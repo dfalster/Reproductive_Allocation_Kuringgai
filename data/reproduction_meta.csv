@@ -1,0 +1,13 @@
+column,description
+species,4 letter species abbreviations
+replicate,3-digit individual replicate number
+site,name of site along West Head Road
+age,years since last burn at time of harvest
+individual,tagged individual ID
+date_tagged,date the plant was tagged and mapped
+date_harvested,date the plant was harvested and remapped
+repro_description,verbal description of the date of the census
+date_census,date of the census
+census,which census period the data are from
+pre-new,indicates whether the row of data is for new or preexisting structures
+repro_verbal,verbal description of reproduction on the plant at time of investment

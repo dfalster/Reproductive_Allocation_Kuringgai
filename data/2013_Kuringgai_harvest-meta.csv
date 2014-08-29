@@ -1,0 +1,27 @@
+column,units,description
+sort2,,"sorts species by year, age, species, individual"
+sort1,,sorts species by order of data on datasheets
+species,,4 letter species abbreviations
+replicate,,3-digit individual replicate number
+individual,,tagged individual ID
+site,,name of site along West Head Road
+age,,years since last burn at time of harvest
+date,,data tagged or harvested
+year,,year tagged or harvested
+segment,,segment name that appears on plant maps and bags
+node_below,,node number at base of segment
+node_above,,node number at top of segment
+plant_status,,is the plant alive or dead
+use_status,,"column indicating which data to use, excluding individuals with currently missing data"
+stem_weight,mg,dry weight of stem segment
+leaf_weight,mg,dry weight of leaves on stem segment
+root_weight,mg,"dry weight of roots, for entire plant"
+diameter_1,mm,"diameter of stem segment, replicate 1"
+diameter_2,mm,"diameter of stem segment, replicate 2"
+diameter_3,mm,"diameter of stem segment, replicate 3"
+diameter_ave,mm,average diameter of stem segment
+total_stem_weight,mg,dry weight of all stem segment above and including this stem segment
+total_leaf_weight,mg,dry weight of all leaves above and including this stem segment
+total_plant_weight,mg,dry weight of all leaves and stem above and including this stem segment
+height,mm,plant height
+notes,,notes

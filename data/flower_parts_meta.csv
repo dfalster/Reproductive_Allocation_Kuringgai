@@ -1,0 +1,20 @@
+Var,units,description
+sort,,"order in which data were entered, to easily relocate plant parts"
+species,,4 letter species abbreviations
+site,,name of site along West Head Road
+date,,date plant part collected
+sample,,individual from which sample was collected; numbered sequentially within each species; indicates if multiple flowering parts collected from the same individual
+individual,,tagged individual ID; indicates plant part collected from this tagged plant
+census_to_use,,"if plant part collected from a tagged plant, indicates which census periods this specific weight should be used for calculating reproductive investment"
+census_notes_use,,"if plant part collected from a tagged plant, indicates whether this specific weight should be used "
+part,,"plant part; the file ""flowering_categories_descriptions"" indicates exactly what plant parts are included in each category and at what flowering stage the parts were collected; these are the same flowering parts used in the following lookup tables: ""Flowering_cat_lookup_table"" and ""MultiplierTable"""
+count,,number of plant parts weighed
+count2,,"a secondary count, used when determining average number of seeds per pod; never used in final calculations"
+length,mm,"length of stem or cone covered with flowers; used for BAER, EPMI and LEES to calculate counts"
+dimension_height,mm,"height of plant part, used when a regression line or volume is used to calculate weight of censused parts; used for BAER, GRBU, GRSP, HATE, PELA, PEPU"
+dimension_diameter,mm,"diameter of plant part, used when volume is used to calculate weight of censused parts; used for BAER, PEPU"
+category_use,,indicates if plant part is used in reproductive investment calculations
+weight,mg,total weight of collected parts
+weights_dont_use,mg,total weight of collected parts that is suspect; not used in calculations
+weight_per_item,mg,weight per unit collected part; not used in calcuations
+notes,,extra notes

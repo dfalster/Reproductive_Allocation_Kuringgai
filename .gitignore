@@ -1,0 +1,22 @@
+.Rproj.user
+.Rhistory
+.RData
+ignore
+output
+.DS_Store
+
+
+# LaTeX #
+#########
+*.aux
+*.bbl
+*.blg
+*.dvi
+*.fff
+*.lof
+*.lot
+*.out
+*.toc
+*.ttt
+*.log
+*.gz

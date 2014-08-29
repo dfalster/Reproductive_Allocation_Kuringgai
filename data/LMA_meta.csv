@@ -1,0 +1,15 @@
+species,species using standard 4-letter codes
+site,site at West Head
+age,age since fire
+branch_age,youngest = fully expanded leaves from most recent flush; mid = leaves from second more recent flush; old = oldest leaves on plant (usually third flush)
+branch_code,"1 = young, 2 = mid, 3 = old"
+branch_type,"main branch for almost all samples, but for HATE, also sampled the short sideshoots (shortshoots), which grow on branches one years later and are where most fruiting occurs"
+juvenile,"adult = adult style leaves; 1 = 1st leaves after cotyledon; 2 = 2nd leaves after cotyledon (still not adult form); 3 = 3rd leaves after cotyledon (still not adult form) (Information in this column should probably be considered ahead of branch code - in other words, for juvenile leaves, branch code shouldn't matter)"
+date_collected,date collected
+indiv_pooled,number of individuals from which leaves were collected at a site
+lvs_per_ind,"numbers of leaves collected per individual (occasionally different by individual, depending on how many undamaged leaves available)"
+leaf_number,total number of leaves samples
+weight,weight in grams
+leaf_area,leaf area in cm^2
+LMA,grams per cm^2
+notes,extra information

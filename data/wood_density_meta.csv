@@ -1,0 +1,14 @@
+sort,order data entered
+species,species using four letter codes
+rep,replicate
+volume1,first of up to four submersion values; units are cubic centimeters
+volume2,second of up to four submersion values; units are cubic centimeters
+volume3,third of up to four submersion values; units are cubic centimeters
+volume4,fourth of up to four submersion values; units are cubic centimeters
+volume,average of up to four submerion values; units are cubic centimeters
+weight,dry weight in grams
+density,dry weight by volume; units are grams per cubic centimeter
+site,"site where wood was collected; wood collected from just below the oldest leaf on most species, but collected from base of plant for BOLE, EPMI, HEPU and PILI where stems are so narrow"
+balance,which of the two lab balances were used
+method,tweezer method=inserting pin into wood and holding just below water level with a pair of tweezers; submersion method=insert small segment of stem into pippette suspended above graduated cylinder; both measure volume by displacement
+notes,"any notes about the specimen; unless noted, all samples are without bark and without pith"
