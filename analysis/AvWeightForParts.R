@@ -1,7 +1,7 @@
 AvWeightForParts<-function()
 {
 library(xtable)
-#dir.create("output/partWeights", recursive=TRUE, showWarnings=FALSE)
+dir.create("output/partWeights", recursive=TRUE, showWarnings=FALSE)
 source('analysis/OrderedListsOfParts.R')
 source('analysis/DeriveMissingParts.R')
 
