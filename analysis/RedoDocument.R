@@ -20,6 +20,9 @@ RegressionCoefficients()
 source('analysis/CalculateMassAndDiameters.R')
 CalculateMassAndDiameters()
 
+source('analysis/IndividualBasedWeightsCalculations.R')
+IndividualBasedWeightsCalculations()
+
 source('analysis/CalculateInvestmentForSpecies.R')
 species <- read.csv("data/species_names.csv", stringsAsFactors=FALSE)
 mclapply(species$Abbreviation, CalculateInvestmentForSpecies,  mc.cores=detectCores()-1 )
