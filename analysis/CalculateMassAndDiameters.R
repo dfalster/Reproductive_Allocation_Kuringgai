@@ -1,8 +1,5 @@
 CalculateMassAndDiameters<-function()
 {
-library(smatr)
-library(plyr)
-library(dplyr)
 source("analysis/plot-utils.R")
 
 data <- tbl_df(read.csv("data/2013_Kuringgai_harvest.csv", stringsAsFactors=FALSE)) %.%

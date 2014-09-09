@@ -1,6 +1,10 @@
 library(stringr)
 library(colorspace)
 library(parallel)
+library(smatr)
+library(plyr)
+library(dplyr)
+library(igraph)
 
 source('analysis/OrderedListsOfParts.R')
 

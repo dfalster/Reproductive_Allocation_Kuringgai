@@ -3,13 +3,13 @@
 DeriveMissingParts<-function(out)
 {
 ####### EPMI #########
-data=out[["EPMI"]]; 
-nr=which(data[,2]=="flower_calyx")
-data[nr,3]=NA
-data[nr,4]=data[data$part=="flower_all_parts",4]-data[data$part=="flower_petals",4] 
-data=data[!data$part=="flower_all_parts",]
-
-out[["EPMI"]]=data;
+# data=out[["EPMI"]]; 
+# nr=which(data[,2]=="flower_calyx")
+# data[nr,3]=NA
+# data[nr,4]=data[data$part=="flower_all_parts",4]-data[data$part=="flower_petals",4] 
+# data=data[!data$part=="flower_all_parts",]
+# 
+# out[["EPMI"]]=data;
 ######################
 
 ####### COER #########

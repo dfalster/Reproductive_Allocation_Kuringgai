@@ -9,7 +9,7 @@ Maps[["GRSP"]]=c("inflorescence_bud_small","inflorescence_stalk","bud_tiny","inf
                  "bud_mid","bud_big","bud_just_opening","flower_petals","flower_stigma","finished_flower_stigma","fruit_just_starting",
                  "fruit_young","pedicel","fruit_large_immature","seed_pod","seed_aborted","seed")
 
-Maps[["EPMI"]]=c("bud_tiny","bud_mid","bud_big","flower_petals","flower_calyx","finished_flower","fruit_young","fruit_large_immature","fruit_mature","flower_all_parts")
+Maps[["EPMI"]]=c("bud_tiny","bud_mid","bud_big","flower_petals","flower_calyx","finished_flower","fruit_young","fruit_large_immature","fruit_mature")
 
 Maps[["COER"]]=c("inflorescence_bud_tiny","inflorescence_bud_mid","inflorescence_stalk","bud_big","inflorescence_stalk_in_fruit",
                  "inflorescence_stalk_in_fruit_large","inflorescence_stalk_in_fruit_very_large","flower_petals","flower_stigma","finished_flower",
