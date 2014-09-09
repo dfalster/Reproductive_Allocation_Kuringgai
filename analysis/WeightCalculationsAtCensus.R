@@ -6,7 +6,7 @@ library(stringr)
 
 FloweringCategories=read.csv('data/Flowering_cat_lookup_table.csv',sep=',',header=T, stringsAsFactors = FALSE)
 
-WeightCalculationsAtCensus<-function(C, TreeID){
+WeightCalculationsAtCensus<-function(C, TreeID,census){
   #Determine species name and allowed plant parts together with their way of measuring
   species=substr(TreeID,1,4)
   Parts=FloweringCategories[,c("flower_part",species)]
@@ -26,7 +26,7 @@ WeightCalculationsAtCensus<-function(C, TreeID){
         type=Parts[i,1]
         m.type="count"
         count=sum(as.numeric(unlist(strsplit(as.character(count_ch),split=";"))))
-        weight=WeightFromCount(count=count,species=species,part=type)
+        weight=WeightFromCount(count=count,species=species,part=type,individual=TreeID,census=census)
         #specific for inflorescence in HATE(Lizzy made calculations on scale of inflorescent hence adjustments. Possibly we can move it to Multiplier table, althought it is slightly different reasoning)
         if((species=="HATE")*(grepl("inflorescence",type)))
         {
@@ -46,7 +46,7 @@ WeightCalculationsAtCensus<-function(C, TreeID){
         type=Parts[i,1]
         m.type="length"
         length=sum(as.numeric(unlist(strsplit(as.character(length_ch),split=";"))))
-        weight=WeightFromLength(length=length,species=species,part=type)
+        weight=WeightFromLength(length=length,species=species,part=type,individual=TreeID,census=census)
         Element=list(type=type,m.type=m.type,count=length(weight),weight=weight)
         C_list[[k]]=Element
       }
@@ -61,7 +61,7 @@ WeightCalculationsAtCensus<-function(C, TreeID){
         type=Parts[i,1]
         m.type="count"
         count=sum(as.numeric(unlist(strsplit(as.character(count_ch),split=";"))))
-        weight=WeightFromCount(count=count,species=species,part=type)
+        weight=WeightFromCount(count=count,species=species,part=type,individual=TreeID,census=census)
         Element=list(type=type,m.type=m.type,count=count,weight=weight)
         C_list[[k]]=Element
       }
@@ -72,7 +72,7 @@ WeightCalculationsAtCensus<-function(C, TreeID){
         type=Parts[i,1]
         m.type="length"
         length=sum(as.numeric(unlist(strsplit(as.character(length_ch),split=";"))))
-        weight=WeightFromLength(length=length,species=species,part=type)
+        weight=WeightFromLength(length=length,species=species,part=type,individual=TreeID,census=census)
         Element=list(type=type,m.type=m.type,count=length(weight),weight=weight)
         C_list[[k]]=Element
       }
@@ -92,7 +92,7 @@ WeightCalculationsAtCensus<-function(C, TreeID){
         weight=c()
         for(j in 1:count)
         {
-        weight[j]=WeightFromRegression(height=heights[j],species=species,part=type)
+        weight[j]=WeightFromRegression(height=heights[j],species=species,part=type,individual=TreeID,census=census)
         }
         Element=list(type=type,m.type=m.type,count=length(weight),weight=weight)
         C_list[[k]]=Element
@@ -113,7 +113,7 @@ WeightCalculationsAtCensus<-function(C, TreeID){
         weight=c()
         for(j in 1:count)
         {
-          weight[j]=WeightFromRegression(height=heights[j],diameter=diameters[j],species=species,part=type)
+          weight[j]=WeightFromRegression(height=heights[j],diameter=diameters[j],species=species,part=type,individual=TreeID,census=census)
         }
         Element=list(type=type,m.type=m.type,count=length(weight),weight=weight)
         C_list[[k]]=Element

@@ -19,8 +19,8 @@ WeightCalculationsForTree<-function(Tree)
     C_old=Tree[(Tree$census==i)&(Tree$pre.new=="pre-existing"),]
     C_new=Tree[(Tree$census==i)&(Tree$pre.new=="new"),]
     #Transforming measurments to weights
-    C_old_list=WeightCalculationsAtCensus(C_old,TreeID)
-    C_new_list=WeightCalculationsAtCensus(C_new,TreeID)
+    C_old_list=WeightCalculationsAtCensus(C_old,TreeID,census=i)
+    C_new_list=WeightCalculationsAtCensus(C_new,TreeID,census=i)
     C_total=c(C_old_list,C_new_list)
     C_total=RemoveDuplicates(C_total)
     #Create list containing new, pre.existing and total data for the given census
