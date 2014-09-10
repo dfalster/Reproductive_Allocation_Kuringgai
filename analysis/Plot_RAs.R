@@ -2,7 +2,6 @@ Plot_RAs<-function()
 {
 #Function plotting the comparison plot of RA for all the species.
 InvSummary=read.csv('output/InvestmentSummary.csv')
-InvSummary["species"]=str_sub(InvSummary$Tree_ID,1,4)
 RA=aggregate(RA~species+age,data=InvSummary,FUN=mean)
 
 RA=t(reshape(RA,timevar="age",idvar="species",direction="wide"))

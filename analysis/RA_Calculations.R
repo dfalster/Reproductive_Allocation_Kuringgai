@@ -38,12 +38,13 @@ for(i in 1:nrow(DiameterData))
     diams=DiameterData[i,c("diameter_1","diameter_2","diameter_3")]
     diam.av =mean(as.numeric(diams),na.rm=T)
     DiameterData$EstWeight[i]=exp(coef$Intercept+coef$Slope*log(diam.av))
+    DiameterData[i,"Basal.Diameter.Av"]=diam.av
   }
 }
 ############################################################
 #Calculate change in the weight, i.e., Growth Investement
 ############################################################
-GrowthInv=data.frame(Tree_ID=c(),GrowthInv=c())
+GrowthInv=data.frame(Tree_ID=c(),GrowthInv=c(),StartWeight=c(),FinalWeight=c(),StartBasalDiamAv=c(),FinalBasalDiamAv=c())
 for(i in 1:length(unique(DiameterData$tag_ID)))
 {
   individual=unique(DiameterData$tag_ID)[i]
@@ -56,6 +57,10 @@ for(i in 1:length(unique(DiameterData$tag_ID)))
   {
     GrowthInv[i,"Tree_ID"]=individual
     GrowthInv[i,"GrowthInv"]=IndData[IndData$year==2013,"EstWeight"]-IndData[IndData$year==2012,"EstWeight"]
+    GrowthInv[i,"StartWeight"]=IndData[IndData$year==2012,"EstWeight"]
+    GrowthInv[i,"FinalWeight"]=IndData[IndData$year==2013,"EstWeight"]
+    GrowthInv[i,"StartBasalDiamAv"]=IndData[IndData$year==2012,"Basal.Diameter.Av"]
+    GrowthInv[i,"FinalBasalDiamAv"]=IndData[IndData$year==2013,"Basal.Diameter.Av"]
   }
 }
 
@@ -90,5 +95,7 @@ InvestmentSummary[str_sub(InvestmentSummary$Tree_ID,6,6)=="9","age"]=32
 
 InvestmentSummary[["TotalInvestment"]]=InvestmentSummary$ReproInv+InvestmentSummary$GrowthInv
 InvestmentSummary[["RA"]]=InvestmentSummary$ReproInv/InvestmentSummary$TotalInvestment
+row.names(InvestmentSummary)<-NULL
+InvestmentSummary[["species"]]=str_sub(InvestmentSummary$Tree_ID,1,4)
 write.csv(x=InvestmentSummary,file='output/InvestmentSummary.csv')
 }

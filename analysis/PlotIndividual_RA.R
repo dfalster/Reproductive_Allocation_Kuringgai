@@ -3,7 +3,7 @@ PlotIndividual_RA<-function()
 # Function creating individual pdf RA developenent plots for all the species
 source("analysis/OrderedListsOfParts.R")
 InvSummary=read.csv('output/InvestmentSummary.csv')
-InvSummary["species"]=str_sub(InvSummary$Tree_ID,1,4)
+#InvSummary["species"]=str_sub(InvSummary$Tree_ID,1,4)
 
 for(j in 1:14)
 {

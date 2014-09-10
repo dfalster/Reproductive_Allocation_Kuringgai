@@ -35,3 +35,10 @@ PlotIndividual_RA()
 
 source('analysis/Plot_RAs.R')
 Plot_RAs()
+
+source('analysis/PlotsRA_vs_Weight_Diameter.R')
+PlotRAs_vs_Diameter()
+PlotRAs_vs_Weight()
+PlotIndividualRAs_vs_Weight_Diam()
+
+
