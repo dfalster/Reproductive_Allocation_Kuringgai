@@ -97,5 +97,7 @@ InvestmentSummary[["TotalInvestment"]]=InvestmentSummary$ReproInv+InvestmentSumm
 InvestmentSummary[["RA"]]=InvestmentSummary$ReproInv/InvestmentSummary$TotalInvestment
 row.names(InvestmentSummary)<-NULL
 InvestmentSummary[["species"]]=str_sub(InvestmentSummary$Tree_ID,1,4)
+InvestmentSummary=InvestmentSummary[order(InvestmentSummary$species),]
+
 write.csv(x=InvestmentSummary,file='output/InvestmentSummary.csv')
 }

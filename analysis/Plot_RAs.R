@@ -16,6 +16,7 @@ for(k in 5:2)
         RA[k-1,i]=0
   }
 }
+RA=RA[,order(colnames(RA))]
 Age=matrix(ncol=14,nrow=5,c(1.3,5,7,9,32))
 pdf(file='output/docs/RA_Comparison.pdf',width=20,height=10)
 matplot(Age,RA,type="b",pch='o',main="Reproductive Allovation for 14 species along time",col=rainbow_hcl(14),lty=1,lwd=3,xlim=c(0,35),bty="L")

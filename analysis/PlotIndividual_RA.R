@@ -7,7 +7,7 @@ InvSummary=read.csv('output/InvestmentSummary.csv')
 
 for(j in 1:14)
 {
-species=names(Maps)[j]
+species=sort(names(Maps))[j]
 sp_col=rainbow_hcl(14)[j]
 InvBySpecies=InvSummary[InvSummary$species==species,]
 
