@@ -8,6 +8,7 @@ CalculateInvestmentForSpecies<-function(species)
   LostSpecies=data.frame(Individual=c(),age=c(),what=c(),Census=c(), count=c(),weight=c())
   #Read and restrict the data to the subset of interest.
   Data=read.csv('data/reproduction.csv',sep=',',header=T,stringsAsFactors = FALSE, na.strings="")
+  Data=Data[Data$census<=18,]
   ind.list=unique(Data[Data$species==species,]$individual)
   #Loop along all individuals
   for(individual in ind.list)
