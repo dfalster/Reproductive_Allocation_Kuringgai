@@ -98,7 +98,7 @@ rm(PUTU.graph)
 
 
 
-BAER.graph=graph.formula("cone_base_green_01"-"cone_base_green_02"-"cone_base_green_03"-"cone_base_green_04"-"cone_base_brown","cone_young_01"-"cone_young_02"-"cone_young_03"-"cone_young_04"-"cone_green_01"-"cone_green_02"-"cone_green_03"-"cone_green_04"-"cone_brown","cone_green_04"-"cone_brown_no_expanded_follicles","cone_green_04"-"cone_aborted","bud_tiny"-"bud_small"-"bud_mid"-"bud_big"-"bud_just_opening"-"flower_stigma"-"finished_flower_stigma"-"fruit_just_starting"-"fruit_young"-"fruit_large_immature_01"-"seed","bud_just_opening"-"flower_petals","flower_stigma"-"flower_style","fruit_large_immature_01"-"seed_pod","fruit_large_immature_01"-"seed_aborted")
+BAER.graph=graph.formula("cone_base_green_01"-"cone_base_green_02"-"cone_base_green_03"-"cone_base_green_04"-"cone_base_brown","cone_young_01"-"cone_young_02"-"cone_young_03"-"cone_young_04"-"cone_green_01"-"cone_green_02"-"cone_green_03"-"cone_green_04"-"cone_brown","cone_green_04"-"cone_brown_no_expanded_follicles","cone_green_04"-"cone_aborted","bud_tiny"-"bud_small"-"bud_mid"-"bud_big"-"bud_just_opening"-"flower_stigma"-"finished_flower_stigma"-"fruit_just_starting"-"fruit_young"-"fruit_large_immature_01"-"seed","bud_just_opening"-"flower_petals","bud_just_opening"-"flower_style","fruit_large_immature_01"-"seed_pod","fruit_large_immature_01"-"seed_aborted")
 from=c("bud_tiny","cone_young_01","cone_base_green_01")
 to=c("seed","cone_brown","cone_base_brown")
 Paths=data.frame(from=from,to=to)
@@ -109,7 +109,7 @@ BAER.graph=set.vertex.attribute(BAER.graph,name="col",index=c(17:27,31),value=3)
 BAER.graph=set.vertex.attribute(BAER.graph,name="col",index=c(28:30),value=4)
 #Set weights
 BAER.graph=set.edge.attribute(BAER.graph,name="weight",value=1)
-BAER.graph=set.edge.attribute(BAER.graph,name="weight",index=c(19,20,21,22,26,27,28),value=c(0.39,0.61,0.69,0.31,0.07,0.93,0.07))
+BAER.graph=set.edge.attribute(BAER.graph,name="weight",index=c(19,20,21,26,27,28),value=c(0.28,0.44,0.28,0.07,0.93,0.07))
 GraphMaps[["BAER"]]=list(graph=BAER.graph,Paths=Paths)
 rm(BAER.graph)
 
