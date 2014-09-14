@@ -8,17 +8,26 @@ InvestmentCalculations<-function(TreeListOrig)
   #Initialize the variables
   ErrList=data.frame(Element=NA,Census=NA,Count=NA)
   Lost=data.frame(what=c(),Census=c(),count=c(),weight=c())
+  FinishedDevelopement=data.frame(what=c(),Census=c(),count=c(),weight=c());
+  if((length(sapply(TreeListOrig[[19]]$total,function(x) x$type)>0))){
+    FinishedDevelopement=rbind(FinishedDevelopement,data.frame(what=sapply(TreeListOrig[[19]]$total,function(x) x$type),
+                           Census=rep(18,length(sapply(TreeListOrig[[19]]$total,function(x) x$type))),
+                           count=sapply(TreeListOrig[[19]]$total,function(x) x$count),
+                           weight=sapply(TreeListOrig[[19]]$total,function(x) sum(x$weight))))}
+
+  
   Investments=data.frame(FromCensus=c(),ToCensus=c(),From=c(),To=c(),Inv=c(),Count=c())
   Err=c()
   #If tree had no reproduction at all return list of empty data frames
   if (is.null(unlist(TreeListOrig[2:19])))
-  {return(list(Inv=c(),Err=Err,Lost=Lost))}
-
+  {return(list(Inv=c(),Err=Err,Lost=Lost,FinishedDevelopement=FinishedDevelopement))}
+  
   #Check how many main paths there are for this plant.
   n.paths=nrow(GraphMaps[[species]]$Paths)
   #For each of the paths
   for( a in 1:n.paths)
   { L=data.frame(what=c(),Census=c(),count=c(),weight=c())
+    FD=data.frame(what=c(),Census=c(),count=c(),weight=c())
     #Determine beginning and end of the path.
     BE=(GraphMaps[[species]]$Paths[a,])
     #Read in plant graph
@@ -30,7 +39,7 @@ InvestmentCalculations<-function(TreeListOrig)
     #Define the progression list
     Progression=V_names[PATH]
     n=length(Progression)
-
+    
     #Duplicate tree structure (Acc= for accesories calculations, Pred=for storing possible predecessors)
     # Will modify below,  TreeLis contains list of lists, one for each census. As we identify, parents for
     # a given object, they are removed from the list of possible predecssors. In this way progressively
@@ -56,7 +65,7 @@ InvestmentCalculations<-function(TreeListOrig)
         #Store investment and possible errors
         Investments=rbind(Investments,R[["Inv"]])
         ErrList=rbind(ErrList,R[["Err"]])
-
+        
 {
           #Some elements have aborted/empty parts which can be their alternative at that stage of reproduction. Make calculations for them
           #
@@ -68,13 +77,13 @@ InvestmentCalculations<-function(TreeListOrig)
           which.have.the.same.col  = V(Plant.Graph)$col==get.vertex.attribute(Plant.Graph,index=Progression[1],name="col")
           #Find the ones that are not the original value
           which.are.not.the.orig   = !(V(Plant.Graph)$name==Progression[j])
-
+          
           # The list of the XOR parts (mostly aborted fruits,seeds,a.s.o which should be taken into consideration when calculating what was lost.
           #This parts are ancesstors of the previous part as the one on the main axis is)
           XOR.Part=V(Plant.Graph)[which.have.the.same.dist&which.have.the.same.col&which.are.not.the.orig]
           XOR.Part=XOR.Part$name
           n.xors=length(XOR.Part)
-
+          
           if(n.xors>0)
           {
             for(l in 1:n.xors)
@@ -91,13 +100,22 @@ InvestmentCalculations<-function(TreeListOrig)
 if((i>2)&(i<18))
 {if((length(sapply(TreeList_Pred[[i-1]]$total,function(x) x$type)>0))){
   L=rbind(L,data.frame(what=sapply(TreeList_Pred[[i-1]]$total,function(x) x$type),
-                       Census=rep(i-1,length(sapply(TreeList_Pred[[i-1]]$total,function(x) x$type))),
+                       Census=rep(i-2,length(sapply(TreeList_Pred[[i-1]]$total,function(x) x$type))),
                        count=sapply(TreeList_Pred[[i-1]]$total,function(x) x$count),
                        weight=sapply(TreeList_Pred[[i-1]]$total,function(x) sum(x$weight))))}}
+
+if(i>2)
+{
+  if((length(sapply(TreeList_Pred[[i-1]]$total,function(x) x$type)>0))){
+    FD=rbind(FD,data.frame(what=sapply(TreeList_Pred[[i-1]]$total,function(x) x$type),
+                           Census=rep(i-2,length(sapply(TreeList_Pred[[i-1]]$total,function(x) x$type))),
+                           count=sapply(TreeList_Pred[[i-1]]$total,function(x) x$count),
+                           weight=sapply(TreeList_Pred[[i-1]]$total,function(x) sum(x$weight))))}}
     }
+  
 #Restrict loses to the line that you made your calculations on
 Lost=rbind(Lost,L[as.character(L$what)%in%V(Plant.Graph)$name[V(Plant.Graph)$col==get.vertex.attribute(Plant.Graph,"col",index=Progression[1])],])
-
+FinishedDevelopement=rbind(FinishedDevelopement,FD[as.character(FD$what)%in%V(Plant.Graph)$name[V(Plant.Graph)$col==get.vertex.attribute(Plant.Graph,"col",index=Progression[1])],])
 
 ###########################################
 #Calculating cost of accesorries
@@ -112,6 +130,8 @@ if(length(Acc.Finals)>0)
 {
   for(k in 1 :length(Acc.Finals))
   { L=data.frame(what=c(),Census=c(),count=c(),weight=c())
+    FD=data.frame(what=c(),Census=c(),count=c(),weight=c())
+    
     Accessory=Acc.Finals[k]
     #Reset the lists to the original ones.
     TreeList=TreeListOrig
@@ -130,7 +150,7 @@ if(length(Acc.Finals)>0)
       for(l in n.aux:1)
       {
         Element.aux=Progression_Not_on_Main[l]
-        R=InvestmentInAPartType(TreeList=TreeList,TreeList_Pred=TreeList_Acc,Element=Element.aux,Progression=Aux_Progression_to_root[1:(length(Aux_Progression_to_root)-n.aux+l-1)])
+        R=InvestmentInAPartType(TreeList=TreeList,TreeList_Pred=TreeList_Acc,Element=Element.aux,Progression=Aux_Progression_to_root[1:(length(Aux_Progression_to_root)-n.aux+l)])
         TreeList_Acc=R[["TreeList_Pred"]]
         Investments=rbind(Investments,R[["Inv"]])
         ErrList=rbind(ErrList,R[["Err"]])
@@ -139,15 +159,26 @@ if(length(Acc.Finals)>0)
       if((i>2)&(i<18))
       {if((length(sapply(TreeList_Acc[[i-1]]$total,function(x) x$type)>0))){
         L=rbind(L,data.frame(what=sapply(TreeList_Acc[[i-1]]$total,function(x) x$type),
-                             Census=rep(i-1,length(sapply(TreeList_Acc[[i-1]]$total,function(x) x$type))),
+                             Census=rep(i-2,length(sapply(TreeList_Acc[[i-1]]$total,function(x) x$type))),
                              count=sapply(TreeList_Acc[[i-1]]$total,function(x) x$count),
-                             weight=sapply(TreeList_Acc[[i-1]]$total,function(x) sum(x$weight))))}}
+                             weight=sapply(TreeList_Acc[[i-1]]$total,function(x) sum(x$weight))))}
+      }
+      if(i>2)
+      {if((length(sapply(TreeList_Acc[[i-1]]$total,function(x) x$type)>0))){
+        FD=rbind(FD,data.frame(what=sapply(TreeList_Acc[[i-1]]$total,function(x) x$type),
+                               Census=rep(i-2,length(sapply(TreeList_Acc[[i-1]]$total,function(x) x$type))),
+                               count=sapply(TreeList_Acc[[i-1]]$total,function(x) x$count),
+                               weight=sapply(TreeList_Acc[[i-1]]$total,function(x) sum(x$weight))))}
+      }
     }
     #Restrict loss calculations to the elements outside main progression line.
     Lost=rbind(Lost,L[as.character(L$what)%in%V(Plant.Graph)$name[V(Plant.Graph)$col==get.vertex.attribute(Plant.Graph,"col",index=Accessory)],])
+    FinishedDevelopement=rbind(FinishedDevelopement,FD[as.character(FD$what)%in%V(Plant.Graph)$name[V(Plant.Graph)$col==get.vertex.attribute(Plant.Graph,"col",index=Accessory)],])
+    
   }
 }
-  }
+
+}
 
 #Aggregare and order the result
 ErrList=ErrList[complete.cases(ErrList),]
@@ -166,6 +197,7 @@ Inv["Total"]=Inv$Inv*Inv$Count
 Inv["Individual"]=rep(TreeListOrig[[1]],nrow(Inv))
 
 Lost=unique(Lost)
+FinishedDevelopement=unique(FinishedDevelopement)
 #Exclude elements of degree 1, they can not develop, not lost
 LeavesOfGraph=V(Plant.Graph)$name[degree(Plant.Graph)>1]
 #Add roots, if they are not the only elements
@@ -178,5 +210,11 @@ if(nrow(Lost)>0)
 {
   Lost=Lost[order(Lost$Census),]
 }
-list(Inv=Inv,Err=Err,Lost=Lost)
+
+if(nrow(FinishedDevelopement)>0)
+{
+  FinishedDevelopement=FinishedDevelopement[order(FinishedDevelopement$Census),]
+}
+
+list(Inv=Inv,Err=Err,Lost=Lost,FinishedDevelopement=FinishedDevelopement)
 }

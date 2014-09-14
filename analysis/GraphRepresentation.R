@@ -50,7 +50,7 @@ rm(GRSP.graph)
 
 
 # Temporary changes.
-EPMI.graph=graph.formula("bud_tiny"-"bud_mid"-"bud_big"-"flower_calyx"-"finished_flower"-"fruit_large_immature_01"-"fruit_young"-"fruit_mature","bud_big"-"flower_petals")
+EPMI.graph=graph.formula("bud_tiny"-"bud_mid"-"bud_big"-"flower_calyx"-"finished_flower"-"fruit_young"-"fruit_large_immature_01"-"fruit_mature","bud_big"-"flower_petals")
 from="bud_tiny"
 to="fruit_mature"
 Paths=data.frame(from=from,to=to)

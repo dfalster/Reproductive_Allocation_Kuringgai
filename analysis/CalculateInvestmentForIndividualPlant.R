@@ -41,5 +41,20 @@ CalculateInvestmentForIndiviualPlant<-function(individual)
     Lost=NULL
   }
   }
-  list(Inv=I,Lost=Lost,Err=Err)
+  
+  FD=Res[["FinishedDevelopement"]]
+  
+  if(!is.null(FD))
+  {if(nrow(FD)>0)
+  {  
+    FD["Individual"]=individual
+    FD["age"]=as.numeric(unique(Tree$age))
+    FD=FD[,c(5,6,1:4)]
+  }
+  if(nrow(FD)==0)
+  {
+    FD=NULL
+  }
+  }
+  list(Inv=I,Lost=Lost,Err=Err,FD=FD)
 }
