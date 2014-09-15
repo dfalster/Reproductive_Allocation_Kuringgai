@@ -1,7 +1,6 @@
 AvWeightForParts<-function()
 {
 library(xtable)
-dir.create("output/partWeights", recursive=TRUE, showWarnings=FALSE)
 source('analysis/OrderedListsOfParts.R')
 source('analysis/DeriveMissingParts.R')
 
@@ -41,6 +40,9 @@ for(species.name in unique(FPSummary$species)){
 out=DeriveMissingParts(out)
 #
 #
+path <- "output/docs"
+if(!file.exists(path))
+  dir.create(path, recursive=TRUE)
 for(species.name in unique(FPSummary$species)){
   print(xtable(out[[species.name ]], include.rownames=FALSE), floating=FALSE, type="latex", file=paste0("output/docs/", species.name,".tex"))
 }

@@ -6,7 +6,7 @@
 library("stringr")
 #read in necessary summary data
 AvWeightPerUnit=read.table('output/partWeights/AvWeightPerUnit.csv',sep=',',header=T)
-AvCountsPerMM  =read.table('output/partWeights/AvCOuntsPerMM.csv'  ,sep=',',header=T) 
+AvCountsPerMM  =read.table('output/partWeights/AvCountsPerMM.csv'  ,sep=',',header=T) 
 RegressionTable=read.table('output/partWeights/RegressionTable.csv'  ,sep=',',header=T) 
 #Read in individual based weights
 IBW = read.csv('output/partWeights/IndividualBasedWeights.csv')
