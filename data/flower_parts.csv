@@ -6513,3 +6513,5 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 6513,EPMI,Waratah2003,23-May-13,175,EPMI_806,2;17,used,bud_tiny,278,,,,,used,35.8,,,weighed 70 tiny buds (9.0 mg) and determined total count from total weight
 6514,LEES,Waratah2003,23-May-13,,LEES_805,17,used,bud_tiny,68,,,,,used,39.5,,0.580882353,
 6515,LEES,Waratah2003,23-May-13,,LEES_806,17,used,bud_tiny,82,,,,,used,38,,0.463414634,
+6516,BAER,Basin1981,21-Jun,,BAER_901,9,used,seed,23,,,,,used,3221.9,,,
+6517,BAER,Basin1981,21-Jun,,BAER_901,9,used,cone_brown,1,,,172,26.3,used,95520,,,
