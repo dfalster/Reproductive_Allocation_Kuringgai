@@ -25,7 +25,13 @@ IndividualBasedWeightsCalculations()
 
 source('analysis/CalculateInvestmentForSpecies.R')
 species <- read.csv("data/species_names.csv", stringsAsFactors=FALSE)
+# Korad & daniel
 mclapply(species$Abbreviation, CalculateInvestmentForSpecies,  mc.cores=detectCores()-1 )
+# Lizzy - cannot rubn multicore
+lapply(species$Abbreviation, CalculateInvestmentForSpecies)
+
+# Rerun a spp if needed
+# CalculateInvestmentForSpecies("BAER")
 
 source('analysis/RA_Calculations.R')
 RA_Calculations()
