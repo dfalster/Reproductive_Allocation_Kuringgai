@@ -889,8 +889,8 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 413,COER,,,40,,,,bud_big,10,,,,,used,7.9,,,
 414,COER,,,41,,,,bud_big,10,,,,,used,7.9,,,
 415,COER,,,42,,,,bud_big,10,,,,,used,8.4,,,
-425,COER,,,43,,,,finished_flower_all_parts,10,,,,,used,11.5,,,
-426,COER,,,44,,,,finished_flower_all_parts,10,,,,,used,11.2,,,
+425,COER,,,43,,,,finished_flower,10,,,,,used,11.5,,1.15,
+426,COER,,,44,,,,finished_flower,10,,,,,used,11.2,,1.12,
 416,COER,,,45,,,,flower_all_parts,10,,,,,used,11.5,,1.15,
 417,COER,,,46,,,,flower_all_parts,10,,,,,used,11.6,,1.16,
 418,COER,,,47,,,,flower_all_parts,10,,,,,used,12.3,,1.23,
@@ -906,13 +906,13 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 519,COER,,,57,,,,fruit_young,5,,,,,used,4.2,,,without bract
 520,COER,,,58,,,,fruit_young,4,,,,,used,3.3,,,without bract
 521,COER,,,59,,,,fruit_young,4,,,,,used,3.9,,,without bract
-427,COER,,,60,,,,finished_flower_all_parts,14,,,,,used,10.1,,,
-428,COER,,,61,,,,finished_flower_all_parts,10,,,,,used,7,,,
-429,COER,,,62,,,,finished_flower_all_parts,10,,,,,used,7.5,,,
-430,COER,,,63,,,,finished_flower_all_parts,10,,,,,used,9.7,,,
-431,COER,,,64,,,,finished_flower_all_parts,10,,,,,used,6.7,,,
-432,COER,,,65,,,,finished_flower_all_parts,10,,,,,used,7.8,,,
-433,COER,,,66,,,,finished_flower_all_parts,10,,,,,used,7.2,,,
+427,COER,,,60,,,,finished_flower,14,,,,,used,10.1,,0.721428571,
+428,COER,,,61,,,,finished_flower,10,,,,,used,7,,0.7,
+429,COER,,,62,,,,finished_flower,10,,,,,used,7.5,,0.75,
+430,COER,,,63,,,,finished_flower,10,,,,,used,9.7,,0.97,
+431,COER,,,64,,,,finished_flower,10,,,,,used,6.7,,0.67,
+432,COER,,,65,,,,finished_flower,10,,,,,used,7.8,,0.78,
+433,COER,,,66,,,,finished_flower,10,,,,,used,7.2,,0.72,
 525,COER,,,67,,,,fruit_large_immature,10,,,,,used,20.7,,,fruit_large_immature
 526,COER,,,68,,,,fruit_large_immature,10,,,,,used,20,,,fruit_large_immature
 527,COER,,,69,,,,fruit_large_immature,10,,,,,used,17.1,,,fruit_large_immature
@@ -1136,7 +1136,7 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 3511,COER,Waratah2003,7-Sep-13,284,,,,inflorescence_stalk,1,,,,,used,36.2,,,3-forked
 3512,COER,Waratah2003,7-Sep-13,285,,,,inflorescence_stalk,1,,,,,used,20.5,,,3-forked
 4224,COER,Waratah2003,29-Sep-13,286,,,,fruit_young,4,,,,,used,3.1,,,
-4225,COER,Waratah2003,29-Sep-13,287,,,,finished_flower_all_parts,6,,,,,used,4.5,,,
+4225,COER,Waratah2003,29-Sep-13,287,,,,finished_flower,6,,,,,used,4.5,,0.75,
 4351,COER,Waratah2003,31-Oct-13,288,,,,inflorescence_stalk_in_fruit_very_large,1,,,,,used,50.1,,,
 4352,COER,Waratah2003,31-Oct-13,289,,,,inflorescence_stalk_in_fruit_very_large,1,,,,,used,55.3,,,
 4353,COER,Waratah2003,31-Oct-13,290,,,,inflorescence_stalk_in_fruit_very_large,1,,,,,used,47.6,,,
@@ -3398,14 +3398,14 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 1832,LEES,,, ,,,,fruit_just_starting,6,,,,,used,7,,1.166666667,fruit_just_starting
 6301,LEES,Waratah2003,7-Aug-14,,,,,finished_flower,10,,,,,used,11.4,,1.14,
 6302,LEES,Waratah2003,7-Aug-14,,,,,finished_flower,10,,,,,used,12.4,,1.24,
-6303,LEES,Waratah2003,7-Aug-14,,,,,finished_flower,10,,,,,used,12.7,,1.27,
+6303,LEES,Waratah2003,7-Aug-14,,,,,fruit_just_starting,10,,,,,used,12.7,,1.27,
 6304,LEES,Waratah2003,7-Aug-14,,,,,finished_flower,10,,,,,used,12.1,,1.21,
 6305,LEES,Waratah2003,7-Aug-14,,,,,finished_flower,10,,,,,used,12.1,,1.21,
-6306,LEES,Waratah2003,7-Aug-14,,,,,finished_flower,10,,,,,used,13.7,,1.37,
+6306,LEES,Waratah2003,7-Aug-14,,,,,fruit_just_starting,10,,,,,used,13.7,,1.37,
 6307,LEES,Waratah2003,7-Aug-14,,,,,finished_flower,10,,,,,used,12.9,,1.29,
 6308,LEES,Waratah2003,7-Aug-14,,,,,finished_flower,10,,,,,used,12.5,,1.25,
-6309,LEES,Waratah2003,7-Aug-14,,,,,finished_flower,10,,,,,used,13.4,,1.34,
-6310,LEES,Waratah2003,7-Aug-14,,,,,finished_flower,10,,,,,used,12.9,,1.29,
+6309,LEES,Waratah2003,7-Aug-14,,,,,fruit_just_starting,10,,,,,used,13.4,,1.34,
+6310,LEES,Waratah2003,7-Aug-14,,,,,fruit_just_starting,10,,,,,used,12.9,,1.29,
 6311,LEES,Waratah2003,7-Aug-14,,,,,flower_petals,8,,,,,used,5.9,,0.7375,
 6312,LEES,Waratah2003,7-Aug-14,,,,,flower_petals,8,,,,,used,6.1,,0.7625,
 6313,LEES,Waratah2003,7-Aug-14,,,,,flower_petals,8,,,,,used,6.1,,0.7625,
