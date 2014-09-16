@@ -42,13 +42,19 @@ BAER_906,cone_green_01,3,1,
 BAER_906,flower_petals,3,1708,
 BAER_906,flower_stigma,3,1708,
 BAER_906,flower_style,4,1708,
-BOLE_201,bud_small,3,68,
-BOLE_202,bud_small,3,24,
-BOLE_203,bud_tiny,14,32,fixed issue
-BOLE_204,bud_tiny,2,56,
-BOLE_205,bud_tiny,2,208,
-BOLE_206,bud_tiny,2,172,
-BOLE_207,bud_tiny,2,144,
-BOLE_401,bud_big,2,16,
-BOLE_401,bud_small,3,8,
-BOLE_008,bud_tiny,14,52,fixed issue
+LEES_407,bud_mid,4,6,shouldn't be a problem; and other individuals with same sort of numbers work fine
+LEES_003,bud_mid,4,19,shouldn't be a problem; and other individuals with same sort of numbers work fine
+LEES_006,bud_mid,4,1,shouldn't be a problem; and other individuals with same sort of numbers work fine
+LEES_801,bud_mid,3,1,shouldn't be a problem; and other individuals with same sort of numbers work fine
+LEES_907,bud_mid,4,364,shouldn't be a problem; and other individuals with same sort of numbers work fine
+GRSP_804,bud_mid,7,32,hopefully fixed
+PEPU_801,cone_just_starting_02,13,1,shouldn't be a problem
+PUTU_404,fruit_large_immature_01,16,2,can't find problem
+PUTU_805,fruit_aborted,16,14,can't find problem
+PUTU_805,fruit_large_immature_01,16,58,can't find problem
+PELA_805,bud_mid,13,20,can't find problem
+PELA_807,bud_big,14,16,can't find problem
+PELA_807,bud_mid,14,50,can't find problem
+PELA_903,fruit_large_immature_01,4,11,can't find problem
+HEPU_007,calyx_fruit,15,1,"can't find problem, should progress from a small bud in previous census"
+HEPU_007,flower_petals,15,1,"can't find problem, should progress from a small bud in previous census"
