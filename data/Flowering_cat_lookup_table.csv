@@ -1,1 +1,66 @@
-flower_part,sort,BAER,BOLE,COER,EPMI,GRBU,GRSP,HATE,HEPU,LEES,PELA,PEPU,PHPH,PILI,PUTUinflorescence_stalk,1,,,count,,count,count,,,,,,,count,inflorescence_bud_tiny,2,,,count,,,,count,,,,,,,inflorescence_bud_small,3,,,,,count,count,count,,,,,,,inflorescence_bud_mid,4,,,count,,,,count,,,,,,count,inflorescence_bud_big_bracts,5,,,,,,,count,,,,,,,inflorescence_bud_big_flowers,6,,,,,,,count,,,,,,,inflorescence_stalk_in_fruit,24,,,count,,,count,,,,,,,,inflorescence_stalk_in_fruit_large,25,,,count,,,,,,,,,,,inflorescence_stalk_in_fruit_very_large,26,,,count,,,,,,,,,,,bud_aborted,7,,,,,,,,,count,,count,,,bud_tiny,8,count_by_length,count,,count; count_by_length,,count,,,count; count_by_length,,count,,,bud_small,9,count_by_length,count,,,count,count,,count,,count,,count,,bud_mid,10,count_by_length,count,,count; count_by_length,count,count,,,count; count_by_length,count,,count,,bud_big,11,count_by_length,count,count,count; count_by_length,count,count,,count,count; count_by_length,count,count,,count,countbud_just_opening,12,count_by_length,,,,,count,,,,,,,,flower_petals,13,count_by_length,count,count,count; count_by_length,count,count,count,count,count; count_by_length,count,count,count,count,countflower_petals_small,14,,,,,,,,,,,,count,,flower_stigma,15,count_by_length,,count,,count,count,count,,,count,count,count,count,countflower_calyx,16,,count,,count; count_by_length,,,,count,count; count_by_length,,count,count,count,countflower_aborted,17,,,,,,,,,,,,count,,countflower_aborted_without_petals,18,,,,,,,,,,,,count,,flower_style,19,count_by_length,,,,,,,,,,,,,finished_flower,20,,count,count,count; count_by_length,,,,count,count; count_by_length,,,count,,finished_flower_stigma,21,count_by_length,count,,,count,count,count,,,count,,count,,late_finished_flower,22,,count,,,,,,,,,,count,,bract_flower_or_finished_flower,23,,,,,,,,,,,,count,count,countfruit_just_starting,27,count,count,count,,count,count,count,,count; count_by_length,count,count,count,,fruit_young,28,count,count,count,count; count_by_length,count,count,count,count,count; count_by_length,count,count,count,count,fruit_large_immature_01,29,,count,count,count; count_by_length,regress_by_dim,regress_by_dim,count,count,count; count_by_length,regress_by_dim,count,count,count,countfruit_large_immature_02,30,,,,,regress_by_dim,regress_by_dim,,,,regress_by_dim,,,,fruit_large_immature_03,31,,,,,regress_by_dim,regress_by_dim,,,,regress_by_dim,,,,fruit_large_immature_04,32,,,,,regress_by_dim,regress_by_dim,,,,regress_by_dim,,,,fruit_large_immature_05,33,,,,,regress_by_dim,regress_by_dim,,,,regress_by_dim,,,,fruit_large_immature_06,34,,,,,regress_by_dim,regress_by_dim,,,,regress_by_dim,,,,fruit_aborted,35,,,,,,,count,count,count; count_by_length,,count,count,count,countfruit_empty,36,,,,,,,,,,,count,,,fruit_mature,37,,,count,count; count_by_length,,,,count,count; count_by_length,,count,,,calyx_fruit,38,,,,,,,,count,count; count_by_length,,,,,bract_fruit,39,,,count,,,,,,,,,,,countpedicel,40,,count,,,count,count,,,,count,,,,seed_pod,41,count,count,,,regress_by_dim,regress_by_dim,count,,,regress_by_dim,,count,count,countseed_immature,42,,,,,,,count,,,,,,,seed_aborted,43,count,count,,,count,count,count,,,,,count,,countseed,44,count,count,,,count,count,count,,,regress_by_dim,,count,count,countcone_just_starting_01,45,,,,,,,,,,,regress_by_dim,,,cone_just_starting_02,46,,,,,,,,,,,regress_by_dim,,,cone_just_starting_03,47,,,,,,,,,,,regress_by_dim,,,cone_just_starting_04,48,,,,,,,,,,,regress_by_dim,,,cone_just_starting_05,49,,,,,,,,,,,regress_by_dim,,,cone_young_01,50,regress_by_dim,,,,,,,,,,regress_by_dim,,,cone_young_02,51,regress_by_dim,,,,,,,,,,regress_by_dim,,,cone_young_03,52,regress_by_dim,,,,,,,,,,regress_by_dim,,,cone_young_04,53,regress_by_dim,,,,,,,,,,regress_by_dim,,,cone_green_01,54,volume,,,,,,,,,,volume,,,cone_green_02,55,volume,,,,,,,,,,volume,,,cone_green_03,56,volume,,,,,,,,,,volume,,,cone_green_04,57,volume,,,,,,,,,,volume,,,cone_brown_no_expanded_follicles,58,volume,,,,,,,,,,volume,,,cone_brown,59,volume,,,,,,,,,,volume,,,cone_aborted,60,regress_by_dim,,,,,,,,,,volume,,,cone_base_green_01,61,volume,,,,,,,,,,,,,cone_base_green_02,62,volume,,,,,,,,,,,,,cone_base_green_03,63,volume,,,,,,,,,,,,,cone_base_green_04,64,volume,,,,,,,,,,,,,cone_base_brown,65,volume,,,,,,,,,,,,,
+flower_part,sort,BAER,BOLE,COER,EPMI,GRBU,GRSP,HATE,HEPU,LEES,PELA,PEPU,PHPH,PILI,PUTU
+inflorescence_stalk,1,,,count,,count,count,,,,,,,count,
+inflorescence_bud_tiny,2,,,count,,,,count,,,,,,,
+inflorescence_bud_small,3,,,,,count,count,count,,,,,,,
+inflorescence_bud_mid,4,,,count,,,,count,,,,,,count,
+inflorescence_bud_big_bracts,5,,,,,,,count,,,,,,,
+inflorescence_bud_big_flowers,6,,,,,,,count,,,,,,,
+inflorescence_stalk_in_fruit,24,,,count,,,count,,,,,,,,
+inflorescence_stalk_in_fruit_large,25,,,count,,,,,,,,,,,
+inflorescence_stalk_in_fruit_very_large,26,,,count,,,,,,,,,,,
+bud_aborted,7,,,,,,,,,count,,count,,,
+bud_tiny,8,count_by_length,count,,count; count_by_length,count,count,,,count; count_by_length,,count,,,
+bud_small,9,count_by_length,count,,,count,count,,count,,count,,count,,
+bud_mid,10,count_by_length,count,,count; count_by_length,count,count,,,count; count_by_length,count,,count,,
+bud_big,11,count_by_length,count,count,count; count_by_length,count,count,,count,count; count_by_length,count,count,,count,count
+bud_just_opening,12,count_by_length,,,,,count,,,,,,,,
+flower_petals,13,count_by_length,count,count,count; count_by_length,count,count,count,count,count; count_by_length,count,count,count,count,count
+flower_petals_small,14,,,,,,,,,,,,count,,
+flower_stigma,15,count_by_length,,count,,count,count,count,,,count,count,count,count,count
+flower_calyx,16,,count,,count; count_by_length,,,,count,count; count_by_length,,count,count,count,count
+flower_aborted,17,,,,,,,,,,,,count,,count
+flower_aborted_without_petals,18,,,,,,,,,,,,count,,
+flower_style,19,count_by_length,,,,,,,,,,,,,
+finished_flower,20,,count,count,count; count_by_length,,,,count,count; count_by_length,,,count,,
+finished_flower_stigma,21,count_by_length,count,,,count,count,count,,,count,,count,,
+late_finished_flower,22,,count,,,,,,,,,,count,,
+bract_flower_or_finished_flower,23,,,,,,,,,,,,count,count,count
+fruit_just_starting,27,count,count,count,,count,count,count,,count; count_by_length,count,count,count,,
+fruit_young,28,count,count,count,count; count_by_length,count,count,count,count,count; count_by_length,count,count,count,count,
+fruit_large_immature_01,29,,count,count,count; count_by_length,regress_by_dim,regress_by_dim,count,count,count; count_by_length,regress_by_dim,count,count,count,count
+fruit_large_immature_02,30,,,,,regress_by_dim,regress_by_dim,,,,regress_by_dim,,,,
+fruit_large_immature_03,31,,,,,regress_by_dim,regress_by_dim,,,,regress_by_dim,,,,
+fruit_large_immature_04,32,,,,,regress_by_dim,regress_by_dim,,,,regress_by_dim,,,,
+fruit_large_immature_05,33,,,,,regress_by_dim,regress_by_dim,,,,regress_by_dim,,,,
+fruit_large_immature_06,34,,,,,regress_by_dim,regress_by_dim,,,,regress_by_dim,,,,
+fruit_aborted,35,,,,,,,count,count,count; count_by_length,,count,count,count,count
+fruit_empty,36,,,,,,,,,,,count,,,
+fruit_mature,37,,,count,count; count_by_length,,,,count,count; count_by_length,,count,,,
+calyx_fruit,38,,,,,,,,count,count; count_by_length,,,,,
+bract_fruit,39,,,count,,,,,,,,,,,count
+pedicel,40,,count,,,count,count,,,,count,,,,
+seed_pod,41,count,count,,,regress_by_dim,regress_by_dim,count,,,regress_by_dim,,count,count,count
+seed_immature,42,,,,,,,count,,,,,,,
+seed_aborted,43,count,count,,,count,count,count,,,,,count,,count
+seed,44,count,count,,,count,count,count,,,regress_by_dim,,count,count,count
+cone_just_starting_01,45,,,,,,,,,,,regress_by_dim,,,
+cone_just_starting_02,46,,,,,,,,,,,regress_by_dim,,,
+cone_just_starting_03,47,,,,,,,,,,,regress_by_dim,,,
+cone_just_starting_04,48,,,,,,,,,,,regress_by_dim,,,
+cone_just_starting_05,49,,,,,,,,,,,regress_by_dim,,,
+cone_young_01,50,regress_by_dim,,,,,,,,,,regress_by_dim,,,
+cone_young_02,51,regress_by_dim,,,,,,,,,,regress_by_dim,,,
+cone_young_03,52,regress_by_dim,,,,,,,,,,regress_by_dim,,,
+cone_young_04,53,regress_by_dim,,,,,,,,,,regress_by_dim,,,
+cone_green_01,54,volume,,,,,,,,,,volume,,,
+cone_green_02,55,volume,,,,,,,,,,volume,,,
+cone_green_03,56,volume,,,,,,,,,,volume,,,
+cone_green_04,57,volume,,,,,,,,,,volume,,,
+cone_brown_no_expanded_follicles,58,volume,,,,,,,,,,volume,,,
+cone_brown,59,volume,,,,,,,,,,volume,,,
+cone_aborted,60,regress_by_dim,,,,,,,,,,volume,,,
+cone_base_green_01,61,volume,,,,,,,,,,,,,
+cone_base_green_02,62,volume,,,,,,,,,,,,,
+cone_base_green_03,63,volume,,,,,,,,,,,,,
+cone_base_green_04,64,volume,,,,,,,,,,,,,
+cone_base_brown,65,volume,,,,,,,,,,,,,

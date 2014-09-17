@@ -9,7 +9,7 @@ inflorescence_stalk_in_fruit,24,,,packaging_dispersal,,,packaging_dispersal,,,,,
 inflorescence_stalk_in_fruit_large,25,,,packaging_dispersal,,,,,,,,,,,
 inflorescence_stalk_in_fruit_very_large,26,,,packaging_dispersal,,,,,,,,,,,
 bud_aborted,7,,,,,,,,,prepollination_abort,,prepollination_abort,,,
-bud_tiny,8,prepollination_abort,prepollination_abort,,prepollination_abort,,prepollination_abort,,,prepollination_abort,,prepollination_abort,,,
+bud_tiny,8,prepollination_abort,prepollination_abort,,prepollination_abort,prepollination_abort,prepollination_abort,,,prepollination_abort,,prepollination_abort,,,
 bud_small,9,prepollination_abort,prepollination_abort,,,prepollination_abort,prepollination_abort,,prepollination_abort,,prepollination_abort,,prepollination_abort,,
 bud_mid,10,prepollination_abort,prepollination_abort,,prepollination_abort,prepollination_abort,prepollination_abort,,,prepollination_abort,prepollination_abort,,prepollination_abort,,
 bud_big,11,prepollination_abort,prepollination_abort,prepollination_abort,prepollination_abort,prepollination_abort,prepollination_abort,,prepollination_abort,prepollination_abort,prepollination_abort,prepollination_abort,,prepollination_abort,prepollination_abort
