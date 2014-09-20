@@ -1,5 +1,19 @@
 library(igraph)
+AV_W<-function(species,part)
+{
+  av.weight=AvWeightPerUnit[(AvWeightPerUnit$species==species)&(AvWeightPerUnit$part==part),"av.weight"]
+  av.weight
+}
+
 GraphMaps=list()
+
+#=====================================================================================
+#
+#                     L E E S
+#
+#=====================================================================================
+
+
 
 LEES.graph=graph.formula("bud_tiny"-"bud_mid"-"bud_big"-"flower_calyx"-"finished_flower"-"fruit_just_starting"-"fruit_young"-"fruit_large_immature_01"-"fruit_mature","bud_tiny"-"bud_aborted","bud_big"-"flower_petals","fruit_young"-"calyx_fruit","fruit_young"-"fruit_aborted")
 from="bud_tiny"
@@ -11,10 +25,44 @@ LEES.graph=set.vertex.attribute(LEES.graph,name="col",index=V(LEES.graph),value=
 LEES.graph=set.vertex.attribute(LEES.graph,name="col",index=c(11,12),value=4)
 #Setting edge weight which defines how much of carbon is beeing directed from each part to each part. Especially important for species
 #with accessories
+#All edges get weight 1
 LEES.graph=set.edge.attribute(LEES.graph,name="weight",value=1)
-LEES.graph=set.edge.attribute(LEES.graph,name="weight",index=c(4,5,9,10),value=c(0.6,0.4,0.81,0.19))
+#We modify the edges for those parts which are result of branching on the plant map
+AM=get.adjacency(LEES.graph,edges = T)
+###############################
+#Flower_petals, flower_calyx 
+##############################
+#which edges
+E1=AM["bud_big","flower_calyx"]
+E2=AM["bud_big","flower_petals"]
+#av. weights of the parts
+W1=AV_W("LEES","flower_calyx")
+W2=AV_W("LEES","flower_petals")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+LEES.graph=set.edge.attribute(LEES.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
+###############################
+#Flower_petals, flower_calyx 
+##############################
+#which edges
+E1=AM["fruit_young","calyx_fruit"]
+E2=AM["fruit_young","fruit_large_immature_01"]
+#av. weights of the parts
+W1=AV_W("LEES","calyx_fruit")
+W2=AV_W("LEES","fruit_large_immature")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+LEES.graph=set.edge.attribute(LEES.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
 GraphMaps[["LEES"]]=list(graph=LEES.graph,Paths=Paths)
 rm(LEES.graph)
+
+#=====================================================================================
+#
+#                     G R B U 
+#
+#=====================================================================================
 
 
 
@@ -28,10 +76,57 @@ GRBU.graph=set.vertex.attribute(GRBU.graph,name="col",index=15:16,value=5)
 #Setting edge weight which defines how much of carbon is beeing directed from each part to each part. Especially important for species
 #with accessories
 GRBU.graph=set.edge.attribute(GRBU.graph,name="weight",value=1)
-GRBU.graph=set.edge.attribute(GRBU.graph,name="weight",index=c(3,4,8,9,15,16,17),value=c(0.63,0.37,0.85,0.15,0.08,0.92,0.08))
+#We modify the edges for those parts which are result of branching on the plant map
+AM=get.adjacency(GRBU.graph,edges = T)
+###############################
+#Flower_petals, flower_stigma 
+##############################
+#which edges
+E1=AM["bud_big","flower_stigma"]
+E2=AM["bud_big","flower_petals"]
+#av. weights of the parts
+W1=AV_W("GRBU","flower_stigma")
+W2=AV_W("GRBU","flower_petals")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+GRBU.graph=set.edge.attribute(GRBU.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
+###############################
+#pedicel, fruit_large_immature_01 
+##############################
+#which edges
+E1=AM["fruit_young","pedicel"]
+E2=AM["fruit_young","fruit_large_immature_01"]
+#av. weights of the parts
+W1=AV_W("GRBU","pedicel")
+W2=AV_W("GRBU","fruit_large_immature")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+GRBU.graph=set.edge.attribute(GRBU.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
+###############################
+#seed_pod,seed,seed_aborted
+##############################
+#which edges
+E1=AM["fruit_large_immature_06","seed_pod"]
+E2=AM["fruit_large_immature_06","seed"]
+E3=AM["fruit_large_immature_06","seed_aborted"]
+#av. weights of the parts
+W1=AV_W("GRBU","seed_pod")
+W2=AV_W("GRBU","seed_aborted")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+GRBU.graph=set.edge.attribute(GRBU.graph,name="weight",index=c(E1,E2,E3),value=c(w1,w2,w2))
 # Saving the graph
 GraphMaps[["GRBU"]]=list(graph=GRBU.graph,Paths=Paths)
 rm(GRBU.graph)
+
+#=====================================================================================
+#
+#                     G R S P 
+#
+#=====================================================================================
 
 
 GRSP.graph=graph.formula("bud_tiny"-"bud_small"-"bud_mid"-"bud_big"-"bud_just_opening"-"flower_stigma"-"finished_flower_stigma"-"fruit_just_starting"-"fruit_young"-"fruit_large_immature_01"-"fruit_large_immature_02"-"fruit_large_immature_03"-"fruit_large_immature_04"-"fruit_large_immature_05"-"fruit_large_immature_06"-"seed","inflorescence_bud_small"-"inflorescence_stalk"-"inflorescence_stalk_in_fruit","bud_just_opening"-"flower_petals","fruit_young"-"pedicel","fruit_large_immature_06"-"seed_pod","fruit_large_immature_06"-"seed_aborted")
@@ -44,12 +139,60 @@ GRSP.graph=set.vertex.attribute(GRSP.graph,name="col",index=20:22,value=4)
 GRSP.graph=set.vertex.attribute(GRSP.graph,name="col",index=17:19,value=5)
 #Set weights
 GRSP.graph=set.edge.attribute(GRSP.graph,name="weight",value=1)
-GRSP.graph=set.edge.attribute(GRSP.graph,name="weight",index=c(5,6,10,11,17,18,19),value=c(0.4,0.6,0.92,0.08,0.1,0.9,0.1))
+#We modify the edges for those parts which are result of branching on the plant map
+AM=get.adjacency(GRSP.graph,edges = T)
+###############################
+#Flower_petals, flower_stigma 
+##############################
+#which edges
+E1=AM["bud_just_opening","flower_stigma"]
+E2=AM["bud_just_opening","flower_petals"]
+#av. weights of the parts
+W1=AV_W("GRSP","flower_stigma")
+W2=AV_W("GRSP","flower_petals")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+GRSP.graph=set.edge.attribute(GRSP.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
+
+###############################
+#pedicel, fruit_large_immature_01
+##############################
+#which edges
+E1=AM["fruit_young","pedicel"]
+E2=AM["fruit_young","fruit_large_immature_01"]
+#av. weights of the parts
+W1=AV_W("GRSP","pedicel")
+W2=AV_W("GRSP","fruit_large_immature")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+GRSP.graph=set.edge.attribute(GRSP.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
+
+###############################
+#seed_pod,seed,seed_aborted from fruit_large_immature_06
+##############################
+#which edges
+E1=AM["fruit_large_immature_06","seed_pod"]
+E2=AM["fruit_large_immature_06","seed"]
+E3=AM["fruit_large_immature_06","seed_aborted"]
+#av. weights of the parts
+W1=AV_W("GRSP","seed_pod")
+W2=AV_W("GRSP","seed_aborted")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+GRSP.graph=set.edge.attribute(GRSP.graph,name="weight",index=c(E1,E2,E3),value=c(w1,w2,w2))
 GraphMaps[["GRSP"]]=list(graph=GRSP.graph,Paths=Paths)
 rm(GRSP.graph)
 
 
-# Temporary changes.
+#=====================================================================================
+#
+#                     E P M I 
+#
+#=====================================================================================
+
 EPMI.graph=graph.formula("bud_tiny"-"bud_mid"-"bud_big"-"flower_calyx"-"finished_flower"-"fruit_young"-"fruit_large_immature_01"-"fruit_mature","bud_big"-"flower_petals")
 from="bud_tiny"
 to="fruit_mature"
@@ -59,9 +202,30 @@ EPMI.graph=set.vertex.attribute(EPMI.graph,name="col",index=c(1:8),value=3)
 EPMI.graph=set.vertex.attribute(EPMI.graph,name="col",index=9,value=4)
 #Set edge color
 EPMI.graph=set.edge.attribute(EPMI.graph,name="weight",value=1)
-EPMI.graph=set.edge.attribute(EPMI.graph,name="weight",index=c(3,4),value=c(0.53,0.47))
+AM=get.adjacency(EPMI.graph,edges = T)
+###############################
+#Flower_petals, flower_calyx 
+##############################
+#which edges
+E1=AM["bud_big","flower_calyx"]
+E2=AM["bud_big","flower_petals"]
+#av. weights of the parts
+W1=AV_W("EPMI","flower_calyx")
+W2=AV_W("EPMI","flower_petals")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+EPMI.graph=set.edge.attribute(EPMI.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
+
 GraphMaps[["EPMI"]]=list(graph=EPMI.graph,Paths=Paths)
 rm(EPMI.graph)
+
+
+#=====================================================================================
+#
+#                     C O E R 
+#
+#=====================================================================================
 
 
 COER.graph=graph.formula("bud_big"-"flower_stigma"-"finished_flower"-"fruit_just_starting"-"fruit_young"-"fruit_large_immature_01"-"fruit_mature","inflorescence_bud_tiny"-"inflorescence_bud_mid"-"inflorescence_stalk"-"inflorescence_stalk_in_fruit","inflorescence_stalk"-"inflorescence_stalk_in_fruit_large","inflorescence_stalk"-"inflorescence_stalk_in_fruit_very_large","bud_big"-"flower_petals","fruit_just_starting"-"bract_fruit")
@@ -75,10 +239,43 @@ COER.graph=set.vertex.attribute(COER.graph,name="col",index=14:15,value=4)
 COER.graph=set.vertex.attribute(COER.graph,name="col",index=8:13,value=5)
 #Set the weights for all edges
 COER.graph=set.edge.attribute(COER.graph,name="weight",value=1)
-COER.graph=set.edge.attribute(COER.graph,name="weight",index=c(1,2,5,6),value=c(0.32,0.68,0.53,0.47))
+AM=get.adjacency(COER.graph,edges = T)
+###############################
+#Flower_petals, flower_stigma 
+##############################
+#which edges
+E1=AM["bud_big","flower_stigma"]
+E2=AM["bud_big","flower_petals"]
+#av. weights of the parts
+W1=AV_W("COER","flower_stigma")
+W2=AV_W("COER","flower_petals")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+COER.graph=set.edge.attribute(COER.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
+###############################
+#bract_fruit, fruit_young from fruit_just_starting 
+##############################
+#which edges
+E1=AM["fruit_just_starting","bract_fruit"]
+E2=AM["fruit_just_starting","fruit_young"]
+#av. weights of the parts
+W1=AV_W("COER","bract_fruit")
+W2=AV_W("COER","fruit_young")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+COER.graph=set.edge.attribute(COER.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
+
 GraphMaps[["COER"]]=list(graph=COER.graph,Paths=Paths)
 rm(COER.graph)
 
+
+#=====================================================================================
+#
+#                     P U T U 
+#
+#=====================================================================================
 
 
 PUTU.graph=graph.formula("bud_big"-"flower_stigma"-"finished_flower_stigma"-"fruit_large_immature_01"-"seed","bud_big"-"flower_petals","bud_big"-"flower_calyx","bud_big"-"bract_flower_or_finished_flower","flower_aborted","flower_stigma"-"fruit_aborted","fruit_large_immature_01"-"seed_pod","fruit_large_immature_01"-"seed_aborted")
@@ -91,11 +288,51 @@ PUTU.graph=set.vertex.attribute(PUTU.graph,name="col",index=c(6:8,11),value=4)
 PUTU.graph=set.vertex.attribute(PUTU.graph,name="col",index=c(9),value=5)
 #Set weights to all edges
 PUTU.graph=set.edge.attribute(PUTU.graph,name="weight",value=1)
-PUTU.graph=set.edge.attribute(PUTU.graph,name="weight",index=c(1,2,3,4,8,9,10),value=c(0.1596,0.5122,0.1557,0.1725,0.19,0.81,0.19))
+#PUTU.graph=set.edge.attribute(PUTU.graph,name="weight",index=c(1,2,3,4,8,9,10),value=c(0.1596,0.5122,0.1557,0.1725,0.19,0.81,0.19))
+AM=get.adjacency(PUTU.graph,edges = T)
+###############################
+#flower_petals, flower_calyx, flower_stigma,bract_flower_or_finished_flower from bud big 
+##############################
+#which edges
+E1=AM["bud_big","flower_petals"]
+E2=AM["bud_big","flower_calyx"]
+E3=AM["bud_big","flower_stigma"]
+E4=AM["bud_big","bract_flower_or_finished_flower"]
+
+#av. weights of the parts
+W1=AV_W("PUTU","flower_petals")
+W2=AV_W("PUTU","flower_calyx")
+W3=AV_W("PUTU","flower_stigma")
+W4=AV_W("PUTU","bract_flower_or_finished_flower")
+#
+w1=W1/sum(W1,W2,W3,W4)
+w2=W2/sum(W1,W2,W3,W4)
+w3=W3/sum(W1,W2,W3,W4)
+w4=W4/sum(W1,W2,W3,W4)
+PUTU.graph=set.edge.attribute(PUTU.graph,name="weight",index=c(E1,E2,E3,E4),value=c(w1,w2,w3,w4))
+
+###############################
+#seed_pod,seed,seed_aborted from fruit_large_immature_01
+##############################
+#which edges
+E1=AM["fruit_large_immature_01","seed_pod"]
+E2=AM["fruit_large_immature_01","seed"]
+E3=AM["fruit_large_immature_01","seed_aborted"]
+#av. weights of the parts
+W1=AV_W("PUTU","seed_pod")
+W2=AV_W("PUTU","seed_aborted")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+PUTU.graph=set.edge.attribute(PUTU.graph,name="weight",index=c(E1,E2,E3),value=c(w1,w2,w3))
 GraphMaps[["PUTU"]]=list(graph=PUTU.graph,Paths=Paths)
 rm(PUTU.graph)
 
-
+#=====================================================================================
+#
+#                     B A E R
+#
+#=====================================================================================
 
 
 BAER.graph=graph.formula("cone_base_green_01"-"cone_base_green_02"-"cone_base_green_03"-"cone_base_green_04"-"cone_base_brown","cone_young_01"-"cone_young_02"-"cone_young_03"-"cone_young_04"-"cone_green_01"-"cone_green_02"-"cone_green_03"-"cone_green_04"-"cone_brown","cone_green_04"-"cone_brown_no_expanded_follicles","cone_green_04"-"cone_aborted","bud_tiny"-"bud_small"-"bud_mid"-"bud_big"-"bud_just_opening"-"flower_stigma"-"finished_flower_stigma"-"fruit_just_starting"-"fruit_young"-"fruit_large_immature_01"-"seed","bud_just_opening"-"flower_petals","bud_just_opening"-"flower_style","fruit_large_immature_01"-"seed_pod","fruit_large_immature_01"-"seed_aborted")
@@ -110,10 +347,48 @@ BAER.graph=set.vertex.attribute(BAER.graph,name="col",index=c(28:30),value=4)
 #Set weights
 BAER.graph=set.edge.attribute(BAER.graph,name="weight",value=1)
 BAER.graph=set.edge.attribute(BAER.graph,name="weight",index=c(19,20,21,26,27,28),value=c(0.28,0.44,0.28,0.07,0.93,0.07))
+
+AM=get.adjacency(BAER.graph,edges = T)
+###############################
+#flower_petals, flower_style, flower_stigma, from bud_just_opening
+##############################
+#which edges
+E1=AM["bud_just_opening","flower_petals"]
+E2=AM["bud_just_opening","flower_style"]
+E3=AM["bud_just_opening","flower_stigma"]
+
+#av. weights of the parts
+W1=AV_W("BAER","flower_petals")
+W2=AV_W("BAER","flower_style")
+W3=AV_W("BAER","flower_stigma")
+#
+w1=W1/sum(W1,W2,W3)
+w2=W2/sum(W1,W2,W3)
+w3=W3/sum(W1,W2,W3)
+BAER.graph=set.edge.attribute(BAER.graph,name="weight",index=c(E1,E2,E3),value=c(w1,w2,w3))
+
+###############################
+#seed_pod,seed,seed_aborted from fruit_large_immature_01
+##############################
+#which edges
+E1=AM["fruit_large_immature_01","seed_pod"]
+E2=AM["fruit_large_immature_01","seed"]
+E3=AM["fruit_large_immature_01","seed_aborted"]
+#av. weights of the parts
+W1=AV_W("BAER","seed_pod")
+W2=AV_W("BAER","seed_aborted")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+BAER.graph=set.edge.attribute(BAER.graph,name="weight",index=c(E1,E2,E3),value=c(w1,w2,w2))
 GraphMaps[["BAER"]]=list(graph=BAER.graph,Paths=Paths)
 rm(BAER.graph)
 
-
+#=====================================================================================
+#
+#                     B O L E 
+#
+#=====================================================================================
 
 
 BOLE.graph=graph.formula("bud_tiny"-"bud_small"-"bud_mid"-"bud_big"-"flower_calyx"-"finished_flower_stigma"-"fruit_just_starting"-"fruit_young"-"fruit_large_immature_01"-"seed","bud_big"-"pedicel","bud_big"-"flower_petals","flower_calyx"-"finished_flower"-"late_finished_flower","fruit_large_immature_01"-"seed_pod")
@@ -125,9 +400,66 @@ BOLE.graph=set.vertex.attribute(BOLE.graph,name="col",index=c(1:10),value=3)
 BOLE.graph=set.vertex.attribute(BOLE.graph,name="col",index=c(11,12,13,14,15),value=4)
 #Set edge weight to define carbon flow
 BOLE.graph=set.edge.attribute(BOLE.graph,name="weight",value=1)
-BOLE.graph=set.edge.attribute(BOLE.graph,name="weight",index=c(4,5,6,7,8,12,13),value=c(0.486,0.116,0.4,0.03,0.97,0.48,0.52))
+#BOLE.graph=set.edge.attribute(BOLE.graph,name="weight",index=c(4,5,6,7,8,12,13),value=c(0.486,0.116,0.4,0.03,0.97,0.48,0.52))
+
+AM=get.adjacency(BOLE.graph,edges = T)
+###############################
+#flower_petals, pedicel, flower_calyx, from bud_big
+##############################
+#which edges
+E1=AM["bud_big","flower_petals"]
+E2=AM["bud_big","pedicel"]
+E3=AM["bud_big","flower_calyx"]
+
+#av. weights of the parts
+W1=AV_W("BOLE","flower_petals")
+W2=AV_W("BOLE","pedicel")
+W3=AV_W("BOLE","flower_calyx")
+#
+w1=W1/sum(W1,W2,W3)
+w2=W2/sum(W1,W2,W3)
+w3=W3/sum(W1,W2,W3)
+BOLE.graph=set.edge.attribute(BOLE.graph,name="weight",index=c(E1,E2,E3),value=c(w1,w2,w3))
+
+###############################
+#finished_flower, finished_flower_stigma from flower_calyx
+##############################
+#which edges
+E1=AM["flower_calyx","finished_flower"]
+E2=AM["flower_calyx","finished_flower_stigma"]
+
+#av. weights of the parts
+W1=AV_W("BOLE","finished_flower")
+W2=AV_W("BOLE","finished_flower_stigma")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+BOLE.graph=set.edge.attribute(BOLE.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
+
+###############################
+#seed_pod, seed from fruit_large_immature
+##############################
+#which edges
+E1=AM["fruit_large_immature_01","seed_pod"]
+E2=AM["fruit_large_immature_01","seed"]
+
+#av. weights of the parts
+W1=AV_W("BOLE","seed_pod")
+W2=AV_W("BOLE","seed")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+BOLE.graph=set.edge.attribute(BOLE.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
+
+
 GraphMaps[["BOLE"]]=list(graph=BOLE.graph,Paths=Paths)
 rm(BOLE.graph)
+
+#=====================================================================================
+#
+#                     H E P U 
+#
+#=====================================================================================
 
 
 
@@ -141,8 +473,47 @@ HEPU.graph=set.vertex.attribute(HEPU.graph,name="col",index=c(8,10),value=4)
 #Set egde weights
 HEPU.graph=set.edge.attribute(HEPU.graph,name="weight",value=1)
 HEPU.graph=set.edge.attribute(HEPU.graph,name="weight",index=c(2,3,6,7),value=c(0.4433,0.5567,0.4658,0.5342))
+
+AM=get.adjacency(HEPU.graph,edges = T)
+###############################
+#flower_petals, flower_calyx from bud_big
+##############################
+#which edges
+E1=AM["bud_big","flower_petals"]
+E2=AM["bud_big","flower_calyx"]
+
+#av. weights of the parts
+W1=AV_W("HEPU","flower_petals")
+W2=AV_W("HEPU","flower_calyx")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+HEPU.graph=set.edge.attribute(HEPU.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
+
+###############################
+#calyx_fruit, fruit_young from finished_flower
+##############################
+#which edges
+E1=AM["finished_flower","calyx_fruit"]
+E2=AM["finished_flower","fruit_young"]
+
+#av. weights of the parts
+W1=AV_W("HEPU","calyx_fruit")
+W2=AV_W("HEPU","fruit_young")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+HEPU.graph=set.edge.attribute(HEPU.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
+
+
 GraphMaps[["HEPU"]]=list(graph=HEPU.graph,Paths=Paths)
 rm(HEPU.graph)
+
+#=====================================================================================
+#
+#                     P I L I
+#
+#=====================================================================================
 
 
 
@@ -157,10 +528,63 @@ PILI.graph=set.vertex.attribute(PILI.graph,name="col",index=c(6:7),value=4)
 PILI.graph=set.vertex.attribute(PILI.graph,name="col",index=8,value=5)
 #Set egde weights
 PILI.graph=set.edge.attribute(PILI.graph,name="weight",value=1)
-PILI.graph=set.edge.attribute(PILI.graph,name="weight",index=c(1,2,3,7,8,9,10),value=c(0.02,0.2,0.78,0.61,0.39,0.22,0.78))
+#PILI.graph=set.edge.attribute(PILI.graph,name="weight",index=c(1,2,3,7,8,9,10),value=c(0.02,0.2,0.78,0.61,0.39,0.22,0.78))
+AM=get.adjacency(PILI.graph,edges = T)
+###############################
+#flower_petals, flower_calyx, flower_stigma, from bud_big
+##############################
+#which edges
+E1=AM["bud_big","flower_petals"]
+E2=AM["bud_big","flower_calyx"]
+E3=AM["bud_big","flower_stigma"]
+
+#av. weights of the parts
+W1=AV_W("PILI","flower_petals")
+W2=AV_W("PILI","flower_calyx")
+W3=AV_W("PILI","flower_stigma")
+#
+w1=W1/sum(W1,W2,W3)
+w2=W2/sum(W1,W2,W3)
+w3=W3/sum(W1,W2,W3)
+PILI.graph=set.edge.attribute(PILI.graph,name="weight",index=c(E1,E2,E3),value=c(w1,w2,w3))
+
+###############################
+#seed_pod, seed from fruit_large_immature
+##############################
+#which edges
+E1=AM["fruit_large_immature_01","seed_pod"]
+E2=AM["fruit_large_immature_01","seed"]
+
+#av. weights of the parts
+W1=AV_W("PILI","seed_pod")
+W2=AV_W("PILI","seed")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+PILI.graph=set.edge.attribute(PILI.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
+
+###############################
+#inflorescence_stalk, bract_flower_or_finished_flower from inflorescence_bud_mid
+##############################
+#which edges
+E1=AM["inflorescence_bud_mid","inflorescence_stalk"]
+E2=AM["inflorescence_bud_mid","bract_flower_or_finished_flower"]
+
+#av. weights of the parts
+W1=AV_W("PILI","inflorescence_stalk")
+W2=AV_W("PILI","bract_flower_or_finished_flower")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+PILI.graph=set.edge.attribute(PILI.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
 GraphMaps[["PILI"]]=list(graph=PILI.graph,Paths=Paths)
 rm(PILI.graph)
 
+#=====================================================================================
+#
+#                     P H P H 
+#
+#=====================================================================================
 
 
 PHPH.graph=graph.formula("bud_small"-"bud_mid"-"flower_stigma"-"finished_flower_stigma"-"fruit_just_starting"-"fruit_young"-"fruit_large_immature_01"-"seed","bud_mid"-"flower_petals_small"-"flower_petals","bud_mid"-"bract_flower_or_finished_flower","bud_mid"-"flower_calyx","bud_small"-"flower_aborted","flower_aborted_without_petals","fruit_young"-"fruit_aborted","fruit_large_immature_01"-"seed_pod","fruit_large_immature_01"-"seed_aborted")
@@ -174,9 +598,54 @@ PHPH.graph=set.vertex.attribute(PHPH.graph,name="col",index=c(14),value=5)
 #Set egde weights
 PHPH.graph=set.edge.attribute(PHPH.graph,name="weight",value=1)
 PHPH.graph=set.edge.attribute(PHPH.graph,name="weight",index=c(3,4,5,6,12,13,14),value=c(0.1269,0.3441,0.3413,0.1876,0.24,0.76,0.24))
+AM=get.adjacency(PHPH.graph,edges = T)
+###############################
+#flower_petals_small, bract_flower_or_finished_flower, flower_stigma,flower_calyx from bud_mid 
+##############################
+#which edges
+E1=AM["bud_mid","flower_petals_small"]
+E2=AM["bud_mid","bract_flower_or_finished_flower"]
+E3=AM["bud_mid","flower_stigma"]
+E4=AM["bud_mid","flower_calyx"]
+
+#av. weights of the parts
+W1=AV_W("PHPH","flower_petals_small")
+W2=AV_W("PHPH","bract_flower_or_finished_flower")
+W3=AV_W("PHPH","flower_stigma")
+W4=AV_W("PHPH","flower_calyx")
+#
+w1=W1/sum(W1,W2,W3,W4)
+w2=W2/sum(W1,W2,W3,W4)
+w3=W3/sum(W1,W2,W3,W4)
+w4=W4/sum(W1,W2,W3,W4)
+PHPH.graph=set.edge.attribute(PHPH.graph,name="weight",index=c(E1,E2,E3,E4),value=c(w1,w2,w3,w4))
+
+
+###############################
+#seed_pod,seed,seed_aborted from fruit_large_immature_01
+##############################
+#which edges
+E1=AM["fruit_large_immature_01","seed_pod"]
+E2=AM["fruit_large_immature_01","seed"]
+E3=AM["fruit_large_immature_01","seed_aborted"]
+#av. weights of the parts
+W1=AV_W("PHPH","seed_pod")
+W2=AV_W("PHPH","seed_aborted")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+PHPH.graph=set.edge.attribute(PHPH.graph,name="weight",index=c(E1,E2,E3),value=c(w1,w2,w2))
+
+
 GraphMaps[["PHPH"]]=list(graph=PHPH.graph,Paths=Paths)
 rm(PHPH.graph)
 
+
+#=====================================================================================
+#
+#                     P E L A 
+#
+#=====================================================================================
 
 
 PELA.graph=graph.formula("bud_small"-"bud_mid"-"bud_big"-"flower_stigma"-"finished_flower_stigma"-"fruit_just_starting"-"fruit_young"-"fruit_large_immature_01"-"fruit_large_immature_02"-"fruit_large_immature_03"-"fruit_large_immature_04"-"fruit_large_immature_05"-"fruit_large_immature_06"-"seed","bud_big"-"flower_petals","bud_big"-"pedicel","fruit_large_immature_06"-"seed_pod")
@@ -188,9 +657,50 @@ PELA.graph=set.vertex.attribute(PELA.graph,name="col",index=c(1:14),value=3)
 PELA.graph=set.vertex.attribute(PELA.graph,name="col",index=15:17,value=4)
 #Set edge color
 PELA.graph=set.edge.attribute(PELA.graph,name="weight",value=1)
-PELA.graph=set.edge.attribute(PELA.graph,name="weight",index=c(3,4,5,15,16),value=c(0.08,0.78,0.14,0.42,0.58))
+#PELA.graph=set.edge.attribute(PELA.graph,name="weight",index=c(3,4,5,15,16),value=c(0.08,0.78,0.14,0.42,0.58))
+AM=get.adjacency(PELA.graph,edges = T)
+###############################
+#flower_petals, pedicel, flower_stigma, from bud_big
+##############################
+#which edges
+E1=AM["bud_big","flower_petals"]
+E2=AM["bud_big","pedicel"]
+E3=AM["bud_big","flower_stigma"]
+
+#av. weights of the parts
+W1=AV_W("PELA","flower_petals")
+W2=AV_W("PELA","pedicel")
+W3=AV_W("PELA","flower_stigma")
+#
+w1=W1/sum(W1,W2,W3)
+w2=W2/sum(W1,W2,W3)
+w3=W3/sum(W1,W2,W3)
+PELA.graph=set.edge.attribute(PELA.graph,name="weight",index=c(E1,E2,E3),value=c(w1,w2,w3))
+
+###############################
+#seed_pod, seed from fruit_large_immature
+##############################
+#which edges
+E1=AM["fruit_large_immature_06","seed_pod"]
+E2=AM["fruit_large_immature_06","seed"]
+
+#av. weights of the parts
+W1=AV_W("PELA","seed_pod")
+W2=AV_W("PELA","seed")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+PELA.graph=set.edge.attribute(PELA.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
+
 GraphMaps[["PELA"]]=list(graph=PELA.graph,Paths=Paths)
 rm(PELA.graph)
+
+#=====================================================================================
+#
+#                     H A T E
+#
+#=====================================================================================
+
 
 HATE.graph=graph.formula("inflorescence_bud_tiny"-"inflorescence_bud_small"-"inflorescence_bud_mid"-"inflorescence_bud_big_flowers"-"flower_stigma"-"finished_flower_stigma"-"fruit_just_starting"-"fruit_young"-"fruit_large_immature_01"-"seed_immature"-"seed","inflorescence_bud_mid"-"inflorescence_bud_big_bracts","inflorescence_bud_big_flowers"-"flower_petals","fruit_young"-"fruit_aborted","fruit_large_immature_01"-"seed_pod","fruit_large_immature_01"-"seed_aborted")
 from=c("inflorescence_bud_tiny")
@@ -201,9 +711,60 @@ HATE.graph=set.vertex.attribute(HATE.graph,name="col",index=c(1:11,14,16),value=
 HATE.graph=set.vertex.attribute(HATE.graph,name="col",index=c(12,13,15),value=4)
 #Set edge color
 HATE.graph=set.edge.attribute(HATE.graph,name="weight",value=1)
-HATE.graph=set.edge.attribute(HATE.graph,name="weight",index=c(3,4,5,6,12,13,14),value=c(0.44,0.56,0.45,0.55,0.01,0.99,0.01))
+#HATE.graph=set.edge.attribute(HATE.graph,name="weight",index=c(3,4,5,6,12,13,14),value=c(0.44,0.56,0.45,0.55,0.01,0.99,0.01))
+AM=get.adjacency(HATE.graph,edges = T)
+###############################
+#inflorescence_bud_big_bracts, inflorescence_bud_big_flowers from inflorescence_bud_mid
+##############################
+#which edges
+E1=AM["inflorescence_bud_mid","inflorescence_bud_big_bracts"]
+E2=AM["inflorescence_bud_mid","inflorescence_bud_big_flowers"]
+
+#av. weights of the parts
+W1=AV_W("HATE","inflorescence_bud_big_bracts")
+W2=AV_W("HATE","inflorescence_bud_big_flowers")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+HATE.graph=set.edge.attribute(HATE.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
+###############################
+#flower_petals,flower_stigma  from inflorescence_bud_big_flowers
+##############################
+#which edges
+E1=AM["inflorescence_bud_big_flowers","flower_petals"]
+E2=AM["inflorescence_bud_big_flowers","flower_stigma"]
+
+#av. weights of the parts
+W1=AV_W("HATE","flower_petals")
+W2=AV_W("HATE","flower_stigma")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+HATE.graph=set.edge.attribute(HATE.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
+
+###############################
+#seed_pod,seed_immature,seed_aborted from fruit_large_immature_01
+##############################
+#which edges
+E1=AM["fruit_large_immature_01","seed_pod"]
+E2=AM["fruit_large_immature_01","seed_immature"]
+E3=AM["fruit_large_immature_01","seed_aborted"]
+#av. weights of the parts
+W1=AV_W("HATE","seed_pod")
+W2=AV_W("HATE","seed_aborted")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+HATE.graph=set.edge.attribute(HATE.graph,name="weight",index=c(E1,E2,E3),value=c(w1,w2,w2))
+
 GraphMaps[["HATE"]]=list(graph=HATE.graph,Paths=Paths)
 rm(HATE.graph)
+
+#=====================================================================================
+#
+#                     P E P U
+#
+#=====================================================================================
 
 
 PEPU.graph=graph.formula("bud_tiny"-"bud_big"-"flower_stigma"-"fruit_just_starting"-"fruit_young"-"fruit_large_immature_01"-"fruit_mature","cone_just_starting_01"-"cone_just_starting_02"-"cone_just_starting_03"-"cone_just_starting_04"-"cone_just_starting_05"-"cone_young_01"-"cone_young_02"-"cone_young_03"-"cone_young_04"-"cone_green_01"-"cone_green_02"-"cone_green_03"-"cone_green_04"-"cone_brown","cone_green_04"-"cone_aborted","bud_tiny"-"bud_aborted","bud_big"-"flower_petals","bud_big"-"flower_calyx","fruit_large_immature_01"-"fruit_empty","fruit_just_starting"-"fruit_aborted")
@@ -217,9 +778,29 @@ PEPU.graph=set.vertex.attribute(PEPU.graph,name="col",index=c(8:22),value=5)
 #Set edge color
 PEPU.graph=set.edge.attribute(PEPU.graph,name="weight",value=1)
 PEPU.graph=set.edge.attribute(PEPU.graph,name="weight",index=c(3,4,5),value=c(0.22,0.66,0.12))
+AM=get.adjacency(PEPU.graph,edges = T)
+###############################
+#flower_petals,flower_calyx, flower_stigma, from bud_big
+##############################
+#which edges
+E1=AM["bud_big","flower_petals"]
+E2=AM["bud_big","flower_calyx"]
+E3=AM["bud_big","flower_stigma"]
+
+#av. weights of the parts
+W1=AV_W("PEPU","flower_petals")
+W2=AV_W("PEPU","flower_calyx")
+W3=AV_W("PEPU","flower_stigma")
+#
+w1=W1/sum(W1,W2,W3)
+w2=W2/sum(W1,W2,W3)
+w3=W3/sum(W1,W2,W3)
+PEPU.graph=set.edge.attribute(PEPU.graph,name="weight",index=c(E1,E2,E3),value=c(w1,w2,w3))
+
 GraphMaps[["PEPU"]]=list(graph=PEPU.graph,Paths=Paths)
 rm(PEPU.graph)
 
+rm(list = c("E1","E2","E3","E4","W1","W2","W3","W4","w1","w2","w3","w4","AM"))
 
 # Example plot
 # tkplot(GraphMaps[["LEES"]]$graph,vertex.color=V(GraphMaps[["LEES"]]$graph)$col,edge.label=E(GraphMaps[["LEES"]]$graph)$weight)
