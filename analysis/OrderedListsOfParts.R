@@ -13,7 +13,7 @@ Maps[["EPMI"]]=c("bud_tiny","bud_mid","bud_big","flower_petals","flower_calyx","
 
 Maps[["COER"]]=c("inflorescence_bud_tiny","inflorescence_bud_mid","inflorescence_stalk","bud_big","inflorescence_stalk_in_fruit",
                  "inflorescence_stalk_in_fruit_large","inflorescence_stalk_in_fruit_very_large","flower_petals","flower_stigma","finished_flower",
-                 "fruit_just_starting","bract_fruit","fruit_young","fruit_large_immature","fruit_mature","flower_all_parts","finished_flower_all_parts")
+                 "fruit_just_starting","bract_fruit","fruit_young","fruit_large_immature","fruit_mature","flower_all_parts")
 
 Maps[["PUTU"]]=c("bud_big","flower_petals","flower_calyx","bract_flower_or_finished_flower","flower_stigma","finished_flower_stigma","flower_aborted","finished_flower_stigma",
                  "fruit_large_immature","fruit_aborted","seed_pod","seed","seed_aborted")

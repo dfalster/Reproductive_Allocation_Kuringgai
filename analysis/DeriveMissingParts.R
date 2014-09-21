@@ -19,10 +19,10 @@ data[nr,3]=NA
 data[nr,4]=data[data$part=="flower_all_parts",4]-data[data$part=="flower_petals",4]
 data=data[!data$part=="flower_all_parts",]
 
-nr=which(data[,2]=="finished_flower")
-data[nr,3]=NA
-data[nr,4]=data[data$part=="finished_flower_all_parts",4]-data[data$part=="flower_petals",4]
-data=data[!data$part=="finished_flower_all_parts",]
+#nr=which(data[,2]=="finished_flower")
+#data[nr,3]=NA
+#data[nr,4]=data[data$part=="finished_flower_all_parts",4]-data[data$part=="flower_petals",4]
+#data=data[!data$part=="finished_flower_all_parts",]
 
 out[["COER"]]=data;
 ######################
@@ -38,12 +38,12 @@ out[["PILI"]]=data;
 ######################
 
 ####### HEPU #########
-data=out[["HEPU"]];
-nr=which(data[,2]=="fruit_aborted")
-data[nr,3]=NA
-data[nr,4]=data[data$part=="calyx_aborted_fruit",4]+data[data$part=="fruit_aborted",4]
-data=data[!data$part=="calyx_aborted_fruit",]
-out[["HEPU"]]=data;
+#data=out[["HEPU"]];
+#nr=which(data[,2]=="fruit_aborted")
+#data[nr,3]=NA
+#data[nr,4]=data[data$part=="calyx_aborted_fruit",4]+data[data$part=="fruit_aborted",4]
+#data=data[!data$part=="calyx_aborted_fruit",]
+#out[["HEPU"]]=data;
 
 return(out)
 }
