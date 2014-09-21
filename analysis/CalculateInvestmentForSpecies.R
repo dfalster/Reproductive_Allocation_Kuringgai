@@ -2,6 +2,7 @@ source('analysis/CalculateInvestmentForIndividualPlant.R')
 
 CalculateInvestmentForSpecies<-function(species)
 { 
+  #species="PUTU"
   #Initialize data frames
   InvestmentSpecies=data.frame(Individual=c(), age=c(), FromCensus=c(), ToCensus=c(), From=c(), To=c(),Inv=c(), Count=c(),Total=c())
   ErrorSpecies=data.frame(Individual=c(), Element=c(), Census=c(), Count=c())

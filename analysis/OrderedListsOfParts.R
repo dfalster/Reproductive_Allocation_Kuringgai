@@ -15,7 +15,7 @@ Maps[["COER"]]=c("inflorescence_bud_tiny","inflorescence_bud_mid","inflorescence
                  "inflorescence_stalk_in_fruit_large","inflorescence_stalk_in_fruit_very_large","flower_petals","flower_stigma","finished_flower",
                  "fruit_just_starting","bract_fruit","fruit_young","fruit_large_immature","fruit_mature","flower_all_parts")
 
-Maps[["PUTU"]]=c("bud_big","flower_petals","flower_calyx","bract_flower_or_finished_flower","flower_stigma","finished_flower_stigma","flower_aborted","finished_flower_stigma",
+Maps[["PUTU"]]=c("bud_big","flower_petals","flower_calyx","bract_flower_or_finished_flower","flower_stigma","finished_flower_stigma","flower_aborted",
                  "fruit_large_immature","fruit_aborted","seed_pod","seed","seed_aborted")
 
 Maps[["BAER"]]=c("cone_base_green","cone_base_brown","cone_green","cone_brown","cone_brown_no_expanded_follicles","cone_aborted",

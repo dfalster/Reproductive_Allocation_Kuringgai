@@ -1,6 +1,6 @@
 InvestmentInAccessoryTissues<-function(individual)
 {
-  #individual="EPMI_906"
+  #individual="PUTU_904"
   species=str_sub(individual,1,4)
   
   #Read tree data
@@ -11,7 +11,6 @@ InvestmentInAccessoryTissues<-function(individual)
   #Transform counts to weights and adjust for multiplicity 
   TreeListOrig=WeightCalculationsForTree(Tree)
   TreeListAdj=AdjustForMultiplicity(TreeList=TreeListOrig)
-  Weights=TreeListToTotalDataFrame(TreeListAdj)
   
   #Read in the information about lost elements
   SpeciesLoss=read.csv(paste0('output/',species,'_FinDev.csv'),header=T,stringsAsFactors = FALSE, na.strings="")
