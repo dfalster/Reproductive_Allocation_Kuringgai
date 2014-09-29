@@ -13,3 +13,6 @@ weight,weight in grams
 leaf_area,leaf area in cm^2
 LMA,grams per cm^2
 notes,extra information
+leaf_area_m,leaf area in m^2
+weight_kg,weight in kilograms
+LMA_kgm,leaf mass per area in kg per m^2
