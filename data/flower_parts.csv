@@ -19,7 +19,7 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 4637,BAER,Basin1981,21-Jun-13,97,BAER_901,17;18,used,bud_big,10,,,,,used,97.38,,9.738,
 3222,BAER,Basin,11-Apr-13,44,,,,bud_big,12,,,,,used,126.9,,10.575,
 4035,BAER,Basin2007,7-May-13,93,BAER_404,17,used,bud_just_opening,15,,,,,used,73.9,,4.9,total weight of buds collected is 2127.6 mg
-5002,BAER,Basin1981,21-Jun-13,122,BAER_901,18,used,bud_just_opening,10,,,,,used,68.96,,6.896,2013 cone with opening buds
+5002,BAER,Basin1981,21-Jun-13,122,BAER_901,18;not used,don’t_use,bud_just_opening,10,,,,,used,68.96,,6.896,2013 cone with opening buds
 5034,BAER,Basin2005,28-May-13,132,BAER_005,16;17,used,bud_just_opening,12,,,,,used,94.38,,7.865,2013 cone with opening buds
 108,BAER,,22-Mar-13,20,,,,bud_just_opening,5,,,,,used,44.2,,8.84,bag with sample marked as: B
 106,BAER,,22-Mar-13,20,,,,bud_just_opening,5,,,,,used,44.5,,8.9,bag with sample marked as: B
@@ -115,7 +115,7 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 5009,BAER,Basin1981,21-Jun-13,124,BAER_901,9,used,cone_base_brown,1,,,5,11.5,used,184.52,,165.3125,2012 cone with no follicles
 4996,BAER,Waratah2003,28-May-13,120,BAER_806,8,used,cone_base_brown,1,,,6,12.8,used,267.56,,245.76,2012 cone with no follicles
 4672,BAER,Basin1981,21-Jun-13,109,BAER_905,8,used,cone_base_brown,1,,,10,10.5,used,422.96,,275.625,2012 cone with no expanded follicles
-4644,BAER,Basin1981,21-Jun-13,99,BAER_902,7,used,cone_base_brown,1,,,6,14.5,used,212.18,,315.375,2012 cone
+4644,BAER,Basin1981,21-Jun-13,99,BAER_902,7,don’t_use,cone_base_brown,1,,,6,14.5,used,212.18,,315.375,2012 cone
 4678,BAER,Basin1981,21-Jun-13,112,BAER_905,8,used,cone_base_brown,1,,,10,12.9,used,313.74,,416.025,2012 cone with no expanded follicles
 5042,BAER,Basin2005,28-May-13,136,BAER_007,5,used,cone_base_brown,1,,,10,14.5,used,553.96,,525.625,2012 cone with two follicles - 1 missing
 5030,BAER,Basin1981,21-Jun-13,131,BAER_901,9,used,cone_base_brown,1,,,8,19.3,used,1086.72,,744.98,2012 cone with 25 big follicles + 2 small follicles
@@ -3675,7 +3675,7 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 2129,PELA,,,130,,,,fruit_large_immature,1,,,16,,used,217.6,,,fruit_large_immature
 2136,PELA,Waratah2003,16-Oct-12,134,PELA_806,8,used,fruit_large_immature,1,,,16,,used,225.6,,,fruit_large_immature
 2158,PELA,Basin1981,20-Nov-12,146,PELA_903,7,used,fruit_large_immature,1,,,10,,used,145.6,,,fruit_mature
-2159,PELA,Basin1981,20-Nov-12,146,PELA_903,7,used,fruit_large_immature,1,,,13,,used,320.2,,,fruit_mature
+2159,PELA,Basin1981,20-Nov-12,146,PELA_903,7,not_used,fruit_large_immature,1,,,13,,used,320.2,,,fruit_mature
 4299,PELA,Waratah2003,31-Oct-13,280,,,,fruit_mature,1,,,16,,category_not_used,430.3,,,fruit_mature
 4300,PELA,Waratah2003,31-Oct-13,281,,,,fruit_mature,1,,,16,,category_not_used,348.1,,,fruit_mature
 4301,PELA,Waratah2003,31-Oct-13,282,,,,fruit_mature,1,,,16,,category_not_used,449.8,,,fruit_mature
