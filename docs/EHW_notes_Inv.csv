@@ -1,0 +1,8 @@
+BAER_806,9,12,13,cone_young_02,cone_aborted,-317.8786004,1,-317.8786004,"the predessor to this should be ""cone_young_01"""
+COER,,,,,,,,,"nothing in the investment table ends with ""inflorescence_stalk_in_fruit"""
+PELA_903,32,7,8,fruit_large_immature_04,fruit_large_immature_05,-146.5765126,89,-13045.30962,size is larger in second category and no collected parts to result in strange numbers
+PELA_902,32,6,7,fruit_large_immature_03,fruit_large_immature_04,0,1,0,"at census 6 there are three entries, at census 7 there are two entries, representing 2 of the three that grew. The third fruit, stayed the same size (15mm) until it became a seed, and therefore I didn't enter it again as a ""fruit_large_immature_04"", but the program assumes the 15 mm fruit at census 7 is the 15 mm fruit at census 6 and one of the small seeds doesn't progress. Should I continue entering the 15 mm fruit at each census to  not confuse the program?"
+PELA_907,32,6,7,fruit_large_immature_03,fruit_large_immature_04,0,2,0,similar to problem with PELA_907
+PELA_805,9,14,15,bud_big,pedicel,-0.030820377,70,-2.157426359,"the pedicels weighed for this plant are slightly below average, but not enough to create a negative investment. Is this because you have set fractions of carbon going to each of the tissue types (when a bud is split into the various flower parts)"
+EPMI,,,,,,,,,no errors found
+BOLE,,,,,,,,,"only problem is that flower_calyx weighs more than finished_flower + 4x-finished flower stigma; I think this is because some number has been typed into the program for carbon splitting, instead of using the current numbers in flower parts"

@@ -1046,7 +1046,7 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 435,COER,,,36,,,,inflorescence_stalk,5,,,,,used,42.8,,,
 436,COER,,,37,,,,inflorescence_stalk,5,,,,,used,32,,,
 503,COER,Waratah2003,11-Dec-12,197,COER_802,5;8,used,inflorescence_stalk,1,,,,,used,11.6,,,
-507,COER,Waratah2003,23-Nov-12,201,COER_805,5;6;8;9,used,inflorescence_stalk,11,,,,,used,32,,,"collected after plant fruited, but these stalks never fruited"
+507,COER,Waratah2003,23-Nov-12,201,COER_805,8;9,used,inflorescence_stalk,11,,,,,used,32,,2.909090909,"collected after plant fruited, but these stalks never fruited"
 3456,COER,Waratah2003,20-Sep-13,253,,,,inflorescence_stalk,1,,,,,used,15.9,,,2x branches
 3457,COER,Waratah2003,20-Sep-13,254,,,,inflorescence_stalk,1,,,,,used,35.9,,,2x branches
 3458,COER,Waratah2003,20-Sep-13,255,,,,inflorescence_stalk,1,,,,,used,17.6,,,1x branches
@@ -3426,7 +3426,7 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 1842,LEES,,,30,,,,fruit_young,5,,,,,used,11.6,,2.32,(marked as young fruit)
 1846,LEES,,,61,,,,fruit_young,10,,,,,used,24,,2.4,(marked as fruit)
 1845,LEES,,,60,,,,fruit_young,10,,,,,used,27.6,,2.76,(marked as fruit)
-4983,PELA,Basin1981,21-Jun-13,290,PELA_903,17,used,bud_big,5,,,,,used,63.5,,12.7,20 more in this category not weighed
+4983,PELA,Basin1981,21-Jun-13,290,PELA_903,17,used,bud_mid,5,,,,,used,63.5,,12.7,20 more in this category not weighed
 2175,PELA,,31-Jan-13,160,,,,bud_big,1,,,,,used,13.4,,13.4,light yellow bud
 2172,PELA,,31-Jan-13,157,,,,bud_big,1,,,,,used,14.8,,14.8,light yellow bud
 2178,PELA,,31-Jan-13,163,,,,bud_big,1,,,,,used,14.8,,14.8,light yellow bud
@@ -3519,7 +3519,7 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 4391,PELA,Basin1981,7-Jun-13,288,PELA_904,16;18,used,finished_flower_stigma,20,,,,,used,38.6,,1.93,"18 more in this category not weighed; initially called 905, but must be 904"
 2304,PELA,,22-Mar-13,263,,,,finished_flower_stigma,5,,,,,used,9.8,,1.96,
 2305,PELA,,22-Mar-13,264,,,,finished_flower_stigma,5,,,,,used,10.5,,2.1,
-4190,PELA,Basin1981,7-Jun-13,278,PELA_901,17,used,finished_flower_stigma,28,,,,,used,57.3,,4.2,
+4190,PELA,Basin1981,7-Jun-13,278,PELA_901,18,used,fruit_just_starting,28,,,,,used,57.3,,4.2,
 2250,PELA,,8-Feb-13,230,,,,flower_petals,1,,,,,used,15.9,,,
 2253,PELA,,8-Feb-13,231,,,,flower_petals,1,,,,,used,16.6,,,
 2256,PELA,,8-Feb-13,232,,,,flower_petals,1,,,,,used,15.7,,,

@@ -16,3 +16,6 @@ BAER_905,32,cone_green_01,3,2,9054.646376,"not lost, turns into cone brown NEF i
 BAER_905,32,finished_flower_stigma,4,2742,13257.57,
 BAER_906,32,finished_flower_stigma,4,1568,7581.28,
 BAER_906,32,fruit_young,6,70,19634.36364,"not lost, turns into fruit large immature in census 7"
+,,,,,,
+new notes,,,,,,
+GRBU,,,,,,"lots of individuals with negative number of ""finished_flower_stigma"" lost; checked a few and no obvious reason for this"
