@@ -9,5 +9,7 @@ BAER_803,9,fruit_young,6,13,3646.381818,this turns into 13 seeds
 BAER_807,9,fruit_young,6,15,4207.363636,this turns into 15 seeds
 BAER_906,32,fruit_young,6,70,19634.36364,this turns into 66 seeds
 BAER_901,32,fruit_young,7,89,24963.69091,this turns into 87 seeds
-EPMI,,,,,,NO ISSUES
-BOLE,,,,,,NO ISSUES I SEE
+PUTU_908,32,fruit_large_immature_01,17,6,6.85,"there are many PUTU individuals that have ""fruit_large_immature"" as a fin_dev part, but this always turns into the same number of seed pods in the following census; also, the counts don't make sense to me, even knowing that everything is multiplied by 2"
+EPMI,,,,,,no errors found
+BOLE,,,,,,no errors found
+PILI,,,,,,no errors found
