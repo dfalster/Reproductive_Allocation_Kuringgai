@@ -24,6 +24,7 @@ InvestmentCalculations<-function(TreeListOrig)
   
   #Check how many main paths there are for this plant.
   n.paths=nrow(GraphMaps[[species]]$Paths)
+  Paths=GraphMaps[[species]]$Paths
   #For each of the paths
   for( a in 1:n.paths)
   { L=data.frame(what=c(),Census=c(),count=c(),weight=c())
@@ -66,7 +67,7 @@ InvestmentCalculations<-function(TreeListOrig)
         Investments=rbind(Investments,R[["Inv"]])
         ErrList=rbind(ErrList,R[["Err"]])
         
-{
+        {
           #Some elements have aborted/empty parts which can be their alternative at that stage of reproduction. Make calculations for them
           #
           #Checking if there are X-OR-s before moving to the lower developement
@@ -87,12 +88,12 @@ InvestmentCalculations<-function(TreeListOrig)
           if(n.xors>0)
           {
             for(l in 1:n.xors)
-              #Determine the XOR progression
-              XOR.Progression=get.vertex.attribute(Plant.Graph,name="name",index=unlist(get.shortest.paths(Plant.Graph,from=Progression[1],to=XOR.Part[l])$vpath))
+            {  #Determine the XOR progression
+            XOR.Progression=get.vertex.attribute(Plant.Graph,name="name",index=unlist(get.shortest.paths(Plant.Graph,from=Progression[1],to=XOR.Part[l])$vpath))
             R=InvestmentInAPartType(TreeList=TreeList,TreeList_Pred=TreeList_Pred,Element=XOR.Part[l],Progression=XOR.Progression)
             TreeList_Pred=R[["TreeList_Pred"]]
             Investments=rbind(Investments,R[["Inv"]])
-            ErrList=rbind(ErrList,R[["Err"]])
+            ErrList=rbind(ErrList,R[["Err"]])}
           }
         }
       }

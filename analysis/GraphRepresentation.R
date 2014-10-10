@@ -800,7 +800,8 @@ PEPU.graph=set.edge.attribute(PEPU.graph,name="weight",index=c(E1,E2,E3),value=c
 GraphMaps[["PEPU"]]=list(graph=PEPU.graph,Paths=Paths)
 rm(PEPU.graph)
 
-rm(list = c("E1","E2","E3","E4","W1","W2","W3","W4","w1","w2","w3","w4","AM"))
+rm(list = c("E1","E2","E3","E4","W1","W2","W3","W4","w1","w2","w3","w4","AM","Paths"))
 
 # Example plot
-# tkplot(GraphMaps[["LEES"]]$graph,vertex.color=V(GraphMaps[["LEES"]]$graph)$col,edge.label=E(GraphMaps[["LEES"]]$graph)$weight)
+#species="HEPU"
+#tkplot(GraphMaps[[species]]$graph,vertex.color=V(GraphMaps[[species]]$graph)$col,edge.label=E(GraphMaps[[species]]$graph)$weight)
