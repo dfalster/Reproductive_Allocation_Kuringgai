@@ -1,10 +1,11 @@
 library(igraph)
+AvWeightPerUnit<-read.csv('output/partWeights/AvWeightPerUnit.csv')
 AV_W<-function(species,part)
 {
   av.weight=AvWeightPerUnit[(AvWeightPerUnit$species==species)&(AvWeightPerUnit$part==part),"av.weight"]
   av.weight
 }
-
+source('analysis/AdjustEdgeWeightsForMultiplicity.R')
 GraphMaps=list()
 
 #=====================================================================================
@@ -66,13 +67,13 @@ rm(LEES.graph)
 
 
 
-GRBU.graph=graph.formula("bud_small"-"bud_mid"-"bud_big"-"flower_stigma"-"finished_flower_stigma"-"fruit_just_starting"-"fruit_young"-"fruit_large_immature_01"-"fruit_large_immature_02"-"fruit_large_immature_03"-"fruit_large_immature_04"-"fruit_large_immature_05"-"fruit_large_immature_06"-"seed","inflorescence_bud_small"-"inflorescence_stalk","bud_big"-"flower_petals","fruit_young"-"pedicel","fruit_large_immature_06"-"seed_pod","fruit_large_immature_06"-"seed_aborted")
-from=c("bud_small","inflorescence_bud_small")
+GRBU.graph=graph.formula("bud_tiny"-"bud_small"-"bud_mid"-"bud_big"-"flower_stigma"-"finished_flower_stigma"-"fruit_just_starting"-"fruit_young"-"fruit_large_immature_01"-"fruit_large_immature_02"-"fruit_large_immature_03"-"fruit_large_immature_04"-"fruit_large_immature_05"-"fruit_large_immature_06"-"seed","inflorescence_bud_small"-"inflorescence_stalk","bud_big"-"flower_petals","fruit_young"-"pedicel","fruit_large_immature_06"-"seed_pod","fruit_large_immature_06"-"seed_aborted")
+from=c("bud_tiny","inflorescence_bud_small")
 to=c("seed","inflorescence_stalk")
 Paths=data.frame(from=from,to=to)
-GRBU.graph=set.vertex.attribute(GRBU.graph,name="col",index=c(1:14,20),value=3)
-GRBU.graph=set.vertex.attribute(GRBU.graph,name="col",index=17:19,value=4)
-GRBU.graph=set.vertex.attribute(GRBU.graph,name="col",index=15:16,value=5)
+GRBU.graph=set.vertex.attribute(GRBU.graph,name="col",index=c(1:15,21),value=3)
+GRBU.graph=set.vertex.attribute(GRBU.graph,name="col",index=18:20,value=4)
+GRBU.graph=set.vertex.attribute(GRBU.graph,name="col",index=16:17,value=5)
 #Setting edge weight which defines how much of carbon is beeing directed from each part to each part. Especially important for species
 #with accessories
 GRBU.graph=set.edge.attribute(GRBU.graph,name="weight",value=1)
@@ -324,7 +325,7 @@ W2=AV_W("PUTU","seed_aborted")
 #
 w1=W1/sum(W1,W2)
 w2=W2/sum(W1,W2)
-PUTU.graph=set.edge.attribute(PUTU.graph,name="weight",index=c(E1,E2,E3),value=c(w1,w2,w3))
+PUTU.graph=set.edge.attribute(PUTU.graph,name="weight",index=c(E1,E2,E3),value=c(w1,w2,w2))
 GraphMaps[["PUTU"]]=list(graph=PUTU.graph,Paths=Paths)
 rm(PUTU.graph)
 
@@ -802,6 +803,7 @@ rm(PEPU.graph)
 
 rm(list = c("E1","E2","E3","E4","W1","W2","W3","W4","w1","w2","w3","w4","AM","Paths"))
 
+GraphMaps=AdjustEdgeWeightsForMultiplicity(GraphMaps)
 # Example plot
-#species="HEPU"
+#species="GRBU"
 #tkplot(GraphMaps[[species]]$graph,vertex.color=V(GraphMaps[[species]]$graph)$col,edge.label=E(GraphMaps[[species]]$graph)$weight)
