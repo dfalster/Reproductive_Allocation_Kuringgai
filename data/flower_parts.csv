@@ -2096,12 +2096,12 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 4872,HATE,Basin2005,9-May-13,400,HATE_006,4,not_used,seed,1,,,,,used,13,,13,2012 fruit
 4873,HATE,Basin2005,9-May-13,400,HATE_006,4,not_used,seed,1,,,,,used,12.3,,12.3,2012 fruit
 4874,HATE,Basin2005,9-May-13,400,HATE_006,4,not_used,seed,1,,,,,used,12.3,,12.3,2012 fruit
-4737,HATE,Basin2005,14-May-13,344,HATE_006,4,not_used,seed_aborted,2,,,,,used,15.4,,7.7,2012 fruit?
-4739,HATE,Basin2005,14-May-13,345,HATE_006,4,not_used,seed_aborted,2,,,,,used,5.98,,2.99,2012 fruit?
-4741,HATE,Basin2005,14-May-13,346,HATE_006,4,not_used,seed_aborted,1,,,,,used,5.74,,5.74,2012 fruit?
-4744,HATE,Basin2005,14-May-13,347,HATE_006,4,not_used,seed_aborted,1,,,,,used,1.52,,1.52,2012 fruit?
-4868,HATE,Basin2005,9-May-13,400,HATE_006,4,not_used,seed_aborted,2,,,,,used,11.2,,5.6,2012 fruit
-4871,HATE,Basin2005,9-May-13,400,HATE_006,4,not_used,seed_aborted,1,,,,,used,7.5,,7.5,2012 fruit
+4737,HATE,Basin2005,14-May-13,344,HATE_006,2,not_used,seed_aborted,2,,,,,used,15.4,,7.7,2012 fruit?
+4739,HATE,Basin2005,14-May-13,345,HATE_006,2,not_used,seed_aborted,2,,,,,used,5.98,,2.99,2012 fruit?
+4741,HATE,Basin2005,14-May-13,346,HATE_006,2,not_used,seed_aborted,1,,,,,used,5.74,,5.74,2012 fruit?
+4744,HATE,Basin2005,14-May-13,347,HATE_006,2,not_used,seed_aborted,1,,,,,used,1.52,,1.52,2012 fruit?
+4868,HATE,Basin2005,9-May-13,400,HATE_006,2,not_used,seed_aborted,2,,,,,used,11.2,,5.6,2012 fruit
+4871,HATE,Basin2005,9-May-13,400,HATE_006,2,not_used,seed_aborted,1,,,,,used,7.5,,7.5,2012 fruit
 4736,HATE,Basin2005,14-May-13,344,HATE_006,2,not_used,seed_pod,1,,,,,used,220.02,,220.02,2012 fruit?
 4738,HATE,Basin2005,14-May-13,345,HATE_006,2,not_used,seed_pod,1,,,,,used,151.32,,151.32,2012 fruit?
 4740,HATE,Basin2005,14-May-13,346,HATE_006,2,not_used,seed_pod,1,,,,,used,205.1,,205.1,2012 fruit?
@@ -2112,12 +2112,12 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 4867,HATE,Basin2005,9-May-13,400,HATE_006,2,not_used,seed_pod,1,,,,,used,209.08,,209.08,2012 fruit
 4842,HATE,Waratah2003,16-May-13,390,HATE_801,4,not_used,seed,1,,,,,used,18,,18,old fruit
 4845,HATE,Waratah2003,16-May-13,391,HATE_801,4,not_used,seed,1,,,,,used,9.7,,9.7,old fruit
-4841,HATE,Waratah2003,16-May-13,390,HATE_801,4,not_used,seed_aborted,1,,,,,used,5.6,,5.6,old fruit
-4844,HATE,Waratah2003,16-May-13,391,HATE_801,4,not_used,seed_aborted,1,,,,,used,8.3,,8.3,old fruit
-4847,HATE,Waratah2003,16-May-13,392,HATE_801,4,not_used,seed_aborted,1,,,,,used,7.4,,7.4,old fruit
-4848,HATE,Waratah2003,16-May-13,392,HATE_801,4,not_used,seed_aborted,1,,,,,used,6.2,,6.2,old fruit
-4850,HATE,Waratah2003,16-May-13,393,HATE_801,4,not_used,seed_aborted,1,,,,,used,3.8,,3.8,old fruit
-4851,HATE,Waratah2003,16-May-13,393,HATE_801,4,not_used,seed_aborted,1,,,,,used,1.9,,1.9,old fruit
+4841,HATE,Waratah2003,16-May-13,390,HATE_801,2,not_used,seed_aborted,1,,,,,used,5.6,,5.6,old fruit
+4844,HATE,Waratah2003,16-May-13,391,HATE_801,2,not_used,seed_aborted,1,,,,,used,8.3,,8.3,old fruit
+4847,HATE,Waratah2003,16-May-13,392,HATE_801,2,not_used,seed_aborted,1,,,,,used,7.4,,7.4,old fruit
+4848,HATE,Waratah2003,16-May-13,392,HATE_801,2,not_used,seed_aborted,1,,,,,used,6.2,,6.2,old fruit
+4850,HATE,Waratah2003,16-May-13,393,HATE_801,2,not_used,seed_aborted,1,,,,,used,3.8,,3.8,old fruit
+4851,HATE,Waratah2003,16-May-13,393,HATE_801,2,not_used,seed_aborted,1,,,,,used,1.9,,1.9,old fruit
 4837,HATE,Waratah2003,16-May-13,388,HATE_801,17,not_used,seed_immature,2,,,,,used,8.8,,4.4,2013 fruit
 4839,HATE,Waratah2003,16-May-13,389,HATE_801,17,not_used,seed_immature,2,,,,,used,7.8,,3.9,2013 fruit
 4836,HATE,Waratah2003,16-May-13,388,HATE_801,17,not_used,seed_pod,1,,,,,used,252.1,,252.1,2013 fruit
@@ -2131,9 +2131,9 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 4881,HATE,Waratah2003,17-May-13,404,HATE_802,17,not_used,fruit_large_immature,1,,,,,used,179.3,,179.3,fruit_large_immature
 4417,GRSP,Waratah2003,21-May-13,305,GRSP_802,17,used,bud_mid,22,,,,,used,40.7,,1.85,
 4419,GRSP,Waratah2003,21-May-13,306,GRSP_802,17,used,bud_small,38,,,,,used,38.9,,1.02,
-4830,HATE,Waratah2003,17-May-13,385,HATE_802,4,not_used,seed_aborted,1,,,,,used,16.82,,16.82,old fruit
-4832,HATE,Waratah2003,17-May-13,386,HATE_802,4,not_used,seed_aborted,1,,,,,used,30.6,,30.6,old fruit
-4833,HATE,Waratah2003,17-May-13,386,HATE_802,4,not_used,seed_aborted,1,,,,,used,37.2,,37.2,old fruit
+4830,HATE,Waratah2003,17-May-13,385,HATE_802,2,not_used,seed_aborted,1,,,,,used,16.82,,16.82,old fruit
+4832,HATE,Waratah2003,17-May-13,386,HATE_802,2,not_used,seed_aborted,1,,,,,used,30.6,,30.6,old fruit
+4833,HATE,Waratah2003,17-May-13,386,HATE_802,2,not_used,seed_aborted,1,,,,,used,37.2,,37.2,old fruit
 4828,HATE,Waratah2003,17-May-13,385,HATE_802,2,not_used,seed_pod,1,,,,,used,312.16,,312.16,old fruit
 4831,HATE,Waratah2003,17-May-13,386,HATE_802,2,not_used,seed_pod,1,,,,,used,252.62,,252.62,old fruit
 4853,HATE,Waratah2003,16-May-13,394,HATE_803,17,not_used,seed_immature,1,,,,,used,5.12,,5.12,2013 fruit
@@ -2144,14 +2144,14 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 4415,GRSP,Waratah2003,21-May-13,304,GRSP_802,17,used,inflorescence_bud_small,11,,,,,used,69.8,,6.35,
 4414,GRSP,Waratah2003,21-May-13,304,GRSP_802,3;4;5;7;8,used,inflorescence_stalk,13,,,,,used,78.5,,6.04,"stalks that shed buds before flowering; from this plant, also infl with 12 f + bbud that wasn't weighed"
 6740,GRSP,Waratah2003,21-May-13,309,GRSP_802,17,used,inflorescence_stalk,16,,,,,used,79,,4.94,
-4747,HATE,Waratah2003,17-May-13,348,HATE_804,4,not_used,seed_aborted,1,,,,,used,50,,50,2012 fruit
-4750,HATE,Waratah2003,17-May-13,349,HATE_804,4,not_used,seed_aborted,2,,,,,used,13,,6.5,2012 fruit
-4752,HATE,Waratah2003,17-May-13,350,HATE_804,4,not_used,seed_aborted,2,,,,,used,17.6,,8.8,2012 fruit
-4754,HATE,Waratah2003,17-May-13,351,HATE_804,4,not_used,seed_aborted,2,,,,,used,8.5,,4.25,2012 fruit
-4756,HATE,Waratah2003,17-May-13,352,HATE_804,4,not_used,seed_aborted,2,,,,,used,9.1,,4.55,2012 fruit
-4758,HATE,Waratah2003,17-May-13,353,HATE_804,4,not_used,seed_aborted,2,,,,,used,9.2,,4.6,2012 fruit
-4760,HATE,Waratah2003,17-May-13,354,HATE_804,4,not_used,seed_aborted,2,,,,,used,8.2,,4.1,2012 fruit
-4763,HATE,Waratah2003,17-May-13,355,HATE_804,4,not_used,seed_aborted,1,,,,,used,8.6,,8.6,2012 fruit
+4747,HATE,Waratah2003,17-May-13,348,HATE_804,2,not_used,seed_aborted,1,,,,,used,50,,50,2012 fruit
+4750,HATE,Waratah2003,17-May-13,349,HATE_804,2,not_used,seed_aborted,2,,,,,used,13,,6.5,2012 fruit
+4752,HATE,Waratah2003,17-May-13,350,HATE_804,2,not_used,seed_aborted,2,,,,,used,17.6,,8.8,2012 fruit
+4754,HATE,Waratah2003,17-May-13,351,HATE_804,2,not_used,seed_aborted,2,,,,,used,8.5,,4.25,2012 fruit
+4756,HATE,Waratah2003,17-May-13,352,HATE_804,2,not_used,seed_aborted,2,,,,,used,9.1,,4.55,2012 fruit
+4758,HATE,Waratah2003,17-May-13,353,HATE_804,2,not_used,seed_aborted,2,,,,,used,9.2,,4.6,2012 fruit
+4760,HATE,Waratah2003,17-May-13,354,HATE_804,2,not_used,seed_aborted,2,,,,,used,8.2,,4.1,2012 fruit
+4763,HATE,Waratah2003,17-May-13,355,HATE_804,2,not_used,seed_aborted,1,,,,,used,8.6,,8.6,2012 fruit
 4765,HATE,Waratah2003,17-May-13,356,HATE_804,17,not_used,seed_immature,2,,,,,used,112,,56,2013 fruit
 4767,HATE,Waratah2003,17-May-13,357,HATE_804,17,not_used,seed_immature,2,,,,,used,6.4,,3.2,2013 fruit
 4770,HATE,Waratah2003,17-May-13,359,HATE_804,17,not_used,seed_immature,2,,,,,used,8,,4,2013 fruit
@@ -2231,10 +2231,10 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 3626,HATE,Waratah2003,12-Apr-13,236,HATE_807,15,not_used,fruit_aborted,1,,,27,,used,134.8,,134.8,fruit_aborted
 3627,HATE,Waratah2003,12-Apr-13,237,HATE_807,15,not_used,fruit_aborted,1,,,24,,used,107.7,,107.7,fruit_aborted
 6742,GRSP,Waratah2003,21-May-13,314,GRSP_803,17,used,bud_small,147,,,,,used,101,,0.69,
-4055,HATE,Waratah2003,17-May-13,250,HATE_807,4,not_used,seed_aborted,2,,,,,used,9.2,,4.6,2012 fruit
-4243,HATE,Waratah2003,17-May-13,305,HATE_807,4,not_used,seed_aborted,1,,,,,used,4.1,,4.1,2012 fruit
-4246,HATE,Waratah2003,17-May-13,306,HATE_807,4,not_used,seed_aborted,1,,,,,used,4.2,,4.2,2012 fruit
-4247,HATE,Waratah2003,17-May-13,306,HATE_807,4,not_used,seed_aborted,1,,,,,used,6,,6,2012 fruit
+4055,HATE,Waratah2003,17-May-13,250,HATE_807,2,not_used,seed_aborted,2,,,,,used,9.2,,4.6,2012 fruit
+4243,HATE,Waratah2003,17-May-13,305,HATE_807,2,not_used,seed_aborted,1,,,,,used,4.1,,4.1,2012 fruit
+4246,HATE,Waratah2003,17-May-13,306,HATE_807,2,not_used,seed_aborted,1,,,,,used,4.2,,4.2,2012 fruit
+4247,HATE,Waratah2003,17-May-13,306,HATE_807,2,not_used,seed_aborted,1,,,,,used,6,,6,2012 fruit
 4883,HATE,Waratah2003,17-May-13,405,HATE_807,17,not_used,seed_immature,2,,,,,used,8.76,,4.38,2013 fruit
 4885,HATE,Waratah2003,17-May-13,406,HATE_807,17,not_used,seed_immature,2,,,,,used,10.14,,5.07,2013 fruit
 4887,HATE,Waratah2003,17-May-13,407,HATE_807,17,not_used,seed_immature,2,,,,,used,8.82,,4.41,2013 fruit
@@ -2323,11 +2323,11 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 4201,HATE,Basin1981,21-Jun-13,254,HATE_901,5,not_used,seed,2,,,,,used,41.3,,20.65,2012 fruit
 4216,HATE,Basin1981,21-Jun-13,266,HATE_901,5,not_used,seed,2,,,,,used,60.4,,30.2,2012 fruit
 4241,HATE,Basin1981,21-Jun-13,304,HATE_901,5,not_used,seed,1,,,,,used,11.7,,11.7,2012 fruit
-4218,HATE,Basin1981,21-Jun-13,268,HATE_901,5,not_used,seed_aborted,2,,,,,used,6.6,,3.3,2012 fruit
-4217,HATE,Basin1981,21-Jun-13,267,HATE_901,5,not_used,seed_aborted,2,,,,,used,12.2,,6.1,2012 fruit
-4215,HATE,Basin1981,21-Jun-13,265,HATE_901,5,not_used,seed_aborted,1,,,,,used,6.2,,6.2,2012 fruit
-4197,HATE,Basin1981,21-Jun-13,252,HATE_901,5,not_used,seed_aborted,1,,,,,used,7.8,,7.8,2012 fruit
-4240,HATE,Basin1981,21-Jun-13,304,HATE_901,5,not_used,seed_aborted,1,,,,,used,2.1,,2.1,2012 fruit
+4218,HATE,Basin1981,21-Jun-13,268,HATE_901,3,not_used,seed_aborted,2,,,,,used,6.6,,3.3,2012 fruit
+4217,HATE,Basin1981,21-Jun-13,267,HATE_901,3,not_used,seed_aborted,2,,,,,used,12.2,,6.1,2012 fruit
+4215,HATE,Basin1981,21-Jun-13,265,HATE_901,3,not_used,seed_aborted,1,,,,,used,6.2,,6.2,2012 fruit
+4197,HATE,Basin1981,21-Jun-13,252,HATE_901,3,not_used,seed_aborted,1,,,,,used,7.8,,7.8,2012 fruit
+4240,HATE,Basin1981,21-Jun-13,304,HATE_901,3,not_used,seed_aborted,1,,,,,used,2.1,,2.1,2012 fruit
 4202,HATE,Basin1981,21-Jun-13,255,HATE_901,3,not_used,seed_pod,1,,,,,used,334.5,,334.5,2012 fruit
 4211,HATE,Basin1981,21-Jun-13,261,HATE_901,3,not_used,seed_pod,1,,,,,used,340.4,,340.4,2012 fruit
 4193,HATE,Basin1981,21-Jun-13,251,HATE_901,3,not_used,seed_pod,1,,,,,used,414.6,,414.6,2012 fruit
@@ -2348,21 +2348,21 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 3859,HATE,Basin1981,11-Jun-13,233,HATE_902,5,not_used,seed,2,,,,,used,26.3,,13.15,2012 fruit
 3855,HATE,Basin1981,11-Jun-13,229,HATE_902,5,not_used,seed,1,,,,,used,15.1,,15.1,2012 fruit
 3985,HATE,Basin1981,21-Jun-13,247,HATE_902,5,not_used,seed,1,,,,,used,11.9,,11.9,2012 fruit
-3869,HATE,Basin1981,11-Jun-13,244,HATE_902,5,not_used,seed_aborted,2,,,,,used,6.1,,3.05,2012 fruit
-3865,HATE,Basin1981,11-Jun-13,239,HATE_902,5,not_used,seed_aborted,2,,,,,used,6.8,,3.4,2012 fruit
-3867,HATE,Basin1981,11-Jun-13,241,HATE_902,5,not_used,seed_aborted,2,,,,,used,6.8,,3.4,2012 fruit
-3860,HATE,Basin1981,11-Jun-13,234,HATE_902,5,not_used,seed_aborted,2,,,,,used,7.3,,3.65,2012 fruit
-3870,HATE,Basin1981,11-Jun-13,245,HATE_902,5,not_used,seed_aborted,2,,,,,used,7.4,,3.7,2012 fruit
-3873,HATE,Basin1981,11-Jun-13,229,HATE_902,5,not_used,seed_aborted,1,,,,,used,3.9,,3.9,2012 fruit
-3857,HATE,Basin1981,11-Jun-13,231,HATE_902,5,not_used,seed_aborted,2,,,,,used,8,,4,2012 fruit
-3856,HATE,Basin1981,11-Jun-13,230,HATE_902,5,not_used,seed_aborted,2,,,,,used,10.6,,5.3,2012 fruit
-3868,HATE,Basin1981,11-Jun-13,243,HATE_902,5,not_used,seed_aborted,2,,,,,used,10.8,,5.4,2012 fruit
-3858,HATE,Basin1981,11-Jun-13,232,HATE_902,5,not_used,seed_aborted,2,,,,,used,11.5,,5.75,2012 fruit
-3874,HATE,Basin1981,11-Jun-13,246,HATE_902,5,not_used,seed_aborted,1,,,,,used,6.2,,6.2,2012 fruit
-3864,HATE,Basin1981,11-Jun-13,238,HATE_902,5,not_used,seed_aborted,2,,,,,used,12.6,,6.3,2012 fruit
-3862,HATE,Basin1981,11-Jun-13,236,HATE_902,5,not_used,seed_aborted,2,,,,,used,12.8,,6.4,2012 fruit
-3866,HATE,Basin1981,11-Jun-13,240,HATE_902,5,not_used,seed_aborted,2,,,,,used,12.9,,6.45,2012 fruit
-3986,HATE,Basin1981,21-Jun-13,247,HATE_902,5,not_used,seed_aborted,1,,,,,used,5,,5,2012 fruit
+3869,HATE,Basin1981,11-Jun-13,244,HATE_902,3,not_used,seed_aborted,2,,,,,used,6.1,,3.05,2012 fruit
+3865,HATE,Basin1981,11-Jun-13,239,HATE_902,3,not_used,seed_aborted,2,,,,,used,6.8,,3.4,2012 fruit
+3867,HATE,Basin1981,11-Jun-13,241,HATE_902,3,not_used,seed_aborted,2,,,,,used,6.8,,3.4,2012 fruit
+3860,HATE,Basin1981,11-Jun-13,234,HATE_902,3,not_used,seed_aborted,2,,,,,used,7.3,,3.65,2012 fruit
+3870,HATE,Basin1981,11-Jun-13,245,HATE_902,3,not_used,seed_aborted,2,,,,,used,7.4,,3.7,2012 fruit
+3873,HATE,Basin1981,11-Jun-13,229,HATE_902,3,not_used,seed_aborted,1,,,,,used,3.9,,3.9,2012 fruit
+3857,HATE,Basin1981,11-Jun-13,231,HATE_902,3,not_used,seed_aborted,2,,,,,used,8,,4,2012 fruit
+3856,HATE,Basin1981,11-Jun-13,230,HATE_902,3,not_used,seed_aborted,2,,,,,used,10.6,,5.3,2012 fruit
+3868,HATE,Basin1981,11-Jun-13,243,HATE_902,3,not_used,seed_aborted,2,,,,,used,10.8,,5.4,2012 fruit
+3858,HATE,Basin1981,11-Jun-13,232,HATE_902,3,not_used,seed_aborted,2,,,,,used,11.5,,5.75,2012 fruit
+3874,HATE,Basin1981,11-Jun-13,246,HATE_902,3,not_used,seed_aborted,1,,,,,used,6.2,,6.2,2012 fruit
+3864,HATE,Basin1981,11-Jun-13,238,HATE_902,3,not_used,seed_aborted,2,,,,,used,12.6,,6.3,2012 fruit
+3862,HATE,Basin1981,11-Jun-13,236,HATE_902,3,not_used,seed_aborted,2,,,,,used,12.8,,6.4,2012 fruit
+3866,HATE,Basin1981,11-Jun-13,240,HATE_902,3,not_used,seed_aborted,2,,,,,used,12.9,,6.45,2012 fruit
+3986,HATE,Basin1981,21-Jun-13,247,HATE_902,3,not_used,seed_aborted,1,,,,,used,5,,5,2012 fruit
 3836,HATE,Basin1981,11-Jun-13,229,HATE_902,3,not_used,seed_pod,1,,,,,used,502.7,,502.7,2012 fruit
 3837,HATE,Basin1981,11-Jun-13,230,HATE_902,3,not_used,seed_pod,1,,,,,used,475,,475,2012 fruit
 3838,HATE,Basin1981,11-Jun-13,231,HATE_902,3,not_used,seed_pod,1,,,,,used,415.4,,415.4,2012 fruit
@@ -2419,9 +2419,9 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 4195,HATE,Basin1981,21-Jun-13,286,HATE_905,5,not_used,seed,2,,,,,used,15.4,,7.7,2012 fruit
 4198,HATE,Basin1981,21-Jun-13,287,HATE_905,5,not_used,seed,1,,,,,used,7.1,,7.1,2012 fruit
 3662,HATE,Basin1981,11-Jun-13,239,HATE_905,,not_used,seed_aborted,2,,,,,used,6.2,,3.1,
-4197,HATE,Basin1981,21-Jun-13,287,HATE_905,5,not_used,seed_aborted,1,,,,,used,3.1,,3.1,2012 fruit
-4200,HATE,Basin1981,21-Jun-13,288,HATE_905,5,not_used,seed_aborted,1,,,,,used,6.3,,6.3,2012 fruit
-4201,HATE,Basin1981,21-Jun-13,288,HATE_905,5,not_used,seed_aborted,1,,,,,used,6.1,,6.1,2012 fruit
+4197,HATE,Basin1981,21-Jun-13,287,HATE_905,3,not_used,seed_aborted,1,,,,,used,3.1,,3.1,2012 fruit
+4200,HATE,Basin1981,21-Jun-13,288,HATE_905,3,not_used,seed_aborted,1,,,,,used,6.3,,6.3,2012 fruit
+4201,HATE,Basin1981,21-Jun-13,288,HATE_905,3,not_used,seed_aborted,1,,,,,used,6.1,,6.1,2012 fruit
 3663,HATE,Basin1981,11-Jun-13,239,HATE_905,,not_used,seed_pod,1,,,,,used,500.1,,500.1,
 4194,HATE,Basin1981,21-Jun-13,286,HATE_905,3,not_used,seed_pod,1,,,,,used,521.8,,521.8,2012 fruit
 4196,HATE,Basin1981,21-Jun-13,287,HATE_905,3,not_used,seed_pod,1,,,,,used,331.5,,331.5,2012 fruit
@@ -2453,38 +2453,38 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 4335,HATE,Basin1981,21-Jun-13,340,HATE_906,5,not_used,seed,1,,,,,used,9.3,,9.3,2012 fruit
 4336,HATE,Basin1981,21-Jun-13,340,HATE_906,5,not_used,seed,1,,,,,used,9,,9,2012 fruit
 4339,HATE,Basin1981,21-Jun-13,341,HATE_906,5,not_used,seed,1,,,,,used,17,,17,2012 fruit
-4249,HATE,Basin1981,21-Jun-13,307,HATE_906,5,not_used,seed_aborted,1,,,,,used,2.7,,2.7,2012 fruit
-4250,HATE,Basin1981,21-Jun-13,307,HATE_906,5,not_used,seed_aborted,1,,,,,used,2.6,,2.6,2012 fruit
-4252,HATE,Basin1981,21-Jun-13,308,HATE_906,5,not_used,seed_aborted,2,,,,,used,4.9,,2.45,2012 fruit
-4254,HATE,Basin1981,21-Jun-13,309,HATE_906,5,not_used,seed_aborted,1,,,,,used,5.4,,5.4,2012 fruit
-4255,HATE,Basin1981,21-Jun-13,309,HATE_906,5,not_used,seed_aborted,1,,,,,used,4.9,,4.9,2012 fruit
-4257,HATE,Basin1981,21-Jun-13,310,HATE_906,5,not_used,seed_aborted,1,,,,,used,6.5,,6.5,2012 fruit
-4260,HATE,Basin1981,21-Jun-13,311,HATE_906,5,not_used,seed_aborted,2,,,,,used,11.2,,5.6,2012 fruit
-4262,HATE,Basin1981,21-Jun-13,312,HATE_906,5,not_used,seed_aborted,2,,,,,used,3.9,,1.95,2012 fruit
-4265,HATE,Basin1981,21-Jun-13,313,HATE_906,5,not_used,seed_aborted,1,,,,,used,6.9,,6.9,2012 fruit
-4267,HATE,Basin1981,21-Jun-13,314,HATE_906,5,not_used,seed_aborted,1,,,,,used,7.9,,7.9,2012 fruit
-4273,HATE,Basin1981,21-Jun-13,316,HATE_906,5,not_used,seed_aborted,1,,,,,used,6.5,,6.5,2012 fruit
-4274,HATE,Basin1981,21-Jun-13,316,HATE_906,5,not_used,seed_aborted,1,,,,,used,4.1,,4.1,2012 fruit
-4276,HATE,Basin1981,21-Jun-13,317,HATE_906,5,not_used,seed_aborted,1,,,,,used,4.2,,4.2,2012 fruit
-4277,HATE,Basin1981,21-Jun-13,317,HATE_906,5,not_used,seed_aborted,1,,,,,used,3.9,,3.9,2012 fruit
-4279,HATE,Basin1981,21-Jun-13,318,HATE_906,5,not_used,seed_aborted,1,,,,,used,5,,5,2012 fruit
-4280,HATE,Basin1981,21-Jun-13,318,HATE_906,5,not_used,seed_aborted,1,,,,,used,5.2,,5.2,2012 fruit
-4282,HATE,Basin1981,21-Jun-13,319,HATE_906,5,not_used,seed_aborted,2,,,,,used,7.2,,3.6,2012 fruit
-4284,HATE,Basin1981,21-Jun-13,320,HATE_906,5,not_used,seed_aborted,1,,,,,used,7.7,,7.7,2012 fruit
-4291,HATE,Basin1981,21-Jun-13,323,HATE_906,5,not_used,seed_aborted,2,,,,,used,7.5,,3.75,2012 fruit
-4294,HATE,Basin1981,21-Jun-13,324,HATE_906,5,not_used,seed_aborted,1,,,,,used,3.9,,3.9,2012 fruit
-4299,HATE,Basin1981,21-Jun-13,326,HATE_906,5,not_used,seed_aborted,2,,,,,used,15.9,,7.95,2012 fruit
-4303,HATE,Basin1981,21-Jun-13,328,HATE_906,5,not_used,seed_aborted,2,,,,,used,5.4,,2.7,2012 fruit
-4305,HATE,Basin1981,21-Jun-13,329,HATE_906,5,not_used,seed_aborted,2,,,,,used,5.9,,2.95,2012 fruit
-4308,HATE,Basin1981,21-Jun-13,330,HATE_906,5,not_used,seed_aborted,1,,,,,used,2,,2,2012 fruit
-4310,HATE,Basin1981,21-Jun-13,331,HATE_906,5,not_used,seed_aborted,1,,,,,used,4.5,,4.5,2012 fruit
-4311,HATE,Basin1981,21-Jun-13,331,HATE_906,5,not_used,seed_aborted,1,,,,,used,4.8,,4.8,2012 fruit
-4314,HATE,Basin1981,21-Jun-13,332,HATE_906,5,not_used,seed_aborted,1,,,,,used,4.8,,4.8,2012 fruit
-4322,HATE,Basin1981,21-Jun-13,335,HATE_906,5,not_used,seed_aborted,1,,,,,used,8,,8,2012 fruit
-4325,HATE,Basin1981,21-Jun-13,336,HATE_906,5,not_used,seed_aborted,1,,,,,used,7.9,,7.9,2012 fruit
-4331,HATE,Basin1981,21-Jun-13,338,HATE_906,5,not_used,seed_aborted,1,,,,,used,4.1,,4.1,2012 fruit
-4333,HATE,Basin1981,21-Jun-13,339,HATE_906,5,not_used,seed_aborted,2,,,,,used,7,,3.5,2012 fruit
-4338,HATE,Basin1981,21-Jun-13,341,HATE_906,5,not_used,seed_aborted,1,,,,,used,6.7,,6.7,2012 fruit
+4249,HATE,Basin1981,21-Jun-13,307,HATE_906,3,not_used,seed_aborted,1,,,,,used,2.7,,2.7,2012 fruit
+4250,HATE,Basin1981,21-Jun-13,307,HATE_906,3,not_used,seed_aborted,1,,,,,used,2.6,,2.6,2012 fruit
+4252,HATE,Basin1981,21-Jun-13,308,HATE_906,3,not_used,seed_aborted,2,,,,,used,4.9,,2.45,2012 fruit
+4254,HATE,Basin1981,21-Jun-13,309,HATE_906,3,not_used,seed_aborted,1,,,,,used,5.4,,5.4,2012 fruit
+4255,HATE,Basin1981,21-Jun-13,309,HATE_906,3,not_used,seed_aborted,1,,,,,used,4.9,,4.9,2012 fruit
+4257,HATE,Basin1981,21-Jun-13,310,HATE_906,3,not_used,seed_aborted,1,,,,,used,6.5,,6.5,2012 fruit
+4260,HATE,Basin1981,21-Jun-13,311,HATE_906,3,not_used,seed_aborted,2,,,,,used,11.2,,5.6,2012 fruit
+4262,HATE,Basin1981,21-Jun-13,312,HATE_906,3,not_used,seed_aborted,2,,,,,used,3.9,,1.95,2012 fruit
+4265,HATE,Basin1981,21-Jun-13,313,HATE_906,3,not_used,seed_aborted,1,,,,,used,6.9,,6.9,2012 fruit
+4267,HATE,Basin1981,21-Jun-13,314,HATE_906,3,not_used,seed_aborted,1,,,,,used,7.9,,7.9,2012 fruit
+4273,HATE,Basin1981,21-Jun-13,316,HATE_906,3,not_used,seed_aborted,1,,,,,used,6.5,,6.5,2012 fruit
+4274,HATE,Basin1981,21-Jun-13,316,HATE_906,3,not_used,seed_aborted,1,,,,,used,4.1,,4.1,2012 fruit
+4276,HATE,Basin1981,21-Jun-13,317,HATE_906,3,not_used,seed_aborted,1,,,,,used,4.2,,4.2,2012 fruit
+4277,HATE,Basin1981,21-Jun-13,317,HATE_906,3,not_used,seed_aborted,1,,,,,used,3.9,,3.9,2012 fruit
+4279,HATE,Basin1981,21-Jun-13,318,HATE_906,3,not_used,seed_aborted,1,,,,,used,5,,5,2012 fruit
+4280,HATE,Basin1981,21-Jun-13,318,HATE_906,3,not_used,seed_aborted,1,,,,,used,5.2,,5.2,2012 fruit
+4282,HATE,Basin1981,21-Jun-13,319,HATE_906,3,not_used,seed_aborted,2,,,,,used,7.2,,3.6,2012 fruit
+4284,HATE,Basin1981,21-Jun-13,320,HATE_906,3,not_used,seed_aborted,1,,,,,used,7.7,,7.7,2012 fruit
+4291,HATE,Basin1981,21-Jun-13,323,HATE_906,3,not_used,seed_aborted,2,,,,,used,7.5,,3.75,2012 fruit
+4294,HATE,Basin1981,21-Jun-13,324,HATE_906,3,not_used,seed_aborted,1,,,,,used,3.9,,3.9,2012 fruit
+4299,HATE,Basin1981,21-Jun-13,326,HATE_906,3,not_used,seed_aborted,2,,,,,used,15.9,,7.95,2012 fruit
+4303,HATE,Basin1981,21-Jun-13,328,HATE_906,3,not_used,seed_aborted,2,,,,,used,5.4,,2.7,2012 fruit
+4305,HATE,Basin1981,21-Jun-13,329,HATE_906,3,not_used,seed_aborted,2,,,,,used,5.9,,2.95,2012 fruit
+4308,HATE,Basin1981,21-Jun-13,330,HATE_906,3,not_used,seed_aborted,1,,,,,used,2,,2,2012 fruit
+4310,HATE,Basin1981,21-Jun-13,331,HATE_906,3,not_used,seed_aborted,1,,,,,used,4.5,,4.5,2012 fruit
+4311,HATE,Basin1981,21-Jun-13,331,HATE_906,3,not_used,seed_aborted,1,,,,,used,4.8,,4.8,2012 fruit
+4314,HATE,Basin1981,21-Jun-13,332,HATE_906,3,not_used,seed_aborted,1,,,,,used,4.8,,4.8,2012 fruit
+4322,HATE,Basin1981,21-Jun-13,335,HATE_906,3,not_used,seed_aborted,1,,,,,used,8,,8,2012 fruit
+4325,HATE,Basin1981,21-Jun-13,336,HATE_906,3,not_used,seed_aborted,1,,,,,used,7.9,,7.9,2012 fruit
+4331,HATE,Basin1981,21-Jun-13,338,HATE_906,3,not_used,seed_aborted,1,,,,,used,4.1,,4.1,2012 fruit
+4333,HATE,Basin1981,21-Jun-13,339,HATE_906,3,not_used,seed_aborted,2,,,,,used,7,,3.5,2012 fruit
+4338,HATE,Basin1981,21-Jun-13,341,HATE_906,3,not_used,seed_aborted,1,,,,,used,6.7,,6.7,2012 fruit
 4158,HATE,Basin1981,21-Jun-13,270,HATE_906,17,not_used,seed_immature,2,,,,,used,4.3,,2.15,2013 fruit
 4160,HATE,Basin1981,21-Jun-13,271,HATE_906,17,not_used,seed_immature,2,,,,,used,7.4,,3.7,2013 fruit
 4162,HATE,Basin1981,21-Jun-13,272,HATE_906,17,not_used,seed_immature,2,,,,,used,5,,2.5,2013 fruit
@@ -2539,20 +2539,20 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 4225,HATE,Basin1981,21-Jun-13,298,HATE_907,5,not_used,seed,1,,,,,used,11.2,,11.2,2012 fruit
 4227,HATE,Basin1981,21-Jun-13,299,HATE_907,5,not_used,seed,1,,,,,used,13.2,,13.2,2012 fruit
 4230,HATE,Basin1981,21-Jun-13,300,HATE_907,5,not_used,seed,1,,,,,used,11.8,,11.8,2012 fruit
-3647,HATE,Basin1981,21-Jun-13,238,HATE_907,5,not_used,seed_aborted,1,,,,,used,3.9,,3.9,2012 fruit
-4203,HATE,Basin1981,21-Jun-13,289,HATE_907,5,not_used,seed_aborted,2,,,,,used,12,,6,2012 fruit
-4211,HATE,Basin1981,21-Jun-13,293,HATE_907,5,not_used,seed_aborted,1,,,,,used,7.1,,7.1,2012 fruit
-4214,HATE,Basin1981,21-Jun-13,294,HATE_907,5,not_used,seed_aborted,2,,,,,used,8.3,,4.15,2012 fruit
-4216,HATE,Basin1981,21-Jun-13,295,HATE_907,5,not_used,seed_aborted,1,,,,,used,8.7,,8.7,2012 fruit
-4219,HATE,Basin1981,21-Jun-13,296,HATE_907,5,not_used,seed_aborted,2,,,,,used,7,,3.5,2012 fruit
-4221,HATE,Basin1981,21-Jun-13,297,HATE_907,5,not_used,seed_aborted,1,,,,,used,6.3,,6.3,2012 fruit
-4224,HATE,Basin1981,21-Jun-13,298,HATE_907,5,not_used,seed_aborted,1,,,,,used,6.9,,6.9,2012 fruit
-4228,HATE,Basin1981,21-Jun-13,299,HATE_907,5,not_used,seed_aborted,1,,,,,used,7.6,,7.6,2012 fruit
-4231,HATE,Basin1981,21-Jun-13,300,HATE_907,5,not_used,seed_aborted,1,,,,,used,5.2,,5.2,2012 fruit
-4233,HATE,Basin1981,21-Jun-13,301,HATE_907,5,not_used,seed_aborted,1,,,,,used,5.5,,5.5,2012 fruit
-4234,HATE,Basin1981,21-Jun-13,301,HATE_907,5,not_used,seed_aborted,1,,,,,used,7.1,,7.1,2012 fruit
-4236,HATE,Basin1981,21-Jun-13,302,HATE_907,5,not_used,seed_aborted,2,,,,,used,12.3,,6.15,2012 fruit
-4238,HATE,Basin1981,21-Jun-13,303,HATE_907,5,not_used,seed_aborted,2,,,,,used,6.5,,3.25,2012 fruit
+3647,HATE,Basin1981,21-Jun-13,238,HATE_907,3,not_used,seed_aborted,1,,,,,used,3.9,,3.9,2012 fruit
+4203,HATE,Basin1981,21-Jun-13,289,HATE_907,3,not_used,seed_aborted,2,,,,,used,12,,6,2012 fruit
+4211,HATE,Basin1981,21-Jun-13,293,HATE_907,3,not_used,seed_aborted,1,,,,,used,7.1,,7.1,2012 fruit
+4214,HATE,Basin1981,21-Jun-13,294,HATE_907,3,not_used,seed_aborted,2,,,,,used,8.3,,4.15,2012 fruit
+4216,HATE,Basin1981,21-Jun-13,295,HATE_907,3,not_used,seed_aborted,1,,,,,used,8.7,,8.7,2012 fruit
+4219,HATE,Basin1981,21-Jun-13,296,HATE_907,3,not_used,seed_aborted,2,,,,,used,7,,3.5,2012 fruit
+4221,HATE,Basin1981,21-Jun-13,297,HATE_907,3,not_used,seed_aborted,1,,,,,used,6.3,,6.3,2012 fruit
+4224,HATE,Basin1981,21-Jun-13,298,HATE_907,3,not_used,seed_aborted,1,,,,,used,6.9,,6.9,2012 fruit
+4228,HATE,Basin1981,21-Jun-13,299,HATE_907,3,not_used,seed_aborted,1,,,,,used,7.6,,7.6,2012 fruit
+4231,HATE,Basin1981,21-Jun-13,300,HATE_907,3,not_used,seed_aborted,1,,,,,used,5.2,,5.2,2012 fruit
+4233,HATE,Basin1981,21-Jun-13,301,HATE_907,3,not_used,seed_aborted,1,,,,,used,5.5,,5.5,2012 fruit
+4234,HATE,Basin1981,21-Jun-13,301,HATE_907,3,not_used,seed_aborted,1,,,,,used,7.1,,7.1,2012 fruit
+4236,HATE,Basin1981,21-Jun-13,302,HATE_907,3,not_used,seed_aborted,2,,,,,used,12.3,,6.15,2012 fruit
+4238,HATE,Basin1981,21-Jun-13,303,HATE_907,3,not_used,seed_aborted,2,,,,,used,6.5,,3.25,2012 fruit
 3646,HATE,Basin1981,21-Jun-13,238,HATE_907,3,not_used,seed_pod,1,,,,,used,403.8,,403.8,2012 fruit
 4202,HATE,Basin1981,21-Jun-13,289,HATE_907,3,not_used,seed_pod,1,,,,,used,400.2,,400.2,2012 fruit
 4204,HATE,Basin1981,21-Jun-13,290,HATE_907,3,not_used,seed_pod,1,,,,,used,506.1,,506.1,2012 fruit
@@ -2907,10 +2907,10 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 6667,HATE,Basin2005,14-May-13,342,HATE_005,17,used,fruit_large_immature,2,,,,,non-mean used,337.32,,168.66,fruit_large_immature
 6668,HATE,Basin2005,14-May-13,343,HATE_006,15,used,fruit_large_immature,2,,,,,non-mean used,460.38,,230.19,fruit_large_immature
 6669,HATE,Basin2005,9-May-13,400,HATE_006,4,used,seed,7,,,,,non-mean used,83.36,,11.91,2012 fruit
-6670,HATE,Basin2005,14-May-13,345,HATE_006,4,used,seed_aborted,9,,,,,non-mean used,47.34,,5.26,2012 fruit?
+6670,HATE,Basin2005,14-May-13,345,HATE_006,2,used,seed_aborted,9,,,,,non-mean used,47.34,,5.26,2012 fruit?
 6671,HATE,Basin2005,14-May-13,347,HATE_006,2,used,seed_pod,8,,,,,non-mean used,1670.66,,208.83,2012 fruit?
 6672,HATE,Waratah2003,16-May-13,391,HATE_801,4,used,seed,2,,,,,non-mean used,27.7,,13.85,old fruit
-6673,HATE,Waratah2003,16-May-13,392,HATE_801,4,used,seed_aborted,6,,,,,non-mean used,33.2,,5.53,old fruit
+6673,HATE,Waratah2003,16-May-13,392,HATE_801,2,used,seed_aborted,6,,,,,non-mean used,33.2,,5.53,old fruit
 4341,HEPU,Waratah2003,24-May-13,209,HEPU_806,17,not_used,flower_all_parts,2,,,,,only_for_collected_parts,9,,4.5,
 6674,HATE,Waratah2003,16-May-13,388,HATE_801,17,used,seed_immature,4,,,,,non-mean used,16.6,,4.15,2013 fruit
 6675,HATE,Waratah2003,16-May-13,388,HATE_801,17,used,seed_pod,6,,,,,non-mean used,1896.86,,316.14,2013 fruit
@@ -2919,7 +2919,7 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 6676,HATE,Waratah2003,17-May-13,404,HATE_802,17,used,fruit_large_immature,3,,,,,non-mean used,632.52,,210.84,fruit_large_immature
 1470,HATE,Waratah2003,21-Feb-13,230,HATE_802,14,used,fruit_young,1,,,,,used,48.5,,48.5,aborted fruit
 4829,HATE,Waratah2003,17-May-13,385,HATE_802,4,used,seed,1,,,,,used,6.06,,6.06,old fruit
-6677,HATE,Waratah2003,17-May-13,385,HATE_802,4,used,seed_aborted,3,,,,,non-mean used,84.62,,28.21,old fruit
+6677,HATE,Waratah2003,17-May-13,385,HATE_802,2,used,seed_aborted,3,,,,,non-mean used,84.62,,28.21,old fruit
 1657,HEPU,Basin1981,5-Jan-13,119,HEPU_903,12,not_used,fruit_mature,0.5,,,,,used,1.1,,2.2,fruit_mature
 6678,HATE,Waratah2003,17-May-13,385,HATE_802,2,used,seed_pod,2,,,,,non-mean used,564.78,,282.39,old fruit
 6679,HATE,Waratah2003,16-May-13,394,HATE_803,17,used,seed_immature,2,,,,,non-mean used,7.98,,3.99,2013 fruit
@@ -3142,7 +3142,7 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 1595,HEPU,,11-Dec-12,90,,,,fruit_young_X,1,,,,,category_not_used,3.9,,3.9,fruit_very_young
 1588,HEPU,,,60,,,,fruit_young_X,1,,,,,category_not_used,4,,4,fruit_very_young
 1596,HEPU,,11-Dec-12,91,,,,fruit_young_X,1,,,,,category_not_used,4.1,,4.1,fruit_very_young
-6681,HATE,Waratah2003,17-May-13,350,HATE_804,4,used,seed_aborted,14,,,,,non-mean used,124.2,,8.87,2012 fruit
+6681,HATE,Waratah2003,17-May-13,350,HATE_804,2,used,seed_aborted,14,,,,,non-mean used,124.2,,8.87,2012 fruit
 1767,LEES,Basin2005,13-Dec-12,139,LEES_002,11,not_used,bud_aborted,7,,,,,mean_used,5.2,,0.74,small aborted bud
 1751,LEES,Basin2005,20-Nov-12,100,LEES_002,10,not_used,bud_aborted,2,,,,,mean_used,1.9,,0.95,small aborted bud
 6682,HATE,Waratah2003,17-May-13,360,HATE_804,17,used,seed_immature,56,,,,,non-mean used,348.1,,6.22,2013 fruit
@@ -3153,13 +3153,13 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 4878,HATE,Waratah2003,17-May-13,403,HATE_806,4,used,seed,2,,,,,used,24.76,,12.38,2012 fruit
 1911,LEES,Basin2005,13-Dec-12,139,LEES_002,9,not_used,fruit_mature,4,,,,,mean_used,13.6,,3.4,fruit_mature
 1900,LEES,Basin2005,20-Nov-12,100,LEES_002,9,not_used,fruit_mature,4,,,,,mean_used,14.3,,3.58,fruit_mature
-4859,HATE,Waratah2003,17-May-13,397,HATE_806,4,used,seed_aborted,2,,,,,used,6.98,,3.49,2012 fruit
+4859,HATE,Waratah2003,17-May-13,397,HATE_806,2,used,seed_aborted,2,,,,,used,6.98,,3.49,2012 fruit
 6684,HATE,Waratah2003,17-May-13,399,HATE_806,17,used,fruit_large_immature,2,,,,,non-mean used,299.62,,149.81,"2013 fruit; probably immature fruit, numbers very low"
 ,,,,,,,,,,,,,,,,,,
 6686,HATE,Waratah2003,17-May-13,403,HATE_806,2,used,seed_pod,2,,,,,non-mean used,467.58,,233.79,2012 fruit
 6687,HATE,Waratah2003,12-Apr-13,235,HATE_807,15,used,fruit_aborted,5,,,26,,non-mean used,602.9,,120.58,fruit_aborted
 4244,HATE,Waratah2003,17-May-13,305,HATE_807,4,used,seed,1,,,,,used,14.3,,14.3,2012 fruit
-6688,HATE,Waratah2003,17-May-13,306,HATE_807,4,used,seed_aborted,5,,,,,non-mean used,23.5,,4.7,2012 fruit
+6688,HATE,Waratah2003,17-May-13,306,HATE_807,2,used,seed_aborted,5,,,,,non-mean used,23.5,,4.7,2012 fruit
 6689,HATE,Waratah2003,17-May-13,408,HATE_807,17,used,seed_immature,74,,,,,non-mean used,336.88,,4.55,2013 fruit
 1749,LEES,Basin2005,20-Nov-12,97,LEES_006,10,not_used,bud_aborted,11,,,,,mean_used,9.6,,0.87,small aborted bud
 1766,LEES,Basin2005,13-Dec-12,138,LEES_006,11;12,not_used,bud_aborted,7,,,,,mean_used,6.3,,0.9,small aborted bud
@@ -3176,7 +3176,7 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 1912,LEES,Basin2005,13-Dec-12,140,LEES_007,9,not_used,fruit_mature,14,,,,,mean_used,42.3,,3.02,fruit_mature
 1899,LEES,Basin2005,20-Nov-12,98,LEES_007,9,not_used,fruit_mature,29,,,,,mean_used,92.2,,3.18,fruit_mature
 6692,HATE,Basin1981,21-Jun-13,266,HATE_901,5,used,seed,19,,,,,non-mean used,317.8,,16.73,2012 fruit
-6693,HATE,Basin1981,21-Jun-13,267,HATE_901,5,used,seed_aborted,7,,,,,non-mean used,34.9,,4.99,2012 fruit
+6693,HATE,Basin1981,21-Jun-13,267,HATE_901,3,used,seed_aborted,7,,,,,non-mean used,34.9,,4.99,2012 fruit
 1754,LEES,Basin2007,20-Nov-12,103,LEES_403,10,not_used,bud_aborted,4,,,,,mean_used,3.5,,0.88,small aborted bud
 1764,LEES,Basin2007,13-Dec-12,136,LEES_403,11;12,not_used,bud_aborted,3,,,,,mean_used,3.3,,1.1,small aborted bud
 1955,LEES,Basin2007,20-Nov-12,103,LEES_403,8,not_used,calyx_fruit,3,,,,,mean_used,2,,0.67,
@@ -3185,7 +3185,7 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 1919,LEES,Basin2007,20-Nov-12,103,LEES_403,8,not_used,fruit_aborted,2,,,,,mean_used,4.3,,2.15,fruit_aborted
 6694,HATE,Basin1981,21-Jun-13,261,HATE_901,3,used,seed_pod,13,,,,,non-mean used,6142.7,,472.52,2012 fruit
 6695,HATE,Basin1981,11-Jun-13,237,HATE_902,5,used,seed,11,,,,,non-mean used,135.6,,12.33,2012 fruit
-6696,HATE,Basin1981,11-Jun-13,244,HATE_902,5,used,seed_aborted,27,,,,,non-mean used,128.7,,4.77,2012 fruit
+6696,HATE,Basin1981,11-Jun-13,244,HATE_902,3,used,seed_aborted,27,,,,,non-mean used,128.7,,4.77,2012 fruit
 1756,LEES,Basin2007,20-Nov-12,107,LEES_407,10,not_used,bud_aborted,3,,,,,mean_used,2.2,,0.73,small aborted bud
 1765,LEES,Basin2007,13-Dec-12,137,LEES_407,11,not_used,bud_aborted,1,,,,,mean_used,1.2,,1.2,small aborted bud
 1959,LEES,Basin2007,20-Nov-12,107,LEES_407,8,not_used,calyx_fruit,21,,,,,mean_used,15,,0.71,
@@ -3193,22 +3193,22 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 1906,LEES,Basin2007,20-Nov-12,107,LEES_407,8,not_used,fruit_aborted,19,,,,,mean_used,46.7,,2.46,fruit_aborted
 1922,LEES,Basin2007,20-Nov-12,107,LEES_407,8,not_used,fruit_aborted,3,,,,,mean_used,7.9,,2.63,fruit_aborted
 6697,HATE,Basin1981,11-Jun-13,229,HATE_902,3,used,seed_pod,20,,,,,non-mean used,9270.5,,463.53,2012 fruit
-4220,HATE,Basin1981,7-Jun-13,269,HATE_904,5,used,seed_aborted,2,,,,,used,12.8,,6.4,2012 fruit
+4220,HATE,Basin1981,7-Jun-13,269,HATE_904,3,used,seed_aborted,2,,,,,used,12.8,,6.4,2012 fruit
 4219,HATE,Basin1981,7-Jun-13,269,HATE_904,3,used,seed_pod,1,,,,,used,404,,404,2012 fruit
 6698,HATE,Basin1981,21-Jun-13,287,HATE_905,5,used,seed,3,,,,,non-mean used,22.5,,7.5,2012 fruit
-6699,HATE,Basin1981,21-Jun-13,288,HATE_905,5,used,seed_aborted,3,,,,,non-mean used,15.5,,5.17,2012 fruit
+6699,HATE,Basin1981,21-Jun-13,288,HATE_905,3,used,seed_aborted,3,,,,,non-mean used,15.5,,5.17,2012 fruit
 1745,LEES,Waratah2003,23-Nov-12,93,LEES_803,10,not_used,bud_aborted,9,,,,,mean_used,6.7,,0.74,small aborted bud
 1760,LEES,Waratah2003,11-Dec-12,132,LEES_803,10,not_used,bud_aborted,11,,,,,mean_used,8.7,,0.79,small aborted bud
 6700,HATE,Basin1981,21-Jun-13,286,HATE_905,3,used,seed_pod,3,,,,,non-mean used,1364.8,,454.93,2012 fruit
 1416,HATE,Basin1981,21-Feb-13,229,HATE_906,5,used,finished_flower_stigma,1,,,,,used,2.8,,2.8,aborting fruit
 3286,HATE,Basin1981,11-Apr-13,231,HATE_906,5,used,fruit_aborted,1,,,,,used,76.3,,76.3,fruit_aborted
 6701,HATE,Basin1981,21-Jun-13,324,HATE_906,5,used,seed,29,,,,,non-mean used,375.1,,12.93,2012 fruit
-6702,HATE,Basin1981,21-Jun-13,328,HATE_906,5,used,seed_aborted,41,,,,,non-mean used,189.1,,4.61,2012 fruit
+6702,HATE,Basin1981,21-Jun-13,328,HATE_906,3,used,seed_aborted,41,,,,,non-mean used,189.1,,4.61,2012 fruit
 6703,HATE,Basin1981,21-Jun-13,273,HATE_906,17,used,seed_immature,10,,,,,non-mean used,33.9,,3.39,2013 fruit
 6704,HATE,Basin1981,21-Jun-13,271,HATE_906,17,used,seed_pod,5,,,,,non-mean used,1495.7,,299.14,2013 fruit
 6705,HATE,Basin1981,21-Jun-13,308,HATE_906,3,used,seed_pod,35,,,,,non-mean used,14768.4,,421.95,2012 fruit
 6706,HATE,Basin1981,21-Jun-13,298,HATE_907,5,used,seed,12,,,,,non-mean used,135.8,,11.32,2012 fruit
-6707,HATE,Basin1981,21-Jun-13,299,HATE_907,5,used,seed_aborted,19,,,,,non-mean used,104.4,,5.49,2012 fruit
+6707,HATE,Basin1981,21-Jun-13,299,HATE_907,3,used,seed_aborted,19,,,,,non-mean used,104.4,,5.49,2012 fruit
 1746,LEES,Waratah2003,23-Nov-12,94,LEES_807,10,not_used,bud_aborted,15,,,,,mean_used,10.8,,0.72,small aborted bud
 1758,LEES,Waratah2003,11-Dec-12,130,LEES_807,10,not_used,bud_aborted,27,,,,,mean_used,24.1,,0.89,small aborted bud
 6708,HATE,Basin1981,21-Jun-13,292,HATE_907,3,used,seed_pod,16,,,,,non-mean used,7345.1,,459.07,2012 fruit
