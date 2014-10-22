@@ -613,7 +613,7 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 249,BOLE,,,93,,,,fruit_just_starting,1,,,,,used,1.7,,1.7,fruit_just_starting
 250,BOLE,,,94,,,,fruit_just_starting,1,,,,,used,1.4,,1.4,fruit_just_starting
 251,BOLE,,,99,,,,fruit_just_starting,2,,,,,used,2.3,,1.15,fruit_just_starting
-6373,BOLE,dummmy,,,,,,fruit_large_immature,1,,,,,used,6,,6,dummy variable
+,,,,,,,,,,,,,,,,,,
 263,BOLE,,1-Nov-12,21,,,,fruit_young,1,,,,,used,2.2,,2.2,
 264,BOLE,,1-Nov-12,24,,,,fruit_young,1,,,,,used,2.2,,2.2,
 265,BOLE,,,26,,,,fruit_young,1,,,,,used,1.8,,1.8,
@@ -627,67 +627,67 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 260,BOLE,,,93,,,,fruit_young,1,,,,,used,2.3,,2.3,
 261,BOLE,,,95,,,,fruit_young,2,,,,,used,6,,3,
 262,BOLE,,,97,,,,fruit_young,1,,,,,used,4,,4,
-189,BOLE,,1-Nov-12,19,,,,late_finished_flower,1,,,,,used,20.1,,20.1,
-190,BOLE,,1-Nov-12,20,,,,late_finished_flower,1,,,,,used,26.6,,26.6,
-191,BOLE,,1-Nov-12,21,,,,late_finished_flower,1,,,,,used,26.6,,26.6,
-192,BOLE,,1-Nov-12,22,,,,late_finished_flower,1,,,,,used,17.7,,17.7,
-193,BOLE,,1-Nov-12,23,,,,late_finished_flower,1,,,,,used,17.6,,17.6,
-194,BOLE,,1-Nov-12,24,,,,late_finished_flower,1,,,,,used,22.5,,22.5,
-195,BOLE,,,25,,,,late_finished_flower,1,,,,,used,18.6,,18.6,
-196,BOLE,,,26,,,,late_finished_flower,1,,,,,used,28.4,,28.4,
-197,BOLE,,,27,,,,late_finished_flower,1,,,,,used,30.1,,30.1,
-198,BOLE,,,28,,,,late_finished_flower,1,,,,,used,25.6,,25.6,
-199,BOLE,,,29,,,,late_finished_flower,1,,,,,used,21.4,,21.4,
-200,BOLE,,,30,,,,late_finished_flower,1,,,,,used,22.8,,22.8,
-201,BOLE,,,31,,,,late_finished_flower,1,,,,,used,28.7,,28.7,
-202,BOLE,,,32,,,,late_finished_flower,1,,,,,used,24.5,,24.5,
-203,BOLE,,,33,,,,late_finished_flower,1,,,,,used,18.9,,18.9,
-204,BOLE,,,34,,,,late_finished_flower,1,,,,,used,21.4,,21.4,
-205,BOLE,,,35,,,,late_finished_flower,1,,,,,used,20.6,,20.6,
-206,BOLE,,,36,,,,late_finished_flower,1,,,,,used,20.3,,20.3,
-207,BOLE,,,37,,,,late_finished_flower,1,,,,,used,25.7,,25.7,
-234,BOLE,,,39,,,,late_finished_flower,1,,,,,used,18.8,,18.8,
-162,BOLE,,,40,,,,late_finished_flower,1,,,,,used,15.4,,15.4,late_finished_flower_small
-163,BOLE,,,41,,,,late_finished_flower,1,,,,,used,14.8,,14.8,late_finished_flower_small
-166,BOLE,,,50,,,,late_finished_flower,1,,,,,used,18.7,,18.7,
-146,BOLE,,,51,,,,late_finished_flower,1,,,,,used,15.9,,15.9,all 3 seeds a bit wrinkly; late_finished_flower_small
-147,BOLE,,,52,,,,late_finished_flower,1,,,,,used,15.5,,15.5,late_finished_flower_small
-148,BOLE,,,53,,,,late_finished_flower,1,,,,,used,16.8,,16.8,late_finished_flower_small
-149,BOLE,,,54,,,,late_finished_flower,1,,,,,used,15.8,,15.8,late_finished_flower_small
-150,BOLE,,,55,,,,late_finished_flower,1,,,,,used,16.3,,16.3,late_finished_flower_small
-167,BOLE,,,56,,,,late_finished_flower,1,,,,,used,24.4,,24.4,
-168,BOLE,,,57,,,,late_finished_flower,1,,,,,used,19.8,,19.8,
-151,BOLE,,,58,,,,late_finished_flower,1,,,,,used,17.2,,17.2,late_finished_flower_small
-152,BOLE,,,59,,,,late_finished_flower,1,,,,,used,14.1,,14.1,late_finished_flower_small
-169,BOLE,,,60,,,,late_finished_flower,1,,,,,used,21.3,,21.3,
-153,BOLE,,,61,,,,late_finished_flower,1,,,,,used,16.1,,16.1,think some pod must be missing; late_finished_flower_small
-154,BOLE,,,63,,,,late_finished_flower,1,,,,,used,14.3,,14.3,late_finished_flower_small
-156,BOLE,,,63,,,,late_finished_flower,1,,,,,used,16.3,,16.3,seeds wrinkled; late_finished_flower_small
-155,BOLE,,,64,,,,late_finished_flower,1,,,,,used,16.3,,16.3,"1 pod empty; seeds not wrinkly, are glossy; late_finished_flower_small"
-170,BOLE,,,65,,,,late_finished_flower,1,,,,,used,19.9,,19.9,called large flower
-157,BOLE,,,66,,,,late_finished_flower,1,,,,,used,15.9,,15.9,late_finished_flower_small
-171,BOLE,,,67,,,,late_finished_flower,1,,,,,used,19.5,,19.5,called large flower
-172,BOLE,,,68,,,,late_finished_flower,1,,,,,used,22.3,,22.3,
-173,BOLE,,,80,,,,late_finished_flower,1,,,,,used,23.1,,23.1,
-174,BOLE,,,81,,,,late_finished_flower,1,,,,,used,18.8,,18.8,
-175,BOLE,,,82,,,,late_finished_flower,1,,,,,used,17.6,,17.6,
-176,BOLE,,,83,,,,late_finished_flower,1,,,,,used,19.8,,19.8,
-177,BOLE,,,84,,,,late_finished_flower,1,,,,,used,21,,21,
-158,BOLE,,,85,,,,late_finished_flower,1,,,,,used,15.9,,15.9,late_finished_flower_small
-178,BOLE,,,86,,,,late_finished_flower,1,,,,,used,18.4,,18.4,
-159,BOLE,,,87,,,,late_finished_flower,1,,,,,used,14.2,,14.2,late_finished_flower_small
-179,BOLE,,,88,,,,late_finished_flower,1,,,,,used,17.7,,17.7,
-180,BOLE,,,89,,,,late_finished_flower,1,,,,,used,21.3,,21.3,
-181,BOLE,,,90,,,,late_finished_flower,1,,,,,used,18.5,,18.5,
-182,BOLE,,,91,,,,late_finished_flower,1,,,,,used,21.2,,21.2,
-183,BOLE,,,92,,,,late_finished_flower,1,,,,,used,20.4,,20.4,
-184,BOLE,,,93,,,,late_finished_flower,1,,,,,used,19.4,,19.4,
-185,BOLE,,,94,,,,late_finished_flower,1,,,,,used,23,,23,
-160,BOLE,,,95,,,,late_finished_flower,1,,,,,used,15.9,,15.9,late_finished_flower_small
-186,BOLE,,,96,,,,late_finished_flower,1,,,,,used,17.7,,17.7,
-187,BOLE,,,97,,,,late_finished_flower,1,,,,,used,23.7,,23.7,
-161,BOLE,,,98,,,,late_finished_flower,1,,,,,used,15.8,,15.8,late_finished_flower_small
-188,BOLE,,,99,,,,late_finished_flower,1,,,,,used,22.7,,22.7,
+189,BOLE,,1-Nov-12,19,,,,late_finished_flower,1,,,,,category_not_used,20.1,,20.1,
+190,BOLE,,1-Nov-12,20,,,,late_finished_flower,1,,,,,category_not_used,26.6,,26.6,
+191,BOLE,,1-Nov-12,21,,,,late_finished_flower,1,,,,,category_not_used,26.6,,26.6,
+192,BOLE,,1-Nov-12,22,,,,late_finished_flower,1,,,,,category_not_used,17.7,,17.7,
+193,BOLE,,1-Nov-12,23,,,,late_finished_flower,1,,,,,category_not_used,17.6,,17.6,
+194,BOLE,,1-Nov-12,24,,,,late_finished_flower,1,,,,,category_not_used,22.5,,22.5,
+195,BOLE,,,25,,,,late_finished_flower,1,,,,,category_not_used,18.6,,18.6,
+196,BOLE,,,26,,,,late_finished_flower,1,,,,,category_not_used,28.4,,28.4,
+197,BOLE,,,27,,,,late_finished_flower,1,,,,,category_not_used,30.1,,30.1,
+198,BOLE,,,28,,,,late_finished_flower,1,,,,,category_not_used,25.6,,25.6,
+199,BOLE,,,29,,,,late_finished_flower,1,,,,,category_not_used,21.4,,21.4,
+200,BOLE,,,30,,,,late_finished_flower,1,,,,,category_not_used,22.8,,22.8,
+201,BOLE,,,31,,,,late_finished_flower,1,,,,,category_not_used,28.7,,28.7,
+202,BOLE,,,32,,,,late_finished_flower,1,,,,,category_not_used,24.5,,24.5,
+203,BOLE,,,33,,,,late_finished_flower,1,,,,,category_not_used,18.9,,18.9,
+204,BOLE,,,34,,,,late_finished_flower,1,,,,,category_not_used,21.4,,21.4,
+205,BOLE,,,35,,,,late_finished_flower,1,,,,,category_not_used,20.6,,20.6,
+206,BOLE,,,36,,,,late_finished_flower,1,,,,,category_not_used,20.3,,20.3,
+207,BOLE,,,37,,,,late_finished_flower,1,,,,,category_not_used,25.7,,25.7,
+234,BOLE,,,39,,,,late_finished_flower,1,,,,,category_not_used,18.8,,18.8,
+162,BOLE,,,40,,,,late_finished_flower,1,,,,,category_not_used,15.4,,15.4,late_finished_flower_small
+163,BOLE,,,41,,,,late_finished_flower,1,,,,,category_not_used,14.8,,14.8,late_finished_flower_small
+166,BOLE,,,50,,,,late_finished_flower,1,,,,,category_not_used,18.7,,18.7,
+146,BOLE,,,51,,,,late_finished_flower,1,,,,,category_not_used,15.9,,15.9,all 3 seeds a bit wrinkly; late_finished_flower_small
+147,BOLE,,,52,,,,late_finished_flower,1,,,,,category_not_used,15.5,,15.5,late_finished_flower_small
+148,BOLE,,,53,,,,late_finished_flower,1,,,,,category_not_used,16.8,,16.8,late_finished_flower_small
+149,BOLE,,,54,,,,late_finished_flower,1,,,,,category_not_used,15.8,,15.8,late_finished_flower_small
+150,BOLE,,,55,,,,late_finished_flower,1,,,,,category_not_used,16.3,,16.3,late_finished_flower_small
+167,BOLE,,,56,,,,late_finished_flower,1,,,,,category_not_used,24.4,,24.4,
+168,BOLE,,,57,,,,late_finished_flower,1,,,,,category_not_used,19.8,,19.8,
+151,BOLE,,,58,,,,late_finished_flower,1,,,,,category_not_used,17.2,,17.2,late_finished_flower_small
+152,BOLE,,,59,,,,late_finished_flower,1,,,,,category_not_used,14.1,,14.1,late_finished_flower_small
+169,BOLE,,,60,,,,late_finished_flower,1,,,,,category_not_used,21.3,,21.3,
+153,BOLE,,,61,,,,late_finished_flower,1,,,,,category_not_used,16.1,,16.1,think some pod must be missing; late_finished_flower_small
+154,BOLE,,,63,,,,late_finished_flower,1,,,,,category_not_used,14.3,,14.3,late_finished_flower_small
+156,BOLE,,,63,,,,late_finished_flower,1,,,,,category_not_used,16.3,,16.3,seeds wrinkled; late_finished_flower_small
+155,BOLE,,,64,,,,late_finished_flower,1,,,,,category_not_used,16.3,,16.3,"1 pod empty; seeds not wrinkly, are glossy; late_finished_flower_small"
+170,BOLE,,,65,,,,late_finished_flower,1,,,,,category_not_used,19.9,,19.9,called large flower
+157,BOLE,,,66,,,,late_finished_flower,1,,,,,category_not_used,15.9,,15.9,late_finished_flower_small
+171,BOLE,,,67,,,,late_finished_flower,1,,,,,category_not_used,19.5,,19.5,called large flower
+172,BOLE,,,68,,,,late_finished_flower,1,,,,,category_not_used,22.3,,22.3,
+173,BOLE,,,80,,,,late_finished_flower,1,,,,,category_not_used,23.1,,23.1,
+174,BOLE,,,81,,,,late_finished_flower,1,,,,,category_not_used,18.8,,18.8,
+175,BOLE,,,82,,,,late_finished_flower,1,,,,,category_not_used,17.6,,17.6,
+176,BOLE,,,83,,,,late_finished_flower,1,,,,,category_not_used,19.8,,19.8,
+177,BOLE,,,84,,,,late_finished_flower,1,,,,,category_not_used,21,,21,
+158,BOLE,,,85,,,,late_finished_flower,1,,,,,category_not_used,15.9,,15.9,late_finished_flower_small
+178,BOLE,,,86,,,,late_finished_flower,1,,,,,category_not_used,18.4,,18.4,
+159,BOLE,,,87,,,,late_finished_flower,1,,,,,category_not_used,14.2,,14.2,late_finished_flower_small
+179,BOLE,,,88,,,,late_finished_flower,1,,,,,category_not_used,17.7,,17.7,
+180,BOLE,,,89,,,,late_finished_flower,1,,,,,category_not_used,21.3,,21.3,
+181,BOLE,,,90,,,,late_finished_flower,1,,,,,category_not_used,18.5,,18.5,
+182,BOLE,,,91,,,,late_finished_flower,1,,,,,category_not_used,21.2,,21.2,
+183,BOLE,,,92,,,,late_finished_flower,1,,,,,category_not_used,20.4,,20.4,
+184,BOLE,,,93,,,,late_finished_flower,1,,,,,category_not_used,19.4,,19.4,
+185,BOLE,,,94,,,,late_finished_flower,1,,,,,category_not_used,23,,23,
+160,BOLE,,,95,,,,late_finished_flower,1,,,,,category_not_used,15.9,,15.9,late_finished_flower_small
+186,BOLE,,,96,,,,late_finished_flower,1,,,,,category_not_used,17.7,,17.7,
+187,BOLE,,,97,,,,late_finished_flower,1,,,,,category_not_used,23.7,,23.7,
+161,BOLE,,,98,,,,late_finished_flower,1,,,,,category_not_used,15.8,,15.8,late_finished_flower_small
+188,BOLE,,,99,,,,late_finished_flower,1,,,,,category_not_used,22.7,,22.7,
 3825,BOLE,,31-Oct-13,239,,,,pedicel,1,,,,,category_not_used,1.98,,1.98,"weights odd, don't use"
 3826,BOLE,,31-Oct-13,240,,,,pedicel,1,,,,,category_not_used,1.82,,1.82,"weights odd, don't use"
 3827,BOLE,,31-Oct-13,241,,,,pedicel,1,,,,,category_not_used,3.13,,3.13,"weights odd, don't use"
@@ -2838,7 +2838,7 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 3989,HATE,,28-Nov-13,250,,,,inflorescence_bud_small,5,,,,,used,28.5,,5.7,
 3988,HATE,,28-Nov-13,249,,,,inflorescence_bud_small,5,,,,,used,28.8,,5.76,
 3990,HATE,,28-Nov-13,251,,,,inflorescence_bud_small,5,,,,,used,29.2,,5.84,
-6377,HATE,dummmy,,,,,,inflorescence_bud_tiny,1,,,,,used,2,,2,dummy variable
+,,,,,,,,,,,,,,,,,,
 1484,HATE,,,1,,,,seed,2,,,,,used,29.8,,14.9,
 1485,HATE,,,2,,,,seed,2,,,,,used,16.8,,8.4,
 1486,HATE,,,3,,,,seed,2,,,,,used,19.1,,9.55,
@@ -6749,3 +6749,65 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 4471,PUTU,Basin1981,6-Jun-13,124,PUTU_908,18,used,seed,1,,,,,used,1.72,,1.72,
 4472,PUTU,Basin1981,6-Jun-13,124,PUTU_908,18,used,seed_aborted,3,,,,,used,0.8,,0.27,
 4470,PUTU,Basin1981,6-Jun-13,124,PUTU_908,18,used,seed_pod,4,,,,,used,8.4,,2.1,
+,HATE,Waratah2003,11-Sep-14,443,,,,inflorescence_bud_tiny,5,,,,,used,17.3,,3.46,
+,HATE,Waratah2003,11-Sep-14,444,,,,inflorescence_bud_tiny,5,,,,,used,22.2,,4.44,
+,HATE,Waratah2003,11-Sep-14,445,,,,inflorescence_bud_tiny,5,,,,,used,19.9,,3.98,
+,HATE,Waratah2003,11-Sep-14,446,,,,inflorescence_bud_tiny,5,,,,,used,16.3,,3.26,
+,HATE,Waratah2003,11-Sep-14,447,,,,inflorescence_bud_tiny,5,,,,,used,18.3,,3.66,
+,HATE,Waratah2003,11-Sep-14,448,,,,inflorescence_bud_tiny,5,,,,,used,17.4,,3.48,
+,HATE,Waratah2003,11-Sep-14,449,,,,inflorescence_bud_tiny,5,,,,,used,15.3,,3.06,
+,HATE,Waratah2003,11-Sep-14,450,,,,inflorescence_bud_tiny,5,,,,,used,18.6,,3.72,
+,HATE,Waratah2003,11-Sep-14,451,,,,inflorescence_bud_tiny,5,,,,,used,20.6,,4.12,
+,HATE,Waratah2003,11-Sep-14,452,,,,inflorescence_bud_tiny,5,,,,,used,16.7,,3.34,
+,HATE,Waratah2003,11-Sep-14,453,,,,inflorescence_bud_tiny,5,,,,,used,18.3,,3.66,
+,HATE,Waratah2003,11-Sep-14,454,,,,inflorescence_bud_tiny,5,,,,,used,18.9,,3.78,
+,GRBU,Waratah2003,11-Sep-14,241,,,,finished_flower_stigma,5,,,,,used,66.8,,13.36,
+,GRBU,Waratah2003,11-Sep-14,242,,,,finished_flower_stigma,5,,,,,used,60.6,,12.12,
+,GRBU,Waratah2003,11-Sep-14,243,,,,finished_flower_stigma,5,,,,,used,59.5,,11.9,
+,GRBU,Waratah2003,11-Sep-14,244,,,,finished_flower_stigma,5,,,,,used,60.5,,12.1,
+,GRBU,Waratah2003,11-Sep-14,245,,,,finished_flower_stigma,5,,,,,used,55,,11,
+,GRBU,Waratah2003,11-Sep-14,246,,,,finished_flower_stigma,5,,,,,used,64.8,,12.96,
+,GRBU,Waratah2003,11-Sep-14,247,,,,finished_flower_stigma,5,,,,,used,65.2,,13.04,
+,GRBU,Waratah2003,11-Sep-14,248,,,,finished_flower_stigma,5,,,,,used,61.8,,12.36,
+,GRBU,Waratah2003,11-Sep-14,249,,,,finished_flower_stigma,3,,,,,used,42.6,,14.2,
+,,,,,,,,,,,,,,,,,,
+,BOLE,Waratah2003,11-Sep-14,463,,,,late_finished_flower,4,,,,,used,31.4,,7.85,
+,BOLE,Waratah2003,11-Sep-14,464,,,,late_finished_flower,4,,,,,used,30.5,,7.625,
+,BOLE,Waratah2003,11-Sep-14,465,,,,late_finished_flower,4,,,,,used,26,,6.5,
+,BOLE,Waratah2003,11-Sep-14,466,,,,late_finished_flower,4,,,,,used,33.5,,8.375,
+,BOLE,Waratah2003,11-Sep-14,467,,,,late_finished_flower,4,,,,,used,26.2,,6.55,
+,BOLE,Waratah2003,11-Sep-14,468,,,,late_finished_flower,4,,,,,used,26.3,,6.575,
+,BOLE,Waratah2003,11-Sep-14,469,,,,late_finished_flower,4,,,,,used,27,,6.75,
+,BOLE,Waratah2003,11-Sep-14,470,,,,late_finished_flower,4,,,,,used,24.8,,6.2,
+,BOLE,Waratah2003,11-Sep-14,471,,,,late_finished_flower,4,,,,,used,23.6,,5.9,
+,BOLE,Waratah2003,11-Sep-14,463,,,,late_finished_flower_petals,4,,,,,used,41.4,,10.35,
+,BOLE,Waratah2003,11-Sep-14,464,,,,late_finished_flower_petals,4,,,,,used,32.7,,8.175,
+,BOLE,Waratah2003,11-Sep-14,465,,,,late_finished_flower_petals,4,,,,,used,34.2,,8.55,
+,BOLE,Waratah2003,11-Sep-14,466,,,,late_finished_flower_petals,4,,,,,used,37.4,,9.35,
+,BOLE,Waratah2003,11-Sep-14,467,,,,late_finished_flower_petals,4,,,,,used,33.4,,8.35,
+,BOLE,Waratah2003,11-Sep-14,468,,,,late_finished_flower_petals,4,,,,,used,32,,8,
+,BOLE,Waratah2003,11-Sep-14,469,,,,late_finished_flower_petals,4,,,,,used,31.8,,7.95,
+,BOLE,Waratah2003,11-Sep-14,470,,,,late_finished_flower_petals,4,,,,,used,27,,6.75,
+,BOLE,Waratah2003,11-Sep-14,471,,,,late_finished_flower_petals,4,,,,,used,27.1,,6.775,
+,BOLE,Waratah2003,11-Sep-14,472,,,,fruit_young,3,,,,,used,9.6,,3.2,
+,BOLE,Waratah2003,11-Sep-14,473,,,,fruit_young,3,,,,,used,8.3,,2.766666667,
+,BOLE,Waratah2003,11-Sep-14,474,,,,fruit_young,3,,,,,used,8,,2.666666667,
+,BOLE,Waratah2003,11-Sep-14,475,,,,fruit_young,3,,,,,used,10.5,,3.5,
+,BOLE,Waratah2003,11-Sep-14,476,,,,fruit_young,3,,,,,used,10.6,,3.533333333,
+,BOLE,Waratah2003,11-Sep-14,477,,,,fruit_young,3,,,,,used,7,,2.333333333,
+,BOLE,Waratah2003,11-Sep-14,478,,,,fruit_young,3,,,,,used,7.2,,2.4,
+,BOLE,Waratah2003,11-Sep-14,479,,,,fruit_young,3,,,,,used,8.3,,2.766666667,
+,BOLE,Waratah2003,11-Sep-14,480,,,,fruit_young,3,,,,,used,9.1,,3.033333333,
+,BOLE,Waratah2003,11-Sep-14,481,,,,fruit_young,3,,,,,used,7.9,,2.633333333,
+,BOLE,Waratah2003,11-Sep-14,482,,,,fruit_young,3,,,,,used,6.5,,2.166666667,
+,BOLE,Waratah2003,11-Sep-14,483,,,,fruit_young,3,,,,,used,9.5,,3.166666667,
+,BOLE,Waratah2003,11-Sep-14,484,,,,fruit_large_immature,2,,,,,used,8.2,,4.1,
+,BOLE,Waratah2003,11-Sep-14,485,,,,fruit_large_immature,2,,,,,used,13,,6.5,
+,BOLE,Waratah2003,11-Sep-14,486,,,,fruit_large_immature,2,,,,,used,11.3,,5.65,
+,BOLE,Waratah2003,11-Sep-14,487,,,,fruit_large_immature,2,,,,,used,12.7,,6.35,
+,BOLE,Waratah2003,11-Sep-14,488,,,,fruit_large_immature,2,,,,,used,12.3,,6.15,
+,BOLE,Waratah2003,11-Sep-14,489,,,,fruit_large_immature,2,,,,,used,11.7,,5.85,
+,BOLE,Waratah2003,11-Sep-14,490,,,,fruit_large_immature,2,,,,,used,10.2,,5.1,
+,BOLE,Waratah2003,11-Sep-14,491,,,,fruit_large_immature,2,,,,,used,13.4,,6.7,
+,BOLE,Waratah2003,11-Sep-14,492,,,,fruit_large_immature,2,,,,,used,9.3,,4.65,
+,BOLE,Waratah2003,11-Sep-14,493,,,,fruit_large_immature,2,,,,,used,7.9,,3.95,
