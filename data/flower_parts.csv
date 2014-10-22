@@ -2881,7 +2881,7 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 6747,GRSP,Waratah2003,17-May-13,317,GRSP_807,17,used,bud_mid,109,,,,,used,157.9,,1.45,
 6748,GRSP,Waratah2003,17-May-13,321,GRSP_807,17,used,bud_small,88,,,,,used,94.6,,1.08,
 6749,GRSP,Waratah2003,17-May-13,323,GRSP_807,17,used,bud_tiny,130,,,,,used,48.4,,0.37,
-4441,GRSP,Waratah2003,17-May-13,319,GRSP_807,17,used,finished_flower_stigma,14,,,,,used,65,,4.64,
+4441,GRSP,Waratah2003,17-May-13,319,GRSP_807,17,used,flower_stigma,14,,,,,category_not_used,65,,4.64,
 1571,HEPU,Basin2007,28-Aug-12,2,HEPU_406,5,not_used,fruit_aborted_no_calyx,3,,,,,category_not_used,2.6,,0.87,fruit_aborted
 4439,GRSP,Waratah2003,17-May-13,318,GRSP_807,17,used,inflorescence_bud_small,11,,,,,used,97.5,,8.86,
 4180,HEPU,Basin2007,11-Apr-13,203,HEPU_407,16,not_used,calyx_fruit,1,,,,,mean_used,1.92,,1.92,
