@@ -3,7 +3,8 @@ CalculateMassAndDiameters<-function()
 source("analysis/plot-utils.R")
 
 data <- tbl_df(read.csv("data/2013_Kuringgai_harvest.csv", stringsAsFactors=FALSE)) %.%
-  filter((year==2013)||(year=2014)) %.%
+  filter(year==2013) %.%
+#  filter((year==2013)||(year=2014)) %.%
   arrange(tag_ID, date, segment)
 
 data$species[data$species=="BAER "] <- "BAER"
