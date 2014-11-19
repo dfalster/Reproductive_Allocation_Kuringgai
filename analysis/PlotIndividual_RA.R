@@ -42,7 +42,7 @@ points(InvByAge$age,InvByAge$RI_U,pch=6,cex=2,col=sp_col)
 points(InvBySpecies$age,InvBySpecies$ReproInv,pch="o",cex=1.5,col='grey')
 
 
-plot(InvByAge$age,InvByAge$RA,type="b",lwd=3,pch=as.character(N),cex=1.5,col=sp_col,ylim=range(InvBySpecies$RA),main="Reproductive Allocation",xlab="Age (years)",ylab="Reproductive Allovation")
+plot(InvByAge$age,InvByAge$RA,type="b",lwd=3,pch=as.character(N),cex=1.5,col=sp_col,ylim=range(InvBySpecies$RA),main="Reproductive Allocation",xlab="Age (years)",ylab="Reproductive Allocation")
 points(InvByAge$age,InvByAge$RA_L,pch=2,cex=2,col=sp_col)
 points(InvByAge$age,InvByAge$RA_U,pch=6,cex=2,col=sp_col)
 points(InvBySpecies$age,InvBySpecies$RA,pch="o",cex=1.5,col='grey')
