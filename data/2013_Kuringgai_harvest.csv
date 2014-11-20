@@ -395,7 +395,7 @@ sort2,sort1,species,replicate,tag_ID,site,age,date,start_end,interval,year,segme
 539,1146,PELA,108,PELA_108,Waratah2011,1.4,4-Jun-13,end01,,2013,1,0,1,alive,use,43,11.6,,1.7,1.71,1.73,1.71,93.4,386.7,480.1,70,check diameter on sheet
 540,1141,PELA,108,PELA_108,Waratah2011,1.4,4-Jun-13,end01,,2013,2,1,2,alive,,50.4,375.1,,1.48,,,1.48,50.4,375.1,425.5,,
 2541,,PELA,113,PELA_113,Waratah2011,1.4,15-Jun-12,start01,1,2012,1,0,1,alive,use,,,,1.54,,,1.54,,,,34,
-541,,PELA,113,PELA_113,Waratah2011,1.4,13-Jun-13,end01,,2013,1,0,1,alive,use,61.5,58.9,,1.977777778,,2.2,2.09,61.5,58.9,120.4,30,previous measure too big (maybe included leaf bases?); measured dry = 1.78 and scaled up by 10%
+541,,PELA,113,PELA_113,Waratah2011,1.4,13-Jun-13,end01,,2013,1,0,1,alive,use,61.5,58.9,,2.56,2.31,2.2,,61.5,58.9,120.4,30,previous measure too big (maybe included leaf bases?); measured dry = 1.78 and scaled up by 10%
 2542,,PELA,118,PELA_118,Waratah2011,1.4,30-Aug-12,start01,0.8,2012,1,0,1,alive,use,,,,1.45,,,1.45,,,,31,
 542,,PELA,118,PELA_118,Waratah2011,1.4,13-Jun-13,end01,,2013,1,0,1,alive,use,34.6,7.7,,1.89,1.77,1.82,1.83,76.9,335.8,412.7,61,
 2543,,PELA,118,PELA_118,Waratah2011,1.4,30-Aug-12,start01,0.8,2012,2,1,2,alive,,,,,,,,,,,,,
