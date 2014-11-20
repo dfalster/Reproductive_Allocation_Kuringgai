@@ -4,6 +4,9 @@ source("analysis/WeightFunctions.R")
 
 #Read data
 #Data=read.csv('data/reproduction.csv',sep=',',header=T,stringsAsFactors = FALSE, na.strings="")
+#individual='BAER_301'
+#individual='BAER_104'
+#Tree=Data[Data$individual==individual,]
 #FPSummary=read.csv('data/flower_parts.csv',header=T,sep=',', stringsAsFactors = FALSE)
 
 #Choose specific individual
@@ -13,7 +16,8 @@ WeightCalculationsForTree<-function(Tree)
   TreeID=as.character(unique(Tree$individual))
   TreeList=list(TreeID=TreeID)
   #Choose specific census
-  for(i in 1:18)
+  k=1;
+  for(i in unique(Tree$census))
   {
     #Measurments from Census i
     C_old=Tree[(Tree$census==i)&(Tree$pre.new=="pre-existing"),]
@@ -26,7 +30,8 @@ WeightCalculationsForTree<-function(Tree)
     #Create list containing new, pre.existing and total data for the given census
     C=list(pre.ex=C_old_list,new=C_new_list,total=C_total)
     #Add the information about weight structure at time i (place i+1 in the list) to the tree List
-    TreeList[[i+1]]=C
+    TreeList[[k+1]]=C
+    k=k+1;
   }
   #Return tree List
   TreeList

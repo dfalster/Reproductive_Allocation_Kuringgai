@@ -3,6 +3,8 @@ source('analysis/InvestmentCalculations.R')
 source('analysis/GraphRepresentation.R')
 source('analysis/MultiplicityAdjustment.R')
 
+#individual='BOLE_157'
+
 
 CalculateInvestmentForIndiviualPlant<-function(individual)
 { #Read and extract data

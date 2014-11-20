@@ -3,23 +3,25 @@ source('analysis/InvestmentInAPartType.R')
 
 InvestmentCalculations<-function(TreeListOrig)
 {
+  last.census=length(TreeListOrig)
+  n.censuses=last.census-1;
   #Extract species name
   species=substr(TreeListOrig[[1]],1,4)
   #Initialize the variables
   ErrList=data.frame(Element=NA,Census=NA,Count=NA)
   Lost=data.frame(what=c(),Census=c(),count=c(),weight=c())
   FinishedDevelopement=data.frame(what=c(),Census=c(),count=c(),weight=c());
-  if((length(sapply(TreeListOrig[[19]]$total,function(x) x$type)>0))){
-    FinishedDevelopement=rbind(FinishedDevelopement,data.frame(what=sapply(TreeListOrig[[19]]$total,function(x) x$type),
-                           Census=rep(18,length(sapply(TreeListOrig[[19]]$total,function(x) x$type))),
-                           count=sapply(TreeListOrig[[19]]$total,function(x) x$count),
-                           weight=sapply(TreeListOrig[[19]]$total,function(x) sum(x$weight))))}
+  if((length(sapply(TreeListOrig[[last.census]]$total,function(x) x$type)>0))){
+    FinishedDevelopement=rbind(FinishedDevelopement,data.frame(what=sapply(TreeListOrig[[last.census]]$total,function(x) x$type),
+                           Census=rep(n.censuses,length(sapply(TreeListOrig[[last.census]]$total,function(x) x$type))),
+                           count=sapply(TreeListOrig[[last.census]]$total,function(x) x$count),
+                           weight=sapply(TreeListOrig[[last.census]]$total,function(x) sum(x$weight))))}
 
   
   Investments=data.frame(FromCensus=c(),ToCensus=c(),From=c(),To=c(),Inv=c(),Count=c())
   Err=c()
   #If tree had no reproduction at all return list of empty data frames
-  if (is.null(unlist(TreeListOrig[2:19])))
+  if (is.null(unlist(TreeListOrig[2:last.census])))
   {return(list(Inv=c(),Err=Err,Lost=Lost,FinishedDevelopement=FinishedDevelopement))}
   
   #Check how many main paths there are for this plant.
@@ -49,7 +51,7 @@ InvestmentCalculations<-function(TreeListOrig)
     TreeList_Acc =TreeList;
     TreeList_Pred=TreeList;
     #Go backwards in time i=j -> Census= j-1
-    for(i in 19:2)
+    for(i in last.census:2)
     {
       #Restrict your data to the time frame of interest
       TreeList=TreeList[1:i];
@@ -98,7 +100,7 @@ InvestmentCalculations<-function(TreeListOrig)
         }
       }
 # Befor moving to next census (from time t to t-1) check the list of avilable predecessor at time t-1 contain any elements. They will not develop to anything, hence they are lost.
-if((i>2)&(i<18))
+if((i>2)&(i<n.censuses))
 {if((length(sapply(TreeList_Pred[[i-1]]$total,function(x) x$type)>0))){
   L=rbind(L,data.frame(what=sapply(TreeList_Pred[[i-1]]$total,function(x) x$type),
                        Census=rep(i-2,length(sapply(TreeList_Pred[[i-1]]$total,function(x) x$type))),
@@ -144,7 +146,7 @@ if(length(Acc.Finals)>0)
     Progression_Not_on_Main=Aux_Progression_to_root[I_not_on_main]
     n.aux=length(Progression_Not_on_Main)
     #Perform investment calculations in the same mannes as in the previous case. Only calculations for elements not on the main progression are made, however all the progression is allowed.
-    for(i in 19:2)
+    for(i in last.census:2)
     {
       TreeList=TreeList[1:i];
       TreeList_Acc =TreeList_Acc[1:i]
@@ -157,7 +159,7 @@ if(length(Acc.Finals)>0)
         ErrList=rbind(ErrList,R[["Err"]])
       }
       #Calculate lost elements
-      if((i>2)&(i<18))
+      if((i>2)&(i<n.censuses))
       {if((length(sapply(TreeList_Acc[[i-1]]$total,function(x) x$type)>0))){
         L=rbind(L,data.frame(what=sapply(TreeList_Acc[[i-1]]$total,function(x) x$type),
                              Census=rep(i-2,length(sapply(TreeList_Acc[[i-1]]$total,function(x) x$type))),

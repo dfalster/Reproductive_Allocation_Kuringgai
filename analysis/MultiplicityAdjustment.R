@@ -31,7 +31,8 @@ Census
 AdjustForMultiplicity<-function(TreeList)
 {
   species=substr(TreeList[[1]],1,4)
-  for(i in 2:19)
+  
+  for(i in 2:length(TreeList))
   {
    TreeList[[i]]=AdjustForMultiplicity_Census(TreeList[[i]],species) 
   }

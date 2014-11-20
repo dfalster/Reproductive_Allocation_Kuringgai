@@ -3,6 +3,7 @@ RA_Calculations<-function()
 # Function that produce the summary of both investment types and calculate RAs.
 source('analysis/OrderedListsOfParts.R')
 WeightDiameterData=read.csv(file="output/WeightDiameterData.csv",stringsAsFactors = FALSE)
+WeightDiameterData=WeightDiameterData[!is.na(WeightDiameterData$total_weight),]
 ############################################################
 #Calculate Regression coefficients based on common slope and intercept by the basal diameter at year 2013
 ############################################################
