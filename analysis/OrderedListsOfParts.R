@@ -3,7 +3,7 @@ Maps[["LEES"]]=c("bud_tiny","bud_mid","bud_aborted","bud_big","flower_petals","f
            "fruit_just_starting","fruit_young","calyx_fruit","fruit_large_immature","fruit_aborted","fruit_mature")
 
 Maps[["GRBU"]]=c("inflorescence_bud_small","inflorescence_stalk","bud_tiny","bud_small","bud_mid","bud_big","flower_petals",
-           "flower_stigma","fruit_just_starting","fruit_young","pedicel","fruit_large_immature","seed_pod","seed","seed_aborted")
+           "flower_stigma","finished_flower_stigma","fruit_just_starting","fruit_young","pedicel","fruit_large_immature","seed_pod","seed","seed_aborted")
 
 Maps[["GRSP"]]=c("inflorescence_bud_small","inflorescence_stalk","bud_tiny","inflorescence_stalk_in_fruit","bud_small",
                  "bud_mid","bud_big","bud_just_opening","flower_petals","flower_stigma","finished_flower_stigma","fruit_just_starting",

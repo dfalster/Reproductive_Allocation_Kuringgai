@@ -21,7 +21,7 @@ source('analysis/CalculateInvestmentForSpecies.R')
 source('analysis/TreeListToTotalDataFrame.R')
 AnalyzeIndividual<-function(individual)
 {
-  #individual="PELA_903"
+  #individual="GRBU_407"
   species=str_sub(individual,1,4)
   
   #Read tree data

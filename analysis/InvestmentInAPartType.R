@@ -29,8 +29,9 @@ InvestmentInAPartType<-function(TreeList,TreeList_Pred,Element,Progression)
  I_pre.ex=sapply(TreeList[[N]]$pre.ex,function(x) x$type)==Element
  Inv=From=To=Census=Count=FromCensus=ToCensus=c()
  ErrList=data.frame(Element=NA,Census=NA,Count=NA)
+ 
  #If there are there are pre.existing parts and we are at least at Census 2 we try to find a predecessor.
- if(sum(unlist(I_pre.ex))&N>2)
+ if(sum(unlist(I_pre.ex))&N>2) 
  {
  #Check how many elements of that type there are
  n_elements=TreeList[[N]]$pre.ex[[which(I_pre.ex)]]$count
@@ -51,6 +52,17 @@ InvestmentInAPartType<-function(TreeList,TreeList_Pred,Element,Progression)
   }
  Inv_pre.ex=data.frame(FromCensus=FromCensus,ToCensus=ToCensus,From=From,To=To,Inv=Inv,Count=Count)
  }
+ 
+ 
+ #Errors in the beginning
+ if(sum(unlist(I_pre.ex))&N==2) 
+ {
+  Err=data.frame(Element=Element,Census=2,Count=TreeList[[N]]$pre.ex[[which(I_pre.ex)]]$count)
+  ErrList=rbind(ErrList,Err)
+ }
+ 
+ 
+ 
  Inv_total=rbind(Inv_new,Inv_pre.ex)
  
  
