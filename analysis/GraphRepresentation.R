@@ -28,6 +28,8 @@ LEES.graph=set.vertex.attribute(LEES.graph,name="col",index=c(11,12),value=4)
 #with accessories
 #All edges get weight 1
 LEES.graph=set.edge.attribute(LEES.graph,name="weight",value=1)
+#Multiplicity adjust weights
+LEES.graph=AdjustEdgeWeightsForMultiplicity(graph = LEES.graph,species = 'LEES')
 #We modify the edges for those parts which are result of branching on the plant map
 AM=get.adjacency(LEES.graph,edges = T)
 ###############################
@@ -77,6 +79,8 @@ GRBU.graph=set.vertex.attribute(GRBU.graph,name="col",index=16:17,value=5)
 #Setting edge weight which defines how much of carbon is beeing directed from each part to each part. Especially important for species
 #with accessories
 GRBU.graph=set.edge.attribute(GRBU.graph,name="weight",value=1)
+#Multiplicity adjust weights
+GRBU.graph=AdjustEdgeWeightsForMultiplicity(graph = GRBU.graph,species = 'GRBU')
 #We modify the edges for those parts which are result of branching on the plant map
 AM=get.adjacency(GRBU.graph,edges = T)
 ###############################
@@ -116,8 +120,8 @@ E3=AM["fruit_large_immature_06","seed_aborted"]
 W1=AV_W("GRBU","seed_pod")
 W2=AV_W("GRBU","seed_aborted")
 #
-w1=W1/sum(W1,W2)
-w2=W2/sum(W1,W2)
+w1=W1/sum(W1,2*W2)
+w2=W2/sum(W1,2*W2)
 GRBU.graph=set.edge.attribute(GRBU.graph,name="weight",index=c(E1,E2,E3),value=c(w1,w2,w2))
 # Saving the graph
 GraphMaps[["GRBU"]]=list(graph=GRBU.graph,Paths=Paths)
@@ -140,6 +144,8 @@ GRSP.graph=set.vertex.attribute(GRSP.graph,name="col",index=20:22,value=4)
 GRSP.graph=set.vertex.attribute(GRSP.graph,name="col",index=17:19,value=5)
 #Set weights
 GRSP.graph=set.edge.attribute(GRSP.graph,name="weight",value=1)
+#Multiplicity adjust weights
+GSP.graph=AdjustEdgeWeightsForMultiplicity(graph = GRSP.graph,species = 'GRSP')
 #We modify the edges for those parts which are result of branching on the plant map
 AM=get.adjacency(GRSP.graph,edges = T)
 ###############################
@@ -181,8 +187,8 @@ E3=AM["fruit_large_immature_06","seed_aborted"]
 W1=AV_W("GRSP","seed_pod")
 W2=AV_W("GRSP","seed_aborted")
 #
-w1=W1/sum(W1,W2)
-w2=W2/sum(W1,W2)
+w1=W1/sum(W1,2*W2)
+w2=W2/sum(W1,2*W2)
 GRSP.graph=set.edge.attribute(GRSP.graph,name="weight",index=c(E1,E2,E3),value=c(w1,w2,w2))
 GraphMaps[["GRSP"]]=list(graph=GRSP.graph,Paths=Paths)
 rm(GRSP.graph)
@@ -323,8 +329,8 @@ E3=AM["fruit_large_immature_01","seed_aborted"]
 W1=AV_W("PUTU","seed_pod")
 W2=AV_W("PUTU","seed_aborted")
 #
-w1=W1/sum(W1,W2)
-w2=W2/sum(W1,W2)
+w1=W1/sum(W1,2*W2)
+w2=W2/sum(W1,2*W2)
 PUTU.graph=set.edge.attribute(PUTU.graph,name="weight",index=c(E1,E2,E3),value=c(w1,w2,w2))
 GraphMaps[["PUTU"]]=list(graph=PUTU.graph,Paths=Paths)
 rm(PUTU.graph)
@@ -379,8 +385,8 @@ E3=AM["fruit_large_immature_01","seed_aborted"]
 W1=AV_W("BAER","seed_pod")
 W2=AV_W("BAER","seed_aborted")
 #
-w1=W1/sum(W1,W2)
-w2=W2/sum(W1,W2)
+w1=W1/sum(W1,2*W2)
+w2=W2/sum(W1,2*W2)
 BAER.graph=set.edge.attribute(BAER.graph,name="weight",index=c(E1,E2,E3),value=c(w1,w2,w2))
 GraphMaps[["BAER"]]=list(graph=BAER.graph,Paths=Paths)
 rm(BAER.graph)
@@ -433,8 +439,8 @@ E2=AM["flower_calyx","finished_flower_stigma"]
 W1=AV_W("BOLE","finished_flower")
 W2=AV_W("BOLE","finished_flower_stigma")
 #
-w1=W1/sum(W1,W2)
-w2=W2/sum(W1,W2)
+w1=W1/sum(W1,4*W2)
+w2=W2/sum(W1,4*W2)
 BOLE.graph=set.edge.attribute(BOLE.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
 
 ###############################
@@ -633,8 +639,8 @@ E3=AM["fruit_large_immature_01","seed_aborted"]
 W1=AV_W("PHPH","seed_pod")
 W2=AV_W("PHPH","seed_aborted")
 #
-w1=W1/sum(W1,W2)
-w2=W2/sum(W1,W2)
+w1=W1/sum(W1,2*W2)
+w2=W2/sum(W1,2*W2)
 PHPH.graph=set.edge.attribute(PHPH.graph,name="weight",index=c(E1,E2,E3),value=c(w1,w2,w2))
 
 
@@ -754,8 +760,8 @@ E3=AM["fruit_large_immature_01","seed_aborted"]
 W1=AV_W("HATE","seed_pod")
 W2=AV_W("HATE","seed_aborted")
 #
-w1=W1/sum(W1,W2)
-w2=W2/sum(W1,W2)
+w1=W1/sum(W1,2*W2)
+w2=W2/sum(W1,2*W2)
 HATE.graph=set.edge.attribute(HATE.graph,name="weight",index=c(E1,E2,E3),value=c(w1,w2,w2))
 
 GraphMaps[["HATE"]]=list(graph=HATE.graph,Paths=Paths)
@@ -803,7 +809,7 @@ rm(PEPU.graph)
 
 rm(list = c("E1","E2","E3","E4","W1","W2","W3","W4","w1","w2","w3","w4","AM","Paths"))
 
-GraphMaps=AdjustEdgeWeightsForMultiplicity(GraphMaps)
+#GraphMaps=AdjustEdgeWeightsForMultiplicity(GraphMaps)
 # Example plot
 #species="GRBU"
 #tkplot(GraphMaps[[species]]$graph,vertex.color=V(GraphMaps[[species]]$graph)$col,edge.label=E(GraphMaps[[species]]$graph)$weight)
