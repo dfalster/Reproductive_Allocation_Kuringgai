@@ -395,7 +395,7 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 4674,BAER,Basin1981,11-Jun-13,110,BAER_903,10,used,seed,7,,,,,used,1153.86,,164.84,fruit_mature
 4012,BAER,Basin1981,21-Jun-13,92,BAER_906,8,used,seed,42,,,,,used,7326.7,,174.45,"14 more seeds are lost; 1049.8 from 60 seed sheath, rest from seeds"
 4013,BAER,Basin1981,21-Jun-13,92,BAER_906,8,used,seed_aborted,4,,,,,used,371.8,,92.95,2012 cone
-6372,BAER,dummmy,,,,,,seed_pod,1,,,,,used,1200,,1200,dummy variable
+,,,,,,,,,,,,,,,,,,
 126,BOLE,,,16,,,,bud_big,10,,,,,used,73,,7.3,
 127,BOLE,,,17,,,,bud_big,10,,,,,used,75.3,,7.53,
 128,BOLE,,,1,,,,bud_big,4,,,,,used,32.1,,8.03,
@@ -4261,18 +4261,18 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 3283,PEPU,,,46,,,,cone_green,1,,,32,16,used,1794.5,,1794.5,cone_green_with_embedded_seeds
 3282,PEPU,,,45,,,,cone_green,1,,,37,16,used,1897.6,,1897.6,cone_green_with_embedded_seeds
 5069,PEPU,Waratah2003,12-Apr-13,62,PEPU_803,15,used,cone_green,1,,,20,9,used,226.1,,226.1,2013 cone
-5070,PEPU,Basin,30-Oct-14,92,,,,cone_just_starting,1,,,3,,used,33.2,,,
-5071,PEPU,Basin,30-Oct-14,93,,,,cone_just_starting,1,,,3,,used,33.4,,,
-5072,PEPU,Basin,30-Oct-14,94,,,,cone_just_starting,1,,,3,,used,34.9,,,
-5073,PEPU,Basin,30-Oct-14,95,,,,cone_just_starting,1,,,4,,used,38.7,,,
-5074,PEPU,Basin,30-Oct-14,96,,,,cone_just_starting,1,,,4.5,,used,50.7,,,
-5075,PEPU,Basin,30-Oct-14,97,,,,cone_just_starting,1,,,4.5,,used,52.2,,,
-5076,PEPU,Basin,30-Oct-14,98,,,,cone_just_starting,1,,,5,,used,56.6,,,
-5077,PEPU,Basin,30-Oct-14,99,,,,cone_just_starting,1,,,5,,used,58.1,,,
-5078,PEPU,Basin,30-Oct-14,100,,,,cone_just_starting,1,,,6,,used,60.6,,,
-5079,PEPU,Basin,30-Oct-14,101,,,,cone_just_starting,1,,,6,,used,64.8,,,
-5080,PEPU,Basin,30-Oct-14,102,,,,cone_young,1,,,8,,used,75.3,,,
-5081,PEPU,Basin,30-Oct-14,103,,,,cone_young,1,,,8,,used,68.3,,,
+5070,PEPU,Basin,30-Oct-14,92,,,,cone_just_starting,1,,,3,,category_not_used,33.2,,,individual includes bracts
+5071,PEPU,Basin,30-Oct-14,93,,,,cone_just_starting,1,,,3,,category_not_used,33.4,,,individual includes bracts
+5072,PEPU,Basin,30-Oct-14,94,,,,cone_just_starting,1,,,3,,category_not_used,34.9,,,individual includes bracts
+5073,PEPU,Basin,30-Oct-14,95,,,,cone_just_starting,1,,,4,,category_not_used,38.7,,,individual includes bracts
+5074,PEPU,Basin,30-Oct-14,96,,,,cone_just_starting,1,,,4.5,,category_not_used,50.7,,,individual includes bracts
+5075,PEPU,Basin,30-Oct-14,97,,,,cone_just_starting,1,,,4.5,,category_not_used,52.2,,,individual includes bracts
+5076,PEPU,Basin,30-Oct-14,98,,,,cone_just_starting,1,,,5,,category_not_used,56.6,,,individual includes bracts
+5077,PEPU,Basin,30-Oct-14,99,,,,cone_just_starting,1,,,5,,category_not_used,58.1,,,individual includes bracts
+5078,PEPU,Basin,30-Oct-14,100,,,,cone_just_starting,1,,,6,,category_not_used,60.6,,,individual includes bracts
+5079,PEPU,Basin,30-Oct-14,101,,,,cone_just_starting,1,,,6,,category_not_used,64.8,,,individual includes bracts
+5080,PEPU,Basin,30-Oct-14,102,,,,cone_young,1,,,8,,category_not_used,75.3,,,individual includes bracts
+5081,PEPU,Basin,30-Oct-14,103,,,,cone_young,1,,,8,,category_not_used,68.3,,,individual includes bracts
 5082,PEPU,Basin,30-Oct-14,104,,,,cone_young,1,,,9,,used,70.8,,,
 5083,PEPU,Basin,30-Oct-14,105,,,,cone_young,1,,,12,,used,106.1,,,
 6382,PEPU,dummmy,,,,,,flower_calyx,1,,,,,used,1,,1,dummy variable
@@ -5649,7 +5649,7 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 2726,PHPH,,,58,,,,finished_flower,11,,,,,used,57.6,,5.24,
 2719,PHPH,,,26,,,,finished_flower,19,,,,,used,99.9,,5.26,
 2720,PHPH,,,29,,,,finished_flower,3,,,,,used,22.1,,7.37,
-6374,PHPH,dummmy,,,,,,finished_flower_calyx,1,,,,,used,1.5,,1.5,dummy variable
+,,,,,,,,,,,,,,,,,,
 6417,PHPH,Waratah2003,24-Aug-14,188,,,,finished_flower_stigma,2,,,,,used,1.4,,0.7,
 6840,PHPH,Waratah2003,11-Sep-14,318,,,,finished_flower_stigma,3,,,,,used,1.77,,0.59,
 6841,PHPH,Waratah2003,11-Sep-14,319,,,,finished_flower_stigma,3,,,,,used,1.85,,0.62,
@@ -5933,7 +5933,7 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 6586,PHPH,Basin1981,20-Nov-12,137,PHPH_905,9,used,late_finished_flower,22,,,,,used,147.1,,6.69,+17 more ff no pods
 2759,PHPH,Basin1981,20-Nov-12,141,PHPH_906,9,used,late_finished_flower,2,,,,,used,13.1,,6.55,+25 more ff no pod
 6589,PHPH,Basin1981,13-Dec-12,145,PHPH_908,9,used,late_finished_flower,9,,,,,used,60.7,,6.74,
-6375,PHPH,dummmy,,,,,,late_finished_flower_calyx,1,,,,,used,1.7,,1.7,dummy variable
+,,,,,,,,,,,,,,,,,,
 2866,PHPH,,,38,,,,seed,4,,,,,used,11.2,,2.8,"fat, round brown"
 2867,PHPH,,,39,,,,seed,4,,,,,used,12.1,,3.03,"fat, round brown"
 2868,PHPH,,,40,,,,seed,3,,,,,used,7.5,,2.5,"fat, round brown"
@@ -7069,3 +7069,26 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 4069,HEPU,Waratah2003,17-May-13,202,HEPU_807,17,used,fruit_large_immature_aborting,1,,,,,used,3.3,,3.3,fruit_large_immature
 1605,HEPU,Basin1981,5-Jan-13,117,HEPU_907,12,not_used,fruit_young,1,,,,,used,1.1,,1.1,
 1605,HEPU,Basin1981,5-Jan-13,117,HEPU_907,12,used,fruit_young_aborting,1,,,,,used,1.1,,1.1,
+7072,BAER,Waratah2003,,138,,,,seed_pod,1,,,,,used,2261.7,,2261.7,
+7073,BAER,Waratah2003,,138,,,,seed,1,,,,,used,215.4,,215.4,
+7074,BAER,Waratah2003,,139,,,,seed_pod,1,,,,,used,2132.2,,2132.2,
+7075,BAER,Waratah2003,,139,,,,seed,1,,,,,used,209.1,,209.1,
+7076,BAER,Waratah2003,,140,,,,seed_pod,1,,,,,used,1856.2,,1856.2,
+7077,BAER,Waratah2003,,140,,,,seed,1,,,,,used,157.3,,157.3,
+7078,BAER,Waratah2003,,141,,,,seed_pod,1,,,,,used,1769.5,,1769.5,
+7079,BAER,Waratah2003,,141,,,,seed,1,,,,,used,171.3,,171.3,
+7080,BAER,Waratah2003,,142,,,,seed_pod,1,,,,,used,1491.5,,1491.5,
+7081,BAER,Waratah2003,,142,,,,seed,1,,,,,used,155.3,,155.3,
+7082,BAER,Waratah2003,,143,,,,seed_pod,1,,,,,used,2908.5,,2908.5,
+7087,PEPU,Basin,12-Nov-14,110,,,,cone_just_starting,1,,,3,,used,7.9,,,
+7092,PEPU,Basin,12-Nov-14,115,,,,cone_just_starting,1,,,3,,used,7.2,,,
+7090,PEPU,Basin,12-Nov-14,113,,,,cone_just_starting,1,,,4,,used,15.2,,,
+7091,PEPU,Basin,12-Nov-14,114,,,,cone_just_starting,1,,,4,,used,12.1,,,
+7086,PEPU,Basin,12-Nov-14,109,,,,cone_just_starting,1,,,5,,used,24.3,,,
+7085,PEPU,Basin,12-Nov-14,108,,,,cone_just_starting,1,,,6,,used,32.7,,,
+7088,PEPU,Basin,12-Nov-14,111,,,,cone_just_starting,1,,,6,,used,35,,,
+7089,PEPU,Basin,12-Nov-14,112,,,,cone_just_starting,1,,,5,,used,25.6,,,
+7083,PEPU,Basin,12-Nov-14,106,,,,cone_young,1,,,7,,used,54.4,,,
+7084,PEPU,Basin,12-Nov-14,107,,,,cone_young,1,,,7,,used,62,,,
+7093,PEPU,Basin,12-Nov-14,116,,,,cone_young,1,,,11,,used,89,,,
+7094,PEPU,Basin,12-Nov-14,117,,,,cone_young,1,,,15,,used,138.9,,,
