@@ -612,16 +612,16 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 6966,BOLE,Waratah_2011,30-Jul-14,503,BOLE_153,30,used,flower_pedicel,14,,,,,used,23.85897436,,1.704212454,
 6967,BOLE,Waratah_2011,30-Jul-14,506,BOLE_156,30,used,flower_pedicel,13,,,,,used,15.69230769,,1.207100592,
 6968,BOLE,Waratah_2011,30-Jul-14,507,BOLE_157,30,used,flower_pedicel,4,,,,,used,5.615384615,,1.403846154,
-6418,BOLE,Waratah2003,24-Aug-14,453,,,,flower_petal,4,,,,,used,27.1,6.775,6.78,
-6419,BOLE,Waratah2003,24-Aug-14,454,,,,flower_petal,4,,,,,used,31.5,7.875,7.88,
-6420,BOLE,Waratah2003,24-Aug-14,455,,,,flower_petal,4,,,,,used,18,4.5,4.5,
-6421,BOLE,Waratah2003,24-Aug-14,456,,,,flower_petal,4,,,,,used,18.6,4.65,4.65,
-6422,BOLE,Waratah2003,24-Aug-14,457,,,,flower_petal,4,,,,,used,15.2,3.8,3.8,
-6423,BOLE,Waratah2003,24-Aug-14,458,,,,flower_petal,4,,,,,used,20,5,5,
-6424,BOLE,Waratah2003,24-Aug-14,459,,,,flower_petal,4,,,,,used,21.2,5.3,5.3,
-6425,BOLE,Waratah2003,24-Aug-14,460,,,,flower_petal,4,,,,,used,26.2,6.55,6.55,
-6426,BOLE,Waratah2003,24-Aug-14,461,,,,flower_petal,4,,,,,used,23.6,5.9,5.9,
-6427,BOLE,Waratah2003,24-Aug-14,462,,,,flower_petal,4,,,,,used,22.9,5.725,5.73,
+6418,BOLE,Waratah2003,24-Aug-14,453,,,,flower_petals,4,,,,,used,27.1,6.775,6.78,
+6419,BOLE,Waratah2003,24-Aug-14,454,,,,flower_petals,4,,,,,used,31.5,7.875,7.88,
+6420,BOLE,Waratah2003,24-Aug-14,455,,,,flower_petals,4,,,,,used,18,4.5,4.5,
+6421,BOLE,Waratah2003,24-Aug-14,456,,,,flower_petals,4,,,,,used,18.6,4.65,4.65,
+6422,BOLE,Waratah2003,24-Aug-14,457,,,,flower_petals,4,,,,,used,15.2,3.8,3.8,
+6423,BOLE,Waratah2003,24-Aug-14,458,,,,flower_petals,4,,,,,used,20,5,5,
+6424,BOLE,Waratah2003,24-Aug-14,459,,,,flower_petals,4,,,,,used,21.2,5.3,5.3,
+6425,BOLE,Waratah2003,24-Aug-14,460,,,,flower_petals,4,,,,,used,26.2,6.55,6.55,
+6426,BOLE,Waratah2003,24-Aug-14,461,,,,flower_petals,4,,,,,used,23.6,5.9,5.9,
+6427,BOLE,Waratah2003,24-Aug-14,462,,,,flower_petals,4,,,,,used,22.9,5.725,5.73,
 3806,BOLE,,31-Oct-13,220,,,,flower_petals,2,,,,,used,,27.7,0,
 3807,BOLE,,31-Oct-13,221,,,,flower_petals,2,,,,,used,,25.2,0,
 3808,BOLE,,31-Oct-13,222,,,,flower_petals,2,,,,,used,,26,0,
@@ -785,15 +785,15 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 210,BOLE,Waratah2003,16-Oct-12,72,BOLE_801,8,used,late_finished_flower_all_parts,1,,,,,only_for_collected_parts,8.3,,8.3,"outer pods only, assume bit of flower missing, but it was very small petals"
 165,BOLE,Waratah2003,16-Oct-12,69,BOLE_802,7,used,late_finished_flower_all_parts,4,,,,,only_for_collected_parts,90.2,,22.55,outer pods only
 164,BOLE,Waratah2003,23-Nov-12,70,BOLE_807,7,used,late_finished_flower_all_parts,3,,,,,only_for_collected_parts,38.5,,12.83,outer pods only; late_finished_flower_small
-6782,BOLE,Waratah2003,11-Sep-14,463,,,,late_finished_flower_petals,4,,,,,used,41.4,,10.35,
-6783,BOLE,Waratah2003,11-Sep-14,464,,,,late_finished_flower_petals,4,,,,,used,32.7,,8.175,
-6784,BOLE,Waratah2003,11-Sep-14,465,,,,late_finished_flower_petals,4,,,,,used,34.2,,8.55,
-6785,BOLE,Waratah2003,11-Sep-14,466,,,,late_finished_flower_petals,4,,,,,used,37.4,,9.35,
-6786,BOLE,Waratah2003,11-Sep-14,467,,,,late_finished_flower_petals,4,,,,,used,33.4,,8.35,
-6787,BOLE,Waratah2003,11-Sep-14,468,,,,late_finished_flower_petals,4,,,,,used,32,,8,
-6788,BOLE,Waratah2003,11-Sep-14,469,,,,late_finished_flower_petals,4,,,,,used,31.8,,7.95,
-6789,BOLE,Waratah2003,11-Sep-14,470,,,,late_finished_flower_petals,4,,,,,used,27,,6.75,
-6790,BOLE,Waratah2003,11-Sep-14,471,,,,late_finished_flower_petals,4,,,,,used,27.1,,6.775,
+6782,BOLE,Waratah2003,11-Sep-14,463,,,,late_flower_petals,4,,,,,used,41.4,,10.35,
+6783,BOLE,Waratah2003,11-Sep-14,464,,,,late_flower_petals,4,,,,,used,32.7,,8.175,
+6784,BOLE,Waratah2003,11-Sep-14,465,,,,late_flower_petals,4,,,,,used,34.2,,8.55,
+6785,BOLE,Waratah2003,11-Sep-14,466,,,,late_flower_petals,4,,,,,used,37.4,,9.35,
+6786,BOLE,Waratah2003,11-Sep-14,467,,,,late_flower_petals,4,,,,,used,33.4,,8.35,
+6787,BOLE,Waratah2003,11-Sep-14,468,,,,late_flower_petals,4,,,,,used,32,,8,
+6788,BOLE,Waratah2003,11-Sep-14,469,,,,late_flower_petals,4,,,,,used,31.8,,7.95,
+6789,BOLE,Waratah2003,11-Sep-14,470,,,,late_flower_petals,4,,,,,used,27,,6.75,
+6790,BOLE,Waratah2003,11-Sep-14,471,,,,late_flower_petals,4,,,,,used,27.1,,6.775,
 3825,BOLE,,31-Oct-13,239,,,,pedicel,1,,,,,category_not_used,1.98,,1.98,"weights odd, don't use"
 3826,BOLE,,31-Oct-13,240,,,,pedicel,1,,,,,category_not_used,1.82,,1.82,"weights odd, don't use"
 3827,BOLE,,31-Oct-13,241,,,,pedicel,1,,,,,category_not_used,3.13,,3.13,"weights odd, don't use"
@@ -1829,7 +1829,7 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 1026,GRSP,,,67,,,,bud_big,6,,,,,used,32.6,,5.43,
 1027,GRSP,,,72,,,,bud_big,9,,,,,used,50,,5.56,small flower
 1028,GRSP,,,81,,,,bud_big,12,,,,,used,56.2,,4.68,small flower
-7006,GRSP,Waratah2011,31-Jul-14,336,GRSP_152,30,used,bud_big,24,,,,,used,94.8,,4.0,
+7006,GRSP,Waratah2011,31-Jul-14,336,GRSP_152,30,used,bud_big,24,,,,,used,94.8,,4,
 7010,GRSP,Waratah2011,31-Jul-14,337,GRSP_153,30,used,bud_big,60,,,,,used,197.7,,3.3,
 7026,GRSP,Waratah2011,31-Jul-14,340,GRSP_157,30,used,bud_big,9,,,,,used,46.7,,5.2,
 1029,GRSP,,,1,,,,bud_just_opening,16,,,,,used,132.4,,8.28,
@@ -2113,7 +2113,7 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 4707,GRSP,Waratah2003,16-May-13,331,GRSP_806,17,used,inflorescence_bud_small,2,,,,,used,8.18,,4.09,
 4439,GRSP,Waratah2003,17-May-13,318,GRSP_807,17,used,inflorescence_bud_small,11,,,,,used,97.5,,8.86,
 7012,GRSP,Waratah2011,31-Jul-14,337,GRSP_153,30,used,inflorescence_bud_small,5,,,,,used,23.3,,4.7,
-7014,GRSP,Waratah2011,30-Jul-14,338,GRSP_155,30,used,inflorescence_bud_small,9,,,,,used,81.1,,9.0,
+7014,GRSP,Waratah2011,30-Jul-14,338,GRSP_155,30,used,inflorescence_bud_small,9,,,,,used,81.1,,9,
 7017,GRSP,Waratah2011,31-Jul-14,339,GRSP_156,30,used,inflorescence_bud_small,2,,,,,used,12.9,,6.5,
 4412,GRSP,Basin2005,10-May-13,303,GRSP_003,17,used,inflorescence_stalk,2,,,,,used,8.1,,4.05,
 4700,GRSP,Basin2005,9-May-13,327,GRSP_005,16,used,inflorescence_stalk,5,,,,,used,25.9,,5.18,
@@ -2181,7 +2181,7 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 7003,GRSP,Waratah2011,31-Jul-14,336,GRSP_152,30,used,inflorescence_stalk,18,,,,,used,154.2,,8.6,
 7013,GRSP,Waratah2011,31-Jul-14,337,GRSP_153,30,used,inflorescence_stalk,27,,,,,used,264.8,,9.8,
 7015,GRSP,Waratah2011,30-Jul-14,338,GRSP_155,30,used,inflorescence_stalk,1,,,,,used,7.4,,7.4,
-7022,GRSP,Waratah2011,31-Jul-14,339,GRSP_156,30,used,inflorescence_stalk,23,,,,,used,228.9,,10.0,
+7022,GRSP,Waratah2011,31-Jul-14,339,GRSP_156,30,used,inflorescence_stalk,23,,,,,used,228.9,,10,
 7029,GRSP,Waratah2011,31-Jul-14,340,GRSP_157,30,used,inflorescence_stalk,19,,,,,used,187.1,,9.8,
 4046,GRSP,Waratah2011,13-Jun-13,284,GRSP_116,16;17;18,used,inflorescence_stalk_in_fruit,3,,,,,used,29.6,,9.87,
 3173,GRSP,Waratah2003,3-Sep-13,213,,,,inflorescence_stalk_in_fruit,1,,,,,used,11,,11,
@@ -3347,12 +3347,12 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 1631,HEPU,,5-Jan-13,140,,,,fruit_large_immature,1,,,,,used,3.1,,3.1,fruit_large_immature
 1643,HEPU,,,153,,,,fruit_large_immature,1,,,,,used,3.1,,3.1,fruit_large_immature
 1638,HEPU,,,147,,,,fruit_large_immature,1,,,,,used,3.3,,3.3,fruit_large_immature
-4010,HEPU,Basin2005,10-May-13,159,HEPU_001,17,used,fruit_large_immature,2,,,,,used,4.868,,2.43,fruit_large_immature
-4187,HEPU,Basin2005,10-May-13,205,HEPU_004,17,used,fruit_large_immature,6.75,,,,,used,16,,2.37,fruit_large_immature
-4975,HEPU,Waratah2003,23-May-13,220,HEPU_804,17,used,fruit_large_immature,1,,,,,used,2.4,,2.4,fruit_large_immature
-4344,HEPU,Waratah2003,24-May-13,212,HEPU_806,17,used,fruit_large_immature,1.5,,,,,used,3.65,,2.43,fruit_large_immature
-4069,HEPU,Waratah2003,17-May-13,202,HEPU_807,17,used,fruit_large_immature,1,,,,,used,3.3,,3.3,fruit_large_immature
-6871,HEPU,Waratah2011,30-Jul-14,222,HEPU_152,30,used,fruit_large_immature,1,,,,,used,2.881989708,,2.881989708,
+4010,HEPU,Basin2005,10-May-13,159,HEPU_001,17,not_used,fruit_large_immature,2,,,,,used,4.868,,2.43,fruit_large_immature
+4010,HEPU,Basin2005,10-May-13,159,HEPU_001,17,used,fruit_large_immature_aborting,2,,,,,used,4.868,,2.43,fruit_large_immature
+4187,HEPU,Basin2005,10-May-13,205,HEPU_004,17,not_used,fruit_large_immature,6.75,,,,,used,16,,2.37,fruit_large_immature
+4187,HEPU,Basin2005,10-May-13,205,HEPU_004,17,used,fruit_large_immature_aborting,6.75,,,,,used,16,,2.37,fruit_large_immature
+4347,HEPU,Basin2005,10-May-13,214,HEPU_007,16;17,not_used,fruit_young,3,,,,,used,6.2,,2.07,
+4347,HEPU,Basin2005,10-May-13,214,HEPU_007,16;17,used,fruit_young_aborting,3,,,,,used,6.2,,2.07,
 1689,HEPU,Basin2005,21-Feb-13,188,HEPU_004,14,not_used,fruit_mature,0.75,,,,,mean_used,1.7,,2.27,fruit_mature
 1690,HEPU,Basin2005,21-Feb-13,189,HEPU_004,14,not_used,fruit_mature,0.25,,,,,mean_used,0.7,,2.8,fruit_mature
 1692,HEPU,Waratah2003,21-Feb-13,193,HEPU_806,14,not_used,fruit_mature,1,,,,,mean_used,3.1,,3.1,fruit_mature
@@ -3400,8 +3400,8 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 6659,HEPU,Waratah2003,21-Feb-13,192,HEPU_806,14,used,fruit_mature,1.5,,,,,used,4.8,,3.2,fruit_mature
 1654,HEPU,Basin1981,28-Aug-12,7,HEPU_904,5,used,fruit_mature,0.25,,,,,used,1.3,,5.2,fruit_mature
 1656,HEPU,Basin1981,5-Jan-13,116,HEPU_907,12,used,fruit_mature,1,,,,,used,2,,2,fruit_mature
-4970,HEPU,Waratah2003,23-May-13,218,HEPU_803,17,not_used,fruit_young,1,,,,,mean_used,1.2,,1.2,
-4972,HEPU,Waratah2003,23-May-13,219,HEPU_803,17,not_used,fruit_young,1,,,,,mean_used,1.4,,1.4,
+4348,HEPU,Basin2005,10-May-13,215,HEPU_009,16,not_used,fruit_young,1,,,,,used,1.8,,1.8,
+4348,HEPU,Basin2005,10-May-13,215,HEPU_009,16,used,fruit_young_aborting,1,,,,,used,1.8,,1.8,
 1612,HEPU,,,157,,,,fruit_young,1,,,,,used,1.1,,1.1,
 1608,HEPU,,5-Jan-13,134,,,,fruit_young,1,,,,,used,1.2,,1.2,
 1611,HEPU,,,155,,,,fruit_young,1,,,,,used,1.2,,1.2,
@@ -3417,15 +3417,15 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 1600,HEPU,,,58,,,,fruit_young,1,,,,,used,2.4,,2.4,
 1603,HEPU,,11-Dec-12,83,,,,fruit_young,1,,,,,used,2.4,,2.4,
 1599,HEPU,,,57,,,,fruit_young,1,,,,,used,2.6,,2.6,
-4347,HEPU,Basin2005,10-May-13,214,HEPU_007,16;17,used,fruit_young,3,,,,,used,6.2,,2.07,
-4348,HEPU,Basin2005,10-May-13,215,HEPU_009,16,used,fruit_young,1,,,,,used,1.8,,1.8,
-3293,HEPU,Basin2007,2-May-13,196,HEPU_404,17,used,fruit_young,1,,,,,used,1.3,,1.3,completely dry fruit (could be aborted)
+6871,HEPU,Waratah2011,30-Jul-14,222,HEPU_152,30,not_used,fruit_large_immature,1,,,,,used,2.881989708,,2.881989708,
+6871,HEPU,Waratah2011,30-Jul-14,222,HEPU_152,30,used,fruit_large_immature_aborting,1,,,,,used,2.881989708,,2.881989708,
+6866,HEPU,Waratah2011,30-Jul-14,223,HEPU_154,30,not_used,fruit_young,1,,,,,used,2.923014257,,2.923014257,
+6866,HEPU,Waratah2011,30-Jul-14,223,HEPU_154,30,used,fruit_young_aborting,1,,,,,used,2.923014257,,2.923014257,
+3293,HEPU,Basin2007,2-May-13,196,HEPU_404,17,not_used,fruit_young,1,,,,,used,1.3,,1.3,completely dry fruit (could be aborted)
+3293,HEPU,Basin2007,2-May-13,196,HEPU_404,17,used,fruit_young_aborting,1,,,,,used,1.3,,1.3,completely dry fruit (could be aborted)
 4034,HEPU,Basin2007,7-May-13,201,HEPU_407,16,used,fruit_young,2,,,,,used,4.3,,2.15,fruit_very_young
-6658,HEPU,Waratah2003,23-May-13,219,HEPU_803,17,used,fruit_young,2,,,,,used,2.6,,1.3,
-4183,HEPU,Waratah2003,24-May-13,204,HEPU_805,17,used,fruit_young,0.75,,,,,used,1.1,,1.47,
-4343,HEPU,Waratah2003,24-May-13,211,HEPU_806,17,used,fruit_young,1,,,,,category_not_used,0.69,,0.69,omit?
-1605,HEPU,Basin1981,5-Jan-13,117,HEPU_907,12,used,fruit_young,1,,,,,used,1.1,,1.1,
-6866,HEPU,Waratah2011,30-Jul-14,223,HEPU_154,30,used,fruit_young,1,,,,,used,2.923014257,,2.923014257,
+4034,HEPU,Basin2007,7-May-13,201,HEPU_407,16,used,fruit_young_aborting,2,,,,,used,4.3,,2.15,fruit_very_young
+4970,HEPU,Waratah2003,23-May-13,218,HEPU_803,17,not_used,fruit_young,1,,,,,mean_used,1.2,,1.2,
 1593,HEPU,,11-Dec-12,88,,,,fruit_young_X,2,,,,,category_not_used,7.7,,3.85,fruit_very_young
 1595,HEPU,,11-Dec-12,90,,,,fruit_young_X,1,,,,,category_not_used,3.9,,3.9,fruit_very_young
 1588,HEPU,,,60,,,,fruit_young_X,1,,,,,category_not_used,4,,4,fruit_very_young
@@ -7023,8 +7023,49 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 6909,PUTU,Waratah2011,30-Jul-14,143,PUTU_155,28,used,seed_pod,1,,,,,used,14.2,,14.2,
 6911,PUTU,Waratah2011,30-Jul-14,144,PUTU_156,29,used,seed_pod,2,,,,,used,3.769,,1.8845,
 6913,PUTU,Waratah2011,30-Jul-14,145,PUTU_157,28,used,seed_pod,3,,,,,used,5.187,,1.729,
-,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,
+1635,HEPU,,5-Jan-13,144,,,,fruit_large_immature_aborting,1,,,,,used,2.4,,2.4,fruit_large_immature
+1639,HEPU,,,149,,,,fruit_large_immature_aborting,1,,,,,used,2.4,,2.4,fruit_large_immature
+1633,HEPU,,5-Jan-13,142,,,,fruit_large_immature_aborting,1,,,,,used,2.5,,2.5,fruit_large_immature
+1629,HEPU,,5-Jan-13,135,,,,fruit_large_immature_aborting,1,,,,,used,2.6,,2.6,fruit_large_immature
+1637,HEPU,,31-Jan-13,146,,,,fruit_large_immature_aborting,1,,,,,used,2.6,,2.6,fruit_large_immature
+1640,HEPU,,,150,,,,fruit_large_immature_aborting,1,,,,,used,2.6,,2.6,fruit_large_immature
+1632,HEPU,,5-Jan-13,141,,,,fruit_large_immature_aborting,1,,,,,used,2.7,,2.7,fruit_large_immature
+1636,HEPU,,5-Jan-13,145,,,,fruit_large_immature_aborting,1,,,,,used,2.7,,2.7,fruit_large_immature
+1630,HEPU,,5-Jan-13,139,,,,fruit_large_immature_aborting,1,,,,,used,2.8,,2.8,fruit_large_immature
+1634,HEPU,,5-Jan-13,143,,,,fruit_large_immature_aborting,1,,,,,used,2.9,,2.9,fruit_large_immature
+1644,HEPU,,,156,,,,fruit_large_immature_aborting,1,,,,,used,2.9,,2.9,fruit_large_immature
+1631,HEPU,,5-Jan-13,140,,,,fruit_large_immature_aborting,1,,,,,used,3.1,,3.1,fruit_large_immature
+1643,HEPU,,,153,,,,fruit_large_immature_aborting,1,,,,,used,3.1,,3.1,fruit_large_immature
+1638,HEPU,,,147,,,,fruit_large_immature_aborting,1,,,,,used,3.3,,3.3,fruit_large_immature
+4972,HEPU,Waratah2003,23-May-13,219,HEPU_803,17,not_used,fruit_young,1,,,,,mean_used,1.4,,1.4,
+6658,HEPU,Waratah2003,23-May-13,219,HEPU_803,17,not_used,fruit_young,2,,,,,used,2.6,,1.3,
+4970,HEPU,Waratah2003,23-May-13,218,HEPU_803,17,not_used,fruit_young_aborting,1,,,,,mean_used,1.2,,1.2,
+4972,HEPU,Waratah2003,23-May-13,219,HEPU_803,17,not_used,fruit_young_aborting,1,,,,,mean_used,1.4,,1.4,
+6658,HEPU,Waratah2003,23-May-13,219,HEPU_803,17,used,fruit_young_aborting,2,,,,,used,2.6,,1.3,
+4975,HEPU,Waratah2003,23-May-13,220,HEPU_804,17,not_used,fruit_large_immature,1,,,,,used,2.4,,2.4,fruit_large_immature
+4975,HEPU,Waratah2003,23-May-13,220,HEPU_804,17,used,fruit_large_immature_aborting,1,,,,,used,2.4,,2.4,fruit_large_immature
+4183,HEPU,Waratah2003,24-May-13,204,HEPU_805,17,not_used,fruit_young,0.75,,,,,used,1.1,,1.47,
+1612,HEPU,,,157,,,,fruit_young_aborting,1,,,,,used,1.1,,1.1,
+1608,HEPU,,5-Jan-13,134,,,,fruit_young_aborting,1,,,,,used,1.2,,1.2,
+1611,HEPU,,,155,,,,fruit_young_aborting,1,,,,,used,1.2,,1.2,
+1606,HEPU,,13-Dec-12,125,,,,fruit_young_aborting,1,,,,,used,1.3,,1.3,
+1609,HEPU,,,148,,,,fruit_young_aborting,1,,,,,used,1.6,,1.6,
+1607,HEPU,,13-Dec-12,128,,,,fruit_young_aborting,1,,,,,used,1.7,,1.7,
+1610,HEPU,,,154,,,,fruit_young_aborting,1,,,,,used,1.8,,1.8,
+1601,HEPU,,,59,,,,fruit_young_aborting,1,,,,,used,1.9,,1.9,
+1602,HEPU,,11-Dec-12,81,,,,fruit_young_aborting,1,,,,,used,2.1,,2.1,
+1598,HEPU,,,56,,,,fruit_young_aborting,1,,,,,used,2.2,,2.2,
+1604,HEPU,,11-Dec-12,100,,,,fruit_young_aborting,1,,,,,used,2.3,,2.3,
+1597,HEPU,,,55,,,,fruit_young_aborting,1,,,,,used,2.4,,2.4,
+1600,HEPU,,,58,,,,fruit_young_aborting,1,,,,,used,2.4,,2.4,
+1603,HEPU,,11-Dec-12,83,,,,fruit_young_aborting,1,,,,,used,2.4,,2.4,
+1599,HEPU,,,57,,,,fruit_young_aborting,1,,,,,used,2.6,,2.6,
+4183,HEPU,Waratah2003,24-May-13,204,HEPU_805,17,used,fruit_young_aborting,0.75,,,,,used,1.1,,1.47,
+4344,HEPU,Waratah2003,24-May-13,212,HEPU_806,17,not_used,fruit_large_immature,1.5,,,,,used,3.65,,2.43,fruit_large_immature
+4343,HEPU,Waratah2003,24-May-13,211,HEPU_806,17,not_used,fruit_young,1,,,,,category_not_used,0.69,,0.69,omit?
+4344,HEPU,Waratah2003,24-May-13,212,HEPU_806,17,used,fruit_large_immature_aborting,1.5,,,,,used,3.65,,2.43,fruit_large_immature
+4343,HEPU,Waratah2003,24-May-13,211,HEPU_806,17,used,fruit_young_aborting,1,,,,,category_not_used,0.69,,0.69,omit?
+4069,HEPU,Waratah2003,17-May-13,202,HEPU_807,17,not_used,fruit_large_immature,1,,,,,used,3.3,,3.3,fruit_large_immature
+4069,HEPU,Waratah2003,17-May-13,202,HEPU_807,17,used,fruit_large_immature_aborting,1,,,,,used,3.3,,3.3,fruit_large_immature
+1605,HEPU,Basin1981,5-Jan-13,117,HEPU_907,12,not_used,fruit_young,1,,,,,used,1.1,,1.1,
+1605,HEPU,Basin1981,5-Jan-13,117,HEPU_907,12,used,fruit_young_aborting,1,,,,,used,1.1,,1.1,
