@@ -15,10 +15,12 @@ flower_petals,flower,prepollination,16,2,4,1,1,2,2,2,1,1,1,1,2,1,2
 flower_petals_small,flower,prepollination,18,,,,,,,,,,,,2,,
 flower_stigma,flower,prepollination,19,2,,1,,2,2,2,,,1,1,2,1,2
 flower_calyx,flower,prepollination,20,,4,,1,,,,1,1,,1,2,1,2
+flower_calyx_aborting,flower,prepollination,,,,,,,,,1,,,,,,
 flower_aborted,flower,prepollination,22,,,,,,,,,,,,2,,2
 flower_aborted_without_petals,flower,prepollination,23,,,,,,,,,,,,2,,
 flower_style,flower,prepollination,24,2,,,,,,,,,,,,,
 finished_flower,flower,prepollination,25,,4,1,1,,,,1,1,,,2,,
+finished_flower_aborting,flower,prepollination,,,,,,,,,1,,,,,,
 finished_flower_stigma,flower,prepollination,27,2,1,,,2,2,2,,,1,,2,,2
 late_finished_flower,flower,prepollination,28,,4,,,,,,,,,,2,,
 late_flower_petals,flower,prepollination,28.1,,4,,,,,,,,,,,,

@@ -18,10 +18,12 @@ flower_petals,13,count_by_length,count,count,count; count_by_length,count,count,
 flower_petals_small,14,,,,,,,,,,,,count,,
 flower_stigma,15,count_by_length,,count,,count,count,count,,,count,count,count,count,count
 flower_calyx,16,,count,,count; count_by_length,,,,count,count; count_by_length,,count,count,count,count
+flower_calyx_aborting,,,,,,,,,count,,,,,,
 flower_aborted,17,,,,,,,,,,,,count,,count
 flower_aborted_without_petals,18,,,,,,,,,,,,count,,
 flower_style,19,count_by_length,,,,,,,,,,,,,
 finished_flower,20,,count,count,count; count_by_length,,,,count,count; count_by_length,,,count,,
+finished_flower_aborting,,,,,,,,,count,,,,,,
 finished_flower_stigma,21,count_by_length,count,,,count,count,count,,,count,,count,,count
 late_finished_flower,22,,count,,,,,,,,,,count,,
 late_flower_petals,22.1,,count,,,,,,,,,,,,

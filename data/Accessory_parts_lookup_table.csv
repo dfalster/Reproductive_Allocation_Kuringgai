@@ -18,10 +18,12 @@ flower_petals,13,prepollination_success,prepollination_success,prepollination_su
 flower_petals_small,14,,,,,,,,,,,,prepollination_success,,
 flower_stigma,15,prepollination_success,,prepollination_success,,prepollination_success,prepollination_success,prepollination_success,,,prepollination_success,prepollination_success,prepollination_success,prepollination_success,prepollination_success
 flower_calyx,16,,prepollination_success,,prepollination_success,,,,prepollination_success,prepollination_success,,prepollination_success,prepollination_success,prepollination_success,prepollination_success
+flower_calyx_aborting,16.1,,,,,,,,prepollination_success,,,,,,
 flower_aborted,17,,,,,,,,,,,,prepollination_abort,,prepollination_abort
 flower_aborted_without_petals,18,,,,,,,,,,,,prepollination_abort,,
 flower_style,19,prepollination_success,,,,,,,,,,,,,
 finished_flower,20,,prepollination_success,prepollination_success,prepollination_success,,,,prepollination_success,prepollination_success,,,prepollination_success,,
+finished_flower_aborting,20.1,,,,,,,,prepollination_success,,,,,,
 finished_flower_stigma,21,prepollination_success,prepollination_success,,,prepollination_success,prepollination_success,prepollination_success,,,prepollination_success,,prepollination_success,,
 late_finished_flower,22,,prepollination_success,,,,,,,,,,prepollination_success,,
 late_flower_petals,22.5,,packaging_dispersal,,,,,,,,,,,,
