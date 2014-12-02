@@ -22,11 +22,11 @@ Maps[["BAER"]]=c("cone_base_green","cone_base_brown","cone_green","cone_brown","
                  "bud_tiny","bud_small","bud_mid","bud_big","bud_just_opening","flower_petals","flower_style","flower_stigma","finished_flower_stigma",
                  "fruit_just_starting","fruit_young","fruit_large_immature","seed_pod","seed","seed_aborted")
 
-Maps[["BOLE"]]=c("bud_tiny","bud_small","bud_mid","bud_big","pedicel","flower_petals","flower_calyx","finished_flower","finished_flower_stigma",
+Maps[["BOLE"]]=c("bud_tiny","bud_small","bud_mid","bud_big","pedicel","flower_petals","late_flower_petals","flower_calyx","finished_flower","finished_flower_stigma",
                  "late_finished_flower","fruit_just_starting","fruit_young","fruit_large_immature","seed_pod","seed")
 
-Maps[["HEPU"]]=c("bud_small","bud_big","flower_petals","flower_calyx","fruit_aborted","finished_flower","calyx_aborted_fruit","calyx_fruit","fruit_young",
-                 "fruit_large_immature","fruit_aborted","fruit_mature")
+Maps[["HEPU"]]=c("bud_small","bud_big","flower_petals","flower_calyx","flower_calyx_aborting","fruit_aborted","finished_flower","finished_flower_aborting","calyx_aborted_fruit","calyx_fruit","fruit_young","fruit_young_aborting",
+                 "fruit_large_immature","fruit_large_immature_aborting","fruit_aborted","fruit_mature")
 
 Maps[["PILI"]]=c("inflorescence_bud_mid","inflorescence_stalk","bract_flower_or_finished_flower","bud_big",
                  "flower_calyx","flower_stigma","flower_petals","fruit_young","fruit_large_immature","fruit_aborted","seed_pod","seed")

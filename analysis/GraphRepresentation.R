@@ -287,11 +287,11 @@ rm(COER.graph)
 
 PUTU.graph=graph.formula("bud_big"-"flower_stigma"-"finished_flower_stigma"-"fruit_large_immature_01"-"seed","bud_big"-"flower_petals","bud_big"-"flower_calyx","bud_big"-"bract_flower_or_finished_flower","flower_aborted","flower_stigma"-"fruit_aborted","fruit_large_immature_01"-"seed_pod","fruit_large_immature_01"-"seed_aborted")
 from=c("bud_big","flower_aborted")
-to=c("seed","flower_aborted")
+to=c("seed_pod","flower_aborted")
 Paths=data.frame(from=from,to=to)
 #Set colors to vertices
-PUTU.graph=set.vertex.attribute(PUTU.graph,name="col",index=c(1:5,10,12),value=3)
-PUTU.graph=set.vertex.attribute(PUTU.graph,name="col",index=c(6:8,11),value=4)
+PUTU.graph=set.vertex.attribute(PUTU.graph,name="col",index=c(1:4,11,10),value=3)
+PUTU.graph=set.vertex.attribute(PUTU.graph,name="col",index=c(6:8,5,12),value=4)
 PUTU.graph=set.vertex.attribute(PUTU.graph,name="col",index=c(9),value=5)
 #Set weights to all edges
 PUTU.graph=set.edge.attribute(PUTU.graph,name="weight",value=1)
@@ -398,13 +398,13 @@ rm(BAER.graph)
 #=====================================================================================
 
 
-BOLE.graph=graph.formula("bud_tiny"-"bud_small"-"bud_mid"-"bud_big"-"flower_calyx"-"finished_flower_stigma"-"fruit_just_starting"-"fruit_young"-"fruit_large_immature_01"-"seed","bud_big"-"pedicel","bud_big"-"flower_petals","flower_calyx"-"finished_flower"-"late_finished_flower","fruit_large_immature_01"-"seed_pod")
+BOLE.graph=graph.formula("bud_tiny"-"bud_small"-"bud_mid"-"bud_big"-"flower_calyx"-"finished_flower_stigma"-"fruit_just_starting"-"fruit_young"-"fruit_large_immature_01"-"seed","bud_big"-"pedicel","bud_big"-"flower_petals","flower_calyx"-"finished_flower"-"late_finished_flower","fruit_large_immature_01"-"seed_pod","flower_petals"-"late_flower_petals")
 from=c("bud_tiny")
 to=c("seed")
 Paths=data.frame(from=from,to=to)
 #Set vertex colors to define paths and their accessories
 BOLE.graph=set.vertex.attribute(BOLE.graph,name="col",index=c(1:10),value=3)
-BOLE.graph=set.vertex.attribute(BOLE.graph,name="col",index=c(11,12,13,14,15),value=4)
+BOLE.graph=set.vertex.attribute(BOLE.graph,name="col",index=c(11,12,13,14,15,16),value=4)
 #Set edge weight to define carbon flow
 BOLE.graph=set.edge.attribute(BOLE.graph,name="weight",value=1)
 #BOLE.graph=set.edge.attribute(BOLE.graph,name="weight",index=c(4,5,6,7,8,12,13),value=c(0.486,0.116,0.4,0.03,0.97,0.48,0.52))
@@ -470,16 +470,16 @@ rm(BOLE.graph)
 
 
 
-HEPU.graph=graph.formula("bud_small"-"bud_big"-"flower_calyx"-"finished_flower"-"fruit_young"-"fruit_large_immature_01"-"fruit_mature","bud_big"-"flower_petals","flower_calyx"-"fruit_aborted","finished_flower"-"calyx_fruit")
+HEPU.graph=graph.formula("bud_small"-"bud_big"-"flower_calyx"-"finished_flower"-"fruit_young"-"fruit_large_immature_01"-"fruit_mature","bud_big"-"flower_petals","flower_calyx"-"fruit_aborted","finished_flower"-"calyx_fruit","bud_big"-"flower_calyx_aborting","flower_calyx"-"finished_flower_aborting","finished_flower"-"fruit_young_aborting","fruit_young"-"fruit_large_immature_aborting")
 from=c("bud_small")
 to=c("fruit_mature")
 Paths=data.frame(from=from,to=to)
 #Set vertex colors
-HEPU.graph=set.vertex.attribute(HEPU.graph,name="col",index=c(1:7,9),value=3)
+HEPU.graph=set.vertex.attribute(HEPU.graph,name="col",index=c(1:7,9,11:14),value=3)
 HEPU.graph=set.vertex.attribute(HEPU.graph,name="col",index=c(8,10),value=4)
 #Set egde weights
 HEPU.graph=set.edge.attribute(HEPU.graph,name="weight",value=1)
-HEPU.graph=set.edge.attribute(HEPU.graph,name="weight",index=c(2,3,6,7),value=c(0.4433,0.5567,0.4658,0.5342))
+#HEPU.graph=set.edge.attribute(HEPU.graph,name="weight",index=c(2,3,6,7),value=c(0.4433,0.5567,0.4658,0.5342))
 
 AM=get.adjacency(HEPU.graph,edges = T)
 ###############################
@@ -596,15 +596,15 @@ rm(PILI.graph)
 
 PHPH.graph=graph.formula("bud_small"-"bud_mid"-"flower_stigma"-"finished_flower_stigma"-"fruit_just_starting"-"fruit_young"-"fruit_large_immature_01"-"seed","bud_mid"-"flower_petals_small"-"flower_petals","bud_mid"-"bract_flower_or_finished_flower","bud_mid"-"flower_calyx","bud_small"-"flower_aborted","flower_aborted_without_petals","fruit_young"-"fruit_aborted","fruit_large_immature_01"-"seed_pod","fruit_large_immature_01"-"seed_aborted")
 from=c("bud_small","flower_aborted_without_petals")
-to=c("seed","flower_aborted_without_petals")
+to=c("seed_pod","flower_aborted_without_petals")
 Paths=data.frame(from=from,to=to)
 #Set vertex color
-PHPH.graph=set.vertex.attribute(PHPH.graph,name="col",index=c(1:8,13,15,17),value=3)
-PHPH.graph=set.vertex.attribute(PHPH.graph,name="col",index=c(9,10,11,12,16),value=4)
+PHPH.graph=set.vertex.attribute(PHPH.graph,name="col",index=c(1:7,16,13,15),value=3)
+PHPH.graph=set.vertex.attribute(PHPH.graph,name="col",index=c(8,9,10,11,12,17),value=4)
 PHPH.graph=set.vertex.attribute(PHPH.graph,name="col",index=c(14),value=5)
 #Set egde weights
 PHPH.graph=set.edge.attribute(PHPH.graph,name="weight",value=1)
-PHPH.graph=set.edge.attribute(PHPH.graph,name="weight",index=c(3,4,5,6,12,13,14),value=c(0.1269,0.3441,0.3413,0.1876,0.24,0.76,0.24))
+#PHPH.graph=set.edge.attribute(PHPH.graph,name="weight",index=c(3,4,5,6,12,13,14),value=c(0.1269,0.3441,0.3413,0.1876,0.24,0.76,0.24))
 AM=get.adjacency(PHPH.graph,edges = T)
 ###############################
 #flower_petals_small, bract_flower_or_finished_flower, flower_stigma,flower_calyx from bud_mid 
