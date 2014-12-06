@@ -2,7 +2,7 @@ TreeListToTotalDataFrame<-function(TreeList)
 {
   individual=TreeList[[1]]
   TreeTotalDataFrame=data.frame(individual=c(),census=c(),part=c(),count=c(),weight=c())
-  for(i in 2:(length(TreeList)-1))
+  for(i in 2:(length(TreeList)))
   {
     CensusTotal=TreeList[[i]]$total
     n.types=length(CensusTotal)

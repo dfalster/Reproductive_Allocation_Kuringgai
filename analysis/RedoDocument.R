@@ -47,4 +47,15 @@ PlotRAs_vs_Diameter()
 PlotRAs_vs_Weight()
 PlotIndividualRAs_vs_Weight_Diam()
 
+# Investments in diffeernet types of accesorry tissues
+source('analysis/IAT.R')
+IAT()
+
+source('analysis/Plot_IAT_By_Species.R')
+Plot_IAT_By_Species()
+Compare_IProp()
+
+
+
+
 

@@ -157,7 +157,7 @@ if(length(Acc.Finals)>0)
         TreeList_Acc=R[["TreeList_Pred"]]
         Investments=rbind(Investments,R[["Inv"]])
         ErrList=rbind(ErrList,R[["Err"]])
-      }
+      
       #Calculate lost elements
       if((i>2)&(i<n.censuses))
       {if((length(sapply(TreeList_Acc[[i-1]]$total,function(x) x$type)>0))){
@@ -173,15 +173,18 @@ if(length(Acc.Finals)>0)
                                count=sapply(TreeList_Acc[[i-1]]$total,function(x) x$count),
                                weight=sapply(TreeList_Acc[[i-1]]$total,function(x) sum(x$weight))))}
       }
+      }
     }
-    #Restrict loss calculations to the elements outside main progression line.
-    Lost=rbind(Lost,L[as.character(L$what)%in%V(Plant.Graph)$name[V(Plant.Graph)$col==get.vertex.attribute(Plant.Graph,"col",index=Accessory)],])
-    FinishedDevelopement=rbind(FinishedDevelopement,FD[as.character(FD$what)%in%V(Plant.Graph)$name[V(Plant.Graph)$col==get.vertex.attribute(Plant.Graph,"col",index=Accessory)],])
+    #Restrict loss calculations to the elements outside main progression line and only in the progression line of question (for k).
+    Lost=                rbind(Lost,                L[as.character(L$what)%in%Progression_Not_on_Main,])
+    FinishedDevelopement=rbind(FinishedDevelopement,FD[as.character(FD$what)%in%Progression_Not_on_Main,])
     
   }
 }
 
 }
+Investments=Investments[complete.cases(Investments),]
+
 
 #Aggregare and order the result
 ErrList=ErrList[complete.cases(ErrList),]
@@ -190,15 +193,15 @@ if(nrow(ErrList)>0)
   Err=aggregate(Count~Element+Census,data=ErrList,FUN="sum")
   Err=Err[order(Err$Census),]
 }
+Inv=NULL
 Investments=Investments[complete.cases(Investments),]
 if(nrow(Investments)>0)
 {
   Inv=aggregate(Count~FromCensus+ToCensus+From+To+Inv,FUN="sum",data=Investments)
   Inv=Inv[order(Inv$ToCensus),]
-}
 Inv["Total"]=Inv$Inv*Inv$Count
 Inv["Individual"]=rep(TreeListOrig[[1]],nrow(Inv))
-
+}
 Lost=unique(Lost)
 FinishedDevelopement=unique(FinishedDevelopement)
 #Exclude elements of degree 1, they can not develop, not lost

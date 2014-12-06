@@ -5,12 +5,13 @@ InvestmentInAccessoryTissues<-function(individual)
   
   #Read tree data
   InvestmentCategories=read.csv('data/Accessory_parts_lookup_table.csv',header=T,stringsAsFactors = FALSE, na.strings="")
-  Data=read.csv('data/reproduction.csv',sep=',',header=T,stringsAsFactors = FALSE, na.strings="")
-  Tree=Data[Data$individual==individual,]
+  #Data=read.csv('data/reproduction.csv',sep=',',header=T,stringsAsFactors = FALSE, na.strings="")
+  #Tree=Data[Data$individual==individual,]
   
   #Transform counts to weights and adjust for multiplicity 
-  TreeListOrig=WeightCalculationsForTree(Tree)
-  TreeListAdj=AdjustForMultiplicity(TreeList=TreeListOrig)
+  #TreeListOrig=WeightCalculationsForTree(Tree)
+  #TreeListAdj=AdjustForMultiplicity(TreeList=TreeListOrig)
+  #TreeFrame=TreeListToTotalDataFrame(TreeListAdj)
   
   #Read in the information about lost elements
   SpeciesLoss=read.csv(paste0('output/',species,'_FinDev.csv'),header=T,stringsAsFactors = FALSE, na.strings="")

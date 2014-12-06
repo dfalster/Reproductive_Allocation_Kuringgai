@@ -21,13 +21,13 @@ source('analysis/CalculateInvestmentForSpecies.R')
 source('analysis/TreeListToTotalDataFrame.R')
 AnalyzeIndividual<-function(individual)
 {
-  #individual="GRBU_407"
+  #individual="BOLE_305"
   species=str_sub(individual,1,4)
   
   #Read tree data
   InvestmentCategories=read.csv('data/Accessory_parts_lookup_table.csv',header=T,stringsAsFactors = FALSE, na.strings="")
   Data=read.csv('data/reproduction.csv',sep=',',header=T,stringsAsFactors = FALSE, na.strings="")
-  Tree=Data[Data$individual==individual,]
+  Tree=unique(Data[Data$individual==individual,])
   
   #Transform counts to weights and adjust for multiplicity 
   TreeListOrig=WeightCalculationsForTree(Tree)

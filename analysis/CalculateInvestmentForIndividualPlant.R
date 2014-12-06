@@ -3,13 +3,13 @@ source('analysis/InvestmentCalculations.R')
 source('analysis/GraphRepresentation.R')
 source('analysis/MultiplicityAdjustment.R')
 
-#individual='BOLE_157'
+individual='BAER_007'
 
 
 CalculateInvestmentForIndiviualPlant<-function(individual)
 { #Read and extract data
   Data=read.csv('data/reproduction.csv',sep=',',header=T,stringsAsFactors = FALSE, na.strings="")
-  Tree=Data[Data$individual==individual,]
+  Tree=unique(Data[Data$individual==individual,])
   #Transform counts to weights and adjust for multiplicity 
   TreeListOrig=WeightCalculationsForTree(Tree)
   #TreeListAdj=TreeListOrig;
