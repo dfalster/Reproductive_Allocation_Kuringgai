@@ -1,9 +1,9 @@
-sort01,sort02,species,replicate,tag_ID,site,age,date,start_end,census,interval,year,year_div,segment,node_below,node_above,plant_status,use_status,stem_weight,leaf_weight,root_weight,diameter_1,diameter_2,diameter_3,diameter_ave,total_stem_weight,total_leaf_weight,total_plant_weight,height,notes
+sort01,sort02,species,replicate,individual,site,age,date,start_end,census,interval,year,year_div,segment,node_below,node_above,plant_status,use_status,stem_weight,leaf_weight,root_weight,diameter_1,diameter_2,diameter_3,diameter_ave,total_stem_weight,total_leaf_weight,total_plant_weight,height,notes
 1,,BAER,B-01,BAER_B-01,baby,0.1,28-Jun-13,start,19,,2013,2013,1,0,1,alive,do_not_use,73.5,327,,1.68,1.64,1.65,1.66,73.5,327,400.5,107,
 2,,BAER,B-02,BAER_B-02,baby,0.1,28-Jun-13,start,19,,2013,2013,1,0,1,alive,do_not_use,98.1,525.1,,1.91,1.77,1.865,1.85,98.1,525.1,623.2,147,
 3,,BAER,B-03,BAER_B-03,baby,0.1,28-Jun-13,start,19,,2013,2013,1,0,1,alive,do_not_use,67.9,330.5,,1.59,1.67,1.59,1.62,67.9,330.5,398.4,98,
 4,,BAER,B-04,BAER_B-04,baby,0.1,28-Jun-13,start,19,,2013,2013,1,0,1,alive,do_not_use,51.4,153.8,,1.87,1.8,1.82,1.83,51.4,153.8,205.2,64,
-5,,BAER ,B-05,BAER_B-05,baby,0.1,28-Jun-13,start,19,,2013,2013,1,0,1,alive,do_not_use,17.3,54.9,,0.94,0.88,1.01,0.94,17.3,54.9,72.2,28,
+5,,BAER,B-05,BAER_B-05,baby,0.1,28-Jun-13,start,19,,2013,2013,1,0,1,alive,do_not_use,17.3,54.9,,0.94,0.88,1.01,0.94,17.3,54.9,72.2,28,
 6,,BAER,B-06,BAER_B-06,baby,0.1,28-Jun-13,start,19,,2013,2013,1,0,1,alive,do_not_use,93.2,395.6,,0.96,2.04,1.99,1.66,93.2,395.6,488.8,143,
 7,,BAER,B-09,BAER_B-09,baby,0.1,22-Jan-14,start,25,,2013,2013,1,0,1,alive,do_not_use,38.6,151.2,,1.44,1.6,,1.52,38.6,151.2,189.8,81,no leaves shed
 8,,BAER,B-099,BAER_B-099,baby,0.1,22-Jan-14,start,25,,2013,2013,1,0,1,alive,do_not_use,37.6,159.8,,1.36,1.31,,1.34,37.6,159.8,197.4,82,
@@ -2148,7 +2148,7 @@ sort01,sort02,species,replicate,tag_ID,site,age,date,start_end,census,interval,y
 2147,,PELA,402,PELA_402,Basin2007,5,26-Apr-12,start,2,1,2012,2012,1,0,1,alive,use,,,333.3,2.84,2.77,2.89,2.83,,,,250,
 2148,,PELA,402,PELA_402,Basin2007,5,2-May-13,end,17,,2013,2013,1,0,1,alive,use,646.5,837.6,333.3,3.94,3.99,4.2,4.04,1242.3,4762,6004.3,300,"marked as PELA 401 in spreadsheet, changed to PELA 402"
 2149,,PELA,402,PELA_402,Basin2007,5,26-Apr-12,start,2,1,2012,2012,2,1,2,alive,,,,,2.47,,,2.47,,,,,
-2150,,PELA,402,PELA_402,Basin2007,5,2-May-13,end,17,,2013,2013,2,1,2,alive,,360,1810.4,,3.3,,,3.3,595.8,3924.4,4520.2,, 
+2150,,PELA,402,PELA_402,Basin2007,5,2-May-13,end,17,,2013,2013,2,1,2,alive,,360,1810.4,,3.3,,,3.3,595.8,3924.4,4520.2,,
 2151,,PELA,402,PELA_402,Basin2007,5,26-Apr-12,start,2,1,2012,2012,3,2,3,alive,,,,,,,,,,,,,
 2152,,PELA,402,PELA_402,Basin2007,5,2-May-13,end,17,,2013,2013,3,2,3,alive,,235.8,2114,,2.86,2.72,,2.79,235.8,2114,2349.8,,
 2153,,PELA,403,PELA_403,Basin2007,5,26-Apr-12,start,2,1,2012,2012,1,0,1,alive,use,,,493.5,2.73,2.76,2.7,2.73,,,,175,
@@ -4126,7 +4126,7 @@ sort01,sort02,species,replicate,tag_ID,site,age,date,start_end,census,interval,y
 4125,3214,GRBU,903,GRBU_903,Basin1981,32,7-Jun-12,start,3,1,2012,2012,1.2,1,9,alive,,,,,,,,,,,,,
 4126,1214,GRBU,903,GRBU_903,Basin1981,32,6-Jun-13,end,18,,2013,2013,1.2,1,9,alive,,7030,0,,6.03,6.22,,6.13,7030,0,7030,,"small stem segment that not marked in any section; maybe with 1.2; which would make it ""1"""
 4127,3207,GRBU,903,GRBU_903,Basin1981,32,7-Jun-12,start,3,1,2012,2012,1.3,1,10,alive,,,,,9.25,,,9.25,,,,,
-4128,1207,GRBU,903,GRBU_903,Basin1981,32,6-Jun-13,end,18,,2013,2013,1.3,1,10,alive,,19930,0,,9.26,,,9.26,19930,0,19930,, 
+4128,1207,GRBU,903,GRBU_903,Basin1981,32,6-Jun-13,end,18,,2013,2013,1.3,1,10,alive,,19930,0,,9.26,,,9.26,19930,0,19930,,
 4129,3230,GRBU,903,GRBU_903,Basin1981,32,7-Jun-12,start,3,1,2012,2012,2,1,2,alive,,,,,5.9,,,5.9,,,,,
 4130,1230,GRBU,903,GRBU_903,Basin1981,32,6-Jun-13,end,18,,2013,2013,2,1,2,alive,,11130,0,,6.5,,,6.5,11788.6,398.5,12187.1,,
 4131,3216,GRBU,903,GRBU_903,Basin1981,32,7-Jun-12,start,3,1,2012,2012,3,2,3,alive,,,,,1.9,,,1.9,,,,,

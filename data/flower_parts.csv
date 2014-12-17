@@ -548,18 +548,18 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 6446,BOLE,Waratah2003,24-Aug-14,461,,,,finished_flower_stigma,16,,,,,used,6,0.375,0.38,"per individual, so 4 per flower"
 6447,BOLE,Waratah2003,24-Aug-14,462,,,,finished_flower_stigma,16,,,,,used,4.58,0.28625,0.29,"per individual, so 4 per flower"
 144,BOLE,Basin2007,14-Sep-12,46,BOLE_401,5,used,flower_all_parts,1,,,,,only_for_collected_parts,14.3,,14.3,
-133,BOLE,,,1,,,,flower_all_parts,36,,,,,category_not_used,340.7,,9.46,flower_all_parts_small; 
-134,BOLE,,,2,,,,flower_all_parts,20,,,,,category_not_used,229.3,,11.47,flower_all_parts_small; 
-135,BOLE,,,3,,,,flower_all_parts,22,,,,,category_not_used,254.9,,11.59,flower_all_parts_small; 
-137,BOLE,,,4,,,,flower_all_parts,13,,,,,category_not_used,108.5,,8.35,flower_all_parts_small; 
+133,BOLE,,,1,,,,flower_all_parts,36,,,,,category_not_used,340.7,,9.46,flower_all_parts_small;
+134,BOLE,,,2,,,,flower_all_parts,20,,,,,category_not_used,229.3,,11.47,flower_all_parts_small;
+135,BOLE,,,3,,,,flower_all_parts,22,,,,,category_not_used,254.9,,11.59,flower_all_parts_small;
+137,BOLE,,,4,,,,flower_all_parts,13,,,,,category_not_used,108.5,,8.35,flower_all_parts_small;
 138,BOLE,,,5,,,,flower_all_parts,6,,,,,category_not_used,74.1,,12.35,
 136,BOLE,,,12,,,,flower_all_parts,25,,,,,category_not_used,239.2,,9.57,flower_all_parts_small; make sure numbers are correct; otherwise check original data sheet
-143,BOLE,,,13,,,,flower_all_parts,19,,,,,category_not_used,221,,11.63,flower_all_parts_small; 
+143,BOLE,,,13,,,,flower_all_parts,19,,,,,category_not_used,221,,11.63,flower_all_parts_small;
 140,BOLE,,,14,,,,flower_all_parts,2,,,,,category_not_used,25.8,,12.9,
 139,BOLE,,,18,,,,flower_all_parts,4,,,,,category_not_used,51.1,,12.78,
 141,BOLE,,,44,,,,flower_all_parts,10,,,,,category_not_used,138,,13.8,
 142,BOLE,,,45,,,,flower_all_parts,16,,,,,category_not_used,248.6,,15.54,
-145,BOLE,,,47,,,,flower_all_parts,16,,,,,category_not_used,167.8,,10.49,flower_all_parts_small; 
+145,BOLE,,,47,,,,flower_all_parts,16,,,,,category_not_used,167.8,,10.49,flower_all_parts_small;
 3198,BOLE,Waratah2011,23-Aug-13,159,,,,flower_all_parts,5,,,,,category_not_used,74.6,,14.92,"flower_all_parts_small; includes pedicel; these numbers very high, so maybe remove and reweigh?"
 3199,BOLE,Waratah2011,23-Aug-13,160,,,,flower_all_parts,5,,,,,category_not_used,68.5,,13.7,"flower_all_parts_small; includes pedicel; these numbers very high, so maybe remove and reweigh?"
 3200,BOLE,Waratah2011,23-Aug-13,161,,,,flower_all_parts,5,,,,,category_not_used,73.6,,14.72,"flower_all_parts_small; includes pedicel; these numbers very high, so maybe remove and reweigh?"
@@ -1230,7 +1230,7 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 490,COER,,,166,,,,inflorescence_stalk_in_fruit,1,,,,,used,15.6,,15.6,
 510,COER,Waratah2003,23-Nov-12,205,COER_806,8;9,used,inflorescence_stalk_in_fruit,4,,,,,used,48.6,,12.15,
 512,COER,Waratah2003,23-Nov-12,207,COER_807,8,used,inflorescence_stalk_in_fruit,9,,,,,used,153,,17,
-459,COER,,,109,,,,inflorescence_stalk_in_fruit_large,1,,,,,used,40.4,,40.4,2x stem 
+459,COER,,,109,,,,inflorescence_stalk_in_fruit_large,1,,,,,used,40.4,,40.4,2x stem
 492,COER,,,168,,,,inflorescence_stalk_in_fruit_large,1,,,,,used,33.4,,33.4,2x stalk
 4359,COER,Waratah2003,31-Oct-13,296,,,,inflorescence_stalk_in_fruit_large,1,,,,,used,38.3,,38.3,
 4360,COER,Waratah2003,31-Oct-13,297,,,,inflorescence_stalk_in_fruit_large,1,,,,,used,31.9,,31.9,
@@ -1818,7 +1818,7 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 1016,GRSP,,,16,,,,bud_big,17,,,,,used,49.6,,2.92,borderline between med and big size
 1017,GRSP,,,17,,,,bud_big,14,,,,,used,68.6,,4.9,
 1018,GRSP,,,18,,,,bud_big,4,,,,,used,13.9,,3.48,
-1019,GRSP,,,23,,,,bud_big,17,,,,,used,89.9,,5.29, 
+1019,GRSP,,,23,,,,bud_big,17,,,,,used,89.9,,5.29,
 1020,GRSP,,,26,,,,bud_big,22,,,,,used,100.1,,4.55,
 1021,GRSP,,,27,,,,bud_big,22,,,,,used,118.4,,5.38,
 1022,GRSP,,,34,,,,bud_big,8,,,,,used,32.2,,4.03,
@@ -1978,7 +1978,7 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 1073,GRSP,,,123,,,,flower_stigma,9,,,,,used,36.5,,4.06,re-categorized as small
 1050,GRSP,,,53,,,,flower_stigma,7,,,,,used,28.5,,4.07,
 1049,GRSP,,,38,,,,flower_stigma,11,,,,,used,46.1,,4.19,
-1068,GRSP,,,69,,,,flower_stigma,12,,,,,used,51.7,,4.31, 
+1068,GRSP,,,69,,,,flower_stigma,12,,,,,used,51.7,,4.31,
 1051,GRSP,,,56,,,,flower_stigma,5,,,,,used,22.5,,4.5,
 1069,GRSP,,,94,,,,flower_stigma,7,,,,,used,32.6,,4.66,
 1076,GRSP,,,127,,,,flower_stigma,10,,,,,used,46.6,,4.66,smallish

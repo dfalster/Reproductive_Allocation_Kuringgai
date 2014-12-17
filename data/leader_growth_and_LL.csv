@@ -1,4 +1,4 @@
-species,replicate,site,tag_ID,d_start,d_end,length_start,new_length,segment,lvs_start_length,lvs_start_count,lvs_finish_length,lvs_end_count,lvs_new,lvs_new_count,,new&shed,80.10%,,mm,leaves,lvs per mm,
+species,replicate,site,individual,d_start,d_end,length_start,new_length,segment,lvs_start_length,lvs_start_count,lvs_finish_length,lvs_end_count,lvs_new,lvs_new_count,,new&shed,80.10%,,mm,leaves,lvs per mm,
 BAER,1,Basin2005,BAER_001,130,262,117,70,N/A - bn 4&5,235,100,177,,70,,,,,,,,,
 BAER,2,Basin2005,BAER_002,179,337,188,128,3,365,,188,30,128,,,,,,,,,
 BAER,3,Basin2005,BAER_003,184,315,263,184,4,559,,300,4,184,,,,,,,,,

@@ -1,4 +1,4 @@
-sort2,sort1,species,individual,tag_ID,site,age,date,year,segment,node_below,node_above,plant_status,stem_weight,leaf_weight,root_weight,diameter_1,diameter_2,diameter_3,diameter_ave,total_stem_weight,total_leaf_weight,total_plant_weight,height,notes
+sort2,sort1,species,individual,individual,site,age,date,year,segment,node_below,node_above,plant_status,stem_weight,leaf_weight,root_weight,diameter_1,diameter_2,diameter_3,diameter_ave,total_stem_weight,total_leaf_weight,total_plant_weight,height,notes
 ,1,BAER,151,BAER_151,Waratah2011,3,14-Jun-13,2013,1,0,1,alive,,,,454,448,452,451.3333333,,,,512,
 ,103,BAER,151,BAER_151,Waratah2011,3,31-Jul-14,2014,1,0,1,alive,3.4034,2.2653,,652,652,639,,,,,671,
 ,,BAER,151,BAER_151,Waratah2011,3,14-Jun-13,2013,2,1,2,alive,,,,222,,,,,,,,
