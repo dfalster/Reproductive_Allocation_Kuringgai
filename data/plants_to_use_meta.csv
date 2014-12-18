@@ -1,0 +1,8 @@
+species,species 4 letter code
+replicate,species tag number
+tag_ID,full tag ID
+site,site at Kuringgai
+age,age at harvest
+date_tagged,date species tagged; or harvested for babies
+use_RA_calc,if plant is to be used for RA calculations; omits all dead plants
+use_allometric,if plant is to be used for calculating overall allometric equations for species; this includes baby plants
