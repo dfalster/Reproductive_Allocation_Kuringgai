@@ -22,7 +22,7 @@ get_RA_means_by_age <- function(RA_all){
     arrange(species, age)
 }
 
-plot_species_RA_panel <- function(InvBySpecies) {
+plot_species_RA_age_panel <- function(InvBySpecies) {
 
   InvByAge <- get_RA_means_by_age(InvBySpecies)
 
@@ -42,14 +42,14 @@ plot_species_RA_panel <- function(InvBySpecies) {
   points(InvBySpecies$age, InvBySpecies$ReproInv, pch = "o", cex = 1.5, col = "grey")
 
 
-  plot(InvByAge$age, InvByAge$RA_M, type = "b", lwd = 3, pch = as.character(InvByAge$age), cex = 1.5, col = sp_col, ylim = range(InvBySpecies$RA), main = "Reproductive Allocation",
+  plot(InvByAge$age, InvByAge$RA_M, type = "b", lwd = 3, pch = as.character(InvByAge$age), cex = 1.5, col = cols, ylim = range(InvBySpecies$RA), main = "Reproductive Allocation",
     xlab = "Age (years)", ylab = "Reproductive Allocation")
   points(InvByAge$age, InvByAge$RA_L, pch = 2, cex = 2, col = cols)
   points(InvByAge$age, InvByAge$RA_U, pch = 6, cex = 2, col = cols)
   points(InvBySpecies$age, InvBySpecies$RA, pch = "o", cex = 1.5, col = "grey")
 }
 
-plot_RA_comparsion <- function(RA_all) {
+plot_RA_comparison_age <- function(RA_all) {
 
   InvByAge <- get_RA_means_by_age(RA_all)
   cols <- col.table()
@@ -57,4 +57,33 @@ plot_RA_comparsion <- function(RA_all) {
   d_ply(InvByAge, "species", function(x) points(x$age, x$RA_M, type = "b", pch = "o", col= cols[x$species]))
   legend("topright", legend = names(cols), col = cols, lty = 1, lwd = 3)
 
+}
+
+plot_RA_comparison_diam <- function(RA_all) {
+  cols <- col.table()
+  plot(RA_all$FinalBasalDiamAv, RA_all$RA, type = "p", col = cols[RA_all$species], xlab = "Basal Diameter, year 2013", ylab = "RA", bty = "L")
+  legend("topright", legend = names(cols), col = cols, pch = 1)
+}
+
+plot_RA_comparison_weight <- function(RA_all) {
+  cols <- col.table()
+  plot(RA_all$FinalWeight, RA_all$RA, type = "p", col = cols[RA_all$species], xlab = "Weight, year 2013", ylab = "RA", bty = "L")
+  legend("topright", legend = names(cols), col = cols, pch = 1)
+}
+
+plot_species_RA_weight_diam_panel <- function(Data) {
+    cols <- col.table()[Data$species]
+    par(mfrow = c(1, 3), cex.main = 2, cex.lab = 1.5)
+    plot(Data$FinalBasalDiamAv, Data$RA, type = "p", col = cols, xlab = "Diameter, year 2013", ylab = "RA", bty = "L", main = "Diameter", cex = 1.5)
+
+    plot(Data$FinalWeight, Data$RA, type = "p", col = cols, xlab = "Weight, year 2013", ylab = "RA", bty = "L", main = "Weight", cex = 1.5)
+}
+
+print_xtable_for_species <- function(thisSpecies, data, file){
+  print_xtable(filter(data, species==thisSpecies),file=file)
+}
+
+print_xtable <- function(data, file){
+ print(xtable(data, include.rownames=FALSE), floating=FALSE, type="latex",
+    file=file)
 }

@@ -17,6 +17,10 @@ CalculateRAForBAER <- function(...) {
 	RA_Calculations("BAER", ...)
 }
 
+print_xtable_BAER <- function(...) {
+	print_xtable_for_species("BAER", ...)
+}
+
 make_HarvestDataForBOLE <- function(...){
 	filterBySpecies("BOLE", ...)
 }
@@ -31,6 +35,10 @@ CalculateAccesoryCostsForBOLE <- function(...) {
 
 CalculateRAForBOLE <- function(...) {
 	RA_Calculations("BOLE", ...)
+}
+
+print_xtable_BOLE <- function(...) {
+	print_xtable_for_species("BOLE", ...)
 }
 
 make_HarvestDataForCOER <- function(...){
@@ -49,6 +57,10 @@ CalculateRAForCOER <- function(...) {
 	RA_Calculations("COER", ...)
 }
 
+print_xtable_COER <- function(...) {
+	print_xtable_for_species("COER", ...)
+}
+
 make_HarvestDataForEPMI <- function(...){
 	filterBySpecies("EPMI", ...)
 }
@@ -63,6 +75,10 @@ CalculateAccesoryCostsForEPMI <- function(...) {
 
 CalculateRAForEPMI <- function(...) {
 	RA_Calculations("EPMI", ...)
+}
+
+print_xtable_EPMI <- function(...) {
+	print_xtable_for_species("EPMI", ...)
 }
 
 make_HarvestDataForGRBU <- function(...){
@@ -81,6 +97,10 @@ CalculateRAForGRBU <- function(...) {
 	RA_Calculations("GRBU", ...)
 }
 
+print_xtable_GRBU <- function(...) {
+	print_xtable_for_species("GRBU", ...)
+}
+
 make_HarvestDataForGRSP <- function(...){
 	filterBySpecies("GRSP", ...)
 }
@@ -95,6 +115,10 @@ CalculateAccesoryCostsForGRSP <- function(...) {
 
 CalculateRAForGRSP <- function(...) {
 	RA_Calculations("GRSP", ...)
+}
+
+print_xtable_GRSP <- function(...) {
+	print_xtable_for_species("GRSP", ...)
 }
 
 make_HarvestDataForHATE <- function(...){
@@ -113,6 +137,10 @@ CalculateRAForHATE <- function(...) {
 	RA_Calculations("HATE", ...)
 }
 
+print_xtable_HATE <- function(...) {
+	print_xtable_for_species("HATE", ...)
+}
+
 make_HarvestDataForHEPU <- function(...){
 	filterBySpecies("HEPU", ...)
 }
@@ -127,6 +155,10 @@ CalculateAccesoryCostsForHEPU <- function(...) {
 
 CalculateRAForHEPU <- function(...) {
 	RA_Calculations("HEPU", ...)
+}
+
+print_xtable_HEPU <- function(...) {
+	print_xtable_for_species("HEPU", ...)
 }
 
 make_HarvestDataForLEES <- function(...){
@@ -145,6 +177,10 @@ CalculateRAForLEES <- function(...) {
 	RA_Calculations("LEES", ...)
 }
 
+print_xtable_LEES <- function(...) {
+	print_xtable_for_species("LEES", ...)
+}
+
 make_HarvestDataForPELA <- function(...){
 	filterBySpecies("PELA", ...)
 }
@@ -159,6 +195,10 @@ CalculateAccesoryCostsForPELA <- function(...) {
 
 CalculateRAForPELA <- function(...) {
 	RA_Calculations("PELA", ...)
+}
+
+print_xtable_PELA <- function(...) {
+	print_xtable_for_species("PELA", ...)
 }
 
 make_HarvestDataForPEPU <- function(...){
@@ -177,6 +217,10 @@ CalculateRAForPEPU <- function(...) {
 	RA_Calculations("PEPU", ...)
 }
 
+print_xtable_PEPU <- function(...) {
+	print_xtable_for_species("PEPU", ...)
+}
+
 make_HarvestDataForPHPH <- function(...){
 	filterBySpecies("PHPH", ...)
 }
@@ -191,6 +235,10 @@ CalculateAccesoryCostsForPHPH <- function(...) {
 
 CalculateRAForPHPH <- function(...) {
 	RA_Calculations("PHPH", ...)
+}
+
+print_xtable_PHPH <- function(...) {
+	print_xtable_for_species("PHPH", ...)
 }
 
 make_HarvestDataForPILI <- function(...){
@@ -209,6 +257,10 @@ CalculateRAForPILI <- function(...) {
 	RA_Calculations("PILI", ...)
 }
 
+print_xtable_PILI <- function(...) {
+	print_xtable_for_species("PILI", ...)
+}
+
 make_HarvestDataForPUTU <- function(...){
 	filterBySpecies("PUTU", ...)
 }
@@ -223,6 +275,10 @@ CalculateAccesoryCostsForPUTU <- function(...) {
 
 CalculateRAForPUTU <- function(...) {
 	RA_Calculations("PUTU", ...)
+}
+
+print_xtable_PUTU <- function(...) {
+	print_xtable_for_species("PUTU", ...)
 }
 
 

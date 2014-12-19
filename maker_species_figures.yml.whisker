@@ -25,12 +25,49 @@ plot_options:
 targets:
   figures:
     depends:
+      - docs/figures/RA_comparison_age.pdf
+      - docs/figures/RA_comparison_diam.pdf
+      - docs/figures/RA_comparison_weight.pdf
 {{#allspecies}}
-      - docs/figures/RA_{{species}}.pdf
+      - docs/figures/RA_age_{{species}}.pdf
+      - docs/figures/RA_weight_diam_{{species}}.pdf
+{{/allspecies}}
+
+  tables:
+    depends:
+      - docs/tables/AvCountsPerMM.tex
+      - docs/tables/RegressionTable.tex
+
+{{#allspecies}}
+      - docs/tables/{{species}}.tex
+{{/allspecies}}
+
+  docs/tables/AvCountsPerMM.tex:
+    command: print_xtable(AvWeightPerUnit, target_name)
+  docs/tables/RegressionTable.tex:
+    command: print_xtable(RegressionTable, target_name)
+
+  docs/figures/RA_comparison_age.pdf:
+    command: plot_RA_comparison_age(RA_all)
+    plot: wide
+  docs/figures/RA_comparison_diam.pdf:
+    command: plot_RA_comparison_diam(RA_all)
+    plot: wide
+  docs/figures/RA_comparison_weight.pdf:
+    command: plot_RA_comparison_weight(RA_all)
+    plot: wide
+
+{{#allspecies}}
+  docs/figures/RA_age_{{species}}.pdf:
+    command: plot_species_RA_age_panel({{species}}_RA)
+    plot: extra_wide
+
+  docs/figures/RA_weight_diam_{{species}}.pdf:
+    command: plot_species_RA_weight_diam_panel({{species}}_RA)
+    plot: extra_wide
 {{/allspecies}}
 
 {{#allspecies}}
-  docs/figures/RA_{{species}}.pdf:
-    command: plot_species_RA_panel({{species}}_RA)
-    plot: extra_wide
+  docs/tables/{{species}}.tex:
+    command: print_xtable_{{species}}(AvWeightPerUnit, target_name)
 {{/allspecies}}

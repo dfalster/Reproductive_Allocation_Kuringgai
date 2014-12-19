@@ -1,4 +1,4 @@
-.Rproj.user
+.Rproj*
 .Rhistory
 .RData
 ignore
@@ -7,6 +7,8 @@ output
 .maker
 
 docs/figures
+docs/tables
+docs/CarbonInvestments.pdf
 
 # LaTeX #
 #########

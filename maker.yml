@@ -10,13 +10,14 @@ sources:
 
 include:
   - maker_species_data.yml
-  - maker_species_figures.yml
+  - maker_species_figures_tables.yml
 
 targets:
   all:
     depends:
       - data
       - figures
+      - tables
 
   data:
     depends:
