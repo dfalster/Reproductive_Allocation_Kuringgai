@@ -10,6 +10,9 @@ docs/figures
 docs/tables
 docs/CarbonInvestments.pdf
 
+*.whisker
+./bootstrap
+
 # LaTeX #
 #########
 *.aux
