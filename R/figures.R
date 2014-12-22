@@ -28,25 +28,25 @@ plot_species_ReproductionAllocation_age_panel <- function(InvBySpecies) {
 
   cols <- col.table()[InvBySpecies$species]
 
-  par(mfrow = c(1, 3), cex.main = 2, cex.lab = 1.5)
-  plot(InvByAge$age, InvByAge$GI_M, type = "b", lwd = 3, pch = as.character(InvByAge$age), cex = 1.5, col = cols, ylim = range(c(InvBySpecies$ReproInv, InvBySpecies$GrowthInv)),
+  par(mfrow = c(1, 3), cex.main = 1, cex.lab = 1)
+  plot(InvByAge$age, InvByAge$GI_M, type = "b", lwd = 3, pch = as.character(InvByAge$age), cex = 1, col = cols, ylim = range(c(InvBySpecies$ReproInv, InvBySpecies$GrowthInv)),
     main = "Growth Investment", xlab = "Age (years)", ylab = "Growth Investment (mg)")
-  points(InvByAge$age, InvByAge$GI_L, pch = 2, cex = 2, col = cols)
-  points(InvByAge$age, InvByAge$GI_U, pch = 6, cex = 2, col = cols)
-  points(InvBySpecies$age, InvBySpecies$GrowthInv, pch = "o", cex = 1.5, col = "grey")
+  points(InvByAge$age, InvByAge$GI_L, pch = 2, cex = 1, col = cols)
+  points(InvByAge$age, InvByAge$GI_U, pch = 6, cex = 1, col = cols)
+  points(InvBySpecies$age, InvBySpecies$GrowthInv, pch = "o", cex = 1, col = "grey")
 
-  plot(InvByAge$age, InvByAge$RI_M, type = "b", lwd = 3, pch = as.character(InvByAge$age), cex = 1.5, col = cols, ylim = range(c(InvBySpecies$ReproInv, InvBySpecies$GrowthInv)),
+  plot(InvByAge$age, InvByAge$RI_M, type = "b", lwd = 1, pch = as.character(InvByAge$age), cex = 1, col = cols, ylim = range(c(InvBySpecies$ReproInv, InvBySpecies$GrowthInv)),
     main = "Reproductive Investment", xlab = "Age (years)", ylab = "Reproductive Investment (mg)")
-  points(InvByAge$age, InvByAge$RI_L, pch = 2, cex = 2, col = cols)
-  points(InvByAge$age, InvByAge$RI_U, pch = 6, cex = 2, col = cols)
-  points(InvBySpecies$age, InvBySpecies$ReproInv, pch = "o", cex = 1.5, col = "grey")
+  points(InvByAge$age, InvByAge$RI_L, pch = 2, cex = 1, col = cols)
+  points(InvByAge$age, InvByAge$RI_U, pch = 6, cex = 1, col = cols)
+  points(InvBySpecies$age, InvBySpecies$ReproInv, pch = "o", cex = 1, col = "grey")
 
 
-  plot(InvByAge$age, InvByAge$RA_M, type = "b", lwd = 3, pch = as.character(InvByAge$age), cex = 1.5, col = cols, ylim = range(InvBySpecies$RA), main = "Reproductive Allocation",
+  plot(InvByAge$age, InvByAge$RA_M, type = "b", lwd = 1, pch = as.character(InvByAge$age), cex = 1, col = cols, ylim = range(InvBySpecies$RA), main = "Reproductive Allocation",
     xlab = "Age (years)", ylab = "Reproductive Allocation")
-  points(InvByAge$age, InvByAge$RA_L, pch = 2, cex = 2, col = cols)
-  points(InvByAge$age, InvByAge$RA_U, pch = 6, cex = 2, col = cols)
-  points(InvBySpecies$age, InvBySpecies$RA, pch = "o", cex = 1.5, col = "grey")
+  points(InvByAge$age, InvByAge$RA_L, pch = 2, cex = 1, col = cols)
+  points(InvByAge$age, InvByAge$RA_U, pch = 6, cex = 1, col = cols)
+  points(InvBySpecies$age, InvBySpecies$RA, pch = "o", cex = 1, col = "grey")
 }
 
 plot_ReproductionAllocation_comparison_age <- function(ReproductionAllocation_all) {
@@ -73,10 +73,10 @@ plot_ReproductionAllocation_comparison_weight <- function(ReproductionAllocation
 
 plot_species_ReproductionAllocation_weight_diam_panel <- function(Data) {
     cols <- col.table()[Data$species]
-    par(mfrow = c(1, 3), cex.main = 2, cex.lab = 1.5)
-    plot(Data$FinalBasalDiamAv, Data$RA, type = "p", col = cols, xlab = "Diameter, year 2013", ylab = "RA", bty = "L", main = "Diameter", cex = 1.5)
+    par(mfrow = c(1, 2), cex.main = 1, cex.lab = 1)
+    plot(Data$FinalBasalDiamAv, Data$RA, type = "p", col = cols, xlab = "Diameter, year 2013", ylab = "RA", bty = "L", main = "Diameter", cex = 1)
 
-    plot(Data$FinalWeight, Data$RA, type = "p", col = cols, xlab = "Weight, year 2013", ylab = "RA", bty = "L", main = "Weight", cex = 1.5)
+    plot(Data$FinalWeight, Data$RA, type = "p", col = cols, xlab = "Weight, year 2013", ylab = "RA", bty = "L", main = "Weight", cex = 1)
 }
 
 print_xtable_for_species <- function(thisSpecies, data, file){

@@ -287,393 +287,624 @@ An example of the graph for CEOR species is presented in Figure 1.1.
 \newpage
 \footnotesize
 
+<<tablepreload1, echo=FALSE>>=
+print_table <- function(x, caption, label=NULL){
+  if(!is.null(x) && nrow(x) > 0)
+ 	  print(xtable(x,caption=caption, label=label,  type="latex"),
+               include.rownames=FALSE, hline.after=c(0,nrow(x)), caption.placement="top")
+}
+@
+
 
 
 \clearpage
 \newpage
+
 \section{BAER}
-\begin{multicols}{2}
-\includegraphics[width=3in]{images/BAER.png}
-\vfill
-\columnbreak
-\input{tables/BAER.tex}
-\end{multicols}
 
+\includegraphics[height=6in]{images/BAER.png}
+<<results='asis', echo=FALSE>>=
+ print_table(BAER_PartsSummary$AvWeightPerUnit,
+ caption="BAER: Average weight of parts")
+@
+
+<<results='asis', echo=FALSE>>=
+ print_table(BAER_PartsSummary$AvCountsPerMM,
+ caption="BAER: Average density of parts for per mm")
+@
+
+<<results='asis', echo=FALSE>>=
+ print_table(BAER_PartsSummary$RegressionTable,
+ caption="BAER: Coefficients of regressions used to estimate weights for some parts")
+@
 
 
 \clearpage
 \newpage
+
 \section{BOLE}
-\begin{multicols}{2}
-\includegraphics[width=3in]{images/BOLE.png}
-\vfill
-\columnbreak
-\input{tables/BOLE.tex}
-\end{multicols}
+
+\includegraphics[height=6in]{images/BOLE.png}
+<<results='asis', echo=FALSE>>=
+ print_table(BOLE_PartsSummary$AvWeightPerUnit,
+ caption="BOLE: Average weight of parts")
+
+ print_table(BOLE_PartsSummary$AvCountsPerMM,
+ caption="BOLE: Average density of parts for per mm")
+
+ print_table(BOLE_PartsSummary$RegressionTable,
+ caption="BOLE: Coefficients of regressions used to estimate weights for some parts")
+@
 
 
 \clearpage
 \newpage
-
-
 
 \section{COER}
-\begin{multicols}{2}
-\includegraphics[width=2.7in]{images/COER.png}
-\vfill
-\columnbreak
-\input{tables/COER.tex}
-\end{multicols}
+
+\includegraphics[height=6in]{images/COER.png}
+<<results='asis', echo=FALSE>>=
+ print_table(COER_PartsSummary$AvWeightPerUnit,
+ caption="COER: Average weight of parts")
+
+ print_table(COER_PartsSummary$AvCountsPerMM,
+ caption="COER: Average density of parts for per mm")
+
+ print_table(COER_PartsSummary$RegressionTable,
+ caption="COER: Coefficients of regressions used to estimate weights for some parts")
+@
+
 
 \clearpage
 \newpage
-
 
 \section{EPMI}
-\begin{multicols}{2}
-\includegraphics[width=2.5in]{images/EPMI.png}
-\vfill
-\columnbreak
-\input{tables/EPMI.tex}
-\end{multicols}
+
+\includegraphics[height=6in]{images/EPMI.png}
+<<results='asis', echo=FALSE>>=
+ print_table(EPMI_PartsSummary$AvWeightPerUnit,
+ caption="EPMI: Average weight of parts")
+
+<<results='asis', echo=FALSE>>=
+ print_table(EPMI_PartsSummary$AvCountsPerMM,
+ caption="EPMI: Average density of parts for per mm")
+
+<<results='asis', echo=FALSE>>=
+ print_table(EPMI_PartsSummary$RegressionTable,
+ caption="EPMI: Coefficients of regressions used to estimate weights for some parts")
+@
+
 
 \clearpage
 \newpage
 
-
 \section{GRBU}
-\begin{multicols}{2}
-\includegraphics[width=3in]{images/GRBU.png}
-\vfill
-\columnbreak
 
-\input{tables/GRBU.tex}\\
+\includegraphics[height=6in]{images/GRBU.png}
+<<results='asis', echo=FALSE>>=
+ print_table(GRBU_PartsSummary$AvWeightPerUnit,
+ caption="GRBU: Average weight of parts")
 
-\end{multicols}
+<<results='asis', echo=FALSE>>=
+ print_table(GRBU_PartsSummary$AvCountsPerMM,
+ caption="GRBU: Average density of parts for per mm")
+
+<<results='asis', echo=FALSE>>=
+ print_table(GRBU_PartsSummary$RegressionTable,
+ caption="GRBU: Coefficients of regressions used to estimate weights for some parts")
+@
+
 
 \clearpage
 \newpage
 
 \section{GRSP}
-\begin{multicols}{2}
-\includegraphics[width=3in]{images/GRSP.png}
-\vfill
-\columnbreak
 
-\input{tables/GRSP.tex}
+\includegraphics[height=6in]{images/GRSP.png}
+<<results='asis', echo=FALSE>>=
+ print_table(GRSP_PartsSummary$AvWeightPerUnit,
+ caption="GRSP: Average weight of parts")
 
-\end{multicols}
+<<results='asis', echo=FALSE>>=
+ print_table(GRSP_PartsSummary$AvCountsPerMM,
+ caption="GRSP: Average density of parts for per mm")
 
-
+<<results='asis', echo=FALSE>>=
+ print_table(GRSP_PartsSummary$RegressionTable,
+ caption="GRSP: Coefficients of regressions used to estimate weights for some parts")
+@
 
 
 \clearpage
 \newpage
+
 \section{HATE}
-\begin{multicols}{2}
-\includegraphics[width=3in]{images/HATE.png}
-\vfill
-\columnbreak
-\input{tables/HATE.tex}
 
-\end{multicols}
+\includegraphics[height=6in]{images/HATE.png}
+<<results='asis', echo=FALSE>>=
+ print_table(HATE_PartsSummary$AvWeightPerUnit,
+ caption="HATE: Average weight of parts")
+
+<<results='asis', echo=FALSE>>=
+ print_table(HATE_PartsSummary$AvCountsPerMM,
+ caption="HATE: Average density of parts for per mm")
+
+<<results='asis', echo=FALSE>>=
+ print_table(HATE_PartsSummary$RegressionTable,
+ caption="HATE: Coefficients of regressions used to estimate weights for some parts")
+@
+
 
 \clearpage
 \newpage
-
-
 
 \section{HEPU}
-\begin{multicols}{2}
-\includegraphics[width=3in]{images/HEPU.png}
-\vfill
-\columnbreak
-\input{tables/HEPU.tex}
-\end{multicols}
+
+\includegraphics[height=6in]{images/HEPU.png}
+<<results='asis', echo=FALSE>>=
+ print_table(HEPU_PartsSummary$AvWeightPerUnit,
+ caption="HEPU: Average weight of parts")
+
+<<results='asis', echo=FALSE>>=
+ print_table(HEPU_PartsSummary$AvCountsPerMM,
+ caption="HEPU: Average density of parts for per mm")
+
+<<results='asis', echo=FALSE>>=
+ print_table(HEPU_PartsSummary$RegressionTable,
+ caption="HEPU: Coefficients of regressions used to estimate weights for some parts")
+@
+
 
 \clearpage
 \newpage
 
 \section{LEES}
-\begin{multicols}{2}
-\includegraphics[width=3in]{images/LEES.png}
-\vfill
-\columnbreak
-%%%%
-\input{tables/LEES.tex}
-%%%%%
-\\
-\end{multicols}
+
+\includegraphics[height=6in]{images/LEES.png}
+<<results='asis', echo=FALSE>>=
+ print_table(LEES_PartsSummary$AvWeightPerUnit,
+ caption="LEES: Average weight of parts")
+
+<<results='asis', echo=FALSE>>=
+ print_table(LEES_PartsSummary$AvCountsPerMM,
+ caption="LEES: Average density of parts for per mm")
+
+<<results='asis', echo=FALSE>>=
+ print_table(LEES_PartsSummary$RegressionTable,
+ caption="LEES: Coefficients of regressions used to estimate weights for some parts")
+@
+
+
 \clearpage
 \newpage
-
 
 \section{PELA}
-\begin{multicols}{2}
-\includegraphics[width=2.8in]{images/PELA.png}
-\vfill
-\columnbreak
-\input{tables/PELA.tex}
-\end{multicols}
+
+\includegraphics[height=6in]{images/PELA.png}
+<<results='asis', echo=FALSE>>=
+ print_table(PELA_PartsSummary$AvWeightPerUnit,
+ caption="PELA: Average weight of parts")
+
+<<results='asis', echo=FALSE>>=
+ print_table(PELA_PartsSummary$AvCountsPerMM,
+ caption="PELA: Average density of parts for per mm")
+
+<<results='asis', echo=FALSE>>=
+ print_table(PELA_PartsSummary$RegressionTable,
+ caption="PELA: Coefficients of regressions used to estimate weights for some parts")
+@
 
 
 
 \clearpage
 \newpage
+
 \section{PEPU}
-\begin{multicols}{2}
-\includegraphics[width=2.7in]{images/PEPU.png}
-\vfill
-\columnbreak
-\input{tables/PEPU.tex}
-\end{multicols}
+
+\includegraphics[height=6in]{images/PEPU.png}
+<<results='asis', echo=FALSE>>=
+ print_table(PEPU_PartsSummary$AvWeightPerUnit,
+ caption="PEPU: Average weight of parts")
+
+<<results='asis', echo=FALSE>>=
+ print_table(PEPU_PartsSummary$AvCountsPerMM,
+ caption="PEPU: Average density of parts for per mm")
+
+<<results='asis', echo=FALSE>>=
+ print_table(PEPU_PartsSummary$RegressionTable,
+ caption="PEPU: Coefficients of regressions used to estimate weights for some parts")
+@
+
+
+
 \clearpage
 \newpage
 
-
-\clearpage
-\newpage
 \section{PHPH}
-\begin{multicols}{2}
-\includegraphics[width=3in]{images/PHPH.png}
-\vfill
-\columnbreak
-\input{tables/PHPH.tex}
-\end{multicols}
+
+\includegraphics[height=6in]{images/PHPH.png}
+<<results='asis', echo=FALSE>>=
+ print_table(PHPH_PartsSummary$AvWeightPerUnit,
+ caption="PHPH: Average weight of parts")
+
+<<results='asis', echo=FALSE>>=
+ print_table(PHPH_PartsSummary$AvCountsPerMM,
+ caption="PHPH: Average density of parts for per mm")
+
+<<results='asis', echo=FALSE>>=
+ print_table(PHPH_PartsSummary$RegressionTable,
+ caption="PHPH: Coefficients of regressions used to estimate weights for some parts")
+@
 
 
 
 \clearpage
 \newpage
+
 \section{PILI}
-\begin{multicols}{2}
-\includegraphics[width=2.7in]{images/PILI.png}
-\vfill
-\columnbreak
-\input{tables/PILI.tex}
-\end{multicols}
 
+\includegraphics[height=6in]{images/PILI.png}
+<<results='asis', echo=FALSE>>=
+ print_table(PILI_PartsSummary$AvWeightPerUnit,
+ caption="PILI: Average weight of parts")
 
+<<results='asis', echo=FALSE>>=
+ print_table(PILI_PartsSummary$AvCountsPerMM,
+ caption="PILI: Average density of parts for per mm")
+
+<<results='asis', echo=FALSE>>=
+ print_table(PILI_PartsSummary$RegressionTable,
+ caption="PILI: Coefficients of regressions used to estimate weights for some parts")
+@
 
 
 
 \clearpage
 \newpage
+
 \section{PUTU}
-\begin{multicols}{2}
-\includegraphics[width=2.5in]{images/PUTU.png}
-\vfill
-\columnbreak
-\input{tables/PUTU.tex}
-\end{multicols}
+
+\includegraphics[height=6in]{images/PUTU.png}
+<<results='asis', echo=FALSE>>=
+ print_table(PUTU_PartsSummary$AvWeightPerUnit,
+ caption="PUTU: Average weight of parts")
+
+<<results='asis', echo=FALSE>>=
+ print_table(PUTU_PartsSummary$AvCountsPerMM,
+ caption="PUTU: Average density of parts for per mm")
+
+<<results='asis', echo=FALSE>>=
+ print_table(PUTU_PartsSummary$RegressionTable,
+ caption="PUTU: Coefficients of regressions used to estimate weights for some parts")
+@
 
 
-
-
-\chapter{Additional preliminary calculations}
-
-\section{Average count/length values}
-
-
-\begin{figure}[h!]
-\begin{center}
-\input{tables/AvCountsPerMM.tex}
-\end{center}
-\caption{Table summarising the average number of elements per mm. To be used for calculations of mass based on the length for conversion to counts.}
-\end{figure}
-
+% \chapter{Additional preliminary calculations}
 
 % TODO: Include these plots
 % \section{Regression Fits and Coefficients}
 % \subsection*{GRBU}
 % \begin{center}
-% \includegraphics[width=2.7in]{figures/GRBU_fruit_large_immature.pdf}
-% \includegraphics[width=2.7in]{figures/GRBU_seed_pod.pdf}
+% \includegraphics[width=2.7in]{figure/GRBU_fruit_large_immature.pdf}
+% \includegraphics[width=2.7in]{figure/GRBU_seed_pod.pdf}
 % \end{center}
 
 % \subsection{GRSP}
 % \begin{center}
-% \includegraphics[width=2.7in]{figures/GRSP_fruit_large_immature.pdf}
-% \includegraphics[width=2.7in]{figures/GRSP_seed_pod.pdf}
+% \includegraphics[width=2.7in]{figure/GRSP_fruit_large_immature.pdf}
+% \includegraphics[width=2.7in]{figure/GRSP_seed_pod.pdf}
 % \end{center}
 
 % \subsection{PELA}
 % \begin{center}
-% \includegraphics[width=2.7in]{figures/PELA_fruit_large_immature.pdf}
-% \includegraphics[width=2.7in]{figures/PELA_seed_pod.pdf}\\
-% \includegraphics[width=2.7in]{figures/PELA_seed.pdf}
+% \includegraphics[width=2.7in]{figure/PELA_fruit_large_immature.pdf}
+% \includegraphics[width=2.7in]{figure/PELA_seed_pod.pdf}\\
+% \includegraphics[width=2.7in]{figure/PELA_seed.pdf}
 % \end{center}
 
 % \subsection{BAER}
 % \begin{center}
-% \includegraphics[width=2.7in]{figures/BAER_cone_young.pdf}
-% \includegraphics[width=2.7in]{figures/BAER_cone_green.pdf}\\
-% \includegraphics[width=2.7in]{figures/BAER_cone_brown_no_expanded_follicles.pdf}
-% \includegraphics[width=2.7in]{figures/BAER_cone_brown.pdf}\\
-% \includegraphics[width=2.7in]{figures/BAER_cone_aborted.pdf}
-% \includegraphics[width=2.7in]{figures/BAER_cone_base_green.pdf}\\
-% \includegraphics[width=2.7in]{figures/BAER_cone_base_brown.pdf}
+% \includegraphics[width=2.7in]{figure/BAER_cone_young.pdf}
+% \includegraphics[width=2.7in]{figure/BAER_cone_green.pdf}\\
+% \includegraphics[width=2.7in]{figure/BAER_cone_brown_no_expanded_follicles.pdf}
+% \includegraphics[width=2.7in]{figure/BAER_cone_brown.pdf}\\
+% \includegraphics[width=2.7in]{figure/BAER_cone_aborted.pdf}
+% \includegraphics[width=2.7in]{figure/BAER_cone_base_green.pdf}\\
+% \includegraphics[width=2.7in]{figure/BAER_cone_base_brown.pdf}
 % \end{center}
 
 % \subsection{PEPU}
 % \begin{center}
-% \includegraphics[width=2.7in]{figures/PEPU_cone_green.pdf}
-% \includegraphics[width=2.7in]{figures/PEPU_cone_brown.pdf}\\
-% \includegraphics[width=2.7in]{figures/PEPU_cone_aborted.pdf}
+% \includegraphics[width=2.7in]{figure/PEPU_cone_green.pdf}
+% \includegraphics[width=2.7in]{figure/PEPU_cone_brown.pdf}\\
+% \includegraphics[width=2.7in]{figure/PEPU_cone_aborted.pdf}
 % \end{center}
 
 
-\newpage
-\subsection{Summary table for regression}
-\begin{figure}[h!]
-\begin{center}
-\input{tables/RegressionTable.tex}
-\end{center}
-\caption{Table summarising the equations used to determine weights of individual plant parts by using their size.}
-\end{figure}
-
-\chapter{Preliminary results}
-\section{Reproductive allocation results}
-\subsection{Overview}
-\includegraphics[width=1\linewidth]{figures/RA_comparison_age.pdf}
-\includegraphics[width=1\linewidth]{figures/RA_comparison_diam.pdf}
-\includegraphics[width=1\linewidth]{figures/RA_comparison_weight.pdf}
-\clearpage
-
-TODO:Add this material back in
-
-\newpage
-\section{Individual species}
-\subsection{BAER}
-\includegraphics[width=1\linewidth]{figures/RA_age_BAER.pdf}
-\includegraphics[width=1\linewidth]{figures/RA_weight_diam_BAER.pdf}
-
-\clearpage
-\newpage
-\subsection{BOLE}
-\includegraphics[width=1\linewidth]{figures/RA_age_BOLE.pdf}
-\includegraphics[width=1\linewidth]{figures/RA_weight_diam_BOLE.pdf}
-
-\clearpage
-\newpage
-\subsection{COER}
-\includegraphics[width=1\linewidth]{figures/RA_age_COER.pdf}
-\includegraphics[width=1\linewidth]{figures/RA_weight_diam_COER.pdf}
-
-\clearpage
-\newpage
-\subsection{EPMI}
-\includegraphics[width=1\linewidth]{figures/RA_age_EPMI.pdf}
-\includegraphics[width=1\linewidth]{figures/RA_weight_diam_EPMI.pdf}
-
-\clearpage
-\newpage
-\subsection{GRBU}
-\includegraphics[width=1\linewidth]{figures/RA_age_GRBU.pdf}
-\includegraphics[width=1\linewidth]{figures/RA_weight_diam_GRBU.pdf}
-
-\clearpage
-\newpage
-\subsection{GRSP}
-\includegraphics[width=1\linewidth]{figures/RA_age_GRSP.pdf}
-\includegraphics[width=1\linewidth]{figures/RA_weight_diam_GRSP.pdf}
-
-\clearpage
-\newpage
-\subsection{HATE}
-\includegraphics[width=1\linewidth]{figures/RA_age_HATE.pdf}
-\includegraphics[width=1\linewidth]{figures/RA_weight_diam_HATE.pdf}
-
-\clearpage
-\newpage
-\subsection{HEPU}
-\includegraphics[width=1\linewidth]{figures/RA_age_HEPU.pdf}
-\includegraphics[width=1\linewidth]{figures/RA_weight_diam_HEPU.pdf}
-
-\clearpage
-\newpage
-\subsection{LEES}
-\includegraphics[width=1\linewidth]{figures/RA_age_LEES.pdf}
-\includegraphics[width=1\linewidth]{figures/RA_weight_diam_LEES.pdf}
-
-\clearpage
-\newpage
-\subsection{PELA}
-\includegraphics[width=1\linewidth]{figures/RA_age_PELA.pdf}
-\includegraphics[width=1\linewidth]{figures/RA_weight_diam_PELA.pdf}
-
-\clearpage
-\newpage
-\subsection{PEPU}
-\includegraphics[width=1\linewidth]{figures/RA_age_PEPU.pdf}
-\includegraphics[width=1\linewidth]{figures/RA_weight_diam_PEPU.pdf}
-
-\clearpage
-\newpage
-\subsection{PHPH}
-\includegraphics[width=1\linewidth]{figures/RA_age_PHPH.pdf}
-\includegraphics[width=1\linewidth]{figures/RA_weight_diam_PHPH.pdf}
-
-\clearpage
-\newpage
-\subsection{PILI}
-\includegraphics[width=1\linewidth]{figures/RA_age_PILI.pdf}
-\includegraphics[width=1\linewidth]{figures/RA_weight_diam_PILI.pdf}
-
-\clearpage
-\newpage
-\subsection{PUTU}
-\includegraphics[width=1\linewidth]{figures/RA_age_PUTU.pdf}
-\includegraphics[width=1\linewidth]{figures/RA_weight_diam_PUTU.pdf}
-
 % \newpage
-% \section{Investment in Accessory Tissues}
+% \subsection{Summary table for regression}
+% \begin{figure}[h!]
+% \begin{center}
+% \input{tables/RegressionTable.tex}
+% \end{center}
+% \caption{Table summarising the equations used to determine weights of individual plant parts by using their size.}
+% \end{figure}
+
+% \chapter{Preliminary results}
+% \section{Reproductive allocation results}
 % \subsection{Overview}
-% \includegraphics[width=1\linewidth]{figures/IAT_Comparison.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_comparison_age.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_comparison_diam.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_comparison_weight.pdf}
+% \clearpage
+ \clearpage
+ \newpage
+
+ \subsection{ BAER }
+
+<<results='asis', echo=FALSE>>=
+	plot_species_ReproductionAllocation_age_panel(BAER_ReproductionAllocation)
+	plot_species_ReproductionAllocation_weight_diam_panel(BAER_ReproductionAllocation)
+@
+
+ \clearpage
+ \newpage
+
+ \subsection{ BOLE }
+
+<<results='asis', echo=FALSE>>=
+	plot_species_ReproductionAllocation_age_panel(BOLE_ReproductionAllocation)
+	plot_species_ReproductionAllocation_weight_diam_panel(BOLE_ReproductionAllocation)
+@
+
+ \clearpage
+ \newpage
+
+ \subsection{ COER }
+
+<<results='asis', echo=FALSE>>=
+	plot_species_ReproductionAllocation_age_panel(COER_ReproductionAllocation)
+	plot_species_ReproductionAllocation_weight_diam_panel(COER_ReproductionAllocation)
+@
+
+ \clearpage
+ \newpage
+
+ \subsection{ EPMI }
+
+<<results='asis', echo=FALSE>>=
+	plot_species_ReproductionAllocation_age_panel(EPMI_ReproductionAllocation)
+	plot_species_ReproductionAllocation_weight_diam_panel(EPMI_ReproductionAllocation)
+@
+
+ \clearpage
+ \newpage
+
+ \subsection{ GRBU }
+
+<<results='asis', echo=FALSE>>=
+	plot_species_ReproductionAllocation_age_panel(GRBU_ReproductionAllocation)
+	plot_species_ReproductionAllocation_weight_diam_panel(GRBU_ReproductionAllocation)
+@
+
+ \clearpage
+ \newpage
+
+ \subsection{ GRSP }
+
+<<results='asis', echo=FALSE>>=
+	plot_species_ReproductionAllocation_age_panel(GRSP_ReproductionAllocation)
+	plot_species_ReproductionAllocation_weight_diam_panel(GRSP_ReproductionAllocation)
+@
+
+ \clearpage
+ \newpage
+
+ \subsection{ HATE }
+
+<<results='asis', echo=FALSE>>=
+	plot_species_ReproductionAllocation_age_panel(HATE_ReproductionAllocation)
+	plot_species_ReproductionAllocation_weight_diam_panel(HATE_ReproductionAllocation)
+@
+
+ \clearpage
+ \newpage
+
+ \subsection{ HEPU }
+
+<<results='asis', echo=FALSE>>=
+	plot_species_ReproductionAllocation_age_panel(HEPU_ReproductionAllocation)
+	plot_species_ReproductionAllocation_weight_diam_panel(HEPU_ReproductionAllocation)
+@
+
+ \clearpage
+ \newpage
+
+ \subsection{ LEES }
+
+<<results='asis', echo=FALSE>>=
+	plot_species_ReproductionAllocation_age_panel(LEES_ReproductionAllocation)
+	plot_species_ReproductionAllocation_weight_diam_panel(LEES_ReproductionAllocation)
+@
+
+ \clearpage
+ \newpage
+
+ \subsection{ PELA }
+
+<<results='asis', echo=FALSE>>=
+	plot_species_ReproductionAllocation_age_panel(PELA_ReproductionAllocation)
+	plot_species_ReproductionAllocation_weight_diam_panel(PELA_ReproductionAllocation)
+@
+
+ \clearpage
+ \newpage
+
+ \subsection{ PEPU }
+
+<<results='asis', echo=FALSE>>=
+	plot_species_ReproductionAllocation_age_panel(PEPU_ReproductionAllocation)
+	plot_species_ReproductionAllocation_weight_diam_panel(PEPU_ReproductionAllocation)
+@
+
+ \clearpage
+ \newpage
+
+ \subsection{ PHPH }
+
+<<results='asis', echo=FALSE>>=
+	plot_species_ReproductionAllocation_age_panel(PHPH_ReproductionAllocation)
+	plot_species_ReproductionAllocation_weight_diam_panel(PHPH_ReproductionAllocation)
+@
+
+ \clearpage
+ \newpage
+
+ \subsection{ PILI }
+
+<<results='asis', echo=FALSE>>=
+	plot_species_ReproductionAllocation_age_panel(PILI_ReproductionAllocation)
+	plot_species_ReproductionAllocation_weight_diam_panel(PILI_ReproductionAllocation)
+@
+
+ \clearpage
+ \newpage
+
+ \subsection{ PUTU }
+
+<<results='asis', echo=FALSE>>=
+	plot_species_ReproductionAllocation_age_panel(PUTU_ReproductionAllocation)
+	plot_species_ReproductionAllocation_weight_diam_panel(PUTU_ReproductionAllocation)
+@
+
+
+
 % \clearpage
 % \newpage
-% \section{Individual species}
-% \subsection{BAER}
-% \includegraphics[width=1\linewidth]{figures/IAT_BAER.pdf}
-
 % \subsection{BOLE}
-% \includegraphics[width=1\linewidth]{figures/IAT_BOLE.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_age_BOLE.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_weight_diam_BOLE.pdf}
 
+% \clearpage
+% \newpage
 % \subsection{COER}
-% \includegraphics[width=1\linewidth]{figures/IAT_COER.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_age_COER.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_weight_diam_COER.pdf}
 
+% \clearpage
+% \newpage
 % \subsection{EPMI}
-% \includegraphics[width=1\linewidth]{figures/IAT_EPMI.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_age_EPMI.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_weight_diam_EPMI.pdf}
 
+% \clearpage
+% \newpage
 % \subsection{GRBU}
-% \includegraphics[width=1\linewidth]{figures/IAT_GRBU.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_age_GRBU.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_weight_diam_GRBU.pdf}
 
+% \clearpage
+% \newpage
 % \subsection{GRSP}
-% \includegraphics[width=1\linewidth]{figures/IAT_GRSP.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_age_GRSP.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_weight_diam_GRSP.pdf}
 
+% \clearpage
+% \newpage
 % \subsection{HATE}
-% \includegraphics[width=1\linewidth]{figures/IAT_HATE.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_age_HATE.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_weight_diam_HATE.pdf}
 
+% \clearpage
+% \newpage
 % \subsection{HEPU}
-% \includegraphics[width=1\linewidth]{figures/IAT_HEPU.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_age_HEPU.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_weight_diam_HEPU.pdf}
 
+% \clearpage
+% \newpage
 % \subsection{LEES}
-% \includegraphics[width=1\linewidth]{figures/IAT_LEES.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_age_LEES.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_weight_diam_LEES.pdf}
 
+% \clearpage
+% \newpage
 % \subsection{PELA}
-% \includegraphics[width=1\linewidth]{figures/IAT_PELA.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_age_PELA.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_weight_diam_PELA.pdf}
 
+% \clearpage
+% \newpage
 % \subsection{PEPU}
-% \includegraphics[width=1\linewidth]{figures/IAT_PEPU.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_age_PEPU.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_weight_diam_PEPU.pdf}
 
+% \clearpage
+% \newpage
 % \subsection{PHPH}
-% \includegraphics[width=1\linewidth]{figures/IAT_PHPH.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_age_PHPH.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_weight_diam_PHPH.pdf}
 
+% \clearpage
+% \newpage
 % \subsection{PILI}
-% \includegraphics[width=1\linewidth]{figures/IAT_PILI.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_age_PILI.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_weight_diam_PILI.pdf}
 
+% \clearpage
+% \newpage
 % \subsection{PUTU}
-% \includegraphics[width=1\linewidth]{figures/IAT_PUTU.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_age_PUTU.pdf}
+% \includegraphics[width=1\linewidth]{figure/RA_weight_diam_PUTU.pdf}
+
+% % \newpage
+% % \section{Investment in Accessory Tissues}
+% % \subsection{Overview}
+% % \includegraphics[width=1\linewidth]{figure/IAT_Comparison.pdf}
+% % \clearpage
+% % \newpage
+% % \section{Individual species}
+% % \subsection{BAER}
+% % \includegraphics[width=1\linewidth]{figure/IAT_BAER.pdf}
+
+% % \subsection{BOLE}
+% % \includegraphics[width=1\linewidth]{figure/IAT_BOLE.pdf}
+
+% % \subsection{COER}
+% % \includegraphics[width=1\linewidth]{figure/IAT_COER.pdf}
+
+% % \subsection{EPMI}
+% % \includegraphics[width=1\linewidth]{figure/IAT_EPMI.pdf}
+
+% % \subsection{GRBU}
+% % \includegraphics[width=1\linewidth]{figure/IAT_GRBU.pdf}
+
+% % \subsection{GRSP}
+% % \includegraphics[width=1\linewidth]{figure/IAT_GRSP.pdf}
+
+% % \subsection{HATE}
+% % \includegraphics[width=1\linewidth]{figure/IAT_HATE.pdf}
+
+% % \subsection{HEPU}
+% % \includegraphics[width=1\linewidth]{figure/IAT_HEPU.pdf}
+
+% % \subsection{LEES}
+% % \includegraphics[width=1\linewidth]{figure/IAT_LEES.pdf}
+
+% % \subsection{PELA}
+% % \includegraphics[width=1\linewidth]{figure/IAT_PELA.pdf}
+
+% % \subsection{PEPU}
+% % \includegraphics[width=1\linewidth]{figure/IAT_PEPU.pdf}
+
+% % \subsection{PHPH}
+% % \includegraphics[width=1\linewidth]{figure/IAT_PHPH.pdf}
+
+% % \subsection{PILI}
+% % \includegraphics[width=1\linewidth]{figure/IAT_PILI.pdf}
+
+% % \subsection{PUTU}
+% % \includegraphics[width=1\linewidth]{figure/IAT_PUTU.pdf}
 
 
 

@@ -23,4 +23,4 @@ m$install_packages()
 m$make()
 ````
 
-Figures and tables for the document are saved with the directories `docs/tables` and `docs\figures`.
+Figures and tables for the document are saved with the directories `tables` and `figures`.

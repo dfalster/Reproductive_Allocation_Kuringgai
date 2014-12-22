@@ -2,8 +2,9 @@
 # edit the file there (or the files that it includes).
 
 targets:
-  species_data:
+  CarbonInvestments.tex:
     depends:
+      - ReproductionAllocation_all
       - BAER_IndividualsList
       - BAER_FlowerPartsData
       - BAER_ReproductionData
@@ -14,7 +15,6 @@ targets:
       - BAER_Investment
       - BAER_AccessoryCosts
       - BAER_ReproductionAllocation
-
       - BOLE_IndividualsList
       - BOLE_FlowerPartsData
       - BOLE_ReproductionData
@@ -25,7 +25,6 @@ targets:
       - BOLE_Investment
       - BOLE_AccessoryCosts
       - BOLE_ReproductionAllocation
-
       - COER_IndividualsList
       - COER_FlowerPartsData
       - COER_ReproductionData
@@ -36,7 +35,6 @@ targets:
       - COER_Investment
       - COER_AccessoryCosts
       - COER_ReproductionAllocation
-
       - EPMI_IndividualsList
       - EPMI_FlowerPartsData
       - EPMI_ReproductionData
@@ -47,7 +45,6 @@ targets:
       - EPMI_Investment
       - EPMI_AccessoryCosts
       - EPMI_ReproductionAllocation
-
       - GRBU_IndividualsList
       - GRBU_FlowerPartsData
       - GRBU_ReproductionData
@@ -58,7 +55,6 @@ targets:
       - GRBU_Investment
       - GRBU_AccessoryCosts
       - GRBU_ReproductionAllocation
-
       - GRSP_IndividualsList
       - GRSP_FlowerPartsData
       - GRSP_ReproductionData
@@ -69,7 +65,6 @@ targets:
       - GRSP_Investment
       - GRSP_AccessoryCosts
       - GRSP_ReproductionAllocation
-
       - HATE_IndividualsList
       - HATE_FlowerPartsData
       - HATE_ReproductionData
@@ -80,7 +75,6 @@ targets:
       - HATE_Investment
       - HATE_AccessoryCosts
       - HATE_ReproductionAllocation
-
       - HEPU_IndividualsList
       - HEPU_FlowerPartsData
       - HEPU_ReproductionData
@@ -91,7 +85,6 @@ targets:
       - HEPU_Investment
       - HEPU_AccessoryCosts
       - HEPU_ReproductionAllocation
-
       - LEES_IndividualsList
       - LEES_FlowerPartsData
       - LEES_ReproductionData
@@ -102,7 +95,6 @@ targets:
       - LEES_Investment
       - LEES_AccessoryCosts
       - LEES_ReproductionAllocation
-
       - PELA_IndividualsList
       - PELA_FlowerPartsData
       - PELA_ReproductionData
@@ -113,7 +105,6 @@ targets:
       - PELA_Investment
       - PELA_AccessoryCosts
       - PELA_ReproductionAllocation
-
       - PEPU_IndividualsList
       - PEPU_FlowerPartsData
       - PEPU_ReproductionData
@@ -124,7 +115,6 @@ targets:
       - PEPU_Investment
       - PEPU_AccessoryCosts
       - PEPU_ReproductionAllocation
-
       - PHPH_IndividualsList
       - PHPH_FlowerPartsData
       - PHPH_ReproductionData
@@ -135,7 +125,6 @@ targets:
       - PHPH_Investment
       - PHPH_AccessoryCosts
       - PHPH_ReproductionAllocation
-
       - PILI_IndividualsList
       - PILI_FlowerPartsData
       - PILI_ReproductionData
@@ -146,7 +135,6 @@ targets:
       - PILI_Investment
       - PILI_AccessoryCosts
       - PILI_ReproductionAllocation
-
       - PUTU_IndividualsList
       - PUTU_FlowerPartsData
       - PUTU_ReproductionData
@@ -157,7 +145,7 @@ targets:
       - PUTU_Investment
       - PUTU_AccessoryCosts
       - PUTU_ReproductionAllocation
-
+    knitr: TRUE
 
   BAER_IndividualsList:
     command: filterToBAER(IndividualsList)
@@ -191,7 +179,6 @@ targets:
   BAER_ReproductionAllocation:
     command: >
       CalculateRAForBAER(BAER_Investment, BAER_HarvestData, BAER_GraphMaps, IndividualsList)
-
   BOLE_IndividualsList:
     command: filterToBOLE(IndividualsList)
 
@@ -224,7 +211,6 @@ targets:
   BOLE_ReproductionAllocation:
     command: >
       CalculateRAForBOLE(BOLE_Investment, BOLE_HarvestData, BOLE_GraphMaps, IndividualsList)
-
   COER_IndividualsList:
     command: filterToCOER(IndividualsList)
 
@@ -257,7 +243,6 @@ targets:
   COER_ReproductionAllocation:
     command: >
       CalculateRAForCOER(COER_Investment, COER_HarvestData, COER_GraphMaps, IndividualsList)
-
   EPMI_IndividualsList:
     command: filterToEPMI(IndividualsList)
 
@@ -290,7 +275,6 @@ targets:
   EPMI_ReproductionAllocation:
     command: >
       CalculateRAForEPMI(EPMI_Investment, EPMI_HarvestData, EPMI_GraphMaps, IndividualsList)
-
   GRBU_IndividualsList:
     command: filterToGRBU(IndividualsList)
 
@@ -323,7 +307,6 @@ targets:
   GRBU_ReproductionAllocation:
     command: >
       CalculateRAForGRBU(GRBU_Investment, GRBU_HarvestData, GRBU_GraphMaps, IndividualsList)
-
   GRSP_IndividualsList:
     command: filterToGRSP(IndividualsList)
 
@@ -356,7 +339,6 @@ targets:
   GRSP_ReproductionAllocation:
     command: >
       CalculateRAForGRSP(GRSP_Investment, GRSP_HarvestData, GRSP_GraphMaps, IndividualsList)
-
   HATE_IndividualsList:
     command: filterToHATE(IndividualsList)
 
@@ -389,7 +371,6 @@ targets:
   HATE_ReproductionAllocation:
     command: >
       CalculateRAForHATE(HATE_Investment, HATE_HarvestData, HATE_GraphMaps, IndividualsList)
-
   HEPU_IndividualsList:
     command: filterToHEPU(IndividualsList)
 
@@ -422,7 +403,6 @@ targets:
   HEPU_ReproductionAllocation:
     command: >
       CalculateRAForHEPU(HEPU_Investment, HEPU_HarvestData, HEPU_GraphMaps, IndividualsList)
-
   LEES_IndividualsList:
     command: filterToLEES(IndividualsList)
 
@@ -455,7 +435,6 @@ targets:
   LEES_ReproductionAllocation:
     command: >
       CalculateRAForLEES(LEES_Investment, LEES_HarvestData, LEES_GraphMaps, IndividualsList)
-
   PELA_IndividualsList:
     command: filterToPELA(IndividualsList)
 
@@ -488,7 +467,6 @@ targets:
   PELA_ReproductionAllocation:
     command: >
       CalculateRAForPELA(PELA_Investment, PELA_HarvestData, PELA_GraphMaps, IndividualsList)
-
   PEPU_IndividualsList:
     command: filterToPEPU(IndividualsList)
 
@@ -521,7 +499,6 @@ targets:
   PEPU_ReproductionAllocation:
     command: >
       CalculateRAForPEPU(PEPU_Investment, PEPU_HarvestData, PEPU_GraphMaps, IndividualsList)
-
   PHPH_IndividualsList:
     command: filterToPHPH(IndividualsList)
 
@@ -554,7 +531,6 @@ targets:
   PHPH_ReproductionAllocation:
     command: >
       CalculateRAForPHPH(PHPH_Investment, PHPH_HarvestData, PHPH_GraphMaps, IndividualsList)
-
   PILI_IndividualsList:
     command: filterToPILI(IndividualsList)
 
@@ -587,7 +563,6 @@ targets:
   PILI_ReproductionAllocation:
     command: >
       CalculateRAForPILI(PILI_Investment, PILI_HarvestData, PILI_GraphMaps, IndividualsList)
-
   PUTU_IndividualsList:
     command: filterToPUTU(IndividualsList)
 

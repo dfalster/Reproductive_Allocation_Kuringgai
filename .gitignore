@@ -6,9 +6,9 @@ output
 .DS_Store
 .maker
 
-docs/figures
-docs/tables
-docs/CarbonInvestments.pdf
+figure*
+CarbonInvestments.pdf
+CarbonInvestments.tex
 
 *.whisker
 ./bootstrap

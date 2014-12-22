@@ -11,14 +11,37 @@ sources:
 
 include:
   - maker_species_data.yml
-  - maker_species_figures_tables.yml
+
+plot_options:
+  tall:
+    width: 4
+    height: 8
+  extra_wide:
+    width: 15
+    height: 5
+  wide:
+    width: 8
+    height: 4
+  small_square:
+    width: 4
+    height: 4
+  med_square:
+    width: 6
+    height: 6
+  large_square:
+    width: 8
+    height: 8
 
 targets:
   all:
     depends:
-      - data
+      - CarbonInvestments.pdf
+
+  CarbonInvestments.pdf:
+    depends:
+      - "CarbonInvestments.Rnw"
       - figures
-      - tables
+    command: tex_2_pdf("CarbonInvestments.tex")
 
   data:
     depends:
@@ -27,7 +50,6 @@ targets:
       - ReproductionData
       - HarvestData
       - MultiplierTable
-
 
   # Data --------------------------------------
   IndividualsList:
@@ -54,3 +76,18 @@ targets:
   InvestmentCategories:
     command: read_csv("data/accessoryParts.csv")
 
+  figures:
+    depends:
+      - figure/RA_comparison_age.pdf
+      - figure/RA_comparison_diam.pdf
+      - figure/RA_comparison_weight.pdf
+
+  figure/RA_comparison_age.pdf:
+    command: plot_ReproductionAllocation_comparison_age(ReproductionAllocation_all)
+    plot: wide
+  figure/RA_comparison_diam.pdf:
+    command: plot_ReproductionAllocation_comparison_diam(ReproductionAllocation_all)
+    plot: wide
+  figure/RA_comparison_weight.pdf:
+    command: plot_ReproductionAllocation_comparison_weight(ReproductionAllocation_all)
+    plot: wide
