@@ -1,6 +1,6 @@
 InvestmentInAccessoryTissues<-function(individual)
 {
-  #individual="PUTU_904"
+  #individual="PEPU_401"
   species=str_sub(individual,1,4)
   
   #Read tree data
@@ -30,7 +30,7 @@ InvestmentInAccessoryTissues<-function(individual)
   PrepolinationAbortWeight=0
   if(length(PreP_A_parts)>0)
   {
-    PrepolinationAbortWeight=sum(Lost[(Lost$what%in%PreP_A_parts),]$weight)
+    PrepolinationAbortWeight=sum(as.numeric(Lost[(Lost$what%in%PreP_A_parts),]$weight))
   }
   ########################################################################*
   #Prepolination_success 
@@ -41,7 +41,7 @@ InvestmentInAccessoryTissues<-function(individual)
   PrepolinationSuccessWeight=0
   if(length(PreP_A_parts)>0)
   {
-    PrepolinationSuccessWeight=sum(Lost[(Lost$what%in%PreP_S_parts),]$weight)
+    PrepolinationSuccessWeight=sum(as.numeric(Lost[(Lost$what%in%PreP_S_parts),]$weight))
   }
   ########################################################################*
   #Postpollination_abort 
@@ -52,7 +52,7 @@ InvestmentInAccessoryTissues<-function(individual)
   PostpollinationAbortWeight=0
   if(length(PostP_A_parts)>0)
   {
-    PostpollinationAbortWeight=sum(Lost[(Lost$what%in%PostP_A_parts),]$weight)
+    PostpollinationAbortWeight=sum(as.numeric(Lost[(Lost$what%in%PostP_A_parts),]$weight))
   }
   
   ########################################################################*
@@ -64,7 +64,7 @@ InvestmentInAccessoryTissues<-function(individual)
   PackaginDispersalWeight=0
   if(length(PD_parts)>0)
   {
-    PackaginDispersalWeight=sum(Lost[(Lost$what%in%PD_parts),]$weight)
+    PackaginDispersalWeight=sum(as.numeric(Lost[(Lost$what%in%PD_parts),]$weight))
   }
   ########################################################################*
   #Propagule 
@@ -75,7 +75,7 @@ InvestmentInAccessoryTissues<-function(individual)
   PropaguleWeight=0
   if(length(PROP_parts)>0)
   {
-    PropaguleWeight=sum(Lost[(Lost$what%in%PROP_parts),]$weight)
+    PropaguleWeight=sum(as.numeric(Lost[(Lost$what%in%PROP_parts),]$weight))
   }
 TotWeight=PrepolinationAbortWeight+PrepolinationSuccessWeight+PostpollinationAbortWeight+PackaginDispersalWeight+PropaguleWeight;
 data.frame(individual=individual,PrePol_A=PrepolinationAbortWeight,PrePol_S=PrepolinationSuccessWeight,

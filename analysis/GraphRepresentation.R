@@ -497,6 +497,24 @@ w1=W1/sum(W1,W2)
 w2=W2/sum(W1,W2)
 HEPU.graph=set.edge.attribute(HEPU.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
 
+
+###############################
+#flower_petals, flower_calyx_aborting from bud_big
+##############################
+#which edges
+E1=AM["bud_big","flower_petals"]
+E2=AM["bud_big","flower_calyx_aborting"]
+
+#av. weights of the parts
+W1=AV_W("HEPU","flower_petals")
+W2=AV_W("HEPU","flower_calyx_aborting")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+HEPU.graph=set.edge.attribute(HEPU.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
+
+
+
 ###############################
 #calyx_fruit, fruit_young from finished_flower
 ##############################
@@ -511,6 +529,24 @@ W2=AV_W("HEPU","fruit_young")
 w1=W1/sum(W1,W2)
 w2=W2/sum(W1,W2)
 HEPU.graph=set.edge.attribute(HEPU.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
+
+
+###############################
+#calyx_fruit, fruit_young_aborting from finished_flower
+##############################
+#which edges
+E1=AM["finished_flower","calyx_fruit"]
+E2=AM["finished_flower","fruit_young_aborting"]
+
+#av. weights of the parts
+W1=AV_W("HEPU","calyx_fruit")
+W2=AV_W("HEPU","fruit_young_aborting")
+#
+w1=W1/sum(W1,W2)
+w2=W2/sum(W1,W2)
+HEPU.graph=set.edge.attribute(HEPU.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
+
+
 
 
 GraphMaps[["HEPU"]]=list(graph=HEPU.graph,Paths=Paths)
