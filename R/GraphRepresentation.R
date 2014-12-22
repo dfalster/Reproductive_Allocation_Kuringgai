@@ -407,43 +407,79 @@ make_HEPU_GraphMaps <- function(PartsSummary, MultiplierTable){
 
   AvWeightPerUnit <-  PartsSummary$AvWeightPerUnit
 
-  HEPU.graph <- graph.formula("bud_small" - "bud_big" - "flower_calyx" - "finished_flower" - "fruit_young" - "fruit_large_immature_01" - "fruit_mature", "bud_big" -
-    "flower_petals", "flower_calyx" - "fruit_aborted", "finished_flower" - "calyx_fruit", "bud_big" - "flower_calyx_aborting", "flower_calyx" - "finished_flower_aborting",
-    "finished_flower" - "fruit_young_aborting", "fruit_young" - "fruit_large_immature_aborting")
+  HEPU.graph <- graph.formula("bud_small" - "bud_big" - "flower_calyx" - "finished_flower" - "fruit_young" - "fruit_large_immature_01" - "fruit_mature", "bud_big" - "flower_petals", "flower_calyx" - "fruit_aborted", "finished_flower" - "calyx_fruit", "bud_big" - "flower_calyx_aborting", "flower_calyx" - "finished_flower_aborting", "finished_flower" - "fruit_young_aborting", "fruit_young" - "fruit_large_immature_aborting")
   from <- c("bud_small")
   to <- c("fruit_mature")
-  Paths <- data.frame(from = from, to = to)
-  # Set vertex colors
-  HEPU.graph <- set.vertex.attribute(HEPU.graph, name = "col", index = c(1:7, 9, 11:14), value = 3)
-  HEPU.graph <- set.vertex.attribute(HEPU.graph, name = "col", index = c(8, 10), value = 4)
-  # Set egde weights
-  HEPU.graph <- set.edge.attribute(HEPU.graph, name = "weight", value = 1)
-  # HEPU.graph=set.edge.attribute(HEPU.graph,name='weight',index=c(2,3,6,7),value=c(0.4433,0.5567,0.4658,0.5342))
+  Paths <- data.frame(from=from,to=to)
+  #Set vertex colors
+  HEPU.graph <- set.vertex.attribute(HEPU.graph,name="col",index=c(1:7,9,11:14),value=3)
+  HEPU.graph <- set.vertex.attribute(HEPU.graph,name="col",index=c(8,10),value=4)
+  #Set egde weights
+  HEPU.graph <- set.edge.attribute(HEPU.graph,name="weight",value=1)
 
-  AM <- get.adjacency(HEPU.graph, edges = T)
-  ## flower_petals, flower_calyx from bud_big which edges
+  AM <- get.adjacency(HEPU.graph,edges = T)
+  ###############################
+  #flower_petals, flower_calyx from bud_big
+  ##############################
+  #which edges
   E1 <- AM["bud_big", "flower_petals"]
   E2 <- AM["bud_big", "flower_calyx"]
 
-  # av. weights of the parts
+  #av. weights of the parts
   W1 <- AV_W("HEPU", "flower_petals", AvWeightPerUnit)
   W2 <- AV_W("HEPU", "flower_calyx", AvWeightPerUnit)
   #
   w1 <- W1/sum(W1, W2)
   w2 <- W2/sum(W1, W2)
-  HEPU.graph <- set.edge.attribute(HEPU.graph, name = "weight", index = c(E1, E2), value = c(w1, w2))
+  HEPU.graph <- set.edge.attribute(HEPU.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
 
-  ## calyx_fruit, fruit_young from finished_flower which edges
+
+  ###############################
+  #flower_petals, flower_calyx_aborting from bud_big
+  ##############################
+  #which edges
+  E1 <- AM["bud_big", "flower_petals"]
+  E2 <- AM["bud_big", "flower_calyx_aborting"]
+
+  #av. weights of the parts
+  W1 <- AV_W("HEPU", "flower_petals", AvWeightPerUnit)
+  W2 <- AV_W("HEPU", "flower_calyx_aborting", AvWeightPerUnit)
+  #
+  w1 <- W1/sum(W1, W2)
+  w2 <- W2/sum(W1, W2)
+  HEPU.graph <- set.edge.attribute(HEPU.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
+
+  ###############################
+  #calyx_fruit, fruit_young from finished_flower
+  ##############################
+  #which edges
   E1 <- AM["finished_flower", "calyx_fruit"]
   E2 <- AM["finished_flower", "fruit_young"]
 
-  # av. weights of the parts
+  #av. weights of the parts
   W1 <- AV_W("HEPU", "calyx_fruit", AvWeightPerUnit)
   W2 <- AV_W("HEPU", "fruit_young", AvWeightPerUnit)
   #
   w1 <- W1/sum(W1, W2)
   w2 <- W2/sum(W1, W2)
-  HEPU.graph <- set.edge.attribute(HEPU.graph, name = "weight", index = c(E1, E2), value = c(w1, w2))
+  HEPU.graph <- set.edge.attribute(HEPU.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
+
+
+  ###############################
+  #calyx_fruit, fruit_young_aborting from finished_flower
+  ##############################
+  #which edges
+  E1 <- AM["finished_flower", "calyx_fruit"]
+  E2 <- AM["finished_flower", "fruit_young_aborting"]
+
+  #av. weights of the parts
+  W1 <- AV_W("HEPU", "calyx_fruit", AvWeightPerUnit)
+  W2 <- AV_W("HEPU", "fruit_young_aborting", AvWeightPerUnit)
+  #
+  w1 <- W1/sum(W1, W2)
+  w2 <- W2/sum(W1, W2)
+  HEPU.graph <- set.edge.attribute(HEPU.graph,name="weight",index=c(E1,E2),value=c(w1,w2))
+
   list(graph = HEPU.graph, Paths = Paths)
 }
 

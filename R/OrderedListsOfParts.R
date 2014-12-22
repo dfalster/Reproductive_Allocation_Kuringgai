@@ -43,7 +43,7 @@ make_OrderedListsOfParts_BOLE <- function() {
 
 make_OrderedListsOfParts_HEPU <- function() {
   c("bud_small", "bud_big", "flower_petals", "flower_calyx", "flower_calyx_aborting", "fruit_aborted", "finished_flower", "finished_flower_aborting",
-    "calyx_aborted_fruit", "calyx_fruit", "fruit_young", "fruit_young_aborting", "fruit_large_immature", "fruit_large_immature_aborting", "fruit_aborted", "fruit_mature")
+    "calyx_aborted_fruit", "calyx_fruit", "fruit_young", "fruit_young_aborting", "fruit_large_immature", "fruit_large_immature_aborting", "fruit_mature")
 }
 
 make_OrderedListsOfParts_PILI <- function() {
