@@ -58,8 +58,8 @@ targets:
       - docs/figures/RA_weight_diam_PUTU.pdf
   tables:
     depends:
-      - docs/tables/AvCountsPerMM.tex
-      - docs/tables/RegressionTable.tex
+#      - docs/tables/AvCountsPerMM.tex
+#      - docs/tables/RegressionTable.tex
 
       - docs/tables/BAER.tex
       - docs/tables/BOLE.tex
@@ -75,10 +75,10 @@ targets:
       - docs/tables/PHPH.tex
       - docs/tables/PILI.tex
       - docs/tables/PUTU.tex
-  docs/tables/AvCountsPerMM.tex:
-    command: print_xtable(AvWeightPerUnit, target_name)
-  docs/tables/RegressionTable.tex:
-    command: print_xtable(RegressionTable, target_name)
+#  docs/tables/AvCountsPerMM.tex:
+#    command: print_xtable(AvWeightPerUnit, target_name)
+#  docs/tables/RegressionTable.tex:
+#    command: print_xtable(RegressionTable, target_name)
 
   docs/figures/RA_comparison_age.pdf:
     command: plot_RA_comparison_age(RA_all)
@@ -188,46 +188,46 @@ targets:
   docs/figures/RA_weight_diam_PUTU.pdf:
     command: plot_species_RA_weight_diam_panel(PUTU_RA)
     plot: extra_wide
-
-  docs/tables/BAER.tex:
-    command: print_xtable_BAER(AvWeightPerUnit, target_name)
-
-  docs/tables/BOLE.tex:
-    command: print_xtable_BOLE(AvWeightPerUnit, target_name)
-
-  docs/tables/COER.tex:
-    command: print_xtable_COER(AvWeightPerUnit, target_name)
-
-  docs/tables/EPMI.tex:
-    command: print_xtable_EPMI(AvWeightPerUnit, target_name)
-
-  docs/tables/GRBU.tex:
-    command: print_xtable_GRBU(AvWeightPerUnit, target_name)
-
-  docs/tables/GRSP.tex:
-    command: print_xtable_GRSP(AvWeightPerUnit, target_name)
-
-  docs/tables/HATE.tex:
-    command: print_xtable_HATE(AvWeightPerUnit, target_name)
-
-  docs/tables/HEPU.tex:
-    command: print_xtable_HEPU(AvWeightPerUnit, target_name)
-
-  docs/tables/LEES.tex:
-    command: print_xtable_LEES(AvWeightPerUnit, target_name)
-
-  docs/tables/PELA.tex:
-    command: print_xtable_PELA(AvWeightPerUnit, target_name)
-
-  docs/tables/PEPU.tex:
-    command: print_xtable_PEPU(AvWeightPerUnit, target_name)
-
-  docs/tables/PHPH.tex:
-    command: print_xtable_PHPH(AvWeightPerUnit, target_name)
-
-  docs/tables/PILI.tex:
-    command: print_xtable_PILI(AvWeightPerUnit, target_name)
-
-  docs/tables/PUTU.tex:
-    command: print_xtable_PUTU(AvWeightPerUnit, target_name)
-
+#
+#  docs/tables/BAER.tex:
+#    command: print_xtable_BAER(BAER_PartsSummary, target_name)
+#
+#  docs/tables/BOLE.tex:
+#    command: print_xtable_BOLE(BOLE_PartsSummary, target_name)
+#
+#  docs/tables/COER.tex:
+#    command: print_xtable_COER(COER_PartsSummary, target_name)
+#
+#  docs/tables/EPMI.tex:
+#    command: print_xtable_EPMI(EPMI_PartsSummary, target_name)
+#
+#  docs/tables/GRBU.tex:
+#    command: print_xtable_GRBU(GRBU_PartsSummary, target_name)
+#
+#  docs/tables/GRSP.tex:
+#    command: print_xtable_GRSP(GRSP_PartsSummary, target_name)
+#
+#  docs/tables/HATE.tex:
+#    command: print_xtable_HATE(HATE_PartsSummary, target_name)
+#
+#  docs/tables/HEPU.tex:
+#    command: print_xtable_HEPU(HEPU_PartsSummary, target_name)
+#
+#  docs/tables/LEES.tex:
+#    command: print_xtable_LEES(LEES_PartsSummary, target_name)
+#
+#  docs/tables/PELA.tex:
+#    command: print_xtable_PELA(PELA_PartsSummary, target_name)
+#
+#  docs/tables/PEPU.tex:
+#    command: print_xtable_PEPU(PEPU_PartsSummary, target_name)
+#
+#  docs/tables/PHPH.tex:
+#    command: print_xtable_PHPH(PHPH_PartsSummary, target_name)
+#
+#  docs/tables/PILI.tex:
+#    command: print_xtable_PILI(PILI_PartsSummary, target_name)
+#
+#  docs/tables/PUTU.tex:
+#    command: print_xtable_PUTU(PUTU_PartsSummary, target_name)
+#

@@ -3,14 +3,13 @@ IAT_Species <- function(species, Reproduction, HarvestData, InvestmentCategories
 
   # TODO :get ages from individual list, not from harvest data
   AgeData <- unique(
-    filter(HarvestData, segment == 1, use_status == "use", plant_status == "alive",
-      individual %in% Reproduction$individual) %.%
+    filter(HarvestData, segment == 1, plant_status == "alive", individual %in% Reproduction$individual) %.%
     select(age, individual)
       )
 
   InvDist <- data.frame(individual = c(), PrePol_A = c(), PrePol_S = c(), PostPol_A = c(), PD = c(), Prop = c(), Total = c(), age = c())
 
-  for (individual in unique(Reproduction[Reproduction$species == species, ]$individual)) {
+  for (individual in unique(Reproduction$individual)) {
     # print(individual)
     Ind <- InvestmentInAccessoryTissues(individual, species, InvestmentCategories[, c("flower_part", species)], species_INV)
     if (length(AgeData[AgeData[, 2] == individual, 1]) == 1) {

@@ -1,62 +1,57 @@
 
-CalculateInvestmentForSpecies <- function(species, RegressionTable, AvCountsPerMM, AvWeightPerUnit, IBW, FloweringCategories, Reproduction, MultiplierTable, GraphMaps) {
+# Error - amounts that were pre-existing on plant at start of census, i.e. no predecsssor
+#    - rename ot pre-existing
+# Lost - parts lost during development - same number lost
+# Finished Development is everything (including lost parts) - rename to Halted development
+# Investment = energy investment in going from one stage to next
 
-  # Initialize data frames
-  Investment <- data.frame(Individual = c(), age = c(), FromCensus = c(), ToCensus = c(), From = c(), To = c(), Inv = c(), Count = c(), Total = c())
-  Error <- data.frame(Individual = c(), Element = c(), Census = c(), Count = c())
-  Lost <- data.frame(Individual = c(), age = c(), what = c(), Census = c(), count = c(), weight = c())
-  FD <- data.frame(Individual = c(), age = c(), what = c(), Census = c(), count = c(), weight = c())
+CalculateInvestmentForSpecies <- function(species, Reproduction, FloweringCategories, MultiplierTable, GraphMaps,
+  PartsSummary) {
 
-  ind.list <- unique(Reproduction[Reproduction$species == species, ]$individual)
-  # Loop along all individuals
-  for (individual in ind.list) {
-    print(individual)
-
-    R <- CalculateInvestmentForIndiviualPlant(individual, RegressionTable, AvCountsPerMM, AvWeightPerUnit, IBW, FloweringCategories, Reproduction, MultiplierTable, GraphMaps)
-    if (!is.null(R$Inv)) {
-      Investment <- rbind(Investment, R$Inv)
-    }
-    if (!is.null(R$Lost)) {
-      Lost <- rbind(Lost, R$Lost)
-    }
-    if (!is.null(R$FD)) {
-      FD <- rbind(FD, R$FD)
-    }
-    if (!is.null(R$Err)) {
-      Error <- rbind(Error, R$Err)
-    }
+  combine <- function(name, d) {
+    ldply(d, function(x) x[[name]])
   }
 
-  list(Investment=Investment, Lost=Lost, FD=FD, Error=Error)
+  R <- llply(unique(Reproduction$individual), function(x) CalculateInvestmentForIndiviualPlant(x,
+    filter(Reproduction,  individual==x), FloweringCategories, MultiplierTable, GraphMaps, PartsSummary))
+
+  list(Investment=combine("Investment", R),
+      Lost=combine("Lost", R),
+      FD=combine("FD", R),
+      Error=combine("Error", R))
 }
 
 
-CalculateInvestmentForIndiviualPlant <- function(individual, RegressionTable, AvCountsPerMM, AvWeightPerUnit, IBW, FloweringCategories, Reproduction, MultiplierTable, GraphMaps) {
-  Tree <- unique(Reproduction[Reproduction$individual == individual, ])
+CalculateInvestmentForIndiviualPlant <- function(individual, Reproduction, FloweringCategories, MultiplierTable, GraphMaps, PartsSummary) {
+
+  print(individual)
+
   # Transform counts to weights and adjust for multiplicity
-  TreeListOrig <- WeightCalculationsForTree(Tree, RegressionTable, AvCountsPerMM, AvWeightPerUnit, IBW, FloweringCategories)
-  # TreeListAdj=TreeListOrig;
+  TreeListOrig <- WeightCalculationsForTree(Reproduction, FloweringCategories, PartsSummary)
   TreeListAdj <- AdjustForMultiplicity(TreeListOrig, MultiplierTable)
+
   # Calculate investment
   Res <- InvestmentCalculations(TreeListAdj, GraphMaps)
+
   # Extract and reorder the results
-  I <- Res[["Inv"]]
-  if (!is.null(I)) {
-    I["age"] <- as.numeric(unique(Tree$age))
-    I <- I[, c(8, 9, 1:7)]
+  # TODO : Why?
+  Inv <- Res[["Inv"]]
+  if (!is.null(Inv)) {
+    Inv["age"] <- as.numeric(unique(Reproduction$age))
+    Inv <- Inv[, c(8, 9, 1:7)] # TODO: what are there. Use name not numbers to select columns
   }
 
   Err <- Res[["Err"]]
   if (!is.null(Err)) {
     Err["Individual"] <- individual
-    Err <- Err[, c(4, (1:3))]
+    Err <- Err[, c(4, (1:3))] # TODO: what are there. Use name not numbers to select columns
   }
   Lost <- Res[["Lost"]]
   if (!is.null(Lost)) {
     if (nrow(Lost) > 0) {
       Lost["Individual"] <- individual
-      Lost["age"] <- as.numeric(unique(Tree$age))
-      Lost <- Lost[, c(5, 6, 1:4)]
+      Lost["age"] <- as.numeric(unique(Reproduction$age))
+      Lost <- Lost[, c(5, 6, 1:4)] # TODO: what are there. Use name not numbers to select columns
     }
     if (nrow(Lost) == 0) {
       Lost <- NULL
@@ -68,14 +63,14 @@ CalculateInvestmentForIndiviualPlant <- function(individual, RegressionTable, Av
   if (!is.null(FD)) {
     if (nrow(FD) > 0) {
       FD["Individual"] <- individual
-      FD["age"] <- as.numeric(unique(Tree$age))
+      FD["age"] <- as.numeric(unique(Reproduction$age))
       FD <- FD[, c(5, 6, 1:4)]
     }
     if (nrow(FD) == 0) {
       FD <- NULL
     }
   }
-  list(Inv = I, Lost = Lost, Err = Err, FD = FD)
+  list(Investment = Inv, Lost = Lost, Error = Err, FD = FD)
 }
 
 
@@ -103,16 +98,16 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
   }
 
   # Check how many main paths there are for this plant.
-  n.paths <- nrow(GraphMaps[[species]]$Paths)
-  Paths <- GraphMaps[[species]]$Paths
+  n.paths <- nrow(GraphMaps$Paths)
+  Paths <- GraphMaps$Paths
   # For each of the paths
   for (a in seq_len(n.paths)) {
     L <- data.frame(what = c(), Census = c(), count = c(), weight = c())
     FD <- data.frame(what = c(), Census = c(), count = c(), weight = c())
     # Determine beginning and end of the path.
-    BE <- (GraphMaps[[species]]$Paths[a, ])
+    BE <- (GraphMaps$Paths[a, ])
     # Read in plant graph
-    Plant.Graph <- GraphMaps[[species]]$graph
+    Plant.Graph <- GraphMaps$graph
     # Extract the list of vertices for the path
     PATH <- get.shortest.paths(Plant.Graph, from = as.character(BE[1, 1]), to = as.character(BE[1, 2]), weights = NA)
     PATH <- unlist(PATH$vpath)
@@ -291,13 +286,6 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
   list(Inv = Inv, Err = Err, Lost = Lost, FinishedDevelopement = FinishedDevelopement)
 }
 
-# Todo:
-# Error - amounts that were pre-existing on plant at start of census, i.e. no predecsssor
-#    - rename ot pre-existing
-# Lost - parts lost during development - same number lost
-# Finished Development is everything (including lost parts) - rename to Halted development
-# Investment = energy investment in going from one stage to next
-
 InvestmentInAPartType <- function(TreeList, TreeList_Pred, Element, Progression, GraphMaps) {
   # Initialize data frames
   Inv <- From <- To <- FromCensus <- ToCensus <- Count <- c()
@@ -331,7 +319,7 @@ InvestmentInAPartType <- function(TreeList, TreeList_Pred, Element, Progression,
       # Extract the weight of a single element
       El_weight <- TreeList[[N]]$pre.ex[[which(I_pre.ex)]]$weight[i]
       # Calculate investment made into progressiong to the element from its ancestor.
-      R <- InvestmentInIndividualPart(Element, TreeList_Pred, Progression, El_weight, GraphMaps)
+      R <- InvestmentInIndividualPart(Element, TreeList_Pred, Progression, El_weight, GraphMaps$graph)
       Inv[i] <- R[["Invest"]]
       From[i] <- R[["from"]]
       To[i] <- R[["to"]]
@@ -354,7 +342,7 @@ InvestmentInAPartType <- function(TreeList, TreeList_Pred, Element, Progression,
 }
 
 
-InvestmentInIndividualPart <- function(Element, TreeList_Pred, Progression, El_weight, GraphMaps) {
+InvestmentInIndividualPart <- function(Element, TreeList_Pred, Progression, El_weight, Plant.Graph) {
   # Determine what time are we at
   N <- length(TreeList_Pred)
   # Go back in time
@@ -371,7 +359,6 @@ InvestmentInIndividualPart <- function(Element, TreeList_Pred, Progression, El_w
       # If you find a predecessor
       if (sum(Predecessor == parts.at.time.t)) {
         # Use graphd to determine path between predecessor and ancesstor.
-        Plant.Graph <- GraphMaps[[substr(TreeList_Pred[[1]], 1, 4)]]$graph
         EdgePath <- unlist(get.shortest.paths(Plant.Graph, from = Element, to = Predecessor, output = "both", weights = NA)$epath)
         # proportion of carbon of the predecessors weight that has been used to produce the ancesstor
         w <- prod(get.edge.attribute(Plant.Graph, name = "weight", index = EdgePath))

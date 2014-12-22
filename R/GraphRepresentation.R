@@ -3,6 +3,7 @@ AV_W <- function(species, part, AvWeightPerUnit) {
 }
 
 AdjustEdgeWeightsForMultiplicity <- function(graph, species, MultiplierTable) {
+
   EdgeList <- get.edgelist(graph)
   weights <- get.edge.attribute(graph, "weight")
   for (i in seq_len(nrow(EdgeList))) {
@@ -17,11 +18,9 @@ AdjustEdgeWeightsForMultiplicity <- function(graph, species, MultiplierTable) {
 
 # TODO: lots of repittion here
 
-make_GraphMaps <- function(AvWeightPerUnit, MultiplierTable){
+make_LEES_GraphMaps <- function(PartsSummary, MultiplierTable){
 
-  GraphMaps <- list()
-
-  #  L E E S=======================================================================
+  AvWeightPerUnit <-  PartsSummary$AvWeightPerUnit
 
   LEES.graph <- graph.formula("bud_tiny" - "bud_mid" - "bud_big" - "flower_calyx" - "finished_flower" - "fruit_just_starting" - "fruit_young" - "fruit_large_immature_01" -
     "fruit_mature", "bud_tiny" - "bud_aborted", "bud_big" - "flower_petals", "fruit_young" - "calyx_fruit", "fruit_young" - "fruit_aborted")
@@ -59,13 +58,12 @@ make_GraphMaps <- function(AvWeightPerUnit, MultiplierTable){
   w1 <- W1/sum(W1, W2)
   w2 <- W2/sum(W1, W2)
   LEES.graph <- set.edge.attribute(LEES.graph, name = "weight", index = c(E1, E2), value = c(w1, w2))
-  GraphMaps[["LEES"]] <- list(graph = LEES.graph, Paths = Paths)
-  rm(LEES.graph)
+  list(graph = LEES.graph, Paths = Paths)
+}
 
-  #  G R B U
-  # =====================================================================================
+make_GRBU_GraphMaps <- function(PartsSummary, MultiplierTable){
 
-
+  AvWeightPerUnit <-  PartsSummary$AvWeightPerUnit
 
   GRBU.graph <- graph.formula("bud_tiny" - "bud_small" - "bud_mid" - "bud_big" - "flower_stigma" - "finished_flower_stigma" - "fruit_just_starting" - "fruit_young" -
     "fruit_large_immature_01" - "fruit_large_immature_02" - "fruit_large_immature_03" - "fruit_large_immature_04" - "fruit_large_immature_05" - "fruit_large_immature_06" -
@@ -114,12 +112,12 @@ make_GraphMaps <- function(AvWeightPerUnit, MultiplierTable){
   w1 <- W1/sum(W1, 2 * W2)
   w2 <- W2/sum(W1, 2 * W2)
   GRBU.graph <- set.edge.attribute(GRBU.graph, name = "weight", index = c(E1, E2, E3), value = c(w1, w2, w2))
-  # Saving the graph
-  GraphMaps[["GRBU"]] <- list(graph = GRBU.graph, Paths = Paths)
-  rm(GRBU.graph)
+  list(graph = GRBU.graph, Paths = Paths)
+}
 
-  #  G R S P =======================================================================
+make_GRSP_GraphMaps <- function(PartsSummary, MultiplierTable){
 
+  AvWeightPerUnit <-  PartsSummary$AvWeightPerUnit
 
   GRSP.graph <- graph.formula("bud_tiny" - "bud_small" - "bud_mid" - "bud_big" - "bud_just_opening" - "flower_stigma" - "finished_flower_stigma" - "fruit_just_starting" -
     "fruit_young" - "fruit_large_immature_01" - "fruit_large_immature_02" - "fruit_large_immature_03" - "fruit_large_immature_04" - "fruit_large_immature_05" - "fruit_large_immature_06" -
@@ -171,11 +169,12 @@ make_GraphMaps <- function(AvWeightPerUnit, MultiplierTable){
   w1 <- W1/sum(W1, 2 * W2)
   w2 <- W2/sum(W1, 2 * W2)
   GRSP.graph <- set.edge.attribute(GRSP.graph, name = "weight", index = c(E1, E2, E3), value = c(w1, w2, w2))
-  GraphMaps[["GRSP"]] <- list(graph = GRSP.graph, Paths = Paths)
-  rm(GRSP.graph)
+  list(graph = GRSP.graph, Paths = Paths)
+}
 
+make_EPMI_GraphMaps <- function(PartsSummary, MultiplierTable){
 
-  #  E P M I =======================================================================
+  AvWeightPerUnit <-  PartsSummary$AvWeightPerUnit
 
   EPMI.graph <- graph.formula("bud_tiny" - "bud_mid" - "bud_big" - "flower_calyx" - "finished_flower" - "fruit_young" - "fruit_large_immature_01" - "fruit_mature",
     "bud_big" - "flower_petals")
@@ -199,12 +198,12 @@ make_GraphMaps <- function(AvWeightPerUnit, MultiplierTable){
   w2 <- W2/sum(W1, W2)
   EPMI.graph <- set.edge.attribute(EPMI.graph, name = "weight", index = c(E1, E2), value = c(w1, w2))
 
-  GraphMaps[["EPMI"]] <- list(graph = EPMI.graph, Paths = Paths)
-  rm(EPMI.graph)
+  list(graph = EPMI.graph, Paths = Paths)
+  }
 
+make_COER_GraphMaps <- function(PartsSummary, MultiplierTable){
 
-  #  C O E R =======================================================================
-
+  AvWeightPerUnit <-  PartsSummary$AvWeightPerUnit
 
   COER.graph <- graph.formula("bud_big" - "flower_stigma" - "finished_flower" - "fruit_just_starting" - "fruit_young" - "fruit_large_immature_01" - "fruit_mature",
     "inflorescence_bud_tiny" - "inflorescence_bud_mid" - "inflorescence_stalk" - "inflorescence_stalk_in_fruit", "inflorescence_stalk" - "inflorescence_stalk_in_fruit_large",
@@ -241,12 +240,12 @@ make_GraphMaps <- function(AvWeightPerUnit, MultiplierTable){
   w2 <- W2/sum(W1, W2)
   COER.graph <- set.edge.attribute(COER.graph, name = "weight", index = c(E1, E2), value = c(w1, w2))
 
-  GraphMaps[["COER"]] <- list(graph = COER.graph, Paths = Paths)
-  rm(COER.graph)
+  list(graph = COER.graph, Paths = Paths)
+}
 
+make_PUTU_GraphMaps <- function(PartsSummary, MultiplierTable){
 
-  #  P U T U =======================================================================
-
+  AvWeightPerUnit <-  PartsSummary$AvWeightPerUnit
 
   PUTU.graph <- graph.formula("bud_big" - "flower_stigma" - "finished_flower_stigma" - "fruit_large_immature_01" - "seed", "bud_big" - "flower_petals", "bud_big" -
     "flower_calyx", "bud_big" - "bract_flower_or_finished_flower", "flower_aborted", "flower_stigma" - "fruit_aborted", "fruit_large_immature_01" - "seed_pod", "fruit_large_immature_01" -
@@ -291,11 +290,12 @@ make_GraphMaps <- function(AvWeightPerUnit, MultiplierTable){
   w1 <- W1/sum(W1, 2 * W2)
   w2 <- W2/sum(W1, 2 * W2)
   PUTU.graph <- set.edge.attribute(PUTU.graph, name = "weight", index = c(E1, E2, E3), value = c(w1, w2, w2))
-  GraphMaps[["PUTU"]] <- list(graph = PUTU.graph, Paths = Paths)
-  rm(PUTU.graph)
+  list(graph = PUTU.graph, Paths = Paths)
+}
 
-  #  B A E R =======================================================================
+make_BAER_GraphMaps <- function(PartsSummary, MultiplierTable){
 
+  AvWeightPerUnit <-  PartsSummary$AvWeightPerUnit
 
   BAER.graph <- graph.formula("cone_base_green_01" - "cone_base_green_02" - "cone_base_green_03" - "cone_base_green_04" - "cone_base_brown", "cone_young_01" - "cone_young_02" -
     "cone_young_03" - "cone_young_04" - "cone_green_01" - "cone_green_02" - "cone_green_03" - "cone_green_04" - "cone_brown", "cone_green_04" - "cone_brown_no_expanded_follicles",
@@ -341,11 +341,12 @@ make_GraphMaps <- function(AvWeightPerUnit, MultiplierTable){
   w1 <- W1/sum(W1, 2 * W2)
   w2 <- W2/sum(W1, 2 * W2)
   BAER.graph <- set.edge.attribute(BAER.graph, name = "weight", index = c(E1, E2, E3), value = c(w1, w2, w2))
-  GraphMaps[["BAER"]] <- list(graph = BAER.graph, Paths = Paths)
-  rm(BAER.graph)
+  list(graph = BAER.graph, Paths = Paths)
+}
 
-  #  B O L E =======================================================================
+make_BOLE_GraphMaps <- function(PartsSummary, MultiplierTable){
 
+  AvWeightPerUnit <-  PartsSummary$AvWeightPerUnit
 
   BOLE.graph <- graph.formula("bud_tiny" - "bud_small" - "bud_mid" - "bud_big" - "flower_calyx" - "finished_flower_stigma" - "fruit_just_starting" - "fruit_young" -
     "fruit_large_immature_01" - "seed", "bud_big" - "pedicel", "bud_big" - "flower_petals", "flower_calyx" - "finished_flower" - "late_finished_flower", "fruit_large_immature_01" -
@@ -399,14 +400,12 @@ make_GraphMaps <- function(AvWeightPerUnit, MultiplierTable){
   w1 <- W1/sum(W1, W2)
   w2 <- W2/sum(W1, W2)
   BOLE.graph <- set.edge.attribute(BOLE.graph, name = "weight", index = c(E1, E2), value = c(w1, w2))
+  list(graph = BOLE.graph, Paths = Paths)
+}
 
+make_HEPU_GraphMaps <- function(PartsSummary, MultiplierTable){
 
-  GraphMaps[["BOLE"]] <- list(graph = BOLE.graph, Paths = Paths)
-  rm(BOLE.graph)
-
-  #  H E P U =======================================================================
-
-
+  AvWeightPerUnit <-  PartsSummary$AvWeightPerUnit
 
   HEPU.graph <- graph.formula("bud_small" - "bud_big" - "flower_calyx" - "finished_flower" - "fruit_young" - "fruit_large_immature_01" - "fruit_mature", "bud_big" -
     "flower_petals", "flower_calyx" - "fruit_aborted", "finished_flower" - "calyx_fruit", "bud_big" - "flower_calyx_aborting", "flower_calyx" - "finished_flower_aborting",
@@ -445,14 +444,12 @@ make_GraphMaps <- function(AvWeightPerUnit, MultiplierTable){
   w1 <- W1/sum(W1, W2)
   w2 <- W2/sum(W1, W2)
   HEPU.graph <- set.edge.attribute(HEPU.graph, name = "weight", index = c(E1, E2), value = c(w1, w2))
+  list(graph = HEPU.graph, Paths = Paths)
+}
 
+make_PILI_GraphMaps <- function(PartsSummary, MultiplierTable){
 
-  GraphMaps[["HEPU"]] <- list(graph = HEPU.graph, Paths = Paths)
-  rm(HEPU.graph)
-
-  #  P I L I =======================================================================
-
-
+  AvWeightPerUnit <-  PartsSummary$AvWeightPerUnit
 
   PILI.graph <- graph.formula("bud_big" - "flower_stigma" - "fruit_young" - "fruit_large_immature_01" - "seed", "inflorescence_bud_mid" - "inflorescence_stalk", "inflorescence_bud_mid" -
     "bract_flower_or_finished_flower", "bud_big" - "flower_calyx", "bud_big" - "flower_petals", "fruit_young" - "fruit_aborted", "fruit_large_immature_01" - "seed_pod")
@@ -506,11 +503,13 @@ make_GraphMaps <- function(AvWeightPerUnit, MultiplierTable){
   w1 <- W1/sum(W1, W2)
   w2 <- W2/sum(W1, W2)
   PILI.graph <- set.edge.attribute(PILI.graph, name = "weight", index = c(E1, E2), value = c(w1, w2))
-  GraphMaps[["PILI"]] <- list(graph = PILI.graph, Paths = Paths)
-  rm(PILI.graph)
+  list(graph = PILI.graph, Paths = Paths)
+}
 
-  #  P H P H =======================================================================
 
+make_PHPH_GraphMaps <- function(PartsSummary, MultiplierTable){
+
+  AvWeightPerUnit <-  PartsSummary$AvWeightPerUnit
 
   PHPH.graph <- graph.formula("bud_small" - "bud_mid" - "flower_stigma" - "finished_flower_stigma" - "fruit_just_starting" - "fruit_young" - "fruit_large_immature_01" -
     "seed", "bud_mid" - "flower_petals_small" - "flower_petals", "bud_mid" - "bract_flower_or_finished_flower", "bud_mid" - "flower_calyx", "bud_small" - "flower_aborted",
@@ -557,13 +556,13 @@ make_GraphMaps <- function(AvWeightPerUnit, MultiplierTable){
   w2 <- W2/sum(W1, 2 * W2)
   PHPH.graph <- set.edge.attribute(PHPH.graph, name = "weight", index = c(E1, E2, E3), value = c(w1, w2, w2))
 
+  list(graph = PHPH.graph, Paths = Paths)
+}
 
-  GraphMaps[["PHPH"]] <- list(graph = PHPH.graph, Paths = Paths)
-  rm(PHPH.graph)
 
+make_PELA_GraphMaps <- function(PartsSummary, MultiplierTable){
 
-  #  P E L A =======================================================================
-
+  AvWeightPerUnit <-  PartsSummary$AvWeightPerUnit
 
   PELA.graph <- graph.formula("bud_small" - "bud_mid" - "bud_big" - "flower_stigma" - "finished_flower_stigma" - "fruit_just_starting" - "fruit_young" - "fruit_large_immature_01" -
     "fruit_large_immature_02" - "fruit_large_immature_03" - "fruit_large_immature_04" - "fruit_large_immature_05" - "fruit_large_immature_06" - "seed", "bud_big" -
@@ -605,11 +604,13 @@ make_GraphMaps <- function(AvWeightPerUnit, MultiplierTable){
   w2 <- W2/sum(W1, W2)
   PELA.graph <- set.edge.attribute(PELA.graph, name = "weight", index = c(E1, E2), value = c(w1, w2))
 
-  GraphMaps[["PELA"]] <- list(graph = PELA.graph, Paths = Paths)
-  rm(PELA.graph)
+  list(graph = PELA.graph, Paths = Paths)
+}
 
-  #  H A T E =======================================================================
 
+make_HATE_GraphMaps <- function(PartsSummary, MultiplierTable){
+
+  AvWeightPerUnit <-  PartsSummary$AvWeightPerUnit
 
   HATE.graph <- graph.formula("inflorescence_bud_tiny" - "inflorescence_bud_small" - "inflorescence_bud_mid" - "inflorescence_bud_big_flowers" - "flower_stigma" -
     "finished_flower_stigma" - "fruit_just_starting" - "fruit_young" - "fruit_large_immature_01" - "seed_immature" - "seed", "inflorescence_bud_mid" - "inflorescence_bud_big_bracts",
@@ -659,11 +660,12 @@ make_GraphMaps <- function(AvWeightPerUnit, MultiplierTable){
   w2 <- W2/sum(W1, 2 * W2)
   HATE.graph <- set.edge.attribute(HATE.graph, name = "weight", index = c(E1, E2, E3), value = c(w1, w2, w2))
 
-  GraphMaps[["HATE"]] <- list(graph = HATE.graph, Paths = Paths)
-  rm(HATE.graph)
+  list(graph = HATE.graph, Paths = Paths)
+}
 
-  #  P E P U =======================================================================
+make_PEPU_GraphMaps <- function(PartsSummary, MultiplierTable){
 
+  AvWeightPerUnit <-  PartsSummary$AvWeightPerUnit
 
   PEPU.graph <- graph.formula("bud_tiny" - "bud_big" - "flower_stigma" - "fruit_just_starting" - "fruit_young" - "fruit_large_immature_01" - "fruit_mature", "cone_just_starting_01" -
     "cone_just_starting_02" - "cone_just_starting_03" - "cone_just_starting_04" - "cone_just_starting_05" - "cone_young_01" - "cone_young_02" - "cone_young_03" -
@@ -695,8 +697,5 @@ make_GraphMaps <- function(AvWeightPerUnit, MultiplierTable){
   w3 <- W3/sum(W1, W2, W3)
   PEPU.graph <- set.edge.attribute(PEPU.graph, name = "weight", index = c(E1, E2, E3), value = c(w1, w2, w3))
 
-  GraphMaps[["PEPU"]] <- list(graph = PEPU.graph, Paths = Paths)
-  rm(PEPU.graph)
-
-  GraphMaps
+  list(graph = PEPU.graph, Paths = Paths)
 }

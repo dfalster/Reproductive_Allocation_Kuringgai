@@ -4,244 +4,622 @@
 targets:
   species_data:
     depends:
+      - BAER_IndividualsList
+      - BAER_FlowerPartsData
+      - BAER_ReproductionData
       - BAER_HarvestData
+      - BAER_GraphMaps
+      - BAER_PartsList
+      - BAER_PartsSummary
       - BAER_Inv
       - BAER_Acc
       - BAER_RA
+
+      - BOLE_IndividualsList
+      - BOLE_FlowerPartsData
+      - BOLE_ReproductionData
       - BOLE_HarvestData
+      - BOLE_GraphMaps
+      - BOLE_PartsList
+      - BOLE_PartsSummary
       - BOLE_Inv
       - BOLE_Acc
       - BOLE_RA
+
+      - COER_IndividualsList
+      - COER_FlowerPartsData
+      - COER_ReproductionData
       - COER_HarvestData
+      - COER_GraphMaps
+      - COER_PartsList
+      - COER_PartsSummary
       - COER_Inv
       - COER_Acc
       - COER_RA
+
+      - EPMI_IndividualsList
+      - EPMI_FlowerPartsData
+      - EPMI_ReproductionData
       - EPMI_HarvestData
+      - EPMI_GraphMaps
+      - EPMI_PartsList
+      - EPMI_PartsSummary
       - EPMI_Inv
       - EPMI_Acc
       - EPMI_RA
+
+      - GRBU_IndividualsList
+      - GRBU_FlowerPartsData
+      - GRBU_ReproductionData
       - GRBU_HarvestData
+      - GRBU_GraphMaps
+      - GRBU_PartsList
+      - GRBU_PartsSummary
       - GRBU_Inv
       - GRBU_Acc
       - GRBU_RA
+
+      - GRSP_IndividualsList
+      - GRSP_FlowerPartsData
+      - GRSP_ReproductionData
       - GRSP_HarvestData
+      - GRSP_GraphMaps
+      - GRSP_PartsList
+      - GRSP_PartsSummary
       - GRSP_Inv
       - GRSP_Acc
       - GRSP_RA
+
+      - HATE_IndividualsList
+      - HATE_FlowerPartsData
+      - HATE_ReproductionData
       - HATE_HarvestData
+      - HATE_GraphMaps
+      - HATE_PartsList
+      - HATE_PartsSummary
       - HATE_Inv
       - HATE_Acc
       - HATE_RA
+
+      - HEPU_IndividualsList
+      - HEPU_FlowerPartsData
+      - HEPU_ReproductionData
       - HEPU_HarvestData
+      - HEPU_GraphMaps
+      - HEPU_PartsList
+      - HEPU_PartsSummary
       - HEPU_Inv
       - HEPU_Acc
       - HEPU_RA
+
+      - LEES_IndividualsList
+      - LEES_FlowerPartsData
+      - LEES_ReproductionData
       - LEES_HarvestData
+      - LEES_GraphMaps
+      - LEES_PartsList
+      - LEES_PartsSummary
       - LEES_Inv
       - LEES_Acc
       - LEES_RA
+
+      - PELA_IndividualsList
+      - PELA_FlowerPartsData
+      - PELA_ReproductionData
       - PELA_HarvestData
+      - PELA_GraphMaps
+      - PELA_PartsList
+      - PELA_PartsSummary
       - PELA_Inv
       - PELA_Acc
       - PELA_RA
+
+      - PEPU_IndividualsList
+      - PEPU_FlowerPartsData
+      - PEPU_ReproductionData
       - PEPU_HarvestData
+      - PEPU_GraphMaps
+      - PEPU_PartsList
+      - PEPU_PartsSummary
       - PEPU_Inv
       - PEPU_Acc
       - PEPU_RA
+
+      - PHPH_IndividualsList
+      - PHPH_FlowerPartsData
+      - PHPH_ReproductionData
       - PHPH_HarvestData
+      - PHPH_GraphMaps
+      - PHPH_PartsList
+      - PHPH_PartsSummary
       - PHPH_Inv
       - PHPH_Acc
       - PHPH_RA
+
+      - PILI_IndividualsList
+      - PILI_FlowerPartsData
+      - PILI_ReproductionData
       - PILI_HarvestData
+      - PILI_GraphMaps
+      - PILI_PartsList
+      - PILI_PartsSummary
       - PILI_Inv
       - PILI_Acc
       - PILI_RA
+
+      - PUTU_IndividualsList
+      - PUTU_FlowerPartsData
+      - PUTU_ReproductionData
       - PUTU_HarvestData
+      - PUTU_GraphMaps
+      - PUTU_PartsList
+      - PUTU_PartsSummary
       - PUTU_Inv
       - PUTU_Acc
       - PUTU_RA
 
+
+  BAER_IndividualsList:
+    command: filterToBAER(IndividualsList)
+
+  BAER_FlowerPartsData:
+    command: filterToBAER(FlowerPartsData)
+
   BAER_HarvestData:
-    command: make_HarvestDataForBAER(HarvestData)
+    command: filterToBAER(HarvestData)
+
+  BAER_ReproductionData:
+    command: filterToBAER(ReproductionData)
+
+  BAER_GraphMaps:
+    command: make_BAER_GraphMaps(BAER_PartsSummary, MultiplierTable)
+
+  BAER_PartsList:
+    command: make_OrderedListsOfParts_BAER()
+
+  BAER_PartsSummary:
+    command: make_PartsSummary(BAER_FlowerPartsData, BAER_PartsList)
+
   BAER_Inv:
     command: >
-      CalculateInvestmentForBAER(RegressionTable, AvCountsPerMM,
-      AvWeightPerUnit, IndividualBasedWeights, FloweringCategories, Reproduction, MultiplierTable, GraphMaps)
+      CalculateInvestmentForBAER(BAER_ReproductionData, FloweringCategories, MultiplierTable, BAER_GraphMaps, BAER_PartsSummary)
+
   BAER_Acc:
     command: >
-      CalculateAccesoryCostsForBAER(Reproduction, BAER_HarvestData, InvestmentCategories, BAER_Inv)
+      CalculateAccesoryCostsForBAER(BAER_ReproductionData, BAER_HarvestData, InvestmentCategories, BAER_Inv)
+
   BAER_RA:
     command: >
-      CalculateRAForBAER(BAER_Inv, BAER_HarvestData, GraphMaps, IndividualsList)
+      CalculateRAForBAER(BAER_Inv, BAER_HarvestData, BAER_GraphMaps, IndividualsList)
+
+  BOLE_IndividualsList:
+    command: filterToBOLE(IndividualsList)
+
+  BOLE_FlowerPartsData:
+    command: filterToBOLE(FlowerPartsData)
 
   BOLE_HarvestData:
-    command: make_HarvestDataForBOLE(HarvestData)
+    command: filterToBOLE(HarvestData)
+
+  BOLE_ReproductionData:
+    command: filterToBOLE(ReproductionData)
+
+  BOLE_GraphMaps:
+    command: make_BOLE_GraphMaps(BOLE_PartsSummary, MultiplierTable)
+
+  BOLE_PartsList:
+    command: make_OrderedListsOfParts_BOLE()
+
+  BOLE_PartsSummary:
+    command: make_PartsSummary(BOLE_FlowerPartsData, BOLE_PartsList)
+
   BOLE_Inv:
     command: >
-      CalculateInvestmentForBOLE(RegressionTable, AvCountsPerMM,
-      AvWeightPerUnit, IndividualBasedWeights, FloweringCategories, Reproduction, MultiplierTable, GraphMaps)
+      CalculateInvestmentForBOLE(BOLE_ReproductionData, FloweringCategories, MultiplierTable, BOLE_GraphMaps, BOLE_PartsSummary)
+
   BOLE_Acc:
     command: >
-      CalculateAccesoryCostsForBOLE(Reproduction, BOLE_HarvestData, InvestmentCategories, BOLE_Inv)
+      CalculateAccesoryCostsForBOLE(BOLE_ReproductionData, BOLE_HarvestData, InvestmentCategories, BOLE_Inv)
+
   BOLE_RA:
     command: >
-      CalculateRAForBOLE(BOLE_Inv, BOLE_HarvestData, GraphMaps, IndividualsList)
+      CalculateRAForBOLE(BOLE_Inv, BOLE_HarvestData, BOLE_GraphMaps, IndividualsList)
+
+  COER_IndividualsList:
+    command: filterToCOER(IndividualsList)
+
+  COER_FlowerPartsData:
+    command: filterToCOER(FlowerPartsData)
 
   COER_HarvestData:
-    command: make_HarvestDataForCOER(HarvestData)
+    command: filterToCOER(HarvestData)
+
+  COER_ReproductionData:
+    command: filterToCOER(ReproductionData)
+
+  COER_GraphMaps:
+    command: make_COER_GraphMaps(COER_PartsSummary, MultiplierTable)
+
+  COER_PartsList:
+    command: make_OrderedListsOfParts_COER()
+
+  COER_PartsSummary:
+    command: make_PartsSummary(COER_FlowerPartsData, COER_PartsList)
+
   COER_Inv:
     command: >
-      CalculateInvestmentForCOER(RegressionTable, AvCountsPerMM,
-      AvWeightPerUnit, IndividualBasedWeights, FloweringCategories, Reproduction, MultiplierTable, GraphMaps)
+      CalculateInvestmentForCOER(COER_ReproductionData, FloweringCategories, MultiplierTable, COER_GraphMaps, COER_PartsSummary)
+
   COER_Acc:
     command: >
-      CalculateAccesoryCostsForCOER(Reproduction, COER_HarvestData, InvestmentCategories, COER_Inv)
+      CalculateAccesoryCostsForCOER(COER_ReproductionData, COER_HarvestData, InvestmentCategories, COER_Inv)
+
   COER_RA:
     command: >
-      CalculateRAForCOER(COER_Inv, COER_HarvestData, GraphMaps, IndividualsList)
+      CalculateRAForCOER(COER_Inv, COER_HarvestData, COER_GraphMaps, IndividualsList)
+
+  EPMI_IndividualsList:
+    command: filterToEPMI(IndividualsList)
+
+  EPMI_FlowerPartsData:
+    command: filterToEPMI(FlowerPartsData)
 
   EPMI_HarvestData:
-    command: make_HarvestDataForEPMI(HarvestData)
+    command: filterToEPMI(HarvestData)
+
+  EPMI_ReproductionData:
+    command: filterToEPMI(ReproductionData)
+
+  EPMI_GraphMaps:
+    command: make_EPMI_GraphMaps(EPMI_PartsSummary, MultiplierTable)
+
+  EPMI_PartsList:
+    command: make_OrderedListsOfParts_EPMI()
+
+  EPMI_PartsSummary:
+    command: make_PartsSummary(EPMI_FlowerPartsData, EPMI_PartsList)
+
   EPMI_Inv:
     command: >
-      CalculateInvestmentForEPMI(RegressionTable, AvCountsPerMM,
-      AvWeightPerUnit, IndividualBasedWeights, FloweringCategories, Reproduction, MultiplierTable, GraphMaps)
+      CalculateInvestmentForEPMI(EPMI_ReproductionData, FloweringCategories, MultiplierTable, EPMI_GraphMaps, EPMI_PartsSummary)
+
   EPMI_Acc:
     command: >
-      CalculateAccesoryCostsForEPMI(Reproduction, EPMI_HarvestData, InvestmentCategories, EPMI_Inv)
+      CalculateAccesoryCostsForEPMI(EPMI_ReproductionData, EPMI_HarvestData, InvestmentCategories, EPMI_Inv)
+
   EPMI_RA:
     command: >
-      CalculateRAForEPMI(EPMI_Inv, EPMI_HarvestData, GraphMaps, IndividualsList)
+      CalculateRAForEPMI(EPMI_Inv, EPMI_HarvestData, EPMI_GraphMaps, IndividualsList)
+
+  GRBU_IndividualsList:
+    command: filterToGRBU(IndividualsList)
+
+  GRBU_FlowerPartsData:
+    command: filterToGRBU(FlowerPartsData)
 
   GRBU_HarvestData:
-    command: make_HarvestDataForGRBU(HarvestData)
+    command: filterToGRBU(HarvestData)
+
+  GRBU_ReproductionData:
+    command: filterToGRBU(ReproductionData)
+
+  GRBU_GraphMaps:
+    command: make_GRBU_GraphMaps(GRBU_PartsSummary, MultiplierTable)
+
+  GRBU_PartsList:
+    command: make_OrderedListsOfParts_GRBU()
+
+  GRBU_PartsSummary:
+    command: make_PartsSummary(GRBU_FlowerPartsData, GRBU_PartsList)
+
   GRBU_Inv:
     command: >
-      CalculateInvestmentForGRBU(RegressionTable, AvCountsPerMM,
-      AvWeightPerUnit, IndividualBasedWeights, FloweringCategories, Reproduction, MultiplierTable, GraphMaps)
+      CalculateInvestmentForGRBU(GRBU_ReproductionData, FloweringCategories, MultiplierTable, GRBU_GraphMaps, GRBU_PartsSummary)
+
   GRBU_Acc:
     command: >
-      CalculateAccesoryCostsForGRBU(Reproduction, GRBU_HarvestData, InvestmentCategories, GRBU_Inv)
+      CalculateAccesoryCostsForGRBU(GRBU_ReproductionData, GRBU_HarvestData, InvestmentCategories, GRBU_Inv)
+
   GRBU_RA:
     command: >
-      CalculateRAForGRBU(GRBU_Inv, GRBU_HarvestData, GraphMaps, IndividualsList)
+      CalculateRAForGRBU(GRBU_Inv, GRBU_HarvestData, GRBU_GraphMaps, IndividualsList)
+
+  GRSP_IndividualsList:
+    command: filterToGRSP(IndividualsList)
+
+  GRSP_FlowerPartsData:
+    command: filterToGRSP(FlowerPartsData)
 
   GRSP_HarvestData:
-    command: make_HarvestDataForGRSP(HarvestData)
+    command: filterToGRSP(HarvestData)
+
+  GRSP_ReproductionData:
+    command: filterToGRSP(ReproductionData)
+
+  GRSP_GraphMaps:
+    command: make_GRSP_GraphMaps(GRSP_PartsSummary, MultiplierTable)
+
+  GRSP_PartsList:
+    command: make_OrderedListsOfParts_GRSP()
+
+  GRSP_PartsSummary:
+    command: make_PartsSummary(GRSP_FlowerPartsData, GRSP_PartsList)
+
   GRSP_Inv:
     command: >
-      CalculateInvestmentForGRSP(RegressionTable, AvCountsPerMM,
-      AvWeightPerUnit, IndividualBasedWeights, FloweringCategories, Reproduction, MultiplierTable, GraphMaps)
+      CalculateInvestmentForGRSP(GRSP_ReproductionData, FloweringCategories, MultiplierTable, GRSP_GraphMaps, GRSP_PartsSummary)
+
   GRSP_Acc:
     command: >
-      CalculateAccesoryCostsForGRSP(Reproduction, GRSP_HarvestData, InvestmentCategories, GRSP_Inv)
+      CalculateAccesoryCostsForGRSP(GRSP_ReproductionData, GRSP_HarvestData, InvestmentCategories, GRSP_Inv)
+
   GRSP_RA:
     command: >
-      CalculateRAForGRSP(GRSP_Inv, GRSP_HarvestData, GraphMaps, IndividualsList)
+      CalculateRAForGRSP(GRSP_Inv, GRSP_HarvestData, GRSP_GraphMaps, IndividualsList)
+
+  HATE_IndividualsList:
+    command: filterToHATE(IndividualsList)
+
+  HATE_FlowerPartsData:
+    command: filterToHATE(FlowerPartsData)
 
   HATE_HarvestData:
-    command: make_HarvestDataForHATE(HarvestData)
+    command: filterToHATE(HarvestData)
+
+  HATE_ReproductionData:
+    command: filterToHATE(ReproductionData)
+
+  HATE_GraphMaps:
+    command: make_HATE_GraphMaps(HATE_PartsSummary, MultiplierTable)
+
+  HATE_PartsList:
+    command: make_OrderedListsOfParts_HATE()
+
+  HATE_PartsSummary:
+    command: make_PartsSummary(HATE_FlowerPartsData, HATE_PartsList)
+
   HATE_Inv:
     command: >
-      CalculateInvestmentForHATE(RegressionTable, AvCountsPerMM,
-      AvWeightPerUnit, IndividualBasedWeights, FloweringCategories, Reproduction, MultiplierTable, GraphMaps)
+      CalculateInvestmentForHATE(HATE_ReproductionData, FloweringCategories, MultiplierTable, HATE_GraphMaps, HATE_PartsSummary)
+
   HATE_Acc:
     command: >
-      CalculateAccesoryCostsForHATE(Reproduction, HATE_HarvestData, InvestmentCategories, HATE_Inv)
+      CalculateAccesoryCostsForHATE(HATE_ReproductionData, HATE_HarvestData, InvestmentCategories, HATE_Inv)
+
   HATE_RA:
     command: >
-      CalculateRAForHATE(HATE_Inv, HATE_HarvestData, GraphMaps, IndividualsList)
+      CalculateRAForHATE(HATE_Inv, HATE_HarvestData, HATE_GraphMaps, IndividualsList)
+
+  HEPU_IndividualsList:
+    command: filterToHEPU(IndividualsList)
+
+  HEPU_FlowerPartsData:
+    command: filterToHEPU(FlowerPartsData)
 
   HEPU_HarvestData:
-    command: make_HarvestDataForHEPU(HarvestData)
+    command: filterToHEPU(HarvestData)
+
+  HEPU_ReproductionData:
+    command: filterToHEPU(ReproductionData)
+
+  HEPU_GraphMaps:
+    command: make_HEPU_GraphMaps(HEPU_PartsSummary, MultiplierTable)
+
+  HEPU_PartsList:
+    command: make_OrderedListsOfParts_HEPU()
+
+  HEPU_PartsSummary:
+    command: make_PartsSummary(HEPU_FlowerPartsData, HEPU_PartsList)
+
   HEPU_Inv:
     command: >
-      CalculateInvestmentForHEPU(RegressionTable, AvCountsPerMM,
-      AvWeightPerUnit, IndividualBasedWeights, FloweringCategories, Reproduction, MultiplierTable, GraphMaps)
+      CalculateInvestmentForHEPU(HEPU_ReproductionData, FloweringCategories, MultiplierTable, HEPU_GraphMaps, HEPU_PartsSummary)
+
   HEPU_Acc:
     command: >
-      CalculateAccesoryCostsForHEPU(Reproduction, HEPU_HarvestData, InvestmentCategories, HEPU_Inv)
+      CalculateAccesoryCostsForHEPU(HEPU_ReproductionData, HEPU_HarvestData, InvestmentCategories, HEPU_Inv)
+
   HEPU_RA:
     command: >
-      CalculateRAForHEPU(HEPU_Inv, HEPU_HarvestData, GraphMaps, IndividualsList)
+      CalculateRAForHEPU(HEPU_Inv, HEPU_HarvestData, HEPU_GraphMaps, IndividualsList)
+
+  LEES_IndividualsList:
+    command: filterToLEES(IndividualsList)
+
+  LEES_FlowerPartsData:
+    command: filterToLEES(FlowerPartsData)
 
   LEES_HarvestData:
-    command: make_HarvestDataForLEES(HarvestData)
+    command: filterToLEES(HarvestData)
+
+  LEES_ReproductionData:
+    command: filterToLEES(ReproductionData)
+
+  LEES_GraphMaps:
+    command: make_LEES_GraphMaps(LEES_PartsSummary, MultiplierTable)
+
+  LEES_PartsList:
+    command: make_OrderedListsOfParts_LEES()
+
+  LEES_PartsSummary:
+    command: make_PartsSummary(LEES_FlowerPartsData, LEES_PartsList)
+
   LEES_Inv:
     command: >
-      CalculateInvestmentForLEES(RegressionTable, AvCountsPerMM,
-      AvWeightPerUnit, IndividualBasedWeights, FloweringCategories, Reproduction, MultiplierTable, GraphMaps)
+      CalculateInvestmentForLEES(LEES_ReproductionData, FloweringCategories, MultiplierTable, LEES_GraphMaps, LEES_PartsSummary)
+
   LEES_Acc:
     command: >
-      CalculateAccesoryCostsForLEES(Reproduction, LEES_HarvestData, InvestmentCategories, LEES_Inv)
+      CalculateAccesoryCostsForLEES(LEES_ReproductionData, LEES_HarvestData, InvestmentCategories, LEES_Inv)
+
   LEES_RA:
     command: >
-      CalculateRAForLEES(LEES_Inv, LEES_HarvestData, GraphMaps, IndividualsList)
+      CalculateRAForLEES(LEES_Inv, LEES_HarvestData, LEES_GraphMaps, IndividualsList)
+
+  PELA_IndividualsList:
+    command: filterToPELA(IndividualsList)
+
+  PELA_FlowerPartsData:
+    command: filterToPELA(FlowerPartsData)
 
   PELA_HarvestData:
-    command: make_HarvestDataForPELA(HarvestData)
+    command: filterToPELA(HarvestData)
+
+  PELA_ReproductionData:
+    command: filterToPELA(ReproductionData)
+
+  PELA_GraphMaps:
+    command: make_PELA_GraphMaps(PELA_PartsSummary, MultiplierTable)
+
+  PELA_PartsList:
+    command: make_OrderedListsOfParts_PELA()
+
+  PELA_PartsSummary:
+    command: make_PartsSummary(PELA_FlowerPartsData, PELA_PartsList)
+
   PELA_Inv:
     command: >
-      CalculateInvestmentForPELA(RegressionTable, AvCountsPerMM,
-      AvWeightPerUnit, IndividualBasedWeights, FloweringCategories, Reproduction, MultiplierTable, GraphMaps)
+      CalculateInvestmentForPELA(PELA_ReproductionData, FloweringCategories, MultiplierTable, PELA_GraphMaps, PELA_PartsSummary)
+
   PELA_Acc:
     command: >
-      CalculateAccesoryCostsForPELA(Reproduction, PELA_HarvestData, InvestmentCategories, PELA_Inv)
+      CalculateAccesoryCostsForPELA(PELA_ReproductionData, PELA_HarvestData, InvestmentCategories, PELA_Inv)
+
   PELA_RA:
     command: >
-      CalculateRAForPELA(PELA_Inv, PELA_HarvestData, GraphMaps, IndividualsList)
+      CalculateRAForPELA(PELA_Inv, PELA_HarvestData, PELA_GraphMaps, IndividualsList)
+
+  PEPU_IndividualsList:
+    command: filterToPEPU(IndividualsList)
+
+  PEPU_FlowerPartsData:
+    command: filterToPEPU(FlowerPartsData)
 
   PEPU_HarvestData:
-    command: make_HarvestDataForPEPU(HarvestData)
+    command: filterToPEPU(HarvestData)
+
+  PEPU_ReproductionData:
+    command: filterToPEPU(ReproductionData)
+
+  PEPU_GraphMaps:
+    command: make_PEPU_GraphMaps(PEPU_PartsSummary, MultiplierTable)
+
+  PEPU_PartsList:
+    command: make_OrderedListsOfParts_PEPU()
+
+  PEPU_PartsSummary:
+    command: make_PartsSummary(PEPU_FlowerPartsData, PEPU_PartsList)
+
   PEPU_Inv:
     command: >
-      CalculateInvestmentForPEPU(RegressionTable, AvCountsPerMM,
-      AvWeightPerUnit, IndividualBasedWeights, FloweringCategories, Reproduction, MultiplierTable, GraphMaps)
+      CalculateInvestmentForPEPU(PEPU_ReproductionData, FloweringCategories, MultiplierTable, PEPU_GraphMaps, PEPU_PartsSummary)
+
   PEPU_Acc:
     command: >
-      CalculateAccesoryCostsForPEPU(Reproduction, PEPU_HarvestData, InvestmentCategories, PEPU_Inv)
+      CalculateAccesoryCostsForPEPU(PEPU_ReproductionData, PEPU_HarvestData, InvestmentCategories, PEPU_Inv)
+
   PEPU_RA:
     command: >
-      CalculateRAForPEPU(PEPU_Inv, PEPU_HarvestData, GraphMaps, IndividualsList)
+      CalculateRAForPEPU(PEPU_Inv, PEPU_HarvestData, PEPU_GraphMaps, IndividualsList)
+
+  PHPH_IndividualsList:
+    command: filterToPHPH(IndividualsList)
+
+  PHPH_FlowerPartsData:
+    command: filterToPHPH(FlowerPartsData)
 
   PHPH_HarvestData:
-    command: make_HarvestDataForPHPH(HarvestData)
+    command: filterToPHPH(HarvestData)
+
+  PHPH_ReproductionData:
+    command: filterToPHPH(ReproductionData)
+
+  PHPH_GraphMaps:
+    command: make_PHPH_GraphMaps(PHPH_PartsSummary, MultiplierTable)
+
+  PHPH_PartsList:
+    command: make_OrderedListsOfParts_PHPH()
+
+  PHPH_PartsSummary:
+    command: make_PartsSummary(PHPH_FlowerPartsData, PHPH_PartsList)
+
   PHPH_Inv:
     command: >
-      CalculateInvestmentForPHPH(RegressionTable, AvCountsPerMM,
-      AvWeightPerUnit, IndividualBasedWeights, FloweringCategories, Reproduction, MultiplierTable, GraphMaps)
+      CalculateInvestmentForPHPH(PHPH_ReproductionData, FloweringCategories, MultiplierTable, PHPH_GraphMaps, PHPH_PartsSummary)
+
   PHPH_Acc:
     command: >
-      CalculateAccesoryCostsForPHPH(Reproduction, PHPH_HarvestData, InvestmentCategories, PHPH_Inv)
+      CalculateAccesoryCostsForPHPH(PHPH_ReproductionData, PHPH_HarvestData, InvestmentCategories, PHPH_Inv)
+
   PHPH_RA:
     command: >
-      CalculateRAForPHPH(PHPH_Inv, PHPH_HarvestData, GraphMaps, IndividualsList)
+      CalculateRAForPHPH(PHPH_Inv, PHPH_HarvestData, PHPH_GraphMaps, IndividualsList)
+
+  PILI_IndividualsList:
+    command: filterToPILI(IndividualsList)
+
+  PILI_FlowerPartsData:
+    command: filterToPILI(FlowerPartsData)
 
   PILI_HarvestData:
-    command: make_HarvestDataForPILI(HarvestData)
+    command: filterToPILI(HarvestData)
+
+  PILI_ReproductionData:
+    command: filterToPILI(ReproductionData)
+
+  PILI_GraphMaps:
+    command: make_PILI_GraphMaps(PILI_PartsSummary, MultiplierTable)
+
+  PILI_PartsList:
+    command: make_OrderedListsOfParts_PILI()
+
+  PILI_PartsSummary:
+    command: make_PartsSummary(PILI_FlowerPartsData, PILI_PartsList)
+
   PILI_Inv:
     command: >
-      CalculateInvestmentForPILI(RegressionTable, AvCountsPerMM,
-      AvWeightPerUnit, IndividualBasedWeights, FloweringCategories, Reproduction, MultiplierTable, GraphMaps)
+      CalculateInvestmentForPILI(PILI_ReproductionData, FloweringCategories, MultiplierTable, PILI_GraphMaps, PILI_PartsSummary)
+
   PILI_Acc:
     command: >
-      CalculateAccesoryCostsForPILI(Reproduction, PILI_HarvestData, InvestmentCategories, PILI_Inv)
+      CalculateAccesoryCostsForPILI(PILI_ReproductionData, PILI_HarvestData, InvestmentCategories, PILI_Inv)
+
   PILI_RA:
     command: >
-      CalculateRAForPILI(PILI_Inv, PILI_HarvestData, GraphMaps, IndividualsList)
+      CalculateRAForPILI(PILI_Inv, PILI_HarvestData, PILI_GraphMaps, IndividualsList)
+
+  PUTU_IndividualsList:
+    command: filterToPUTU(IndividualsList)
+
+  PUTU_FlowerPartsData:
+    command: filterToPUTU(FlowerPartsData)
 
   PUTU_HarvestData:
-    command: make_HarvestDataForPUTU(HarvestData)
+    command: filterToPUTU(HarvestData)
+
+  PUTU_ReproductionData:
+    command: filterToPUTU(ReproductionData)
+
+  PUTU_GraphMaps:
+    command: make_PUTU_GraphMaps(PUTU_PartsSummary, MultiplierTable)
+
+  PUTU_PartsList:
+    command: make_OrderedListsOfParts_PUTU()
+
+  PUTU_PartsSummary:
+    command: make_PartsSummary(PUTU_FlowerPartsData, PUTU_PartsList)
+
   PUTU_Inv:
     command: >
-      CalculateInvestmentForPUTU(RegressionTable, AvCountsPerMM,
-      AvWeightPerUnit, IndividualBasedWeights, FloweringCategories, Reproduction, MultiplierTable, GraphMaps)
+      CalculateInvestmentForPUTU(PUTU_ReproductionData, FloweringCategories, MultiplierTable, PUTU_GraphMaps, PUTU_PartsSummary)
+
   PUTU_Acc:
     command: >
-      CalculateAccesoryCostsForPUTU(Reproduction, PUTU_HarvestData, InvestmentCategories, PUTU_Inv)
+      CalculateAccesoryCostsForPUTU(PUTU_ReproductionData, PUTU_HarvestData, InvestmentCategories, PUTU_Inv)
+
   PUTU_RA:
     command: >
-      CalculateRAForPUTU(PUTU_Inv, PUTU_HarvestData, GraphMaps, IndividualsList)
+      CalculateRAForPUTU(PUTU_Inv, PUTU_HarvestData, PUTU_GraphMaps, IndividualsList)
   RA_all:
     command: >
       combine_RA(

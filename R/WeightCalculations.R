@@ -24,7 +24,7 @@ RemoveDuplicates <- function(C) {
 
 # Choose specific individual
 
-WeightCalculationsForTree <- function(Tree, RegressionTable, AvCountsPerMM, AvWeightPerUnit, IBW, FloweringCategories) {
+WeightCalculationsForTree <- function(Tree, FloweringCategories, PartsSummary) {
   # Determine the id for individual and put it as the first element in a list
   TreeID <- as.character(unique(Tree$individual))
   TreeList <- list(TreeID = TreeID)
@@ -35,10 +35,10 @@ WeightCalculationsForTree <- function(Tree, RegressionTable, AvCountsPerMM, AvWe
     C_old <- Tree[(Tree$census == i) & (Tree$pre.new == "pre-existing"), ]
     C_new <- Tree[(Tree$census == i) & (Tree$pre.new == "new"), ]
     # Transforming measurments to weights
-    C_old_list <- WeightCalculationsAtCensus(C_old, TreeID, i, RegressionTable, AvCountsPerMM, AvWeightPerUnit, IBW, FloweringCategories)
+    C_old_list <- WeightCalculationsAtCensus(C_old, TreeID, i, FloweringCategories, PartsSummary)
   # Determine species name and allowed plant par
 
-    C_new_list <- WeightCalculationsAtCensus(C_new, TreeID, i, RegressionTable, AvCountsPerMM, AvWeightPerUnit, IBW, FloweringCategories)
+    C_new_list <- WeightCalculationsAtCensus(C_new, TreeID, i, FloweringCategories, PartsSummary)
     C_total <- c(C_old_list, C_new_list)
     C_total <- RemoveDuplicates(C_total)
     # Create list containing new, pre.existing and total data for the given census
@@ -98,13 +98,10 @@ WeightFromRegression <- function(height, diameter, species, part, individual, ce
   }
   if (n_i == 0) {
     parameters <- RegressionTable[(RegressionTable$species == species) & (RegressionTable$part == part), ]
-    # Regression equations
-    if (is.na(diameter)) {
-      w <- parameters$intercept + parameters$slope * height^parameters$reg.order
+    if(parameters[["reg.type"]] =="volume"){
+      w <- parameters$intercept + parameters$slope * get_volume(diameter,height)
     } else {
-      # Calculations based on volume (cylinder approximation of cones geometry) and density
-      volume <- pi/4 * diameter^2 * height
-      w <- parameters$slope * volume
+      w <- parameters$intercept + parameters$slope * height^parameters$reg.order
     }
   }
   w
@@ -113,21 +110,27 @@ WeightFromRegression <- function(height, diameter, species, part, individual, ce
 
 # Function that for given Census contruct the list that contains the information about the weight of each part
 
-WeightCalculationsAtCensus <- function(C, TreeID, census, RegressionTable, AvCountsPerMM, AvWeightPerUnit, IBW, FloweringCategories) {
+WeightCalculationsAtCensus <- function(C, TreeID, census, FloweringCategories, PartsSummary) {
+
+  RegressionTable <- PartsSummary$RegressionTable
+  AvCountsPerMM  <- PartsSummary$AvCountsPerMM
+  AvWeightPerUnit <- PartsSummary$AvWeightPerUnit
+  IBW <- PartsSummary$IndividualBasedWeights
+
   # Determine species name and allowed plant parts together with their way of measuring
   species <- substr(TreeID, 1, 4)
   Parts <- FloweringCategories[, c("flower_part", species)]
-  Parts <- Parts[!(Parts[, 2] == ""), ]
+  Parts <- Parts[!(Parts[, species] == ""), ]
   n.parts <- nrow(Parts)
   C_list <- list()
   k <- 0
   # For each of the parts check how to transform inform in repro_spreadheet to weight and perform given calculations
   for (i in seq_len(n.parts)) {
-    if (Parts[i, 2] == "count") {
-      count_ch <- C[, Parts[i, 1]]
+    if (Parts[i, species] == "count") {
+      count_ch <- C[, Parts[i, "flower_part"]]
       if (!is.na(count_ch)) {
         k <- k + 1
-        type <- Parts[i, 1]
+        type <- Parts[i, "flower_part"]
         m.type <- "count"
         count <- sum(as.numeric(unlist(strsplit(as.character(count_ch), split = ";"))))
         weight <- WeightFromCount(count, species, type, TreeID, census, AvWeightPerUnit, IBW)
@@ -142,11 +145,11 @@ WeightCalculationsAtCensus <- function(C, TreeID, census, RegressionTable, AvCou
         C_list[[k]] <- Element
       }
     }
-    if (Parts[i, 2] == "count_by_length") {
-      length_ch <- C[, paste0(Parts[i, 1], "_by_length")]
+    if (Parts[i, species] == "count_by_length") {
+      length_ch <- C[, paste0(Parts[i, "flower_part"], "_by_length")]
       if (!is.na(length_ch)) {
         k <- k + 1
-        type <- Parts[i, 1]
+        type <- Parts[i, "flower_part"]
         m.type <- "length"
         length <- sum(as.numeric(unlist(strsplit(as.character(length_ch), split = ";"))))
         weight <- WeightFromLength(length, species, type, TreeID, census, AvCountsPerMM, AvWeightPerUnit, IBW)
@@ -155,21 +158,21 @@ WeightCalculationsAtCensus <- function(C, TreeID, census, RegressionTable, AvCou
       }
     }
 
-    if (Parts[i, 2] == "count; count_by_length") {
-      count_ch <- C[, Parts[i, 1]]
+    if (Parts[i, species] == "count; count_by_length") {
+      count_ch <- C[, Parts[i, "flower_part"]]
       if (!is.na(count_ch)) {
         k <- k + 1
-        type <- Parts[i, 1]
+        type <- Parts[i, "flower_part"]
         m.type <- "count"
         count <- sum(as.numeric(unlist(strsplit(as.character(count_ch), split = ";"))))
         weight <- WeightFromCount(count, species, type, TreeID, census, AvWeightPerUnit, IBW)
         Element <- list(type = type, m.type = m.type, count = count, weight = weight)
         C_list[[k]] <- Element
       }
-      length_ch <- C[, paste0(Parts[i, 1], "_by_length")]
+      length_ch <- C[, paste0(Parts[i, "flower_part"], "_by_length")]
       if (!is.na(length_ch)) {
         k <- k + 1
-        type <- Parts[i, 1]
+        type <- Parts[i, "flower_part"]
         m.type <- "length"
         length <- sum(as.numeric(unlist(strsplit(as.character(length_ch), split = ";"))))
 
@@ -180,11 +183,11 @@ WeightCalculationsAtCensus <- function(C, TreeID, census, RegressionTable, AvCou
     }
 
 
-    if (Parts[i, 2] == "regress_by_dim") {
-      height_ch <- C[, Parts[i, 1]]
+    if (Parts[i, species] == "regress_by_dim") {
+      height_ch <- C[, Parts[i, "flower_part"]]
       if (!is.na(height_ch)) {
         k <- k + 1
-        type <- Parts[i, 1]
+        type <- Parts[i, "flower_part"]
         m.type <- "regress_by_dim"
         heights <- as.numeric(unlist(strsplit(as.character(height_ch), split = ";")))
         count <- length(heights)
@@ -197,11 +200,11 @@ WeightCalculationsAtCensus <- function(C, TreeID, census, RegressionTable, AvCou
       }
     }
 
-    if (Parts[i, 2] == "volume") {
-      dimension_ch <- C[, Parts[i, 1]]
+    if (Parts[i, species] == "volume") {
+      dimension_ch <- C[, Parts[i, "flower_part"]]
       if (!is.na(dimension_ch)) {
         k <- k + 1
-        type <- Parts[i, 1]
+        type <- Parts[i, "flower_part"]
         m.type <- "volume"
         heights <- matrix(as.numeric(unlist(strsplit(unlist(strsplit(as.character(dimension_ch), split = ";")), split = "x"))), ncol = 2, byrow = T)[, 1]
         diameters <- matrix(as.numeric(unlist(strsplit(unlist(strsplit(as.character(dimension_ch), split = ";")), split = "x"))), ncol = 2, byrow = T)[,
