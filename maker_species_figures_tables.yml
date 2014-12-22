@@ -25,209 +25,209 @@ plot_options:
 targets:
   figures:
     depends:
-      - docs/figures/RA_comparison_age.pdf
-      - docs/figures/RA_comparison_diam.pdf
-      - docs/figures/RA_comparison_weight.pdf
-      - docs/figures/RA_age_BAER.pdf
-      - docs/figures/RA_weight_diam_BAER.pdf
-      - docs/figures/RA_age_BOLE.pdf
-      - docs/figures/RA_weight_diam_BOLE.pdf
-      - docs/figures/RA_age_COER.pdf
-      - docs/figures/RA_weight_diam_COER.pdf
-      - docs/figures/RA_age_EPMI.pdf
-      - docs/figures/RA_weight_diam_EPMI.pdf
-      - docs/figures/RA_age_GRBU.pdf
-      - docs/figures/RA_weight_diam_GRBU.pdf
-      - docs/figures/RA_age_GRSP.pdf
-      - docs/figures/RA_weight_diam_GRSP.pdf
-      - docs/figures/RA_age_HATE.pdf
-      - docs/figures/RA_weight_diam_HATE.pdf
-      - docs/figures/RA_age_HEPU.pdf
-      - docs/figures/RA_weight_diam_HEPU.pdf
-      - docs/figures/RA_age_LEES.pdf
-      - docs/figures/RA_weight_diam_LEES.pdf
-      - docs/figures/RA_age_PELA.pdf
-      - docs/figures/RA_weight_diam_PELA.pdf
-      - docs/figures/RA_age_PEPU.pdf
-      - docs/figures/RA_weight_diam_PEPU.pdf
-      - docs/figures/RA_age_PHPH.pdf
-      - docs/figures/RA_weight_diam_PHPH.pdf
-      - docs/figures/RA_age_PILI.pdf
-      - docs/figures/RA_weight_diam_PILI.pdf
-      - docs/figures/RA_age_PUTU.pdf
-      - docs/figures/RA_weight_diam_PUTU.pdf
+      - figures/RA_comparison_age.pdf
+      - figures/RA_comparison_diam.pdf
+      - figures/RA_comparison_weight.pdf
+      - figures/RA_age_BAER.pdf
+      - figures/RA_weight_diam_BAER.pdf
+      - figures/RA_age_BOLE.pdf
+      - figures/RA_weight_diam_BOLE.pdf
+      - figures/RA_age_COER.pdf
+      - figures/RA_weight_diam_COER.pdf
+      - figures/RA_age_EPMI.pdf
+      - figures/RA_weight_diam_EPMI.pdf
+      - figures/RA_age_GRBU.pdf
+      - figures/RA_weight_diam_GRBU.pdf
+      - figures/RA_age_GRSP.pdf
+      - figures/RA_weight_diam_GRSP.pdf
+      - figures/RA_age_HATE.pdf
+      - figures/RA_weight_diam_HATE.pdf
+      - figures/RA_age_HEPU.pdf
+      - figures/RA_weight_diam_HEPU.pdf
+      - figures/RA_age_LEES.pdf
+      - figures/RA_weight_diam_LEES.pdf
+      - figures/RA_age_PELA.pdf
+      - figures/RA_weight_diam_PELA.pdf
+      - figures/RA_age_PEPU.pdf
+      - figures/RA_weight_diam_PEPU.pdf
+      - figures/RA_age_PHPH.pdf
+      - figures/RA_weight_diam_PHPH.pdf
+      - figures/RA_age_PILI.pdf
+      - figures/RA_weight_diam_PILI.pdf
+      - figures/RA_age_PUTU.pdf
+      - figures/RA_weight_diam_PUTU.pdf
   tables:
     depends:
-#      - docs/tables/AvCountsPerMM.tex
-#      - docs/tables/RegressionTable.tex
+#      - tables/AvCountsPerMM.tex
+#      - tables/RegressionTable.tex
 
-      - docs/tables/BAER.tex
-      - docs/tables/BOLE.tex
-      - docs/tables/COER.tex
-      - docs/tables/EPMI.tex
-      - docs/tables/GRBU.tex
-      - docs/tables/GRSP.tex
-      - docs/tables/HATE.tex
-      - docs/tables/HEPU.tex
-      - docs/tables/LEES.tex
-      - docs/tables/PELA.tex
-      - docs/tables/PEPU.tex
-      - docs/tables/PHPH.tex
-      - docs/tables/PILI.tex
-      - docs/tables/PUTU.tex
-#  docs/tables/AvCountsPerMM.tex:
+      - tables/BAER.tex
+      - tables/BOLE.tex
+      - tables/COER.tex
+      - tables/EPMI.tex
+      - tables/GRBU.tex
+      - tables/GRSP.tex
+      - tables/HATE.tex
+      - tables/HEPU.tex
+      - tables/LEES.tex
+      - tables/PELA.tex
+      - tables/PEPU.tex
+      - tables/PHPH.tex
+      - tables/PILI.tex
+      - tables/PUTU.tex
+#  tables/AvCountsPerMM.tex:
 #    command: print_xtable(AvWeightPerUnit, target_name)
-#  docs/tables/RegressionTable.tex:
+#  tables/RegressionTable.tex:
 #    command: print_xtable(RegressionTable, target_name)
 
-  docs/figures/RA_comparison_age.pdf:
+  figures/RA_comparison_age.pdf:
     command: plot_ReproductionAllocation_comparison_age(ReproductionAllocation_all)
     plot: wide
-  docs/figures/RA_comparison_diam.pdf:
+  figures/RA_comparison_diam.pdf:
     command: plot_ReproductionAllocation_comparison_diam(ReproductionAllocation_all)
     plot: wide
-  docs/figures/RA_comparison_weight.pdf:
+  figures/RA_comparison_weight.pdf:
     command: plot_ReproductionAllocation_comparison_weight(ReproductionAllocation_all)
     plot: wide
 
-  docs/figures/RA_age_BAER.pdf:
+  figures/RA_age_BAER.pdf:
     command: plot_species_ReproductionAllocation_age_panel(BAER_ReproductionAllocation)
     plot: extra_wide
 
-  docs/figures/RA_weight_diam_BAER.pdf:
+  figures/RA_weight_diam_BAER.pdf:
     command: plot_species_ReproductionAllocation_weight_diam_panel(BAER_ReproductionAllocation)
     plot: extra_wide
-  docs/figures/RA_age_BOLE.pdf:
+  figures/RA_age_BOLE.pdf:
     command: plot_species_ReproductionAllocation_age_panel(BOLE_ReproductionAllocation)
     plot: extra_wide
 
-  docs/figures/RA_weight_diam_BOLE.pdf:
+  figures/RA_weight_diam_BOLE.pdf:
     command: plot_species_ReproductionAllocation_weight_diam_panel(BOLE_ReproductionAllocation)
     plot: extra_wide
-  docs/figures/RA_age_COER.pdf:
+  figures/RA_age_COER.pdf:
     command: plot_species_ReproductionAllocation_age_panel(COER_ReproductionAllocation)
     plot: extra_wide
 
-  docs/figures/RA_weight_diam_COER.pdf:
+  figures/RA_weight_diam_COER.pdf:
     command: plot_species_ReproductionAllocation_weight_diam_panel(COER_ReproductionAllocation)
     plot: extra_wide
-  docs/figures/RA_age_EPMI.pdf:
+  figures/RA_age_EPMI.pdf:
     command: plot_species_ReproductionAllocation_age_panel(EPMI_ReproductionAllocation)
     plot: extra_wide
 
-  docs/figures/RA_weight_diam_EPMI.pdf:
+  figures/RA_weight_diam_EPMI.pdf:
     command: plot_species_ReproductionAllocation_weight_diam_panel(EPMI_ReproductionAllocation)
     plot: extra_wide
-  docs/figures/RA_age_GRBU.pdf:
+  figures/RA_age_GRBU.pdf:
     command: plot_species_ReproductionAllocation_age_panel(GRBU_ReproductionAllocation)
     plot: extra_wide
 
-  docs/figures/RA_weight_diam_GRBU.pdf:
+  figures/RA_weight_diam_GRBU.pdf:
     command: plot_species_ReproductionAllocation_weight_diam_panel(GRBU_ReproductionAllocation)
     plot: extra_wide
-  docs/figures/RA_age_GRSP.pdf:
+  figures/RA_age_GRSP.pdf:
     command: plot_species_ReproductionAllocation_age_panel(GRSP_ReproductionAllocation)
     plot: extra_wide
 
-  docs/figures/RA_weight_diam_GRSP.pdf:
+  figures/RA_weight_diam_GRSP.pdf:
     command: plot_species_ReproductionAllocation_weight_diam_panel(GRSP_ReproductionAllocation)
     plot: extra_wide
-  docs/figures/RA_age_HATE.pdf:
+  figures/RA_age_HATE.pdf:
     command: plot_species_ReproductionAllocation_age_panel(HATE_ReproductionAllocation)
     plot: extra_wide
 
-  docs/figures/RA_weight_diam_HATE.pdf:
+  figures/RA_weight_diam_HATE.pdf:
     command: plot_species_ReproductionAllocation_weight_diam_panel(HATE_ReproductionAllocation)
     plot: extra_wide
-  docs/figures/RA_age_HEPU.pdf:
+  figures/RA_age_HEPU.pdf:
     command: plot_species_ReproductionAllocation_age_panel(HEPU_ReproductionAllocation)
     plot: extra_wide
 
-  docs/figures/RA_weight_diam_HEPU.pdf:
+  figures/RA_weight_diam_HEPU.pdf:
     command: plot_species_ReproductionAllocation_weight_diam_panel(HEPU_ReproductionAllocation)
     plot: extra_wide
-  docs/figures/RA_age_LEES.pdf:
+  figures/RA_age_LEES.pdf:
     command: plot_species_ReproductionAllocation_age_panel(LEES_ReproductionAllocation)
     plot: extra_wide
 
-  docs/figures/RA_weight_diam_LEES.pdf:
+  figures/RA_weight_diam_LEES.pdf:
     command: plot_species_ReproductionAllocation_weight_diam_panel(LEES_ReproductionAllocation)
     plot: extra_wide
-  docs/figures/RA_age_PELA.pdf:
+  figures/RA_age_PELA.pdf:
     command: plot_species_ReproductionAllocation_age_panel(PELA_ReproductionAllocation)
     plot: extra_wide
 
-  docs/figures/RA_weight_diam_PELA.pdf:
+  figures/RA_weight_diam_PELA.pdf:
     command: plot_species_ReproductionAllocation_weight_diam_panel(PELA_ReproductionAllocation)
     plot: extra_wide
-  docs/figures/RA_age_PEPU.pdf:
+  figures/RA_age_PEPU.pdf:
     command: plot_species_ReproductionAllocation_age_panel(PEPU_ReproductionAllocation)
     plot: extra_wide
 
-  docs/figures/RA_weight_diam_PEPU.pdf:
+  figures/RA_weight_diam_PEPU.pdf:
     command: plot_species_ReproductionAllocation_weight_diam_panel(PEPU_ReproductionAllocation)
     plot: extra_wide
-  docs/figures/RA_age_PHPH.pdf:
+  figures/RA_age_PHPH.pdf:
     command: plot_species_ReproductionAllocation_age_panel(PHPH_ReproductionAllocation)
     plot: extra_wide
 
-  docs/figures/RA_weight_diam_PHPH.pdf:
+  figures/RA_weight_diam_PHPH.pdf:
     command: plot_species_ReproductionAllocation_weight_diam_panel(PHPH_ReproductionAllocation)
     plot: extra_wide
-  docs/figures/RA_age_PILI.pdf:
+  figures/RA_age_PILI.pdf:
     command: plot_species_ReproductionAllocation_age_panel(PILI_ReproductionAllocation)
     plot: extra_wide
 
-  docs/figures/RA_weight_diam_PILI.pdf:
+  figures/RA_weight_diam_PILI.pdf:
     command: plot_species_ReproductionAllocation_weight_diam_panel(PILI_ReproductionAllocation)
     plot: extra_wide
-  docs/figures/RA_age_PUTU.pdf:
+  figures/RA_age_PUTU.pdf:
     command: plot_species_ReproductionAllocation_age_panel(PUTU_ReproductionAllocation)
     plot: extra_wide
 
-  docs/figures/RA_weight_diam_PUTU.pdf:
+  figures/RA_weight_diam_PUTU.pdf:
     command: plot_species_ReproductionAllocation_weight_diam_panel(PUTU_ReproductionAllocation)
     plot: extra_wide
 #
-#  docs/tables/BAER.tex:
+#  tables/BAER.tex:
 #    command: print_xtable_BAER(BAER_PartsSummary, target_name)
 #
-#  docs/tables/BOLE.tex:
+#  tables/BOLE.tex:
 #    command: print_xtable_BOLE(BOLE_PartsSummary, target_name)
 #
-#  docs/tables/COER.tex:
+#  tables/COER.tex:
 #    command: print_xtable_COER(COER_PartsSummary, target_name)
 #
-#  docs/tables/EPMI.tex:
+#  tables/EPMI.tex:
 #    command: print_xtable_EPMI(EPMI_PartsSummary, target_name)
 #
-#  docs/tables/GRBU.tex:
+#  tables/GRBU.tex:
 #    command: print_xtable_GRBU(GRBU_PartsSummary, target_name)
 #
-#  docs/tables/GRSP.tex:
+#  tables/GRSP.tex:
 #    command: print_xtable_GRSP(GRSP_PartsSummary, target_name)
 #
-#  docs/tables/HATE.tex:
+#  tables/HATE.tex:
 #    command: print_xtable_HATE(HATE_PartsSummary, target_name)
 #
-#  docs/tables/HEPU.tex:
+#  tables/HEPU.tex:
 #    command: print_xtable_HEPU(HEPU_PartsSummary, target_name)
 #
-#  docs/tables/LEES.tex:
+#  tables/LEES.tex:
 #    command: print_xtable_LEES(LEES_PartsSummary, target_name)
 #
-#  docs/tables/PELA.tex:
+#  tables/PELA.tex:
 #    command: print_xtable_PELA(PELA_PartsSummary, target_name)
 #
-#  docs/tables/PEPU.tex:
+#  tables/PEPU.tex:
 #    command: print_xtable_PEPU(PEPU_PartsSummary, target_name)
 #
-#  docs/tables/PHPH.tex:
+#  tables/PHPH.tex:
 #    command: print_xtable_PHPH(PHPH_PartsSummary, target_name)
 #
-#  docs/tables/PILI.tex:
+#  tables/PILI.tex:
 #    command: print_xtable_PILI(PILI_PartsSummary, target_name)
 #
-#  docs/tables/PUTU.tex:
+#  tables/PUTU.tex:
 #    command: print_xtable_PUTU(PUTU_PartsSummary, target_name)
 #
