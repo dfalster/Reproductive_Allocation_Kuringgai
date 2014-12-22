@@ -211,7 +211,7 @@ make_IndividualBasedWeights <- function(FPSummary) {
 }
 
 
-combine_RA <- function(..., d=list(...), IndividualsList) {
+combine_ReproductionAllocation <- function(..., d=list(...), IndividualsList) {
     ret <- ldply(d, function(x) x)
     if(!all(ret$Tree_ID %in% IndividualsList$individual[IndividualsList$use_for_allocation_calculations]))
       stop("problem with individuals list")

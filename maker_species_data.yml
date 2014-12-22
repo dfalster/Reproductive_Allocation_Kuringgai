@@ -11,9 +11,9 @@ targets:
       - BAER_GraphMaps
       - BAER_PartsList
       - BAER_PartsSummary
-      - BAER_Inv
-      - BAER_Acc
-      - BAER_RA
+      - BAER_Investment
+      - BAER_AccessoryCosts
+      - BAER_ReproductionAllocation
 
       - BOLE_IndividualsList
       - BOLE_FlowerPartsData
@@ -22,9 +22,9 @@ targets:
       - BOLE_GraphMaps
       - BOLE_PartsList
       - BOLE_PartsSummary
-      - BOLE_Inv
-      - BOLE_Acc
-      - BOLE_RA
+      - BOLE_Investment
+      - BOLE_AccessoryCosts
+      - BOLE_ReproductionAllocation
 
       - COER_IndividualsList
       - COER_FlowerPartsData
@@ -33,9 +33,9 @@ targets:
       - COER_GraphMaps
       - COER_PartsList
       - COER_PartsSummary
-      - COER_Inv
-      - COER_Acc
-      - COER_RA
+      - COER_Investment
+      - COER_AccessoryCosts
+      - COER_ReproductionAllocation
 
       - EPMI_IndividualsList
       - EPMI_FlowerPartsData
@@ -44,9 +44,9 @@ targets:
       - EPMI_GraphMaps
       - EPMI_PartsList
       - EPMI_PartsSummary
-      - EPMI_Inv
-      - EPMI_Acc
-      - EPMI_RA
+      - EPMI_Investment
+      - EPMI_AccessoryCosts
+      - EPMI_ReproductionAllocation
 
       - GRBU_IndividualsList
       - GRBU_FlowerPartsData
@@ -55,9 +55,9 @@ targets:
       - GRBU_GraphMaps
       - GRBU_PartsList
       - GRBU_PartsSummary
-      - GRBU_Inv
-      - GRBU_Acc
-      - GRBU_RA
+      - GRBU_Investment
+      - GRBU_AccessoryCosts
+      - GRBU_ReproductionAllocation
 
       - GRSP_IndividualsList
       - GRSP_FlowerPartsData
@@ -66,9 +66,9 @@ targets:
       - GRSP_GraphMaps
       - GRSP_PartsList
       - GRSP_PartsSummary
-      - GRSP_Inv
-      - GRSP_Acc
-      - GRSP_RA
+      - GRSP_Investment
+      - GRSP_AccessoryCosts
+      - GRSP_ReproductionAllocation
 
       - HATE_IndividualsList
       - HATE_FlowerPartsData
@@ -77,9 +77,9 @@ targets:
       - HATE_GraphMaps
       - HATE_PartsList
       - HATE_PartsSummary
-      - HATE_Inv
-      - HATE_Acc
-      - HATE_RA
+      - HATE_Investment
+      - HATE_AccessoryCosts
+      - HATE_ReproductionAllocation
 
       - HEPU_IndividualsList
       - HEPU_FlowerPartsData
@@ -88,9 +88,9 @@ targets:
       - HEPU_GraphMaps
       - HEPU_PartsList
       - HEPU_PartsSummary
-      - HEPU_Inv
-      - HEPU_Acc
-      - HEPU_RA
+      - HEPU_Investment
+      - HEPU_AccessoryCosts
+      - HEPU_ReproductionAllocation
 
       - LEES_IndividualsList
       - LEES_FlowerPartsData
@@ -99,9 +99,9 @@ targets:
       - LEES_GraphMaps
       - LEES_PartsList
       - LEES_PartsSummary
-      - LEES_Inv
-      - LEES_Acc
-      - LEES_RA
+      - LEES_Investment
+      - LEES_AccessoryCosts
+      - LEES_ReproductionAllocation
 
       - PELA_IndividualsList
       - PELA_FlowerPartsData
@@ -110,9 +110,9 @@ targets:
       - PELA_GraphMaps
       - PELA_PartsList
       - PELA_PartsSummary
-      - PELA_Inv
-      - PELA_Acc
-      - PELA_RA
+      - PELA_Investment
+      - PELA_AccessoryCosts
+      - PELA_ReproductionAllocation
 
       - PEPU_IndividualsList
       - PEPU_FlowerPartsData
@@ -121,9 +121,9 @@ targets:
       - PEPU_GraphMaps
       - PEPU_PartsList
       - PEPU_PartsSummary
-      - PEPU_Inv
-      - PEPU_Acc
-      - PEPU_RA
+      - PEPU_Investment
+      - PEPU_AccessoryCosts
+      - PEPU_ReproductionAllocation
 
       - PHPH_IndividualsList
       - PHPH_FlowerPartsData
@@ -132,9 +132,9 @@ targets:
       - PHPH_GraphMaps
       - PHPH_PartsList
       - PHPH_PartsSummary
-      - PHPH_Inv
-      - PHPH_Acc
-      - PHPH_RA
+      - PHPH_Investment
+      - PHPH_AccessoryCosts
+      - PHPH_ReproductionAllocation
 
       - PILI_IndividualsList
       - PILI_FlowerPartsData
@@ -143,9 +143,9 @@ targets:
       - PILI_GraphMaps
       - PILI_PartsList
       - PILI_PartsSummary
-      - PILI_Inv
-      - PILI_Acc
-      - PILI_RA
+      - PILI_Investment
+      - PILI_AccessoryCosts
+      - PILI_ReproductionAllocation
 
       - PUTU_IndividualsList
       - PUTU_FlowerPartsData
@@ -154,9 +154,9 @@ targets:
       - PUTU_GraphMaps
       - PUTU_PartsList
       - PUTU_PartsSummary
-      - PUTU_Inv
-      - PUTU_Acc
-      - PUTU_RA
+      - PUTU_Investment
+      - PUTU_AccessoryCosts
+      - PUTU_ReproductionAllocation
 
 
   BAER_IndividualsList:
@@ -180,17 +180,17 @@ targets:
   BAER_PartsSummary:
     command: make_PartsSummary(BAER_FlowerPartsData, BAER_PartsList)
 
-  BAER_Inv:
+  BAER_Investment:
     command: >
       CalculateInvestmentForBAER(BAER_ReproductionData, FloweringCategories, MultiplierTable, BAER_GraphMaps, BAER_PartsSummary)
 
-  BAER_Acc:
+  BAER_AccessoryCosts:
     command: >
-      CalculateAccesoryCostsForBAER(BAER_ReproductionData, BAER_HarvestData, InvestmentCategories, BAER_Inv)
+      CalculateAccesoryCostsForBAER(BAER_ReproductionData, BAER_HarvestData, InvestmentCategories, BAER_Investment)
 
-  BAER_RA:
+  BAER_ReproductionAllocation:
     command: >
-      CalculateRAForBAER(BAER_Inv, BAER_HarvestData, BAER_GraphMaps, IndividualsList)
+      CalculateRAForBAER(BAER_Investment, BAER_HarvestData, BAER_GraphMaps, IndividualsList)
 
   BOLE_IndividualsList:
     command: filterToBOLE(IndividualsList)
@@ -213,17 +213,17 @@ targets:
   BOLE_PartsSummary:
     command: make_PartsSummary(BOLE_FlowerPartsData, BOLE_PartsList)
 
-  BOLE_Inv:
+  BOLE_Investment:
     command: >
       CalculateInvestmentForBOLE(BOLE_ReproductionData, FloweringCategories, MultiplierTable, BOLE_GraphMaps, BOLE_PartsSummary)
 
-  BOLE_Acc:
+  BOLE_AccessoryCosts:
     command: >
-      CalculateAccesoryCostsForBOLE(BOLE_ReproductionData, BOLE_HarvestData, InvestmentCategories, BOLE_Inv)
+      CalculateAccesoryCostsForBOLE(BOLE_ReproductionData, BOLE_HarvestData, InvestmentCategories, BOLE_Investment)
 
-  BOLE_RA:
+  BOLE_ReproductionAllocation:
     command: >
-      CalculateRAForBOLE(BOLE_Inv, BOLE_HarvestData, BOLE_GraphMaps, IndividualsList)
+      CalculateRAForBOLE(BOLE_Investment, BOLE_HarvestData, BOLE_GraphMaps, IndividualsList)
 
   COER_IndividualsList:
     command: filterToCOER(IndividualsList)
@@ -246,17 +246,17 @@ targets:
   COER_PartsSummary:
     command: make_PartsSummary(COER_FlowerPartsData, COER_PartsList)
 
-  COER_Inv:
+  COER_Investment:
     command: >
       CalculateInvestmentForCOER(COER_ReproductionData, FloweringCategories, MultiplierTable, COER_GraphMaps, COER_PartsSummary)
 
-  COER_Acc:
+  COER_AccessoryCosts:
     command: >
-      CalculateAccesoryCostsForCOER(COER_ReproductionData, COER_HarvestData, InvestmentCategories, COER_Inv)
+      CalculateAccesoryCostsForCOER(COER_ReproductionData, COER_HarvestData, InvestmentCategories, COER_Investment)
 
-  COER_RA:
+  COER_ReproductionAllocation:
     command: >
-      CalculateRAForCOER(COER_Inv, COER_HarvestData, COER_GraphMaps, IndividualsList)
+      CalculateRAForCOER(COER_Investment, COER_HarvestData, COER_GraphMaps, IndividualsList)
 
   EPMI_IndividualsList:
     command: filterToEPMI(IndividualsList)
@@ -279,17 +279,17 @@ targets:
   EPMI_PartsSummary:
     command: make_PartsSummary(EPMI_FlowerPartsData, EPMI_PartsList)
 
-  EPMI_Inv:
+  EPMI_Investment:
     command: >
       CalculateInvestmentForEPMI(EPMI_ReproductionData, FloweringCategories, MultiplierTable, EPMI_GraphMaps, EPMI_PartsSummary)
 
-  EPMI_Acc:
+  EPMI_AccessoryCosts:
     command: >
-      CalculateAccesoryCostsForEPMI(EPMI_ReproductionData, EPMI_HarvestData, InvestmentCategories, EPMI_Inv)
+      CalculateAccesoryCostsForEPMI(EPMI_ReproductionData, EPMI_HarvestData, InvestmentCategories, EPMI_Investment)
 
-  EPMI_RA:
+  EPMI_ReproductionAllocation:
     command: >
-      CalculateRAForEPMI(EPMI_Inv, EPMI_HarvestData, EPMI_GraphMaps, IndividualsList)
+      CalculateRAForEPMI(EPMI_Investment, EPMI_HarvestData, EPMI_GraphMaps, IndividualsList)
 
   GRBU_IndividualsList:
     command: filterToGRBU(IndividualsList)
@@ -312,17 +312,17 @@ targets:
   GRBU_PartsSummary:
     command: make_PartsSummary(GRBU_FlowerPartsData, GRBU_PartsList)
 
-  GRBU_Inv:
+  GRBU_Investment:
     command: >
       CalculateInvestmentForGRBU(GRBU_ReproductionData, FloweringCategories, MultiplierTable, GRBU_GraphMaps, GRBU_PartsSummary)
 
-  GRBU_Acc:
+  GRBU_AccessoryCosts:
     command: >
-      CalculateAccesoryCostsForGRBU(GRBU_ReproductionData, GRBU_HarvestData, InvestmentCategories, GRBU_Inv)
+      CalculateAccesoryCostsForGRBU(GRBU_ReproductionData, GRBU_HarvestData, InvestmentCategories, GRBU_Investment)
 
-  GRBU_RA:
+  GRBU_ReproductionAllocation:
     command: >
-      CalculateRAForGRBU(GRBU_Inv, GRBU_HarvestData, GRBU_GraphMaps, IndividualsList)
+      CalculateRAForGRBU(GRBU_Investment, GRBU_HarvestData, GRBU_GraphMaps, IndividualsList)
 
   GRSP_IndividualsList:
     command: filterToGRSP(IndividualsList)
@@ -345,17 +345,17 @@ targets:
   GRSP_PartsSummary:
     command: make_PartsSummary(GRSP_FlowerPartsData, GRSP_PartsList)
 
-  GRSP_Inv:
+  GRSP_Investment:
     command: >
       CalculateInvestmentForGRSP(GRSP_ReproductionData, FloweringCategories, MultiplierTable, GRSP_GraphMaps, GRSP_PartsSummary)
 
-  GRSP_Acc:
+  GRSP_AccessoryCosts:
     command: >
-      CalculateAccesoryCostsForGRSP(GRSP_ReproductionData, GRSP_HarvestData, InvestmentCategories, GRSP_Inv)
+      CalculateAccesoryCostsForGRSP(GRSP_ReproductionData, GRSP_HarvestData, InvestmentCategories, GRSP_Investment)
 
-  GRSP_RA:
+  GRSP_ReproductionAllocation:
     command: >
-      CalculateRAForGRSP(GRSP_Inv, GRSP_HarvestData, GRSP_GraphMaps, IndividualsList)
+      CalculateRAForGRSP(GRSP_Investment, GRSP_HarvestData, GRSP_GraphMaps, IndividualsList)
 
   HATE_IndividualsList:
     command: filterToHATE(IndividualsList)
@@ -378,17 +378,17 @@ targets:
   HATE_PartsSummary:
     command: make_PartsSummary(HATE_FlowerPartsData, HATE_PartsList)
 
-  HATE_Inv:
+  HATE_Investment:
     command: >
       CalculateInvestmentForHATE(HATE_ReproductionData, FloweringCategories, MultiplierTable, HATE_GraphMaps, HATE_PartsSummary)
 
-  HATE_Acc:
+  HATE_AccessoryCosts:
     command: >
-      CalculateAccesoryCostsForHATE(HATE_ReproductionData, HATE_HarvestData, InvestmentCategories, HATE_Inv)
+      CalculateAccesoryCostsForHATE(HATE_ReproductionData, HATE_HarvestData, InvestmentCategories, HATE_Investment)
 
-  HATE_RA:
+  HATE_ReproductionAllocation:
     command: >
-      CalculateRAForHATE(HATE_Inv, HATE_HarvestData, HATE_GraphMaps, IndividualsList)
+      CalculateRAForHATE(HATE_Investment, HATE_HarvestData, HATE_GraphMaps, IndividualsList)
 
   HEPU_IndividualsList:
     command: filterToHEPU(IndividualsList)
@@ -411,17 +411,17 @@ targets:
   HEPU_PartsSummary:
     command: make_PartsSummary(HEPU_FlowerPartsData, HEPU_PartsList)
 
-  HEPU_Inv:
+  HEPU_Investment:
     command: >
       CalculateInvestmentForHEPU(HEPU_ReproductionData, FloweringCategories, MultiplierTable, HEPU_GraphMaps, HEPU_PartsSummary)
 
-  HEPU_Acc:
+  HEPU_AccessoryCosts:
     command: >
-      CalculateAccesoryCostsForHEPU(HEPU_ReproductionData, HEPU_HarvestData, InvestmentCategories, HEPU_Inv)
+      CalculateAccesoryCostsForHEPU(HEPU_ReproductionData, HEPU_HarvestData, InvestmentCategories, HEPU_Investment)
 
-  HEPU_RA:
+  HEPU_ReproductionAllocation:
     command: >
-      CalculateRAForHEPU(HEPU_Inv, HEPU_HarvestData, HEPU_GraphMaps, IndividualsList)
+      CalculateRAForHEPU(HEPU_Investment, HEPU_HarvestData, HEPU_GraphMaps, IndividualsList)
 
   LEES_IndividualsList:
     command: filterToLEES(IndividualsList)
@@ -444,17 +444,17 @@ targets:
   LEES_PartsSummary:
     command: make_PartsSummary(LEES_FlowerPartsData, LEES_PartsList)
 
-  LEES_Inv:
+  LEES_Investment:
     command: >
       CalculateInvestmentForLEES(LEES_ReproductionData, FloweringCategories, MultiplierTable, LEES_GraphMaps, LEES_PartsSummary)
 
-  LEES_Acc:
+  LEES_AccessoryCosts:
     command: >
-      CalculateAccesoryCostsForLEES(LEES_ReproductionData, LEES_HarvestData, InvestmentCategories, LEES_Inv)
+      CalculateAccesoryCostsForLEES(LEES_ReproductionData, LEES_HarvestData, InvestmentCategories, LEES_Investment)
 
-  LEES_RA:
+  LEES_ReproductionAllocation:
     command: >
-      CalculateRAForLEES(LEES_Inv, LEES_HarvestData, LEES_GraphMaps, IndividualsList)
+      CalculateRAForLEES(LEES_Investment, LEES_HarvestData, LEES_GraphMaps, IndividualsList)
 
   PELA_IndividualsList:
     command: filterToPELA(IndividualsList)
@@ -477,17 +477,17 @@ targets:
   PELA_PartsSummary:
     command: make_PartsSummary(PELA_FlowerPartsData, PELA_PartsList)
 
-  PELA_Inv:
+  PELA_Investment:
     command: >
       CalculateInvestmentForPELA(PELA_ReproductionData, FloweringCategories, MultiplierTable, PELA_GraphMaps, PELA_PartsSummary)
 
-  PELA_Acc:
+  PELA_AccessoryCosts:
     command: >
-      CalculateAccesoryCostsForPELA(PELA_ReproductionData, PELA_HarvestData, InvestmentCategories, PELA_Inv)
+      CalculateAccesoryCostsForPELA(PELA_ReproductionData, PELA_HarvestData, InvestmentCategories, PELA_Investment)
 
-  PELA_RA:
+  PELA_ReproductionAllocation:
     command: >
-      CalculateRAForPELA(PELA_Inv, PELA_HarvestData, PELA_GraphMaps, IndividualsList)
+      CalculateRAForPELA(PELA_Investment, PELA_HarvestData, PELA_GraphMaps, IndividualsList)
 
   PEPU_IndividualsList:
     command: filterToPEPU(IndividualsList)
@@ -510,17 +510,17 @@ targets:
   PEPU_PartsSummary:
     command: make_PartsSummary(PEPU_FlowerPartsData, PEPU_PartsList)
 
-  PEPU_Inv:
+  PEPU_Investment:
     command: >
       CalculateInvestmentForPEPU(PEPU_ReproductionData, FloweringCategories, MultiplierTable, PEPU_GraphMaps, PEPU_PartsSummary)
 
-  PEPU_Acc:
+  PEPU_AccessoryCosts:
     command: >
-      CalculateAccesoryCostsForPEPU(PEPU_ReproductionData, PEPU_HarvestData, InvestmentCategories, PEPU_Inv)
+      CalculateAccesoryCostsForPEPU(PEPU_ReproductionData, PEPU_HarvestData, InvestmentCategories, PEPU_Investment)
 
-  PEPU_RA:
+  PEPU_ReproductionAllocation:
     command: >
-      CalculateRAForPEPU(PEPU_Inv, PEPU_HarvestData, PEPU_GraphMaps, IndividualsList)
+      CalculateRAForPEPU(PEPU_Investment, PEPU_HarvestData, PEPU_GraphMaps, IndividualsList)
 
   PHPH_IndividualsList:
     command: filterToPHPH(IndividualsList)
@@ -543,17 +543,17 @@ targets:
   PHPH_PartsSummary:
     command: make_PartsSummary(PHPH_FlowerPartsData, PHPH_PartsList)
 
-  PHPH_Inv:
+  PHPH_Investment:
     command: >
       CalculateInvestmentForPHPH(PHPH_ReproductionData, FloweringCategories, MultiplierTable, PHPH_GraphMaps, PHPH_PartsSummary)
 
-  PHPH_Acc:
+  PHPH_AccessoryCosts:
     command: >
-      CalculateAccesoryCostsForPHPH(PHPH_ReproductionData, PHPH_HarvestData, InvestmentCategories, PHPH_Inv)
+      CalculateAccesoryCostsForPHPH(PHPH_ReproductionData, PHPH_HarvestData, InvestmentCategories, PHPH_Investment)
 
-  PHPH_RA:
+  PHPH_ReproductionAllocation:
     command: >
-      CalculateRAForPHPH(PHPH_Inv, PHPH_HarvestData, PHPH_GraphMaps, IndividualsList)
+      CalculateRAForPHPH(PHPH_Investment, PHPH_HarvestData, PHPH_GraphMaps, IndividualsList)
 
   PILI_IndividualsList:
     command: filterToPILI(IndividualsList)
@@ -576,17 +576,17 @@ targets:
   PILI_PartsSummary:
     command: make_PartsSummary(PILI_FlowerPartsData, PILI_PartsList)
 
-  PILI_Inv:
+  PILI_Investment:
     command: >
       CalculateInvestmentForPILI(PILI_ReproductionData, FloweringCategories, MultiplierTable, PILI_GraphMaps, PILI_PartsSummary)
 
-  PILI_Acc:
+  PILI_AccessoryCosts:
     command: >
-      CalculateAccesoryCostsForPILI(PILI_ReproductionData, PILI_HarvestData, InvestmentCategories, PILI_Inv)
+      CalculateAccesoryCostsForPILI(PILI_ReproductionData, PILI_HarvestData, InvestmentCategories, PILI_Investment)
 
-  PILI_RA:
+  PILI_ReproductionAllocation:
     command: >
-      CalculateRAForPILI(PILI_Inv, PILI_HarvestData, PILI_GraphMaps, IndividualsList)
+      CalculateRAForPILI(PILI_Investment, PILI_HarvestData, PILI_GraphMaps, IndividualsList)
 
   PUTU_IndividualsList:
     command: filterToPUTU(IndividualsList)
@@ -609,32 +609,32 @@ targets:
   PUTU_PartsSummary:
     command: make_PartsSummary(PUTU_FlowerPartsData, PUTU_PartsList)
 
-  PUTU_Inv:
+  PUTU_Investment:
     command: >
       CalculateInvestmentForPUTU(PUTU_ReproductionData, FloweringCategories, MultiplierTable, PUTU_GraphMaps, PUTU_PartsSummary)
 
-  PUTU_Acc:
+  PUTU_AccessoryCosts:
     command: >
-      CalculateAccesoryCostsForPUTU(PUTU_ReproductionData, PUTU_HarvestData, InvestmentCategories, PUTU_Inv)
+      CalculateAccesoryCostsForPUTU(PUTU_ReproductionData, PUTU_HarvestData, InvestmentCategories, PUTU_Investment)
 
-  PUTU_RA:
+  PUTU_ReproductionAllocation:
     command: >
-      CalculateRAForPUTU(PUTU_Inv, PUTU_HarvestData, PUTU_GraphMaps, IndividualsList)
-  RA_all:
+      CalculateRAForPUTU(PUTU_Investment, PUTU_HarvestData, PUTU_GraphMaps, IndividualsList)
+  ReproductionAllocation_all:
     command: >
-      combine_RA(
-        BAER_RA,
-        BOLE_RA,
-        COER_RA,
-        EPMI_RA,
-        GRBU_RA,
-        GRSP_RA,
-        HATE_RA,
-        HEPU_RA,
-        LEES_RA,
-        PELA_RA,
-        PEPU_RA,
-        PHPH_RA,
-        PILI_RA,
-        PUTU_RA,
+      combine_ReproductionAllocation(
+        BAER_ReproductionAllocation,
+        BOLE_ReproductionAllocation,
+        COER_ReproductionAllocation,
+        EPMI_ReproductionAllocation,
+        GRBU_ReproductionAllocation,
+        GRSP_ReproductionAllocation,
+        HATE_ReproductionAllocation,
+        HEPU_ReproductionAllocation,
+        LEES_ReproductionAllocation,
+        PELA_ReproductionAllocation,
+        PEPU_ReproductionAllocation,
+        PHPH_ReproductionAllocation,
+        PILI_ReproductionAllocation,
+        PUTU_ReproductionAllocation,
         IndividualsList=IndividualsList)

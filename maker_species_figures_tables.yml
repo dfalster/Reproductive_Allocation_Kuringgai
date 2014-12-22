@@ -81,112 +81,112 @@ targets:
 #    command: print_xtable(RegressionTable, target_name)
 
   docs/figures/RA_comparison_age.pdf:
-    command: plot_RA_comparison_age(RA_all)
+    command: plot_ReproductionAllocation_comparison_age(ReproductionAllocation_all)
     plot: wide
   docs/figures/RA_comparison_diam.pdf:
-    command: plot_RA_comparison_diam(RA_all)
+    command: plot_ReproductionAllocation_comparison_diam(ReproductionAllocation_all)
     plot: wide
   docs/figures/RA_comparison_weight.pdf:
-    command: plot_RA_comparison_weight(RA_all)
+    command: plot_ReproductionAllocation_comparison_weight(ReproductionAllocation_all)
     plot: wide
 
   docs/figures/RA_age_BAER.pdf:
-    command: plot_species_RA_age_panel(BAER_RA)
+    command: plot_species_ReproductionAllocation_age_panel(BAER_ReproductionAllocation)
     plot: extra_wide
 
   docs/figures/RA_weight_diam_BAER.pdf:
-    command: plot_species_RA_weight_diam_panel(BAER_RA)
+    command: plot_species_ReproductionAllocation_weight_diam_panel(BAER_ReproductionAllocation)
     plot: extra_wide
   docs/figures/RA_age_BOLE.pdf:
-    command: plot_species_RA_age_panel(BOLE_RA)
+    command: plot_species_ReproductionAllocation_age_panel(BOLE_ReproductionAllocation)
     plot: extra_wide
 
   docs/figures/RA_weight_diam_BOLE.pdf:
-    command: plot_species_RA_weight_diam_panel(BOLE_RA)
+    command: plot_species_ReproductionAllocation_weight_diam_panel(BOLE_ReproductionAllocation)
     plot: extra_wide
   docs/figures/RA_age_COER.pdf:
-    command: plot_species_RA_age_panel(COER_RA)
+    command: plot_species_ReproductionAllocation_age_panel(COER_ReproductionAllocation)
     plot: extra_wide
 
   docs/figures/RA_weight_diam_COER.pdf:
-    command: plot_species_RA_weight_diam_panel(COER_RA)
+    command: plot_species_ReproductionAllocation_weight_diam_panel(COER_ReproductionAllocation)
     plot: extra_wide
   docs/figures/RA_age_EPMI.pdf:
-    command: plot_species_RA_age_panel(EPMI_RA)
+    command: plot_species_ReproductionAllocation_age_panel(EPMI_ReproductionAllocation)
     plot: extra_wide
 
   docs/figures/RA_weight_diam_EPMI.pdf:
-    command: plot_species_RA_weight_diam_panel(EPMI_RA)
+    command: plot_species_ReproductionAllocation_weight_diam_panel(EPMI_ReproductionAllocation)
     plot: extra_wide
   docs/figures/RA_age_GRBU.pdf:
-    command: plot_species_RA_age_panel(GRBU_RA)
+    command: plot_species_ReproductionAllocation_age_panel(GRBU_ReproductionAllocation)
     plot: extra_wide
 
   docs/figures/RA_weight_diam_GRBU.pdf:
-    command: plot_species_RA_weight_diam_panel(GRBU_RA)
+    command: plot_species_ReproductionAllocation_weight_diam_panel(GRBU_ReproductionAllocation)
     plot: extra_wide
   docs/figures/RA_age_GRSP.pdf:
-    command: plot_species_RA_age_panel(GRSP_RA)
+    command: plot_species_ReproductionAllocation_age_panel(GRSP_ReproductionAllocation)
     plot: extra_wide
 
   docs/figures/RA_weight_diam_GRSP.pdf:
-    command: plot_species_RA_weight_diam_panel(GRSP_RA)
+    command: plot_species_ReproductionAllocation_weight_diam_panel(GRSP_ReproductionAllocation)
     plot: extra_wide
   docs/figures/RA_age_HATE.pdf:
-    command: plot_species_RA_age_panel(HATE_RA)
+    command: plot_species_ReproductionAllocation_age_panel(HATE_ReproductionAllocation)
     plot: extra_wide
 
   docs/figures/RA_weight_diam_HATE.pdf:
-    command: plot_species_RA_weight_diam_panel(HATE_RA)
+    command: plot_species_ReproductionAllocation_weight_diam_panel(HATE_ReproductionAllocation)
     plot: extra_wide
   docs/figures/RA_age_HEPU.pdf:
-    command: plot_species_RA_age_panel(HEPU_RA)
+    command: plot_species_ReproductionAllocation_age_panel(HEPU_ReproductionAllocation)
     plot: extra_wide
 
   docs/figures/RA_weight_diam_HEPU.pdf:
-    command: plot_species_RA_weight_diam_panel(HEPU_RA)
+    command: plot_species_ReproductionAllocation_weight_diam_panel(HEPU_ReproductionAllocation)
     plot: extra_wide
   docs/figures/RA_age_LEES.pdf:
-    command: plot_species_RA_age_panel(LEES_RA)
+    command: plot_species_ReproductionAllocation_age_panel(LEES_ReproductionAllocation)
     plot: extra_wide
 
   docs/figures/RA_weight_diam_LEES.pdf:
-    command: plot_species_RA_weight_diam_panel(LEES_RA)
+    command: plot_species_ReproductionAllocation_weight_diam_panel(LEES_ReproductionAllocation)
     plot: extra_wide
   docs/figures/RA_age_PELA.pdf:
-    command: plot_species_RA_age_panel(PELA_RA)
+    command: plot_species_ReproductionAllocation_age_panel(PELA_ReproductionAllocation)
     plot: extra_wide
 
   docs/figures/RA_weight_diam_PELA.pdf:
-    command: plot_species_RA_weight_diam_panel(PELA_RA)
+    command: plot_species_ReproductionAllocation_weight_diam_panel(PELA_ReproductionAllocation)
     plot: extra_wide
   docs/figures/RA_age_PEPU.pdf:
-    command: plot_species_RA_age_panel(PEPU_RA)
+    command: plot_species_ReproductionAllocation_age_panel(PEPU_ReproductionAllocation)
     plot: extra_wide
 
   docs/figures/RA_weight_diam_PEPU.pdf:
-    command: plot_species_RA_weight_diam_panel(PEPU_RA)
+    command: plot_species_ReproductionAllocation_weight_diam_panel(PEPU_ReproductionAllocation)
     plot: extra_wide
   docs/figures/RA_age_PHPH.pdf:
-    command: plot_species_RA_age_panel(PHPH_RA)
+    command: plot_species_ReproductionAllocation_age_panel(PHPH_ReproductionAllocation)
     plot: extra_wide
 
   docs/figures/RA_weight_diam_PHPH.pdf:
-    command: plot_species_RA_weight_diam_panel(PHPH_RA)
+    command: plot_species_ReproductionAllocation_weight_diam_panel(PHPH_ReproductionAllocation)
     plot: extra_wide
   docs/figures/RA_age_PILI.pdf:
-    command: plot_species_RA_age_panel(PILI_RA)
+    command: plot_species_ReproductionAllocation_age_panel(PILI_ReproductionAllocation)
     plot: extra_wide
 
   docs/figures/RA_weight_diam_PILI.pdf:
-    command: plot_species_RA_weight_diam_panel(PILI_RA)
+    command: plot_species_ReproductionAllocation_weight_diam_panel(PILI_ReproductionAllocation)
     plot: extra_wide
   docs/figures/RA_age_PUTU.pdf:
-    command: plot_species_RA_age_panel(PUTU_RA)
+    command: plot_species_ReproductionAllocation_age_panel(PUTU_ReproductionAllocation)
     plot: extra_wide
 
   docs/figures/RA_weight_diam_PUTU.pdf:
-    command: plot_species_RA_weight_diam_panel(PUTU_RA)
+    command: plot_species_ReproductionAllocation_weight_diam_panel(PUTU_ReproductionAllocation)
     plot: extra_wide
 #
 #  docs/tables/BAER.tex:

@@ -1,4 +1,4 @@
-RA_Calculations <- function(thisSpecies, Species_Inv, HarvestData, Maps, IndividualsList) {
+RA_Calculations <- function(thisSpecies, Species_Investment, HarvestData, Maps, IndividualsList) {
 
 
   ### Calculate Regression coefficients based on common slope and intercept by the basal diameter at year 2013
@@ -57,7 +57,7 @@ RA_Calculations <- function(thisSpecies, Species_Inv, HarvestData, Maps, Individ
   GrowthInv <- GrowthInv[complete.cases(GrowthInv), ]
 
   ### Use saved data to calculate total reproduction investment per individual plant
-  InvSpecies <- Species_Inv$Investment
+  InvSpecies <- Species_Investment$Investment
 
   RepoInv <- data.frame(Tree_ID = c(), ReproInv = c())
   for (individual in unique(InvSpecies$Individual)) {

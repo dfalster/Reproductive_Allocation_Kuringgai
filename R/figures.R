@@ -6,8 +6,8 @@ col.table <- function(){
     PEPU="#CEA472", PHPH= "#B8AC65", PILI="#7BBA7D", PUTU="#46BAC8")
 }
 
-get_RA_means_by_age <- function(RA_all){
-  group_by(RA_all, species, age) %.%
+get_ReproductionAllocation_means_by_age <- function(ReproductionAllocation_all){
+  group_by(ReproductionAllocation_all, species, age) %.%
     summarise(
       n=length(age),
       GI_M = mean(GrowthInv),
@@ -22,9 +22,9 @@ get_RA_means_by_age <- function(RA_all){
     arrange(species, age)
 }
 
-plot_species_RA_age_panel <- function(InvBySpecies) {
+plot_species_ReproductionAllocation_age_panel <- function(InvBySpecies) {
 
-  InvByAge <- get_RA_means_by_age(InvBySpecies)
+  InvByAge <- get_ReproductionAllocation_means_by_age(InvBySpecies)
 
   cols <- col.table()[InvBySpecies$species]
 
@@ -49,9 +49,9 @@ plot_species_RA_age_panel <- function(InvBySpecies) {
   points(InvBySpecies$age, InvBySpecies$RA, pch = "o", cex = 1.5, col = "grey")
 }
 
-plot_RA_comparison_age <- function(RA_all) {
+plot_ReproductionAllocation_comparison_age <- function(ReproductionAllocation_all) {
 
-  InvByAge <- get_RA_means_by_age(RA_all)
+  InvByAge <- get_ReproductionAllocation_means_by_age(ReproductionAllocation_all)
   cols <- col.table()
   plot(InvByAge$age, InvByAge$RA_M, type="n", main = "Reproductive Allovation for 14 species along time", lty = 1, lwd = 3, xlim = c(0, 35), bty = "L", xlab = "Age (years)", ylab = "Reproductive Allocation")
   d_ply(InvByAge, "species", function(x) points(x$age, x$RA_M, type = "b", pch = "o", col= cols[x$species]))
@@ -59,19 +59,19 @@ plot_RA_comparison_age <- function(RA_all) {
 
 }
 
-plot_RA_comparison_diam <- function(RA_all) {
+plot_ReproductionAllocation_comparison_diam <- function(ReproductionAllocation_all) {
   cols <- col.table()
-  plot(RA_all$FinalBasalDiamAv, RA_all$RA, type = "p", col = cols[RA_all$species], xlab = "Basal Diameter, year 2013", ylab = "RA", bty = "L")
+  plot(ReproductionAllocation_all$FinalBasalDiamAv, ReproductionAllocation_all$RA, type = "p", col = cols[ReproductionAllocation_all$species], xlab = "Basal Diameter, year 2013", ylab = "RA", bty = "L")
   legend("topright", legend = names(cols), col = cols, pch = 1)
 }
 
-plot_RA_comparison_weight <- function(RA_all) {
+plot_ReproductionAllocation_comparison_weight <- function(ReproductionAllocation_all) {
   cols <- col.table()
-  plot(RA_all$FinalWeight, RA_all$RA, type = "p", col = cols[RA_all$species], xlab = "Weight, year 2013", ylab = "RA", bty = "L")
+  plot(ReproductionAllocation_all$FinalWeight, ReproductionAllocation_all$RA, type = "p", col = cols[ReproductionAllocation_all$species], xlab = "Weight, year 2013", ylab = "RA", bty = "L")
   legend("topright", legend = names(cols), col = cols, pch = 1)
 }
 
-plot_species_RA_weight_diam_panel <- function(Data) {
+plot_species_ReproductionAllocation_weight_diam_panel <- function(Data) {
     cols <- col.table()[Data$species]
     par(mfrow = c(1, 3), cex.main = 2, cex.lab = 1.5)
     plot(Data$FinalBasalDiamAv, Data$RA, type = "p", col = cols, xlab = "Diameter, year 2013", ylab = "RA", bty = "L", main = "Diameter", cex = 1.5)
