@@ -5,6 +5,7 @@ ignore
 output
 .DS_Store
 .maker
+.remake
 
 figure*
 CarbonInvestments.pdf
