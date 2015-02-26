@@ -28,7 +28,7 @@ CalculateMassAndDiameters <- function(harvestData) {
       stem_weight = sum(stem_weight), total_weight = sum(leaf_weight, stem_weight))
   }
 
-  mass <- ldply(segments, function(x) get.mass.at.node(data, x)) %>% rename(c(.id = "node_above")) %>% arrange(individual, node_above)
+  mass <- ldply(segments, function(x) get.mass.at.node(data, x)) %>% plyr::rename(c(.id = "node_above")) %>% arrange(individual, node_above)
 
   # Get avergae diameter for base of segment. This is given by diameter readings for segment with names in list above
   get.diam.node.above <- function(data, level) {
