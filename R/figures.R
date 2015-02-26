@@ -7,7 +7,7 @@ col.table <- function(){
 }
 
 get_ReproductionAllocation_means_by_age <- function(ReproductionAllocation_all){
-  group_by(ReproductionAllocation_all, species, age) %.%
+  group_by(ReproductionAllocation_all, species, age) %>%
     summarise(
       n=length(age),
       GI_M = mean(GrowthInv),
@@ -18,7 +18,7 @@ get_ReproductionAllocation_means_by_age <- function(ReproductionAllocation_all){
       RI_U = mean(ReproInv) + 1.96/sqrt(n) * sd(ReproInv),
       RA_M = mean(RA),
       RA_L = mean(RA) - 1.96/sqrt(n) * sd(RA),
-      RA_U = mean(RA) + 1.96/sqrt(n) * sd(RA)) %.%
+      RA_U = mean(RA) + 1.96/sqrt(n) * sd(RA)) %>%
     arrange(species, age)
 }
 
