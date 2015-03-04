@@ -1,6 +1,6 @@
 CalculateMassAndDiameters <- function(harvestData) {
 
-  data <- harvestData %.% filter(start_end == "end") %.% arrange(individual, date, segment)
+  data <- harvestData %>% filter(start_end == "end") %>% arrange(individual, date, segment)
 
   segments <- list()
   segments[["1"]] <- c(as.character(1:8, "1.2", "1.3", "1.2.1", "1.2.1.1", "1.1.2", "1.1.2.1", "1.1.1.2"))
@@ -24,19 +24,19 @@ CalculateMassAndDiameters <- function(harvestData) {
 
   ## Get total mass of all material subteneded by given node
   get.mass.at.node <- function(data, segments) {
-    data %.% filter(segment %in% segments) %.% group_by(individual) %.% summarise(species = species[1], site = site[1], age = age[1], leaf_weight = sum(leaf_weight),
+    data %>% filter(segment %in% segments) %>% group_by(individual) %>% summarise(species = species[1], site = site[1], age = age[1], leaf_weight = sum(leaf_weight),
       stem_weight = sum(stem_weight), total_weight = sum(leaf_weight, stem_weight))
   }
 
-  mass <- ldply(segments, function(x) get.mass.at.node(data, x)) %.% rename(c(.id = "node_above")) %.% arrange(individual, node_above)
+  mass <- ldply(segments, function(x) get.mass.at.node(data, x)) %>% plyr::rename(c(.id = "node_above")) %>% arrange(individual, node_above)
 
   # Get avergae diameter for base of segment. This is given by diameter readings for segment with names in list above
   get.diam.node.above <- function(data, level) {
-    data %.% filter(node_above == level) %.% group_by(individual) %.% summarise(node_above = level, dia = mean(c(diameter_1, diameter_2, diameter_3), na.rm = TRUE),
+    data %>% filter(node_above == level) %>% group_by(individual) %>% summarise(node_above = level, dia = mean(c(diameter_1, diameter_2, diameter_3), na.rm = TRUE),
       stem.area = dia^2 * pi/4)
   }
 
-  diameters <- ldply(names(segments), function(x) get.diam.node.above(data, x)) %.% arrange(individual, node_above)
+  diameters <- ldply(names(segments), function(x) get.diam.node.above(data, x)) %>% arrange(individual, node_above)
 
   # Merge mass and diameter measurements
   merge(mass, diameters, by = c("individual", "node_above"))
