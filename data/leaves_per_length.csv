@@ -941,3 +941,5 @@ sort,species,replicate,use,type,branch,length_mm,stem_weight_mg*10,leaf_count,co
 392,PUTU,E,yes,,3.1.1,28,,38,1.357142857,114,90, ,,,609,PUTU-E-3-1-1.jpg,7.506,0.198,0.27
 395,PUTU,E,yes,,3.3.1,50,,68,1.36,123,38, ,,,1093,PUTU-E-3-3-1.jpg,13.258,0.195,0.27
 955,PUTU,E,no,tip,3.3.1.TIPS,43,,,,,,TIP+2SIDES ,,,,,,,
+1000,PEPU,A,yes,,,1,,1,1,1,1,made up number bc PEPU always counts,,,1,,1,1,1
+1000,PELA,A,yes,,,1,,1,1,1,1,made up number bc PELA always counts,,,1,,1,1,1
