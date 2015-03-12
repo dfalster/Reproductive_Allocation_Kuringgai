@@ -1,11 +1,27 @@
-#load files
-leaves_per_length <- read.csv("~/RA schedules - Kuringgai research/Reproductive_Allocation_Kuringgai/data/leaves_per_length.csv",header=TRUE,as.is=TRUE,stringsAsFactors=FALSE)
-leaf_lifespan <- read.csv("~/RA schedules - Kuringgai research/Reproductive_Allocation_Kuringgai/data/leaderGrowthLL.csv",header=TRUE,as.is=TRUE,stringsAsFactors=FALSE)
+#general results
+    #strong correlation between LMA and LL when all species*site combinations included
+    #LL variable across species, as expected; same for LMA
+    #LL does not change as plants age; LMA does not change as plants age
+    #leaf count along the leader decreases in older plants for many species - which is why LL appears to decrease
+
+
+
+#next to do
+    #check how overall plant leaf numbers changes with age, diameter
+    
 
 # load packages
 library(remake)
 library(dplyr)
 library(tidyr)
+
+
+#load files
+leaves_per_length <- read.csv("~/RA schedules - Kuringgai research/Reproductive_Allocation_Kuringgai/data/leaves_per_length.csv",header=TRUE,as.is=TRUE,stringsAsFactors=FALSE)
+leaf_lifespan <- read.csv("~/RA schedules - Kuringgai research/Reproductive_Allocation_Kuringgai/data/leaderGrowthLL.csv",header=TRUE,as.is=TRUE,stringsAsFactors=FALSE)
+LMA <- read.csv("~/RA schedules - Kuringgai research/Reproductive_Allocation_Kuringgai/data/LMA_short.csv",header=TRUE,as.is=TRUE,stringsAsFactors=FALSE)
+InvestmentSummary <- make("ReproductionAllocation_all")
+
 
 #define functions
 se <- function(x) sd(x)/sqrt(length(x))
@@ -30,10 +46,10 @@ leaf_lifespan$count_lvs_spec[is.na(leaf_lifespan$count_lvs_spec)] <-0
 
 #specific leaves per length data
 leaf_lifespan_specific <- subset(leaf_lifespan,mm_lvs_spec!="0")
-leaf_lifespan_specific$spec_leaves_length <- leaf_lifespan_specific$count_lvs_spec/leaf_lifespan_specific$mm
-leaf_lifespan_specific$leaf_start_total <- leaf_lifespan_specific$lvs_start_count + (leaf_lifespan_specific$spec_leaves_length*leaf_lifespan_specific$lvs_start_length)
-leaf_lifespan_specific$leaf_end_total <- leaf_lifespan_specific$lvs_end_count + (leaf_lifespan_specific$spec_leaves_length*leaf_lifespan_specific$lvs_end_length)
-leaf_lifespan_specific$leaf_new_total <- leaf_lifespan_specific$lvs_new_count + leaf_lifespan_generic$new_but_shed_count + (leaf_lifespan_specific$spec_leaves_length*leaf_lifespan_specific$lvs_new_length)
+leaf_lifespan_specific$count_per_length <- leaf_lifespan_specific$count_lvs_spec/leaf_lifespan_specific$mm
+leaf_lifespan_specific$leaf_start_total <- leaf_lifespan_specific$lvs_start_count + (leaf_lifespan_specific$count_per_length*leaf_lifespan_specific$lvs_start_length)
+leaf_lifespan_specific$leaf_end_total <- leaf_lifespan_specific$lvs_end_count + (leaf_lifespan_specific$count_per_length*leaf_lifespan_specific$lvs_end_length)
+leaf_lifespan_specific$leaf_new_total <- leaf_lifespan_specific$lvs_new_count + leaf_lifespan_specific$new_but_shed_count + (leaf_lifespan_specific$count_per_length*leaf_lifespan_specific$lvs_new_length)
 head(leaf_lifespan_specific)
 
 #generic leaves per length data
@@ -45,7 +61,7 @@ leaf_lifespan_generic <- merge(leaf_lifespan_generic, per_length_spp, by.x="spec
 leaf_lifespan_generic$leaf_start_total <- leaf_lifespan_generic$lvs_start_count + (leaf_lifespan_generic$count_per_length*leaf_lifespan_generic$lvs_start_length)
 leaf_lifespan_generic$leaf_end_total <- leaf_lifespan_generic$lvs_end_count + (leaf_lifespan_generic$count_per_length*leaf_lifespan_generic$lvs_end_length)
 leaf_lifespan_generic$leaf_new_total <- leaf_lifespan_generic$lvs_new_count + leaf_lifespan_generic$new_but_shed_count + (leaf_lifespan_generic$count_per_length*leaf_lifespan_generic$lvs_new_length)
-leaf_lifespan_generic <- subset(leaf_lifespan,leaf_new_total>"0")
+leaf_lifespan_generic <- subset(leaf_lifespan_generic,leaf_new_total>"0")
 head(leaf_lifespan_generic)
 
 #combine two files into 1
@@ -75,56 +91,224 @@ LeafLLSummary_av <- leaf_counts %>%
   group_by(species, age) %>%
   summarise_each(funs(mean, se, length), leaf_lifespan_db, leaf_lifespan_death,leaf_lifespan_birth)
 
-
-
-#load files
-LMA <- read.csv("~/RA schedules - Kuringgai research/Reproductive_Allocation_Kuringgai/data/LMA_short.csv",header=TRUE,as.is=TRUE,stringsAsFactors=FALSE)
-
-
-#summarize
-#leaf lifespan summary by species, age
+#LMA summary by species, age
 LMA_summary <- LMA %>%
   group_by(species, age) %>%
   summarise_each(funs(mean, se, length), LMA)
+names(LMA_summary)<-c("species","age","LMA_mean","LMA_se","LMA_length")
+
+leaf_counts_nobabies <- subset(leaf_counts, age>2)
+LMA_nobabies <- subset(LMA, age>2)
+
+#leaf lifespan summary by species
+LeafLL_spp <- leaf_counts_nobabies %>%
+  group_by(species) %>%
+  summarise_each(funs(mean, se, length), leaf_lifespan_db, leaf_lifespan_death,leaf_lifespan_birth)
+
+#LMA summary by species
+LMA_spp <- LMA_nobabies %>%
+  group_by(species) %>%
+  summarise_each(funs(mean, se, length), LMA)
+names(LMA_spp)<-c("species", "LMA_mean","LMA_se","LMA_length")
 
 #merge with LL data
 LeafLLSummary_av <- merge(LeafLLSummary_av, LMA_summary, by.x=c("species","age"), by.y=c("species","age"))
-
+LeafLL_spp <- merge(LeafLL_spp, LMA_spp, by.x=c("species"), by.y=c("species"))
 
 
 
 #plotting and stats
 #LL vs LMA
 pch.spp <- c(0,1,2,15,16,17,18,0,1,2,15,16,17,18)
-col.spp <- c("red", "dark green", "blue", "purple", "orange", "light green","salmon","sky blue","grey", "black","light blue","brown","orange2")
+col.spp <- c("red", "dark green", "blue", "purple", "orange", "light green","salmon","sky blue","grey", "black","light blue","brown","orange2","salmon")
+col.age <- c("red", "dark green", "light green", "light blue", "purple", "orange2")
+pch.age <- c(1,1,16,16,16,16)
+labels.spp <- c("Banksia","Boronia","Conospermum","Epacris", "Grevillea buxifolia","Grevillea speciosa","Hakea","Hemigenia","Leucopogon","Persoonia", "Petrophile", "Phyllota", "Pimelea", "Pultanaea")
 
-plot(leaf_lifespan_db_mean ~ mean, LeafLLSummary_av)
-mod <- lm(leaf_lifespan_db_mean ~ mean + age, LeafLLSummary_av)
+
+#remove HATE, babies
+LeafLL_nobabies <- subset(LeafLLSummary_av, age > 2)
+LeafLL_noHate <- subset(LeafLLSummary_av, species != "HATE")
+LeafLL_noHatebabies <- subset(LeafLL_nobabies, species != "HATE")
+
+
+
+#relationship between LMA, LL by age, species
+#just 7 year old plants
+plot(leaf_lifespan_birth_mean ~ LMA_mean, data=subset(LeafLL_noHate,age==2.4), xlab="LMA", ylab="leaf lifespan (years)", main="leaf lifespan versus LMA (all species and ages)", las=1)
+mod <- lm(leaf_lifespan_birth_mean ~ LMA_mean, data=subset(LeafLL_noHate,age==2.4))
+summary(mod)
+abline(mod)
+
+
+#####Use next 6 lines of code for LL-LMA relationship
+plot(leaf_lifespan_birth_mean ~ LMA_mean, LeafLLSummary_av, xlab="LMA", ylab="leaf lifespan (years)", main="leaf lifespan versus LMA (all species and ages)", las=1)
+mod <- lm(leaf_lifespan_birth_mean ~ LMA_mean, LeafLLSummary_av)
+abline(mod, col="red", lty=2)
+mod_no_HATE <- lm(leaf_lifespan_birth_mean ~ LMA_mean, LeafLL_noHate)
+abline(mod_no_HATE)
+summary(mod)
+
+LeafLL_noHate[order(age),]
+col.LMAage <-c("purple","pink","green","orange","blue","light blue")
+col.LMA <-c("black","purple", "pink", "light green", "orange","blue", "light blue","red")
+labels.LMA <-c("all except HATE","age 1.4", "age 2.4", "age 5", "age 7", "age 9", "age 32", "including HATE")
+plot(leaf_lifespan_birth_mean ~ LMA_mean, LeafLLSummary_av, xlab="LMA", ylab="leaf lifespan (years)", main="leaf lifespan versus LMA (all species and ages)", las=1,pch=17, col="red")
+points(leaf_lifespan_birth_mean ~ LMA_mean, LeafLL_noHate, pch=16, cex=1.2, col=col.LMAage[age])
+mod <- lm(leaf_lifespan_birth_mean ~ LMA_mean, LeafLLSummary_av)
+abline(mod, col="red", lty=2)
+mod_no_HATE <- lm(leaf_lifespan_birth_mean ~ LMA_mean, LeafLL_noHate)
+abline(mod_no_HATE, lwd=2)
+mod_no_HATE5 <- lm(leaf_lifespan_birth_mean ~ LMA_mean, data=subset(LeafLL_noHate,age==5))
+abline(mod_no_HATE5, col="light green", lwd=1.5)
+mod_no_HATE7 <- lm(leaf_lifespan_birth_mean ~ LMA_mean, data=subset(LeafLL_noHate,age==7))
+abline(mod_no_HATE7, col="orange", lwd=1.5)
+mod_no_HATE9 <- lm(leaf_lifespan_birth_mean ~ LMA_mean, data=subset(LeafLL_noHate,age==9))
+abline(mod_no_HATE9, col="blue", lwd=1.5)
+mod_no_HATE2.4 <- lm(leaf_lifespan_birth_mean ~ LMA_mean, data=subset(LeafLL_noHate,age==2.4))
+abline(mod_no_HATE2.4, col="pink", lwd=1.5)
+mod_no_HATE1 <- lm(leaf_lifespan_birth_mean ~ LMA_mean, data=subset(LeafLL_noHate,age<2.4))
+abline(mod_no_HATE1, col="purple", lwd=1.5)
+mod_no_HATE32 <- lm(leaf_lifespan_birth_mean ~ LMA_mean, data=subset(LeafLL_noHate,age==32))
+abline(mod_no_HATE32, col="light blue", lwd=1.5)
+
+legend("topright",col=col.LMA, labels.LMA, pch=16, cex=1.4)
+summary(mod)
+
+
+LMA$age
+LeafLL_noHate$age
+
+
+plot(leaf_lifespan_birth_mean ~ LMA_mean, LeafLL_noHate, xlab="LMA", ylab="leaf lifespan (years)", main="leaf lifespan versus LMA (without HATE)", las=1)
+mod_no_HATE <- lm(leaf_lifespan_birth_mean ~ LMA_mean, LeafLL_noHate)
+abline(mod_no_HATE)
+####how could I label this line as "regression with Hakea omitted" ; i.e. place words on diagonal above line
+summary(mod_no_HATE)
+
+
+
+plot(leaf_lifespan_birth_mean ~ LMA_mean, LeafLL_nobabies, xlab="LMA", ylab="leaf lifespan (years)", main="leaf lifespan versus LMA (no baby plants)", las=1)
+mod <- lm(leaf_lifespan_birth_mean ~ LMA_mean, LeafLL_nobabies)
+abline(mod)
 summary(mod)
 
 
 
-#plotting across species
-pch.spp <- c(0,1,2,15,16,17,18,0,1,2,15,16,17,18)
-col.spp <- c("red", "dark green", "blue", "purple", "orange", "light green","salmon","sky blue","grey", "black","light blue","brown","orange2")
+plot(leaf_lifespan_birth_mean ~ LMA_mean, LeafLL_noHatebabies, xlab="LMA", ylab="leaf lifespan (years)", main="leaf lifespan versus LMA (without HATE)", las=1)
+mod <- lm(leaf_lifespan_birth_mean ~ LMA_mean, LeafLL_noHatebabies)
+abline(mod)
+summary(mod)
 
-plot(leaf_lifespan_db_mean ~ age, LeafLLSummary_av, col=col.spp[species], pch=pch.spp[species], cex=2)
+#model with species included, since HATE so different from others
+plot(leaf_lifespan_birth_mean ~ LMA_mean, LeafLLSummary_av, xlab="LMA", ylab="leaf lifespan (years)", main="leaf lifespan versus LMA (all species and ages)", las=1)
+mod <- lm(leaf_lifespan_birth_mean ~ LMA_mean + species, LeafLLSummary_av)
+summary(mod)
 
-plot(leaf_lifespan_birth_mean ~ as.factor(age), LeafLLSummary_av)
-plot(leaf_lifespan_death_mean ~ as.factor(age), LeafLLSummary_av)
 
-plot(leaf_lifespan_db_mean ~ as.factor(species), LeafLLSummary_av, data=subset(LeafLLSummary_av,age>2))
-plot(leaf_lifespan_birth_mean ~ as.factor(species), LeafLLSummary_av, data=subset(LeafLLSummary_av,age>2))
-plot(leaf_lifespan_death_mean ~ as.factor(species), LeafLLSummary_av, data=subset(LeafLLSummary_av,age>2))
+#LL by age, species, without youngest plants - graphs
+par(mar = c(10, 6, 4, 1) + 0.1)
 
-plot(leaf_lifespan_db_mean ~ as.factor(age), LeafLLSummary_av, data=subset(LeafLLSummary_av,species=="BAER"))
-plot(leaf_lifespan_db_mean ~ as.factor(age), LeafLLSummary_av, data=subset(LeafLLSummary_av,species=="BOLE"))
-plot(leaf_lifespan_db_mean ~ as.factor(age), LeafLLSummary_av, data=subset(LeafLLSummary_av,species=="COER"))
-plot(leaf_lifespan_db_mean ~ as.factor(age), LeafLLSummary_av, data=subset(LeafLLSummary_av,species=="GRBU"))
-plot(leaf_lifespan_db_mean ~ as.factor(age), LeafLLSummary_av, data=subset(LeafLLSummary_av,species=="GRSP"))
-plot(leaf_lifespan_db_mean ~ as.factor(age), LeafLLSummary_av, data=subset(LeafLLSummary_av,species=="HATE"))
-plot(leaf_lifespan_db_mean ~ as.factor(age), LeafLLSummary_av, data=subset(LeafLLSummary_av,species=="HEPU"))
+LLplot <- plot(leaf_lifespan_db ~ as.factor(species), leaf_counts_nobabies, xlab="species", ylab="leaf lifespan", cex.axis=.8, las=1, xaxt="n")
+LLplot <- plot(leaf_lifespan_db ~ as.factor(species), leaf_counts_nobabies, xlab="species", ylab="leaf lifespan", cex.axis=.8, las=1)
 
+text(LLplot, par("usr")[3] - 0.25, srt=45, adj=1, labels=labels.spp, xpd=TRUE)
+
+axis(1,1:14,labels=labels.spp,col.axis="black", cex.axis=.4, tck=0)
+
+#LL by age, species, without youngest plants - model
+mod <- lm(leaf_lifespan_db ~ age +species + age*species, leaf_counts_nobabies)
+summary(mod)
+
+pdf(file="leaf lifespan plots.pdf",width=6,height=4)
+plot(leaf_lifespan_birth~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="BAER"), xlab="age", ylab="leaf lifespan (leaf births)", cex.axis=.8, las=1, main="Banksia ericifolia")
+plot(leaf_lifespan_birth~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="BOLE"), xlab="age", ylab="leaf lifespan (leaf births)", cex.axis=.8, las=1, main="Boronia ledifolia")
+plot(leaf_lifespan_birth~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="COER"), xlab="age", ylab="leaf lifespan (leaf births)", cex.axis=.8, las=1, main="Conospermum ericifolium")
+plot(leaf_lifespan_birth~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="EPMI"), xlab="age", ylab="leaf lifespan (leaf births)", cex.axis=.8, las=1, main="Epacris microphylla")
+plot(leaf_lifespan_birth~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="GRBU"), xlab="age", ylab="leaf lifespan (leaf births)", cex.axis=.8, las=1, main="Grevillea buxifolia")
+plot(leaf_lifespan_birth~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="GRSP"), xlab="age", ylab="leaf lifespan (leaf births)", cex.axis=.8, las=1, main="Grevillea speciosa")
+plot(leaf_lifespan_birth~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="HATE"), xlab="age", ylab="leaf lifespan (leaf births)", cex.axis=.8, las=1, main="Hakea teretifolia")
+plot(leaf_lifespan_birth~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="HEPU"), xlab="age", ylab="leaf lifespan (leaf births)", cex.axis=.8, las=1, main="Hemigenia purpurea")
+plot(leaf_lifespan_birth~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="LEES"), xlab="age", ylab="leaf lifespan (leaf births)", cex.axis=.8, las=1, main="Leucopogon esquamatus")
+plot(leaf_lifespan_birth~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="PELA"), xlab="age", ylab="leaf lifespan (leaf births)", cex.axis=.8, las=1, main="Persoonia lanceolata")
+plot(leaf_lifespan_birth~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="PEPU"), xlab="age", ylab="leaf lifespan (leaf births)", cex.axis=.8, las=1, main="Petrophile pulchella")
+plot(leaf_lifespan_birth~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="PHPH"), xlab="age", ylab="leaf lifespan (leaf births)", cex.axis=.8, las=1, main="Phyllota phylicoides")
+plot(leaf_lifespan_birth~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="PILI"), xlab="age", ylab="leaf lifespan (leaf births)", cex.axis=.8, las=1, main="Pimelea linifolia")
+plot(leaf_lifespan_birth~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="PUTU"), xlab="age", ylab="leaf lifespan (leaf births)", cex.axis=.8, las=1, main="Pultenaea tuberculata")
+dev.off()
+# age not significant, but some significant interactions (COER, HATE, HEPU)
+    # many species have sigificantly different LL from one another
+
+#LMA by age, species, without youngest plants
+plot(mean ~ as.factor(species), LeafLL_nobabies, xlab="species", ylab="LMA", cex.axis=.8, las=1)
+mod <- lm(LMA ~ age +species + age*species, LMA)
+summary(mod)
+
+plot(LMA ~ as.factor(age), LMA, data=subset(LMA,species=="BAER"), xlab="age", ylab="LMA", cex.axis=.8, las=1, main="Banksia ericifolia")
+plot(LMA ~ as.factor(age), LMA, data=subset(LMA,species=="BOLE"), xlab="age", ylab="LMA", cex.axis=.8, las=1, main="Boronia ledifolia")
+plot(LMA ~ as.factor(age), LMA, data=subset(LMA,species=="COER"), xlab="age", ylab="LMA", cex.axis=.8, las=1, main="Conospermum ericifolium")
+plot(LMA ~ as.factor(age), LMA, data=subset(LMA,species=="EPMI"), xlab="age", ylab="LMA", cex.axis=.8, las=1, main="Epacris microphylla")
+plot(LMA ~ as.factor(age), LMA, data=subset(LMA,species=="GRBU"), xlab="age", ylab="LMA", cex.axis=.8, las=1, main="Grevillea buxifolia")
+plot(LMA ~ as.factor(age), LMA, data=subset(LMA,species=="GRSP"), xlab="age", ylab="LMA", cex.axis=.8, las=1, main="Grevillea speciosa")
+plot(LMA ~ as.factor(age), LMA, data=subset(LMA,species=="HATE"), xlab="age", ylab="LMA", cex.axis=.8, las=1, main="Hakea teretifolia")
+plot(LMA ~ as.factor(age), LMA, data=subset(LMA,species=="HEPU"), xlab="age", ylab="LMA", cex.axis=.8, las=1, main="Hemigenia purpurea")
+plot(LMA ~ as.factor(age), LMA, data=subset(LMA,species=="LEES"), xlab="age", ylab="LMA", cex.axis=.8, las=1, main="Leucopogon esquamatus")
+plot(LMA ~ as.factor(age), LMA, data=subset(LMA,species=="PELA"), xlab="age", ylab="LMA", cex.axis=.8, las=1, main="Persoonia lanceolata")
+plot(LMA ~ as.factor(age), LMA, data=subset(LMA,species=="PEPU"), xlab="age", ylab="LMA", cex.axis=.8, las=1, main="Petrophile pulchella")
+plot(LMA ~ as.factor(age), LMA, data=subset(LMA,species=="PHPH"), xlab="age", ylab="LMA", cex.axis=.8, las=1, main="Phyllota phylicoides")
+plot(LMA ~ as.factor(age), LMA, data=subset(LMA,species=="PILI"), xlab="age", ylab="LMA", cex.axis=.8, las=1, main="Pimelea linifolia")
+plot(LMA ~ as.factor(age), LMA, data=subset(LMA,species=="PUTU"), xlab="age", ylab="LMA", cex.axis=.8, las=1, main="Pultenaea tuberculata")
+
+
+
+#models with leaf counts per age
+plot(leaf_end_total ~ age, leaf_counts, xlab="age", ylab="leaf counts", cex.axis=.8, las=1)
+        #####I don't understand why this plot only works when age is a factor####
+plot(leaf_end_total ~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="BAER"), xlab="age", ylab="leaf counts", cex.axis=.8, las=1, main="Banksia ericifolia")
+plot(leaf_end_total ~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="BOLE"), xlab="age", ylab="leaf counts", cex.axis=.8, las=1, main="Boronia ledifolia")
+plot(leaf_end_total ~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="COER"), xlab="age", ylab="leaf counts", cex.axis=.8, las=1, main="Conospermum ericifolium")
+plot(leaf_end_total ~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="EPMI"), xlab="age", ylab="leaf counts", cex.axis=.8, las=1, main="Epacris microphylla")
+plot(leaf_end_total ~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="GRBU"), xlab="age", ylab="leaf counts", cex.axis=.8, las=1, main="Grevillea buxifolia")
+plot(leaf_end_total ~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="GRSP"), xlab="age", ylab="leaf counts", cex.axis=.8, las=1, main="Grevillea speciosa")
+plot(leaf_end_total ~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="HATE"), xlab="age", ylab="leaf counts", cex.axis=.8, las=1, main="Hakea teretifolia")
+plot(leaf_end_total ~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="HEPU"), xlab="age", ylab="leaf counts", cex.axis=.8, las=1, main="Hemigenia purpurea")
+plot(leaf_end_total ~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="LEES"), xlab="age", ylab="leaf counts", cex.axis=.8, las=1, main="Leucopogon esquamatus")
+plot(leaf_end_total ~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="PELA"), xlab="age", ylab="leaf counts", cex.axis=.8, las=1, main="Persoonia lanceolata")
+plot(leaf_end_total ~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="PEPU"), xlab="age", ylab="leaf counts", cex.axis=.8, las=1, main="Petrophile pulchella")
+plot(leaf_end_total ~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="PHPH"), xlab="age", ylab="leaf counts", cex.axis=.8, las=1, main="Phyllota phylicoides")
+plot(leaf_end_total ~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="PILI"), xlab="age", ylab="leaf counts", cex.axis=.8, las=1, main="Pimelea linifolia")
+plot(leaf_end_total ~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="PUTU"), xlab="age", ylab="leaf counts", cex.axis=.8, las=1, main="Pultenaea tuberculata")
+
+
+mod <- lm(leaf_end_total ~ age +species +age*species, leaf_counts)
+summary(mod)
+
+
+#LMA versus LL
+plot(leaf_lifespan_db_mean ~ mean, LeafLLSummary_av, xlab="LMA",ylab="leaf lifespans (years)", main="leaf lifespan versus LMA")
+legend("bottomright", c("Banksia","Boronia","Conospermum","Epacris", "Grevillea buxifolia","Grevillea speciosa","Hakea","Hemigenia","Leucopogon","Persoonia", "Petrophile", "Phyllota", "Pimilea", "Pultanaea"), col = col.spp, pch = pch.spp, text.col = "black", border = "black", title="species")
+
+    #the above commands work, but if I try to color points by species, it fails
+#plot(leaf_lifespan_db_mean ~ mean , LeafLLSummary_av, col=col.spp[species], pch=pch.spp[species])
+  
+  #when I try and plot by age, some ages show up and others don't
+plot(leaf_lifespan_db_mean ~ mean, LeafLLSummary_av, col=col.age[age], pch=pch.age[age], xlab="LMA",ylab="leaf lifespans (years)", main="leaf lifespan versus LMA")
+legend("bottomright", c("1.35","2.4","5","7","9","32"), col = col.age, pch = pch.age, text.col = "black", border = "black", title="age categories")
+
+    #can't get syntax correct for moving this legend to locations specified by x,y coordinates
+
+
+
+
+mod <- lm(leaf_lifespan_db_mean ~ mean + age, LeafLLSummary_av)
+no_HATE <- lm(leaf_lifespan_db_mean ~ mean + age, LeafLLSummary_av,data=subset(LeafLLSummary_av, species != "HATE"))
+#this doesn't work
+abline(mod)
+summary(mod)
+
+
+
+#playing with other information
 
 plot(leaf_lifespan_db ~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="BAER"))
 plot(leaf_lifespan_db ~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="BOLE"))
@@ -139,6 +323,6 @@ plot(leaf_lifespan_db ~ as.factor(age), leaf_counts, data=subset(leaf_counts,spe
 plot(leaf_lifespan_db ~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="PHPH"))
 plot(leaf_lifespan_db ~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="PILI"))
 plot(leaf_lifespan_db ~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="PUTU"))
-mod <- lm(leaf_lifespan_db ~ as.factor(age), leaf_counts, data=subset(leaf_counts,species=="PUTU"))
-summary(mod)
+
+
 
