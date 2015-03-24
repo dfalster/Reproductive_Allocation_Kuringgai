@@ -18,3 +18,7 @@ se <- function(x) {
 con95 <- function(x){
   (sd(x)/sqrt(length(x)))*1.96
 }
+
+combine_data_frames <- function(..., d=list(...)) {
+   ldply(d, function(x) x)
+ }

@@ -5,6 +5,7 @@ targets:
   CarbonInvestments.tex:
     depends:
       - ReproductionAllocation_all
+      - AccessoryCosts_all
       - BAER_IndividualsList
       - BAER_FlowerPartsData
       - BAER_ReproductionData
@@ -613,3 +614,22 @@ targets:
         PILI_ReproductionAllocation,
         PUTU_ReproductionAllocation,
         IndividualsList=IndividualsList)
+
+  AccessoryCosts_all:
+    command: >
+      combine_data_frames(
+        BAER_AccessoryCosts,
+        BOLE_AccessoryCosts,
+        COER_AccessoryCosts,
+        EPMI_AccessoryCosts,
+        GRBU_AccessoryCosts,
+        GRSP_AccessoryCosts,
+        HATE_AccessoryCosts,
+        HEPU_AccessoryCosts,
+        LEES_AccessoryCosts,
+        PELA_AccessoryCosts,
+        PEPU_AccessoryCosts,
+        PHPH_AccessoryCosts,
+        PILI_AccessoryCosts,
+        PUTU_AccessoryCosts,
+        NULL)
