@@ -2,6 +2,7 @@ packages:
   - stringr
   - smatr
   - plyr
+  - tidyr
   - dplyr
   - xtable
   - igraph

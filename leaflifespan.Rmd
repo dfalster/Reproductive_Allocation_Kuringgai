@@ -20,25 +20,23 @@ output: html_document
     
 ```{r, echo=FALSE,results='hide', message=FALSE}
 # load packages
-library(tidyr)
-library(dplyr)
-#library(lme4)
 
-#load files
+library(remake)
+create_bindings()
 
-LMA <- read.csv("data/LMA_short.csv",header=TRUE,as.is=TRUE,stringsAsFactors=FALSE)%>%
+# InvestmentSummary <- InvestmentSummary
+# names(InvestmentSummary)[1] <- "tag_ID"
+
+LMA <- read.csv("data/LMA_short.csv",header=TRUE,stringsAsFactors=FALSE)%>%
   filter(species!="" & species!=" ")
-#InvestmentSummary <- remake::make("ReproductionAllocation_all")
-#names(InvestmentSummary)[1] <- "tag_ID"
 
+wood <- read.csv("data/woodDensity.csv", header=TRUE,stringsAsFactors=FALSE)%>%
+  filter(use=="use")
 
-#define functions
-se <- function(x) sd(x)/sqrt(length(x))
-con95 <- function(x) (sd(x)/sqrt(length(x)))*1.96
-
+seedsize <- read.csv("data/seedsize.csv", header=TRUE,stringsAsFactors=FALSE)
 
 # leaf lifespan data
-raw_leaf_lifespan <- read.csv("data/leaderGrowthLL.csv",header=TRUE,as.is=TRUE,stringsAsFactors=FALSE) %>%
+raw_leaf_lifespan <- read.csv("data/leaderGrowthLL.csv",header=TRUE,stringsAsFactors=FALSE) %>%
   filter(dont_use!="dead" & dont_use!="dont_use")
 
 # Create new dataset taking only count measures, bc these are ultimately what we want
@@ -54,7 +52,7 @@ for(v in c("lvs_start_count","lvs_end_count","lvs_new_count","new_but_shed_count
 # For individuals with "length" measures, translate into count
 
 # get average leaves per length for spp
-leaves_per_length_spp <- read.csv("data/leaves_per_length.csv", header=TRUE, as.is=TRUE,stringsAsFactors=FALSE) %>%
+leaves_per_length_spp <- read.csv("data/leaves_per_length.csv", header=TRUE, stringsAsFactors=FALSE) %>%
   filter(use=="yes") %>%
   mutate(count_per_length = leaf_count/length_mm) %>%
   group_by(species) %>%
@@ -87,7 +85,7 @@ raw_leaf_lifespan$LL_death[which(is.infinite(raw_leaf_lifespan$LL_death))] <- NA
 raw_leaf_lifespan$LL_bd[which(is.infinite(raw_leaf_lifespan$LL_death))] <- NA
 raw_leaf_lifespan$LL_birth[which(is.infinite(raw_leaf_lifespan$LL_death))] <- NA
 
-write.csv(raw_leaf_lifespan, file = "raw_leaf_lifespan.csv")
+#write.csv(raw_leaf_lifespan, file = "raw_leaf_lifespan.csv")
 ```
 
 #TODO: Check outlier for HATE
@@ -113,7 +111,7 @@ raw_leaf_lifespan$change_shoot_area <- (3.14*((raw_leaf_lifespan$d_end/2)^2)) - 
 LLSummary <- raw_leaf_lifespan %>%
   filter(LL_bd>0 & LL_bd<6 & LL_birth<8 & LL_death<8) %>%
   group_by(species, age) %>%
-  summarise_each(funs(mean, se, length), LL_bd, LL_death,LL_birth,new_length, lvs_end)
+  summarise_each(funs(mean, se, length), LL_bd, LL_death,LL_birth,new_length, lvs_end, lvs_end_total)
 
 #LMA summary by species, age
 LMA_summary <- LMA %>%
@@ -121,8 +119,13 @@ LMA_summary <- LMA %>%
   summarise_each(funs(mean, se, length), LMA)
 names(LMA_summary)<-c("species","age","LMA_mean","LMA_se","LMA_length")
 
-#leaf lifespan summary by species
+#wood density summary by species
+Wood_summary <- wood %>%
+  group_by(species) %>%
+  summarise_each(funs(mean, se, length), density)
+names(Wood_summary)<-c("species","WD_mean","WD_se","WD_length")
 
+#leaf lifespan summary by species
 LL_spp <- raw_leaf_lifespan %>%
   filter(age>2) %>%
   group_by(species) %>%
@@ -135,15 +138,20 @@ LMA_spp <- LMA %>%
   summarise_each(funs(mean, se, length), LMA)
 names(LMA_spp)<-c("species", "LMA_mean","LMA_se","LMA_length")
 
-#merge LMA data into LLSummary dataframe
+#merge LMA, wood density, seed size data into LLSummary dataframe
 LLSummary <- merge(LLSummary, LMA_summary, by.x=c("species","age"), by.y=c("species","age"))
+LLSummary <- merge(LLSummary, Wood_summary, by.x=c("species"), by.y=c("species"))
+LLSummary <- merge(LLSummary, seedsize, by.x=c("species"), by.y=c("species"))
 LL_spp <- merge(LL_spp, LMA_spp, by.x=c("species"), by.y=c("species"))
+LL_spp <- merge(LL_spp, Wood_summary, by.x=c("species"), by.y=c("species"))
+LL_spp <- merge(LL_spp, seedsize, by.x=c("species"), by.y=c("species"))
+#still to add, max H from Investment data, absolute and relative growth measures
 
 #plotting and stats
 #creating lists of information for plotting symbols, colors, labels
 pch.spp <- c(0,1,2,15,16,17,18,0,1,2,15,16,17,18)
 col.spp <- c("red", "dark green", "blue", "purple", "orange", "light green","salmon","turquoise","grey", "black","light blue","brown","yellow","salmon")
-col.age <-c("purple","pink","green","orange","blue","light blue")
+col.age <-c("purple","pink","green","orange","blue","dark green")
 pch.age <- c(1,1,16,16,16,16)
 labels.spp <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris micraphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia","Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile puchella", "Phyllota phyllicoides", "Pimelea linifolia", "Pultanaea tuberculata")
 names(labels.spp) <- c("BAER","BOLE","COER","EPMI","GRBU","GRSP","HATE","HEPU","LEES","PELA","PEPU","PHPH","PILI","PUTU") 
@@ -268,9 +276,6 @@ There is also no overall affect of age on LMA, although a few species would show
 LMA %>% group_by(species) %>%
   summarise(mean(LMA))
 
-labels.spp <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris micraphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia","Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile puchella", "Phyllota phyllicoides", "Pimelea linifolia", "Pultanaea tuberculata")
-names(labels.spp) <- c("BAER","BOLE","COER","EPMI","GRBU","GRSP","HATE","HEPU","LEES","PELA","PEPU","PHPH","PILI","PUTU") 
-
 plot_LMAvAge <- function(spp) {
   plot(LMA ~ age, data=subset(LMA,species==spp), xlab="age", ylab="LMA", cex.axis=.8, las=1, pch=16, log="x",
   main=labels.spp[spp]) 
@@ -297,19 +302,16 @@ for(n in names(labels.spp)) {
 
 
 #models with leaf counts per age
-The number of leaves on a leader is slightly affected by age however, with a decrease in leaf count along the leader with increasing age. This is what gives the perception of fewer leaves in some older plants.
+The number of leaves on a leader is slightly affected by age however, with a decrease in leaf count along the leader with increasing age. This is what gives the perception of fewer leaves in some older plants. I'm not sure why this pattern looks stronger than leaf lifespan.
 
 ```{r, echo=FALSE,results='hide', message=FALSE}
   
-labels.spp <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris micraphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia","Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile puchella", "Phyllota phyllicoides", "Pimelea linifolia", "Pultanaea tuberculata")
-names(labels.spp) <- c("BAER","BOLE","COER","EPMI","GRBU","GRSP","HATE","HEPU","LEES","PELA","PEPU","PHPH","PILI","PUTU") 
-
 plot_lfcountvAge <- function(spp) {
-  plot(lvs_end ~ age, data=subset(raw_leaf_lifespan,species==spp), xlab="age", ylab="leaf count along shoot", cex.axis=.8, las=1, pch=16, log="x",
+  plot(lvs_end_total ~ age, data=subset(raw_leaf_lifespan,species==spp), xlab="age", ylab="leaf count along shoot", cex.axis=.8, las=1, pch=16, log="x",
   main=labels.spp[spp]) 
-  points(lvs_end_mean ~ age, data=subset(LLSummary, species==spp), cex=1.3, pch=8)
-  points((lvs_end_mean+lvs_end_se) ~ age, data=subset(LLSummary, species==spp), cex=1.5, pch=25)
-  points((lvs_end_mean-lvs_end_se) ~ age, data=subset(LLSummary, species==spp), cex=1.5, pch=24)
+  points(lvs_end_total_mean ~ age, data=subset(LLSummary, species==spp), cex=1.3, pch=8)
+  points((lvs_end_total_mean+lvs_end_se) ~ age, data=subset(LLSummary, species==spp), cex=1.5, pch=25)
+  points((lvs_end_total_mean-lvs_end_se) ~ age, data=subset(LLSummary, species==spp), cex=1.5, pch=24)
 }
 
 mod_lfcountvAge <- function(spp) {
@@ -326,12 +328,10 @@ for(n in names(labels.spp)) {
 ```
 
 #models with shoot extenstion by age
-These models show that for some species, shoot extension decreases enormously in the older plants. This effect is larger than with number of leaves, indicating that some of these individuals have more leaves per length as they get older
+These models show that for some species, shoot extension decreases enormously in the older plants. This effect is larger than with number of leaves.
 
 
 ```{r, echo=FALSE,results='hide', message=FALSE}
-labels.spp <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris micraphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia","Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile puchella", "Phyllota phyllicoides", "Pimelea linifolia", "Pultanaea tuberculata")
-names(labels.spp) <- c("BAER","BOLE","COER","EPMI","GRBU","GRSP","HATE","HEPU","LEES","PELA","PEPU","PHPH","PILI","PUTU") 
 
 plot_newlengthvAge <- function(spp) {
   plot(new_length ~ age, data=subset(raw_leaf_lifespan,species==spp), xlab="age", ylab="leader shoot extention", cex.axis=.8, las=1, pch=16, log="x",
@@ -354,4 +354,20 @@ for(n in names(labels.spp)) {
 
 
 #plots regressing variables against one another
+```{r, echo=FALSE,results='hide', message=FALSE}
+plot(change_shoot_area~new_length,data=subset(raw_leaf_lifespan,change_shoot_area<1000000), log="xy",col=col.age[as.factor(age)], pch=16, cex=.8, xlab="shoot extension (mm)", ylab="increased shoot cross sectional area")
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+mod <- lm(change_shoot_area~new_length +age,data=subset(raw_leaf_lifespan,change_shoot_area<1000000))
+summary(mod)
 
+raw_leaf_lifespan$lvs_end_total <- raw_leaf_lifespan$lvs_end + raw_leaf_lifespan$lvs_new
+plot(lvs_end_total~lvs_start,raw_leaf_lifespan, log="xy",col=col.age[as.factor(age)], pch=16, cex=.8, xlab="starting leaf count", ylab="ending leaf count")
+
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+mod <- lm(lvs_start~lvs_end_total+age +age*lvs_end_total, raw_leaf_lifespan)
+summary(mod)
+#IS THERE AN EASY WAY TO ADD A 1:1 LINE TO THIS PLOT?
+
+
+plot(LL_birth_mean~LMA_mean,data=subset(LLSummary,species!="HATE"),col=col.age[as.factor(age)], pch=16, cex=.8, log="xy",xlab="LMA", ylab="leaf lifespan (calculated from leaf births")
+points(LL_birth_mean~LMA_mean,data=subset(LLSummary,species=="HATE"),col="red", pch=19, cex=.8)
