@@ -31,7 +31,9 @@ wood <- filter(woodDensity_raw, use=="use")
 seedsize <- seedSize_raw
 
 # leaf lifespan data
-leaf_lifespan <- filter(leafLifespan_raw, dont_use!="dead" & dont_use!="dont_use")
+raw_leaf_lifespan <-  filter(leafLifespan_raw, dont_use!="dead" & dont_use!="dont_use")
+
+leaf_lifespan <- raw_leaf_lifespan %>%
               select(species,age,site,tag_ID,d_start,d_end,length_start,new_length,segment,lvs_start_count,lvs_end_count,lvs_new_count,new_but_shed_count)
 
 # where counts did not previously exists, set as 0; CHECK WITH DANIEL THAT "V" IS A SET "NAME" IN THESE FUNCTIONS
