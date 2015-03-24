@@ -1,4 +1,4 @@
-species,age,age2,replicate,site,tag_ID,d_start,d_end,length_start,new_length,segment,lvs_start_length,lvs_start_count,lvs_end_length,lvs_end_count,lvs_new_length,lvs_new_count,new_but_shed_count,mm_lvs_spec,count_lvs_spec,notes,dont_use
+species,age,age2,replicate,site,individual,d_start,d_end,length_start,new_length,segment,lvs_start_length,lvs_start_count,lvs_end_length,lvs_end_count,lvs_new_length,lvs_new_count,new_but_shed_count,mm_lvs_spec,count_lvs_spec,notes,dont_use
 BAER,7,7,1,Basin2005,BAER_001,130,262,117,70,N/A - bn 4&5,235,100,177,0,70,,,,,,
 BAER,7,7,2,Basin2005,BAER_002,179,337,188,128,3,365,,188,30,128,,,,,,
 BAER,7,7,3,Basin2005,BAER_003,184,315,263,184,4,559,,300,4,184,,,,,,
