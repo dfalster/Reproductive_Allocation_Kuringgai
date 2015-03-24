@@ -35,7 +35,7 @@ RA_Calculations <- function(thisSpecies, Species_Investment, HarvestData, Maps, 
   DiameterData <- DiameterData[!is.na(DiameterData$EstWeight), ]
 
   ### Calculate change in the weight, i.e., Growth Investement
-  GrowthInv <- data.frame(Tree_ID = c(), GrowthInv = c(), StartWeight = c(), FinalWeight = c(), StartBasalDiamAv = c(), FinalBasalDiamAv = c(), age = c())
+  GrowthInv <- data.frame(tag_ID = c(), GrowthInv = c(), StartWeight = c(), FinalWeight = c(), StartBasalDiamAv = c(), FinalBasalDiamAv = c(), age = c())
   for (i in 1:length(unique(DiameterData$individual))) {
     end <- "end"
     individual <- unique(DiameterData$individual)[i]
@@ -44,7 +44,7 @@ RA_Calculations <- function(thisSpecies, Species_Investment, HarvestData, Maps, 
       print(paste0("Incorrect number of measurments for ", individual))
     }
     if (nrow(IndData) == 2) {
-      GrowthInv[i, "Tree_ID"] <- individual
+      GrowthInv[i, "tag_ID"] <- individual
       GrowthInv[i, "age"] <- unique(IndData$age)
       GrowthInv[i, "GrowthInv"] <- IndData[IndData$start_end == end, "EstWeight"] - IndData[IndData$start_end == "start", "EstWeight"]
       GrowthInv[i, "StartWeight"] <- IndData[IndData$start_end == "start", "EstWeight"]
@@ -59,26 +59,26 @@ RA_Calculations <- function(thisSpecies, Species_Investment, HarvestData, Maps, 
   ### Use saved data to calculate total reproduction investment per individual plant
   InvSpecies <- Species_Investment$Investment
 
-  RepoInv <- data.frame(Tree_ID = c(), ReproInv = c())
+  RepoInv <- data.frame(tag_ID = c(), ReproInv = c())
   for (individual in unique(InvSpecies$Individual)) {
       InvIndividual <- InvSpecies[InvSpecies$Individual == individual, ]
-      RepoInv <- rbind(RepoInv, data.frame(Tree_ID = individual, ReproInv = c(sum(InvIndividual$Total))))
+      RepoInv <- rbind(RepoInv, data.frame(tag_ID = individual, ReproInv = c(sum(InvIndividual$Total))))
     }
 
 
 
   ### Merge two tables and calculate total investment and RAR
-  InvestmentSummary <- merge(RepoInv, GrowthInv, by.y = "Tree_ID", all.y = T)
+  InvestmentSummary <- merge(RepoInv, GrowthInv, by.y = "tag_ID", all.y = T)
   # NA that appeared correspond to zeoro reproductive investment
   InvestmentSummary[is.na(InvestmentSummary)] <- 0
-  # Recode ages if at some place there are old time tags used. InvestmentSummary[str_sub(InvestmentSummary$Tree_ID,6,6)=='0','age']=7
-  # InvestmentSummary[str_sub(InvestmentSummary$Tree_ID,6,6)=='1','age']=1.3 InvestmentSummary[str_sub(InvestmentSummary$Tree_ID,6,6)=='4','age']=5
-  # InvestmentSummary[str_sub(InvestmentSummary$Tree_ID,6,6)=='8','age']=9 InvestmentSummary[str_sub(InvestmentSummary$Tree_ID,6,6)=='9','age']=32
+  # Recode ages if at some place there are old time tags used. InvestmentSummary[str_sub(InvestmentSummary$tag_ID,6,6)=='0','age']=7
+  # InvestmentSummary[str_sub(InvestmentSummary$tag_ID,6,6)=='1','age']=1.3 InvestmentSummary[str_sub(InvestmentSummary$tag_ID,6,6)=='4','age']=5
+  # InvestmentSummary[str_sub(InvestmentSummary$tag_ID,6,6)=='8','age']=9 InvestmentSummary[str_sub(InvestmentSummary$tag_ID,6,6)=='9','age']=32
 
 
   InvestmentSummary[["TotalInvestment"]] <- InvestmentSummary$ReproInv + InvestmentSummary$GrowthInv
   InvestmentSummary[["RA"]] <- InvestmentSummary$ReproInv/InvestmentSummary$TotalInvestment
   row.names(InvestmentSummary) <- NULL
-  InvestmentSummary[["species"]] <- str_sub(InvestmentSummary$Tree_ID, 1, 4)
+  InvestmentSummary[["species"]] <- str_sub(InvestmentSummary$tag_ID, 1, 4)
   InvestmentSummary[order(InvestmentSummary$species), ]
 }

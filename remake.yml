@@ -76,6 +76,21 @@ targets:
 
   InvestmentCategories:
     command: read_csv("data/accessoryParts.csv")
+  
+  LMA_raw:
+    command: read_csv("data/LMA_short.csv")
+  
+  woodDensity_raw:
+    command: read_csv("data/woodDensity.csv")
+
+  seedSize_raw:
+    command: read_csv("data/seedsize.csv")
+
+  leafLifespan_raw:
+    command: read_csv("data/leaderGrowthLL.csv")
+
+  leavesPerLength_raw:
+    command: read_csv("data/leaves_per_length.csv")
 
   figures:
     depends:

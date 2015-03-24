@@ -24,24 +24,15 @@ output: html_document
 library(remake)
 create_bindings()
 
-# InvestmentSummary <- InvestmentSummary
-# names(InvestmentSummary)[1] <- "individual"
+LMA <- filter(LMA_raw, species!="" & species!=" ")
 
-LMA <- read.csv("data/LMA_short.csv",header=TRUE,stringsAsFactors=FALSE)%>%
-  filter(species!="" & species!=" ")
+wood <- filter(woodDensity_raw, use=="use")
 
-wood <- read.csv("data/woodDensity.csv", header=TRUE,stringsAsFactors=FALSE)%>%
-  filter(use=="use")
-
-seedsize <- read.csv("data/seedsize.csv", header=TRUE,stringsAsFactors=FALSE)
+seedsize <- seedSize_raw
 
 # leaf lifespan data
-raw_leaf_lifespan <- read.csv("data/leaderGrowthLL.csv",header=TRUE,stringsAsFactors=FALSE) %>%
-  filter(dont_use!="dead" & dont_use!="dont_use")
-
-# Create new dataset taking only count measures, bc these are ultimately what we want
-leaf_lifespan <- raw_leaf_lifespan %>%
-  select(species,age,site,individual,d_start,d_end,length_start,new_length,segment,lvs_start_count,lvs_end_count,lvs_new_count,new_but_shed_count)
+leaf_lifespan <- filter(leafLifespan_raw, dont_use!="dead" & dont_use!="dont_use")
+              select(species,age,site,tag_ID,d_start,d_end,length_start,new_length,segment,lvs_start_count,lvs_end_count,lvs_new_count,new_but_shed_count)
 
 # where counts did not previously exists, set as 0; CHECK WITH DANIEL THAT "V" IS A SET "NAME" IN THESE FUNCTIONS
 for(v in c("lvs_start_count","lvs_end_count","lvs_new_count","new_but_shed_count")) {
@@ -52,8 +43,7 @@ for(v in c("lvs_start_count","lvs_end_count","lvs_new_count","new_but_shed_count
 # For individuals with "length" measures, translate into count
 
 # get average leaves per length for spp
-leaves_per_length_spp <- read.csv("data/leaves_per_length.csv", header=TRUE, stringsAsFactors=FALSE) %>%
-  filter(use=="yes") %>%
+leaves_per_length_spp <-  filter(leavesPerLength_raw,use=="yes") %>%
   mutate(count_per_length = leaf_count/length_mm) %>%
   group_by(species) %>%
   summarise(count_per_length = mean(count_per_length, na.rm=TRUE))

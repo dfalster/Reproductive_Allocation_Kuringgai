@@ -1,8 +1,3 @@
-
-read_csv <- function(filename) {
-  read.csv(filename, header = TRUE, sep = ",", stringsAsFactors = FALSE)
-}
-
 filterBySpecies <- function(thisSpecies, data){
   filter(data, species == thisSpecies)
 }
@@ -213,7 +208,7 @@ make_IndividualBasedWeights <- function(FPSummary) {
 
 combine_ReproductionAllocation <- function(..., d=list(...), IndividualsList) {
     ret <- ldply(d, function(x) x)
-    if(!all(ret$Tree_ID %in% IndividualsList$individual[IndividualsList$use_for_allocation_calculations]))
+    if(!all(ret$tag_ID %in% IndividualsList$individual[IndividualsList$use_for_allocation_calculations]))
       stop("problem with individuals list")
     ret
  }
