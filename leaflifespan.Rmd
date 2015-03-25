@@ -85,6 +85,12 @@ While overall accessory costs are not clearly affected by age, several of the su
 - seed weight vs. propagule weight dilemma
 - sites that are aged 1.35 vs 1.4 years
 
+technical:
+-parts remake not working
+-tag_ID still exists in 1 file
+-avoiding duplicate columns with name "age" "species" (how to subset columns that are merged, how to delete columns)
+-getting model summaries to show up when looping through species/ages
+
 #next to do
 
 - check how overall plant leaf numbers changes with age, diameter
@@ -213,7 +219,7 @@ investment_summary <- investment %>%
 
 #harvest summary by species, age
 harvest_summary <- harvest %>%
-  group_by(species, age) %>%
+  group_by(species, age2) %>%
   summarise_each(funs(mean, se, length), total_stem_weight, total_leaf_weight, height)
 
 #RA for each species/age combination
@@ -345,10 +351,10 @@ summary(mod_no_HATE)
 # Relationship between LMA, LL for 7 year old plants
 # There would be a similar plot for any other age as well. As with the overall LMA analyses, HATE needs to be removed.
 
-plot(LL_birth_mean ~ LMA_mean, data=subset(SummarySppAge,age==7), xlab="LMA", ylab="leaf lifespan (years)", main="leaf lifespan versus LMA", las=1, pch=16)
-text(LL_birth_mean ~ LMA_mean, data=subset(SummarySppAge,age==7), labels=species, pos=1, offset=-0.9, cex=0.9,col="blue")
-text(LL_birth_mean ~ LMA_mean, data=subset(SummarySppAge,age==7 & species=="HATE"), labels=species, pos=1, offset=-0.9, cex=0.9,col="red")
-mod <- lm(LL_birth_mean ~ LMA_mean, data=subset(SummarySppAge,species!="HATE" & age==7))
+plot(LL_birth_mean ~ LMA_mean, data=subset(SummarySppAge,age==5), xlab="LMA", ylab="leaf lifespan (years)", main="leaf lifespan versus LMA", las=1, pch=16)
+text(LL_birth_mean ~ LMA_mean, data=subset(SummarySppAge,age==5), labels=species, pos=1, offset=-0.9, cex=0.9,col="blue")
+text(LL_birth_mean ~ LMA_mean, data=subset(SummarySppAge,age==5 & species=="HATE"), labels=species, pos=1, offset=-0.9, cex=0.9,col="red")
+mod <- lm(LL_birth_mean ~ LMA_mean, data=subset(SummarySppAge,species!="HATE" & age==5))
 summary(mod)
 abline(mod)
 ```
@@ -367,7 +373,6 @@ summary(mod)
 leafLifespan %>% group_by(species) %>%
     summarise(mean(LL_birth))
 
-#where does the [spp] comes from? This is the first place in the script it is used like this - I assume it could be any name?
 plot_LLvAge <- function(spp) {
   plot(LL_birth ~ age, data=subset(SummaryInd,species==spp), xlab="age", ylab="leaf lifespan (leaf births)", cex.axis=.8, las=1,
      main=labels.spp[spp], xlim=c(1,35), ylim=c(0,8), log="x", pch=16)
@@ -463,7 +468,66 @@ for(n in names(labels.spp)) {
 }
 ```
 
-#plots regressing variables against one another
+#models looking at how the relationship between leaf weight (or area) and total plant weight shifts with age
+this should be another way to get at the decreasing "leafiness" of plants with age
+
+```{r, echo=FALSE,results='hide', message=FALSE}
+plot(leaf_weight~FinalWeight,SummaryInd, log="xy",col=col.age[as.factor(age)], pch=16, cex=0.8)
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+mod <-lm(FinalWeight~leaf_weight+age+species,SummaryInd)
+summary(mod)
+
+plot_LeafWeight <- function(spp) {
+  plot(leaf_weight~FinalWeight,data=subset(SummaryInd,species==spp), xlab="total weight (mg)", ylab ="leaf weight (mg)", log="xy",col=col.age[as.factor(age)], pch=16,     cex=0.8,main=labels.spp[spp])
+  legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+  mod <-lm(FinalWeight~leaf_weight+age,data=subset(SummaryInd,species==spp))
+  abline(mod)
+  summary(mod)
+}
+
+for(n in names(labels.spp)) {
+  plot_LeafWeight(n)
+  
+#plot looking at leaf area versus plant weight
+#USE THIS PLOT IN LAB MEETING - CLEARLY SHOWS DECLINE IN INTERCEPT WITH AGE  
+plot(leafArea~FinalWeight,SummaryInd, log="xy",col=col.age[as.factor(age)], pch=16, cex=0.8)
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+mod <-lm(FinalWeight~leafArea+age+species,SummaryInd)
+summary(mod)
+
+plot_LeafArea <- function(spp) {
+  plot(leafArea~FinalWeight,data=subset(SummaryInd,species==spp), xlab="total weight (mg)", ylab ="leaf weight (mg)", log="xy",col=col.age[as.factor(age)], pch=16,     cex=0.8,main=labels.spp[spp])
+  legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+  mod <-lm(FinalWeight~leafArea+age,data=subset(SummaryInd,species==spp))
+  abline(mod)
+  summary(mod)
+}
+
+for(n in names(labels.spp)) {
+  plot_LeafArea(n)
+} 
+
+
+#plots looking at shoot extension versus plant size
+plot(new_length~FinalWeight,SummaryInd, log="xy",col=col.age[as.factor(age)], pch=16, cex=0.8)
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+mod <-lm(FinalWeight~new_length+age+species,SummaryInd)
+summary(mod)
+
+plot_LeaderExtension <- function(spp) {
+  plot(new_length~FinalWeight,data=subset(SummaryInd,species==spp), xlab="total weight (mg)", ylab ="leaf weight (mg)", log="xy",col=col.age[as.factor(age)], pch=16,     cex=0.8,main=labels.spp[spp])
+  legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+  mod <-lm(FinalWeight~new_length+age,data=subset(SummaryInd,species==spp))
+  abline(mod)
+  summary(mod)
+}
+
+for(n in names(labels.spp)) {
+  plot_LeaderExtension(n)
+} 
+```
+  
+#many plots regressing variables against one another
 ```{r, echo=FALSE,results='hide', message=FALSE}
 plot(change_shoot_area~new_length,SummaryInd, log="xy",col=col.age[as.factor(age)], pch=16, cex=.8, xlab="shoot extension (mm)", ylab="increased shoot cross sectional area")
 legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
