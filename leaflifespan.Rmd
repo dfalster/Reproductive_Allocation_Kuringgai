@@ -11,8 +11,8 @@ Measures of biomass and growth include:
 - basal diameter
 - "leader" diameter
 - total biomass
-- leaf mass (calculations not yet done)
-- leaf area (calculations not yet done)
+- leaf mass
+- leaf area
 - stem biomass (calculations not yet done)
 - leaf count along leaders
 - shoot extension
@@ -264,7 +264,9 @@ SummaryInd <- merge(SummaryInd,Wood_summary, by.x=c("species"), by.y=c("species"
 SummaryInd <- merge(SummaryInd,LMA_summary, by.x=c("species","age"), by.y=c("species","age"))
 SummaryInd <- merge(SummaryInd,MaxH_spp, by.x=c("species"), by.y=c("species"))
 SummaryInd <- merge(SummaryInd,seedsize, by.x=c("species"), by.y=c("species"))
-#TO DO: REMOVE DUPLICATE COLUMNS FOR AGE and SPECIES
+SummaryInd$leafArea <- SummaryInd$total_leaf_weight * SummaryInd$LMA_mean
+#TO DO: REMOVE DUPLICATE COLUMNS FOR AGE and SPECIES MORE ELEGANTLY
+#TO DO: REMOVE COLUMNS I DON'T NEED
 
 #merge various data summaries into SummarySppAge dataframe
 SummarySppAge <- merge(LL_summary, LMA_summary, by.x=c("species","age"), by.y=c("species","age"))
@@ -477,4 +479,98 @@ summary(mod)
 
 plot(LL_birth_mean~LMA_mean,data=subset(SummarySppAge,species!="HATE"),col=col.age[as.factor(age)], pch=16, cex=.8, log="xy",xlab="LMA", ylab="leaf lifespan (calculated from leaf births")
 points(LL_birth_mean~LMA_mean,data=subset(SummarySppAge,species=="HATE"),col="red", pch=19, cex=.8)
+```
+
+#beginning with a large number of regressions to look for general pattern across variables
+A few stand out, noticeably that growth at the shoot level and whole plant level are well-correlated, indicating that a plant, even old ones, are distributing their available energy evenly to all shoots
+Also, max height and LMA (at a species*age level) are well correlated, There is obviously a strong effect of age, since older plants are taller.
+
+```{r, echo=FALSE,results='hide', message=FALSE}
+pairs(SummarySppAge[c("RA_mean", "GrowthInv_mean", "Prop_mean", "LL_birth_mean","LL_death_mean","new_length_mean", "change_shoot_area_mean","change_basal_area_mean","LMA_mean","WD_mean","seed_size","maxH")], log="xy")
+
+plot(maxH ~ LMA_mean,SummarySppAge,log="xy",col=col.age[as.factor(age)],pch=16,cex=.7)
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+mod<-lm(LMA_mean~maxH+age,data=subset(SummarySppAge,species!="PEPU"))
+summary(mod)
+
+plot(maxH ~ LMA_mean,SummarySppAge,log="xy",col=col.spp[as.factor(species)],pch=16,cex=.7)
+legend("bottomright",col=col.spp, labels.spp, pch=16, cex=1)
+
+plot(GrowthInv_mean ~ LMA_mean,SummarySppAge,log="xy",col=col.age[as.factor(age)],pch=16,cex=.7)
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+mod<-lm(LMA_mean~GrowthInv+age,data=subset(SummarySppAge,species!="PEPU"))
+summary(mod)
+```
+
+#Plots of interest to Anais' analyses
+The following plots look at the correlation between growth (absolute growth in this case) versus LMA, wood density, maxH (at that age), and seed size.
+
+They show,
+for LMA: slight positive correlation for youngest plants, no correlation for intermediate plants, strong positive correlation for adult plants
+for wood density: no correlation for yougest plants, intermediate plants, but strong negative correlation for adult plants
+```{r, echo=FALSE,results='hide', message=FALSE}
+plot(GrowthInv_mean ~ LMA_mean,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age[as.factor(age)],pch=16,cex=.7)
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+mod<-lm(LMA_mean~GrowthInv_mean+age,data=subset(SummarySppAge,age==1.4))
+summary(mod)
+
+plot(GrowthInv_mean ~ LMA_mean,data=subset(SummarySppAge,age==2.4),log="xy",col=col.age[as.factor(age)],pch=16,cex=.7)
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+mod<-lm(LMA_mean~GrowthInv_mean+age,data=subset(SummarySppAge,age==2.4))
+summary(mod)
+
+plot(GrowthInv_mean ~ LMA_mean,data=subset(SummarySppAge,age>3),log="xy",col=col.age[as.factor(age)],pch=16,cex=.7)
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+mod<-lm(LMA_mean~GrowthInv_mean+age,data=subset(SummarySppAge,age>3))
+summary(mod)
+
+
+plot(GrowthInv_mean ~ WD_mean,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age[as.factor(age)],pch=16,cex=.7)
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+mod<-lm(WD_mean~GrowthInv_mean+age,data=subset(SummarySppAge,age==1.4))
+summary(mod)
+
+plot(GrowthInv_mean ~ WD_mean,data=subset(SummarySppAge,age==2.4),log="xy",col=col.age[as.factor(age)],pch=16,cex=.7)
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+mod<-lm(WD_mean~GrowthInv_mean+age,data=subset(SummarySppAge,age==2.4))
+summary(mod)
+
+plot(GrowthInv_mean ~ WD_mean,data=subset(SummarySppAge,age>3),log="xy",col=col.age[as.factor(age)],pch=16,cex=.7)
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+mod<-lm(WD_mean~GrowthInv_mean+age,data=subset(SummarySppAge,age>3))
+summary(mod)
+
+
+
+plot(GrowthInv_mean ~ seed_size,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age[as.factor(age)],pch=16,cex=.7)
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+mod<-lm(seed_size~GrowthInv_mean+age,data=subset(SummarySppAge,age==1.4))
+summary(mod)
+
+plot(GrowthInv_mean ~ seed_size,data=subset(SummarySppAge,age==2.4),log="xy",col=col.age[as.factor(age)],pch=16,cex=.7)
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+mod<-lm(seed_size~GrowthInv_mean+age,data=subset(SummarySppAge,age==2.4))
+summary(mod)
+
+plot(GrowthInv_mean ~ seed_size,data=subset(SummarySppAge,age>3),log="xy",col=col.age[as.factor(age)],pch=16,cex=.7)
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+mod<-lm(seed_size~GrowthInv_mean+age,data=subset(SummarySppAge,age>3))
+summary(mod)
+
+
+
+plot(GrowthInv_mean ~ maxH,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age[as.factor(age)],pch=16,cex=.7)
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+mod<-lm(maxH~GrowthInv_mean,data=subset(SummarySppAge,age==1.4))
+summary(mod)
+
+plot(GrowthInv_mean ~ maxH,data=subset(SummarySppAge,age==2.4),log="xy",col=col.age[as.factor(age)],pch=16,cex=.7)
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+mod<-lm(maxH~GrowthInv_mean,data=subset(SummarySppAge,age==2.4))
+summary(mod)
+
+plot(GrowthInv_mean ~ maxH,data=subset(SummarySppAge,age>3),log="xy",col=col.age[as.factor(age)],pch=16,cex=.7)
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+mod<-lm(maxH~GrowthInv_mean+age,data=subset(SummarySppAge,age>3))
+summary(mod)
 ```
