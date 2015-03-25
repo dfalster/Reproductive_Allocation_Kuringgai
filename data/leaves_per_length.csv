@@ -943,7 +943,6 @@ sort,species,replicate,use,type,branch,length_mm,stem_weight_mg*10,leaf_count,co
 955,PUTU,E,no,tip,3.3.1.TIPS,43,,,,,,TIP+2SIDES ,,,,,,,
 1000,PEPU,A,yes,,,1,,1,1,1,1,made up number bc PEPU always counts,,,1,,1,1,1
 1000,PELA,A,yes,,,1,,1,1,1,1,made up number bc PELA always counts,,,1,,1,1,1
-1000,EPMI,A,yes,,,1,,1,1,1,1,made up number - needrel number,,,1,,1,1,1
 1000,GRSP,,yes,,,282,,108,,,,from specific counts,,,,,,,
 1000,GRSP,,yes,,,292,,131,,,,from specific counts,,,,,,,
 1000,GRSP,,yes,,,205,,72,,,,from specific counts,,,,,,,
@@ -975,3 +974,11 @@ sort,species,replicate,use,type,branch,length_mm,stem_weight_mg*10,leaf_count,co
 1000,HATE,,yes,,,530,,70,,,,from specific counts,,,,,,,
 1000,HATE,,yes,,,1333,,161,,,,from specific counts,,,,,,,
 1000,HATE,,yes,,,745,,132,,,,from specific counts,,,,,,,
+1000,EPMI,,yes,,,61,,51,,,,"from fully expanded branch that has fruit, no leaf loss",,,,,,,
+1000,EPMI,,yes,,,46,,61,,,,"from fully expanded branch that has fruit, no leaf loss",,,,,,,
+1000,EPMI,,yes,,,27,,30,,,,"from fully expanded branch that has fruit, no leaf loss",,,,,,,
+1000,EPMI,,yes,,,34,,40,,,,"from fully expanded branch that has fruit, no leaf loss",,,,,,,
+1000,EPMI,,yes,,,61,,46,,,,"from fully expanded branch that has fruit, no leaf loss",,,,,,,
+1000,EPMI,,yes,,,46,,56,,,,"from fully expanded branch that has fruit, no leaf loss",,,,,,,
+1000,EPMI,,yes,,,35,,46,,,,"from fully expanded branch that has fruit, no leaf loss",,,,,,,
+1000,EPMI,,yes,,,31,,52,,,,"from fully expanded branch that has fruit, no leaf loss",,,,,,,

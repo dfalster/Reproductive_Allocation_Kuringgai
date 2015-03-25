@@ -78,7 +78,7 @@ targets:
     command: read_csv("data/accessoryParts.csv")
   
   LMA_raw:
-    command: read_csv("data/LMA_short.csv")
+    command: read_csv("data/LMA.csv")
   
   woodDensity_raw:
     command: read_csv("data/woodDensity.csv")
