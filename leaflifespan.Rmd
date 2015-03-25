@@ -31,7 +31,7 @@ Reproduction measures include:
   * the propagule itself (either the seed or the seed with fused fruit tissue)
 - % investment in accessory tissues versus the propagule
 - seed set (calculations not yet done)
-  
+
   !!!TO DISCUSS: I only have my own seed weights for species where the seed isn't fused to any fruit tissue. However, I do have seed weights from the literature and global databases for all species and calculations could be redone based on actual seed weights for all species.!!!
 
 
@@ -106,7 +106,7 @@ harvest <- filter(HarvestData, use_status=="use" & segment==1 & start_end=="end"
 investment <- ReproductionAllocation_all
 names(investment) <- c("individual","ReproInv","age","GrowthInv","StartWeight","FinalWeight","StartBasalDiamAv","FinalBasalDiamAv","TotalInvestment","RA","species")
 #still have tagId as label
-#remaking this from scratch 
+#remaking this from scratch
 
 accessory <- AccessoryCosts_all
 
@@ -216,13 +216,13 @@ harvest_summary <- harvest %>%
   group_by(species, age) %>%
   summarise_each(funs(mean, se, length), total_stem_weight, total_leaf_weight, height)
 
-#RA for each species/age combination                 
+#RA for each species/age combination
 maxRA <- investment %>%
   group_by(species, age) %>%
   summarise_each(funs(max), RA)
 names(maxRA)<-c("species","age","maxRA")
 
-#maximum H for each species/age combination                 
+#maximum H for each species/age combination
 maxH <- harvest %>%
   group_by(species, age) %>%
   summarise_each(funs(max), height)
@@ -337,13 +337,13 @@ summary(mod_no_HATE)
 #  mod <- lm(LL_birth_mean ~ LMA_mean, data=subset(SummarySppAge,age==age&species!="HATE")
 #  abline(mod, col=col.age[age], lwd=1.5)
 #}
-  
+
 #for(n in names(labels.age)) {
 #  plot_by_age(n)
 #}
 
 # Relationship between LMA, LL for 7 year old plants
-# There would be a similar plot for any other age as well. As with the overall LMA analyses, HATE needs to be removed. 
+# There would be a similar plot for any other age as well. As with the overall LMA analyses, HATE needs to be removed.
 
 plot(LL_birth_mean ~ LMA_mean, data=subset(SummarySppAge,age==7), xlab="LMA", ylab="leaf lifespan (years)", main="leaf lifespan versus LMA", las=1, pch=16)
 text(LL_birth_mean ~ LMA_mean, data=subset(SummarySppAge,age==7), labels=species, pos=1, offset=-0.9, cex=0.9,col="blue")
