@@ -1,4 +1,4 @@
-species,site,age,age,branch_age,branch_code,branch_type,juvenile,date_collected,indiv_pooled,lvs_per_ind,leaf_number,weight,leaf_area,LMA,leaf_area_m,weight_kg,LMA_kgm,notes
+species,site,age,age2,branch_age,branch_code,branch_type,juvenile,date_collected,indiv_pooled,lvs_per_ind,leaf_number,weight,leaf_area,LMA,leaf_area_m,weight_kg,LMA_kgm,notes
 BAER,Wilunga2012,1.4,1.35,young,1,main,adult,7-May-14,4,8,32,0.1508,6.86323,0.022,0.000686323,0.0001508,0.22,
 BAER,Wilunga2012,1.4,1.35,mid,2,main,2,7-May-14,4,8,32,0.2018,9.09808,0.0222,0.000909808,0.0002018,0.222,
 BAER,Wilunga2012,1.4,1.35,old,3,main,1,7-May-14,4,5,16,0.2952,15.74846,0.0187,0.001574846,0.0002952,0.187,1st big leaves
