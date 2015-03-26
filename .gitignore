@@ -6,6 +6,10 @@ output
 .DS_Store
 .maker
 .remake
+*.html
+
+talk.md
+talk.pdf
 
 figure*
 CarbonInvestments.pdf

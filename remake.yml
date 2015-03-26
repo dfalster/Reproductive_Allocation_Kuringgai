@@ -36,21 +36,17 @@ plot_options:
 targets:
   all:
     depends:
-      - CarbonInvestments.pdf
+      - talk.pdf
+
+  talk.pdf:
+    depends:
+    command: render("talk.md", output_format = I("beamer_presentation"))
 
   CarbonInvestments.pdf:
     depends:
       - "CarbonInvestments.Rnw"
       - figures
     command: tex_2_pdf("CarbonInvestments.tex")
-
-  data:
-    depends:
-      - IndividualsList
-      - FlowerPartsData
-      - ReproductionData
-      - HarvestData
-      - MultiplierTable
 
   # Data --------------------------------------
   IndividualsList:
@@ -76,10 +72,10 @@ targets:
 
   InvestmentCategories:
     command: read_csv("data/accessoryParts.csv")
-  
+
   LMA_raw:
     command: read_csv("data/LMA.csv")
-  
+
   woodDensity_raw:
     command: read_csv("data/woodDensity.csv")
 
