@@ -106,7 +106,7 @@ create_bindings()
 
 ```{r, echo=FALSE,results='hide', message=FALSE}
 LMA <- filter(LMA_raw, species!="" & species!=" ") %>%
-  select(species,age,LMA)
+  select(species,age,LMA,branch_age)
 
 wood <- filter(woodDensity_raw, use=="use") %>%
   select(species,density)
@@ -314,17 +314,33 @@ Overall plot shows a lack of relationship when HATE included. This is because it
 
 ```{r, echo=FALSE,results='hide', message=FALSE}
 
-col.LMA <-c("black","purple", "pink", "light green", "orange","blue", "light blue","red")
-labels.LMA <-c("all except HATE","age 1.4", "age 2.4", "age 5", "age 7", "age 9", "age 32", "including HATE")
+col.LMA <-c("purple", "pink", "light green", "orange","blue", "light blue","red")
+labels.LMA <-c("age 1.4", "age 2.4", "age 5", "age 7", "age 9", "age 32", "HATE")
 plot(LL_birth_mean ~ LMA_mean, SummarySppAge, type="n", xlab="LMA", ylab="leaf lifespan (years)", main="leaf lifespan versus LMA (all species and ages)", las=1,pch=17, log="xy")
 points(LL_birth_mean ~ LMA_mean, data=subset(SummarySppAge, species!="HATE"), pch=16, cex=1.2, col=col.age[as.factor(age)])
 points(LL_birth_mean ~ LMA_mean, col="red", data=subset(SummarySppAge, species=="HATE"), pch=17)
+legend("bottomright",col=col.LMA, labels.LMA, pch=16, cex=1.4)
+
+plot(LL_birth_mean ~ LMA_mean, data=subset(SummarySppAge, species!="HATE" & age>1.5), pch=16, cex=1.2, col=col.age[as.factor(age)])
+mod <- lm(LL_birth_mean ~ LMA_mean, data=subset(SummarySppAge, species!="HATE" & age>1.5))
+summary(mod)         
+          
+plot(LL_death_mean ~ LMA_mean, data=subset(SummarySppAge, species!="HATE" & age>1.5), pch=16, cex=1.2, col=col.age[as.factor(age)])
+mod <- lm(LL_death_mean ~ LMA_mean, data=subset(SummarySppAge, species!="HATE" & age>1.5))
+summary(mod)  
+
+
+plot(LL_bd_mean ~ LMA_mean, data=subset(SummarySppAge, species!="HATE" & age>1.5), pch=16, cex=1.2, col=col.age[as.factor(age)])
+legend("bottomright",col=col.age,labels.age,pch=16)
+mod <- lm(LL_bd_mean ~ LMA_mean, data=subset(SummarySppAge, species!="HATE" & age>1.5))
+summary(mod)  
+
 #need log transformation to get these to plot onto axes
 mod <- lm(LL_birth_mean ~ LMA_mean, SummarySppAge)
 abline(mod, col="red", lty=2)
 mod_no_HATE <- lm(LL_birth_mean ~ LMA_mean, data=subset(SummarySppAge, species!="HATE"))
 abline(mod_no_HATE, lwd=2)
-legend("bottomright",col=col.LMA, labels.LMA, pch=16, cex=1.4)
+
 summary(mod_no_HATE)
 
 #plot_by_age <- function(age) {
@@ -354,7 +370,7 @@ Age is not significant, but some significant interactions (COER, HATE, HEPU)
 And many species have sigificantly different LL from one another
 
 ```{r, echo=FALSE,results='hide', message=FALSE}
-plot(LL_birth~age,SummaryInd,log="xy", xlab="age",ylab="leaf lifespan (based on leaf births",col=col.spp[as.factor(species)])
+plot(LL_birth~age,SummaryInd,log="xy", xlab="age",ylab="leaf lifespan (based on leaf births)",col=col.spp[as.factor(species)])
 legend("bottomright",col=col.spp, labels.spp, pch=16, cex=1)
 
 mod <- lm(LL_birth ~ age + species, data=subset(SummaryInd,age>3 & LL_birth!="Inf"))
@@ -387,8 +403,10 @@ There is also no overall affect of age on LMA, although a few species would show
 #mod <- lm(LMA ~ age +species + age*species, LMA)
 #summary(mod)
 
-plot(LMA_mean~age,SummarySppAge,log="xy", xlab="age",ylab="LMA",col=col.spp[as.factor(species)],pch=16)
+plot(LMA~age,data=subset(LMA,branch_age=="mid"),log="xy", xlab="age",ylab="LMA",col=col.spp[as.factor(species)],pch=16)
 legend("bottomright",col=col.spp, labels.spp, pch=16, cex=1)
+mod<- lm(LMA~age+species,data=subset(LMA,branch_age=="mid" & age>2))
+summary(mod)
 
 LMA %>% group_by(species) %>%
   summarise(mean(LMA))
@@ -420,7 +438,7 @@ The number of leaves on a leader is slightly affected by age however, with a dec
 ```{r, echo=FALSE,results='hide', message=FALSE}
 plot(lvs_end_total~age,SummaryInd,log="xy", xlab="age",ylab="final leaf count along shoot",col=col.spp[as.factor(species)])
 legend("bottomright",col=col.spp, labels.spp, pch=16, cex=1)
-mod <- lm(lvs_end_total~age+species+age*species,SummaryInd)
+mod <- lm(lvs_end_total~age+species,SummaryInd)
 summary(mod)
 
 
@@ -659,8 +677,8 @@ Will include a couple of the obviously different species in lab meeting
 
 ```{r, echo=FALSE,results='hide', message=FALSE}
 plot_RAbyAge <- function(spp) {
-  plot(RA~age, data=subset(SummaryInd,species==spp), xlab="age",ylab="reproductive allocation", log="x", main=labels.spp[spp])
-  points(RA_mean~age, data=subset(SummarySppAge, species==spp),pch=16,cex=1.2)
+  plot(RA~age, data=subset(SummaryInd,species==spp), xlab="age (years)",ylab="reproductive allocation (%)", log="x", main=labels.spp[spp],xlim=c(1,35),ylim=c(0,1))
+  points(RA_mean~age, data=subset(SummarySppAge, species==spp),pch=16,cex=1.4)
 }
 
 

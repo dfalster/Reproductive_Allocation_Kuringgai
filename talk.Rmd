@@ -8,9 +8,319 @@ output:
        toc: true
        theme: united
 ---
+```{r, echo=FALSE,results='hide', message=FALSE}
+
+# load packages and "open" dataframes to use
+#library(remake)
+#create_bindings()
+```
+
+```{r, echo=FALSE,results='hide', message=FALSE}
+LMA <- filter(LMA_raw, species!="" & species!=" ") %>%
+  select(species,age,LMA,branch_age)
+
+wood <- filter(woodDensity_raw, use=="use") %>%
+  select(species,density)
+
+seedsize <- seedSize_raw %>%
+  select(species,seed_size)
+
+harvest <- filter(HarvestData, use_status=="use" & segment==1 & start_end=="end") %>%
+  select(species,individual,age,age2,height,total_leaf_weight,site)
+
+investment <- ReproductionAllocation_all
+investment$age2 <- investment$age
+investment$age <- round(investment$age, digits=1)
+
+accessory <- AccessoryCosts_all
+accessory$age2 <- accessory$age
+accessory$age <- round(accessory$age, digits=1)
+#accessory$PerAccessory <- {
+#  select(accessory, Total >0,
+#  1 - (accessory$Prop/accessory$Total)
+#}
+
+#accessory$PerPropagule = 1 - accessory$PerAccessory
+
+leafLifespan <- filter(leafLifespan_raw, dont_use!="dead" & dont_use!="dont_use") %>%
+  select(species,age,individual,d_start,d_end,length_start,new_length,lvs_start_length,lvs_start_count,lvs_end_length,lvs_end_count,lvs_new_length,lvs_new_count,new_but_shed_count,mm_lvs_spec,count_lvs_spec)
+
+leafLifespan$individual <- as.factor(leafLifespan$individual)
+leafLifespan$species <- as.factor(leafLifespan$species)
+
+#loading this column as character, so using this for now
+
+# Calculating Leaf Lifespan
+
+# where counts did not previously exists, set as 0; CHECK WITH DANIEL THAT "V" IS A SET "NAME" IN THESE FUNCTIONS
+
+leaf_lifespan_temp <- leafLifespan %>%
+              select(species,age,individual,d_start,d_end,length_start,new_length,lvs_start_count,lvs_end_count,lvs_new_count,new_but_shed_count)
+
+for(v in c("lvs_start_count","lvs_end_count","lvs_new_count","new_but_shed_count")) {
+  i <- is.na(leaf_lifespan_temp[[v]])
+  leaf_lifespan_temp[[v]][i] <- 0
+}
+
+# For individuals with "length" measures, translate into count
+
+# get average leaves per length for spp
+leaves_per_length_spp <-  filter(leavesPerLength_raw,use=="yes") %>%
+  mutate(count_per_length = leaf_count/length_mm) %>%
+  group_by(species) %>%
+  summarise(count_per_length = mean(count_per_length, na.rm=TRUE))
+
+# get spp average for all individuals
+leafLifespan$count_per_length <- leaves_per_length_spp$count_per_length[match(leafLifespan$species, leaves_per_length_spp$species)]
+
+# if possible use data for that individual, if it exists; this code substitutes in species count per length #s for individuals where this data is available
+i <- !is.na(leafLifespan$mm_lvs)
+leafLifespan$count_per_length[i] <- (leafLifespan$count_lvs_spec/leafLifespan$mm_lvs)[i]
+
+#this is the end of the section Daniel helped me rewrite - next section is mine
+
+#get total leaf counts
+for(v in c("lvs_start_length","lvs_start_count","lvs_end_length","lvs_end_count","lvs_new_length","lvs_new_count","new_but_shed_count")) {
+  i <- is.na(leafLifespan[[v]])
+  leafLifespan[[v]][i] <- 0
+  }
+leafLifespan$lvs_start <- leafLifespan$lvs_start_count + (leafLifespan$lvs_start_length * leafLifespan$count_per_length)
+leafLifespan$lvs_end <- leafLifespan$lvs_end_count + (leafLifespan$lvs_end_length * leafLifespan$count_per_length)
+leafLifespan$lvs_new <- leafLifespan$lvs_new_count + (leafLifespan$lvs_new_length * leafLifespan$count_per_length)
+
+#calculating leaf lifespan
+leafLifespan$LL_bd <- (leafLifespan$lvs_start)/(((leafLifespan$lvs_start)-(leafLifespan$lvs_end))+(leafLifespan$lvs_new)/2)
+leafLifespan$LL_death <- (leafLifespan$lvs_start)/((leafLifespan$lvs_start)-(leafLifespan$lvs_end))
+leafLifespan$LL_birth <- (leafLifespan$lvs_start)/(leafLifespan$lvs_new)
+
+leafLifespan$LL_death[which(is.infinite(leafLifespan$LL_death))] <- NA
+leafLifespan$LL_bd[which(is.infinite(leafLifespan$LL_death))] <- NA
+leafLifespan$LL_birth[which(is.infinite(leafLifespan$LL_death))] <- NA
+
+#adding investment and accessory costs data to leafLifespan dataframe to create a dataframe with all individual level data
+SummaryInd <- merge(leafLifespan, select(investment, -species, -age), by="individual")
+SummaryInd <- merge(SummaryInd, select(accessory, -species, -age, -age2), by="individual")
+SummaryInd <- merge(SummaryInd, select(harvest, -species, -age, -age2), by="individual")
+
+#adding variables to look at change across years
+SummaryInd$change_shoot_diam <- SummaryInd$d_end - SummaryInd$d_start
+SummaryInd$change_basal_diam <- SummaryInd$FinalBasalDiam - SummaryInd$StartBasalDiam
+SummaryInd$change_shoot_area <- (3.14*((SummaryInd$d_end/2)^2)) - (3.14*((SummaryInd$d_start/2)^2))
+SummaryInd$change_basal_area <- (3.14*((SummaryInd$FinalBasalDiam/2)^2)) - (3.14*((SummaryInd$StartBasalDiam/2)^2))
+SummaryInd$lvs_end_total <- SummaryInd$lvs_end + SummaryInd$lvs_new
+```
+
+```{r, echo=FALSE,results='hide', message=FALSE}
+#summarizing data by species, age
+
+#leaf lifespan summary by species, age
+LL_summary <- SummaryInd %>%
+  filter(LL_bd>0 & LL_bd<6 & LL_birth<8 & LL_death<8) %>%
+  group_by(species, age) %>%
+  summarise_each(funs(mean, se, length), LL_bd, LL_death,LL_birth,new_length, lvs_end, lvs_end_total, change_shoot_diam, change_basal_diam, change_shoot_area, change_basal_area)
+
+#LMA summary by species, age
+LMA_summary <- LMA %>%
+  group_by(species, age) %>%
+  summarise_each(funs(mean, se, length), LMA)
+names(LMA_summary)<-c("species","age","LMA_mean","LMA_se","LMA_length")
+
+#accessory tissue summary by species, age
+accessory_summary <- accessory %>%
+  group_by(species, age) %>%
+  summarise_each(funs(mean, se, length), PrePol_A, PrePol_S, PostPol_A, PD, Prop)
+
+#investment summary by species, age
+investment_summary <- investment %>%
+  group_by(species, age) %>%
+  summarise_each(funs(mean, se, length), GrowthInv, FinalWeight, FinalBasalDiamAv, TotalInvestment, RA)
+
+#harvest summary by species, age
+harvest_summary <- harvest %>%
+  group_by(species, age) %>%
+  summarise_each(funs(mean, se, length), height,total_leaf_weight)
+#names(harvest_summary)<-c("species","age","height_mean","height_se","height_length")
+
+#RA for each species/age combination
+maxRA <- investment %>%
+  group_by(species, age) %>%
+  summarise_each(funs(max), RA)
+names(maxRA)<-c("species","age","maxRA")
+
+#maximum H for each species/age combination
+maxH <- harvest %>%
+  group_by(species, age) %>%
+  summarise_each(funs(max), height)
+names(maxH)<-c("species","age","maxH")
+
+#LMA summary by species, age
+LMA_summary <- LMA %>%
+  group_by(species, age) %>%
+  summarise_each(funs(mean, se, length), LMA)
+names(LMA_summary)<-c("species","age","LMA_mean","LMA_se","LMA_length")
+
+#wood density summary by species
+wood_summary <- wood %>%
+  group_by(species) %>%
+  summarise_each(funs(mean, se, length), density)
+names(wood_summary)<-c("species","WD_mean","WD_se","WD_length")
+
+#leaf lifespan summary by species
+LL_spp <- leafLifespan %>%
+  filter(age>2) %>%
+  group_by(species) %>%
+  summarise_each(funs(mean, se, length), LL_bd, LL_death,LL_birth)
+
+#LMA summary by species
+LMA_spp <- LMA %>%
+  filter(age>2) %>%
+  group_by(species) %>%
+  summarise_each(funs(mean, se, length), LMA)
+  names(LMA_spp)<-c("species", "LMA_mean","LMA_se","LMA_length")
+
+#maximum height for each species
+maxH_spp <- harvest %>%
+  group_by(species) %>%
+  summarise_each(funs(max), height)
+names(maxH_spp)<-c("species", "maxH_spp")
+
+SummaryInd <- merge(SummaryInd,wood_summary, by=c("species"))
+SummaryInd <- merge(SummaryInd,LMA_summary, by=c("species","age"))
+SummaryInd <- merge(SummaryInd,maxH_spp, by=c("species"))
+SummaryInd <- merge(SummaryInd,seedsize, by=c("species"))
+
+SummaryInd$leafArea <- SummaryInd$total_leaf_weight * SummaryInd$LMA_mean
+
+#merge various data summaries into SummarySppAge dataframe
+SummarySppAge <- merge(LL_summary, LMA_summary, by=c("species","age"))
+SummarySppAge <- merge(SummarySppAge, wood_summary, by=c("species"))
+SummarySppAge <- merge(SummarySppAge, seedsize, by=c("species"))
+SummarySppAge <- merge(SummarySppAge, maxH_spp, by=c("species"))
+SummarySppAge <- merge(SummarySppAge, maxH, by=c("species","age"))
+SummarySppAge <- merge(SummarySppAge, investment_summary, by=c("species","age"))
+SummarySppAge <- merge(SummarySppAge, accessory_summary, by=c("species","age"))
+SummarySppAge <- merge(SummarySppAge, harvest_summary, by=c("species","age"))
+
+#merge various data summaries into SummarySpp dataframe
+SummarySpp <- merge(LL_spp, LMA_spp, by=c("species"))
+SummarySpp <- merge(SummarySpp, wood_summary, by=c("species"))
+SummarySpp <- merge(SummarySpp, seedsize, by=c("species"))
+SummarySpp <- merge(SummarySpp, select(maxH, -age), by=c("species"))
+
+#plotting and stats
+#creating lists of information for plotting symbols, colors, labels
+pch.spp <- c(0,1,2,15,16,17,18,0,1,2,15,16,17,18)
+col.spp <- c("red", "dark green", "blue", "purple", "orange", "light green","salmon","turquoise","grey", "black","light blue","brown","yellow","salmon")
+col.age <-c("purple","pink","green","orange","blue","dark green")
+pch.age <- c(1,1,16,16,16,16)
+labels.spp <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris micraphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia","Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile puchella", "Phyllota phyllicoides", "Pimelea linifolia", "Pultanaea tuberculata")
+names(labels.spp) <- c("BAER","BOLE","COER","EPMI","GRBU","GRSP","HATE","HEPU","LEES","PELA","PEPU","PHPH","PILI","PUTU")
+labels.age <- c("1.4","2.4","5","7","9","32")
+names(labels.age) <- c("1.4","2.4","5","7","9","32")
+```
 
 # file names
 
 - leaf_counts is file with calculated leaf counts and leaf lifespan data
 - SummarySppAge is file with means of LL - and other variables - by species and age; LMA data is merged to this file
 - subsets of SummarySppAge are created to omit babies or HATE for various analyses
+
+#What causes RA to shift with age in species?
+Theoretical models indicate that there need to be size (or age) related shifts in *some* trade-off to create graded RA schedules.
+
+For instance, shifts in a variable such as leaf lifespan, fecundity per RA, photosynthetic rates with size (or other variables) will change the RA schedule.
+
+I have both RA schedules and lots of other data across multiple ages:
+- leaf lifespa
+- LMA
+- accessory tissue costs
+
+#Shifts in RA with age 
+
+Showing just a few of the RA schedules from my last lab meeting.
+
+They show that species differ greatly in RA, that there is a general increase with age, but also that the data are noisy.
+
+```{r, echo=FALSE,results='hide', message=FALSE}
+plot_RAbyAge <- function(spp) {
+  plot(RA~age, data=subset(SummaryInd,species==spp), xlab="age (years)",ylab="reproductive allocation (%)", log="x", main=labels.spp[spp],xlim=c(1,35),ylim=c(0,1))
+  points(RA_mean~age, data=subset(SummarySppAge, species==spp),pch=16,cex=1.4)
+}
+
+
+for(n in names(labels.spp)) {
+  plot_RAbyAge(n)
+}
+```
+#Individual shoots looked decidedly "less leafy" in many older plants
+This led me to wonder how leaf lifespan - or some other variable - was shifting with age
+
+The number of leaves along a leader is overall uneffected by age, although some species show a marked decline
+```{r, echo=FALSE,results='hide', message=FALSE}
+plot(lvs_end_total~age,SummaryInd,log="xy", xlab="age",ylab="final leaf count along shoot",col=col.spp[as.factor(species)])
+legend("bottomright",col=col.spp, labels.spp, pch=16, cex=1)
+```
+
+#LMA versus age
+The plot below is a bulked LMA sample from each site, of leaves from the second most recent cohort
+
+There is a significant increase with age (p=0.002) and many species differ from one another, despite the very few points
+Age is only borderline significant (p=0.04) when the seedlings are removed
+
+```{r, echo=FALSE,results='hide', message=FALSE}
+plot(LMA~age,data=subset(LMA,branch_age=="mid"),log="xy", xlab="age",ylab="LMA",col=col.spp[as.factor(species)],pch=16)
+legend("bottomright",col=col.spp, labels.spp, pch=16, cex=1)
+```
+
+#Leaf lifespan with age
+Leaf lifespan increases from seedlings (1.4 yrs) to saplings (2.4 years) to adults (>4 years), but there are no differences between the different adult populations
+```{r, echo=FALSE,results='hide', message=FALSE}
+plot(LL_birth~age,SummaryInd,log="xy", xlab="age",ylab="leaf lifespan (based on leaf births)",col=col.spp[as.factor(species)])
+legend("bottomright",col=col.spp, labels.spp, pch=16, cex=1)
+```
+
+#Plots of individual species show that no species has a significant change either - although several show slight declines at the end
+```{r, echo=FALSE,results='hide', message=FALSE}
+#DF: Here is a place where it would be good to run the statistical model on each of the species. I have the function I wrote below, ut hashed out
+
+plot_LLvAge <- function(spp) {
+  plot(LL_birth ~ age, data=subset(SummaryInd,species==spp), xlab="age", ylab="leaf lifespan (leaf births)", cex.axis=.8, las=1,
+     main=labels.spp[spp], xlim=c(1,35), ylim=c(0,8), log="x", pch=16)
+  points(LL_birth_mean ~ age, data=subset(SummarySppAge, species==spp), cex=1.3, pch=8)
+  points((LL_birth_mean+LL_birth_se) ~ age, data=subset(SummarySppAge, species==spp), cex=1.5, pch=25)
+  points((LL_birth_mean-LL_birth_se) ~ age, data=subset(SummarySppAge, species==spp), cex=1.5, pch=24)
+}
+
+#mod_LLvAge <- function(spp) {
+#  lm(LL_birth ~ age, data=subset(SummaryInd,species==spp))
+#}
+
+for(n in names(labels.spp)) {
+  plot_LLvAge(n)
+#  mod_LMAvAge(n)
+#  summary(mod_LMAvAge(n))
+}
+```
+#Had expected a stronger pattern either in leaf lifespan or leaf count on a shoot
+Apparently it is simply that older plants have more stem - plotting total leaf weight against final weight, shows bigger plants have relatively fewer leaves
+(Yes, I know the 2.4 yr olds are missing...)
+
+```{r, echo=FALSE,results='hide', message=FALSE}
+plot(total_leaf_weight~FinalWeight,SummaryInd, log="xy",col=col.age[as.factor(age)], pch=16, cex=0.8)
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+```
+
+#LMA vs Leaf lifespan
+This correlation is as expected, except for the babies
+
+```{r, echo=FALSE,results='hide', message=FALSE}
+col.LMA <-c("purple", "pink", "light green", "orange","blue", "light blue","red")
+labels.LMA <-c("age 1.4", "age 2.4", "age 5", "age 7", "age 9", "age 32", "HATE")
+plot(LL_birth_mean ~ LMA_mean, SummarySppAge, type="n", xlab="LMA", ylab="leaf lifespan (years)", main="leaf lifespan versus LMA (all species and ages)", las=1,pch=17, log="xy")
+points(LL_birth_mean ~ LMA_mean, data=subset(SummarySppAge, species!="HATE"), pch=16, cex=1.2, col=col.age[as.factor(age)])
+points(LL_birth_mean ~ LMA_mean, col="red", data=subset(SummarySppAge, species=="HATE"), pch=17)
+legend("bottomright",col=col.LMA, labels.LMA, pch=16, cex=1.4)
+```
+
+#Some other teasers for the future
+
