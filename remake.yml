@@ -6,6 +6,7 @@ packages:
   - dplyr
   - xtable
   - igraph
+  - rmarkdown
 
 sources:
   - R
@@ -36,11 +37,10 @@ plot_options:
 targets:
   all:
     depends:
-      - talk.pdf
-
-  talk.pdf:
+      - talk.html
+  talk.html:
     depends:
-    command: render("talk.md", output_format = I("beamer_presentation"))
+    command: render("talk.md", output_format = I("isoslides"))
 
   CarbonInvestments.pdf:
     depends:

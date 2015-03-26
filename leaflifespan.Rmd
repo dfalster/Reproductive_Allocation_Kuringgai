@@ -81,9 +81,8 @@ While overall accessory costs are not clearly affected by age, several of the su
 
 #discuss with Daniel
 - once we are certain about leaf lifespan calculations, those calculations should go into a separate file, since that is background processing, but like calculating investment. Then this becomes the file where variables are summarized, plotted analyzed.
-- make sure regressions exist (or are done), to separately look at leaf and stem biomass
+- add final leaf and stem biomass output to "investment" output file
 - seed weight vs. propagule weight dilemma
-- sites that are aged 1.35 vs 1.4 years
 
 technical:
 -parts remake not working
@@ -95,29 +94,49 @@ technical:
 
 - check how overall plant leaf numbers changes with age, diameter
 
+#data to check
+- HATE outlier in LL
+
 ```{r, echo=FALSE,results='hide', message=FALSE}
 
 # load packages and "open" dataframes to use
 library(remake)
 create_bindings()
+```
 
-LMA <- filter(LMA_raw, species!="" & species!=" ")
+```{r, echo=FALSE,results='hide', message=FALSE}
+LMA <- filter(LMA_raw, species!="" & species!=" ") %>%
+  select(species,age,LMA)
 
-wood <- filter(woodDensity_raw, use=="use")
+wood <- filter(woodDensity_raw, use=="use") %>%
+  select(species,density)
 
-seedsize <- seedSize_raw
+seedsize <- seedSize_raw %>%
+  select(species,seed_size)
 
-harvest <- filter(HarvestData, use_status=="use" & segment==1 & start_end=="end")
+harvest <- filter(HarvestData, use_status=="use" & segment==1 & start_end=="end") %>%
+  select(species,individual,age,age2,height,total_leaf_weight,site)
 
 investment <- ReproductionAllocation_all
-names(investment) <- c("individual","ReproInv","age","GrowthInv","StartWeight","FinalWeight","StartBasalDiamAv","FinalBasalDiamAv","TotalInvestment","RA","species")
-#still have tagId as label
-#remaking this from scratch
+investment$age2 <- investment$age
+investment$age <- round(investment$age, digits=1)
 
 accessory <- AccessoryCosts_all
+accessory$age2 <- accessory$age
+accessory$age <- round(accessory$age, digits=1)
+#accessory$PerAccessory <- {
+#  select(accessory, Total >0,
+#  1 - (accessory$Prop/accessory$Total)
+#}
 
-leafLifespan <- filter(leafLifespan_raw, dont_use!="dead" & dont_use!="dont_use")
+#accessory$PerPropagule = 1 - accessory$PerAccessory
+
+leafLifespan <- filter(leafLifespan_raw, dont_use!="dead" & dont_use!="dont_use") %>%
+  select(species,age,individual,d_start,d_end,length_start,new_length,lvs_start_length,lvs_start_count,lvs_end_length,lvs_end_count,lvs_new_length,lvs_new_count,new_but_shed_count,mm_lvs_spec,count_lvs_spec)
+
 leafLifespan$individual <- as.factor(leafLifespan$individual)
+leafLifespan$species <- as.factor(leafLifespan$species)
+
 #loading this column as character, so using this for now
 
 # Calculating Leaf Lifespan
@@ -125,7 +144,7 @@ leafLifespan$individual <- as.factor(leafLifespan$individual)
 # where counts did not previously exists, set as 0; CHECK WITH DANIEL THAT "V" IS A SET "NAME" IN THESE FUNCTIONS
 
 leaf_lifespan_temp <- leafLifespan %>%
-              select(species,age,site,individual,d_start,d_end,length_start,new_length,segment,lvs_start_count,lvs_end_count,lvs_new_count,new_but_shed_count)
+              select(species,age,individual,d_start,d_end,length_start,new_length,lvs_start_count,lvs_end_count,lvs_new_count,new_but_shed_count)
 
 for(v in c("lvs_start_count","lvs_end_count","lvs_new_count","new_but_shed_count")) {
   i <- is.na(leaf_lifespan_temp[[v]])
@@ -167,20 +186,10 @@ leafLifespan$LL_death[which(is.infinite(leafLifespan$LL_death))] <- NA
 leafLifespan$LL_bd[which(is.infinite(leafLifespan$LL_death))] <- NA
 leafLifespan$LL_birth[which(is.infinite(leafLifespan$LL_death))] <- NA
 
-
 #adding investment and accessory costs data to leafLifespan dataframe to create a dataframe with all individual level data
-#SummaryInd <- left_join(leafLifespan, investment, by = "individual")
-#SummaryInd <- left_join(SummaryInd, accessory, by = "individual")
-#SummaryInd <- left_join(SummaryInd, harvest, by = "individual")
-#not sure why the above text isn't working... using merge instead
-
-SummaryInd <- merge(leafLifespan, investment, by.x=c("individual"), by.y=c("individual"))
-SummaryInd <- subset(SummaryInd, select = -c(age.y,species.y) )
-SummaryInd <- merge(SummaryInd, accessory, by.x=c("individual"), by.y=c("individual"))
-SummaryInd <- subset(SummaryInd, select = -c(age,species) )
-SummaryInd <- merge(SummaryInd, harvest, by.x=c("individual"), by.y=c("individual"))
-#problem here, because duplicates number of entries
-SummaryInd <- subset(SummaryInd, select = -c(age.x,species.x) )
+SummaryInd <- merge(leafLifespan, select(investment, -species, -age), by="individual")
+SummaryInd <- merge(SummaryInd, select(accessory, -species, -age, -age2), by="individual")
+SummaryInd <- merge(SummaryInd, select(harvest, -species, -age, -age2), by="individual")
 
 #adding variables to look at change across years
 SummaryInd$change_shoot_diam <- SummaryInd$d_end - SummaryInd$d_start
@@ -189,8 +198,6 @@ SummaryInd$change_shoot_area <- (3.14*((SummaryInd$d_end/2)^2)) - (3.14*((Summar
 SummaryInd$change_basal_area <- (3.14*((SummaryInd$FinalBasalDiam/2)^2)) - (3.14*((SummaryInd$StartBasalDiam/2)^2))
 SummaryInd$lvs_end_total <- SummaryInd$lvs_end + SummaryInd$lvs_new
 ```
-
-#TODO: Check outlier for HATE
 
 ```{r, echo=FALSE,results='hide', message=FALSE}
 #summarizing data by species, age
@@ -219,8 +226,9 @@ investment_summary <- investment %>%
 
 #harvest summary by species, age
 harvest_summary <- harvest %>%
-  group_by(species, age2) %>%
-  summarise_each(funs(mean, se, length), total_stem_weight, total_leaf_weight, height)
+  group_by(species, age) %>%
+  summarise_each(funs(mean, se, length), height,total_leaf_weight)
+#names(harvest_summary)<-c("species","age","height_mean","height_se","height_length")
 
 #RA for each species/age combination
 maxRA <- investment %>%
@@ -241,10 +249,10 @@ LMA_summary <- LMA %>%
 names(LMA_summary)<-c("species","age","LMA_mean","LMA_se","LMA_length")
 
 #wood density summary by species
-Wood_summary <- wood %>%
+wood_summary <- wood %>%
   group_by(species) %>%
   summarise_each(funs(mean, se, length), density)
-names(Wood_summary)<-c("species","WD_mean","WD_se","WD_length")
+names(wood_summary)<-c("species","WD_mean","WD_se","WD_length")
 
 #leaf lifespan summary by species
 LL_spp <- leafLifespan %>%
@@ -257,41 +265,36 @@ LMA_spp <- LMA %>%
   filter(age>2) %>%
   group_by(species) %>%
   summarise_each(funs(mean, se, length), LMA)
-names(LMA_spp)<-c("species", "LMA_mean","LMA_se","LMA_length")
+  names(LMA_spp)<-c("species", "LMA_mean","LMA_se","LMA_length")
 
 #maximum height for each species
-MaxH_spp <- harvest %>%
+maxH_spp <- harvest %>%
   group_by(species) %>%
   summarise_each(funs(max), height)
-names(LMA_spp)<-c("species", "maxH_spp")
+names(maxH_spp)<-c("species", "maxH_spp")
 
+SummaryInd <- merge(SummaryInd,wood_summary, by=c("species"))
+SummaryInd <- merge(SummaryInd,LMA_summary, by=c("species","age"))
+SummaryInd <- merge(SummaryInd,maxH_spp, by=c("species"))
+SummaryInd <- merge(SummaryInd,seedsize, by=c("species"))
 
-SummaryInd <- merge(SummaryInd,Wood_summary, by.x=c("species"), by.y=c("species"))
-SummaryInd <- merge(SummaryInd,LMA_summary, by.x=c("species","age"), by.y=c("species","age"))
-SummaryInd <- merge(SummaryInd,MaxH_spp, by.x=c("species"), by.y=c("species"))
-SummaryInd <- merge(SummaryInd,seedsize, by.x=c("species"), by.y=c("species"))
 SummaryInd$leafArea <- SummaryInd$total_leaf_weight * SummaryInd$LMA_mean
-#TO DO: REMOVE DUPLICATE COLUMNS FOR AGE and SPECIES MORE ELEGANTLY
-#TO DO: REMOVE COLUMNS I DON'T NEED
 
 #merge various data summaries into SummarySppAge dataframe
-SummarySppAge <- merge(LL_summary, LMA_summary, by.x=c("species","age"), by.y=c("species","age"))
-SummarySppAge <- merge(SummarySppAge, Wood_summary, by.x=c("species"), by.y=c("species"))
-SummarySppAge <- merge(SummarySppAge, seedsize, by.x=c("species"), by.y=c("species"))
-SummarySppAge <- merge(SummarySppAge, MaxH_spp, by.x=c("species"), by.y=c("species"))
-SummarySppAge <- merge(SummarySppAge, maxH, by.x=c("species","age"), by.y=c("species","age"))
-SummarySppAge <- merge(SummarySppAge, investment_summary, by.x=c("species","age"), by.y=c("species","age"))
-SummarySppAge <- merge(SummarySppAge, accessory_summary, by.x=c("species","age"), by.y=c("species","age"))
-SummarySppAge <- merge(SummarySppAge, harvest_summary, by.x=c("species","age"), by.y=c("species","age"))
-#TO DO: REMOVE DUPLICATE COLUMNS FOR AGE
+SummarySppAge <- merge(LL_summary, LMA_summary, by=c("species","age"))
+SummarySppAge <- merge(SummarySppAge, wood_summary, by=c("species"))
+SummarySppAge <- merge(SummarySppAge, seedsize, by=c("species"))
+SummarySppAge <- merge(SummarySppAge, maxH_spp, by=c("species"))
+SummarySppAge <- merge(SummarySppAge, maxH, by=c("species","age"))
+SummarySppAge <- merge(SummarySppAge, investment_summary, by=c("species","age"))
+SummarySppAge <- merge(SummarySppAge, accessory_summary, by=c("species","age"))
+SummarySppAge <- merge(SummarySppAge, harvest_summary, by=c("species","age"))
 
 #merge various data summaries into SummarySpp dataframe
-SummarySpp <- merge(LL_spp, LMA_spp, by.x=c("species"), by.y=c("species"))
-SummarySpp <- merge(SummarySpp, Wood_summary, by.x=c("species"), by.y=c("species"))
-SummarySpp <- merge(SummarySpp, seedsize, by.x=c("species"), by.y=c("species"))
-SummarySpp <- merge(SummarySpp, maxH, by.x=c("species"), by.y=c("species"))
-
-#WONDERING IF I SHOULD AT THIS POINT HAVE THE DATA FRAME CALLED "sUMMARYINDIVIDUAL" INSTEAD, SINCE NOW CONTAINS FAR MORE THAN LL DATA
+SummarySpp <- merge(LL_spp, LMA_spp, by=c("species"))
+SummarySpp <- merge(SummarySpp, wood_summary, by=c("species"))
+SummarySpp <- merge(SummarySpp, seedsize, by=c("species"))
+SummarySpp <- merge(SummarySpp, select(maxH, -age), by=c("species"))
 
 #plotting and stats
 #creating lists of information for plotting symbols, colors, labels
@@ -305,21 +308,6 @@ labels.age <- c("1.4","2.4","5","7","9","32")
 names(labels.age) <- c("1.4","2.4","5","7","9","32")
 ```
 
-# Plotting final leaf number on the leader by diameter increase of the entire plant (basal diameter) and the leader (shoot diameter).
-
-Both show a strong correlation and species effect as expected. For the model with basal diameter there is a strong age effect, but not for shoot diameter. This is presumably because a shoot of a given species should always deploy the same number of leaves for the same diameter increase. In contrast, the whole plant will have many differing shoot numbers with age, so differing effects of a single shoot's increased diameter. Strangely, the model with basal diameter shows a stronger effect between diameter increase and leaf number.
-
-```{r, echo=FALSE,results='hide', message=FALSE}
-plot(change_basal_diam ~ lvs_end_total, SummaryInd, log="xy", col=col.age[as.factor(age)], pch=16, xlab="leaf number on leader", ylab="change in basal diameter")
-legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
-mod <- lm(log(lvs_end_total) ~ log(change_basal_diam+1) + species +age, SummaryInd)
-summary(mod)
-
-plot(change_shoot_diam ~ lvs_end_total, SummaryInd, log="xy", col=col.age[as.factor(age)], pch=16, xlab="leaf number on leader", ylab="change in diameter of leader")
-legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
-mod <- lm(log(lvs_end_total) ~ log(change_shoot_diam+10) + species +age, data= subset(SummaryInd, !is.na(change_shoot_diam)))
-summary(mod)
-```
 
 #LL vs LMA using species by site means
 Overall plot shows a lack of relationship when HATE included. This is because it has such a high LMA. The youngest and oldest plants have no pattern, presumably because LL data are inaccurate
@@ -366,7 +354,10 @@ Age is not significant, but some significant interactions (COER, HATE, HEPU)
 And many species have sigificantly different LL from one another
 
 ```{r, echo=FALSE,results='hide', message=FALSE}
-mod <- lm(LL_birth ~ age + species +age*species, data=subset(SummaryInd,age>3 & LL_birth!="Inf"))
+plot(LL_birth~age,SummaryInd,log="xy", xlab="age",ylab="leaf lifespan (based on leaf births",col=col.spp[as.factor(species)])
+legend("bottomright",col=col.spp, labels.spp, pch=16, cex=1)
+
+mod <- lm(LL_birth ~ age + species, data=subset(SummaryInd,age>3 & LL_birth!="Inf"))
 summary(mod)
 
 #WHY ARE THE FOLLOWING TWO LINES OF CODE NEEDED?
@@ -396,6 +387,9 @@ There is also no overall affect of age on LMA, although a few species would show
 #mod <- lm(LMA ~ age +species + age*species, LMA)
 #summary(mod)
 
+plot(LMA_mean~age,SummarySppAge,log="xy", xlab="age",ylab="LMA",col=col.spp[as.factor(species)],pch=16)
+legend("bottomright",col=col.spp, labels.spp, pch=16, cex=1)
+
 LMA %>% group_by(species) %>%
   summarise(mean(LMA))
 
@@ -424,6 +418,11 @@ for(n in names(labels.spp)) {
 The number of leaves on a leader is slightly affected by age however, with a decrease in leaf count along the leader with increasing age. This is what gives the perception of fewer leaves in some older plants. I'm not sure why this pattern looks stronger than leaf lifespan.
 
 ```{r, echo=FALSE,results='hide', message=FALSE}
+plot(lvs_end_total~age,SummaryInd,log="xy", xlab="age",ylab="final leaf count along shoot",col=col.spp[as.factor(species)])
+legend("bottomright",col=col.spp, labels.spp, pch=16, cex=1)
+mod <- lm(lvs_end_total~age+species+age*species,SummaryInd)
+summary(mod)
+
 
 plot_lfcountvAge <- function(spp) {
   plot(lvs_end_total ~ age, data=subset(SummaryInd,species==spp), xlab="age", ylab="leaf count along shoot", cex.axis=.8, las=1, pch=16, log="x",
@@ -468,19 +467,35 @@ for(n in names(labels.spp)) {
 }
 ```
 
-#models looking at how the relationship between leaf weight (or area) and total plant weight shifts with age
+# Plotting final leaf number on the leader by diameter increase of the entire plant (basal diameter) and the leader (shoot diameter).
+
+Both show a strong correlation and species effect as expected. For the model with basal diameter there is a strong age effect, but not for shoot diameter. This is presumably because a shoot of a given species should always deploy the same number of leaves for the same diameter increase. In contrast, the whole plant will have many differing shoot numbers with age, so differing effects of a single shoot's increased diameter. Strangely, the model with basal diameter shows a stronger effect between diameter increase and leaf number.
+
+```{r, echo=FALSE,results='hide', message=FALSE}
+plot(change_basal_diam ~ lvs_end_total, SummaryInd, log="xy", col=col.age[as.factor(age)], pch=16, xlab="leaf number on leader", ylab="change in basal diameter")
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+mod <- lm(log(lvs_end_total) ~ log(change_basal_diam+1) + species +age, SummaryInd)
+summary(mod)
+
+plot(change_shoot_diam ~ lvs_end_total, SummaryInd, log="xy", col=col.age[as.factor(age)], pch=16, xlab="leaf number on leader", ylab="change in diameter of leader")
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+mod <- lm(log(lvs_end_total) ~ log(change_shoot_diam+10) + species +age, data= subset(SummaryInd, !is.na(change_shoot_diam)))
+summary(mod)
+```
+
+#other models looking at how the relationship between leaf weight (or area) and total plant weight shifts with age
 this should be another way to get at the decreasing "leafiness" of plants with age
 
 ```{r, echo=FALSE,results='hide', message=FALSE}
-plot(leaf_weight~FinalWeight,SummaryInd, log="xy",col=col.age[as.factor(age)], pch=16, cex=0.8)
+plot(total_leaf_weight~FinalWeight,SummaryInd, log="xy",col=col.age[as.factor(age)], pch=16, cex=0.8)
 legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
-mod <-lm(FinalWeight~leaf_weight+age+species,SummaryInd)
+mod <-lm(FinalWeight~total_leaf_weight+age+species,SummaryInd)
 summary(mod)
 
 plot_LeafWeight <- function(spp) {
-  plot(leaf_weight~FinalWeight,data=subset(SummaryInd,species==spp), xlab="total weight (mg)", ylab ="leaf weight (mg)", log="xy",col=col.age[as.factor(age)], pch=16,     cex=0.8,main=labels.spp[spp])
+  plot(total_leaf_weight~FinalWeight,data=subset(SummaryInd,species==spp), xlab="total weight (mg)", ylab ="leaf weight (mg)", log="xy",col=col.age[as.factor(age)], pch=16,     cex=0.8,main=labels.spp[spp])
   legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
-  mod <-lm(FinalWeight~leaf_weight+age,data=subset(SummaryInd,species==spp))
+  mod <-lm(FinalWeight~total_leaf_weight+age,data=subset(SummaryInd,species==spp))
   abline(mod)
   summary(mod)
 }
@@ -637,4 +652,35 @@ plot(GrowthInv_mean ~ maxH,data=subset(SummarySppAge,age>3),log="xy",col=col.age
 legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
 mod<-lm(maxH~GrowthInv_mean+age,data=subset(SummarySppAge,age>3))
 summary(mod)
+```
+
+#Plots with RA by age 
+Will include a couple of the obviously different species in lab meeting
+
+```{r, echo=FALSE,results='hide', message=FALSE}
+plot_RAbyAge <- function(spp) {
+  plot(RA~age, data=subset(SummaryInd,species==spp), xlab="age",ylab="reproductive allocation", log="x", main=labels.spp[spp])
+  points(RA_mean~age, data=subset(SummarySppAge, species==spp),pch=16,cex=1.2)
+}
+
+
+for(n in names(labels.spp)) {
+  plot_RAbyAge(n)
+} 
+```
+
+
+#Plots of Accessory costs by age
+```{r, echo=FALSE,results='hide', message=FALSE}
+
+plot_PropagulebyAge <- function(spp) {
+  plot(Prop~age, data=subset(SummaryInd,species==spp), xlab="age",ylab="investment on propagule", log="x", main=labels.spp[spp])
+  points(Prop_mean~age, data=subset(SummarySppAge, species==spp),pch=16,cex=1.2)
+}
+
+
+for(n in names(labels.spp)) {
+  plot_PropagulebyAge(n)
+} 
+
 ```
