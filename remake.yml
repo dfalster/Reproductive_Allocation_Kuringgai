@@ -38,9 +38,12 @@ targets:
   all:
     depends:
       - talk.html
+
   talk.html:
-    depends:
-    command: render("talk.md", output_format = I("isoslides"))
+    command: render("talk.md", output_format = I("html_document"))
+
+  talk.pdf:
+    command: render("talk.md", output_format = I("beamer_presentation"))
 
   CarbonInvestments.pdf:
     depends:

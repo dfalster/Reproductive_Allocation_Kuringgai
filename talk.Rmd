@@ -1,5 +1,7 @@
 ---
-title: "Untitled"
+title: "Age-related changes in plant growth and traits"
+author: Lizzy Wenk
+date: 2015.03.26
 output:
      pdf_document:
        toc: true
@@ -240,7 +242,7 @@ I have both RA schedules and lots of other data across multiple ages:
 - LMA
 - accessory tissue costs
 
-#Shifts in RA with age 
+#Shifts in RA with age
 
 Showing just a few of the RA schedules from my last lab meeting.
 
@@ -284,21 +286,19 @@ plot(LL_birth~age,SummaryInd,log="xy", xlab="age",ylab="leaf lifespan (based on 
 legend("bottomright",col=col.spp, labels.spp, pch=16, cex=1)
 ```
 
-#Plots of individual species show that no species has a significant change either - although several show slight declines at the end
+# Plots of individual species show that no species has a significant change either - although several show slight declines at the end
 ```{r, echo=FALSE,results='hide', message=FALSE}
-#DF: Here is a place where it would be good to run the statistical model on each of the species. I have the function I wrote below, ut hashed out
-
 plot_LLvAge <- function(spp) {
-  plot(LL_birth ~ age, data=subset(SummaryInd,species==spp), xlab="age", ylab="leaf lifespan (leaf births)", cex.axis=.8, las=1,
+  data2 <- filter(SummaryInd, species==spp)
+  plot(LL_birth ~ age, data=data2, xlab="age", ylab="leaf lifespan (leaf births)", cex.axis=.8, las=1,
      main=labels.spp[spp], xlim=c(1,35), ylim=c(0,8), log="x", pch=16)
   points(LL_birth_mean ~ age, data=subset(SummarySppAge, species==spp), cex=1.3, pch=8)
   points((LL_birth_mean+LL_birth_se) ~ age, data=subset(SummarySppAge, species==spp), cex=1.5, pch=25)
   points((LL_birth_mean-LL_birth_se) ~ age, data=subset(SummarySppAge, species==spp), cex=1.5, pch=24)
-}
 
-#mod_LLvAge <- function(spp) {
-#  lm(LL_birth ~ age, data=subset(SummaryInd,species==spp))
-#}
+  # fit <- lm(LL_birth ~ log10(age), data=data2)
+  # abline(fit)
+}
 
 for(n in names(labels.spp)) {
   plot_LLvAge(n)

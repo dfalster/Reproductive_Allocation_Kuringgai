@@ -11,6 +11,7 @@ targets:
       - seedSize_raw
       - HarvestData
       - leafLifespan_raw
+      - leavesPerLength_raw
       - BAER_IndividualsList
       - BAER_FlowerPartsData
       - BAER_ReproductionData
