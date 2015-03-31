@@ -402,6 +402,8 @@ legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
 text(GrowthInv_mean ~ maxH_spp, data=subset(SummarySppAge,age==9), labels=species, pos=2, offset=-2.4, cex=0.9,col="blue")
 ```
 
+
+
 #Correlations between different growth measures
 Increased cross-sectional area of a leader and the entire plant are fairly correlated and uneffected by age (once not baby)
 ```{r, echo=FALSE,results='hide', message=FALSE}

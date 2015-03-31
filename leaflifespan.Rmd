@@ -81,6 +81,7 @@ While overall accessory costs are not clearly affected by age, several of the su
 
 #discuss with Daniel
 - once we are certain about leaf lifespan calculations, those calculations should go into a separate file, since that is background processing, but like calculating investment. Then this becomes the file where variables are summarized, plotted analyzed.
+-Similarly, have separate file where all teh summary calculations occur
 - add final leaf and stem biomass output to "investment" output file
 - seed weight vs. propagule weight dilemma
 
@@ -186,17 +187,37 @@ leafLifespan$LL_death[which(is.infinite(leafLifespan$LL_death))] <- NA
 leafLifespan$LL_bd[which(is.infinite(leafLifespan$LL_death))] <- NA
 leafLifespan$LL_birth[which(is.infinite(leafLifespan$LL_death))] <- NA
 
+#calculating percentages of various accessory tissues
+
+accessory$PerPrePol_A <- accessory$PrePol_A / accessory$Total
+accessory$PerPrePol_S <- accessory$PrePol_S / accessory$Total
+accessory$PerPostPol_A <- accessory$PostPol_A / accessory$Total
+accessory$PerPackDisp <- accessory$PD / accessory$Total
+accessory$PerPropagule <- accessory$Prop / accessory$Total
+accessory$PerAcc <- 1- accessory$PerPropagule
+
+
+accessory$PerPrePol_A[which(is.nan(accessory$PerPrePol_A))] <- NA
+accessory$PerPrePol_S[which(is.nan(accessory$PerPrePol_S))] <- NA
+accessory$PerPostPol_A[which(is.nan(accessory$PerPostPol_A))] <- NA
+accessory$PerPackDisp[which(is.nan(accessory$PerPackDisp))] <- NA
+accessory$PerPropagule[which(is.nan(accessory$PerPropagule))] <- NA
+accessory$PerAcc[which(is.nan(accessory$PerAcc))] <- NA
+
+
+
 #adding investment and accessory costs data to leafLifespan dataframe to create a dataframe with all individual level data
 SummaryInd <- merge(leafLifespan, select(investment, -species, -age), by="individual")
 SummaryInd <- merge(SummaryInd, select(accessory, -species, -age, -age2), by="individual")
 SummaryInd <- merge(SummaryInd, select(harvest, -species, -age, -age2), by="individual")
 
-#adding variables to look at change across years
+#adding variables to look at change across years, RGR
 SummaryInd$change_shoot_diam <- SummaryInd$d_end - SummaryInd$d_start
 SummaryInd$change_basal_diam <- SummaryInd$FinalBasalDiam - SummaryInd$StartBasalDiam
 SummaryInd$change_shoot_area <- (3.14*((SummaryInd$d_end/2)^2)) - (3.14*((SummaryInd$d_start/2)^2))
 SummaryInd$change_basal_area <- (3.14*((SummaryInd$FinalBasalDiam/2)^2)) - (3.14*((SummaryInd$StartBasalDiam/2)^2))
 SummaryInd$lvs_end_total <- SummaryInd$lvs_end + SummaryInd$lvs_new
+SummaryInd$RGR <- log(SummaryInd$FinalWeight)-log(SummaryInd$FinalWeight-SummaryInd$GrowthInv)
 ```
 
 ```{r, echo=FALSE,results='hide', message=FALSE}
@@ -206,7 +227,7 @@ SummaryInd$lvs_end_total <- SummaryInd$lvs_end + SummaryInd$lvs_new
 LL_summary <- SummaryInd %>%
   filter(LL_bd>0 & LL_bd<6 & LL_birth<8 & LL_death<8) %>%
   group_by(species, age) %>%
-  summarise_each(funs(mean, se, length), LL_bd, LL_death,LL_birth,new_length, lvs_end, lvs_end_total, change_shoot_diam, change_basal_diam, change_shoot_area, change_basal_area)
+  summarise_each(funs(mean, se, length), LL_bd, LL_death,LL_birth,new_length, lvs_end, lvs_end_total, change_shoot_diam, change_basal_diam, change_shoot_area, change_basal_area,RGR)
 
 #LMA summary by species, age
 LMA_summary <- LMA %>%
@@ -219,6 +240,11 @@ accessory_summary <- accessory %>%
   group_by(species, age) %>%
   summarise_each(funs(mean, se, length), PrePol_A, PrePol_S, PostPol_A, PD, Prop)
 
+accessory_summary2 <- accessory %>%
+  filter(Total!=0) %>%
+  group_by(species, age) %>%
+  summarise_each(funs(mean, se, length), PerPrePol_A, PerPrePol_S, PerPostPol_A, PerPackDisp, PerPropagule, PerAcc)
+                 
 #investment summary by species, age
 investment_summary <- investment %>%
   group_by(species, age) %>%
@@ -288,6 +314,7 @@ SummarySppAge <- merge(SummarySppAge, maxH_spp, by=c("species"))
 SummarySppAge <- merge(SummarySppAge, maxH, by=c("species","age"))
 SummarySppAge <- merge(SummarySppAge, investment_summary, by=c("species","age"))
 SummarySppAge <- merge(SummarySppAge, accessory_summary, by=c("species","age"))
+SummarySppAge <- merge(SummarySppAge, accessory_summary2, by=c("species","age"))
 SummarySppAge <- merge(SummarySppAge, harvest_summary, by=c("species","age"))
 
 #merge various data summaries into SummarySpp dataframe
@@ -618,6 +645,17 @@ legend("bottomright",col=col.spp, labels.spp, pch=16, cex=1)
 plot(GrowthInv_mean ~ LMA_mean,SummarySppAge,log="xy",col=col.age[as.factor(age)],pch=16,cex=.7)
 legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
 mod<-lm(LMA_mean~GrowthInv+age,data=subset(SummarySppAge,species!="PEPU"))
+summary(mod)
+```
+
+#Plots indicating there is a fundamental problem with leaf lifespan measurements
+```{r, echo=FALSE,results='hide', message=FALSE}
+plot(LL_death ~ LL_birth, data=subset(SummaryInd,LL_bd>0&LL_bd<5&LL_death<5&age>2.4))
+mod <- lm(LL_death ~ LL_birth, data=subset(SummaryInd,LL_bd>0&LL_bd<5&LL_death<5&age>2.4&LL_birth!=Inf))
+summary(mod)
+
+plot(LL_death ~ LL_bd, data=subset(SummaryInd,LL_bd>0&LL_bd<5&LL_death<5&age>2.4))
+mod <- lm(LL_death ~ LL_bd, data=subset(SummaryInd,LL_bd>0&LL_bd<5&LL_death<5&age>2.4))
 summary(mod)
 ```
 
