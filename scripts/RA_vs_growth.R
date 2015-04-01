@@ -96,9 +96,9 @@ step(mod,direction="both")
 #order variables removed: wood density, seed size, leaf lifespan
 #in other words, RA is predicted by species, age, and most importantly various size and growth measures, but not by functional trait values
 
-mod <- lm(asin(sqrt(RA)) ~ log(RGR+1) + log(GrowthInv+1) + log(FinalWeight) + log(new_length+1) + log(height) + species + age + species*age, data=SummaryInd)
+mod <- lm(asin(sqrt(RA)) ~ log(GrowthInv+1) + log(FinalWeight) + log(new_length+1) + log(height) + species + age + species*age, data=SummaryInd)
 summary(mod)
-
+step(mod)
 
 #I also ran the model using only RA>0 - so that data normally distributed. When I do that exactly the same variables are identified as significant, but the overall model exaplains less of the variance.
 

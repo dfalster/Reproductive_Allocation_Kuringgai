@@ -19,7 +19,7 @@ summary(mod)
 plot((PerPackDisp+.01) ~ age, SummaryInd, log="xy", col=col.spp[is.factor(species)])
 
 plot_packdisp <- function(spp) {
-    points((PerPackDisp_mean+.01) ~ age,data=subset(SummarySppAge,species==spp), col=col.spp[is.factor(species)], pch=16, cex=1.5)
+    points((PerPackDisp_mean+.01) ~ age,data=subset(SummarySppAge,species==spp), col=col.spp[as.factor(species)], pch=16, cex=1.5)
 }
   
 for(n in names(labels.spp)) {
@@ -37,6 +37,7 @@ for(n in names(labels.spp)) {
   plot_prepolA(n)
 }
 
+plot(PerPropagule_mean ~ FinalWeight_mean, SummarySppAge, log="xy", col=col.spp[as.factor(species)], pch=16)
 
 
 
