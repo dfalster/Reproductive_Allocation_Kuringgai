@@ -125,6 +125,9 @@ investment$age <- round(investment$age, digits=1)
 accessory <- AccessoryCosts_all
 accessory$age2 <- accessory$age
 accessory$age <- round(accessory$age, digits=1)
+accessory$PrePol_S[which(is.na(accessory$PrePol_S))] <- 0
+accessory$Total= (accessory$PrePol_A + accessory$PrePol_S + accessory$PostPol_A + accessory$PD + accessory$Prop)
+
 #accessory$PerAccessory <- {
 #  select(accessory, Total >0,
 #  1 - (accessory$Prop/accessory$Total)
