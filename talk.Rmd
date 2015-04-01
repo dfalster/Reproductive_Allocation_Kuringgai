@@ -28,21 +28,11 @@ seedsize <- seedSize_raw %>%
   select(species,seed_size)
 
 harvest <- filter(HarvestData, use_status=="use" & segment==1 & start_end=="end") %>%
-  select(species,individual,age,age2,height,total_leaf_weight,site)
+  select(species,individual,age,height,total_leaf_weight,site)
 
 investment <- ReproductionAllocation_all
-investment$age2 <- investment$age
-investment$age <- round(investment$age, digits=1)
 
 accessory <- AccessoryCosts_all
-accessory$age2 <- accessory$age
-accessory$age <- round(accessory$age, digits=1)
-#accessory$PerAccessory <- {
-#  select(accessory, Total >0,
-#  1 - (accessory$Prop/accessory$Total)
-#}
-
-#accessory$PerPropagule = 1 - accessory$PerAccessory
 
 leafLifespan <- filter(leafLifespan_raw, dont_use!="dead" & dont_use!="dont_use") %>%
   select(species,age,individual,d_start,d_end,length_start,new_length,lvs_start_length,lvs_start_count,lvs_end_length,lvs_end_count,lvs_new_length,lvs_new_count,new_but_shed_count,mm_lvs_spec,count_lvs_spec)
@@ -101,8 +91,8 @@ leafLifespan$LL_birth[which(is.infinite(leafLifespan$LL_death))] <- NA
 
 #adding investment and accessory costs data to leafLifespan dataframe to create a dataframe with all individual level data
 SummaryInd <- merge(leafLifespan, select(investment, -species, -age), by="individual")
-SummaryInd <- merge(SummaryInd, select(accessory, -species, -age, -age2), by="individual")
-SummaryInd <- merge(SummaryInd, select(harvest, -species, -age, -age2), by="individual")
+SummaryInd <- merge(SummaryInd, select(accessory, -species, -age), by="individual")
+SummaryInd <- merge(SummaryInd, select(harvest, -species, -age), by="individual")
 
 #adding variables to look at change across years
 SummaryInd$change_shoot_diam <- SummaryInd$d_end - SummaryInd$d_start

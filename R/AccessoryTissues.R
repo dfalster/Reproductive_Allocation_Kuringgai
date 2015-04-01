@@ -13,8 +13,8 @@ IAT_Species <- function(species, Reproduction, HarvestData, InvestmentCategories
     # print(individual)
     Ind <- InvestmentInAccessoryTissues(individual, species, InvestmentCategories[, c("flower_part", species)], species_INV)
     if (length(AgeData[AgeData[, 2] == individual, 1]) == 1) {
-      age <- AgeData[AgeData[, 2] == individual, 1]
-      Ind <- cbind(species, Ind, age=round(age, digits=1), age_exact = age)
+      thisage <- AgeData[AgeData[, 2] == individual, 1]
+      Ind <- cbind(species, Ind, age=round(thisage, digits=1), age_exact = thisage)
       InvDist <- rbind(InvDist, Ind)
     }
   }

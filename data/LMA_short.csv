@@ -1,4 +1,4 @@
-species,site,age,age2,branch_age,indiv_pooled,lvs_per_ind,leaf_number,weight,leaf_area,LMA,notes
+species,site,age,age_exact,branch_age,indiv_pooled,lvs_per_ind,leaf_number,weight,leaf_area,LMA,notes
 BAER,Wilunga2012,1.4,1.35,young,4,8,32,0.1508,6.86323,0.022,
 BAER,Wilunga2012,1.4,1.35,mid,4,8,32,0.2018,9.09808,0.0222,
 BAER,Wilunga2012,1.4,1.35,old,4,5,16,0.2952,15.74846,0.0187,
