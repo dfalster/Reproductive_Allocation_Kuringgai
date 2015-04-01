@@ -123,17 +123,6 @@ investment$age2 <- investment$age
 investment$age <- round(investment$age, digits=1)
 
 accessory <- AccessoryCosts_all
-accessory$age2 <- accessory$age
-accessory$age <- round(accessory$age, digits=1)
-accessory$PrePol_S[which(is.na(accessory$PrePol_S))] <- 0
-accessory$Total= (accessory$PrePol_A + accessory$PrePol_S + accessory$PostPol_A + accessory$PD + accessory$Prop)
-
-#accessory$PerAccessory <- {
-#  select(accessory, Total >0,
-#  1 - (accessory$Prop/accessory$Total)
-#}
-
-#accessory$PerPropagule = 1 - accessory$PerAccessory
 
 leafLifespan <- filter(leafLifespan_raw, dont_use!="dead" & dont_use!="dont_use") %>%
   select(species,age,individual,d_start,d_end,length_start,new_length,lvs_start_length,lvs_start_count,lvs_end_length,lvs_end_count,lvs_new_length,lvs_new_count,new_but_shed_count,mm_lvs_spec,count_lvs_spec)
@@ -247,7 +236,7 @@ accessory_summary2 <- accessory %>%
   filter(Total!=0) %>%
   group_by(species, age) %>%
   summarise_each(funs(mean, se, length), PerPrePol_A, PerPrePol_S, PerPostPol_A, PerPackDisp, PerPropagule, PerAcc)
-                 
+
 #investment summary by species, age
 investment_summary <- investment %>%
   group_by(species, age) %>%
@@ -355,18 +344,18 @@ legend("bottomright",col=col.LMA, labels.LMA, pch=16, cex=1.4)
 
 plot(LL_birth_mean ~ LMA_mean, data=subset(SummarySppAge, species!="HATE" & age>1.5), pch=16, cex=1.2, col=col.age[as.factor(age)])
 mod <- lm(LL_birth_mean ~ LMA_mean, data=subset(SummarySppAge, species!="HATE" & age>1.5))
-summary(mod)         
-          
+summary(mod)
+
 plot(LL_death_mean ~ LMA_mean, data=subset(SummarySppAge, species!="HATE" & age>1.5), pch=16, cex=1.2, col=col.age[as.factor(age)])
 mod <- lm(LL_death_mean ~ LMA_mean, data=subset(SummarySppAge, species!="HATE" & age>1.5))
-summary(mod)  
+summary(mod)
 
 
 plot(LL_bd_mean ~ LMA_mean, data=subset(SummarySppAge, species!="HATE" & age>1.5), pch=16, cex=1.2, col=col.age2[as.factor(age)])
 legend("bottomright",col=col.age2,labels.age2,pch=16)
 
 mod <- lm(LL_bd_mean ~ LMA_mean, data=subset(SummarySppAge, species!="HATE" & age>1.5))
-summary(mod)  
+summary(mod)
 
 #need log transformation to get these to plot onto axes
 mod <- lm(LL_birth_mean ~ LMA_mean, SummarySppAge)
@@ -555,9 +544,9 @@ plot_LeafWeight <- function(spp) {
 
 for(n in names(labels.spp)) {
   plot_LeafWeight(n)
-  
+
 #plot looking at leaf area versus plant weight
-#USE THIS PLOT IN LAB MEETING - CLEARLY SHOWS DECLINE IN INTERCEPT WITH AGE  
+#USE THIS PLOT IN LAB MEETING - CLEARLY SHOWS DECLINE IN INTERCEPT WITH AGE
 plot(leafArea~FinalWeight,SummaryInd, log="xy",col=col.age[as.factor(age)], pch=16, cex=0.8)
 legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
 mod <-lm(FinalWeight~leafArea+age+species,SummaryInd)
@@ -573,7 +562,7 @@ plot_LeafArea <- function(spp) {
 
 for(n in names(labels.spp)) {
   plot_LeafArea(n)
-} 
+}
 
 
 #plots looking at shoot extension versus plant size
@@ -592,9 +581,9 @@ plot_LeaderExtension <- function(spp) {
 
 for(n in names(labels.spp)) {
   plot_LeaderExtension(n)
-} 
+}
 ```
-  
+
 #many plots regressing variables against one another
 ```{r, echo=FALSE,results='hide', message=FALSE}
 plot(change_shoot_area~new_length,SummaryInd, log="xy",col=col.age[as.factor(age)], pch=16, cex=.8, xlab="shoot extension (mm)", ylab="increased shoot cross sectional area",main="How well do growth at the shoot level and whole plant level match?")
@@ -735,7 +724,7 @@ mod<-lm(maxH~GrowthInv_mean+age,data=subset(SummarySppAge,age>3))
 summary(mod)
 ```
 
-#Plots with RA by age 
+#Plots with RA by age
 Will include a couple of the obviously different species in lab meeting
 
 ```{r, echo=FALSE,results='hide', message=FALSE}
@@ -747,7 +736,7 @@ plot_RAbyAge <- function(spp) {
 
 for(n in names(labels.spp)) {
   plot_RAbyAge(n)
-} 
+}
 ```
 
 
@@ -762,6 +751,6 @@ plot_PropagulebyAge <- function(spp) {
 
 for(n in names(labels.spp)) {
   plot_PropagulebyAge(n)
-} 
+}
 
 ```

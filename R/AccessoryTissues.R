@@ -7,16 +7,22 @@ IAT_Species <- function(species, Reproduction, HarvestData, InvestmentCategories
     select(age, individual)
       )
 
-  InvDist <- data.frame(species=c(), individual = c(), PrePol_A = c(), PrePol_S = c(), PostPol_A = c(), PD = c(), Prop = c(), Total = c(), age = c())
+  InvDist <- data.frame(species=c(), individual = c(), PrePol_A = c(), PrePol_S = c(), PostPol_A = c(), PD = c(), Prop = c(), Total = c(), age = c(), ageExact = c())
 
   for (individual in unique(Reproduction$individual)) {
     # print(individual)
     Ind <- InvestmentInAccessoryTissues(individual, species, InvestmentCategories[, c("flower_part", species)], species_INV)
     if (length(AgeData[AgeData[, 2] == individual, 1]) == 1) {
-      Ind <- cbind(species, Ind, age = AgeData[AgeData[, 2] == individual, 1])
+      age <- AgeData[AgeData[, 2] == individual, 1]
+      Ind <- cbind(species, Ind, age=round(age, digits=1), age_exact = age)
       InvDist <- rbind(InvDist, Ind)
     }
   }
+
+# TODO: This is temp fix to remove some NAs in PrePol_S. Figure out why these are needed
+  InvDist$PrePol_S[which(is.na(InvDist$PrePol_S))] <- 0
+  InvDist$Total= (InvDist$PrePol_A + InvDist$PrePol_S + InvDist$PostPol_A + InvDist$PD + InvDist$Prop)
+
   InvDist
 }
 
