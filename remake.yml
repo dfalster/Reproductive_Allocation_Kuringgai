@@ -64,8 +64,11 @@ targets:
   ReproductionData:
     command: filterForAllocation(Reproduction_raw, IndividualsList)
 
-  HarvestData:
+  HarvestData_raw:
     command: read_csv("data/harvest.csv")
+
+  HarvestData:
+    command: preprocessHarvest(HarvestData_raw, IndividualsList)
 
   FloweringCategories:
     command: read_csv("data/flowerCategories.csv")

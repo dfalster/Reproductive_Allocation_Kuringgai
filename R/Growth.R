@@ -39,5 +39,5 @@ CalculateMassAndDiameters <- function(harvestData) {
   diameters <- ldply(names(segments), function(x) get.diam.node.above(data, x)) %>% arrange(individual, node_above)
 
   # Merge mass and diameter measurements
-  merge(mass, diameters, by = c("individual", "node_above"))
+  merge(mass, diameters, by = c("individual", "node_above")) %>% filter(!is.na(total_weight), !is.na(dia))
 }

@@ -2,14 +2,12 @@ RA_Calculations <- function(thisSpecies, Species_Investment, HarvestData, Maps, 
 
 
   ### Calculate Regression coefficients based on common slope and intercept by the basal diameter at year 2013
-  HarvestData <- filter(HarvestData,
-    individual %in% IndividualsList$individual[IndividualsList$use_for_allometric_equations])
 
-  WD.species <- CalculateMassAndDiameters(HarvestData) %>%
-      filter(!is.na(total_weight), !is.na(dia))
+  WD.species <- CalculateMassAndDiameters(HarvestData)
 
   lm.fit <- lm(log(total_weight) ~ log(dia), data = WD.species)
   common_slope <- as.numeric(coef(lm.fit)[2])
+
   WD.specie.basal <- WD.species[WD.species$node_above == 1, ]
   intercept.ind <- log(WD.specie.basal$total_weight) - common_slope * log(WD.specie.basal$dia)
   RegTable <- data.frame(TreeID = WD.specie.basal$individual, Intercept = intercept.ind, Slope = common_slope)
