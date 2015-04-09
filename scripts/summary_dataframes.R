@@ -15,11 +15,15 @@ wood <- filter(woodDensity_raw, use=="use") %>%
 seedsize <- seedSize_raw %>%
   select(species,seed_size)
 
-harvest <- filter(HarvestData, use_status=="use" & segment==1 & start_end=="end") %>%
-  select(species,individual,age,age2,height,total_leaf_weight,site)
+individuals <- IndividualsList
+
+
+harvest <- filter(HarvestData, 
+                  individuals$use_for_allocation_calculations[match(HarvestData$individual, individuals$individual)] & segment==1 & start_end=="end") %>%
+  select(species,individual,age,height,total_leaf_weight,site)
 
 investment <- ReproductionAllocation_all
-investment$age2 <- investment$age
+
 investment$age <- round(investment$age, digits=1)
 
 accessory <- AccessoryCosts_all
