@@ -1,15 +1,13 @@
-IAT_Species <- function(species, Reproduction, HarvestData, InvestmentCategories, species_INV) {
+IAT_Species <- function(species, IndividualsList, InvestmentCategories, species_INV) {
   # Read and restrict the data to the subset of interest.
 
-  # TODO :get ages from individual list, not from harvest data
-  AgeData <- unique(
-    filter(HarvestData, segment == 1, plant_status == "alive", individual %in% Reproduction$individual) %>%
-    select(age, individual)
-      )
+  AgeData <- IndividualsList %>%
+    filter(use_for_allocation_calculations & alive) %>%
+    select(individual, age)
 
   InvDist <- data.frame(species=c(), individual = c(), PrePol_A = c(), PrePol_S = c(), PostPol_A = c(), PD = c(), Prop = c(), Total = c(), age = c(), ageExact = c())
 
-  for (individual in unique(Reproduction$individual)) {
+  for (individual in unique(IndividualsList$individual)) {
     # print(individual)
     Ind <- InvestmentInAccessoryTissues(individual, species, InvestmentCategories[, c("flower_part", species)], species_INV)
     if (length(AgeData[AgeData[, 2] == individual, 1]) == 1) {

@@ -1,6 +1,5 @@
 RA_Calculations <- function(thisSpecies, Species_Investment, HarvestData, Maps, IndividualsList) {
 
-
   ### Calculate Regression coefficients based on common slope and intercept by the basal diameter at year 2013
 
   WD.species <- CalculateMassAndDiameters(HarvestData)
@@ -16,7 +15,7 @@ RA_Calculations <- function(thisSpecies, Species_Investment, HarvestData, Maps, 
   # Use only basal diameter of the trees that are alive and have status use.
   DiameterData <- HarvestData %>%
     filter(individual %in% IndividualsList$individual[IndividualsList$use_for_allocation_calculations]) %>%
-    filter(segment == 1, use_status == "use", plant_status == "alive")  %>%
+    filter(segment == 1)  %>%
     select(individual, age, start_end, diameter_1, diameter_2, diameter_3, total_plant_weight)
 
   for (i in seq_len(nrow(DiameterData))) {
