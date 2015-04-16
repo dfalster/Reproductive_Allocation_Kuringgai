@@ -13,8 +13,11 @@ RA_Calculations <- function(thisSpecies, Species_Investment, HarvestData, Maps, 
 
   ### Use the regrsssion to obtain weights year 2012 (and 2013).
   # Use only basal diameter of the trees that are alive and have status use.
+
+  Individuals <- filter(IndividualsList, use_for_allocation_calculations & alive)$individual
+
   DiameterData <- HarvestData %>%
-    filter(individual %in% IndividualsList$individual[IndividualsList$use_for_allocation_calculations]) %>%
+    filter(individual %in% Individuals) %>%
     filter(segment == 1)  %>%
     select(individual, age, start_end, diameter_1, diameter_2, diameter_3, total_plant_weight)
 
