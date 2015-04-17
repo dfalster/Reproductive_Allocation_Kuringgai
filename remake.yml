@@ -37,13 +37,10 @@ plot_options:
 targets:
   all:
     depends:
-      - talk.html
+      - results.html
 
-  talk.html:
-    command: render("talk.md", output_format = I("html_document"))
-
-  talk.pdf:
-    command: render("talk.md", output_format = I("beamer_presentation"))
+  results.html:
+    command: render("results.md", output_format = I("html_document"))
 
   CarbonInvestments.pdf:
     depends:

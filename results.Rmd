@@ -1,0 +1,26 @@
+```{r, echo=FALSE,results='hide', message=FALSE}
+# create_bindings()
+
+LMA <- filter(LMA_raw, species!="" & species!=" ") %>%
+  select(species,age,LMA,branch_age)
+
+wood <- filter(woodDensity_raw, use=="use") %>%
+  select(species,density)
+
+seedsize <- seedSize_raw %>%
+  select(species,seed_size)
+
+individuals <- IndividualsList
+
+
+harvest <- filter(HarvestData,
+                  individuals$use_for_allocation_calculations[match(HarvestData$individual, individuals$individual)] & segment==1 & start_end=="end") %>%
+  select(species,individual,age,height,total_leaf_weight,site)
+
+investment <- ReproductionAllocation_all
+
+investment$age <- round(investment$age, digits=1)
+
+accessory <- AccessoryCosts_all
+
+```

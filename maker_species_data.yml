@@ -2,7 +2,7 @@
 # edit the file there (or the files that it includes).
 
 targets:
-  talk.md:
+  results.md:
     depends:
       - ReproductionAllocation_all
       - AccessoryCosts_all
@@ -10,6 +10,7 @@ targets:
       - woodDensity_raw
       - seedSize_raw
       - HarvestData
+      - IndividualsList
       - leafLifespan_raw
       - leavesPerLength_raw
       - BAER_IndividualsList
