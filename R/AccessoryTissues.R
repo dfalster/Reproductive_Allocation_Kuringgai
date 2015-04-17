@@ -5,23 +5,15 @@ IAT_Species <- function(species, IndividualsList, InvestmentCategories, species_
     filter(use_for_allocation_calculations & alive) %>%
     select(individual, age)
 
-  InvDist <- data.frame(species=c(), individual = c(), PrePol_A = c(), PrePol_S = c(), PostPol_A = c(), PD = c(), Prop = c(), Total = c(), age = c(), ageExact = c())
-
-  for (individual in unique(IndividualsList$individual)) {
-    # print(individual)
-    Ind <- InvestmentInAccessoryTissues(individual, species, InvestmentCategories[, c("flower_part", species)], species_INV)
-    if (length(AgeData[AgeData[, 2] == individual, 1]) == 1) {
-      thisage <- AgeData[AgeData[, 2] == individual, 1]
-      Ind <- cbind(species, Ind, age=round(thisage, digits=1), age_exact = thisage)
-      InvDist <- rbind(InvDist, Ind)
-    }
-  }
+  InvDist <- lapply(unique(AgeData$individual), InvestmentInAccessoryTissues,
+                species=species, InvestmentCategories=InvestmentCategories[, c("flower_part", species)],
+                species_INV= species_INV) %>% rbind_all
 
 # TODO: This is temp fix to remove some NAs in PrePol_S. Figure out why these are needed
   InvDist$PrePol_S[which(is.na(InvDist$PrePol_S))] <- 0
   InvDist$Total= (InvDist$PrePol_A + InvDist$PrePol_S + InvDist$PostPol_A + InvDist$PD + InvDist$Prop)
 
-  InvDist
+  merge(AgeData, InvDist, by="individual")
 }
 
 
@@ -82,7 +74,7 @@ InvestmentInAccessoryTissues <- function(individual, species, InvestmentCategori
   }
   TotWeight <- PrepolinationAbortWeight + PrepolinationSuccessWeight + PostpollinationAbortWeight + PackaginDispersalWeight + PropaguleWeight
   data.frame(individual = individual, PrePol_A = PrepolinationAbortWeight, PrePol_S = PrepolinationSuccessWeight, PostPol_A = PostpollinationAbortWeight, PD = PackaginDispersalWeight,
-    Prop = PropaguleWeight, Total = TotWeight)
+    Prop = PropaguleWeight, Total = TotWeight, stringsAsFactors=FALSE)
 }
 
 TreeListToTotalDataFrame <- function(TreeList) {
