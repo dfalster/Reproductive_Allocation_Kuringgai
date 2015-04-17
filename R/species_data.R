@@ -10,7 +10,7 @@ CalculateInvestmentForBAER <- function(...) {
 }
 
 CalculateAccesoryCostsForBAER <- function(...) {
-	IAT_Species("BAER", ...)
+	AccessoryCosts("BAER", ...)
 }
 
 CalculateRAForBAER <- function(...) {
@@ -30,7 +30,7 @@ CalculateInvestmentForBOLE <- function(...) {
 }
 
 CalculateAccesoryCostsForBOLE <- function(...) {
-	IAT_Species("BOLE", ...)
+	AccessoryCosts("BOLE", ...)
 }
 
 CalculateRAForBOLE <- function(...) {
@@ -50,7 +50,7 @@ CalculateInvestmentForCOER <- function(...) {
 }
 
 CalculateAccesoryCostsForCOER <- function(...) {
-	IAT_Species("COER", ...)
+	AccessoryCosts("COER", ...)
 }
 
 CalculateRAForCOER <- function(...) {
@@ -70,7 +70,7 @@ CalculateInvestmentForEPMI <- function(...) {
 }
 
 CalculateAccesoryCostsForEPMI <- function(...) {
-	IAT_Species("EPMI", ...)
+	AccessoryCosts("EPMI", ...)
 }
 
 CalculateRAForEPMI <- function(...) {
@@ -90,7 +90,7 @@ CalculateInvestmentForGRBU <- function(...) {
 }
 
 CalculateAccesoryCostsForGRBU <- function(...) {
-	IAT_Species("GRBU", ...)
+	AccessoryCosts("GRBU", ...)
 }
 
 CalculateRAForGRBU <- function(...) {
@@ -110,7 +110,7 @@ CalculateInvestmentForGRSP <- function(...) {
 }
 
 CalculateAccesoryCostsForGRSP <- function(...) {
-	IAT_Species("GRSP", ...)
+	AccessoryCosts("GRSP", ...)
 }
 
 CalculateRAForGRSP <- function(...) {
@@ -130,7 +130,7 @@ CalculateInvestmentForHATE <- function(...) {
 }
 
 CalculateAccesoryCostsForHATE <- function(...) {
-	IAT_Species("HATE", ...)
+	AccessoryCosts("HATE", ...)
 }
 
 CalculateRAForHATE <- function(...) {
@@ -150,7 +150,7 @@ CalculateInvestmentForHEPU <- function(...) {
 }
 
 CalculateAccesoryCostsForHEPU <- function(...) {
-	IAT_Species("HEPU", ...)
+	AccessoryCosts("HEPU", ...)
 }
 
 CalculateRAForHEPU <- function(...) {
@@ -170,7 +170,7 @@ CalculateInvestmentForLEES <- function(...) {
 }
 
 CalculateAccesoryCostsForLEES <- function(...) {
-	IAT_Species("LEES", ...)
+	AccessoryCosts("LEES", ...)
 }
 
 CalculateRAForLEES <- function(...) {
@@ -190,7 +190,7 @@ CalculateInvestmentForPELA <- function(...) {
 }
 
 CalculateAccesoryCostsForPELA <- function(...) {
-	IAT_Species("PELA", ...)
+	AccessoryCosts("PELA", ...)
 }
 
 CalculateRAForPELA <- function(...) {
@@ -210,7 +210,7 @@ CalculateInvestmentForPEPU <- function(...) {
 }
 
 CalculateAccesoryCostsForPEPU <- function(...) {
-	IAT_Species("PEPU", ...)
+	AccessoryCosts("PEPU", ...)
 }
 
 CalculateRAForPEPU <- function(...) {
@@ -230,7 +230,7 @@ CalculateInvestmentForPHPH <- function(...) {
 }
 
 CalculateAccesoryCostsForPHPH <- function(...) {
-	IAT_Species("PHPH", ...)
+	AccessoryCosts("PHPH", ...)
 }
 
 CalculateRAForPHPH <- function(...) {
@@ -250,7 +250,7 @@ CalculateInvestmentForPILI <- function(...) {
 }
 
 CalculateAccesoryCostsForPILI <- function(...) {
-	IAT_Species("PILI", ...)
+	AccessoryCosts("PILI", ...)
 }
 
 CalculateRAForPILI <- function(...) {
@@ -270,7 +270,7 @@ CalculateInvestmentForPUTU <- function(...) {
 }
 
 CalculateAccesoryCostsForPUTU <- function(...) {
-	IAT_Species("PUTU", ...)
+	AccessoryCosts("PUTU", ...)
 }
 
 CalculateRAForPUTU <- function(...) {

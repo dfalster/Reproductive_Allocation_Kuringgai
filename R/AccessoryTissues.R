@@ -1,4 +1,4 @@
-IAT_Species <- function(species, IndividualsList, InvestmentCategories, species_INV) {
+AccessoryCosts <- function(species, IndividualsList, InvestmentCategories, species_INV) {
   # Read and restrict the data to the subset of interest.
 
   AgeData <- IndividualsList %>%
