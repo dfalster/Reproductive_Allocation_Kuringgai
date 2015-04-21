@@ -21,7 +21,7 @@ I have both RA schedules and lots of other data across multiple ages:
 - LMA
 - accessory tissue costs
 
-#Shifts in RA with age
+# Shifts in RA with age
 
 Showing just a few of the RA schedules from my last lab meeting.
 
@@ -38,6 +38,7 @@ for(n in names(labels.spp)) {
   plot_RAbyAge(n)
 }
 ```
+
 # Individual shoots looked decidedly "less leafy" in many older plants
 This led me to wonder how leaf lifespan - or some other variable - was shifting with age
 
@@ -67,6 +68,7 @@ legend("bottomright",col=col.spp, labels.spp, pch=16, cex=1)
 ```
 
 # Plots of individual species show that no species has a significant change either - although several show slight declines at the end
+
 ```{r, echo=FALSE,results='hide', message=FALSE}
 plot_LLvAge <- function(spp) {
   data2 <- filter(SummaryInd, species==spp)
@@ -88,24 +90,49 @@ for(n in names(labels.spp)) {
 ```
 
 # Several species show significant declines in shoot extension with age
+
 ```{r, echo=FALSE,results='hide', message=FALSE}
-plot_newlengthvAge <- function(spp) {
-  plot(new_length ~ age, data=subset(SummaryInd,species==spp), xlab="age", ylab="leader shoot extention", cex.axis=.8, las=1, pch=16, log="x",
-       main=labels.spp[spp])
-  points(new_length_mean ~ age, data=subset(SummarySppAge, species==spp), cex=1.3, pch=8)
-  points((new_length_mean+new_length_se) ~ age, data=subset(SummarySppAge, species==spp), cex=1.5, pch=25)
-  points((new_length_mean-new_length_se) ~ age, data=subset(SummarySppAge, species==spp), cex=1.5, pch=24)
+
+
+plot_newlengthvAge <- function(data, yvar = "new_length", xvar = "age", ...) {
+	Y <- data[[yvar]]
+	X <- data[[xvar]]
+  plot(Y ~ X, data=data,  cex.axis=.8, las=1, pch=16, ...)
+  # points(new_length_mean ~ age, data=data, cex=1.3, pch=8)
+  # points((new_length_mean+new_length_se) ~ age, data=data, cex=1.5, pch=25)
+  # points((new_length_mean-new_length_se) ~ age, data=data, cex=1.5, pch=24)
 }
 
-mod_newlengthvAge <- function(spp) {
-  lm(new_length ~ age, data=subset(SummaryInd,age>2.4 & species==spp))
+summarise_fit <- function(x) {
+	data.frame(
+		select(glance(x), r.squared, p.value),
+		n= length(resid(x)),
+		a = coef(x)[1],
+		b = coef(x)[2]
+	)
 }
 
-for(n in names(labels.spp)) {
-  plot_newlengthvAge(n)
-  mod_newlengthvAge(n)
-  summary(mod_newlengthvAge(n))
+summarise_all_fits <- function(x) {
+	tmp <- lapply(x, summarise_fit) %>%
+		bind_rows
+	data.frame(species=names(x), tmp)
 }
+
+yvar <- "new_length"
+xvar <- "age"
+
+data <- filter(SummaryInd, age > 2.4)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(x[[yvar]] ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+for(spp in names(data)) {
+  plot_newlengthvAge(data[[spp]], yvar, xvar, log="x",
+  	ylim=c(0,150),  main=spp, xlab="age", ylab="leader shoot extention")
+  abline(lmfits[[spp]])
+}
+
+
 ```
 
 # Had expected a stronger pattern either in leaf lifespan or leaf count on a shoot
