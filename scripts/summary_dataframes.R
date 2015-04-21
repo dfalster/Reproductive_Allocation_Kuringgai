@@ -1,11 +1,5 @@
-```{r, echo=FALSE,results='hide', message=FALSE}
 
 # load packages and "open" dataframes to use
-library(remake)
-create_bindings()
-```
-
-```{r, echo=FALSE,results='hide', message=FALSE}
 LMA <- filter(LMA_raw, species!="" & species!=" ") %>%
   select(species,age,LMA,branch_age)
 
@@ -18,7 +12,7 @@ seedsize <- seedSize_raw %>%
 individuals <- IndividualsList
 
 
-harvest <- filter(HarvestData, 
+harvest <- filter(HarvestData,
                   individuals$use_for_allocation_calculations[match(HarvestData$individual, individuals$individual)] & segment==1 & start_end=="end") %>%
   select(species,individual,age,height,total_leaf_weight,site)
 
@@ -123,9 +117,7 @@ SummaryInd$change_shoot_area <- (3.14*((SummaryInd$d_end/2)^2)) - (3.14*((Summar
 SummaryInd$change_basal_area <- (3.14*((SummaryInd$FinalBasalDiam/2)^2)) - (3.14*((SummaryInd$StartBasalDiam/2)^2))
 SummaryInd$lvs_end_total <- SummaryInd$lvs_end + SummaryInd$lvs_new
 SummaryInd$RGR <- log(SummaryInd$FinalWeight)-log(SummaryInd$FinalWeight-SummaryInd$GrowthInv)
-```
 
-```{r, echo=FALSE,results='hide', message=FALSE}
 #summarizing data by species, age
 
 #leaf lifespan summary by species, age
@@ -248,7 +240,3 @@ labels.age <- c("1.4","2.4","5","7","9","32")
 names(labels.age) <- c("1.4","2.4","5","7","9","32")
 labels.age2 <- c("2.4","5","7","9","32")
 col.age2 <-c("pink","green","orange","blue","dark green")
-```
-
-#writing csv files for checking errors
-write.csv(SummaryInd, file = "SummaryInd.csv")
