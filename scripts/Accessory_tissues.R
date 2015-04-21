@@ -83,6 +83,65 @@ plot(asin(sqrt(RA))~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0))
 mod <- lm(asin(sqrt(RA))~asin(sqrt(PerPropagule))+species+species*asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0))
 summary(mod)
 anova(mod)
+mod <- lm(asin(sqrt(RA))~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0&species=="GRSP"))
+summary(mod)
+mod <- lm(asin(sqrt(RA))~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0&species=="COER"))
+summary(mod)
+mod <- lm(asin(sqrt(RA))~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0&species=="BAER"))
+summary(mod)
+mod <- lm(asin(sqrt(RA))~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0&species=="HATE"))
+summary(mod)
+mod <- lm(asin(sqrt(RA))~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0&species=="GRBU"))
+summary(mod)
+mod <- lm(asin(sqrt(RA))~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0&species=="PELA"))
+summary(mod)
+
+
+mod <- lm(asin(sqrt(RA))~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0&species=="PILI"))
+summary(mod)
+mod <- lm(asin(sqrt(RA))~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0&species=="BOLE"&age>2))
+summary(mod)
+
+
+mod <- lm(asin(sqrt(RA))~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0&species=="EPMI"))
+summary(mod)
+mod <- lm(asin(sqrt(RA))~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0&species=="HEPU"))
+summary(mod)
+mod <- lm(asin(sqrt(RA))~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0&species=="PUTU"))
+summary(mod)
+
+#look at same shifts with total size
+plot(log(FinalWeight)~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0))
+mod <- lm(log(FinalWeight)~asin(sqrt(PerPropagule))+species+species*asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0))
+summary(mod)
+anova(mod)
+mod <- lm(log(FinalWeight)~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0&species=="GRSP"))
+summary(mod)
+mod <- lm(log(FinalWeight)~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0&species=="COER"))
+summary(mod)
+mod <- lm(log(FinalWeight)~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0&species=="BAER"))
+summary(mod)
+mod <- lm(log(FinalWeight)~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0&species=="HATE"))
+summary(mod)
+mod <- lm(log(FinalWeight)~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0&species=="GRBU"))
+summary(mod)
+mod <- lm(log(FinalWeight)~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0&species=="PELA"))
+summary(mod)
+
+
+mod <- lm(log(FinalWeight)~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0&species=="PILI"))
+summary(mod)
+mod <- lm(log(FinalWeight)~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0&species=="BOLE"&age>2))
+summary(mod)
+
+
+mod <- lm(log(FinalWeight)~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0&species=="EPMI"))
+summary(mod)
+mod <- lm(log(FinalWeight)~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0&species=="HEPU"))
+summary(mod)
+mod <- lm(log(FinalWeight)~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0&species=="PUTU"))
+summary(mod)
+
 
 #investment in propagules does not shift with age
 plot(asin(sqrt(PerPropagule))~age,data=subset(SummaryInd,RA>0), log="x")
