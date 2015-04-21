@@ -3,7 +3,7 @@ AccessoryCosts <- function(species, IndividualsList, InvestmentCategories, speci
 
   AgeData <- IndividualsList %>%
     filter(use_for_allocation_calculations & alive) %>%
-    select(individual, age)
+    select(species,individual, age)
 
   InvDist <- lapply(unique(AgeData$individual), InvestmentInAccessoryTissues,
                 species=species, InvestmentCategories=InvestmentCategories[, c("flower_part", species)],

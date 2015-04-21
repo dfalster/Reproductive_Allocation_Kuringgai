@@ -27,8 +27,8 @@ investment <- ReproductionAllocation_all
 investment$age <- round(investment$age, digits=1)
 
 accessory <- AccessoryCosts_all
-accessory$age2 <- accessory$age
-accessory$age <- round(accessory$age, digits=1)
+#accessory$age2 <- accessory$age
+#accessory$age <- round(accessory$age, digits=1)
 
 #accessory$PerAccessory <- {
 #  select(accessory, Total >0,
@@ -113,8 +113,8 @@ accessory$PerAcc[which(is.nan(accessory$PerAcc))] <- NA
 
 #adding investment and accessory costs data to leafLifespan dataframe to create a dataframe with all individual level data
 SummaryInd <- merge(leafLifespan, select(investment, -species, -age), by="individual")
-SummaryInd <- merge(SummaryInd, select(accessory, -species, -age, -age2), by="individual")
-SummaryInd <- merge(SummaryInd, select(harvest, -species, -age, -age2), by="individual")
+SummaryInd <- merge(SummaryInd, select(accessory, -species, -age), by="individual")
+SummaryInd <- merge(SummaryInd, select(harvest, -species, -age), by="individual")
 
 #adding variables to look at change across years, RGR
 SummaryInd$change_shoot_diam <- SummaryInd$d_end - SummaryInd$d_start
@@ -148,6 +148,12 @@ accessory_summary <- accessory %>%
 accessory_summary2 <- accessory %>%
   filter(Total!=0) %>%
   group_by(species, age) %>%
+  summarise_each(funs(mean, se, length), PerPrePol_A, PerPrePol_S, PerPostPol_A, PerPackDisp, PerPropagule, PerAcc)
+
+#accessory tissue by species
+accessory_spp <- accessory %>%
+  filter(Total!=0) %>%
+  group_by(species) %>%
   summarise_each(funs(mean, se, length), PerPrePol_A, PerPrePol_S, PerPostPol_A, PerPackDisp, PerPropagule, PerAcc)
 
 #investment summary by species, age
@@ -227,6 +233,8 @@ SummarySpp <- merge(LL_spp, LMA_spp, by=c("species"))
 SummarySpp <- merge(SummarySpp, wood_summary, by=c("species"))
 SummarySpp <- merge(SummarySpp, seedsize, by=c("species"))
 SummarySpp <- merge(SummarySpp, select(maxH, -age), by=c("species"))
+SummarySpp <- merge(SummarySpp, accessory_spp, by=c("species"))
+
 
 #plotting and stats
 #creating lists of information for plotting symbols, colors, labels
