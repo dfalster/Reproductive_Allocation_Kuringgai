@@ -1,0 +1,62 @@
+header,axis_label
+species,species
+age,age (years)
+individual,individual
+d_start,starting diameter (mm)
+d_end,final diameter (mm)
+length_start,shoot length at start (mm)
+new_length,shoot extension (mm)
+lvs_start_length,N/A
+lvs_start_count,N/A
+lvs_end_length,N/A
+lvs_end_count,N/A
+lvs_new_length,N/A
+lvs_new_count,N/A
+new_but_shed_count,N/A
+mm_lvs_spec,N/A
+count_lvs_spec,N/A
+count_per_length,N/A
+lvs_start,starting count of leaves
+lvs_end,final count of leaves
+lvs_new,new leaves
+LL_bd,leaf lifespan (average of leaf births and deaths)
+LL_death,leaf lifespan (using leaf deaths)
+LL_birth,leaf lifespan (using leaf births)
+ReproInv,reproductive investment (mg/year)
+GrowthInv,growth investment (mg/year)
+StartWeight,weight at start (mg)
+FinalWeight,final weight (mg)
+StartBasalDiamAv,basal diameter at start (mm)
+FinalBasalDiamAv,final basal diameter (mm)
+TotalInvestment,total carbon investment (mg)
+RA,RA (prop of total investment)
+PrePol_A,investment in tissues aborted pre-pollination (mg)
+PrePol_S,investment in tissues forming successful flowers (mg)
+PostPol_A,investment in tissues aborted post-pollination (mg)
+PD,investment in tissues used in packaging and dispersal (mg)
+Prop,investment in propagules (mg)
+Total,total reproductive investment (mg/year)
+PerPrePol_A,proportional investment in tissues aborted pre-pollination (0 to 1)
+PerPrePol_S,proportional investment in tissues forming successful flowers (0 to 1)
+PerPostPol_A,proportional investment in tissues aborted post-pollination (0 to 1)
+PerPackDisp,proportional investment in tissues used in packaging and dispersal (0 to 1)
+PerPropagule,proportional investment in propagules (0 to 1)
+PerAcc,proportional investment in all accessory tissues (0 to 1)
+height,plant height (mm)
+total_leaf_weight,final leaf weight (mg)
+site,site
+change_shoot_diam,change in shoot diameter (mm/year)
+change_basal_diam,change in basal diameter (mm/year)
+change_shoot_area,change in shoot area (mm^2/year)
+change_basal_area,change in basal area (mm^2/year)
+lvs_end_total,N/A
+RGR,relative growth rate
+WD_mean,wood density (grams per cm^3)
+WD_se,N/A
+WD_length,N/A
+LMA_mean,LMA (grams per cm^2)
+LMA_se,N/A
+LMA_length,N/A
+maxH_spp,species maximum height (mm)
+seed_size,seed size (mg)
+leafArea,leaf area
