@@ -1,0 +1,406 @@
+#Accessory costs
+Overall results:
+- Accessory costs higher for bigger seeds
+- A number of species show fairly consistent declines in accessory costs with various measures of "bigger", including size, age, RA. Other species show no patterns
+- 9 (of 14) species decrease the proportion of reproductive investment in "pre-pollination" tissues as their RA increases. in other words, they get better returns on investment the more they invest.
+- Species very different in which accessory tissues they invest the most in - which reflects the differences in basic structure (i.e. Banksia cones), but also more subtlely that some species abort lots of buds (pre-pollination aborted), while other species abort more fully formed flowers
+- For most of the statistical analyses, the youngest site has been removed, since it included individuals that were harvested while flowering (and therefore never "got to" set fruit) and automatically have no "successful" reproduction. There are of course some individuals like this at other ages as well, but far fewer
+
+#Generic functions for most plotting below
+```{r, echo=FALSE,results='hide', message=FALSE}
+plot_yvar_vs_xvar <- function(data, yvar = "y", xvar = "x", ...) {
+  Y <- data[[yvar]]
+  X <- data[[xvar]]
+  plot(Y ~ X, data=data,  cex.axis=.8, las=1, pch=16, ...)
+}
+
+summarise_fit <- function(x) {
+  data.frame(
+    select(glance(x), r.squared, p.value),
+    n= length(resid(x)),
+    a = coef(x)[1],
+    b = coef(x)[2]
+  )
+}
+
+summarise_all_fits <- function(x) {
+  tmp <- lapply(x, summarise_fit) %>%
+    bind_rows
+  data.frame(species=names(x), tmp)
+}
+```
+
+
+#How do accessory costs shift with seed size?
+Larger-seeded species have higher accessory costs. 
+Also shown in other studies and suggested as a mechanism for why angiosperms were able to have such small seeds (relative to gymnosperms, with no decrease in proportional accessory costs with decreasing size)
+```{r, echo=FALSE,results='hide', message=FALSE}
+yvar <- "PerAcc_mean"
+xvar <- "seed_size"
+data <- SummarySpp
+
+plot_yvar_vs_xvar(data, yvar, xvar,log="x",
+                  xlab=xvar, ylab=yvar)
+mod <- lm(log(seed_size)~PerAcc_mean,SummarySpp)
+summary(mod)
+anova(mod)
+```
+
+#Do species differ in the proportional energy allocated to propagules (vs. accessory tissues)
+COER, EPMI, HEPU, LEES, PILI invest the most energy in propagules
+```{r, echo=FALSE,results='hide', message=FALSE}
+yvar <- "PerPropagule"
+xvar <- "species"
+data <- filter(SummaryInd,Total>0)
+
+
+plot_yvar_vs_xvar(data, yvar, xvar,
+                  xlab=xvar, ylab=yvar)
+mod <- lm(asin(sqrt(PerPropagule)) ~ species, data)
+summary(mod)
+```
+
+#Do species differ in the proportional energy allocated to aborted pre-pollination tissues
+BOLE, EPMI, GRSP, HATE invest the most energy in aborted pre-pollination tissues
+```{r, echo=FALSE,results='hide', message=FALSE}
+yvar <- "PerPrePol_A"
+xvar <- "species"
+data <- filter(SummaryInd,Total>0 & age>2)
+
+
+plot_yvar_vs_xvar(data, yvar, xvar,
+                  xlab=xvar, ylab=yvar)
+mod <- lm(asin(sqrt(PerPrePol_A)) ~ species, data)
+summary(mod)
+```
+
+#Do individual species decrease accessory costs as they increase in size, age or RA?
+First looking at size:
+PerAcc is arcsine transformed, size is log transformed
+COER, HATE, and PILI show a significant decrease in accessory costs with increasing size (p<0.05)
+GRSP, PILI shows a marginally significant decrease in accessory costs with increasing size (0.05<p<0.10)
+PEPU shows a marginally significant INCREASE in accessory costs with increasing size (0.05<p<0.10)
+```{r, echo=FALSE,results='hide', message=FALSE}
+yvar <- "PerAcc"
+xvar <- "FinalWeight"
+
+data <- filter(SummaryInd,Total>0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,
+                    main=spp, log="x", xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+
+```
+
+With respect to age:
+PerAcc is arcsine transformed, age is log transformed
+BOLE, COER, HATE, HEPU, PELA show a significant decrease in accessory costs with increasing age (p<0.05)
+EPMI, GRSP, HATE shows a marginally significant decrease in accessory costs with increasing age (0.05<p<0.10)
+PUTU shows a sig INCREASE in accessory costs with increasing age
+```{r, echo=FALSE,results='hide', message=FALSE}
+yvar <- "PerAcc"
+xvar <- "age"
+
+data <- filter(SummaryInd,Total>0&age>2)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,
+                    main=spp, log="x", xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+
+```
+
+With respect to RA:
+both RA and PerAcc are arcsine transformed
+BAER, COER, GRBU, GRSP, HATE, LEES, PELA, PEPU show a significant decrease in accessory costs with increasing RA (p<0.05)
+BOLE shows a marginally significant decrease in accessory costs with increasing RA (p ~ 0.10)
+```{r, echo=FALSE,results='hide', message=FALSE}
+yvar <- "PerAcc"
+xvar <- "RA"
+
+data <- filter(SummaryInd,Total>0&age>2)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  asin(sqrt(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,
+                    main=spp, xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+
+```
+Overall, proportion of energy allocation to accessory tissues (versus propagules) is best explained by RA
+
+
+#Next considering if the amount of energy spent on aborted buds shifts with age, size, RA
+First looking at size:
+PerPrePol_A is arcsine transformed, size is log transformed
+GRSP, HATE, HEPU, PUTU show a significant decrease in aborted buds with increasing size (p<0.05)
+```{r, echo=FALSE,results='hide', message=FALSE}
+yvar <- "PerPrePol_A"
+xvar <- "FinalWeight"
+
+data <- filter(SummaryInd,Total>0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,
+                    main=spp, log="x", xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+
+```
+
+With respect to age:
+PerPrePol_A is arcsine transformed, age is log transformed
+BAER, BOLE, COER, EPMI, LEES, PHPH, PILI show a significant decrease in aborted buds with increasing age (p<0.05)
+GRSP, HATE show a marginally significant decrease in aborted buds with increasing age (0.05<p<0.10)
+```{r, echo=FALSE,results='hide', message=FALSE}
+yvar <- "PerPrePol_A"
+xvar <- "age"
+
+data <- filter(SummaryInd,Total>0&age>2)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,
+                    main=spp, log="x", xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+
+```
+
+With respect to RA:
+both RA and PerPrePol_A are arcsine transformed
+BAER, BOLE, COER, GRSP, HATE, LEES, PELA, PEPU show a significant decrease in aborted buds with increasing RA (p<0.05)
+```{r, echo=FALSE,results='hide', message=FALSE}
+yvar <- "PerPrePol_A"
+xvar <- "RA"
+
+data <- filter(SummaryInd,Total>0&age>2)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  asin(sqrt(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,
+                    main=spp, xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+
+```
+
+
+
+
+
+#Do individual species decrease total pre-pollination costs as they increase in size, age or RA?
+First looking at size:
+PerPrePol_All is arcsine transformed, size is log transformed
+GRSP, HATE show a significant decrease in total pre-pollination costs with increasing size (p<0.05)
+HEPU shows a marginally significant decrease in total pre-pollination costs with increasing size (0.05<p<0.10)
+
+```{r, echo=FALSE,results='hide', message=FALSE}
+yvar <- "PerPrePol_All"
+xvar <- "FinalWeight"
+
+data <- filter(SummaryInd,Total>0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,
+                    main=spp, log="x", xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+
+```
+
+With respect to age:
+PerPrePol_All is arcsine transformed, age is log transformed
+BAER, BOLE, COER, HEPU, LEES, PILI show a significant decrease in total pre-pollination costs with increasing age (p<0.05)
+EPMI, GRBU, GRSP, HATE shows a marginally significant decrease in total pre-pollination costs with increasing age (0.05<p<0.10)
+PUTU shows a sig INCREASE in total pre-pollination  costs with increasing age
+```{r, echo=FALSE,results='hide', message=FALSE}
+yvar <- "PerPrePol_All"
+xvar <- "age"
+
+data <- filter(SummaryInd,Total>0&age>2)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,
+                    main=spp, log="x", xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+
+```
+
+With respect to RA:
+both RA and PerPrePol_All are arcsine transformed
+BAER, BOLE, COER, GRSP, HATE, HEPU, LEES, PELA, PEPU show a significant decrease in total pre-pollination costs with increasing RA (p<0.05)
+```{r, echo=FALSE,results='hide', message=FALSE}
+yvar <- "PerPrePol_All"
+xvar <- "RA"
+
+data <- filter(SummaryInd,Total>0&age>2)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  asin(sqrt(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,
+                    main=spp, xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+
+```
+
+With respect to Reproductive Investment:
+PerPrePol_All is arcsine transformed, ReproInv is log transformed
+COER, GRBU, GRSP, HATE, PEPU, PHPH, PILI show a significant decrease in total pre-pollination costs with increasing reproductive investment (p<0.05)
+LEES and PELA show a marginally significant decrease in total pre-pollination costs with increasing reproductive investment (0.05<p<0.10)
+```{r, echo=FALSE,results='hide', message=FALSE}
+yvar <- "PerPrePol_All"
+xvar <- "ReproInv"
+
+data <- filter(SummaryInd,Total>0&age>2)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="x",
+                    main=spp, xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+
+```
+
+
+#For each species, look at pattern of investment in different tissues across ages
+Most obvious pattern is that different species invest more or less in different tissue types - across all species this is bigger pattern than shifts across age
+```{r, echo=FALSE,results='hide', message=FALSE}
+plot_Acc_by_Spp <- function(spp) {
+data2 <- filter(SummarySppAge, species==spp)
+plot(PerPropagule_mean ~ age, data=data2, xlab="age", ylab="proportion tissue", cex.axis=.8, las=1,
+       main=labels.spp[spp], ylim=c(0,1), xlim=c(1,35), log="x", pch=16,col="orange")
+points(PerPrePol_A_mean ~ age, data=subset(SummarySppAge, species==spp), cex=1.3, pch=8, col="red")
+points(PerPrePol_S_mean ~ age, data=subset(SummarySppAge, species==spp), cex=1.3, pch=17, col="blue")
+points(PerPostPol_A_mean ~ age, data=subset(SummarySppAge, species==spp), cex=1.3, pch=18, col="black")
+points(PerPackDisp_mean ~ age, data=subset(SummarySppAge, species==spp), cex=1.3, pch=19, col="light green")
+legend(.9,.7, pch=c(16,8,17,18,19),legend=c("Propagule","Aborted pre-poll","Successful pre-poll","Aborted post-poll","Packaging & disp"), col=c("orange","red","blue","black","light green"), cex=.8, bty="n")
+}
+
+for(n in names(labels.spp)) {
+  plot_Acc_by_Spp(n)
+  }
+```
+
+#Using models that look at all the various factors at once - but need to include species in these models and probably use some sort of a MANOVA
+also issues because significance of various variables changes enormously with transformations
+```{r, echo=FALSE,results='hide', message=FALSE}
+mod <- lm(asin(sqrt(RA))~asin(sqrt(PerPropagule))+asin(sqrt(PerPrePol_A))+ asin(sqrt(PerPrePol_S))+ asin(sqrt(PerPostPol_A))+ asin(sqrt(PerPackDisp)) + species,data=subset(SummaryInd,Total>0))
+
+mod <- lm(asin(sqrt(RA))~asin(sqrt(PerPropagule))+asin(sqrt(PerPrePol_A))+ asin(sqrt(PerPrePol_S))+ asin(sqrt(PerPostPol_A))+ asin(sqrt(PerPackDisp)) +asin(sqrt(PerPropagule))*species+asin(sqrt(PerPrePol_A))*species+ asin(sqrt(PerPrePol_S))*species+ asin(sqrt(PerPostPol_A))*species+ asin(sqrt(PerPackDisp))*species+ species,data=subset(SummaryInd,Total>0))
+summary(mod)
+plot(mod)
+step(mod)
+```
