@@ -11,6 +11,7 @@ seedsize <- seedSize_raw %>%
 
 individuals <- IndividualsList
 
+axis_labels <- read_csv("data/axis_labels.csv")
 
 harvest <- filter(HarvestData,
                   individuals$use_for_allocation_calculations[match(HarvestData$individual, individuals$individual)] & segment==1 & start_end=="end") %>%
@@ -117,6 +118,8 @@ SummaryInd$change_shoot_area <- (3.14*((SummaryInd$d_end/2)^2)) - (3.14*((Summar
 SummaryInd$change_basal_area <- (3.14*((SummaryInd$FinalBasalDiam/2)^2)) - (3.14*((SummaryInd$StartBasalDiam/2)^2))
 SummaryInd$lvs_end_total <- SummaryInd$lvs_end + SummaryInd$lvs_new
 SummaryInd$RGR <- log(SummaryInd$FinalWeight)-log(SummaryInd$FinalWeight-SummaryInd$GrowthInv)
+SummaryInd$PrePol_All <- SummaryInd$PrePol_A + SummaryInd$PrePol_S
+SummaryInd$PerPrePol_All <- SummaryInd$PerPrePol_A + SummaryInd$PerPrePol_S
 
 #summarizing data by species, age
 

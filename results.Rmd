@@ -70,13 +70,7 @@ legend("bottomright",col=col.spp, labels.spp, pch=16, cex=1)
 # Plots of individual species show that no species has a significant change either - although several show slight declines at the end
 
 ```{r, echo=FALSE,results='hide', message=FALSE}
-plot_LLvAge <- function(spp) {
-  data2 <- filter(SummaryInd, species==spp)
-  plot(LL_birth ~ age, data=data2, xlab="age", ylab="leaf lifespan (leaf births)", cex.axis=.8, las=1,
-       main=labels.spp[spp], xlim=c(1,35), ylim=c(0,8), log="x", pch=16)
-  points(LL_birth_mean ~ age, data=subset(SummarySppAge, species==spp), cex=1.3, pch=8)
-  points((LL_birth_mean+LL_birth_se) ~ age, data=subset(SummarySppAge, species==spp), cex=1.5, pch=25)
-  points((LL_birth_mean-LL_birth_se) ~ age, data=subset(SummarySppAge, species==spp), cex=1.5, pch=24)
+
 
   # fit <- lm(LL_birth ~ log10(age), data=data2)
   # abline(fit)
@@ -217,3 +211,63 @@ Increased cross-sectional area of a leader and the entire plant are fairly corre
 plot(change_shoot_area~change_basal_area,SummaryInd, log="xy",col=col.age[as.factor(age)], pch=16, cex=.8,xlab="change in basal stem area",ylab="change in shoot area")
 legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
 ```
+
+#22 April 2015
+Generic code to create plots, run lm, summarize results, by species
+
+```{r, echo=FALSE,results='hide', message=FALSE}
+plot_yvar_vs_xvar <- function(data, yvar = "y", xvar = "x", ...) {
+  Y <- data[[yvar]]
+  X <- data[[xvar]]
+  plot(Y ~ X, data=data,  cex.axis=.8, las=1, pch=16, ...)
+}
+
+summarise_fit <- function(x) {
+  data.frame(
+    select(glance(x), r.squared, p.value),
+    n= length(resid(x)),
+    a = coef(x)[1],
+    b = coef(x)[2]
+  )
+}
+
+summarise_all_fits <- function(x) {
+  tmp <- lapply(x, summarise_fit) %>%
+    bind_rows
+  data.frame(species=names(x), tmp)
+}
+```
+
+
+#RV curves
+```{r, echo=FALSE,results='hide', message=FALSE}
+yvar <- "ReproInv"
+xvar <- "FinalWeight"
+
+data <- filter(SummaryInd)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,plot_LLvAge <- function(spp) {
+  data2 <- filter(SummaryInd, species==spp)
+  plot(LL_birth ~ age, data=data2, xlab="age", ylab="leaf lifespan (leaf births)", cex.axis=.8, las=1,
+       main=labels.spp[spp], xlim=c(1,35), ylim=c(0,8), log="x", pch=16)
+  points(LL_birth_mean ~ age, data=subset(SummarySppAge, species==spp), cex=1.3, pch=8)
+  points((LL_birth_mean+LL_birth_se) ~ age, data=subset(SummarySppAge, species==spp), cex=1.5, pch=25)
+  points((LL_birth_mean-LL_birth_se) ~ age, data=subset(SummarySppAge, species==spp), cex=1.5, pch=24)
+                    main=spp, log="xy",xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+```
+
+
