@@ -1,0 +1,349 @@
+```{r, echo=FALSE,results='hide', message=FALSE}
+library(remake)
+create_bindings()
+
+source("scripts/summary_dataframes.R")
+```
+
+#Leaf lifespan data
+General results:
+  
+
+
+#Generic functions for most plotting below
+```{r, echo=FALSE,results='hide', message=FALSE}
+plot_yvar_vs_xvar <- function(data, yvar = "y", xvar = "x", ...) {
+  Y <- data[[yvar]]
+  X <- data[[xvar]]
+  plot(Y ~ X, data=data,  cex.axis=.8, las=1, pch=16, ...)
+}
+
+summarise_fit <- function(x) {
+  data.frame(
+    select(glance(x), r.squared, p.value),
+    n= length(resid(x)),
+    a = coef(x)[1],
+    b = coef(x)[2]
+  )
+}
+
+summarise_all_fits <- function(x) {
+  tmp <- lapply(x, summarise_fit) %>%
+    bind_rows
+  data.frame(species=names(x), tmp)
+}
+```
+
+#First issue is how to calculate leaf lifespan
+A plot of leaf lifespan calculated using birth of leaves, death of leaves, and the mean of the two shows they are poorly correlated, even when the youngest plants are omitted
+
+```{r, echo=FALSE,results='hide', message=FALSE}
+yvar <- "LL_birth"
+xvar <- "LL_death"
+data <- filter(SummaryInd, age>2, LL_birth<10&LL_death<10)
+
+plot_yvar_vs_xvar(data, yvar, xvar,
+                  xlab=xvar, ylab=yvar,col=col.spp[as.factor(data$species)])
+legend("bottomright",legend=labels.spp,pch=16,col=col.spp,bty="n",cex=.8)
+mod <- lm(LL_birth~LL_death + age,data=data)
+anova(mod)
+
+
+yvar <- "LL_birth"
+xvar <- "LL_bd"
+data <- filter(SummaryInd, age>2, LL_birth<10&LL_death<10)
+
+plot_yvar_vs_xvar(data, yvar, xvar,
+                  xlab=xvar, ylab=yvar, ,col=col.spp[as.factor(data$species)])
+legend("bottomright",legend=labels.spp,pch=16,col=col.spp,bty="n",cex=.8)
+mod <- lm(LL_birth~LL_bd,data=data)
+summary(mod)
+
+yvar <- "LL_death"
+xvar <- "LL_bd"
+data <- filter(SummaryInd, age>2, LL_birth<10&LL_death<10)
+
+plot_yvar_vs_xvar(data, yvar, xvar,
+                  xlab=xvar, ylab=yvar,col=col.spp[as.factor(data$species)])
+legend("bottomright",legend=labels.spp,pch=16,col=col.spp,bty="n",cex=.8)
+mod <- lm(LL_death~LL_bd,data=data)
+summary(mod)
+```
+
+#Starting with the basics: Are leaf lifespan and LMA correlated?
+Plotting species*site means
+Figures shown using all three measures of leaf lifespan
+```{r, echo=FALSE,results='hide', message=FALSE}
+yvar <- "LMA_mean"
+xvar <- "LL_death_mean"
+data <- filter(SummarySppAge)
+
+plot_yvar_vs_xvar(data, yvar, xvar,
+                  xlab=xvar, ylab=yvar,col=col.spp[as.factor(data$species)])
+legend("bottomright",legend=labels.spp,pch=16,col=col.spp,bty="n",cex=.8)
+mod <- lm(LL_death_mean~LMA_mean,data=data)
+summary(mod)
+
+yvar <- "LMA_mean"
+xvar <- "LL_birth_mean"
+data <- filter(SummarySppAge)
+
+plot_yvar_vs_xvar(data, yvar, xvar,
+                  xlab=xvar, ylab=yvar,col=col.spp[as.factor(data$species)])
+legend("bottomright",legend=labels.spp,pch=16,col=col.spp,bty="n",cex=.8)
+mod <- lm(LL_birth_mean~LMA_mean,data=data)
+summary(mod)
+
+yvar <- "LMA_mean"
+xvar <- "LL_bd_mean"
+data <- filter(SummarySppAge)
+
+plot_yvar_vs_xvar(data, yvar, xvar,
+                  xlab=xvar, ylab=yvar,col=col.spp[as.factor(data$species)])
+legend("bottomright",legend=labels.spp,pch=16,col=col.spp,bty="n",cex=.8)
+mod <- lm(LL_bd_mean~LMA_mean,data=data)
+summary(mod)
+```
+
+#Same plots as above, but omitting HATE, which has much higher LMA than any other species due to its round "leaves"
+Using leaf deaths gives the poorest fit...
+```{r, echo=FALSE,results='hide', message=FALSE}
+yvar <- "LMA_mean"
+xvar <- "LL_death_mean"
+data <- filter(SummarySppAge, species!="HATE")
+
+plot_yvar_vs_xvar(data, yvar, xvar,
+                  xlab=xvar, ylab=yvar,col=col.spp[as.factor(data$species)])
+legend("bottomright",legend=labels.spp.noHATE,pch=16,col=col.spp.noHATE,bty="n",cex=.8)
+mod <- lm(LL_death_mean~LMA_mean+species,data=data)
+summary(mod)
+anova(mod)
+
+yvar <- "LMA_mean"
+xvar <- "LL_birth_mean"
+data <- filter(SummarySppAge, species!="HATE")
+
+plot_yvar_vs_xvar(data, yvar, xvar,
+                  xlab=xvar, ylab=yvar,col=col.spp[as.factor(data$species)])
+legend("bottomright",legend=labels.spp.noHATE,pch=16,col=col.spp.noHATE,bty="n",cex=.8)
+mod <- lm(LL_birth_mean~LMA_mean+species,data=data)
+summary(mod)
+anova(mod)
+
+yvar <- "LMA_mean"
+xvar <- "LL_bd_mean"
+data <- filter(SummarySppAge, species!="HATE")
+
+plot_yvar_vs_xvar(data, yvar, xvar,
+                  xlab=xvar, ylab=yvar,col=col.spp[as.factor(data$species)])
+legend("bottomright",legend=labels.spp.noHATE,pch=16,col=col.spp.noHATE,bty="n",cex=.8)
+mod <- lm(LL_bd_mean~LMA_mean+species,data=data)
+summary(mod)
+anova(mod)
+
+yvar <- "LMA_mean"
+xvar <- "LL_death_mean"
+data <- filter(SummarySpp)
+
+plot_yvar_vs_xvar(data, yvar, xvar,
+                  xlab=xvar, ylab=yvar)
+text(LMA_mean ~LL_death_mean, data=data, labels=SummarySpp$species, pos=1, offset=-1.1, cex=0.9,col="blue")
+mod <- lm(LL_death_mean~LMA_mean,data=subset(data,species!="HATE"))
+summary(mod)
+```
+
+#How does leaf lifespan change with age and size across all species and within each species
+Using leaf deaths for the following plots and removing the youngest individuals
+
+Age is log transformed.
+BAER, HEPU, PUTU show a significant DECREASE in leaf lifespan with increasing age (p<0.05)
+LEES, PEPU shows a marginally significant DECREASE in accessory costs with increasing age (0.05<p<0.10)
+```{r, echo=FALSE,results='hide', message=FALSE}
+yvar <- "LL_death"
+xvar <- "age"
+data <- filter(SummaryInd,LL_death<10&age>2)
+
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(x[[yvar]] ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=3)
+results$b <- round(results$b,digits=3)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, 
+                    main=spp, log="x", xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+```
+
+And using size...
+Size is log transformed.
+BAER, COER, EPMI show a significant DECREASE in leaf lifespan with increasing size (p<0.05)
+PEPU, PHPH show a marginally significant DECREASE in accessory costs with increasing size (0.05<p<0.10)
+
+If leaf lifespan based on leaf births is used instead, there are a number of significant INCREASES in leaf lifespan with increasing size
+```{r, echo=FALSE,results='hide', message=FALSE}
+yvar <- "LL_death"
+xvar <- "FinalWeight"
+data <- filter(SummaryInd,LL_death<8&age>2)
+
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(x[[yvar]] ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=3)
+results$b <- round(results$b,digits=3)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,
+                    main=spp, log="x", xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+```
+
+#Higher growth rates correlated with lower leaf lifespan in a handful of species
+BAER, EPMI, PEPU show declining LL and COER shows marginally significant decline with increasing absolute growth investment.
+
+```{r, echo=FALSE,results='hide', message=FALSE}
+yvar <- "LL_death"
+xvar <- "GrowthInv"
+data <- filter(SummaryInd,LL_death<8&age>2)
+
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(x[[yvar]] ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=3)
+results$b <- round(results$b,digits=3)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,
+                    main=spp, log="x", xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+```
+
+#Putting age and speices together in a model shows, not surprisingly, that both age and species contribute to the variation and that species matters much more.
+```{r, echo=FALSE,results='hide', message=FALSE}
+plot(LL_death ~ age, data=SummaryInd, cex.axis=.8, las=1, xlim=c(1,35), ylim=c(.95,10), log="xy", pch=16,col=col.spp[as.factor(species)])
+legend(14,8,legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+mod <- lm(LL_death~age*species, data=SummaryInd)
+summary(mod)
+anova(mod)
+```
+
+#Plotting leaf lifespan against the number of leaves on a branch shows that for the babies, "LL_birth" is negatively correlated with the number of leaves - i.e. the shoots grow a lot during the year and the more they grow the lower the LL, because there are so few leaves to begin with. Indicates that for "LL_birth", but not "LL_death", the youngest site should be omitted
+
+However for LL_death most species show a positive correlation between number of leaves on the leader and leaf lifespan. For some species this is driven by a few individuals with high LL_death values, but 6 species still significant when LL > 6 removed (and 4 more species near-significant).
+
+This trend worries me - is leaf count very variable across years?
+
+```{r, echo=FALSE,results='hide', message=FALSE}
+plot(LL_death ~ lvs_end_total, data=subset(SummaryInd), log="xy",col=col.spp[as.factor(species)],pch=16)
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+plot(LL_birth ~ lvs_end_total, SummaryInd, log="xy",col=col.spp[as.factor(species)],pch=16)
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+plot(LL_death ~ lvs_end_total, SummaryInd, log="xy",col=col.age[as.factor(age)],pch=16)
+legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
+
+plot(LL_birth ~ lvs_end_total, data=subset(SummaryInd), log="xy",col=col.age[as.factor(age)],pch=16)
+legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
+
+mod <- lm(LL_death ~ lvs_end_total*species*age, SummaryInd)
+summary(mod)
+anova(mod)
+step(mod)
+
+mod2 <- lm(formula = LL_death ~ lvs_end_total + species + age + lvs_end_total:species + 
+    species:age, data = SummaryInd)
+summary(mod2)
+anova(mod2)
+
+yvar <- "LL_death"
+xvar <- "lvs_end_total"
+data <- filter(SummaryInd,LL_death<6)
+
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(x[[yvar]] ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=3)
+results$b <- round(results$b,digits=3)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,
+                    main=spp, log="x", xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+```
+
+#Plotting LMA vs. age
+older plants have marginally higher LMA, but the effect mostly disappears when the youngest plants are excluded
+there is enormous variation in LMA across species
+
+```{r, echo=FALSE,results='hide', message=FALSE}
+mod <- lm(LMA_mean~species*age, SummarySppAge)
+summary(mod)
+anova(mod)
+
+mod <- lm(LMA_mean~species*age, data=subset(SummarySppAge,age>2))
+summary(mod)
+anova(mod)
+
+plot(LMA_mean ~age, SummarySppAge, log="xy", col=col.spp[as.factor(species)], pch=16)
+#text(LMA_mean~age, data=subset(SummarySppAge,age==5), labels=SummarySpp$species, pos=4, offset=.5, cex=0.7,col="blue")
+legend(12,.04,col=col.spp, pch=16,legend=labels.spp,cex=.8,bty="n")
+```
+
+
+#Plotting LMA vs. weight
+There is a stronger trend with respect to weight, even after the effect of species is taken into account
+
+The interactions terms weren't significant and were removed from the model
+```{r, echo=FALSE,results='hide', message=FALSE}
+mod <- lm(LMA_mean~species+log(FinalWeight_mean), SummarySppAge)
+summary(mod)
+anova(mod)
+
+mod <- lm(LMA_mean~species+log(FinalWeight_mean), data=subset(SummarySppAge,age>2))
+summary(mod)
+anova(mod)
+
+plot(LMA_mean ~FinalWeight_mean, SummarySppAge, log="xy", col=col.spp[as.factor(species)], pch=16)
+legend("topleft",col=col.spp, pch=16,legend=labels.spp,cex=.8,bty="n")
+
+plot(LMA_mean ~FinalWeight_mean, data=subset(SummarySppAge), log="xy", col=col.age[as.factor(age)], pch=16, cex=1)
+legend("topleft",col=col.age, pch=16,legend=labels.age,cex=.8,bty="n")
+
+```
+
+
+
+```{r, echo=FALSE,results='hide', message=FALSE}
+
+
+```
