@@ -107,9 +107,9 @@ accessory$PerAcc[which(is.nan(accessory$PerAcc))] <- NA
 
 
 #adding investment and accessory costs data to leafLifespan dataframe to create a dataframe with all individual level data
-SummaryInd <- merge(leafLifespan, select(investment, -species, -age), by="individual")
-SummaryInd <- merge(SummaryInd, select(accessory, -species, -age), by="individual")
-SummaryInd <- merge(SummaryInd, select(harvest, -species, -age), by="individual")
+SummaryInd <- merge(investment, select(leafLifespan, -species, -age), by="individual",all.x=TRUE)
+SummaryInd <- merge(SummaryInd, select(accessory, -species, -age), by="individual",all.x=TRUE)
+SummaryInd <- merge(SummaryInd, select(harvest, -species, -age), by="individual",all.x=TRUE)
 
 #adding variables to look at change across years, RGR
 SummaryInd$change_shoot_diam <- SummaryInd$d_end - SummaryInd$d_start
@@ -187,10 +187,16 @@ wood_summary <- wood %>%
 names(wood_summary)<-c("species","WD_mean","WD_se","WD_length")
 
 #leaf lifespan summary by species
-LL_spp <- leafLifespan %>%
-  filter(age>2) %>%
+LL_spp1 <- leafLifespan %>%
+  filter(age>2 & LL_death!="NA"&LL_death<10) %>%
   group_by(species) %>%
-  summarise_each(funs(mean, se, length), LL_bd, LL_death,LL_birth)
+  summarise_each(funs(mean, se, length), LL_death)
+names(LL_spp1)<-c("species","LL_death_mean","LL_death_se","LL_death_length")
+
+LL_spp2 <- leafLifespan %>%
+  filter(age>2 & LL_birth<10) %>%
+  group_by(species) %>%
+  summarise_each(funs(mean, se, length), LL_birth, LL_bd)
 
 #LMA summary by species
 LMA_spp <- LMA %>%
@@ -205,10 +211,10 @@ maxH_spp <- harvest %>%
   summarise_each(funs(max), height)
 names(maxH_spp)<-c("species", "maxH_spp")
 
-SummaryInd <- merge(SummaryInd,wood_summary, by=c("species"))
-SummaryInd <- merge(SummaryInd,LMA_summary, by=c("species","age"))
-SummaryInd <- merge(SummaryInd,maxH_spp, by=c("species"))
-SummaryInd <- merge(SummaryInd,seedsize, by=c("species"))
+SummaryInd <- merge(SummaryInd,wood_summary, by=c("species"),all.x=TRUE)
+SummaryInd <- merge(SummaryInd,LMA_summary, by=c("species","age"),all.x=TRUE)
+SummaryInd <- merge(SummaryInd,maxH_spp, by=c("species"),all.x=TRUE)
+SummaryInd <- merge(SummaryInd,seedsize, by=c("species"),all.x=TRUE)
 
 SummaryInd$leafArea <- SummaryInd$total_leaf_weight * SummaryInd$LMA_mean
 
@@ -220,14 +226,15 @@ SummarySppAge <- merge(SummarySppAge, maxH_spp, by=c("species"))
 SummarySppAge <- merge(SummarySppAge, maxH, by=c("species","age"))
 SummarySppAge <- merge(SummarySppAge, investment_summary, by=c("species","age"))
 SummarySppAge <- merge(SummarySppAge, accessory_summary, by=c("species","age"))
-SummarySppAge <- merge(SummarySppAge, accessory_summary2, by=c("species","age"))
+SummarySppAge <- merge(SummarySppAge, accessory_summary2, by=c("species","age"),all=TRUE)
 SummarySppAge <- merge(SummarySppAge, harvest_summary, by=c("species","age"))
 
 #merge various data summaries into SummarySpp dataframe
-SummarySpp <- merge(LL_spp, LMA_spp, by=c("species"))
+SummarySpp <- merge(LL_spp1, LL_spp2, by=c("species"))
+SummarySpp <- merge(SummarySpp, LMA_spp, by=c("species"))
 SummarySpp <- merge(SummarySpp, wood_summary, by=c("species"))
 SummarySpp <- merge(SummarySpp, seedsize, by=c("species"))
-SummarySpp <- merge(SummarySpp, select(maxH, -age), by=c("species"))
+SummarySpp <- merge(SummarySpp, maxH_spp, by=c("species"))
 SummarySpp <- merge(SummarySpp, accessory_spp, by=c("species"))
 
 
@@ -243,3 +250,6 @@ labels.age <- c("1.4","2.4","5","7","9","32")
 names(labels.age) <- c("1.4","2.4","5","7","9","32")
 labels.age2 <- c("2.4","5","7","9","32")
 col.age2 <-c("pink","green","orange","blue","dark green")
+labels.spp.noHATE <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris micraphylla", "Grevillea buxifolia","Grevillea speciosa","Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile puchella", "Phyllota phyllicoides", "Pimelea linifolia", "Pultanaea tuberculata")
+names(labels.spp.noHATE) <- c("BAER","BOLE","COER","EPMI","GRBU","GRSP","HEPU","LEES","PELA","PEPU","PHPH","PILI","PUTU")
+col.spp.noHATE <- c("red", "dark green", "blue", "purple", "orange", "light green","turquoise","grey", "black","light blue","brown","yellow","salmon")
