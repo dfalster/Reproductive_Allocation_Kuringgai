@@ -36,13 +36,15 @@ summarise_all_fits <- function(x) {
     bind_rows
   data.frame(species=names(x), tmp)
 }
+
+
 ```
 
 
 #How do accessory costs shift with seed size?
 Larger-seeded species have higher accessory costs. 
 Also shown in other studies and suggested as a mechanism for why angiosperms were able to have such small seeds (relative to gymnosperms, with no decrease in proportional accessory costs with decreasing size)
-```{r, echo=FALSE,results='hide', message=FALSE}
+```{r, echo=FALSE,message=FALSE}
 yvar <- "PerAcc_mean"
 xvar <- "seed_size"
 data <- SummarySpp
@@ -56,20 +58,20 @@ anova(mod)
 
 #Do species differ in the proportional energy allocated to propagules (vs. accessory tissues)
 COER, EPMI, HEPU, LEES, PILI invest the most energy in propagules
-```{r, echo=FALSE,results='hide', message=FALSE}
+```{r, echo=FALSE, message=FALSE}
 yvar <- "PerPropagule"
 xvar <- "species"
 data <- filter(SummaryInd,Total>0)
 
-
-plot_yvar_vs_xvar(data, yvar, xvar)
+plot_yvar_vs_xvar(data, yvar, xvar,
+                 xlab=xvar, ylab=yvar)
 mod <- lm(asin(sqrt(PerPropagule)) ~ species, data)
 summary(mod)
 ```
 
 #Do species differ in the proportional energy allocated to aborted pre-pollination tissues
 BOLE, EPMI, GRSP, HATE invest the most energy in aborted pre-pollination tissues
-```{r, echo=FALSE,results='hide', message=FALSE}
+```{r, echo=FALSE, message=FALSE}
 yvar <- "PerPrePol_A"
 xvar <- "species"
 data <- filter(SummaryInd,Total>0 & age>2)
@@ -87,7 +89,7 @@ PerAcc is arcsine transformed, size is log transformed
 COER, HATE, and PILI show a significant decrease in accessory costs with increasing size (p<0.05)
 GRSP shows a marginally significant decrease in accessory costs with increasing size (0.05<p<0.10)
 PEPU shows a marginally significant INCREASE in accessory costs with increasing size (0.05<p<0.10)
-```{r, echo=FALSE,results='hide', message=FALSE}
+```{r, echo=FALSE, message=FALSE}
 yvar <- "PerAcc"
 xvar <- "FinalWeight"
 
@@ -117,7 +119,7 @@ PerAcc is arcsine transformed, age is log transformed
 BOLE, COER, GRSP, HATE, HEPU, PELA show a significant decrease in accessory costs with increasing age (p<0.05)
 EPMI, GRBU shows a marginally significant decrease in accessory costs with increasing age (0.05<p<0.10)
 PUTU shows a sig INCREASE in accessory costs with increasing age
-```{r, echo=FALSE,results='hide', message=FALSE}
+```{r, echo=FALSE, message=FALSE}
 yvar <- "PerAcc"
 xvar <- "age"
 
@@ -146,7 +148,7 @@ With respect to RA:
 both RA and PerAcc are arcsine transformed
 BAER, COER, GRBU, GRSP, HATE, LEES, PELA, PEPU show a significant decrease in accessory costs with increasing RA (p<0.05)
 BOLE shows a marginally significant decrease in accessory costs with increasing RA (p ~ 0.10)
-```{r, echo=FALSE,results='hide', message=FALSE}
+```{r, echo=FALSE, message=FALSE}
 yvar <- "PerAcc"
 xvar <- "RA"
 
@@ -178,7 +180,7 @@ First looking at size:
 PerPrePol_A is arcsine transformed, size is log transformed
 GRSP, HATE, HEPU show a significant decrease in aborted buds with increasing size (p<0.05)
 PUTU shows a marginally significant decrease in accessory costs with increasing RA (p ~ 0.10)
-```{r, echo=FALSE,results='hide', message=FALSE}
+```{r, echo=FALSE, message=FALSE}
 yvar <- "PerPrePol_A"
 xvar <- "FinalWeight"
 
@@ -207,7 +209,7 @@ With respect to age:
 PerPrePol_A is arcsine transformed, age is log transformed
 BAER, BOLE, COER, EPMI, LEES, PHPH, PILI show a significant decrease in aborted buds with increasing age (p<0.05)
 GRSP, HATE show a marginally significant decrease in aborted buds with increasing age (0.05<p<0.10)
-```{r, echo=FALSE,results='hide', message=FALSE}
+```{r, echo=FALSE, message=FALSE}
 yvar <- "PerPrePol_A"
 xvar <- "age"
 
@@ -235,7 +237,7 @@ for(spp in names(data)) {
 With respect to RA:
 both RA and PerPrePol_A are arcsine transformed
 BAER, BOLE, COER, GRSP, HATE, LEES, PELA, PEPU show a significant decrease in aborted buds with increasing RA (p<0.05)
-```{r, echo=FALSE,results='hide', message=FALSE}
+```{r, echo=FALSE, message=FALSE}
 yvar <- "PerPrePol_A"
 xvar <- "RA"
 
@@ -270,7 +272,7 @@ PerPrePol_All is arcsine transformed, size is log transformed
 GRSP, HATE show a significant decrease in total pre-pollination costs with increasing size (p<0.05)
 HEPU shows a marginally significant decrease in total pre-pollination costs with increasing size (0.05<p<0.10)
 
-```{r, echo=FALSE,results='hide', message=FALSE}
+```{r, echo=FALSE, message=FALSE}
 yvar <- "PerPrePol_All"
 xvar <- "FinalWeight"
 
@@ -300,7 +302,7 @@ PerPrePol_All is arcsine transformed, age is log transformed
 BAER, BOLE, COER, HEPU, LEES, PILI show a significant decrease in total pre-pollination costs with increasing age (p<0.05)
 EPMI, GRBU, GRSP, HATE shows a marginally significant decrease in total pre-pollination costs with increasing age (0.05<p<0.10)
 PUTU shows a sig INCREASE in total pre-pollination  costs with increasing age
-```{r, echo=FALSE,results='hide', message=FALSE}
+```{r, echo=FALSE, message=FALSE}
 yvar <- "PerPrePol_All"
 xvar <- "age"
 
@@ -329,7 +331,7 @@ With respect to RA:
 both RA and PerPrePol_All are arcsine transformed
 BAER, BOLE, COER, GRSP, HATE, HEPU, LEES, PEPU show a significant decrease in total pre-pollination costs with increasing RA (p<0.05)
 PELA shows a marginally significant decrease in total pre-pollination costs with increasing RA (0.05<p<0.10)
-```{r, echo=FALSE,results='hide', message=FALSE}
+```{r, echo=FALSE, message=FALSE}
 yvar <- "PerPrePol_All"
 xvar <- "RA"
 
@@ -358,7 +360,7 @@ With respect to Reproductive Investment:
 PerPrePol_All is arcsine transformed, ReproInv is log transformed
 COER, GRBU, GRSP, HATE, PEPU, PHPH, PILI show a significant decrease in total pre-pollination costs with increasing reproductive investment (p<0.05)
 LEES shows a marginally significant decrease in total pre-pollination costs with increasing reproductive investment (0.05<p<0.10)
-```{r, echo=FALSE,results='hide', message=FALSE}
+```{r, echo=FALSE, message=FALSE}
 yvar <- "PerPrePol_All"
 xvar <- "ReproInv"
 
@@ -386,7 +388,7 @@ for(spp in names(data)) {
 
 #For each species, look at pattern of investment in different tissues across ages
 Most obvious pattern is that different species invest more or less in different tissue types - across all species this is bigger pattern than shifts across age
-```{r, echo=FALSE,results='hide', message=FALSE}
+```{r, echo=FALSE, message=FALSE}
 plot_Acc_by_Spp <- function(spp) {
 data2 <- filter(SummarySppAge, species==spp)
 plot(PerPropagule_mean ~ age, data=data2, xlab="age", ylab="proportion tissue", cex.axis=.8, las=1,
@@ -405,7 +407,7 @@ for(n in names(labels.spp)) {
 
 #Using models that look at all the various factors at once - but need to include species in these models and probably use some sort of a MANOVA
 also issues because significance of various variables changes enormously with transformations
-```{r, echo=FALSE,results='hide', message=FALSE}
+```{r, echo=FALSE, message=FALSE}
 mod <- lm(asin(sqrt(RA))~asin(sqrt(PerPropagule))+asin(sqrt(PerPrePol_A))+ asin(sqrt(PerPrePol_S))+ asin(sqrt(PerPostPol_A))+ asin(sqrt(PerPackDisp)) + species,data=subset(SummaryInd,Total>0))
 
 mod <- lm(asin(sqrt(RA))~asin(sqrt(PerPropagule))+asin(sqrt(PerPrePol_A))+ asin(sqrt(PerPrePol_S))+ asin(sqrt(PerPostPol_A))+ asin(sqrt(PerPackDisp)) +asin(sqrt(PerPropagule))*species+asin(sqrt(PerPrePol_A))*species+ asin(sqrt(PerPrePol_S))*species+ asin(sqrt(PerPostPol_A))*species+ asin(sqrt(PerPackDisp))*species+ species,data=subset(SummaryInd,Total>0))

@@ -1,0 +1,495 @@
+```{r, echo=FALSE,results='hide', message=FALSE}
+library(remake)
+create_bindings()
+
+source("scripts/summary_dataframes.R")
+```
+#RV curves and RA schedules, general patterns
+
+
+
+
+#Generic functions for most plotting below
+```{r, echo=FALSE, message=FALSE}
+plot_yvar_vs_xvar <- function(data, yvar = "y", xvar = "x", ...) {
+  Y <- data[[yvar]]
+  X <- data[[xvar]]
+  plot(Y ~ X, data=data,  cex.axis=.8, las=1, pch=16, ...)
+}
+
+summarise_fit <- function(x) {
+  data.frame(
+    select(glance(x), r.squared, p.value),
+    n= length(resid(x)),
+    a = coef(x)[1],
+    b = coef(x)[2]
+  )
+}
+
+summarise_all_fits <- function(x) {
+  tmp <- lapply(x, summarise_fit) %>%
+    bind_rows
+  data.frame(species=names(x), tmp)
+}
+```
+
+
+#RV curves
+```{r, echo=FALSE,message=FALSE}
+plot(ReproInv~FinalWeight, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
+legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+plot(ReproInv~FinalWeight, SummaryInd, log="xy", col=col.age[as.factor(age)],pch=16)
+legend("bottomright",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
+
+plot((1+ReproInv_mean)~FinalWeight_mean,SummarySppAge,log="xy", col=col.spp[as.factor(species)],pch=16)
+legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+yvar <- "ReproInv"
+xvar <- "FinalWeight"
+
+data <- SummaryInd
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]+1) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, 
+                    main=spp, log="xy", xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+```
+
+#RV curves (by age)
+```{r, echo=FALSE,message=FALSE}
+plot(ReproInv~age, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
+legend(15,5000,legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+plot((1+ReproInv_mean)~age,SummarySppAge,log="xy", col=col.spp[as.factor(species)],pch=16)
+legend(15,5000,legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+yvar <- "ReproInv"
+xvar <- "age"
+
+data <- SummaryInd
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]+1) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, 
+                    main=spp, log="xy", xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+```
+
+
+#RA schedules (by age)
+```{r, echo=FALSE,message=FALSE}
+plot(RA~age, SummaryInd, log="x", col=col.spp[as.factor(species)],pch=16)
+legend(15,.9,legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+plot(RA_mean~age,SummarySppAge,log="x", col=col.spp[as.factor(species)],pch=16)
+legend(15,.5,legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+yvar <- "RA"
+xvar <- "age"
+
+data <- SummaryInd
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm((x[[yvar]]) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, 
+                    main=spp, log="x", xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+```
+
+
+#RA schedules (by size)
+```{r, echo=FALSE,message=FALSE}
+plot(RA~FinalWeight, SummaryInd, log="x", col=col.spp[as.factor(species)],pch=16)
+legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+plot(RA_mean~FinalWeight_mean,SummarySppAge,log="x", col=col.spp[as.factor(species)],pch=16)
+legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+yvar <- "RA"
+xvar <- "FinalWeight"
+
+data <- SummaryInd
+data <- split(data, data$species)
+
+lmfits <- lapply(data, function(x) lm((x[[yvar]]) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, 
+                    main=spp, log="x", xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+```
+
+
+#Reproductive Investment by Growth Investment
+```{r, echo=FALSE,message=FALSE}
+plot((1+ReproInv)~GrowthInv, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
+legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+plot((1+ReproInv)~GrowthInv, SummaryInd, log="xy", col=col.age[as.factor(age)],pch=16)
+legend("bottomright",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
+
+plot((1+ReproInv_mean)~GrowthInv_mean,SummarySppAge,log="xy", col=col.spp[as.factor(species)],pch=16)
+legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+yvar <- "ReproInv"
+xvar <- "GrowthInv"
+
+data <- SummaryInd
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]+1) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, 
+                    main=spp, log="xy", xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+```
+
+#RA by Growth Investment
+```{r, echo=FALSE,message=FALSE}
+plot(RA~GrowthInv, SummaryInd, log="x", col=col.spp[as.factor(species)],pch=16)
+legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+plot(RA~GrowthInv, SummaryInd, log="x", col=col.age[as.factor(age)],pch=16)
+legend("bottomright",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
+
+plot(RA_mean~GrowthInv_mean,SummarySppAge,log="x", col=col.spp[as.factor(species)],pch=16)
+legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+yvar <- "RA"
+xvar <- "GrowthInv"
+
+data <- subset(SummaryInd,RA>0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm((x[[yvar]]) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, 
+                    main=spp, log="x", xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+```
+
+#Reproductive Investment by scaled height 
+For these calculations, height is scaled relative to max height. This should be a way to determine RSOM - RSOM would be the PropH at which Reproductive Investment begins.
+
+```{r, echo=FALSE, message=FALSE}
+plot((1+ReproInv~PropH), SummaryInd, log="y", col=col.spp[as.factor(species)],pch=16)
+legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+plot((1+ReproInv)~PropH, SummaryInd, log="y", col=col.age[as.factor(age)],pch=16)
+legend("bottomright",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
+
+yvar <- "PropH"
+xvar <- "ReproInv"
+
+data <- SummaryInd
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm((x[[yvar]]) ~  log(x[[xvar]]+1)))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, 
+                    main=spp, log="x", xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+```
+
+
+```{r, echo=FALSE, message=FALSE}
+plot((RA~PropH), SummaryInd, col=col.spp[as.factor(species)],pch=16)
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+plot(RA~PropH, SummaryInd, col=col.age[as.factor(age)],pch=16)
+legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
+
+yvar <- "RA"
+xvar <- "PropH"
+
+data <- SummaryInd
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm((x[[yvar]]) ~  (x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, 
+                    main=spp, xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+```
+
+
+#Growth Investment versus proportion max H
+This turns out to be one of the most interesting sets of graphs
+For the canopy species, PELA, HATE, PEPU, BAER, investment in growth plateaus (i.e. growth relative to size decreases) at ~40% maxH
+For the shorter and shorter-lived species there is much less of a relationship, or a complete lack of relationship (i.e. BOLE, PHPH)
+Quite interesting, there is a distinctly negative relationship for GRBU
+For many of the species with a good relationship, it seems that there are two breakpoints in the curve - wondering what these mean with respect to reproductive onset and RA
+
+```{r, echo=FALSE, message=FALSE}
+plot((GrowthInv~PropH), SummaryInd, log="y", col=col.spp[as.factor(species)],pch=16)
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+plot(GrowthInv~PropH, SummaryInd, log="y", col=col.age[as.factor(age)],pch=16)
+legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
+
+yvar <- "GrowthInv"
+xvar <- "PropH"
+
+data <- SummaryInd
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, log="y",
+                    main=spp, xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+```
+
+These plots show very clearly that for all species RGR suddenly dips when RA becomes non-zero. Plotting against "FinalWeight" or "GrowthInvestment" is much less clear - in other words, an individual's height is the best way to sort them into plants investing more in growth vs reproduction. There are of course some non-reproductive plants with "PropH" above the obvious cut-off, but these are almost certainly "reproductively mature" plants not reproducing in a given year.
+
+The canopy species have, not suprisingly, a very obvious maxH, with Growth Investment or RGR tapering markedly at the maxH is approached. In these species growth investment is poorly correlated with RA, but well correlated with height.
+In some of the mid-height species (GRSP, BOLE, GRBU), growth investment is very poorly correlated with height, but well correlated with RA - in other words, increased RA = less growth.
+Some species are correated with neither.
+
+Now my current analyses still lack the ability to tease apart the most obvious pattern - because I don't actually want to show that growth and height are correlated, so much as that the asymptoting of growth is correlated with height - i.e. the change in slope of the relationship.
+
+```{r, echo=FALSE, message=FALSE}
+yvar <- "GrowthInv"
+xvar <- "RA"
+x2var <- "PropH"
+
+data <- SummaryInd
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (x[[xvar]])+(x[[x2var]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, log="y",
+                    main=spp, xlab=xvar, ylab=yvar)
+  abline(lmfits[[spp]])
+}
+```
+
+
+mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="BOLE"))
+summary(mod)
+anova(mod)
+
+mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="GRBU"))
+summary(mod)
+anova(mod)
+
+mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="GRSP"))
+summary(mod)
+anova(mod)
+
+mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="PELA"))
+summary(mod)
+anova(mod)
+
+mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="HATE"))
+summary(mod)
+anova(mod)
+
+mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="BAER"))
+summary(mod)
+anova(mod)
+
+mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="PEPU"))
+summary(mod)
+anova(mod)
+
+mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="EPMI"))
+summary(mod)
+anova(mod)
+
+mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="LEES"))
+summary(mod)
+anova(mod)
+
+mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="PHPH"))
+summary(mod)
+anova(mod)
+
+mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="PUTU"))
+summary(mod)
+anova(mod)
+
+mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="HEPU"))
+summary(mod)
+anova(mod)
+
+mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="PILI"))
+summary(mod)
+anova(mod)
+
+mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="COER"))
+summary(mod)
+anova(mod)
+```{r, echo=FALSE, message=FALSE}
+plot((RGR~PropH), SummaryInd, col=col.spp[as.factor(species)],pch=16)
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+yvar <- "RGR"
+xvar <- "PropH"
+
+data <- SummaryInd
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm((x[[yvar]]) ~  (x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,
+                    main=spp, xlab=xvar, ylab=yvar)
+  abline(lmfits[[spp]])
+}
+```
+
+#Plotting RGR and RA vs. proportion maxH and simply RA vs RGR
+
+
+```{r, echo=FALSE, message=FALSE}
+plot(RGR~PropH,data=subset(SummaryInd, species=="BAER"),pch=16, col="black")
+points((5*RA)~PropH,data=subset(SummaryInd, species=="BAER"),pch=16, col="red")
+
+plot(RGR~PropH,data=subset(SummaryInd, species=="HATE"),pch=16, col="black")
+points((10*RA)~PropH,data=subset(SummaryInd, species=="HATE"),pch=16, col="red")
+
+plot(RGR~PropH,data=subset(SummaryInd, species=="EPMI"),pch=16, col="black")
+points((5*RA)~PropH,data=subset(SummaryInd, species=="EPMI"),pch=16, col="red")
+
+plot(RGR~PropH,data=subset(SummaryInd, species=="PEPU"),pch=16, col="black")
+points((3*RA)~PropH,data=subset(SummaryInd, species=="PEPU"),pch=16, col="red")
+
+plot(RGR~PropH,data=subset(SummaryInd, species=="BOLE"),pch=16, col="black")
+points((3*RA)~PropH,data=subset(SummaryInd, species=="BOLE"),pch=16, col="red")
+
+plot((1/RGR)~(RA),SummaryInd,log="y",col=col.spp[as.factor(species)],pch=16)
+plot((RGR)~(RA),data=subset(SummaryInd,species=="BOLE"),log="y",col=col.spp[as.factor(species)],pch=16)
+mod <- lm(RA~log(RGR),data=subset(SummaryInd,species=="BOLE"))
+summary(mod)
+
+yvar <- "GrowthInv"
+xvar <- "RA"
+
+data <- SummaryInd
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, log="y",
+                    main=spp, xlab=xvar, ylab=yvar)
+  abline(lmfits[[spp]])
+}

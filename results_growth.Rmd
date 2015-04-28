@@ -1,0 +1,60 @@
+```{r, echo=FALSE,results='hide', message=FALSE}
+library(remake)
+create_bindings()
+
+source("scripts/summary_dataframes.R")
+```
+#Growth data, general patterns
+
+
+
+
+#Generic functions for most plotting below
+```{r, echo=FALSE, message=FALSE}
+plot_yvar_vs_xvar <- function(data, yvar = "y", xvar = "x", ...) {
+  Y <- data[[yvar]]
+  X <- data[[xvar]]
+  plot(Y ~ X, data=data,  cex.axis=.8, las=1, pch=16, ...)
+}
+
+summarise_fit <- function(x) {
+  data.frame(
+    select(glance(x), r.squared, p.value),
+    n= length(resid(x)),
+    a = coef(x)[1],
+    b = coef(x)[2]
+  )
+}
+
+summarise_all_fits <- function(x) {
+  tmp <- lapply(x, summarise_fit) %>%
+    bind_rows
+  data.frame(species=names(x), tmp)
+}
+```
+
+
+
+
+
+
+```{r, echo=FALSE, message=FALSE}
+yvar <- ""
+xvar <- ""
+data <- filter(SummaryInd, 
+
+plot_yvar_vs_xvar(data, yvar, xvar,
+                  xlab=xvar, ylab=yvar)
+
+
+summary(mod)
+anova(mod)
+```
+
+
+
+
+
+```{r, echo=FALSE, message=FALSE}
+
+```

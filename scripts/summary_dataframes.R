@@ -2,7 +2,6 @@
 # load packages and "open" dataframes to use
 LMA <- filter(LMA_raw, species!="" & species!=" ") %>%
   select(species,age,LMA,branch_age)
-
 wood <- filter(woodDensity_raw, use=="use") %>%
   select(species,density)
 
@@ -121,6 +120,7 @@ SummaryInd$RGR <- log(SummaryInd$FinalWeight)-log(SummaryInd$FinalWeight-Summary
 SummaryInd$PrePol_All <- SummaryInd$PrePol_A + SummaryInd$PrePol_S
 SummaryInd$PerPrePol_All <- SummaryInd$PerPrePol_A + SummaryInd$PerPrePol_S
 
+
 #summarizing data by species, age
 
 #leaf lifespan summary by species, age
@@ -154,7 +154,7 @@ accessory_spp <- accessory %>%
 #investment summary by species, age
 investment_summary <- investment %>%
   group_by(species, age) %>%
-  summarise_each(funs(mean, se, length), GrowthInv, FinalWeight, FinalBasalDiamAv, TotalInvestment, RA)
+  summarise_each(funs(mean, se, length), GrowthInv, ReproInv, FinalWeight, FinalBasalDiamAv, TotalInvestment, RA)
 
 #harvest summary by species, age
 harvest_summary <- harvest %>%
@@ -215,6 +215,7 @@ SummaryInd <- merge(SummaryInd,wood_summary, by=c("species"),all.x=TRUE)
 SummaryInd <- merge(SummaryInd,LMA_summary, by=c("species","age"),all.x=TRUE)
 SummaryInd <- merge(SummaryInd,maxH_spp, by=c("species"),all.x=TRUE)
 SummaryInd <- merge(SummaryInd,seedsize, by=c("species"),all.x=TRUE)
+SummaryInd$PropH <- SummaryInd$height / SummaryInd$maxH_spp
 
 SummaryInd$leafArea <- SummaryInd$total_leaf_weight * SummaryInd$LMA_mean
 
@@ -237,6 +238,8 @@ SummarySpp <- merge(SummarySpp, seedsize, by=c("species"))
 SummarySpp <- merge(SummarySpp, maxH_spp, by=c("species"))
 SummarySpp <- merge(SummarySpp, accessory_spp, by=c("species"))
 
+SummaryInd$species <- as.factor(SummaryInd$species)
+SummarySppAge$species <- as.factor(SummarySppAge$species)
 
 #plotting and stats
 #creating lists of information for plotting symbols, colors, labels
