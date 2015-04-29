@@ -1,4 +1,3 @@
-
 ```{r, echo=FALSE,results='hide', message=FALSE}
 library(remake)
 create_bindings()

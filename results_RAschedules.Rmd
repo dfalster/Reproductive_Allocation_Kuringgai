@@ -5,9 +5,9 @@ create_bindings()
 source("scripts/summary_dataframes.R")
 ```
 #RV curves and RA schedules, general patterns
-
-
-
+- RA best plotted against height for many species - much clearer pattern than against weight or age - this seems to support Daniel's suspicion that deadwood shouldn't be included in the "weight" of the plant
+- A number of species show an abrupt decrease in RGR (or tapering of growth investment) at the height where reproduction begins. This is evidence of the growth-reproduction trade-off
+- RV curves are mostly quite pretty, but not necessarily very meaningful
 
 #Generic functions for most plotting below
 ```{r, echo=FALSE, message=FALSE}
@@ -31,10 +31,32 @@ summarise_all_fits <- function(x) {
     bind_rows
   data.frame(species=names(x), tmp)
 }
+
+summarise_fit_2var <- function(x) {
+  data.frame(
+    select(glance(x), r.squared, p.value),
+    n= length(resid(x)),
+    intercept = coef(x)[1],
+    coef_var1 = coef(x)[2],
+    coef_var2 = coef(x)[3],
+    coef_var1var2 = coef(x)[4],
+    SS_var1 = anova(x)[1,2],
+    SS_var2 = anova(x)[2,2],
+    SS_var1var2 =anova(x)[3,2]
+      )
+}
+
+summarise_all_fits_2var <- function(x) {
+  tmp <- lapply(x, summarise_fit_2var) %>%
+    bind_rows
+  data.frame(species=names(x), tmp)
+}
 ```
 
 
 #RV curves
+These are mostly reasonably nice - of course need to fit quadratic curve to these and haven't figured out how to do it correctly
+
 ```{r, echo=FALSE,message=FALSE}
 plot(ReproInv~FinalWeight, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
 legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
@@ -99,6 +121,39 @@ for(spp in names(data)) {
 }
 ```
 
+#RA schedules (vs. propH)
+- these curves are particularly good for a number of species such as EPMI, COER, PELA
+- they also show that for PILI that among individuals that reproduce, the "potential" RA decreases with increasing propH
+
+```{r, echo=FALSE, message=FALSE}
+plot((RA~PropH), SummaryInd, col=col.spp[as.factor(species)],pch=16)
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+plot(RA~PropH, SummaryInd, col=col.age[as.factor(age)],pch=16)
+legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
+
+yvar <- "RA"
+xvar <- "PropH"
+
+data <- SummaryInd
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  (x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,
+                    main=spp, xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+```
 
 #RA schedules (by age)
 ```{r, echo=FALSE,message=FALSE}
@@ -166,6 +221,10 @@ for(spp in names(data)) {
 
 
 #Reproductive Investment by Growth Investment
+Overall, these are not a strong set of results, but HATE shows a very strong relationship that shows reproductive investment (not growth investment) asymptoting
+Interestingly, PHPH, which is generally a complete scatter plot, has one of the strongest correlations between these variables, indicating that indeed most measures of "size" for this multi-stemmed plant aren't very meaningful and it should be analyzed differently.
+
+Note that the analyses are just being done on reproducing individuals at the moment.
 ```{r, echo=FALSE,message=FALSE}
 plot((1+ReproInv)~GrowthInv, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
 legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
@@ -176,10 +235,10 @@ legend("bottomright",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n"
 plot((1+ReproInv_mean)~GrowthInv_mean,SummarySppAge,log="xy", col=col.spp[as.factor(species)],pch=16)
 legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
-yvar <- "ReproInv"
-xvar <- "GrowthInv"
+yvar <- "GrowthInv"
+xvar <- "ReproInv"
 
-data <- SummaryInd
+data <- subset(SummaryInd,RA>0)
 data <- split(data, data$species)
 lmfits <- lapply(data, function(x) lm(log(x[[yvar]]+1) ~  log(x[[xvar]])))
 results <- summarise_all_fits(lmfits)
@@ -200,6 +259,8 @@ for(spp in names(data)) {
 ```
 
 #RA by Growth Investment
+Across all species, high RA = low growth investment. This pattern exists mostly because of shifts in species from high reproducers to high growers - i.e. BOLE in one corner, and BAER & HATE in another.
+For analyses within individual species
 ```{r, echo=FALSE,message=FALSE}
 plot(RA~GrowthInv, SummaryInd, log="x", col=col.spp[as.factor(species)],pch=16)
 legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
@@ -210,12 +271,18 @@ legend("bottomright",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n"
 plot(RA_mean~GrowthInv_mean,SummarySppAge,log="x", col=col.spp[as.factor(species)],pch=16)
 legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
-yvar <- "RA"
-xvar <- "GrowthInv"
+plot(GrowthInv~RA, data=subset(SummaryInd,RA>0), log="y", col=col.spp[as.factor(species)],pch=16)
+legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+mod <- lm(log(GrowthInv)~asin(sqrt(RA)), data=subset(SummaryInd,RA>0))
+summary(mod)
+plot(mod)
+
+yvar <- "GrowthInv"
+xvar <- "RA"
 
 data <- subset(SummaryInd,RA>0)
 data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm((x[[yvar]]) ~  log(x[[xvar]])))
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  asin(sqrt(x[[xvar]]))))
 results <- summarise_all_fits(lmfits)
 
 results$r.squared <- round(results$r.squared,digits=3)
@@ -227,57 +294,71 @@ results
 
 for(spp in names(data)) {
   plot_yvar_vs_xvar(data[[spp]], yvar, xvar, 
-                    main=spp, log="x", xlab=xvar, ylab=yvar)
+                    main=spp, log="xy", xlab=xvar, ylab=yvar)
   
   abline(lmfits[[spp]])
 }
 ```
+
+
+#RA vs RGR - 
+similar to the plots of RA vs Growth Investment, but relationships stronger. For these plots, all but one species (PEPU) have a significantly negative slope
+the results are more of less the same regardless of whether one includes or excluded individuals where RA=0
+```{r, echo=FALSE,message=FALSE}
+plot(RA~RGR, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
+legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+plot(RA~RGR, SummaryInd, log="x", col=col.age[as.factor(age)],pch=16)
+legend("bottomright",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
+
+plot(RA_mean~GrowthInv_mean,SummarySppAge,log="x", col=col.spp[as.factor(species)],pch=16)
+legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+plot(RGR~RA, data=subset(SummaryInd,RA>0), log="xy", col=col.spp[as.factor(species)],pch=16)
+legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+mod <- lm(log(GrowthInv)~asin(sqrt(RA)), data=subset(SummaryInd,RA>0))
+summary(mod)
+plot(mod)
+
+yvar <- "RGR"
+xvar <- "RA"
+
+data <- subset(SummaryInd,RA>0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  asin(sqrt(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, 
+                    main=spp, log="xy", xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+```
+
 
 #Reproductive Investment by scaled height 
 For these calculations, height is scaled relative to max height. This should be a way to determine RSOM - RSOM would be the PropH at which Reproductive Investment begins.
-
-```{r, echo=FALSE, message=FALSE}
-plot((1+ReproInv~PropH), SummaryInd, log="y", col=col.spp[as.factor(species)],pch=16)
-legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-
-plot((1+ReproInv)~PropH, SummaryInd, log="y", col=col.age[as.factor(age)],pch=16)
-legend("bottomright",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
-
-yvar <- "PropH"
-xvar <- "ReproInv"
-
-data <- SummaryInd
-data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm((x[[yvar]]) ~  log(x[[xvar]]+1)))
-results <- summarise_all_fits(lmfits)
-
-results$r.squared <- round(results$r.squared,digits=3)
-results$p.value <- round(results$p.value,digits=3)
-results$a <- round(results$a,digits=2)
-results$b <- round(results$b,digits=2)
-
-results
-
-for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, 
-                    main=spp, log="x", xlab=xvar, ylab=yvar)
-  
-  abline(lmfits[[spp]])
-}
-```
-
+For species such as BOLE which begin reproduction so young, data could be included that have pre-reproductive heights from mid-year censuses of "babies"
 
 ```{r, echo=FALSE, message=FALSE}
 plot((RA~PropH), SummaryInd, col=col.spp[as.factor(species)],pch=16)
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
-plot(RA~PropH, SummaryInd, col=col.age[as.factor(age)],pch=16)
-legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
+plot((RA)~PropH, SummaryInd, col=col.age[as.factor(age)],pch=16)
+legend("bottomright",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
 
 yvar <- "RA"
 xvar <- "PropH"
 
-data <- SummaryInd
+data <- subset(SummaryInd)
 data <- split(data, data$species)
 lmfits <- lapply(data, function(x) lm((x[[yvar]]) ~  (x[[xvar]])))
 results <- summarise_all_fits(lmfits)
@@ -298,48 +379,11 @@ for(spp in names(data)) {
 ```
 
 
-#Growth Investment versus proportion max H
-This turns out to be one of the most interesting sets of graphs
-For the canopy species, PELA, HATE, PEPU, BAER, investment in growth plateaus (i.e. growth relative to size decreases) at ~40% maxH
-For the shorter and shorter-lived species there is much less of a relationship, or a complete lack of relationship (i.e. BOLE, PHPH)
-Quite interesting, there is a distinctly negative relationship for GRBU
-For many of the species with a good relationship, it seems that there are two breakpoints in the curve - wondering what these mean with respect to reproductive onset and RA
+These plots show very clearly that for all species RGR suddenly dips when RA becomes non-zero. Plotting against "FinalWeight" or "GrowthInvestment" is much less clear - in other words, an individual's height is the best way to sort them into plants investing more in growth vs reproduction. There are of course some non-reproductive plants with "PropH" above the obvious cut-off, but these are almost certainly "reproductively mature" plants not reproducing in a given year.  
 
-```{r, echo=FALSE, message=FALSE}
-plot((GrowthInv~PropH), SummaryInd, log="y", col=col.spp[as.factor(species)],pch=16)
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-
-plot(GrowthInv~PropH, SummaryInd, log="y", col=col.age[as.factor(age)],pch=16)
-legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
-
-yvar <- "GrowthInv"
-xvar <- "PropH"
-
-data <- SummaryInd
-data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (x[[xvar]])))
-results <- summarise_all_fits(lmfits)
-
-results$r.squared <- round(results$r.squared,digits=3)
-results$p.value <- round(results$p.value,digits=3)
-results$a <- round(results$a,digits=2)
-results$b <- round(results$b,digits=2)
-
-results
-
-for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, log="y",
-                    main=spp, xlab=xvar, ylab=yvar)
-  
-  abline(lmfits[[spp]])
-}
-```
-
-These plots show very clearly that for all species RGR suddenly dips when RA becomes non-zero. Plotting against "FinalWeight" or "GrowthInvestment" is much less clear - in other words, an individual's height is the best way to sort them into plants investing more in growth vs reproduction. There are of course some non-reproductive plants with "PropH" above the obvious cut-off, but these are almost certainly "reproductively mature" plants not reproducing in a given year.
-
-The canopy species have, not suprisingly, a very obvious maxH, with Growth Investment or RGR tapering markedly at the maxH is approached. In these species growth investment is poorly correlated with RA, but well correlated with height.
+The canopy species have, not suprisingly, a very obvious maxH, with Growth Investment or RGR tapering markedly at the maxH is approached. In these species growth investment is poorly correlated with RA, but well correlated with height.  
 In some of the mid-height species (GRSP, BOLE, GRBU), growth investment is very poorly correlated with height, but well correlated with RA - in other words, increased RA = less growth.
-Some species are correated with neither.
+Some species are correated with neither.  
 
 Now my current analyses still lack the ability to tease apart the most obvious pattern - because I don't actually want to show that growth and height are correlated, so much as that the asymptoting of growth is correlated with height - i.e. the change in slope of the relationship.
 
@@ -350,8 +394,8 @@ x2var <- "PropH"
 
 data <- SummaryInd
 data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (x[[xvar]])+(x[[x2var]])))
-results <- summarise_all_fits(lmfits)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  asin(sqrt(x[[xvar]]))*asin(sqrt(x[[x2var]]))))
+results <- summarise_all_fits_2var(lmfits)
 
 results$r.squared <- round(results$r.squared,digits=3)
 results$p.value <- round(results$p.value,digits=3)
@@ -368,128 +412,4 @@ for(spp in names(data)) {
 ```
 
 
-mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="BOLE"))
-summary(mod)
-anova(mod)
 
-mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="GRBU"))
-summary(mod)
-anova(mod)
-
-mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="GRSP"))
-summary(mod)
-anova(mod)
-
-mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="PELA"))
-summary(mod)
-anova(mod)
-
-mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="HATE"))
-summary(mod)
-anova(mod)
-
-mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="BAER"))
-summary(mod)
-anova(mod)
-
-mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="PEPU"))
-summary(mod)
-anova(mod)
-
-mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="EPMI"))
-summary(mod)
-anova(mod)
-
-mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="LEES"))
-summary(mod)
-anova(mod)
-
-mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="PHPH"))
-summary(mod)
-anova(mod)
-
-mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="PUTU"))
-summary(mod)
-anova(mod)
-
-mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="HEPU"))
-summary(mod)
-anova(mod)
-
-mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="PILI"))
-summary(mod)
-anova(mod)
-
-mod <- lm(GrowthInv~PropH*RA,data=subset(SummaryInd, species=="COER"))
-summary(mod)
-anova(mod)
-```{r, echo=FALSE, message=FALSE}
-plot((RGR~PropH), SummaryInd, col=col.spp[as.factor(species)],pch=16)
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-
-yvar <- "RGR"
-xvar <- "PropH"
-
-data <- SummaryInd
-data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm((x[[yvar]]) ~  (x[[xvar]])))
-results <- summarise_all_fits(lmfits)
-
-results$r.squared <- round(results$r.squared,digits=3)
-results$p.value <- round(results$p.value,digits=3)
-results$a <- round(results$a,digits=2)
-results$b <- round(results$b,digits=2)
-
-results
-
-for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,
-                    main=spp, xlab=xvar, ylab=yvar)
-  abline(lmfits[[spp]])
-}
-```
-
-#Plotting RGR and RA vs. proportion maxH and simply RA vs RGR
-
-
-```{r, echo=FALSE, message=FALSE}
-plot(RGR~PropH,data=subset(SummaryInd, species=="BAER"),pch=16, col="black")
-points((5*RA)~PropH,data=subset(SummaryInd, species=="BAER"),pch=16, col="red")
-
-plot(RGR~PropH,data=subset(SummaryInd, species=="HATE"),pch=16, col="black")
-points((10*RA)~PropH,data=subset(SummaryInd, species=="HATE"),pch=16, col="red")
-
-plot(RGR~PropH,data=subset(SummaryInd, species=="EPMI"),pch=16, col="black")
-points((5*RA)~PropH,data=subset(SummaryInd, species=="EPMI"),pch=16, col="red")
-
-plot(RGR~PropH,data=subset(SummaryInd, species=="PEPU"),pch=16, col="black")
-points((3*RA)~PropH,data=subset(SummaryInd, species=="PEPU"),pch=16, col="red")
-
-plot(RGR~PropH,data=subset(SummaryInd, species=="BOLE"),pch=16, col="black")
-points((3*RA)~PropH,data=subset(SummaryInd, species=="BOLE"),pch=16, col="red")
-
-plot((1/RGR)~(RA),SummaryInd,log="y",col=col.spp[as.factor(species)],pch=16)
-plot((RGR)~(RA),data=subset(SummaryInd,species=="BOLE"),log="y",col=col.spp[as.factor(species)],pch=16)
-mod <- lm(RA~log(RGR),data=subset(SummaryInd,species=="BOLE"))
-summary(mod)
-
-yvar <- "GrowthInv"
-xvar <- "RA"
-
-data <- SummaryInd
-data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (x[[xvar]])))
-results <- summarise_all_fits(lmfits)
-
-results$r.squared <- round(results$r.squared,digits=3)
-results$p.value <- round(results$p.value,digits=3)
-results$a <- round(results$a,digits=2)
-results$b <- round(results$b,digits=2)
-
-results
-
-for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, log="y",
-                    main=spp, xlab=xvar, ylab=yvar)
-  abline(lmfits[[spp]])
-}

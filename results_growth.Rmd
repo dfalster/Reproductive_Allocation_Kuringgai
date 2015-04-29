@@ -5,8 +5,16 @@ create_bindings()
 source("scripts/summary_dataframes.R")
 ```
 #Growth data, general patterns
+- proportion of maxH matters more for some species than others. 
+1. The 4 "canopy" species all tend to have high correlations between "prop maxH" and growth and reproductive investment (both relative and absolute)  
+2. The lower-growing species are more variable, with "prop maxH mattering more for some than others"  
 
+- For almost all species there is a strong negative relationship between RGR and RA - indeed, more reproduction = less growth  
+1. Meanwhile there is the strong positive relationship between growth investment and reproductive investment, because bigger plants grow and reproduce more.  
+2. It is good to have a big enough data set to capture both trends - and to capture them consistently across many species
 
+- Many plants have a clear upturn in RA and corresponding downturn in RGR at a specific prop maxH  
+1. e.g. see EPMI for distinct pattern
 
 
 #Generic functions for most plotting below
@@ -52,9 +60,204 @@ anova(mod)
 ```
 
 
+#Growth Investment versus proportion max H
+This turns out to be one of the most interesting sets of graphs
+For the canopy species, PELA, HATE, PEPU, BAER, investment in growth plateaus (i.e. growth relative to size decreases) at ~40% maxH
+For the shorter and shorter-lived species there is much less of a relationship, or a complete lack of relationship (i.e. BOLE, PHPH)
+Quite interesting, there is a distinctly negative relationship for GRBU
+For many of the species with a good relationship, it seems that there are two breakpoints in the curve - wondering what these mean with respect to reproductive onset and RA
+
+```{r, echo=FALSE, message=FALSE}
+plot((GrowthInv~PropH), SummaryInd, log="y", col=col.spp[as.factor(species)],pch=16)
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+plot(GrowthInv~PropH, SummaryInd, log="y", col=col.age[as.factor(age)],pch=16)
+legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
+
+yvar <- "GrowthInv"
+xvar <- "PropH"
+
+data <- SummaryInd
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, log="y",
+                    main=spp, xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+```
 
 
+
+#A series of models by species showing the relative influence "RA" and "proportion of max H" have on growth investment.
+- These models show that the relative contribution of these two factors differs across species, with the 4 canopy species (PELA, HATE, BAER, PEPU) more influenced by height and other many of the species more influenced by RA.  
+- This reflects in part, the fact that many of the "canopy" species show lots of year-to-year variation in reproductive output   
+- Across the board, most species have quite high R^2 values   
+- Model with RA, PropH, and species has R^2 = 0.8231   
+
+```{r, echo=FALSE, message=FALSE}
+mod <- lm(log(GrowthInv)~asin(sqrt(PropH))*asin(sqrt(RA))*species,data=subset(SummaryInd))
+summary(mod)
+anova(mod)
+plot(mod)
+
+mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="BAER"))
+summary(mod)
+anova(mod)
+plot(mod)
+
+mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="BOLE"))
+summary(mod)
+anova(mod)
+plot(mod)
+
+mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="COER"))
+summary(mod)
+anova(mod)
+plot(mod)
+
+mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="EPMI"))
+summary(mod)
+anova(mod)
+plot(mod)
+
+mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="GRBU"))
+summary(mod)
+anova(mod)
+plot(mod)
+
+mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="GRSP"))
+summary(mod)
+anova(mod)
+plot(mod)
+
+mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="HATE"))
+summary(mod)
+anova(mod)
+plot(mod)
+
+mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="HEPU"))
+summary(mod)
+anova(mod)
+plot(mod)
+
+mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="LEES"))
+summary(mod)
+anova(mod)
+plot(mod)
+
+mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="PELA"))
+summary(mod)
+anova(mod)
+plot(mod)
+
+mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="PEPU"))
+summary(mod)
+anova(mod)
+plot(mod)
+
+mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="PHPH"))
+summary(mod)
+anova(mod)
+plot(mod)
+
+mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="PILI"))
+summary(mod)
+anova(mod)
+plot(mod)
+
+mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="PUTU"))
+summary(mod)
+anova(mod)
+plot(mod)
+```
+
+#Proportion max H by RGR
+Excepting some outliers, RGR declines with increasing height  
+Except in a few species there is little pattern - HEPU, PILI  
+The species with a room correlation are mostly shorter ones that are presumably often broken off 
+These are continued ways to look at the question of how important is height (relative to the species maxH) in understanding its growth and reproduction
+
+```{r, echo=FALSE, message=FALSE}
+plot((RGR~PropH), SummaryInd, col=col.spp[as.factor(species)],pch=16)
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+yvar <- "RGR"
+xvar <- "PropH"
+
+data <- SummaryInd
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm((x[[yvar]]) ~  (x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,
+                    main=spp, xlab=xvar, ylab=yvar)
+  abline(lmfits[[spp]])
+}
+```
+
+
+#Plots of Growth Inv versus weight - showing that slope continues to be 1:1, but intercept decreases with time because more standing biomass
+```{r, echo=FALSE, message=FALSE}
+plot((GrowthInv~FinalWeight), SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
+abline(0,1,lwd=2)
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+plot(GrowthInv~FinalWeight, SummaryInd, log="xy", col=col.age[as.factor(age)],pch=16)
+abline(0,1,lwd=2)
+legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
+```
+
+#Plotting RA vs RGR
+Higher RA = lower RGR, for all species except PEPU  
+1. PEPU an exception because so few individuals reproducing and those that are reproducing have intermediate RGR - neither the young plants nor the older plants just hanging on
+2. PELA doesn't have a relationship either, because so few reproducing individuals. But if the many individuals with RA=0 added back in, strong negative relationship for PELA
 
 ```{r, echo=FALSE, message=FALSE}
 
+plot(RGR~RA,data=subset(SummaryInd,RA>0&RGR>.04),log="y",col=col.spp[as.factor(species)],pch=16)
+mod <-lm(log(RGR)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0&RGR>.04))
+summary(mod)
+plot(mod)
+
+
+yvar <- "RGR"
+xvar <- "RA"
+
+data <- subset(SummaryInd, RA>0&RGR>.04)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  asin(sqrt(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, log="y",
+                    main=spp, xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
 ```
