@@ -17,7 +17,7 @@ source("scripts/summary_dataframes.R")
 1. e.g. see EPMI for distinct pattern
 
 
-#Generic functions for most plotting below
+Generic functions for most plotting below
 ```{r, echo=FALSE, message=FALSE}
 plot_yvar_vs_xvar <- function(data, yvar = "y", xvar = "x", ...) {
   Y <- data[[yvar]]
@@ -41,32 +41,50 @@ summarise_all_fits <- function(x) {
 }
 ```
 
+#Comparing growth between different measures and across age
 
-
-
+###Weight vs. height
+- No surprises here , but need to fit proper lines to the data
+- Plants asymptote in weight as they reach their maximum height. This is true for all species, although some species, like BOLE and GRBU, have a much messier scatter than others  
+- The follow on of course is to look at growth measures vs. height   
+- NOTE: All heights have been scaled 0-1 based on the maximum height of each species across all of the sites. This has no effect on within species analyses, but lets data from all species to be plotted together  
 
 
 ```{r, echo=FALSE, message=FALSE}
-yvar <- ""
-xvar <- ""
-data <- filter(SummaryInd, 
-
-plot_yvar_vs_xvar(data, yvar, xvar,
-                  xlab=xvar, ylab=yvar)
+plot((FinalWeight~PropH), SummaryInd, col=col.spp[as.factor(species)],pch=16,log="y")
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+plot((FinalWeight~StartBasalDiamAv), SummaryInd, col=col.spp[as.factor(species)],pch=16,log="xy")
 
 
-summary(mod)
-anova(mod)
+yvar <- "FinalWeight"
+xvar <- "PropH"
+
+data <- SummaryInd
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="y",
+                    main=spp, xlab=xvar, ylab=yvar)
+  abline(lmfits[[spp]])
+}
 ```
 
-
-#Growth Investment versus proportion max H
-This turns out to be one of the most interesting sets of graphs
-For the canopy species, PELA, HATE, PEPU, BAER, investment in growth plateaus (i.e. growth relative to size decreases) at ~40% maxH
-For the shorter and shorter-lived species there is much less of a relationship, or a complete lack of relationship (i.e. BOLE, PHPH)
-Quite interesting, there is a distinctly negative relationship for GRBU
-For many of the species with a good relationship, it seems that there are two breakpoints in the curve - wondering what these mean with respect to reproductive onset and RA
-
+###Growth Investment versus proportion max H
+- This turns out to be one of the most interesting sets of graphs  
+- For the canopy species, PELA, HATE, PEPU, BAER, investment in growth plateaus (i.e. growth relative to size decreases) at ~40% maxH  
+- For the shorter and shorter-lived species there is much less of a relationship, or a complete lack of relationship (i.e. BOLE, PHPH)  
+- Quite interesting, there is a distinctly negative relationship for GRBU; its absolute growth investment actually declines as it increases in size  
+- For many of the species with a good relationship, it seems that there are two breakpoints in the curve - wondering what these mean with respect to reproductive onset and RA  
+ 
 ```{r, echo=FALSE, message=FALSE}
 plot((GrowthInv~PropH), SummaryInd, log="y", col=col.spp[as.factor(species)],pch=16)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
@@ -97,96 +115,11 @@ for(spp in names(data)) {
 }
 ```
 
-
-
-#A series of models by species showing the relative influence "RA" and "proportion of max H" have on growth investment.
-- These models show that the relative contribution of these two factors differs across species, with the 4 canopy species (PELA, HATE, BAER, PEPU) more influenced by height and other many of the species more influenced by RA.  
-- This reflects in part, the fact that many of the "canopy" species show lots of year-to-year variation in reproductive output   
-- Across the board, most species have quite high R^2 values   
-- Model with RA, PropH, and species has R^2 = 0.8231   
-
-```{r, echo=FALSE, message=FALSE}
-mod <- lm(log(GrowthInv)~asin(sqrt(PropH))*asin(sqrt(RA))*species,data=subset(SummaryInd))
-summary(mod)
-anova(mod)
-plot(mod)
-
-mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="BAER"))
-summary(mod)
-anova(mod)
-plot(mod)
-
-mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="BOLE"))
-summary(mod)
-anova(mod)
-plot(mod)
-
-mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="COER"))
-summary(mod)
-anova(mod)
-plot(mod)
-
-mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="EPMI"))
-summary(mod)
-anova(mod)
-plot(mod)
-
-mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="GRBU"))
-summary(mod)
-anova(mod)
-plot(mod)
-
-mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="GRSP"))
-summary(mod)
-anova(mod)
-plot(mod)
-
-mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="HATE"))
-summary(mod)
-anova(mod)
-plot(mod)
-
-mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="HEPU"))
-summary(mod)
-anova(mod)
-plot(mod)
-
-mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="LEES"))
-summary(mod)
-anova(mod)
-plot(mod)
-
-mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="PELA"))
-summary(mod)
-anova(mod)
-plot(mod)
-
-mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="PEPU"))
-summary(mod)
-anova(mod)
-plot(mod)
-
-mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="PHPH"))
-summary(mod)
-anova(mod)
-plot(mod)
-
-mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="PILI"))
-summary(mod)
-anova(mod)
-plot(mod)
-
-mod <- lm(log(GrowthInv)~PropH*asin(sqrt(RA)),data=subset(SummaryInd, species=="PUTU"))
-summary(mod)
-anova(mod)
-plot(mod)
-```
-
-#Proportion max H by RGR
-Excepting some outliers, RGR declines with increasing height  
-Except in a few species there is little pattern - HEPU, PILI  
-The species with a room correlation are mostly shorter ones that are presumably often broken off 
-These are continued ways to look at the question of how important is height (relative to the species maxH) in understanding its growth and reproduction
+###Proportion max H by RGR
+- Ignoring a few outliers, RGR declines with increasing height is 12 species  
+- Only in HEPU and PILI is there no significant trend  
+- The species with a poorer correlation are mostly shorter ones that are presumably often broken off   
+- These are continued ways to look at the question of how important is height (relative to the species maxH) in understanding its growth and reproduction  
 
 ```{r, echo=FALSE, message=FALSE}
 plot((RGR~PropH), SummaryInd, col=col.spp[as.factor(species)],pch=16)
@@ -214,37 +147,17 @@ for(spp in names(data)) {
 }
 ```
 
-
-#Plots of Growth Inv versus weight - showing that slope continues to be 1:1, but intercept decreases with time because more standing biomass
-```{r, echo=FALSE, message=FALSE}
-plot((GrowthInv~FinalWeight), SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
-abline(0,1,lwd=2)
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-
-plot(GrowthInv~FinalWeight, SummaryInd, log="xy", col=col.age[as.factor(age)],pch=16)
-abline(0,1,lwd=2)
-legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
-```
-
-#Plotting RA vs RGR
-Higher RA = lower RGR, for all species except PEPU  
-1. PEPU an exception because so few individuals reproducing and those that are reproducing have intermediate RGR - neither the young plants nor the older plants just hanging on
-2. PELA doesn't have a relationship either, because so few reproducing individuals. But if the many individuals with RA=0 added back in, strong negative relationship for PELA
+###PropH by age
+- Confirming that species get taller as they get older  
+- Obviously true for most species, but some (i.e. PILI, somewhat BOLE, HEPU) they reach their "maxH" within a few years and then the relationship is mostly flat. These are of course also the species which are shorter lived and have high levels of early reproduction  
 
 ```{r, echo=FALSE, message=FALSE}
+yvar <- "PropH"
+xvar <- "age"
 
-plot(RGR~RA,data=subset(SummaryInd,RA>0&RGR>.04),log="y",col=col.spp[as.factor(species)],pch=16)
-mod <-lm(log(RGR)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0&RGR>.04))
-summary(mod)
-plot(mod)
-
-
-yvar <- "RGR"
-xvar <- "RA"
-
-data <- subset(SummaryInd, RA>0&RGR>.04)
+data <- subset(SummaryInd)
 data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  asin(sqrt(x[[xvar]]))))
+lmfits <- lapply(data, function(x) lm((x[[yvar]]) ~  log(x[[xvar]])))
 results <- summarise_all_fits(lmfits)
 
 results$r.squared <- round(results$r.squared,digits=3)
@@ -255,9 +168,72 @@ results$b <- round(results$b,digits=2)
 results
 
 for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, log="y",
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, log="x",
                     main=spp, xlab=xvar, ylab=yvar)
   
   abline(lmfits[[spp]])
 }
 ```
+
+###Growth Investment versus weight   
+- showing that slope continues to be 1:1, but intercept decreases with time because more standing biomass
+```{r, echo=FALSE, message=FALSE}
+plot((GrowthInv~FinalWeight), SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
+abline(0,1,lwd=2)
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+plot(GrowthInv~FinalWeight, SummaryInd, log="xy", col=col.age[as.factor(age)],pch=16)
+abline(0,1,lwd=2)
+legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
+```
+
+#Comparing growth of whole plant vs. leader
+
+###Correlations between different growth measures
+- Increased cross-sectional area of a leader and the entire plant are fairly correlated and uneffected by age (once not baby)  
+
+TO DO: species should be a random effect for these stats- I want to know the effect of age on the relationship once the effect of species has been accounted for  
+
+```{r, echo=FALSE,message=FALSE}
+plot(change_shoot_area~change_basal_area,SummaryInd, log="xy",col=col.age[as.factor(age)], pch=16, cex=.8,xlab="change in basal stem area",ylab="change in shoot area")
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1,bty="n")
+mod <- lm(change_shoot_area~change_basal_area*age*species,SummaryInd)
+anova(mod)
+```
+
+#Comparing growth rates of species with different trait values
+
+### Species with larger seeds have higher growth rates  
+- The same basic relationship exists across all ages, so combined all data here  
+```{r, echo=FALSE,results='hide', message=FALSE}
+plot(GrowthInv_mean ~ seed_size,data=subset(SummarySppAge,age>.5),log="xy",col=col.age[as.factor(age)],pch=16,cex=1,xlab="seed size (mg)",ylab="growth investment (mg per year)",main="Effect of seed size on growth rates")
+legend("topleft",col=col.age, labels.age, pch=16, cex=1,bty="n")
+text(GrowthInv_mean ~ seed_size, data=subset(SummarySppAge,age==9), labels=species, pos=2, offset=-2.4, cex=0.9,col="blue")
+```
+
+### Species with greater maximum height have higher growth rates
+- For younger plants there is no relationship with *SPECIES* overall maximum H  
+- There is a positive correlation with the maximum height the species reaches at a given age -i.e. fast growing young plants are tall when young.  
+```{r, echo=FALSE,results='hide', message=FALSE}
+plot(GrowthInv_mean ~ maxH_spp,data=subset(SummarySppAge,age<3),log="xy",col=col.age[as.factor(age)],pch=16,cex=1.1,xlab="maximum height (mm)",ylab="growth investment (mg per year)",xlim=c(500,3200),main="Relationship between growth rates on maximum H")
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1,bty="n")
+text(GrowthInv_mean ~ maxH_spp, data=subset(SummarySppAge,age==2.4), labels=species, pos=2, offset=-2.4, cex=0.9,col="blue")
+
+plot(GrowthInv_mean ~ maxH_spp,data=subset(SummarySppAge,age>3),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1.1,xlab="maximum height (mm)",ylab="growth investment (mg per year)",xlim=c(500,3200),main="Relationship between growth rates on maximum H")
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1,bty="n")
+text(GrowthInv_mean ~ maxH_spp, data=subset(SummarySppAge,age==9), labels=species, pos=2, offset=-2.4, cex=0.9,col="blue")
+```
+
+### Species with higher wood density have lower growth rates  
+- Adult plants strongly show this pattern
+- However there is no relationship in younger plants  
+```{r, echo=FALSE,results='hide', message=FALSE}
+plot(GrowthInv_mean ~ WD_mean,data=subset(SummarySppAge,age>3),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1,xlab="wood density",ylab="growth investment (mg per year)",xlim=c(0.57,0.9),main="Relationship between wood density and growth rates")
+text(GrowthInv_mean ~ WD_mean, data=subset(SummarySppAge,age==5), labels=species, pos=2, offset=-2.4, cex=0.9,col="blue")
+legend("bottomleft",col=col.age, labels.age, pch=16, cex=1, bty="n")
+
+plot(GrowthInv_mean ~ WD_mean,data=subset(SummarySppAge,age<3),log="xy",col=col.age[as.factor(age)],pch=16,cex=1,xlab="wood density",ylab="growth investment (mg per year)",xlim=c(0.57,0.9),main="Relationship between wood density and growth rates")
+text(GrowthInv_mean ~ WD_mean, data=subset(SummarySppAge,age==2.4), labels=species, pos=2, offset=-2.4, cex=0.9,col="blue")
+legend("bottomleft",col=col.age, labels.age, pch=16, cex=1, bty="n")
+```
+

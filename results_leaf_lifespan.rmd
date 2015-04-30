@@ -302,11 +302,14 @@ for(spp in names(data)) {
 }
 ```
 
-#Plotting LMA vs. age
-older plants have marginally higher LMA, but the effect mostly disappears when the youngest plants are excluded
-there is enormous variation in LMA across species
+#LMA vs. age
+- older plants have marginally higher LMA, but the effect mostly disappears when the youngest plants are excluded  
+- there is enormous variation in LMA across species  
+- also had plot of just branches from 2nd-last leaf cohort - no real difference, so using mean LMA of up to 3 leaf cohorts
 
 ```{r, echo=FALSE,message=FALSE}
+
+plot(LMA_mean~age, SummarySppAge,log="xy", col=col.spp[as.factor(species)], pch=16)
 mod <- lm(LMA_mean~species*age, SummarySppAge)
 summary(mod)
 anova(mod)
@@ -318,6 +321,12 @@ anova(mod)
 plot(LMA_mean ~age, SummarySppAge, log="xy", col=col.spp[as.factor(species)], pch=16)
 #text(LMA_mean~age, data=subset(SummarySppAge,age==5), labels=SummarySpp$species, pos=4, offset=.5, cex=0.7,col="blue")
 legend(12,.04,col=col.spp, pch=16,legend=labels.spp,cex=.8,bty="n")
+```
+
+
+```{r, echo=FALSE,results='hide', message=FALSE}
+plot(LMA~age,data=subset(LMA,branch_age=="mid"),log="xy", xlab="age",ylab="LMA",col=col.spp[as.factor(species)],pch=16)
+legend("bottomright",col=col.spp, labels.spp, pch=16, cex=1)
 ```
 
 
@@ -343,6 +352,16 @@ legend("topleft",col=col.age, pch=16,legend=labels.age,cex=.8,bty="n")
 ```
 
 
+#PropH vs LL_death
+- Have just plotted overall data, because no relationships across or within species; only GRSP has significant negative relationship and BOLE has significant positive relationship
+```{r, echo=FALSE,message=FALSE}
+plot((LL_death~PropH), data=subset(SummaryInd,LL_death<10), col=col.spp[as.factor(species)],pch=16)
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+
+plot((PropH~log(age)), data=subset(SummaryInd), col=col.spp[as.factor(species)],pch=16)
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+```
 
 ```{r, echo=FALSE,message=FALSE}
 

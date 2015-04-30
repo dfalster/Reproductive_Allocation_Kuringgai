@@ -121,9 +121,14 @@ for(spp in names(data)) {
 }
 ```
 
-#RA schedules (vs. propH)
-- these curves are particularly good for a number of species such as EPMI, COER, PELA
-- they also show that for PILI that among individuals that reproduce, the "potential" RA decreases with increasing propH
+#RA schedules (vs. propH)  
+- these curves are particularly good for a number of species such as EPMI, COER, PELA  
+- they also show that for PILI that among individuals that reproduce, the "potential" RA decreases with increasing propH  
+- when all data points are included, all species except PEPU, PHPH, and PULU show increasing RA with increasing height  
+- when RA =0 is excluded, the following species still have a significant positive correlation: BOLE, COER, EPMI, GRBU, GRSP, HATE. LEES and PELA have a p-value between 0.05-0.10   
+- PEPU has a negative correlation - matches Mark's suggestion that it is "hanging on"  
+
+ NOTE: Again, a linear line is not necessarily the most appropriate 
 
 ```{r, echo=FALSE, message=FALSE}
 plot((RA~PropH), SummaryInd, col=col.spp[as.factor(species)],pch=16)
@@ -135,7 +140,7 @@ legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
 yvar <- "RA"
 xvar <- "PropH"
 
-data <- SummaryInd
+data <- subset(SummaryInd)
 data <- split(data, data$species)
 lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  (x[[xvar]])))
 results <- summarise_all_fits(lmfits)
@@ -188,6 +193,9 @@ for(spp in names(data)) {
 
 
 #RA schedules (by size)
+1. These plots have always been unsatisfying - with few exceptions (PULU, PEPU, LEES) plots against height are stronger. And both PILI and PEPU have very low R^2 by either method  
+2. If Only individuals with RA>0 are included only COER, EPMI, GRBU, HATE and LEES still have a significant positive correlation - for the remaining species correlation only exists because of small, non-reproductive plants having a strong effect on the curve  
+
 ```{r, echo=FALSE,message=FALSE}
 plot(RA~FinalWeight, SummaryInd, log="x", col=col.spp[as.factor(species)],pch=16)
 legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
@@ -198,7 +206,7 @@ legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 yvar <- "RA"
 xvar <- "FinalWeight"
 
-data <- SummaryInd
+data <- subset(SummaryInd)
 data <- split(data, data$species)
 
 lmfits <- lapply(data, function(x) lm((x[[yvar]]) ~  log(x[[xvar]])))
@@ -302,8 +310,12 @@ for(spp in names(data)) {
 
 
 #RA vs RGR - 
-similar to the plots of RA vs Growth Investment, but relationships stronger. For these plots, all but one species (PEPU) have a significantly negative slope
-the results are more of less the same regardless of whether one includes or excluded individuals where RA=0
+1. this is another way to look at the growth-reproduction trade-off 
+2. similar to the plots of RA vs Growth Investment, but relationships stronger. For these plots, all but one species (PEPU) have a significantly negative slope  
+3. the results are more of less the same regardless of whether one includes or excluded individuals where RA=0  
+4. PEPU an exception because so few individuals reproducing and those that are reproducing have intermediate RGR - neither the young plants nor the older plants just hanging on  
+5. PELA doesn't have a relationship either, because so few reproducing individuals. But if the many individuals with RA=0 added back in, strong negative relationship for PELA  
+
 ```{r, echo=FALSE,message=FALSE}
 plot(RA~RGR, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
 legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
@@ -323,7 +335,7 @@ plot(mod)
 yvar <- "RGR"
 xvar <- "RA"
 
-data <- subset(SummaryInd,RA>0)
+data <- subset(SummaryInd,RA>0&RGR>.04)
 data <- split(data, data$species)
 lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  asin(sqrt(x[[xvar]]))))
 results <- summarise_all_fits(lmfits)
@@ -399,8 +411,6 @@ results <- summarise_all_fits_2var(lmfits)
 
 results$r.squared <- round(results$r.squared,digits=3)
 results$p.value <- round(results$p.value,digits=3)
-results$a <- round(results$a,digits=2)
-results$b <- round(results$b,digits=2)
 
 results
 
