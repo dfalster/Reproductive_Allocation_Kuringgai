@@ -6,15 +6,15 @@ source("scripts/summary_dataframes.R")
 ```
 #Growth data, general patterns
 - proportion of maxH matters more for some species than others. 
-1. The 4 "canopy" species all tend to have high correlations between "prop maxH" and growth and reproductive investment (both relative and absolute)  
-2. The lower-growing species are more variable, with "prop maxH mattering more for some than others"  
+  1. The 4 "canopy" species all tend to have high correlations between "prop maxH" and growth and reproductive investment (both relative and absolute)  
+  2. The lower-growing species are more variable, with "prop maxH mattering more for some than others"  
 
 - For almost all species there is a strong negative relationship between RGR and RA - indeed, more reproduction = less growth  
-1. Meanwhile there is the strong positive relationship between growth investment and reproductive investment, because bigger plants grow and reproduce more.  
-2. It is good to have a big enough data set to capture both trends - and to capture them consistently across many species
+  1. Meanwhile there is the strong positive relationship between growth investment and reproductive investment, because bigger plants grow and reproduce more.  
+  2. It is good to have a big enough data set to capture both trends - and to capture them consistently across many species
 
 - Many plants have a clear upturn in RA and corresponding downturn in RGR at a specific prop maxH  
-1. e.g. see EPMI for distinct pattern
+  1. e.g. see EPMI for distinct pattern
 
 
 Generic functions for most plotting below
@@ -199,13 +199,91 @@ plot(change_shoot_area~change_basal_area,SummaryInd, log="xy",col=col.age[as.fac
 legend("bottomright",col=col.age, labels.age, pch=16, cex=1,bty="n")
 mod <- lm(change_shoot_area~change_basal_area*age*species,SummaryInd)
 anova(mod)
+``` 
+
+###Shifts in leafiness with age  
+- Individual shoots looked decidedly "less leafy" in many older plants  
+- This led me to wonder how leaf lifespan - or some other variable - was shifting with age   
+- The number of leaves along a leader is overall uneffected by age  
+- However, looking at individual species: BOLE, GRBU, GRSP, HEPU, PILI, PUTU have declining leaf counts along a shoot with age  
+- And PELA, PEPU show a significant increase in leaf counts along a single shoot with age 
+
+```{r, echo=FALSE,message=FALSE}
+plot(lvs_end_total~age,SummaryInd,log="xy", xlab="age",ylab="final leaf count along shoot",col=col.spp[as.factor(species)])
+legend("bottomright",col=col.spp, labels.spp, pch=16, cex=1,bty="n")
+
+yvar <- "lvs_end_total"
+xvar <- "age"
+
+data <- subset(SummaryInd)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm((x[[yvar]]) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, log="x",
+                    main=spp, xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+```
+
+###Leaf weight (relative to total weight) also declines with age  
+- These numbers are currently incomplete - waiting for full set of "leaf weight" numbers to finalize this  
+
+```{r, echo=FALSE,message=FALSE}
+plot(total_leaf_weight~FinalWeight,SummaryInd, log="xy",col=col.age[as.factor(age)], pch=16, cex=0.8)
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1, bty="n")
+
+plot(total_leaf_weight~FinalWeight,SummaryInd, log="xy",col=col.spp[as.factor(species)], pch=16, cex=0.8)
+legend("bottomright",col=col.spp, labels.spp, pch=16, cex=.8, bty="n")
+```
+
+###Shifts in shoot extension with age
+- The decrease in leaf number along a shoot is largely caused by declining shoot extension, not shifts in leaf lifespan  
+- BAER, BOLE, EPMI, GRBU, GRSP, HATE, HEPU, PHPH, PILI, and PUTU all show significant declines in shoot extension with age  
+- For many of these species, the shift is between the "sapling" and "adult" stages - i.e. when they begin reproducing  
+- PELA stands out by showing increasing shoot extension with age - because it grows so slowly in the beginning  
+
+```{r, echo=FALSE,message=FALSE}
+plot(new_length~age,SummaryInd,log="xy", xlab="age",ylab="shoot extension (mm)",col=col.spp[as.factor(species)])
+legend(12,200,col=col.spp, labels.spp, pch=16, cex=.8,bty="n")
+
+yvar <- "new_length"
+xvar <- "age"
+
+data <- subset(SummaryInd)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm((x[[yvar]]) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, log="x",
+                    main=spp, xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
 ```
 
 #Comparing growth rates of species with different trait values
 
 ### Species with larger seeds have higher growth rates  
 - The same basic relationship exists across all ages, so combined all data here  
-```{r, echo=FALSE,results='hide', message=FALSE}
+```{r, echo=FALSE,message=FALSE}
 plot(GrowthInv_mean ~ seed_size,data=subset(SummarySppAge,age>.5),log="xy",col=col.age[as.factor(age)],pch=16,cex=1,xlab="seed size (mg)",ylab="growth investment (mg per year)",main="Effect of seed size on growth rates")
 legend("topleft",col=col.age, labels.age, pch=16, cex=1,bty="n")
 text(GrowthInv_mean ~ seed_size, data=subset(SummarySppAge,age==9), labels=species, pos=2, offset=-2.4, cex=0.9,col="blue")
@@ -214,7 +292,7 @@ text(GrowthInv_mean ~ seed_size, data=subset(SummarySppAge,age==9), labels=speci
 ### Species with greater maximum height have higher growth rates
 - For younger plants there is no relationship with *SPECIES* overall maximum H  
 - There is a positive correlation with the maximum height the species reaches at a given age -i.e. fast growing young plants are tall when young.  
-```{r, echo=FALSE,results='hide', message=FALSE}
+```{r, echo=FALSE,message=FALSE}
 plot(GrowthInv_mean ~ maxH_spp,data=subset(SummarySppAge,age<3),log="xy",col=col.age[as.factor(age)],pch=16,cex=1.1,xlab="maximum height (mm)",ylab="growth investment (mg per year)",xlim=c(500,3200),main="Relationship between growth rates on maximum H")
 legend("bottomright",col=col.age, labels.age, pch=16, cex=1,bty="n")
 text(GrowthInv_mean ~ maxH_spp, data=subset(SummarySppAge,age==2.4), labels=species, pos=2, offset=-2.4, cex=0.9,col="blue")
@@ -227,7 +305,7 @@ text(GrowthInv_mean ~ maxH_spp, data=subset(SummarySppAge,age==9), labels=specie
 ### Species with higher wood density have lower growth rates  
 - Adult plants strongly show this pattern
 - However there is no relationship in younger plants  
-```{r, echo=FALSE,results='hide', message=FALSE}
+```{r, echo=FALSE,message=FALSE}
 plot(GrowthInv_mean ~ WD_mean,data=subset(SummarySppAge,age>3),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1,xlab="wood density",ylab="growth investment (mg per year)",xlim=c(0.57,0.9),main="Relationship between wood density and growth rates")
 text(GrowthInv_mean ~ WD_mean, data=subset(SummarySppAge,age==5), labels=species, pos=2, offset=-2.4, cex=0.9,col="blue")
 legend("bottomleft",col=col.age, labels.age, pch=16, cex=1, bty="n")
@@ -237,3 +315,81 @@ text(GrowthInv_mean ~ WD_mean, data=subset(SummarySppAge,age==2.4), labels=speci
 legend("bottomleft",col=col.age, labels.age, pch=16, cex=1, bty="n")
 ```
 
+### Species with higher LMA have higher growth rates  
+- This pattern is true for adult plants  
+- But there is no relationship in seedlings (age=1.4) or saplings (age=2.4)  
+- This is not predicted by Daniel's model or Anais' review; re-run with RGR
+```{r, echo=FALSE,message=FALSE}
+plot(GrowthInv_mean ~ LMA_mean,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age[as.factor(age)],pch=16,cex=1.2,xlab="LMA",ylab="growth investment (mg per year)",main="Seedlings")
+text(GrowthInv_mean ~ LMA_mean, data=subset(SummarySppAge,age==1.4), labels=species, pos=1, offset=-1.1, cex=0.9,col="blue")
+mod <- lm(GrowthInv_mean ~ LMA_mean, data=subset(SummarySppAge,age==1.4))
+summary(mod)
+
+plot(GrowthInv_mean ~ LMA_mean,data=subset(SummarySppAge,age==2.4),log="xy",col="pink",pch=16,cex=1.2,xlab="LMA",ylab="growth investment (mg per year)",main="Saplings")
+text(GrowthInv_mean ~ LMA_mean, data=subset(SummarySppAge,age==2.4), labels=species, pos=1, offset=-1.1, cex=0.9,col="blue")
+mod <- lm(GrowthInv_mean ~ LMA_mean, data=subset(SummarySppAge,age==2.4))
+summary(mod)
+
+plot(GrowthInv_mean ~ LMA_mean,data=subset(SummarySppAge,age>3),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1.2,xlab="LMA",ylab="growth investment (mg per year)",main="Adults")
+text(GrowthInv_mean ~ LMA_mean, data=subset(SummarySppAge,age>3), labels=species, pos=1, offset=-1.1, cex=0.6,col="blue")
+legend("bottomright",col=col.age,labels.age,pch=16, bty="n")
+mod <- lm(GrowthInv_mean ~ LMA_mean, data=subset(SummarySppAge,age>3))
+summary(mod)
+```
+
+###Looking at LMA relative to RGR
+- There are no significant relationships at any age when RGR is used instead of actual growth investment 
+```{r, echo=FALSE,message=FALSE}
+plot(RGR_mean ~ LMA_mean,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age[as.factor(age)],pch=16,cex=1.2,xlab="LMA",ylab="RGR=",main="Seedlings")
+text(RGR_mean ~ LMA_mean, data=subset(SummarySppAge,age==1.4), labels=species, pos=1, offset=-1.1, cex=0.9,col="blue")
+mod <- lm(GrowthInv_mean ~ LMA_mean, data=subset(SummarySppAge,age==1.4))
+summary(mod)
+
+plot(RGR_mean ~ LMA_mean,data=subset(SummarySppAge,age==2.4),log="xy",col="pink",pch=16,cex=1.2,xlab="LMA",ylab="RGR",main="Saplings")
+text(RGR_mean ~ LMA_mean, data=subset(SummarySppAge,age==2.4), labels=species, pos=1, offset=-1.1, cex=0.9,col="blue")
+mod <- lm(RGR_mean ~ LMA_mean, data=subset(SummarySppAge,age==2.4))
+summary(mod)
+
+plot(RGR_mean ~ LMA_mean,data=subset(SummarySppAge,age>3),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1.2,xlab="LMA",ylab="RGR",main="Adults")
+text(RGR_mean ~ LMA_mean, data=subset(SummarySppAge,age>3), labels=species, pos=1, offset=-1.1, cex=0.6,col="blue")
+legend("bottomright",col=col.age,labels.age,pch=16, bty="n")
+mod <- lm(RGR_mean ~ LMA_mean, data=subset(SummarySppAge,age>3))
+summary(mod)
+```
+
+###Leaf lifespan vs growth investment
+- There is no relationship between leaf lifespan and growth investment for any age group
+- And just barely a significant relationship between RGR and leaflifespan for adult plants
+```{r, echo=FALSE,message=FALSE}
+plot(GrowthInv ~ LL_death,data=subset(SummaryInd,age==1.4),log="xy",col=col.spp[as.factor(species)],pch=16,cex=1.2,xlab="leaf lifespan",ylab="growth investment (mg per year)",main="Seedlings")
+legend(4.5,1600,col=col.spp,labels.spp,pch=16, bty="n",cex=.8)
+mod <- lm(GrowthInv ~ LL_death, data=subset(SummaryInd,age==1.4))
+summary(mod)
+
+plot(GrowthInv ~ LL_death,data=subset(SummaryInd,age==2.4),log="xy",col=col.spp[as.factor(species)],pch=16,cex=1.2,xlab="leaf lifespan",ylab="growth investment (mg per year)",main="Saplings")
+legend("bottomright",col=col.spp,labels.spp,pch=16, bty="n",cex=.8)
+mod <- lm(GrowthInv ~ LL_death, data=subset(SummaryInd,age==2.4))
+summary(mod)
+
+plot(GrowthInv ~ LL_death,data=subset(SummaryInd,age>3&LL_death<10),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1.2,xlab="leaf lifespan",ylab="growth investment (mg per year)",main="Adults")
+legend("bottomright",col=col.age,labels.age,pch=16, bty="n")
+mod <- lm(GrowthInv ~ LL_death*species, data=subset(SummaryInd,age>3))
+anova(mod)
+```
+
+```{r, echo=FALSE,message=FALSE}
+plot(RGR ~ LL_death,data=subset(SummaryInd,age==1.4),log="xy",col=col.spp[as.factor(species)],pch=16,cex=1.2,xlab="leaf lifespan",ylab="RGR",main="Seedlings")
+legend(4.5,1600,col=col.spp,labels.spp,pch=16, bty="n",cex=.8)
+mod <- lm(RGR ~ LL_death, data=subset(SummaryInd,age==1.4))
+summary(mod)
+
+plot(RGR ~ LL_death,data=subset(SummaryInd,age==2.4),log="xy",col=col.spp[as.factor(species)],pch=16,cex=1.2,xlab="leaf lifespan",ylab="RGR",main="Saplings")
+legend("bottomright",col=col.spp,labels.spp,pch=16, bty="n",cex=.8)
+mod <- lm(RGR ~ LL_death, data=subset(SummaryInd,age==2.4))
+summary(mod)
+
+plot(RGR ~ LL_death,data=subset(SummaryInd,age>3&LL_death<10&RGR>0.04),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1.2,xlab="leaf lifespan",ylab="RGR",main="Adults")
+legend("bottomright",col=col.age,labels.age,pch=16, bty="n")
+mod <- lm(RGR ~ LL_death*species, data=subset(SummaryInd,age>3&LL_death<10&RGR>0.04))
+anova(mod)
+```

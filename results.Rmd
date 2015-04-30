@@ -1,156 +1,24 @@
 ```{r, echo=FALSE,results='hide', message=FALSE}
 library(remake)
 create_bindings()
-
 source("scripts/summary_dataframes.R")
 ```
-# file names
-
-- leaf_counts is file with calculated leaf counts and leaf lifespan data
-- SummarySppAge is file with means of LL - and other variables - by species and age; LMA data is merged to this file
-- subsets of SummarySppAge are created to omit babies or HATE for various analyses
-
 # What causes RA to shift with age in species?
 Theoretical models indicate that there need to be size (or age) related shifts in *some* trade-off to create graded RA schedules.
 
 For instance, shifts in a variable such as leaf lifespan, fecundity per RA, photosynthetic rates with size (or other variables) will change the RA schedule.
 
 I have both RA schedules and lots of other data across multiple ages:
-  - leaf lifespa
+- leaf lifespan
 - LMA
 - accessory tissue costs
 
-# Shifts in RA with age
-
-Showing just a few of the RA schedules from my last lab meeting.
-
-They show that species differ greatly in RA, that there is a general increase with age, but also that the data are noisy.
-
-```{r, echo=FALSE,results='hide', message=FALSE}
-plot_RAbyAge <- function(spp) {
-  plot(RA~age, data=subset(SummaryInd,species==spp), xlab="age (years)",ylab="reproductive allocation (%)", log="x", main=labels.spp[spp],xlim=c(1,35),ylim=c(0,1))
-  points(RA_mean~age, data=subset(SummarySppAge, species==spp),pch=16,cex=1.4)
-}
-
-
-for(n in names(labels.spp)) {
-  plot_RAbyAge(n)
-}
-```
-
-# Individual shoots looked decidedly "less leafy" in many older plants
-This led me to wonder how leaf lifespan - or some other variable - was shifting with age
-
-The number of leaves along a leader is overall uneffected by age, although some species show a marked decline
-
-```{r, echo=FALSE,results='hide', message=FALSE}
-plot(lvs_end_total~age,SummaryInd,log="xy", xlab="age",ylab="final leaf count along shoot",col=col.spp[as.factor(species)])
-legend("bottomright",col=col.spp, labels.spp, pch=16, cex=1)
-```
-
-# Plots of individual species show that no species has a significant change either - although several show slight declines at the end
-
-```{r, echo=FALSE,results='hide', message=FALSE}
-
-
-  # fit <- lm(LL_birth ~ log10(age), data=data2)
-  # abline(fit)
-}
-
-for(n in names(labels.spp)) {
-  plot_LLvAge(n)
-  #  mod_LMAvAge(n)
-  #  summary(mod_LMAvAge(n))
-}
-```
-
-# Several species show significant declines in shoot extension with age
-
-```{r, echo=FALSE,results='hide', message=FALSE}
-
-
-plot_newlengthvAge <- function(data, yvar = "new_length", xvar = "age", ...) {
-	Y <- data[[yvar]]
-	X <- data[[xvar]]
-  plot(Y ~ X, data=data,  cex.axis=.8, las=1, pch=16, ...)
-  # points(new_length_mean ~ age, data=data, cex=1.3, pch=8)
-  # points((new_length_mean+new_length_se) ~ age, data=data, cex=1.5, pch=25)
-  # points((new_length_mean-new_length_se) ~ age, data=data, cex=1.5, pch=24)
-}
-
-summarise_fit <- function(x) {
-	data.frame(
-		select(glance(x), r.squared, p.value),
-		n= length(resid(x)),
-		a = coef(x)[1],
-		b = coef(x)[2]
-	)
-}
-
-summarise_all_fits <- function(x) {
-	tmp <- lapply(x, summarise_fit) %>%
-		bind_rows
-	data.frame(species=names(x), tmp)
-}
-
-yvar <- "new_length"
-xvar <- "age"
-
-data <- filter(SummaryInd, age > 2.4)
-data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm(x[[yvar]] ~  log(x[[xvar]])))
-results <- summarise_all_fits(lmfits)
-
-for(spp in names(data)) {
-  plot_newlengthvAge(data[[spp]], yvar, xvar, log="x",
-  	ylim=c(0,150),  main=spp, xlab="age", ylab="leader shoot extention")
-  abline(lmfits[[spp]])
-}
-
-
-```
-
-# Had expected a stronger pattern either in leaf lifespan or leaf count on a shoot
-Apparently it is simply that older plants have more stem - plotting total leaf weight against final weight, shows bigger plants have relatively fewer leaves
-(Yes, I know the 2.4 yr olds are missing...)
-
-```{r, echo=FALSE,results='hide', message=FALSE}
-plot(total_leaf_weight~FinalWeight,SummaryInd, log="xy",col=col.age[as.factor(age)], pch=16, cex=0.8)
-legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
-```
 # Next steps?
 As I begin to analyze RA patterns, think more specifically about the species that do show a distinct change with age in one of hte "leaf" parameters.
 
 For instance, is there some way to capture "change with age" as a variabe of its own that is worth comparing across species.
 
 Afterall, the energy allocation models suggest that different RA schedules may be due to different amounts of "shifting" across species - some species might be predicted to shift more than others.
-
-# LMA vs Leaf lifespan
-This correlation is as expected, except for the babies
-
-```{r, echo=FALSE,results='hide', message=FALSE}
-
-plot(LL_birth_mean ~ LMA_mean, SummarySppAge, type="n", xlab="LMA", ylab="leaf lifespan (years)", main="leaf lifespan versus LMA (all species and ages)", las=1,pch=17, log="xy")
-points(LL_birth_mean ~ LMA_mean, data=subset(SummarySppAge, species!="HATE"), pch=16, cex=1.2, col=col.age[as.factor(age)])
-points(LL_birth_mean ~ LMA_mean, col="red", data=subset(SummarySppAge, species=="HATE"), pch=17)
-legend("bottomright",col=col.LMA, labels.LMA, pch=16, cex=1.4)
-```
-
-# Growth rates increase with increasing LMA in adult plants
-But there is no relationship in seedlings (age=1.4) or saplings (age=2.4)
-This is not predicted by Daniel's model or Anais' review
-```{r, echo=FALSE,results='hide', message=FALSE}
-plot(GrowthInv_mean ~ LMA_mean,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age[as.factor(age)],pch=16,cex=1.2,xlab="LMA",ylab="growth investment (mg per year)",main="Seedlings")
-text(GrowthInv_mean ~ LMA_mean, data=subset(SummarySppAge,age==1.4), labels=species, pos=1, offset=-1.1, cex=0.9,col="blue")
-
-plot(GrowthInv_mean ~ LMA_mean,data=subset(SummarySppAge,age==2.4),log="xy",col="pink",pch=16,cex=1.2,xlab="LMA",ylab="growth investment (mg per year)",main="Saplings")
-text(GrowthInv_mean ~ LMA_mean, data=subset(SummarySppAge,age==2.4), labels=species, pos=1, offset=-1.1, cex=0.9,col="blue")
-
-plot(GrowthInv_mean ~ LMA_mean,data=subset(SummarySppAge,age>3),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1.2,xlab="LMA",ylab="growth investment (mg per year)",main="Adults")
-text(GrowthInv_mean ~ LMA_mean, data=subset(SummarySppAge,age>3), labels=species, pos=1, offset=-1.1, cex=0.6,col="blue")
-legend("bottomright",col=col.age,labels.age,pch=16)
-```
-
 
 #22 April 2015
 Generic code to create plots, run lm, summarize results, by species

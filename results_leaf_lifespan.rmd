@@ -71,9 +71,9 @@ mod <- lm(LL_death~LL_bd,data=data)
 summary(mod)
 ```
 
-#Starting with the basics: Are leaf lifespan and LMA correlated?
-Plotting species*site means
-Figures shown using all three measures of leaf lifespan
+###Starting with the basics: Are leaf lifespan and LMA correlated?  
+- Plotting species*site means  
+- Figures shown using all three measures of leaf lifespan  
 ```{r, echo=FALSE,message=FALSE}
 yvar <- "LMA_mean"
 xvar <- "LL_death_mean"
@@ -106,8 +106,8 @@ mod <- lm(LL_bd_mean~LMA_mean,data=data)
 summary(mod)
 ```
 
-#Same plots as above, but omitting HATE, which has much higher LMA than any other species due to its round "leaves"
-Using leaf deaths gives the poorest fit...
+###Same plots as above, but omitting HATE, which has much higher LMA than any other species due to its round "leaves"  
+- Using leaf deaths gives the poorest fit...
 ```{r, echo=FALSE,message=FALSE}
 yvar <- "LMA_mean"
 xvar <- "LL_death_mean"
@@ -119,6 +119,11 @@ legend("bottomright",legend=labels.spp.noHATE,pch=16,col=col.spp.noHATE,bty="n",
 mod <- lm(LL_death_mean~LMA_mean+species,data=data)
 summary(mod)
 anova(mod)
+
+plot(LL_birth_mean ~ LMA_mean, SummarySppAge, type="n", xlab="LMA", ylab="leaf lifespan (years)", main="leaf lifespan versus LMA (all species and ages)", las=1,pch=17, log="xy")
+points(LL_birth_mean ~ LMA_mean, data=subset(SummarySppAge, species!="HATE"), pch=16, cex=1.2, col=col.age[as.factor(age)])
+points(LL_birth_mean ~ LMA_mean, col="red", data=subset(SummarySppAge, species=="HATE"), pch=15)
+legend("bottomright",col=col.LMA, labels.LMA, pch=16, cex=1,bty="n")
 
 yvar <- "LMA_mean"
 xvar <- "LL_birth_mean"
