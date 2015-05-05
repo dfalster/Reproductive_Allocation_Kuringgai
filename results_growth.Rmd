@@ -278,6 +278,51 @@ for(spp in names(data)) {
   abline(lmfits[[spp]])
 }
 ```
+###Diameter increase in shoots vs. whole plant
+- The slope of the relationship lessens with age  
+- There is quite a bit of noise in the relationship  
+- However, in many cases, older plants show less of a change in shoot diameter for a given change in basal diameter; the opposite pattern as is predicted if ever fewer shoots are sustaining growth  
+- Instead, each shoot matters ever less to the overall increase in basal area in larger plants
+- NOTE: Plots not correct right now - wrong number of points in some and definitely wrong coloring by age
+```{r, echo=FALSE,message=FALSE}
+plot((change_shoot_diam/100) ~ change_basal_diam,data=subset(SummaryInd, age>1.4), log="xy",col=col.spp[as.factor(species)], pch=16)
+abline(0,1)
+
+mod <- lm (change_shoot_diam ~ change_basal_diam*age,data=subset(SummaryInd, age>1.4))
+summary(mod)
+anova(mod)
+
+plot((change_shoot_diam/100) ~ change_basal_diam,data=subset(SummaryInd, age>1.4), log="xy",col=col.age2[as.factor(age)], pch=16)
+abline(0,1)
+legend("bottomright",col=col.age, labels.age, pch=16, cex=1, bty="n")
+
+plot((change_shoot_area/10000) ~ FinalBasalDiamAv,data=subset(SummaryInd), log="xy",col=col.spp[as.factor(species)], pch=16,ylim=c(0.01,500),cex=.7)
+points((change_basal_area) ~ FinalBasalDiamAv,data=subset(SummaryInd), log="xy",col=col.spp[as.factor(species)], pch=1)
+
+plot((change_shoot_area/10000) ~ FinalBasalDiamAv,data=subset(SummaryInd), log="xy",col=col.age[as.factor(age)], pch=16,ylim=c(0.01,500),cex=.7)
+points((change_basal_area) ~ FinalBasalDiamAv,data=subset(SummaryInd), log="xy",col=col.age[as.factor(age)], pch=1)
+
+yvar <- "change_shoot_diam"
+xvar <- "change_basal_diam"
+
+data <- subset(SummaryInd)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, log="xy", col=col.age[as.factor(SummaryInd$age)],
+                    main=spp, xlab=xvar, ylab=yvar)
+  legend("bottomright",col=col.age, labels.age, pch=16, cex=1, bty="n")
+}
+```
 
 #Comparing growth rates of species with different trait values
 

@@ -55,11 +55,13 @@ summarise_all_fits_2var <- function(x) {
 
 
 #RV curves
-These are mostly reasonably nice - of course need to fit quadratic curve to these and haven't figured out how to do it correctly
-
+###Classic RV curves - reproductive investment versus weight
+- These are mostly reasonably nice - of course need to fit quadratic curve to these and haven't figured out how to do it correctly  
+- The plot that includes all species shows that *once* a given species has ramped up reproduction, the log-log plot of reproductive investment vs final weight is nearly linear across all species; in other words, to first order, all species allocate the same amount to reproduction relative to their weight.
+- However, it is important to note that species early in their reproductive trajectory do not follow this pattern
 ```{r, echo=FALSE,message=FALSE}
-plot(ReproInv~FinalWeight, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
-legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+plot(ReproInv~FinalWeight, SummaryInd, log="xy",col=col.spp[as.factor(species)],pch=16)
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
 plot(ReproInv~FinalWeight, SummaryInd, log="xy", col=col.age[as.factor(age)],pch=16)
 legend("bottomright",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
@@ -90,7 +92,7 @@ for(spp in names(data)) {
 }
 ```
 
-#RV curves (by age)
+###RV curves (by age)
 ```{r, echo=FALSE,message=FALSE}
 plot(ReproInv~age, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
 legend(15,5000,legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
@@ -116,6 +118,36 @@ results
 for(spp in names(data)) {
   plot_yvar_vs_xvar(data[[spp]], yvar, xvar, 
                     main=spp, log="xy", xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+```
+
+###RV curves (by proportion max H)
+- In a sense, by using proportion max H, these figures are showing the proportion of total growth the plant undergoes before starting reproduction
+- You could also plot against "PropMaxWeight", the proportion of the heaviest individual of that species. The two measures look "best" for different species
+```{r, echo=FALSE,message=FALSE}
+plot((PropMaxRepro+.1)~(PropH), SummaryInd, log="y",col=col.spp[as.factor(species)],pch=16,xlim=c(4e-03,1))
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+yvar <- "ReproInv"
+xvar <- "PropH"
+
+data <- SummaryInd
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]+1) ~  (x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, 
+                    main=spp, log="y", xlab=xvar, ylab=yvar)
   
   abline(lmfits[[spp]])
 }
@@ -318,7 +350,7 @@ for(spp in names(data)) {
 
 ```{r, echo=FALSE,message=FALSE}
 plot(RA~RGR, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
-legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
 plot(RA~RGR, SummaryInd, log="x", col=col.age[as.factor(age)],pch=16)
 legend("bottomright",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
@@ -328,8 +360,9 @@ legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n"
 
 plot(RGR~RA, data=subset(SummaryInd,RA>0), log="xy", col=col.spp[as.factor(species)],pch=16)
 legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-mod <- lm(log(GrowthInv)~asin(sqrt(RA)), data=subset(SummaryInd,RA>0))
+mod <- lm(log(GrowthInv)~asin(sqrt(RA))*species, data=subset(SummaryInd,RA>0))
 summary(mod)
+anova(mod)
 plot(mod)
 
 yvar <- "RGR"

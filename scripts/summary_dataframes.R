@@ -162,7 +162,7 @@ harvest_summary <- harvest %>%
   summarise_each(funs(mean, se, length), height,total_leaf_weight)
 #names(harvest_summary)<-c("species","age","height_mean","height_se","height_length")
 
-#RA for each species/age combination
+#maximum RA for each species/age combination
 maxRA <- investment %>%
   group_by(species, age) %>%
   summarise_each(funs(max), RA)
@@ -211,11 +211,20 @@ maxH_spp <- harvest %>%
   summarise_each(funs(max), height)
 names(maxH_spp)<-c("species", "maxH_spp")
 
+#maximum height for each species
+MaxInvestment_spp <- investment %>%
+  group_by(species) %>%
+  summarise_each(funs(max), RA,ReproInv,FinalWeight)
+names(MaxInvestment_spp)<-c("species", "MaxRA_spp", "MaxReproInv_spp","MaxFinalWeight_spp")
+
 SummaryInd <- merge(SummaryInd,wood_summary, by=c("species"),all.x=TRUE)
 SummaryInd <- merge(SummaryInd,LMA_summary, by=c("species","age"),all.x=TRUE)
 SummaryInd <- merge(SummaryInd,maxH_spp, by=c("species"),all.x=TRUE)
 SummaryInd <- merge(SummaryInd,seedsize, by=c("species"),all.x=TRUE)
+SummaryInd <- merge(SummaryInd,MaxInvestment_spp, by=c("species"),all.x=TRUE)
 SummaryInd$PropH <- SummaryInd$height / SummaryInd$maxH_spp
+SummaryInd$PropMaxWeight <- SummaryInd$FinalWeight / SummaryInd$MaxFinalWeight_spp
+SummaryInd$PropMaxRepro <- SummaryInd$ReproInv / SummaryInd$MaxReproInv_spp
 
 SummaryInd$leafArea <- SummaryInd$total_leaf_weight * SummaryInd$LMA_mean
 
