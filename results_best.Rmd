@@ -44,50 +44,53 @@ summarise_all_fits_2var <- function(x) {
     bind_rows
   data.frame(species=names(x), tmp)
 }
+
+xy.error.bars <- function (x,y,xbar,ybar) {
+  plot(x,y,pch=16, ylim=c(min(y-ybar),max(y+ybar)),xlim=c(min(x-xbar),max(x+xbar)))
+  arrows(x,y-ybar,x,y+ybar,code=3,angle=90, length=0.1)
+  arrows(x-xbar,y,x+xbar,y,code=3,angle=90, length=0.1)
+}
+
+se_function <- function(mean1,se1) {
+for(i in 1:14) {
+arrows(i,mean1[i]+se1[i],i,mean1[i]-se1[i],code=3,angle=90, length=0.1)
+}
+}
 ```
 
-#Ideas and plots to include in a paper looking at the ways in which reproductive investment impacts growth
+#Changes in growth and tissue allocation with age and size
 * Part of this paper would be to look at how different "types of" species fall out with respect to the various plots - i.e. canopy species (BAER, HATE, PELA), short-lived species (BOLE, PILI, COER), longer-lived understory species 
-* Plants that grow more also reproduce more, but plants that allocate more to reproduction have lower RGR (Same paper as RA curves?)
-* There is a disinct decline in RGR (or Growth Investment) at the exact "PropH" that plants begin to reproduce (Same paper as RA curves?)
 
-##Growth-reproduction trade-off
-###Bigger plants reproduce more
-- There is a positive correlation between reproductive investment vs growth investment among individuals that are reproducing: plants that grow more also allocate more to reproduction.  
-- It is also true that bigger plants allocate more to reproduction.  
-
-```{r, echo=FALSE,message=FALSE}
-plot((1+ReproInv)~GrowthInv, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
-legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-```
-
-###Plants that allocate more to reproduction (higher RA) have a lower RGR
-- When looked at individually, this pattern holds for all species except PEPU and PELA, although there is lots of variation in the exact trade-off pattern displayed by different species  
-- You can also look at the plots of RGR vs RA and identify the RA at which RGR is impacted. Some plots show a very linear decline throught, whereas for others there is a distinct "knickpoint" -i.e. BOLE, EPMI, HATE   
-
-```{r, echo=FALSE,message=FALSE}
-plot(RA~RGR, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
-legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-
-mod <- lm(RGR~asin(sqrt(RA))*species,SummaryInd)
-anova(mod)
-```
 
 ###More ways to ask how much - and when - reproduction impacts growth  
 - It is clear that different species reach a different "proportion maxH" (RSOM) before reproducing. Need to do curve fitting to determine where this occurs.  
 - The plot of Growth Investment vs. PropH shows a decrease in growth rate at a given PropH (for most species). Is this the same PropH at which reproduction begins?  
 - It seems that some of the early reproducers begin reproducing at a larger PropH, as predicted by others. But because they allocate so much to reproduction, their growth rate declines more precipitously with the onset of reproduction.  
 
-#Ideas and plots to include in RA schedule paper
+#RA schedule paper
 * I have a dataset with enough resolution across species and ages to show patterns of growth and reproductive investment across ages  
-* This includes both RA schedules and RV curves, as well as other potential plots  
+* This includes both RA schedules and RV curves  
+* Below are curves plotted relative to "PropH", which is a better fit for most species - but other species should be plotted against total plant weight  
+* Plants that grow more also reproduce more, but plants that allocate more to reproduction have lower RGR 
+* There is a disinct decline in RGR (or Growth Investment) at the exact "PropH" that plants begin to reproduce 
+* Plotting reproductive investment (ReproInv) against RGR yields a much lower r^2 - for every single species. Only RA captures the actual trade-off incurred by plants that allocate more to reproduction, showing one way RA schedules are important  
+  - As discussed in the review, RA schedule differentiate between greater reproductive output because you are bigger (a positive correlation with plant growth) and greater reproductive output because you are allocating more to reproduction (a negative correlation with plant growth)  
+* RV curves continue to be the more relevent metric to determine the actual amount of reproductive output produced by a plant of a given size or height  
 
-
-###RV curves (by proportion max H)
+##RV curves (by proportion max H)
 - In a sense, by using proportion max H, these figures are showing the proportion of total growth the plant undergoes before starting reproduction
-- You could also plot against "PropMaxWeight", the proportion of the heaviest individual of that species. The two measures look "best" for different species
+- The plot across all species of reproductive investment vs. Prop H is much less tight than reproductive investment vs. total weight, but within a species not as obviously different  
+- The plot that includes all species shows that *once* a given species has ramped up reproduction, the log-log plot of reproductive investment vs final weight is nearly linear across all species; in other words, to first order, all species allocate the same amount to reproduction relative to their weight.  
+- This is presumably the basic allometric scaling relationship discussed by others and wondering if slope I get is same as theirs    
+- However, it is important to note that species early in their reproductive trajectory do not follow this pattern  
 ```{r, echo=FALSE,message=FALSE}
 plot((ReproInv)~(PropH), SummaryInd, log="y",col=col.spp[as.factor(species)],pch=16,xlim=c(4e-03,1))
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+plot(ReproInv~FinalWeight, SummaryInd, log="xy",col=col.spp[as.factor(species)],pch=16)
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+plot(ReproInv~height, SummaryInd, log="xy",col=col.spp[as.factor(species)],pch=16)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
 yvar <- "ReproInv"
@@ -111,7 +114,8 @@ for(spp in names(data)) {
 }
 ```
 
-#RA schedules (vs. propH)  
+##RA schedules (vs. propH)  
+- RA schedules still look "best" plotted against age; not shown here  
 - these curves are particularly good for a number of species such as EPMI, COER, PELA  
 - they also show that for PILI that among individuals that reproduce, the "potential" RA decreases with increasing propH  
 - when all data points are included, all species except PEPU, PHPH, and PULU show increasing RA with increasing height  
@@ -149,8 +153,184 @@ for(spp in names(data)) {
 }
 ```
 
+##Growth-reproduction trade-off
+###Bigger plants reproduce more
+- There is a positive correlation between reproductive investment vs growth investment among individuals that are reproducing: plants that grow more also allocate more to reproduction.  
+- It is also true that bigger plants allocate more to reproduction.  
+
+```{r, echo=FALSE,message=FALSE}
+plot((1+ReproInv)~GrowthInv, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
+legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+```
+
+###Plants that allocate more to reproduction (higher RA) have a lower RGR
+- When looked at individually, this pattern holds for all species except PEPU and PELA, although there is lots of variation in the exact trade-off pattern displayed by different species  
+- You can also look at the plots of RGR vs RA and identify the RA at which RGR is impacted. Some plots show a very linear decline throught, whereas for others there is a distinct "knickpoint" -i.e. BOLE, EPMI, HATE   
+
+```{r, echo=FALSE,message=FALSE}
+plot(RA~RGR, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
+legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+mod <- lm(RGR~asin(sqrt(RA))*species,SummaryInd)
+anova(mod)
+```
+
 ###To think about regarding RA schedules and RV curves
 - What does it mean that PropH is the better correlate that plant weight?  
 1. That "plant weight" is a mis-leading number, since it includes dead "heartwood"  
 2. That this is a community where height is the most important variable? Because height = light access or because of some relationship between height and leaf area.  
 ** Once I have leaf weights, I'll be curious how leaf weight plots against PropH, this might be more of the story  
+
+###Looking jointly at effects of RA and PropH on growth inveestment
+- Model analyzed is: lm(log([[GrowthInv]]) ~  asin(sqrt([[RA]]))*asin(sqrt([[PropH]]))))  
+- The canopy species have, not suprisingly, a very obvious maxH, with Growth Investment or RGR tapering markedly at the maxH is approached. In these species growth investment is poorly correlated with RA, but well correlated with height.  
+- In some of the mid-height species (GRSP, BOLE, GRBU), growth investment is very poorly correlated with height, but better correlated with RA - in other words, increased RA = less growth.  
+- One of the difficult features interpreting this, is that there are species with overall higher correlations and overall lower correlations, and this pattern dominates, not the relative strength  
+- My current analyses still lack the ability to tease apart the most obvious pattern - because I don't actually want to show that growth and height are correlated, so much as that the   asymptoting of growth is correlated with height - i.e. the change in slope of the relationship.  
+```{r, echo=FALSE, message=FALSE}
+yvar <- "GrowthInv"
+xvar <- "RA"
+x2var <- "PropH"
+
+data <- SummaryInd
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  asin(sqrt(x[[xvar]]))*asin(sqrt(x[[x2var]]))))
+results <- summarise_all_fits_2var(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+names(results) <- c("species","r,squared","p-value","n","intercept","coef_RA","coef_PropH","coef_interaction","SS_RA","SS_PropH","SS_interaction")
+results
+```
+
+
+#Shifts in accessory costs across species and ages
+##Overall results
+- Accessory costs higher for bigger seeds  
+- A number of species show fairly consistent declines in accessory costs with various measures of "bigger", including size, age, RA. Other species show no patterns  
+- 9 (of 14) species decrease the proportion of reproductive investment in "pre-pollination" tissues as their RA increases. in other words, they get better returns on investment the more they invest.  
+- Species very different in which accessory tissues they invest the most in - which reflects the differences in basic structure (i.e. Banksia cones), but also more subtlely that some species abort lots of buds (pre-pollination aborted), while other species abort more fully formed flowers  
+- For most of the statistical analyses, the youngest site has been removed, since it included individuals that were harvested while flowering (and therefore never "got to" set fruit) and automatically have no "successful" reproduction. There are of course some individuals like this at other ages as well, but far fewer  
+
+###How do accessory costs shift with seed size?
+- Larger-seeded species have higher accessory costs. 
+- Also shown in other studies and suggested as a mechanism for why angiosperms were able to have such small seeds (relative to gymnosperms, with no decrease in proportional accessory costs - with decreasing size)  
+```{r, echo=FALSE,message=FALSE}
+yvar <- "PerAcc_mean"
+xvar <- "seed_size"
+data <- SummarySpp
+
+plot_yvar_vs_xvar(data, yvar, xvar,log="x",
+                  xlab=xvar, ylab=yvar)
+mod <- lm(log(seed_size)~PerAcc_mean,SummarySpp)
+summary(mod)
+anova(mod)
+```
+###Size versus proportion propagule
+- Species that are bigger (by weight) invest a lower proportion of their reproduction in propagules  
+- This is a much stronger relationship than shifts in RA by plant size  
+- There is also no relationship between RA and proportion of energy invested in propagules  
+- The model including both PerPropagule and RA confirms this - there is a strong species effect and strong PerPropagule effect, but RA not significant  
+   
+* This means: The larger species get less of a return on their investment in reproduction. They have higher accessory costs.  
+
+- Species with larger seeds also have higher accessory costs - what we don't know is if "seed size" or "plant size" that is most important
+
+```{r, echo=FALSE, message=FALSE}
+plot(PerPropagule ~FinalWeight, data=subset(SummaryInd,RA>00),log="xy", col=col.spp[as.factor(species)],pch=16)
+legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+mod <- lm(log(FinalWeight) ~ asin(sqrt(PerPropagule))*species,data=subset(SummaryInd,ReproInv>0))
+summary(mod)
+anova(mod)
+
+plot(PerPropagule_mean ~FinalWeight_mean, data=subset(SummarySppAge,RA_mean>0),log="xy", col=col.spp[as.factor(species)],pch=16)
+legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+mod <- lm(log(FinalWeight_mean) ~ asin(sqrt(PerPropagule_mean))*species,data=subset(SummarySppAge,RA_mean>0))
+#summary(mod)
+anova(mod)
+
+mod <- lm(log(FinalWeight) ~asin(sqrt(PerPropagule))*asin(sqrt(RA))*species,data=subset(SummaryInd,ReproInv>0))
+anova(mod)
+```
+
+### Shifts in PerPropagule and RA within species
+- The above models indicate that there is no overall "PerPropagule" by "species" interaction. Looking at individual species also indicates few species show a pattern - those that do show an increase in propagule investment (decreasing accessory costs) with increasing size
+    - COER, HATE, and PILI show a significant decrease in accessory costs with increasing size (p<0.05)  
+    - GRSP shows a marginally significant decrease in accessory costs with increasing size (0.05<p<0.10)  
+    - PEPU shows a marginally significant INCREASE in accessory costs with increasing size (0.05<p<0.10)  
+    - the plots are in the file with all accessory tissues results
+    
+- There is of course also an increase in RA with increased plant weight (see RA section)
+- An added piece of this, is that WITHIN species, there is an INCREASE in allocation to propagules with increasing size (age) for many species
+    - BAER, COER, GRBU, GRSP, HATE, LEES, PELA, PEPU show a significant decrease in accessory costs with increasing RA (p<0.05)  
+    - BOLE shows a marginally significant decrease in accessory costs with increasing RA (p ~ 0.10) 
+    
+```{r, echo=FALSE, message=FALSE}
+yvar <- "PerPropagule"
+xvar <- "FinalWeight"
+
+data <- filter(SummaryInd,Total>0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+yvar <- "PerPropagule"
+xvar <- "RA"
+
+data <- filter(SummaryInd,Total>0&age>2)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  asin(sqrt(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+```
+
+###Do species differ in the proportional energy allocated to propagules (vs. accessory tissues)  
+- COER, EPMI, LEES, PILI invest the most energy in propagules  
+- HATE invests by far the least into propagules
+
+```{r, echo=FALSE, message=FALSE}
+yvar <- "PerPropagule"
+xvar <- "species"
+data <- filter(SummaryInd,Total>0)
+
+mod <- lm(asin(sqrt(PerPropagule)) ~ species-1, data)
+summary(mod)
+data.frame(
+    select(glance(mod), r.squared, p.value),
+    n= length(resid(mod)),
+    a = coef(mod)[1],
+    b = coef(mod)[2]
+  )
+
+tmp <- summary(mod)
+tmp <- tmp$coefficients
+tmp <-as.data.frame(tmp)
+tmp <- cbind(names(labels.spp),tmp)
+names(tmp) <- c("species","estimate.trans","se.trans","t.value","p.value")
+tmp2 <- select(SummarySpp, species, PerPropagule_mean, PerPropagule_se)
+tmp <- merge(tmp, tmp2, by="species")
+tmp
+plot(PerPropagule_mean~species,tmp,cex.axis=.8,pch=16,log="y",ylim=c(.001,.25),main="Percent reproductive investment put into propagules")
+
+mean1 <- tmp$PerPropagule_mean
+se1 <- tmp$PerPropagule_se
+
+se_function(mean1,se1)
+```
+
+

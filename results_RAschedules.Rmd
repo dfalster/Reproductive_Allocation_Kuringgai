@@ -259,7 +259,6 @@ for(spp in names(data)) {
 }
 ```
 
-
 #Reproductive Investment by Growth Investment
 Overall, these are not a strong set of results, but HATE shows a very strong relationship that shows reproductive investment (not growth investment) asymptoting
 Interestingly, PHPH, which is generally a complete scatter plot, has one of the strongest correlations between these variables, indicating that indeed most measures of "size" for this multi-stemmed plant aren't very meaningful and it should be analyzed differently.
@@ -352,6 +351,9 @@ for(spp in names(data)) {
 plot(RA~RGR, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
 legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
+plot(ReproInv~RGR, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
+legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
 plot(RA~RGR, SummaryInd, log="x", col=col.age[as.factor(age)],pch=16)
 legend("bottomright",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
 
@@ -371,6 +373,28 @@ xvar <- "RA"
 data <- subset(SummaryInd,RA>0&RGR>.04)
 data <- split(data, data$species)
 lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  asin(sqrt(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, 
+                    main=spp, log="xy", xlab=xvar, ylab=yvar)
+  
+  abline(lmfits[[spp]])
+}
+
+yvar <- "RGR"
+xvar <- "ReproInv"
+
+data <- subset(SummaryInd,RA>0&RGR>.04)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (log(x[[xvar]]))))
 results <- summarise_all_fits(lmfits)
 
 results$r.squared <- round(results$r.squared,digits=3)
@@ -426,12 +450,15 @@ for(spp in names(data)) {
 
 These plots show very clearly that for all species RGR suddenly dips when RA becomes non-zero. Plotting against "FinalWeight" or "GrowthInvestment" is much less clear - in other words, an individual's height is the best way to sort them into plants investing more in growth vs reproduction. There are of course some non-reproductive plants with "PropH" above the obvious cut-off, but these are almost certainly "reproductively mature" plants not reproducing in a given year.  
 
+
+
+Model analyzed is: lm(log([[GrowthInv]]) ~  asin(sqrt([[RA]]))*asin(sqrt([[PropH]]))))
+
 The canopy species have, not suprisingly, a very obvious maxH, with Growth Investment or RGR tapering markedly at the maxH is approached. In these species growth investment is poorly correlated with RA, but well correlated with height.  
 In some of the mid-height species (GRSP, BOLE, GRBU), growth investment is very poorly correlated with height, but well correlated with RA - in other words, increased RA = less growth.
 Some species are correated with neither.  
 
 Now my current analyses still lack the ability to tease apart the most obvious pattern - because I don't actually want to show that growth and height are correlated, so much as that the asymptoting of growth is correlated with height - i.e. the change in slope of the relationship.
-
 ```{r, echo=FALSE, message=FALSE}
 yvar <- "GrowthInv"
 xvar <- "RA"
@@ -444,14 +471,38 @@ results <- summarise_all_fits_2var(lmfits)
 
 results$r.squared <- round(results$r.squared,digits=3)
 results$p.value <- round(results$p.value,digits=3)
-
+names(results) <- c("species","r.sq_total","p-total","n","intercept","coef_RA","coef_PropH","coef_interaction","SS_RA","SS_PropH","SS_interaction")
 results
 
-for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, log="y",
-                    main=spp, xlab=xvar, ylab=yvar)
-  abline(lmfits[[spp]])
-}
+yvar <- "GrowthInv"
+xvar <- "PropH"
+
+data <- subset(SummaryInd)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  asin(sqrt(x[[xvar]]))))
+results2 <- summarise_all_fits(lmfits)
+
+results2$r.squared <- round(results2$r.squared,digits=3)
+results2$p.value <- round(results2$p.value,digits=3)
+names(results2) <- c("species","r.sq.PropH","p.PropH","n","a","b")
+results2
+
+yvar <- "GrowthInv"
+xvar <- "RA"
+
+data <- subset(SummaryInd)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  asin(sqrt(x[[xvar]]))))
+results3 <- summarise_all_fits(lmfits)
+
+results3$r.squared <- round(results3$r.squared,digits=3)
+results3$p.value <- round(results3$p.value,digits=3)
+names(results3) <- c("species","r.sq.RA","p.RA","n","a","b")
+results3
+
+results <- merge(results, select(results2, -n, -a,-b), by="species")
+results <- merge(results, select(results3, -n, -a,-b), by="species")
+results
 ```
 
 

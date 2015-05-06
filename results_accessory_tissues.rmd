@@ -37,7 +37,11 @@ summarise_all_fits <- function(x) {
   data.frame(species=names(x), tmp)
 }
 
-
+se_function <- function(mean1,se1) {
+for(i in 1:14) {
+arrows(i,mean1[i]+se1[i],i,mean1[i]-se1[i],code=3,angle=90, length=0.1)
+}
+}
 ```
 
 
@@ -65,8 +69,42 @@ data <- filter(SummaryInd,Total>0)
 
 plot_yvar_vs_xvar(data, yvar, xvar,
                  xlab=xvar, ylab=yvar)
-mod <- lm(asin(sqrt(PerPropagule)) ~ species, data)
+mod <- lm(asin(sqrt(PerPropagule)) ~ species-1, data)
 summary(mod)
+data.frame(
+    select(glance(mod), r.squared, p.value),
+    n= length(resid(mod)),
+    a = coef(mod)[1],
+    b = coef(mod)[2]
+  )
+
+tmp <- summary(mod)
+tmp <- tmp$coefficients
+tmp <-as.data.frame(tmp)
+tmp <- cbind(names(labels.spp),tmp)
+names(tmp) <- c("species","estimate.trans","se.trans","t.value","p.value")
+tmp2 <- select(SummarySpp, species, PerPropagule_mean, PerPropagule_se)
+tmp <- merge(tmp, tmp2, by="species")
+tmp
+plot(PerPropagule_mean~species,tmp,cex.axis=.8,pch=16,log="y",ylim=c(.001,.25),main="Percent reproductive investment put into propagules")
+
+mean1 <- tmp$PerPropagule_mean
+se1 <- tmp$PerPropagule_se
+
+se_function(mean1,se1)
+
+#for(i in 1:14) {
+#arrows(i,tmp$PerPropagule_mean[i]+tmp$PerPropagule_se[i],i,tmp$PerPropagule_mean[i]-tmp$PerPropagule_se[i],code=3,angle=90, length=0.1)}
+
+
+#barplot(height=test$PerPropagule_mean, names=test$species,cex.axis=.8,ylim=c(0,.25),cex.names=.8)
+#xv <- barplot(height=test$PerPropagule_mean, names=test$species,cex.axis=.8,ylim=c(0,.25),cex.names=.8)
+#xv
+
+#points((PerPropagule_mean+PerPropagule_se)~species,test,pch=25)
+#points((PerPropagule_mean-PerPropagule_se)~species,test,pch=24)
+
+#Tuk <- TukeyHSD(mod)
 ```
 
 ###Do species differ in the proportional energy allocated to aborted pre-pollination tissues
@@ -149,7 +187,7 @@ for(spp in names(data)) {
 - BAER, COER, GRBU, GRSP, HATE, LEES, PELA, PEPU show a significant decrease in accessory costs with increasing RA (p<0.05)  
 - BOLE shows a marginally significant decrease in accessory costs with increasing RA (p ~ 0.10)  
 ```{r, echo=FALSE, message=FALSE}
-yvar <- "PerAcc"
+yvar <- "PerPropagule"
 xvar <- "RA"
 
 data <- filter(SummaryInd,Total>0&age>2)
