@@ -441,3 +441,23 @@ se_function(mean1,se1)
 ```
 
 
+#Working to get counts out of Konrad's reproduction data
+tmpBAER <- BAER_Investment
+FD_BAER <- as.data.frame(tmpBAER$FD)
+Error_BAER <- as.data.frame(tmpBAER$Error)
+View(FD_BAER)
+
+BAER_count <- FD_BAER %>%
+  group_by(Individual, what) %>%
+  summarise_each(funs(sum), count, weight)
+  
+BAER_count2 <- Error_BAER %>%
+  group_by(Individual, Element) %>%
+  summarise_each(funs(sum), Count)
+  
+BAER_count2 <- subset(BAER_count2,Count>0)
+
+names(BAER_count2)=c("Individual","what","Error")
+BAER_count <- merge(BAER_count,BAER_count2,by=c("Individual","what"),all=TRUE)
+  
+
