@@ -207,9 +207,12 @@ results
 #Shifts in accessory costs across species and ages
 ##Overall results
 - Accessory costs higher for bigger seeds  
+- Accessory costs higher for bigger species; these are the same species that invest less in RA  
+- Of course there is also a correlation between seed size and plant size, but actually not as strong as the accessory cost one, presumably because older plants have lower accessory costs as well as species that are inherently bigger  
 - A number of species show fairly consistent declines in accessory costs with various measures of "bigger", including size, age, RA. Other species show no patterns  
-- 9 (of 14) species decrease the proportion of reproductive investment in "pre-pollination" tissues as their RA increases. in other words, they get better returns on investment the more they invest.  
+- Lower pre-pollination costs in plants with higher RA: 9 (of 14) species decrease the proportion of reproductive investment in "pre-pollination" tissues as their RA increases. in other words, they get better returns on investment the more they invest. (This is just a pattern within, not across, species)  
 - Species very different in which accessory tissues they invest the most in - which reflects the differences in basic structure (i.e. Banksia cones), but also more subtlely that some species abort lots of buds (pre-pollination aborted), while other species abort more fully formed flowers  
+- Haven't actually run all the rest, but assume all reproductive tissue types will differ in proportional allocation across species
 - For most of the statistical analyses, the youngest site has been removed, since it included individuals that were harvested while flowering (and therefore never "got to" set fruit) and automatically have no "successful" reproduction. There are of course some individuals like this at other ages as well, but far fewer  
 
 ###How do accessory costs shift with seed size?
@@ -234,25 +237,128 @@ anova(mod)
    
 * This means: The larger species get less of a return on their investment in reproduction. They have higher accessory costs.  
 
-- Species with larger seeds also have higher accessory costs - what we don't know is if "seed size" or "plant size" that is most important
+- Species with larger seeds also have higher accessory costs - what we don't know is if "seed size" or "plant size" that is most important  
+- I've also included the plot of "Propagule Allocation", the proportion of total surplus energy allocated to propagules, which combines the RA and Proportion Propagule effects  
+- Not shown, but there is a just barely significant relationship between RA and PerPropagule - in other words, although bigger species have slightly lower RA values than smaller species, this is not an important trend  
+  
+- Overall with plant weight:  
+within species:  
+- greater plant weight = higher RA  (plants allocate more to reproduction when bigger/older)**
+- plant weight = little effect on proportion to propagules  
+- plant weight = little effect on pre-pollination tissues  
+  
+across species  
+- greater plant weight = lower RA  (spending more on growth and survival)**
+- greater plant weight = lower proportion to propagules  (bigger species get less for their allocation)**
+- plant weight = little effect on pre-pollination tissues  
+
+finally,
+
+within species:
+- higher RA = lower allocation to pre-pollination tissues (compounding returns)**
 
 ```{r, echo=FALSE, message=FALSE}
-plot(PerPropagule ~FinalWeight, data=subset(SummaryInd,RA>00),log="xy", col=col.spp[as.factor(species)],pch=16)
+plot(PerPropagule ~FinalWeight, data=subset(SummaryInd,RA>0&PerPropagule>0),log="xy", col=col.spp[as.factor(species)],pch=16)
 legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
-mod <- lm(log(FinalWeight) ~ asin(sqrt(PerPropagule))*species,data=subset(SummaryInd,ReproInv>0))
+mod <- lm(log(FinalWeight) ~ (log(PerPropagule))*species,data=subset(SummaryInd,PerPropagule>0))
 summary(mod)
 anova(mod)
 
-plot(PerPropagule_mean ~FinalWeight_mean, data=subset(SummarySppAge,RA_mean>0),log="xy", col=col.spp[as.factor(species)],pch=16)
+plot(PropAllocation ~FinalWeight, data=subset(SummaryInd,RA>0&PerPropagule>0),log="xy", col=col.spp[as.factor(species)],pch=16)
 legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
-mod <- lm(log(FinalWeight_mean) ~ asin(sqrt(PerPropagule_mean))*species,data=subset(SummarySppAge,RA_mean>0))
-#summary(mod)
+mod <- lm(log(FinalWeight) ~ (log(PropAllocation))*species*age,data=subset(SummaryInd,PerPropagule>0))
+summary(mod)
 anova(mod)
 
-mod <- lm(log(FinalWeight) ~asin(sqrt(PerPropagule))*asin(sqrt(RA))*species,data=subset(SummaryInd,ReproInv>0))
-anova(mod)
+#plot(RA ~FinalWeight, data=subset(SummaryInd,RA>0&PerPropagule>0),log="xy", col=col.spp[as.factor(species)],pch=16,ylim=c(.02,1))
+#legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+#plot(PerPropagule ~RA, data=subset(SummaryInd,RA>0&PerPropagule>0),log="xy", col=col.spp[as.factor(species)],pch=16)
+#legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+```
+
+
+###Shifts in proportional pre-pollination costs with plant weight
+- No pattern within or across species when plotted against size  
+- However, higher RA = lower pre-pollination costs
+
+```{r, echo=FALSE, message=FALSE}
+mean1 <- SummarySpp$PerPrePol_All_mean
+se1 <- SummarySpp$PerPrePol_All_se
+
+plot(mean1~species,SummarySpp,cex.axis=.8,pch=16,ylim=c(.1,1),main="Percent reproductive investment put into packaging and dispersal")
+se_function(mean1,se1)
+
+plot(asin(sqrt(PerPrePol_All))~FinalWeight, data=subset(SummaryInd,PerPrePol_All>0),log="x", col=col.spp[as.factor(species)],pch=16)
+legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+yvar <- "PerPrePol_All"
+xvar <- "FinalWeight"
+
+data <- subset(SummaryInd, Total>0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+plot(asin(sqrt(PerPrePol_All))~RA, data=subset(SummaryInd,PerPrePol_All>0),log="x", col=col.spp[as.factor(species)],pch=16)
+legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+yvar <- "PerPrePol_All"
+xvar <- "RA"
+
+data <- subset(SummaryInd, Total>0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+```
+
+#Shifts in packaging and dispersal costs with plant weight
+- Species very different from one another, but no shift with size  
+- However quite a few species (BAER, BOLE, COER, GRBU. GRSP, HATE, HEPU, PILI increase the percent reproductive investment spent on packaging and dispersal with age  
+```{r, echo=FALSE, message=FALSE}
+plot(asin(sqrt(PerPackDisp)) ~FinalWeight, data=subset(SummaryInd,PerPackDisp>0),log="x", col=col.spp[as.factor(species)],pch=16)
+legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+plot(asin(sqrt(PerPackDisp)) ~RA, data=subset(SummaryInd,PerPackDisp>0),log="x", col=col.spp[as.factor(species)],pch=16)
+legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+yvar <- "PerPackDisp"
+xvar <- "FinalWeight"
+
+data <- subset(SummaryInd, Total>0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+mean1 <- SummarySpp$PerPackDisp_mean
+se1 <- SummarySpp$PerPackDisp_se
+
+plot(mean1~species,SummarySpp,cex.axis=.8,pch=16,log="y",ylim=c(.01,1),main="Percent reproductive investment put into packaging and dispersal")
+se_function(mean1,se1)
 ```
 
 ### Shifts in PerPropagule and RA within species
@@ -273,7 +379,8 @@ xvar <- "FinalWeight"
 
 data <- filter(SummaryInd,Total>0)
 data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  log(x[[xvar]])))
+lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~ log(x[[xvar]])))
+
 results <- summarise_all_fits(lmfits)
 
 results$r.squared <- round(results$r.squared,digits=3)

@@ -136,20 +136,20 @@ LMA_summary <- LMA %>%
 names(LMA_summary)<-c("species","age","LMA_mean","LMA_se","LMA_length")
 
 #accessory tissue summary by species, age
-accessory_summary <- accessory %>%
+accessory_summary <- SummaryInd %>%
   group_by(species, age) %>%
-  summarise_each(funs(mean, se, length), PrePol_A, PrePol_S, PostPol_A, PD, Prop)
+  summarise_each(funs(mean, se, length), PrePol_A, PrePol_S, PostPol_A, PD, Prop, PrePol_All)
 
-accessory_summary2 <- accessory %>%
+accessory_summary2 <- SummaryInd %>%
   filter(Total!=0) %>%
   group_by(species, age) %>%
-  summarise_each(funs(mean, se, length), PerPrePol_A, PerPrePol_S, PerPostPol_A, PerPackDisp, PerPropagule, PerAcc)
+  summarise_each(funs(mean, se, length), PerPrePol_A, PerPrePol_S, PerPostPol_A, PerPackDisp, PerPropagule, PerAcc, PerPrePol_All)
 
 #accessory tissue by species
-accessory_spp <- accessory %>%
+accessory_spp <- SummaryInd %>%
   filter(Total!=0) %>%
   group_by(species) %>%
-  summarise_each(funs(mean, se, length), PerPrePol_A, PerPrePol_S, PerPostPol_A, PerPackDisp, PerPropagule, PerAcc)
+  summarise_each(funs(mean, se, length), PerPrePol_A, PerPrePol_S, PerPostPol_A, PerPackDisp, PerPropagule, PerAcc, PerPrePol_All)
 
 #investment summary by species, age
 investment_summary <- investment %>%
@@ -225,6 +225,7 @@ SummaryInd <- merge(SummaryInd,MaxInvestment_spp, by=c("species"),all.x=TRUE)
 SummaryInd$PropH <- SummaryInd$height / SummaryInd$maxH_spp
 SummaryInd$PropMaxWeight <- SummaryInd$FinalWeight / SummaryInd$MaxFinalWeight_spp
 SummaryInd$PropMaxRepro <- SummaryInd$ReproInv / SummaryInd$MaxReproInv_spp
+SummaryInd$PropAllocation <- SummaryInd$Prop/(SummaryInd$GrowthInv + SummaryInd$ReproInv)
 
 SummaryInd$leafArea <- SummaryInd$total_leaf_weight * SummaryInd$LMA_mean
 
