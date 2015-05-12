@@ -563,7 +563,7 @@ se_function(mean1,se1)
 - most pool shift with RA, but that is likely because higher RA often means increased seed set - higher RA occurs because some flowers pollinated and mature, which shifts proportional allocation to post-pollination pools
 - has interesting implications for what RA means if it is closely linked to increased seed set (or aborted fruit production) 
 
-#Working to get counts out of Konrad's reproduction data
+#getting counts out of Konrad's reproduction data
 ```{r, echo=FALSE, message=FALSE}
 tmp <- BAER_Investment
 FD <- as.data.frame(tmp$FD)
@@ -613,9 +613,73 @@ GRSP_count <- FD %>%
 GRSP_count <- subset(GRSP_count, count!=0)
 GRSP_count$species <- "GRSP"
 
-##haven't continued with remaining species, because of problems described
-accessory_count <- rbind(BAER_count,BOLE_count,COER_count,EPMI_count,GRBU_count,GRSP_count)
+tmp <- HATE_Investment
+FD <- as.data.frame(tmp$FD)
+HATE_count <- FD %>%
+  group_by(Individual, what) %>%
+  summarise_each(funs(sum), count, weight)
+HATE_count <- subset(HATE_count, count!=0)
+HATE_count$species <- "HATE"
+
+tmp <- HEPU_Investment
+FD <- as.data.frame(tmp$FD)
+HEPU_count <- FD %>%
+  group_by(Individual, what) %>%
+  summarise_each(funs(sum), count, weight)
+HEPU_count <- subset(HEPU_count, count!=0)
+HEPU_count$species <- "HEPU"
+
+tmp <- LEES_Investment
+FD <- as.data.frame(tmp$FD)
+LEES_count <- FD %>%
+  group_by(Individual, what) %>%
+  summarise_each(funs(sum), count, weight)
+LEES_count <- subset(LEES_count, count!=0)
+LEES_count$species <- "LEES"
+
+tmp <- PELA_Investment
+FD <- as.data.frame(tmp$FD)
+PELA_count <- FD %>%
+  group_by(Individual, what) %>%
+  summarise_each(funs(sum), count, weight)
+PELA_count <- subset(PELA_count, count!=0)
+PELA_count$species <- "PELA"
+
+tmp <- PEPU_Investment
+FD <- as.data.frame(tmp$FD)
+PEPU_count <- FD %>%
+  group_by(Individual, what) %>%
+  summarise_each(funs(sum), count, weight)
+PEPU_count <- subset(PEPU_count, count!=0)
+PEPU_count$species <- "PEPU"
+
+tmp <- PHPH_Investment
+FD <- as.data.frame(tmp$FD)
+PHPH_count <- FD %>%
+  group_by(Individual, what) %>%
+  summarise_each(funs(sum), count, weight)
+PHPH_count <- subset(PHPH_count, count!=0)
+PHPH_count$species <- "PHPH"
+
+tmp <- PILI_Investment
+FD <- as.data.frame(tmp$FD)
+PILI_count <- FD %>%
+  group_by(Individual, what) %>%
+  summarise_each(funs(sum), count, weight)
+PILI_count <- subset(PILI_count, count!=0)
+PILI_count$species <- "PILI"
+
+tmp <- PUTU_Investment
+FD <- as.data.frame(tmp$FD)
+PUTU_count <- FD %>%
+  group_by(Individual, what) %>%
+  summarise_each(funs(sum), count, weight)
+PUTU_count <- subset(PUTU_count, count!=0)
+PUTU_count$species <- "PUTU"
+
+accessory_count <- rbind(BAER_count,BOLE_count,COER_count,EPMI_count,GRBU_count,GRSP_count,HATE_count,HEPU_count,LEES_count,PELA_count,PEPU_count,PHPH_count,PILI_count,PUTU_count)
 ```
+
 
 TO DO
 - seed set with age - this is probably what explains a lot of changes in proportional tissue alotment. 
