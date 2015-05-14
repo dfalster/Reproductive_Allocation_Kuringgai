@@ -251,6 +251,174 @@ SummarySpp <- merge(SummarySpp, accessory_spp, by=c("species"))
 SummaryInd$species <- as.factor(SummaryInd$species)
 SummarySppAge$species <- as.factor(SummarySppAge$species)
 
+#getting counts out of Konrad's reproduction data
+tmp <- BAER_Investment
+FD <- as.data.frame(tmp$FD)
+BAER_count <- FD %>%
+  group_by(Individual, what) %>%
+  summarise_each(funs(sum), count, weight)
+BAER_count <- subset(BAER_count, count!=0)
+BAER_count$species <- "BAER"
+
+tmp <- BOLE_Investment
+FD <- as.data.frame(tmp$FD)
+BOLE_count <- FD %>%
+  group_by(Individual, what) %>%
+  summarise_each(funs(sum), count, weight)
+BOLE_count <- subset(BOLE_count, count!=0)
+BOLE_count$species <- "BOLE"
+
+tmp <- COER_Investment
+FD <- as.data.frame(tmp$FD)
+COER_count <- FD %>%
+  group_by(Individual, what) %>%
+  summarise_each(funs(sum), count, weight)
+COER_count <- subset(COER_count, count!=0)
+COER_count$species <- "COER"
+
+tmp <- EPMI_Investment
+FD <- as.data.frame(tmp$FD)
+EPMI_count <- FD %>%
+  group_by(Individual, what) %>%
+  summarise_each(funs(sum), count, weight)
+EPMI_count <- subset(EPMI_count, count!=0)
+EPMI_count$species <- "EPMI"
+
+tmp <- GRBU_Investment
+FD <- as.data.frame(tmp$FD)
+GRBU_count <- FD %>%
+  group_by(Individual, what) %>%
+  summarise_each(funs(sum), count, weight)
+GRBU_count <- subset(GRBU_count, count!=0)
+GRBU_count$species <- "GRBU"
+
+tmp <- GRSP_Investment
+FD <- as.data.frame(tmp$FD)
+GRSP_count <- FD %>%
+  group_by(Individual, what) %>%
+  summarise_each(funs(sum), count, weight)
+GRSP_count <- subset(GRSP_count, count!=0)
+GRSP_count$species <- "GRSP"
+
+tmp <- HATE_Investment
+FD <- as.data.frame(tmp$FD)
+HATE_count <- FD %>%
+  group_by(Individual, what) %>%
+  summarise_each(funs(sum), count, weight)
+HATE_count <- subset(HATE_count, count!=0)
+HATE_count$species <- "HATE"
+
+tmp <- HEPU_Investment
+FD <- as.data.frame(tmp$FD)
+HEPU_count <- FD %>%
+  group_by(Individual, what) %>%
+  summarise_each(funs(sum), count, weight)
+HEPU_count <- subset(HEPU_count, count!=0)
+HEPU_count$species <- "HEPU"
+
+tmp <- LEES_Investment
+FD <- as.data.frame(tmp$FD)
+LEES_count <- FD %>%
+  group_by(Individual, what) %>%
+  summarise_each(funs(sum), count, weight)
+LEES_count <- subset(LEES_count, count!=0)
+LEES_count$species <- "LEES"
+
+tmp <- PELA_Investment
+FD <- as.data.frame(tmp$FD)
+PELA_count <- FD %>%
+  group_by(Individual, what) %>%
+  summarise_each(funs(sum), count, weight)
+PELA_count <- subset(PELA_count, count!=0)
+PELA_count$species <- "PELA"
+
+tmp <- PEPU_Investment
+FD <- as.data.frame(tmp$FD)
+PEPU_count <- FD %>%
+  group_by(Individual, what) %>%
+  summarise_each(funs(sum), count, weight)
+PEPU_count <- subset(PEPU_count, count!=0)
+PEPU_count$species <- "PEPU"
+
+tmp <- PHPH_Investment
+FD <- as.data.frame(tmp$FD)
+PHPH_count <- FD %>%
+  group_by(Individual, what) %>%
+  summarise_each(funs(sum), count, weight)
+PHPH_count <- subset(PHPH_count, count!=0)
+PHPH_count$species <- "PHPH"
+
+tmp <- PILI_Investment
+FD <- as.data.frame(tmp$FD)
+PILI_count <- FD %>%
+  group_by(Individual, what) %>%
+  summarise_each(funs(sum), count, weight)
+PILI_count <- subset(PILI_count, count!=0)
+PILI_count$species <- "PILI"
+
+tmp <- PUTU_Investment
+FD <- as.data.frame(tmp$FD)
+PUTU_count <- FD %>%
+  group_by(Individual, what) %>%
+  summarise_each(funs(sum), count, weight)
+PUTU_count <- subset(PUTU_count, count!=0)
+PUTU_count$species <- "PUTU"
+
+accessory_count <- rbind(BAER_count,BOLE_count,COER_count,EPMI_count,GRBU_count,GRSP_count,HATE_count,HEPU_count,LEES_count,PELA_count,PEPU_count,PHPH_count,PILI_count,PUTU_count)
+
+count_flower <- subset(accessory_count, what=="flower_petals",select=c("Individual","count"))
+names(count_flower) <- c("individual","flower_count")
+count_flower$individual <- as.factor(count_flower$individual)
+
+count_bud <- subset(accessory_count, what=="bud_small"|what=="bud_mid"|what=="bud_large")
+count_bud <- count_bud %>%
+  group_by(Individual) %>%
+  summarise_each(funs(sum), count)
+names(count_bud) <- c("individual","bud_count")
+count_bud$individual <- as.factor(count_bud$individual)
+
+count_seed <- subset(accessory_count, what=="seed"|what=="fruit_mature")
+count_seed <- count_seed %>%
+  group_by(Individual) %>%
+  summarise_each(funs(sum), count)
+names(count_seed) <- c("individual","seed_count")
+count_seed$individual <- as.factor(count_seed$individual)
+
+count_fruit_aborted <- subset(accessory_count, what=="fruit_just_starting"|what=="fruit_young"|what=="fruit_large_immature_01"|what=="fruit_large_immature_02"|what=="fruit_large_immature_03"|what=="fruit_large_immature_04"|what==" fruit_large_immature_05"|what==" fruit_large_immature_06"|what=="fruit_empty")
+count_fruit_aborted <- count_fruit_aborted %>%
+  group_by(Individual) %>%
+  summarise_each(funs(sum), count)
+names(count_fruit_aborted) <- c("individual","aborted_fruit_count")
+count_fruit_aborted$individual <- as.factor(count_fruit_aborted$individual)
+
+count_seed_pod <- subset(accessory_count, what=="seed_pod",select=c("Individual","weight"))
+names(count_seed_pod) <- c("individual","seedpod_weight")
+count_seed_pod$individual <- as.factor(count_seed_pod$individual)
+
+count_fruit_mature <- subset(accessory_count, what=="fruit_mature",select=c("Individual","weight"))
+names(count_fruit_mature) <- c("individual","fruit_weight")
+count_fruit_mature$individual <- as.factor(count_fruit_mature$individual)
+
+SummaryInd <- merge(SummaryInd, count_flower, by="individual",all.x=TRUE)
+SummaryInd <- merge(SummaryInd, count_bud, by="individual",all.x=TRUE)
+SummaryInd <- merge(SummaryInd, count_fruit_aborted, by="individual",all.x=TRUE)
+SummaryInd <- merge(SummaryInd, count_seed, by="individual",all.x=TRUE)
+SummaryInd <- merge(SummaryInd, count_seed_pod, by="individual",all.x=TRUE)
+SummaryInd <- merge(SummaryInd, count_fruit_mature, by="individual",all.x=TRUE)
+
+for(v in c("flower_count","bud_count","seed_count","aborted_fruit_count","seedpod_weight","fruit_weight")) {
+  i <- is.na(SummaryInd[[v]])
+  SummaryInd[[v]][i] <- 0
+}
+
+SummaryInd$seedset <- SummaryInd$seed_count/(SummaryInd$bud_count+SummaryInd$flower_count+SummaryInd$seed_count)
+#not quite perfect, because I don't yet have counts of aborted parts in this (+SummaryInd$aborted_fruit_count) because lots of negative counts
+SummaryInd$fruit_weight <- SummaryInd$Prop + SummaryInd$seedpod_weight + SummaryInd$fruit_weight
+SummaryInd$PrePolCount <- SummaryInd$bud_count+SummaryInd$flower_count
+SummaryInd$PrePolAbort <- (SummaryInd$bud_count+SummaryInd$flower_count)/(SummaryInd$bud_count+SummaryInd$flower_count+SummaryInd$seed_count)
+#SummaryInd$PrePolAbort <- (SummaryInd$bud_count+SummaryInd$flower_count)/(SummaryInd$bud_count+SummaryInd$flower_count+SummaryInd$seed_count+SummaryInd$aborted_fruit_count)
+SummaryInd$repro_count <- SummaryInd$bud_count+SummaryInd$flower_count+SummaryInd$seed_count
+
 #plotting and stats
 #creating lists of information for plotting symbols, colors, labels
 pch.spp <- c(0,1,2,15,16,17,18,0,1,2,15,16,17,18)

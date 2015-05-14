@@ -60,29 +60,33 @@ arrows(i,mean1[i]+se1[i],i,mean1[i]-se1[i],code=3,angle=90, length=0.1)
 words.top.right.logxy <- function (x) {
 output <- data.frame(select(glance(x), r.squared, p.value))
 output <- round(output,4)
-text(10^((0.70*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.95*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("r squared = ",output[1]),adj=0)
-text(10^((0.70*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.9*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("p-value = ",output[2]),adj=0)
+text(10^((0.75*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.93*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("r squared = ",output[1]),adj=0,cex=.9)
+text(10^((0.75*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.88*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("p-value = ",output[2]),adj=0,cex=.9)
+text(10^((0.99*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.98*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),summary(mod)[1],cex=.7,adj=1)
 }
 
 words.top.right.logx <- function (x) {
 output <- data.frame(select(glance(x), r.squared, p.value))
 output <- round(output,4)
-text(10^((0.70*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.95*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("r squared = ",output[1]),adj=0)
-text(10^((0.70*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.9*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("p-value = ",output[2]),adj=0)
+text(10^((0.75*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.93*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("r squared = ",output[1]),adj=0,cex=.9)
+text(10^((0.75*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.88*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("p-value = ",output[2]),adj=0,cex=.9)
+text(10^((0.99*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.98*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),summary(mod)[1],cex=.7,adj=1)
 }
 
 words.top.right <- function (x) {
 output <- data.frame(select(glance(x), r.squared, p.value))
 output <- round(output,4)
-text(((0.70*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.95*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("r squared = ",output[1]),adj=0)
-text(((0.70*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.9*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("p-value = ",output[2]),adj=0)
+text(((0.75*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.93*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("r squared = ",output[1]),adj=0,cex=.9)
+text(((0.75*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.88*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("p-value = ",output[2]),adj=0,cex=.9)
+text(((0.99*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.98*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),summary(mod)[1],cex=.7,adj=1)
 }
 
 words.bottom.right.logxy <- function (x) {
 output <- data.frame(select(glance(x), r.squared, p.value))
 output <- round(output,4)
-text(10^((0.70*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.1*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("r squared = ",output[1]),adj=0)
-text(10^((0.70*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.05*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("p-value = ",output[2]),adj=0)
+text(10^((0.75*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.12*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("r squared = ",output[1]),adj=0,cex=.9)
+text(10^((0.75*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.07*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("p-value = ",output[2]),adj=0,cex=.9)
+text(10^((0.99*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.02*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),summary(mod)[1],cex=.7,adj=1)
 }
 ```
 
@@ -295,24 +299,25 @@ words.bottom.right.logxy(mod)
 ###Size versus proportional propagule investment
 - Species that are bigger (by weight) invest a lower proportion of their reproduction in propagules  
    1.  This is another way of showing that larger species get less of a return on their investment in reproduction. They have higher accessory costs. 
+   - There is also an increase in propagule investment with age
 ```{r, echo=FALSE, message=FALSE}
-mod <- lm(log(FinalWeight) ~ (log(PerPropagule))+species,data=subset(SummaryInd,PerPropagule>0))
-anova(mod)
+mod <- lm(log(FinalWeight) ~ (log(PerPropagule))+age,data=subset(SummaryInd,PerPropagule>0))
+summary(mod)
 plot(PerPropagule ~FinalWeight, data=subset(SummaryInd,RA>0&PerPropagule>0),log="xy", col=col.spp[as.factor(species)],pch=16)
 legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right.logxy(mod)
-text(10^((0.70*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.85*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),"includes species effect",adj=0) 
+text(10^((0.70*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.85*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),"includes age effect",adj=0) 
 ```
   
 - Species that are bigger also invest a lower proportion of their TOTAL surplus energy in propagules (proportion propagules*RA) 
   + This is noisier than looking simply at proportion reproductive allocation to propagules, because of the RA effects - see below
 ```{r, echo=FALSE, message=FALSE}
-mod <- lm(log(FinalWeight) ~ (log(PropAllocation))*species*age,data=subset(SummaryInd,PerPropagule>0))
+mod <- lm(log(FinalWeight) ~ (log(PropAllocation))*age,data=subset(SummaryInd,PerPropagule>0))
 plot(PropAllocation ~FinalWeight, data=subset(SummaryInd,RA>0&PerPropagule>0),log="xy", col=col.spp[as.factor(species)],pch=16)
 legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right.logxy(mod)
-text(1000,.6e-4,"includes species effect",adj=0)
-anova(mod)
+text(1000,.6e-4,"includes age effect (increase in Prop Allocation with age)",adj=0)
+summary(mod)
 ```
 
 - Looking at RA with plant size is not very informative, because:
@@ -563,7 +568,157 @@ se_function(mean1,se1)
 - most pool shift with RA, but that is likely because higher RA often means increased seed set - higher RA occurs because some flowers pollinated and mature, which shifts proportional allocation to post-pollination pools
 - has interesting implications for what RA means if it is closely linked to increased seed set (or aborted fruit production) 
 
-#getting counts out of Konrad's reproduction data
+
+##Looking at 
+- Species that are smaller have lower seed set -> this is likely what is causing Propagule allocation to decrease with size
+- Also a small increase in seedset with age - but a smaller effect 
+
+```{r, echo=FALSE, message=FALSE}
+par(mfrow=c(2,2), cex=1, omi=c(.1,0.1,0.1,0.1), mai=c(1.2,1,0.1,0.1))
+mod <- lm(log(FinalWeight)~log(seedset),data=subset(SummaryInd,seedset>0))
+plot(seedset ~ FinalWeight,data=subset(SummaryInd,seedset>0),
+          col=col.spp[as.factor(species)],
+          pch=16,log="xy",xlab="",ylab="seed set")
+words.bottom.right.logxy(mod)
+
+mod <- lm(log(RA)~log(seedset),data=subset(SummaryInd,seedset>0))
+plot(seedset ~ RA,data=subset(SummaryInd,seedset>0),
+          col=col.spp[as.factor(species)],
+          pch=16,log="xy",ylab="",xlab="")
+words.bottom.right.logxy(mod)
+mod <- lm(log(FinalWeight)~log(seed_count),data=subset(SummaryInd,seed_count>0))
+plot(seed_count ~ FinalWeight,data=subset(SummaryInd,seed_count>0),
+          col=col.spp[as.factor(species)],
+          pch=16,log="xy",xlab="plant weight",ylab="seed count")
+words.bottom.right.logxy(mod)
+mod <- lm(log(RA)~log(seed_count),data=subset(SummaryInd,seed_count>0))
+plot(seed_count ~ RA,data=subset(SummaryInd,seed_count>0),
+          col=col.spp[as.factor(species)],
+          pch=16,log="xy",ylab="")
+words.bottom.right.logxy(mod)
+legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+```
+
+```{r, echo=FALSE, message=FALSE}
+mod <- lm(log(FinalWeight)~log(PerPropagule),data=subset(SummaryInd,seedset>0))
+plot(PerPropagule~FinalWeight,data=subset(SummaryInd,PerPropagule>0),col=col.spp[as.factor(species)],pch=16,log="xy")
+legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+words.top.right.logxy(mod)
+```
+
+- However, as shown above, there is no clear shift across plant size in pre-pollination allocation   
+```{r, echo=FALSE, message=FALSE}
+mod <- lm(asin(sqrt(PerPrePol_All)) ~log(FinalWeight)*age, data=subset(SummaryInd,PerPrePol_All>0))
+anova(mod)
+```
+
+- There is however a decrease in RA with plant size at a given age (across species effect)
+```{r, echo=FALSE, message=FALSE}
+mod <- lm(asin(sqrt(RA)) ~ log(FinalWeight)*age, data=subset(SummaryInd,RA>0))
+plot(asin(sqrt(RA))~FinalWeight,data=subset(SummaryInd,seedset>0),col=col.spp[as.factor(species)],pch=16,log="x")
+legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+words.top.right.logx(mod)
+anova(mod)
+```
+
+- Together this indicates that increased propagule allocation is due to increased seedset, which increases RA in smaller-sized species
+```{r, echo=FALSE, message=FALSE}
+mod <- lm(asin(sqrt(RA))~age*species,data=subset(SummaryInd,RA>0))
+anova(mod)
+```
+
+- seedset and Proportional allocation to propagules (vs. all accessory tissues) are well correlated, within and across species  
+```{r, echo=FALSE, message=FALSE}
+mod <- lm(log(seedset)~log(PerPropagule),data=subset(SummaryInd,seedset>0))
+plot(PerPropagule~seedset,data=subset(SummaryInd,seedset>0),col=col.spp[as.factor(species)],pch=16,log="xy")
+legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+words.bottom.right.logxy(mod)
+
+anova(mod)
+```
+
+- however, seedset and seed size are much less well correlated
+- so for this collection of species, shifts in accessory costs are closely linked to seed_set
+- seed set therefore clearly plays a role in the (small) shifts in RA with plant size
+```{r, echo=FALSE, message=FALSE}
+mod <- lm(log(seedset)~log(seed_size),data=subset(SummaryInd,seedset>0))
+
+plot(seed_size~seedset,data=subset(SummaryInd,PerPropagule>0),col=col.spp[as.factor(species)],pch=16,log="xy")
+legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+words.top.right.logxy(mod)
+```
+
+- there is no relationship between seed_count and Final Weight
+```{r, echo=FALSE, message=FALSE}
+mod <- lm(log(FinalWeight)~log(seed_count),data=subset(SummaryInd,seed_count>0))
+plot(seed_count~FinalWeight,data=subset(SummaryInd,seed_count>0),col=col.spp[as.factor(species)],pch=16,log="xy")
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+words.bottom.right.logxy(mod)
+```
+
+```{r, echo=FALSE, message=FALSE}
+mod <- lm(log(FinalWeight)~log(fruit_weight),data=subset(SummaryInd,fruit_weight>0))
+plot(fruit_weight~FinalWeight,data=subset(SummaryInd,fruit_weight>0),col=col.spp[as.factor(species)],pch=16,log="xy")
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+words.bottom.right.logxy(mod)
+```
+
+
+```{r, echo=FALSE, message=FALSE}
+mod <- lm(log(ReproInv)~log(fruit_weight),data=subset(SummaryInd,fruit_weight>0))
+plot(fruit_weight~ReproInv,data=subset(SummaryInd,fruit_weight>0),col=col.spp[as.factor(species)],pch=16,log="xy")
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+words.bottom.right.logxy(mod)
+```
+
+- producing more seeds has a limited effect on RA  
+- it is proprtion of flowers/buds that become seeds (seed set) that matters
+```{r, echo=FALSE, message=FALSE}
+mod <- lm(log(RA)~log(seed_count),data=subset(SummaryInd,seed_count>0))
+plot(seed_count~RA,data=subset(SummaryInd,seed_count>0),col=col.spp[as.factor(species)],pch=16,log="xy")
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+words.bottom.right.logxy(mod)
+
+yvar <- "seed_count"
+xvar <- "RA"
+
+data <- subset(SummaryInd, seed_count>0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm((log(x[[yvar]])) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+```
+
+- However, producing more reproductive units increases RA  - this is a within species effect mostly  
+```{r, echo=FALSE, message=FALSE}
+mod <- lm(log(RA)~log(repro_count),data=subset(SummaryInd,repro_count>0))
+plot(repro_count~RA,data=subset(SummaryInd,repro_count>0),col=col.spp[as.factor(species)],pch=16,log="xy")
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+words.bottom.right.logxy(mod)
+
+yvar <- "repro_count"
+xvar <- "RA"
+
+data <- subset(SummaryInd, repro_count>0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm((log(x[[yvar]])) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+```
+#getting counts out of Konrad's reproduction data - this code now also appears in "summary_dataframe.R", where it belongs in the end
+
 ```{r, echo=FALSE, message=FALSE}
 tmp <- BAER_Investment
 FD <- as.data.frame(tmp$FD)
