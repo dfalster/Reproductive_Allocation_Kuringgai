@@ -1,0 +1,43 @@
+SummaryInd <- merge(SummaryInd,select(accessory_count, -species), by="individual",all.x=TRUE)
+
+count_lots_columns <- separate(accessory_count, count,c("bud_small","bud_mid","bud_big","flower_aborted","bud_just_opening","flower_petals_small","flower_petals","fruit_aborted","flower_stigma","flower_calyx","bract_flower_or_finished_flower","flower_style","finished_flower","finished_flower_stigma","late_finished_flower","inflorescence_stalk_in_fruit_large","inflorescence_stalk_in_fruit_very_large","fruit_just_starting","calyx_fruit",fruit_young","pedicel","fruit_large_immature_01","fruit_large_immature_02","fruit_large_immature_03","fruit_large_immature_04","fruit_large_immature_05","fruit_large_immature_06","fruit_empty","fruit_mature","bract_fruit","seed_pod","seed_immature","seed_aborted","seed","cone_just_starting_01","cone_just_starting_02","cone_just_starting_03","cone_just_starting_04","cone_just_starting_05","cone_young_01","cone_young_02","cone_young_03","cone_young_04","cone_green_01","cone_green_02","cone_green_03","cone_green_04","cone_brown_no_expanded_follicles","cone_brown","cone_aborted","cone_base_green_01","cone_base_green_02","cone_base_green_03","cone_base_green_04","cone_base_brown"),sep=",",remove=TRUE,extra="drop")
+
+View(accessory_count)
+View(count_lots_columns)
+
+count_lots_columns <- separate(accessory_count,count,into=c("bud_small","bud_mid","bud_big","flower_aborted","bud_just_opening","flower_petals_small","flower_petals","fruit_aborted","flower_stigma"),sep=",",remove=TRUE,extra="drop")
+
+
+par(mfrow=c(1,2), cex=1, omi=c(.1,0.1,0.1,0.1), mai=c(1.2,1,0.1,0.1))
+
+plot(seedset ~ FinalWeight,data=subset(SummaryInd,seedset>0),
+          col=col.spp[as.factor(species)],
+          pch=16,log="xy",xlab="plant weight",ylab="seed set") 
+plot(seedset ~ RA,data=subset(SummaryInd,seedset>0),
+          col=col.spp[as.factor(species)],
+          pch=16,log="xy",ylab="")
+plot.new()
+
+
+td.means.comp$whole.stem.density,td.means.comp$stature,td.means.comp$genus,
+           xlabel="",ylabel="Whole stem density",
+           my.colors = unique(color.by.comp),
+           yrange = c(0,1), xrange=c(0.5,2.5))
+axis(1, at=c(1,2), labels=c("Short", "Tall"))
+line.plot( td.means.comp$pith.density,td.means.comp$stature,td.means.comp$genus,
+           xlabel="",ylabel="Pith density",
+           my.colors = unique(color.by.comp),
+           yrange = c(0,1), xrange=c(0.5,2.5))
+axis(1, at=c(1,2), labels=c("Short", "Tall"))
+plot.new()
+line.plot( td.means.comp$wood.density,td.means.comp$stature,td.means.comp$genus,
+           xlabel="",ylabel="Wood density",
+           my.colors = unique(color.by.comp),
+           yrange = c(0,1), xrange=c(0.5,2.5))
+axis(1, at=c(1,2), labels=c("Short", "Tall"))
+line.plot( td.means.comp$bark.density,td.means.comp$stature,td.means.comp$genus,
+           xlabel="",ylabel="Bark density",
+           my.colors = unique(color.by.comp),
+           yrange = c(0,1), xrange=c(0.5,2.5))
+axis(1, at=c(1,2), labels=c("Short", "Tall"))
+plot.new()
