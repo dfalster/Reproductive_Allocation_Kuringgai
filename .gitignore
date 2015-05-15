@@ -15,6 +15,8 @@ figure*
 CarbonInvestments.pdf
 CarbonInvestments.tex
 
+results.md
+
 *.whisker
 ./bootstrap
 

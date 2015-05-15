@@ -1,26 +1,37 @@
 
 # Rebuilding from source
 
-The analysis is managed using the package ['maker'](https://github.com/richfitz/maker). To install maker, from within R, run:
+The analysis is managed using the package ['remake'](https://github.com/richfitz/remake). To install remake, from within R, run:
 
 ```
 # installs the package devtools
 install.packages("devtools")
-# use devtools to install maker
-devtools::install_github("richfitz/maker")
+# use devtools to install remake
+devtools::install_github("richfitz/remake")
 ```
 
 Then open R and set the downloaded folder as your working directory. Then,
 
 ```
-# load maker
-m <- maker:::maker()
+# load remake
+library(remake)
 
-# ask maker to install any missing packages
-m$install_packages()
+# ask remake to install any missing packages
+install_missing_packages()
 
 # build the dataset
-m$make()
+make("all")
 ````
 
-Figures and tables for the document are saved with the directories `tables` and `figures`.
+You can also build parts of the dataset by specifying the objects to build, e.g.
+```
+x <- make("AccessoryCosts_all")
+```
+
+The different targets that can be built are described within the files `remake.yml`, `remake_species_data.yml`.
+
+Note also, you can generate a traditional Rscript for building a particular target
+
+```
+make_script("AccessoryCosts_all", file = "build.R")
+```
