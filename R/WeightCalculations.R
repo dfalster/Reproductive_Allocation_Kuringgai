@@ -128,7 +128,7 @@ WeightCalculationsAtCensus <- function(C, TreeID, census, FloweringCategories, P
   for (i in seq_len(n.parts)) {
     if (Parts[i, species] == "count") {
       count_ch <- C[, Parts[i, "flower_part"]]
-      if (!is.na(count_ch)) {
+      if (!is.na(count_ch)&count_ch!="") {
         k <- k + 1
         type <- Parts[i, "flower_part"]
         m.type <- "count"
@@ -147,7 +147,7 @@ WeightCalculationsAtCensus <- function(C, TreeID, census, FloweringCategories, P
     }
     if (Parts[i, species] == "count_by_length") {
       length_ch <- C[, paste0(Parts[i, "flower_part"], "_by_length")]
-      if (!is.na(length_ch)) {
+      if (!is.na(length_ch)&length_ch!="") {
         k <- k + 1
         type <- Parts[i, "flower_part"]
         m.type <- "length"
@@ -160,7 +160,7 @@ WeightCalculationsAtCensus <- function(C, TreeID, census, FloweringCategories, P
 
     if (Parts[i, species] == "count; count_by_length") {
       count_ch <- C[, Parts[i, "flower_part"]]
-      if (!is.na(count_ch)) {
+      if (!is.na(count_ch)&count_ch!="") {
         k <- k + 1
         type <- Parts[i, "flower_part"]
         m.type <- "count"
@@ -170,7 +170,7 @@ WeightCalculationsAtCensus <- function(C, TreeID, census, FloweringCategories, P
         C_list[[k]] <- Element
       }
       length_ch <- C[, paste0(Parts[i, "flower_part"], "_by_length")]
-      if (!is.na(length_ch)) {
+      if (!is.na(length_ch)&length_ch!="") {
         k <- k + 1
         type <- Parts[i, "flower_part"]
         m.type <- "length"
@@ -185,7 +185,7 @@ WeightCalculationsAtCensus <- function(C, TreeID, census, FloweringCategories, P
 
     if (Parts[i, species] == "regress_by_dim") {
       height_ch <- C[, Parts[i, "flower_part"]]
-      if (!is.na(height_ch)) {
+      if (!is.na(height_ch)&height_ch!="") {
         k <- k + 1
         type <- Parts[i, "flower_part"]
         m.type <- "regress_by_dim"
@@ -202,7 +202,7 @@ WeightCalculationsAtCensus <- function(C, TreeID, census, FloweringCategories, P
 
     if (Parts[i, species] == "volume") {
       dimension_ch <- C[, Parts[i, "flower_part"]]
-      if (!is.na(dimension_ch)) {
+      if (!is.na(dimension_ch)&dimension_ch!="") {
         k <- k + 1
         type <- Parts[i, "flower_part"]
         m.type <- "volume"
