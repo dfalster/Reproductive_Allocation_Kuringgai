@@ -3,10 +3,15 @@ library(remake)
 create_bindings()
 
 source("scripts/summary_dataframes.R")
-
 plot_yvar_vs_xvar <- function(data, yvar = "y", xvar = "x", ...) {
   Y <- data[[yvar]]
   X <- data[[xvar]]
+  plot(Y ~ X, data=data,  cex.axis=.8, las=1, pch=16, ...)
+}
+
+plot_yvar2_vs_xvar2 <- function(data, yvar2 = "y", xvar2 = "x", ...) {
+  Y <- data[[yvar2]]
+  X <- data[[xvar2]]
   plot(Y ~ X, data=data,  cex.axis=.8, las=1, pch=16, ...)
 }
 
@@ -88,6 +93,14 @@ text(10^((0.75*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.12*(par("usr
 text(10^((0.75*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.07*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("p-value = ",output[2]),adj=0,cex=.9)
 text(10^((0.99*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.02*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),summary(mod)[1],cex=.7,adj=1)
 }
+
+words.bottom.right.logx <- function (x) {
+  output <- data.frame(select(glance(x), r.squared, p.value))
+  output <- round(output,4)
+  text(10^((0.75*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.12*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("r squared = ",output[1]),adj=0,cex=.9)
+  text(10^((0.75*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.07*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("p-value = ",output[2]),adj=0,cex=.9)
+  text(10^((0.99*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.02*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),summary(mod)[1],cex=.7,adj=1)
+}
 ```
 
 #Changes in growth and tissue allocation with age and size
@@ -115,8 +128,54 @@ text(10^((0.99*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.02*(par("usr
 - The plot that includes all species shows that *once* a given species has ramped up reproduction, the log-log plot of reproductive investment vs final weight is nearly linear across all species; in other words, to first order, all species allocate the same amount to reproduction relative to their weight.  
 - This is presumably the basic allometric scaling relationship discussed by others and wondering if slope I get is same as theirs    
 - However, it is important to note that species early in their reproductive trajectory do not follow this pattern  
-```{r, echo=FALSE,message=FALSE}
-plot((ReproInv)~(PropH), SummaryInd, log="y",col=col.spp[as.factor(species)],pch=16,xlim=c(4e-03,1))
+
+```{r, echo=FALSE,message=FALSE, fig.width=12, fig.height=6, out.width=792, out.height=576}
+yvar <- "RA"
+xvar <- "PropH"
+
+yvar2 <- "RA"
+xvar2 <- "FinalWeight"
+
+data <- SummaryInd
+data <- split(data, data$species)
+  
+for(spp in names(data)) {
+  par(mfrow=c(1,2), cex=1, omi=c(.1,0.3,.5,0.2), mai=c(1.2,1,.5,0.2))  
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, 
+                    main=spp, xlab=xvar, ylab=yvar)
+  plot_yvar2_vs_xvar2(data[[spp]], yvar2, xvar2, 
+                    main=spp, log="x", xlab=xvar2, ylab="")
+ 
+}  
+
+plot.new()
+```
+
+```{r, echo=FALSE,message=FALSE, fig.width=12, fig.height=6, out.width=792, out.height=576}
+yvar <- "ReproInv"
+xvar <- "PropH"
+
+yvar2 <- "ReproInv"
+xvar2 <- "FinalWeight"
+
+data <- SummaryInd
+data <- split(data, data$species)
+  
+for(spp in names(data)) {
+  par(mfrow=c(1,2), cex=1, omi=c(.1,0.3,.5,0.2), mai=c(1.2,1,.5,0.2))  
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, 
+                    main=spp, ,log="y", xlab=xvar, ylab=yvar)
+  plot_yvar2_vs_xvar2(data[[spp]], yvar2, xvar2, 
+                    main=spp, log="xy", xlab=xvar2, ylab="")
+ 
+}  
+
+par(mfrow=c(1,1), pin=c(5,7),mar=c(5,4,4,2)+.1,omi=c(.1,.1,.1,.1))
+```
+
+
+```{r, echo=FALSE,message=FALSE, fig.width=7, fig.height=7, out.width=792, out.height=576}
+plot((ReproInv)~(PropH), SummaryInd, log="y",col=col.spp[as.factor(species)],pch=16,xlim=c(4e-03,1),xlab=xvar)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
 plot(ReproInv~FinalWeight, SummaryInd, log="xy",col=col.spp[as.factor(species)],pch=16)
@@ -124,7 +183,10 @@ legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
 plot(ReproInv~height, SummaryInd, log="xy",col=col.spp[as.factor(species)],pch=16)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+```
 
+* Reproductive investment vs. PropH
+```{r, echo=FALSE,message=FALSE, fig.width=7, fig.height=7, out.width=792, out.height=576}
 yvar <- "ReproInv"
 xvar <- "PropH"
 
@@ -139,11 +201,6 @@ results$a <- round(results$a,digits=2)
 results$b <- round(results$b,digits=2)
 
 results
-
-for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, 
-                    main=spp, log="y", xlab=xvar, ylab=yvar)
-}
 ```
 
 ##RA schedules (vs. propH)  
@@ -178,11 +235,6 @@ results$a <- round(results$a,digits=2)
 results$b <- round(results$b,digits=2)
 
 results
-
-for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,
-                    main=spp, xlab=xvar, ylab=yvar)
-}
 ```
 
 ##Growth-reproduction trade-off
@@ -300,7 +352,7 @@ words.bottom.right.logxy(mod)
 - Species that are bigger (by weight) invest a lower proportion of their reproduction in propagules  
    1.  This is another way of showing that larger species get less of a return on their investment in reproduction. They have higher accessory costs. 
    - There is also an increase in propagule investment with age
-```{r, echo=FALSE, message=FALSE}
+```{r, echo=FALSE,message=FALSE, fig.width=14, fig.height=7, out.width=792, out.height=576}
 mod <- lm(log(FinalWeight) ~ (log(PerPropagule))+age,data=subset(SummaryInd,PerPropagule>0))
 summary(mod)
 plot(PerPropagule ~FinalWeight, data=subset(SummaryInd,RA>0&PerPropagule>0),log="xy", col=col.spp[as.factor(species)],pch=16)
@@ -717,125 +769,3 @@ results$b <- round(results$b,digits=2)
 
 results
 ```
-#getting counts out of Konrad's reproduction data - this code now also appears in "summary_dataframe.R", where it belongs in the end
-
-```{r, echo=FALSE, message=FALSE}
-tmp <- BAER_Investment
-FD <- as.data.frame(tmp$FD)
-BAER_count <- FD %>%
-  group_by(Individual, what) %>%
-  summarise_each(funs(sum), count, weight)
-BAER_count <- subset(BAER_count, count!=0)
-BAER_count$species <- "BAER"
- 
-tmp <- BOLE_Investment
-FD <- as.data.frame(tmp$FD)
-BOLE_count <- FD %>%
-  group_by(Individual, what) %>%
-  summarise_each(funs(sum), count, weight)
-BOLE_count <- subset(BOLE_count, count!=0)
-BOLE_count$species <- "BOLE"
-
-tmp <- COER_Investment
-FD <- as.data.frame(tmp$FD)
-COER_count <- FD %>%
-  group_by(Individual, what) %>%
-  summarise_each(funs(sum), count, weight)
-COER_count <- subset(COER_count, count!=0)
-COER_count$species <- "COER"
-
-tmp <- EPMI_Investment
-FD <- as.data.frame(tmp$FD)
-EPMI_count <- FD %>%
-  group_by(Individual, what) %>%
-  summarise_each(funs(sum), count, weight)
-EPMI_count <- subset(EPMI_count, count!=0)
-EPMI_count$species <- "EPMI"
-
-tmp <- GRBU_Investment
-FD <- as.data.frame(tmp$FD)
-GRBU_count <- FD %>%
-  group_by(Individual, what) %>%
-  summarise_each(funs(sum), count, weight)
-GRBU_count <- subset(GRBU_count, count!=0)
-GRBU_count$species <- "GRBU"
-
-tmp <- GRSP_Investment
-FD <- as.data.frame(tmp$FD)
-GRSP_count <- FD %>%
-  group_by(Individual, what) %>%
-  summarise_each(funs(sum), count, weight)
-GRSP_count <- subset(GRSP_count, count!=0)
-GRSP_count$species <- "GRSP"
-
-tmp <- HATE_Investment
-FD <- as.data.frame(tmp$FD)
-HATE_count <- FD %>%
-  group_by(Individual, what) %>%
-  summarise_each(funs(sum), count, weight)
-HATE_count <- subset(HATE_count, count!=0)
-HATE_count$species <- "HATE"
-
-tmp <- HEPU_Investment
-FD <- as.data.frame(tmp$FD)
-HEPU_count <- FD %>%
-  group_by(Individual, what) %>%
-  summarise_each(funs(sum), count, weight)
-HEPU_count <- subset(HEPU_count, count!=0)
-HEPU_count$species <- "HEPU"
-
-tmp <- LEES_Investment
-FD <- as.data.frame(tmp$FD)
-LEES_count <- FD %>%
-  group_by(Individual, what) %>%
-  summarise_each(funs(sum), count, weight)
-LEES_count <- subset(LEES_count, count!=0)
-LEES_count$species <- "LEES"
-
-tmp <- PELA_Investment
-FD <- as.data.frame(tmp$FD)
-PELA_count <- FD %>%
-  group_by(Individual, what) %>%
-  summarise_each(funs(sum), count, weight)
-PELA_count <- subset(PELA_count, count!=0)
-PELA_count$species <- "PELA"
-
-tmp <- PEPU_Investment
-FD <- as.data.frame(tmp$FD)
-PEPU_count <- FD %>%
-  group_by(Individual, what) %>%
-  summarise_each(funs(sum), count, weight)
-PEPU_count <- subset(PEPU_count, count!=0)
-PEPU_count$species <- "PEPU"
-
-tmp <- PHPH_Investment
-FD <- as.data.frame(tmp$FD)
-PHPH_count <- FD %>%
-  group_by(Individual, what) %>%
-  summarise_each(funs(sum), count, weight)
-PHPH_count <- subset(PHPH_count, count!=0)
-PHPH_count$species <- "PHPH"
-
-tmp <- PILI_Investment
-FD <- as.data.frame(tmp$FD)
-PILI_count <- FD %>%
-  group_by(Individual, what) %>%
-  summarise_each(funs(sum), count, weight)
-PILI_count <- subset(PILI_count, count!=0)
-PILI_count$species <- "PILI"
-
-tmp <- PUTU_Investment
-FD <- as.data.frame(tmp$FD)
-PUTU_count <- FD %>%
-  group_by(Individual, what) %>%
-  summarise_each(funs(sum), count, weight)
-PUTU_count <- subset(PUTU_count, count!=0)
-PUTU_count$species <- "PUTU"
-
-accessory_count <- rbind(BAER_count,BOLE_count,COER_count,EPMI_count,GRBU_count,GRSP_count,HATE_count,HEPU_count,LEES_count,PELA_count,PEPU_count,PHPH_count,PILI_count,PUTU_count)
-```
-
-
-TO DO
-- seed set with age - this is probably what explains a lot of changes in proportional tissue alotment. 
--Big question is if seed set changes with plant size or age

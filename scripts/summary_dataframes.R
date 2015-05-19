@@ -205,6 +205,11 @@ LMA_spp <- LMA %>%
   summarise_each(funs(mean, se, length), LMA)
 names(LMA_spp)<-c("species", "LMA_mean","LMA_se","LMA_length")
 
+#investment summary by species
+investment_spp <- investment %>%
+    group_by(species) %>%
+  summarise_each(funs(mean, se, length), FinalWeight,ReproInv)
+
 #maximum height for each species
 maxH_spp <- harvest %>%
   group_by(species) %>%
@@ -247,6 +252,7 @@ SummarySpp <- merge(SummarySpp, wood_summary, by=c("species"))
 SummarySpp <- merge(SummarySpp, seedsize, by=c("species"))
 SummarySpp <- merge(SummarySpp, maxH_spp, by=c("species"))
 SummarySpp <- merge(SummarySpp, accessory_spp, by=c("species"))
+SummarySpp <- merge(SummarySpp, investment_spp, by=c("species"))
 
 SummaryInd$species <- as.factor(SummaryInd$species)
 SummarySppAge$species <- as.factor(SummarySppAge$species)
@@ -399,6 +405,7 @@ count_fruit_mature <- subset(accessory_count, what=="fruit_mature",select=c("Ind
 names(count_fruit_mature) <- c("individual","fruit_weight")
 count_fruit_mature$individual <- as.factor(count_fruit_mature$individual)
 
+
 SummaryInd <- merge(SummaryInd, count_flower, by="individual",all.x=TRUE)
 SummaryInd <- merge(SummaryInd, count_bud, by="individual",all.x=TRUE)
 SummaryInd <- merge(SummaryInd, count_fruit_aborted, by="individual",all.x=TRUE)
@@ -411,13 +418,23 @@ for(v in c("flower_count","bud_count","seed_count","aborted_fruit_count","seedpo
   SummaryInd[[v]][i] <- 0
 }
 
-SummaryInd$seedset <- SummaryInd$seed_count/(SummaryInd$bud_count+SummaryInd$flower_count+SummaryInd$seed_count)
-#not quite perfect, because I don't yet have counts of aborted parts in this (+SummaryInd$aborted_fruit_count) because lots of negative counts
+SummaryInd$seedset <- SummaryInd$seed_count/(SummaryInd$bud_count+SummaryInd$flower_count+SummaryInd$seed_count+SummaryInd$aborted_fruit_count)
 SummaryInd$fruit_weight <- SummaryInd$Prop + SummaryInd$seedpod_weight + SummaryInd$fruit_weight
 SummaryInd$PrePolCount <- SummaryInd$bud_count+SummaryInd$flower_count
-SummaryInd$PrePolAbort <- (SummaryInd$bud_count+SummaryInd$flower_count)/(SummaryInd$bud_count+SummaryInd$flower_count+SummaryInd$seed_count)
-#SummaryInd$PrePolAbort <- (SummaryInd$bud_count+SummaryInd$flower_count)/(SummaryInd$bud_count+SummaryInd$flower_count+SummaryInd$seed_count+SummaryInd$aborted_fruit_count)
+SummaryInd$PrePolAbort <- (SummaryInd$bud_count+SummaryInd$flower_count)/(SummaryInd$bud_count+SummaryInd$flower_count+SummaryInd$seed_count+SummaryInd$aborted_fruit_count)
 SummaryInd$repro_count <- SummaryInd$bud_count+SummaryInd$flower_count+SummaryInd$seed_count
+
+for(v in c("seedset")) {
+  i <- is.na(SummaryInd[[v]])
+  SummaryInd[[v]][i] <- 0
+}
+
+count_spp <- SummaryInd %>%
+  filter(ReproInv>0) %>%
+  group_by(species) %>%
+  summarise_each(funs(mean, se, length), seedset,seed_count,flower_count,fruit_weight)
+
+SummarySpp <- merge(SummarySpp, count_spp, by="species",all.x=TRUE)
 
 #plotting and stats
 #creating lists of information for plotting symbols, colors, labels
