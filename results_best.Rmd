@@ -129,7 +129,7 @@ words.bottom.right.logx <- function (x) {
 - This is presumably the basic allometric scaling relationship discussed by others and wondering if slope I get is same as theirs    
 - However, it is important to note that species early in their reproductive trajectory do not follow this pattern  
 
-```{r, echo=FALSE,message=FALSE, fig.width=12, fig.height=6, out.width=792, out.height=576}
+```{r, echo=FALSE,message=FALSE, fig.width=14, fig.height=7}
 yvar <- "RA"
 xvar <- "PropH"
 
@@ -151,7 +151,7 @@ for(spp in names(data)) {
 plot.new()
 ```
 
-```{r, echo=FALSE,message=FALSE, fig.width=12, fig.height=6, out.width=792, out.height=576}
+```{r, echo=FALSE,message=FALSE, fig.width=14, fig.height=7}
 yvar <- "ReproInv"
 xvar <- "PropH"
 

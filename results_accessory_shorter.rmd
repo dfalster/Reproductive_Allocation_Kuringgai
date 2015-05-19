@@ -11,9 +11,14 @@ source("scripts/functions.R")
 * Total reproductive investment can be divided into energy invested in propagules vs. other reproductive tissues (accessory costs)
 * Reproductive investment can be considered on an energy or "count" (fecundity) basis
 
-* A couple of questions:
-    1. What should one measure?
-    2. What does it mean as proportional energy shifts between accessory cost pools?
+    1. What reproduction "pool" should one measure?
+      * Is fecundity good enough?
+      * Is fruit or propagule weight good enough?
+    2. What might cause shifts in accessory costs across species?
+      * Previous studies have shown smaller-seeded species have lower accessory costs.
+      * This data set also lets us look at individual pools of accessory tissues and see how they change across species.
+    3. How does alotment to different accessory tissue types shift within a species as it ages, grows, or increases RA? 
+      * If accessory costs decrease with increased RA, increasing RA yields compounding returns. 
 
 ##Summary of outcomes
 1. Total reproductive investment is by far the best correlate with total plant size (or growth investment)
@@ -174,6 +179,8 @@ legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
 * Looking at proportions, the pattern is much less informative
 * Plants with higher RA have lower allocation to pre-pollination tissues, probably because of their higher seedset
+* Total accessory costs and RA and rather unrelated - the plot shows a significant increase in accessory costs as RA increases, but this is mostly driven by BOLE
+
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=7}
 par(mfrow=c(1,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))  
 mod <- lm(asin(sqrt(RA))~asin(sqrt(PerPrePol_All)),data=subset(SummaryInd,RA>0&PerPrePol_All>0))

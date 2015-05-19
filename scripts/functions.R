@@ -10,6 +10,12 @@ plot_yvar2_vs_xvar2 <- function(data, yvar2 = "y", xvar2 = "x", ...) {
   plot(Y ~ X, data=data,  cex.axis=.8, las=1, pch=16, ...)
 }
 
+plot_yvar3_vs_xvar3 <- function(data, yvar3 = "y", xvar3 = "x", ...) {
+  Y <- data[[yvar3]]
+  X <- data[[xvar3]]
+  plot(Y ~ X, data=data,  cex.axis=.8, las=1, pch=16, ...)
+}
+
 summarise_fit <- function(x) {
   data.frame(
     select(glance(x), r.squared, p.value),
@@ -95,4 +101,12 @@ words.bottom.right.logx <- function (x) {
   text(10^((0.7*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.12*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("r squared = ",output[1]),adj=0,cex=.9)
   text(10^((0.7*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.07*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("p-value = ",output[2]),adj=0,cex=.9)
   text(10^((0.99*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.02*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),summary(mod)[1],cex=.7,adj=1)
+}
+
+words.bottom.right <- function (x) {
+  output <- data.frame(select(glance(x), r.squared, p.value))
+  output <- round(output,4)
+  text(((0.7*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.12*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("r squared = ",output[1]),adj=0,cex=.9)
+  text(((0.7*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.07*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("p-value = ",output[2]),adj=0,cex=.9)
+  text(((0.99*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.02*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),summary(mod)[1],cex=.7,adj=1)
 }
