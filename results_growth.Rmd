@@ -3,6 +3,7 @@ library(remake)
 create_bindings()
 
 source("scripts/summary_dataframes.R")
+source("scripts/functions.R")
 ```
 #Growth data, general patterns
 - proportion of maxH matters more for some species than others. 
@@ -17,30 +18,6 @@ source("scripts/summary_dataframes.R")
   1. e.g. see EPMI for distinct pattern
 
 
-Generic functions for most plotting below
-```{r, echo=FALSE, message=FALSE}
-plot_yvar_vs_xvar <- function(data, yvar = "y", xvar = "x", ...) {
-  Y <- data[[yvar]]
-  X <- data[[xvar]]
-  plot(Y ~ X, data=data,  cex.axis=.8, las=1, pch=16, ...)
-}
-
-summarise_fit <- function(x) {
-  data.frame(
-    select(glance(x), r.squared, p.value),
-    n= length(resid(x)),
-    a = coef(x)[1],
-    b = coef(x)[2]
-  )
-}
-
-summarise_all_fits <- function(x) {
-  tmp <- lapply(x, summarise_fit) %>%
-    bind_rows
-  data.frame(species=names(x), tmp)
-}
-```
-
 #Comparing growth between different measures and across age
 
 ###Weight vs. height
@@ -53,8 +30,6 @@ summarise_all_fits <- function(x) {
 ```{r, echo=FALSE, message=FALSE}
 plot((FinalWeight~PropH), SummaryInd, col=col.spp[as.factor(species)],pch=16,log="y")
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-plot((FinalWeight~StartBasalDiamAv), SummaryInd, col=col.spp[as.factor(species)],pch=16,log="xy")
-
 
 yvar <- "FinalWeight"
 xvar <- "PropH"
@@ -85,7 +60,8 @@ for(spp in names(data)) {
 - Quite interesting, there is a distinctly negative relationship for GRBU; its absolute growth investment actually declines as it increases in size  
 - For many of the species with a good relationship, it seems that there are two breakpoints in the curve - wondering what these mean with respect to reproductive onset and RA  
  
-```{r, echo=FALSE, message=FALSE}
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=7}
+par(mfrow=c(1,2), cex=1, omi=c(.1,0.3,.5,0.2), mai=c(1.1,1,.1,0.2))
 plot((GrowthInv~PropH), SummaryInd, log="y", col=col.spp[as.factor(species)],pch=16)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
@@ -106,7 +82,10 @@ results$a <- round(results$a,digits=2)
 results$b <- round(results$b,digits=2)
 
 results
+```
 
+```{r, echo=FALSE,message=FALSE, fig.width=7, fig.height=7}
+par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2)) 
 for(spp in names(data)) {
   plot_yvar_vs_xvar(data[[spp]], yvar, xvar, log="y",
                     main=spp, xlab=xvar, ylab=yvar)
@@ -122,9 +101,6 @@ for(spp in names(data)) {
 - These are continued ways to look at the question of how important is height (relative to the species maxH) in understanding its growth and reproduction  
 
 ```{r, echo=FALSE, message=FALSE}
-plot((RGR~PropH), SummaryInd, col=col.spp[as.factor(species)],pch=16)
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-
 yvar <- "RGR"
 xvar <- "PropH"
 
@@ -139,40 +115,6 @@ results$a <- round(results$a,digits=2)
 results$b <- round(results$b,digits=2)
 
 results
-
-for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,
-                    main=spp, xlab=xvar, ylab=yvar)
-  abline(lmfits[[spp]])
-}
-```
-
-###PropH by age
-- Confirming that species get taller as they get older  
-- Obviously true for most species, but some (i.e. PILI, somewhat BOLE, HEPU) they reach their "maxH" within a few years and then the relationship is mostly flat. These are of course also the species which are shorter lived and have high levels of early reproduction  
-
-```{r, echo=FALSE, message=FALSE}
-yvar <- "PropH"
-xvar <- "age"
-
-data <- subset(SummaryInd)
-data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm((x[[yvar]]) ~  log(x[[xvar]])))
-results <- summarise_all_fits(lmfits)
-
-results$r.squared <- round(results$r.squared,digits=3)
-results$p.value <- round(results$p.value,digits=3)
-results$a <- round(results$a,digits=2)
-results$b <- round(results$b,digits=2)
-
-results
-
-for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, log="x",
-                    main=spp, xlab=xvar, ylab=yvar)
-  
-  abline(lmfits[[spp]])
-}
 ```
 
 ###Growth Investment versus weight   
