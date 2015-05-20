@@ -57,7 +57,7 @@ words.bottom.right.logxy(mod)
 mod <- lm (log(FinalWeight)~log(PerPropagule), data=subset(SummaryInd,PerPropagule>0))
 plot(PerPropagule~FinalWeight,data=subset(SummaryInd,PerPropagule>0), log="xy",col=col.spp[as.factor(species)], pch=16, ylab="Proportion reproductive investment to propagules",xlim=c(100,2000000),xlab="Total size (mg)")
 words.bottom.right.logxy(mod)
-text((par("fin")[1]*.5),(par("fin")[2]*.2),"Total size (mg)")
+mtext("Total size (mg)", 1, outer=TRUE)
 ```
 
 ###How do accessory costs shift with seed size?
