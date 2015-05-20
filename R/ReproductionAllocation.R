@@ -1,7 +1,7 @@
 RA_Calculations <- function(thisSpecies, Species_Investment, HarvestData, Maps, IndividualsList) {
 
   individuals <- filter(IndividualsList, use_for_allocation_calculations & alive)$individual
-  HarvestData_basal <- filter(HarvestData,  individual %in% individuals & node_above == 1)
+  HarvestData_basal <- filter(HarvestData,  individual %in% individuals & segment == 1)
   HarvestData_basal_end  <- filter(HarvestData_basal, start_end=="end")
 
   ### Calculate Regression coefficients based on common slope and intercept by the basal diameter at year 2013
@@ -44,7 +44,7 @@ RA_Calculations <- function(thisSpecies, Species_Investment, HarvestData, Maps, 
            growth_stem_area = c(NA, diff(stem.area))
            ) %>%
     filter(start_end == "end") %>%
-    select(species, individual, age, dia, stem.area, leaf_weight, stem_weight, total_weight, GrowthInv, growth_stem, growth_leaf, growth_stem_diam, growth_stem_area)
+    select(species, site, individual, age, height, dia, stem.area, leaf_weight, stem_weight, total_weight, GrowthInv, growth_stem, growth_leaf, growth_stem_diam, growth_stem_area)
 
     # Use saved data to calculate total reproduction investment per individual plant
     ReproTotal <- Species_Investment$Investment %>%

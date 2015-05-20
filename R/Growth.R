@@ -5,7 +5,6 @@ preprocessHarvest <- function(HarvestData_raw, IndividualsList) {
 }
 
 CalculateMassAndDiameters <- function(HarvestData) {
-
   segments <- list()
   segments[["1"]] <- c(as.character(1:8, "1.2", "1.3", "1.2.1", "1.2.1.1", "1.1.2", "1.1.2.1", "1.1.1.2"))
   segments[["2"]] <- c(as.character(2:8, "1.1.2", "1.1.2.1", "1.1.1.2"))
@@ -31,7 +30,7 @@ CalculateMassAndDiameters <- function(HarvestData) {
     data %>%
       filter(segment %in% segments[[segment_name]]) %>%
       summarise(
-          node_above = segment_name,
+          segment = segment_name,
           leaf_weight = sum(leaf_weight),
           stem_weight = sum(stem_weight),
           total_weight = sum(leaf_weight, stem_weight))
@@ -44,24 +43,25 @@ CalculateMassAndDiameters <- function(HarvestData) {
   # Get average diameter for base of segment. This is given by diameter readings for segment with names in list above
   get.diam.node.above <- function(level, data) {
     data %>%
-      filter(node_above == level) %>%
+      filter(segment == level) %>%
       group_by(individual) %>%
       summarise(
-        node_above = level,
+        segment = level,
         dia = mean(c(diameter_1, diameter_2, diameter_3), na.rm = TRUE),
-        stem.area = dia^2 * pi/4)
+        stem.area = dia^2 * pi/4,
+        height = height)
   }
 
   get.diam.node.above.by.segement <- function(data) {
     lapply(names(segments),  get.diam.node.above, data=data)  %>% rbind_all()
   }
 
-  data <- group_by(HarvestData, species, individual, age, start_end)
+  data <- group_by(HarvestData, species, individual, site, age, start_end)
 
   mass <-  do(data, get.mass.at.node.by.segement(.))
   diameters <- do(data, get.diam.node.above.by.segement(.))
 
   # Merge mass and diameter measurements
-  merge(diameters, mass, by = c("species", "individual", "age", "node_above", "start_end")) %>%
-   arrange(species, individual, age, node_above, desc(start_end))
+  merge(diameters, mass, by = c("species", "site", "individual", "age", "segment", "start_end")) %>%
+   arrange(species, site, individual, age, segment, desc(start_end))
 }
