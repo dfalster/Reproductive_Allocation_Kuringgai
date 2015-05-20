@@ -12,15 +12,16 @@ individuals <- IndividualsList
 
 axis_labels <- read_csv("data/axis_labels.csv")
 
-harvest <- filter(HarvestData,
-                  individuals$use_for_allocation_calculations[match(HarvestData$individual, individuals$individual)] & segment==1 & start_end=="end") %>%
-  select(species,individual,age,height,total_leaf_weight,site)
+#harvest <- filter(HarvestData,
+#                  individuals$use_for_allocation_calculations[match(HarvestData$individual, individuals$individual)] & segment==1 & start_end=="end") %>%
+#  select(species,individual,age,leaf_weight,stem_weight, total_weight,height,site)
 
 investment <- ReproductionAllocation_all
 
 investment$age <- round(investment$age, digits=1)
 
 accessory <- AccessoryCosts_all
+names(accessory) <- c("individual","species","age","prepollen_aborted","prepollen_success","postpollen_aborted","packaging_dispersal","propagules","total_repro_inv")
 #accessory$age2 <- accessory$age
 #accessory$age <- round(accessory$age, digits=1)
 
@@ -88,37 +89,35 @@ leafLifespan$LL_birth[which(is.infinite(leafLifespan$LL_death))] <- NA
 
 #calculating percentages of various accessory tissues
 
-accessory$PerPrePol_A <- accessory$PrePol_A / accessory$Total
-accessory$PerPrePol_S <- accessory$PrePol_S / accessory$Total
-accessory$PerPostPol_A <- accessory$PostPol_A / accessory$Total
-accessory$PerPackDisp <- accessory$PD / accessory$Total
-accessory$PerPropagule <- accessory$Prop / accessory$Total
-accessory$PerAcc <- 1- accessory$PerPropagule
+accessory$prop_prepollen_aborted <- accessory$prepollen_aborted / accessory$total_repro_inv
+accessory$prop_prepollen_success <- accessory$prepollen_success / accessory$total_repro_inv
+accessory$prop_postpollen_aborted <- accessory$postpollen_aborted / accessory$total_repro_inv
+accessory$prop_packaging_dispersal <- accessory$packaging_dispersal / accessory$total_repro_inv
+accessory$prop_propagules <- accessory$propagules / accessory$total_repro_inv
+accessory$prop_accessory <- 1- accessory$prop_propagules
 
 
-accessory$PerPrePol_A[which(is.nan(accessory$PerPrePol_A))] <- NA
-accessory$PerPrePol_S[which(is.nan(accessory$PerPrePol_S))] <- NA
-accessory$PerPostPol_A[which(is.nan(accessory$PerPostPol_A))] <- NA
-accessory$PerPackDisp[which(is.nan(accessory$PerPackDisp))] <- NA
-accessory$PerPropagule[which(is.nan(accessory$PerPropagule))] <- NA
-accessory$PerAcc[which(is.nan(accessory$PerAcc))] <- NA
+accessory$prop_prepollen_aborted[which(is.nan(accessory$prop_prepollen_aborted))] <- NA
+accessory$prop_prepollen_success[which(is.nan(accessory$prop_prepollen_success))] <- NA
+accessory$prop_postpollen_aborted[which(is.nan(accessory$prop_postpollen_aborted))] <- NA
+accessory$prop_packaging_dispersal[which(is.nan(accessory$prop_packaging_dispersal))] <- NA
+accessory$prop_propagules[which(is.nan(accessory$prop_propagules))] <- NA
+accessory$prop_accessory[which(is.nan(accessory$prop_accessory))] <- NA
 
 
 
 #adding investment and accessory costs data to leafLifespan dataframe to create a dataframe with all individual level data
 SummaryInd <- merge(investment, select(leafLifespan, -species, -age), by="individual",all.x=TRUE)
 SummaryInd <- merge(SummaryInd, select(accessory, -species, -age), by="individual",all.x=TRUE)
-SummaryInd <- merge(SummaryInd, select(harvest, -species, -age), by="individual",all.x=TRUE)
+#SummaryInd <- merge(SummaryInd, select(harvest, -species, -age), by="individual",all.x=TRUE)
 
 #adding variables to look at change across years, RGR
-SummaryInd$change_shoot_diam <- SummaryInd$d_end - SummaryInd$d_start
-SummaryInd$change_basal_diam <- SummaryInd$FinalBasalDiam - SummaryInd$StartBasalDiam
-SummaryInd$change_shoot_area <- (3.14*((SummaryInd$d_end/2)^2)) - (3.14*((SummaryInd$d_start/2)^2))
-SummaryInd$change_basal_area <- (3.14*((SummaryInd$FinalBasalDiam/2)^2)) - (3.14*((SummaryInd$StartBasalDiam/2)^2))
+SummaryInd$growth_shoot_diam <- SummaryInd$d_end - SummaryInd$d_start
+SummaryInd$growth_shoot_area <- (3.14*((SummaryInd$d_end/2)^2)) - (3.14*((SummaryInd$d_start/2)^2))
 SummaryInd$lvs_end_total <- SummaryInd$lvs_end + SummaryInd$lvs_new
-SummaryInd$RGR <- log(SummaryInd$FinalWeight)-log(SummaryInd$FinalWeight-SummaryInd$GrowthInv)
-SummaryInd$PrePol_All <- SummaryInd$PrePol_A + SummaryInd$PrePol_S
-SummaryInd$PerPrePol_All <- SummaryInd$PerPrePol_A + SummaryInd$PerPrePol_S
+SummaryInd$RGR <- log(SummaryInd$total_weight)-log(SummaryInd$total_weight-SummaryInd$GrowthInv)
+SummaryInd$prepollen_all <- SummaryInd$prepollen_aborted + SummaryInd$prepollen_success
+SummaryInd$prop_prepollen_all <- SummaryInd$prop_prepollen_aborted + SummaryInd$prop_prepollen_success
 
 
 #summarizing data by species, age
@@ -127,7 +126,7 @@ SummaryInd$PerPrePol_All <- SummaryInd$PerPrePol_A + SummaryInd$PerPrePol_S
 LL_summary <- SummaryInd %>%
   filter(LL_bd>0 & LL_bd<6 & LL_birth<8 & LL_death<8) %>%
   group_by(species, age) %>%
-  summarise_each(funs(mean, se, length), LL_bd, LL_death,LL_birth,new_length, lvs_end, lvs_end_total, change_shoot_diam, change_basal_diam, change_shoot_area, change_basal_area,RGR)
+  summarise_each(funs(mean, se, length), LL_bd, LL_death,LL_birth,new_length, lvs_end, lvs_end_total, growth_shoot_diam, growth_shoot_area, RGR)
 
 #LMA summary by species, age
 LMA_summary <- LMA %>%
@@ -138,41 +137,34 @@ names(LMA_summary)<-c("species","age","LMA_mean","LMA_se","LMA_length")
 #accessory tissue summary by species, age
 accessory_summary <- SummaryInd %>%
   group_by(species, age) %>%
-  summarise_each(funs(mean, se, length), PrePol_A, PrePol_S, PostPol_A, PD, Prop, PrePol_All)
+  summarise_each(funs(mean, se, length),prepollen_aborted,prepollen_success, postpollen_aborted, packaging_dispersal, propagules, prepollen_all)
 
 accessory_summary2 <- SummaryInd %>%
-  filter(Total!=0) %>%
+  filter(total_repro_inv!=0) %>%
   group_by(species, age) %>%
-  summarise_each(funs(mean, se, length), PerPrePol_A, PerPrePol_S, PerPostPol_A, PerPackDisp, PerPropagule, PerAcc, PerPrePol_All)
+  summarise_each(funs(mean, se, length), prop_prepollen_aborted, prop_prepollen_success, prop_postpollen_aborted, prop_packaging_dispersal, prop_propagules, prop_prepollen_all, prop_accessory)
 
 #accessory tissue by species
 accessory_spp <- SummaryInd %>%
-  filter(Total!=0) %>%
+  filter(total_repro_inv!=0) %>%
   group_by(species) %>%
-  summarise_each(funs(mean, se, length), PerPrePol_A, PerPrePol_S, PerPostPol_A, PerPackDisp, PerPropagule, PerAcc, PerPrePol_All)
+  summarise_each(funs(mean, se, length), prop_prepollen_aborted, prop_prepollen_success, prop_postpollen_aborted, prop_packaging_dispersal, prop_propagules, prop_prepollen_all)
 
 #investment summary by species, age
 investment_summary <- investment %>%
   group_by(species, age) %>%
-  summarise_each(funs(mean, se, length), GrowthInv, ReproInv, FinalWeight, FinalBasalDiamAv, TotalInvestment, RA)
+  summarise_each(funs(mean, se, length), height, GrowthInv, ReproInv, total_weight, TotalInvestment, RA, dia, stem.area, leaf_weight, stem_weight, growth_stem_diam, growth_stem_area, growth_leaf, growth_stem)
 
 #harvest summary by species, age
-harvest_summary <- harvest %>%
-  group_by(species, age) %>%
-  summarise_each(funs(mean, se, length), height,total_leaf_weight)
+#harvest_summary <- harvest %>%
+ # group_by(species, age) %>%
+  #summarise_each(funs(mean, se, length), height,total_leaf_weight)
 #names(harvest_summary)<-c("species","age","height_mean","height_se","height_length")
 
-#maximum RA for each species/age combination
+#maximum RA and height for each species/age combination
 maxRA <- investment %>%
   group_by(species, age) %>%
-  summarise_each(funs(max), RA)
-names(maxRA)<-c("species","age","maxRA")
-
-#maximum H for each species/age combination
-maxH <- harvest %>%
-  group_by(species, age) %>%
-  summarise_each(funs(max), height)
-names(maxH)<-c("species","age","maxH")
+  summarise_each(funs(max), RA, height)
 
 #LMA summary by species, age
 LMA_summary <- LMA %>%
@@ -208,42 +200,42 @@ names(LMA_spp)<-c("species", "LMA_mean","LMA_se","LMA_length")
 #investment summary by species
 investment_spp <- investment %>%
     group_by(species) %>%
-  summarise_each(funs(mean, se, length), FinalWeight,ReproInv)
+  summarise_each(funs(mean, se, length), total_weight,ReproInv, leaf_weight, stem_weight)
 
 #maximum height for each species
-maxH_spp <- harvest %>%
+maxH_spp <- investment %>%
   group_by(species) %>%
   summarise_each(funs(max), height)
 names(maxH_spp)<-c("species", "maxH_spp")
 
 #maximum height for each species
-MaxInvestment_spp <- investment %>%
+max_investment_spp <- investment %>%
   group_by(species) %>%
-  summarise_each(funs(max), RA,ReproInv,FinalWeight)
-names(MaxInvestment_spp)<-c("species", "MaxRA_spp", "MaxReproInv_spp","MaxFinalWeight_spp")
+  summarise_each(funs(max),RA,ReproInv,total_weight,leaf_weight)
+names(max_investment_spp)<-c("species", "max_RA", "max_repro_inv","max_total_weight","max_leaf_weight")
 
 SummaryInd <- merge(SummaryInd,wood_summary, by=c("species"),all.x=TRUE)
 SummaryInd <- merge(SummaryInd,LMA_summary, by=c("species","age"),all.x=TRUE)
 SummaryInd <- merge(SummaryInd,maxH_spp, by=c("species"),all.x=TRUE)
 SummaryInd <- merge(SummaryInd,seedsize, by=c("species"),all.x=TRUE)
-SummaryInd <- merge(SummaryInd,MaxInvestment_spp, by=c("species"),all.x=TRUE)
-SummaryInd$PropH <- SummaryInd$height / SummaryInd$maxH_spp
-SummaryInd$PropMaxWeight <- SummaryInd$FinalWeight / SummaryInd$MaxFinalWeight_spp
-SummaryInd$PropMaxRepro <- SummaryInd$ReproInv / SummaryInd$MaxReproInv_spp
-SummaryInd$PropAllocation <- SummaryInd$Prop/(SummaryInd$GrowthInv + SummaryInd$ReproInv)
+SummaryInd <- merge(SummaryInd,max_investment_spp, by=c("species"),all.x=TRUE)
+SummaryInd$prop_maxH <- SummaryInd$height / SummaryInd$maxH_spp
+SummaryInd$prop_max_weight <- SummaryInd$total_weight / SummaryInd$max_total_weight
+SummaryInd$prop_max_repro <- SummaryInd$ReproInv / SummaryInd$max_repro_inv
+SummaryInd$propagule_allocation <- SummaryInd$propagules/(SummaryInd$GrowthInv + SummaryInd$ReproInv)
 
-SummaryInd$leafArea <- SummaryInd$total_leaf_weight * SummaryInd$LMA_mean
+SummaryInd$leaf_area <- SummaryInd$leaf_weight * SummaryInd$LMA_mean
 
 #merge various data summaries into SummarySppAge dataframe
 SummarySppAge <- merge(LL_summary, LMA_summary, by=c("species","age"))
 SummarySppAge <- merge(SummarySppAge, wood_summary, by=c("species"))
 SummarySppAge <- merge(SummarySppAge, seedsize, by=c("species"))
 SummarySppAge <- merge(SummarySppAge, maxH_spp, by=c("species"))
-SummarySppAge <- merge(SummarySppAge, maxH, by=c("species","age"))
+SummarySppAge <- merge(SummarySppAge, maxRA, by=c("species","age"))
 SummarySppAge <- merge(SummarySppAge, investment_summary, by=c("species","age"))
 SummarySppAge <- merge(SummarySppAge, accessory_summary, by=c("species","age"))
 SummarySppAge <- merge(SummarySppAge, accessory_summary2, by=c("species","age"),all=TRUE)
-SummarySppAge <- merge(SummarySppAge, harvest_summary, by=c("species","age"))
+#SummarySppAge <- merge(SummarySppAge, harvest_summary, by=c("species","age"))
 
 #merge various data summaries into SummarySpp dataframe
 SummarySpp <- merge(LL_spp1, LL_spp2, by=c("species"))
@@ -261,7 +253,7 @@ SummarySppAge$species <- as.factor(SummarySppAge$species)
 tmp <- BAER_Investment
 FD <- as.data.frame(tmp$FD)
 BAER_count <- FD %>%
-  group_by(Individual, what) %>%
+  group_by(individual, what) %>%
   summarise_each(funs(sum), count, weight)
 BAER_count <- subset(BAER_count, count!=0)
 BAER_count$species <- "BAER"
@@ -269,7 +261,7 @@ BAER_count$species <- "BAER"
 tmp <- BOLE_Investment
 FD <- as.data.frame(tmp$FD)
 BOLE_count <- FD %>%
-  group_by(Individual, what) %>%
+  group_by(individual, what) %>%
   summarise_each(funs(sum), count, weight)
 BOLE_count <- subset(BOLE_count, count!=0)
 BOLE_count$species <- "BOLE"
@@ -277,7 +269,7 @@ BOLE_count$species <- "BOLE"
 tmp <- COER_Investment
 FD <- as.data.frame(tmp$FD)
 COER_count <- FD %>%
-  group_by(Individual, what) %>%
+  group_by(individual, what) %>%
   summarise_each(funs(sum), count, weight)
 COER_count <- subset(COER_count, count!=0)
 COER_count$species <- "COER"
@@ -285,7 +277,7 @@ COER_count$species <- "COER"
 tmp <- EPMI_Investment
 FD <- as.data.frame(tmp$FD)
 EPMI_count <- FD %>%
-  group_by(Individual, what) %>%
+  group_by(individual, what) %>%
   summarise_each(funs(sum), count, weight)
 EPMI_count <- subset(EPMI_count, count!=0)
 EPMI_count$species <- "EPMI"
@@ -293,7 +285,7 @@ EPMI_count$species <- "EPMI"
 tmp <- GRBU_Investment
 FD <- as.data.frame(tmp$FD)
 GRBU_count <- FD %>%
-  group_by(Individual, what) %>%
+  group_by(individual, what) %>%
   summarise_each(funs(sum), count, weight)
 GRBU_count <- subset(GRBU_count, count!=0)
 GRBU_count$species <- "GRBU"
@@ -301,7 +293,7 @@ GRBU_count$species <- "GRBU"
 tmp <- GRSP_Investment
 FD <- as.data.frame(tmp$FD)
 GRSP_count <- FD %>%
-  group_by(Individual, what) %>%
+  group_by(individual, what) %>%
   summarise_each(funs(sum), count, weight)
 GRSP_count <- subset(GRSP_count, count!=0)
 GRSP_count$species <- "GRSP"
@@ -309,7 +301,7 @@ GRSP_count$species <- "GRSP"
 tmp <- HATE_Investment
 FD <- as.data.frame(tmp$FD)
 HATE_count <- FD %>%
-  group_by(Individual, what) %>%
+  group_by(individual, what) %>%
   summarise_each(funs(sum), count, weight)
 HATE_count <- subset(HATE_count, count!=0)
 HATE_count$species <- "HATE"
@@ -317,7 +309,7 @@ HATE_count$species <- "HATE"
 tmp <- HEPU_Investment
 FD <- as.data.frame(tmp$FD)
 HEPU_count <- FD %>%
-  group_by(Individual, what) %>%
+  group_by(individual, what) %>%
   summarise_each(funs(sum), count, weight)
 HEPU_count <- subset(HEPU_count, count!=0)
 HEPU_count$species <- "HEPU"
@@ -325,7 +317,7 @@ HEPU_count$species <- "HEPU"
 tmp <- LEES_Investment
 FD <- as.data.frame(tmp$FD)
 LEES_count <- FD %>%
-  group_by(Individual, what) %>%
+  group_by(individual, what) %>%
   summarise_each(funs(sum), count, weight)
 LEES_count <- subset(LEES_count, count!=0)
 LEES_count$species <- "LEES"
@@ -333,7 +325,7 @@ LEES_count$species <- "LEES"
 tmp <- PELA_Investment
 FD <- as.data.frame(tmp$FD)
 PELA_count <- FD %>%
-  group_by(Individual, what) %>%
+  group_by(individual, what) %>%
   summarise_each(funs(sum), count, weight)
 PELA_count <- subset(PELA_count, count!=0)
 PELA_count$species <- "PELA"
@@ -341,7 +333,7 @@ PELA_count$species <- "PELA"
 tmp <- PEPU_Investment
 FD <- as.data.frame(tmp$FD)
 PEPU_count <- FD %>%
-  group_by(Individual, what) %>%
+  group_by(individual, what) %>%
   summarise_each(funs(sum), count, weight)
 PEPU_count <- subset(PEPU_count, count!=0)
 PEPU_count$species <- "PEPU"
@@ -349,7 +341,7 @@ PEPU_count$species <- "PEPU"
 tmp <- PHPH_Investment
 FD <- as.data.frame(tmp$FD)
 PHPH_count <- FD %>%
-  group_by(Individual, what) %>%
+  group_by(individual, what) %>%
   summarise_each(funs(sum), count, weight)
 PHPH_count <- subset(PHPH_count, count!=0)
 PHPH_count$species <- "PHPH"
@@ -357,7 +349,7 @@ PHPH_count$species <- "PHPH"
 tmp <- PILI_Investment
 FD <- as.data.frame(tmp$FD)
 PILI_count <- FD %>%
-  group_by(Individual, what) %>%
+  group_by(individual, what) %>%
   summarise_each(funs(sum), count, weight)
 PILI_count <- subset(PILI_count, count!=0)
 PILI_count$species <- "PILI"
@@ -365,43 +357,43 @@ PILI_count$species <- "PILI"
 tmp <- PUTU_Investment
 FD <- as.data.frame(tmp$FD)
 PUTU_count <- FD %>%
-  group_by(Individual, what) %>%
+  group_by(individual, what) %>%
   summarise_each(funs(sum), count, weight)
 PUTU_count <- subset(PUTU_count, count!=0)
 PUTU_count$species <- "PUTU"
 
 accessory_count <- rbind(BAER_count,BOLE_count,COER_count,EPMI_count,GRBU_count,GRSP_count,HATE_count,HEPU_count,LEES_count,PELA_count,PEPU_count,PHPH_count,PILI_count,PUTU_count)
 
-count_flower <- subset(accessory_count, what=="flower_petals",select=c("Individual","count"))
+count_flower <- subset(accessory_count, what=="flower_petals",select=c("individual","count"))
 names(count_flower) <- c("individual","flower_count")
 count_flower$individual <- as.factor(count_flower$individual)
 
 count_bud <- subset(accessory_count, what=="bud_small"|what=="bud_mid"|what=="bud_large")
 count_bud <- count_bud %>%
-  group_by(Individual) %>%
+  group_by(individual) %>%
   summarise_each(funs(sum), count)
 names(count_bud) <- c("individual","bud_count")
 count_bud$individual <- as.factor(count_bud$individual)
 
 count_seed <- subset(accessory_count, what=="seed"|what=="fruit_mature")
 count_seed <- count_seed %>%
-  group_by(Individual) %>%
+  group_by(individual) %>%
   summarise_each(funs(sum), count)
 names(count_seed) <- c("individual","seed_count")
 count_seed$individual <- as.factor(count_seed$individual)
 
 count_fruit_aborted <- subset(accessory_count, what=="fruit_just_starting"|what=="fruit_young"|what=="fruit_large_immature_01"|what=="fruit_large_immature_02"|what=="fruit_large_immature_03"|what=="fruit_large_immature_04"|what==" fruit_large_immature_05"|what==" fruit_large_immature_06"|what=="fruit_empty")
 count_fruit_aborted <- count_fruit_aborted %>%
-  group_by(Individual) %>%
+  group_by(individual) %>%
   summarise_each(funs(sum), count)
 names(count_fruit_aborted) <- c("individual","aborted_fruit_count")
 count_fruit_aborted$individual <- as.factor(count_fruit_aborted$individual)
 
-count_seed_pod <- subset(accessory_count, what=="seed_pod",select=c("Individual","weight"))
+count_seed_pod <- subset(accessory_count, what=="seed_pod",select=c("individual","weight"))
 names(count_seed_pod) <- c("individual","seedpod_weight")
 count_seed_pod$individual <- as.factor(count_seed_pod$individual)
 
-count_fruit_mature <- subset(accessory_count, what=="fruit_mature",select=c("Individual","weight"))
+count_fruit_mature <- subset(accessory_count, what=="fruit_mature",select=c("individual","weight"))
 names(count_fruit_mature) <- c("individual","fruit_weight")
 count_fruit_mature$individual <- as.factor(count_fruit_mature$individual)
 
@@ -419,10 +411,10 @@ for(v in c("flower_count","bud_count","seed_count","aborted_fruit_count","seedpo
 }
 
 SummaryInd$seedset <- SummaryInd$seed_count/(SummaryInd$bud_count+SummaryInd$flower_count+SummaryInd$seed_count+SummaryInd$aborted_fruit_count)
-SummaryInd$fruit_weight <- SummaryInd$Prop + SummaryInd$seedpod_weight + SummaryInd$fruit_weight
-SummaryInd$PrePolCount <- SummaryInd$bud_count+SummaryInd$flower_count
-SummaryInd$PrePolAbort <- (SummaryInd$bud_count+SummaryInd$flower_count)/(SummaryInd$bud_count+SummaryInd$flower_count+SummaryInd$seed_count+SummaryInd$aborted_fruit_count)
-SummaryInd$repro_count <- SummaryInd$bud_count+SummaryInd$flower_count+SummaryInd$seed_count
+SummaryInd$fruit_weight <- SummaryInd$propagules + SummaryInd$seedpod_weight + SummaryInd$fruit_weight
+SummaryInd$prepollen_count <- SummaryInd$bud_count+SummaryInd$flower_count
+SummaryInd$prop_prepollen_count <- (SummaryInd$bud_count+SummaryInd$flower_count)/(SummaryInd$bud_count+SummaryInd$flower_count+SummaryInd$seed_count+SummaryInd$aborted_fruit_count)
+SummaryInd$repro_units_count <- SummaryInd$bud_count+SummaryInd$flower_count+SummaryInd$seed_count
 
 for(v in c("seedset")) {
   i <- is.na(SummaryInd[[v]])

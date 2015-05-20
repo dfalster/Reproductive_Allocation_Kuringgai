@@ -16,7 +16,6 @@ source("scripts/functions.R")
       * Is fruit or propagule weight good enough?
     2. What might cause shifts in accessory costs across species?
       * Previous studies have shown smaller-seeded species have lower accessory costs.
-      * This data set also lets us look at individual pools of accessory tissues and see how they change across species.
     3. How does alotment to different accessory tissue types shift within a species as it ages, grows, or increases RA? 
       * If accessory costs decrease with increased RA, increasing RA yields compounding returns. 
 
@@ -49,13 +48,13 @@ mod <- lm (log(total_weight)~log(fruit_weight), data=subset(SummaryInd,fruit_wei
 plot(fruit_weight~total_weight,data=subset(SummaryInd,fruit_weight>0), log="xy",col=col.spp[as.factor(species)], pch=16, ylab="Fruit weight (mg)",xlim=c(100,2000000),xlab="")
 words.bottom.right.logxy(mod)
 
-mod <- lm (log(total_weight)~log(Prop), data=subset(SummaryInd,Prop>0))
-plot(Prop~total_weight,data=subset(SummaryInd,Prop>0), log="xy",col=col.spp[as.factor(species)], pch=16, xlab="", ylab="Propagule investment (mg)", xlim=c(100,2000000))
+mod <- lm (log(total_weight)~log(propagules), data=subset(SummaryInd,propagules>0))
+plot(propagules~total_weight,data=subset(SummaryInd,propagules>0), log="xy",col=col.spp[as.factor(species)], pch=16, xlab="", ylab="Propagule investment (mg)", xlim=c(100,2000000))
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.bottom.right.logxy(mod)
 
-mod <- lm (log(total_weight)~log(PerPropagule), data=subset(SummaryInd,PerPropagule>0))
-plot(PerPropagule~total_weight,data=subset(SummaryInd,PerPropagule>0), log="xy",col=col.spp[as.factor(species)], pch=16, ylab="Proportion reproductive investment to propagules",xlim=c(100,2000000),xlab="Total size (mg)")
+mod <- lm (log(total_weight)~log(prop_propagules), data=subset(SummaryInd,prop_propagules>0))
+plot(prop_propagules~total_weight,data=subset(SummaryInd,prop_propagules>0), log="xy",col=col.spp[as.factor(species)], pch=16, ylab="Proportion reproductive investment to propagules",xlim=c(100,2000000),xlab="Total size (mg)")
 words.bottom.right.logxy(mod)
 mtext("Total size (mg)", 1, outer=TRUE)
 ```
@@ -70,21 +69,21 @@ mtext("Total size (mg)", 1, outer=TRUE)
 
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
 par(mfrow=c(2,2), cex=1, omi=c(.1,0.3,.5,0.2), mai=c(1.1,1,.1,0.2))  
-mod <- lm(log(seed_size)~asin(sqrt(PerAcc_mean)),SummarySpp)
-plot(asin(sqrt(PerAcc_mean))~seed_size,SummarySpp, log="x", pch=16,col=col.spp[as.factor(species)],ylab="Accessory costs (asin transformed)",xlab="seed size (mg)",cex=1.3)
+mod <- lm(log(seed_size)~asin(sqrt(prop_accessory_mean),SummarySpp))
+plot(asin(sqrt(prop_accessory_mean))~seed_size,SummarySpp, log="x", pch=16,col=col.spp[as.factor(species)],ylab="Accessory costs (asin transformed)",xlab="seed size (mg)",cex=1.3)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.bottom.right.logx(mod)
 
-mod <- lm(log(total_weight_mean)~asin(sqrt(PerAcc_mean)),SummarySpp)
-plot(asin(sqrt(PerAcc_mean))~total_weight_mean,SummarySpp, log="x", pch=16,col=col.spp[as.factor(species)],ylab="",xlab="Total weight (mg)",cex=1.3)
+mod <- lm(log(total_weight_mean)~asin(sqrt(prop_accessory_mean)),SummarySpp)
+plot(asin(sqrt(prop_accessory_mean))~total_weight_mean,SummarySpp, log="x", pch=16,col=col.spp[as.factor(species)],ylab="",xlab="Total weight (mg)",cex=1.3)
 words.bottom.right.logx(mod)
 
-mod <- lm(log(seedset_mean)~asin(sqrt(PerAcc_mean)),SummarySpp)
-plot(asin(sqrt(PerAcc_mean))~seedset_mean,SummarySpp, log="x", pch=16,col=col.spp[as.factor(species)],ylab="Accessory costs (asin transformed)",xlab="seed set",cex=1.3)
+mod <- lm(log(seedset_mean)~asin(sqrt(prop_accessory_mean)),SummarySpp)
+plot(asin(sqrt(prop_accessory_mean))~seedset_mean,SummarySpp, log="x", pch=16,col=col.spp[as.factor(species)],ylab="Accessory costs (asin transformed)",xlab="seed set",cex=1.3)
 words.top.right.logx(mod)
 
-mod <- lm(asin(sqrt(seedset_mean))~asin(sqrt(PerPrePol_All_mean)),SummarySpp)
-plot(asin(sqrt(PerAcc_mean))~PerPrePol_All_mean,SummarySpp, log="", pch=16,col=col.spp[as.factor(species)],ylab="",xlab="pre-pollination costs (proportional)",cex=1.3)
+mod <- lm(asin(sqrt(seedset_mean))~asin(sqrt(prop_prepollen_all)),SummarySpp)
+plot(asin(sqrt(prop_prepollen_all))~seedset_mean,SummarySpp, log="", pch=16,col=col.spp[as.factor(species)],ylab="",xlab="pre-pollination costs (proportional)",cex=1.3)
 words.top.right(mod)
 ```
 
@@ -92,8 +91,8 @@ words.top.right(mod)
 * This is the complement to the plot of accessory costs  
 ```{r, echo=FALSE,message=FALSE}
 par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))  
-mod <- lm(asin(sqrt(seedset))~log(PerPropagule),data=subset(SummaryInd,seedset>0&seedset<1))
-plot(PerPropagule~seedset,data=subset(SummaryInd,seedset>0&seedset<1), log="xy", pch=16,col=col.spp[as.factor(species)],ylab="Accessory costs (asin transformed)",xlab="seed set")
+mod <- lm(asin(sqrt(seedset))~log(prop_propagules),data=subset(SummaryInd,seedset>0&seedset<1))
+plot(prop_propagules~seedset,data=subset(SummaryInd,seedset>0&seedset<1), log="xy", pch=16,col=col.spp[as.factor(species)],ylab="Accessory costs (asin transformed)",xlab="seed set")
 words.bottom.right.logxy(mod)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 ```
@@ -102,8 +101,8 @@ legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 * At most, there are most "old" plants with very low seedset  
 ```{r, echo=FALSE,message=FALSE}
 par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))  
-mod <- lm(asin(sqrt(seedset))~log(PerPropagule),data=subset(SummaryInd,seedset>0&seedset<1))
-plot(PerPropagule~seedset,data=subset(SummaryInd,seedset>0&seedset<1), log="xy", pch=16,col=col.age[as.factor(age)],ylab="Accessory costs (asin transformed)",xlab="seed set")
+mod <- lm(asin(sqrt(seedset))~log(prop_propagules),data=subset(SummaryInd,seedset>0&seedset<1))
+plot(prop_propagules~seedset,data=subset(SummaryInd,seedset>0&seedset<1), log="xy", pch=16,col=col.age[as.factor(age)],ylab="Accessory costs (asin transformed)",xlab="seed set")
 words.bottom.right.logxy(mod)
 legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
 ```
