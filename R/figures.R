@@ -61,22 +61,22 @@ plot_ReproductionAllocation_comparison_age <- function(ReproductionAllocation_al
 
 plot_ReproductionAllocation_comparison_diam <- function(ReproductionAllocation_all) {
   cols <- col.table()
-  plot(ReproductionAllocation_all$FinalBasalDiamAv, ReproductionAllocation_all$RA, type = "p", col = cols[ReproductionAllocation_all$species], xlab = "Basal Diameter, year 2013", ylab = "RA", bty = "L")
+  plot(ReproductionAllocation_all$dia, ReproductionAllocation_all$RA, type = "p", col = cols[ReproductionAllocation_all$species], xlab = "Basal Diameter, year 2013", ylab = "RA", bty = "L")
   legend("topright", legend = names(cols), col = cols, pch = 1)
 }
 
 plot_ReproductionAllocation_comparison_weight <- function(ReproductionAllocation_all) {
   cols <- col.table()
-  plot(ReproductionAllocation_all$FinalWeight, ReproductionAllocation_all$RA, type = "p", col = cols[ReproductionAllocation_all$species], xlab = "Weight, year 2013", ylab = "RA", bty = "L")
+  plot(ReproductionAllocation_all$total_weight, ReproductionAllocation_all$RA, type = "p", col = cols[ReproductionAllocation_all$species], xlab = "Weight, year 2013", ylab = "RA", bty = "L")
   legend("topright", legend = names(cols), col = cols, pch = 1)
 }
 
 plot_species_ReproductionAllocation_weight_diam_panel <- function(Data) {
     cols <- col.table()[Data$species]
     par(mfrow = c(1, 2), cex.main = 1, cex.lab = 1)
-    plot(Data$FinalBasalDiamAv, Data$RA, type = "p", col = cols, xlab = "Diameter, year 2013", ylab = "RA", bty = "L", main = "Diameter", cex = 1)
+    plot(Data$dia, Data$RA, type = "p", col = cols, xlab = "Diameter, year 2013", ylab = "RA", bty = "L", main = "Diameter", cex = 1)
 
-    plot(Data$FinalWeight, Data$RA, type = "p", col = cols, xlab = "Weight, year 2013", ylab = "RA", bty = "L", main = "Weight", cex = 1)
+    plot(Data$total_weight, Data$RA, type = "p", col = cols, xlab = "Weight, year 2013", ylab = "RA", bty = "L", main = "Weight", cex = 1)
 }
 
 print_xtable_for_species <- function(thisSpecies, data, file){

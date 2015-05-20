@@ -28,10 +28,10 @@ source("scripts/functions.R")
 
 
 ```{r, echo=FALSE, message=FALSE}
-plot((FinalWeight~PropH), SummaryInd, col=col.spp[as.factor(species)],pch=16,log="y")
+plot((total_weight~PropH), SummaryInd, col=col.spp[as.factor(species)],pch=16,log="y")
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
-yvar <- "FinalWeight"
+yvar <- "total_weight"
 xvar <- "PropH"
 
 data <- SummaryInd
@@ -120,11 +120,11 @@ results
 ###Growth Investment versus weight   
 - showing that slope continues to be 1:1, but intercept decreases with time because more standing biomass
 ```{r, echo=FALSE, message=FALSE}
-plot((GrowthInv~FinalWeight), SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
+plot((GrowthInv~total_weight), SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
 abline(0,1,lwd=2)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
-plot(GrowthInv~FinalWeight, SummaryInd, log="xy", col=col.age[as.factor(age)],pch=16)
+plot(GrowthInv~total_weight, SummaryInd, log="xy", col=col.age[as.factor(age)],pch=16)
 abline(0,1,lwd=2)
 legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
 ```
@@ -181,10 +181,10 @@ for(spp in names(data)) {
 - These numbers are currently incomplete - waiting for full set of "leaf weight" numbers to finalize this  
 
 ```{r, echo=FALSE,message=FALSE}
-plot(total_leaf_weight~FinalWeight,SummaryInd, log="xy",col=col.age[as.factor(age)], pch=16, cex=0.8)
+plot(total_leaf_weight~total_weight,SummaryInd, log="xy",col=col.age[as.factor(age)], pch=16, cex=0.8)
 legend("bottomright",col=col.age, labels.age, pch=16, cex=1, bty="n")
 
-plot(total_leaf_weight~FinalWeight,SummaryInd, log="xy",col=col.spp[as.factor(species)], pch=16, cex=0.8)
+plot(total_leaf_weight~total_weight,SummaryInd, log="xy",col=col.spp[as.factor(species)], pch=16, cex=0.8)
 legend("bottomright",col=col.spp, labels.spp, pch=16, cex=.8, bty="n")
 ```
 
@@ -238,11 +238,11 @@ plot((change_shoot_diam/100) ~ change_basal_diam,data=subset(SummaryInd, age>1.4
 abline(0,1)
 legend("bottomright",col=col.age, labels.age, pch=16, cex=1, bty="n")
 
-plot((change_shoot_area/10000) ~ FinalBasalDiamAv,data=subset(SummaryInd), log="xy",col=col.spp[as.factor(species)], pch=16,ylim=c(0.01,500),cex=.7)
-points((change_basal_area) ~ FinalBasalDiamAv,data=subset(SummaryInd), log="xy",col=col.spp[as.factor(species)], pch=1)
+plot((change_shoot_area/10000) ~ dia,data=subset(SummaryInd), log="xy",col=col.spp[as.factor(species)], pch=16,ylim=c(0.01,500),cex=.7)
+points((change_basal_area) ~ dia,data=subset(SummaryInd), log="xy",col=col.spp[as.factor(species)], pch=1)
 
-plot((change_shoot_area/10000) ~ FinalBasalDiamAv,data=subset(SummaryInd), log="xy",col=col.age[as.factor(age)], pch=16,ylim=c(0.01,500),cex=.7)
-points((change_basal_area) ~ FinalBasalDiamAv,data=subset(SummaryInd), log="xy",col=col.age[as.factor(age)], pch=1)
+plot((change_shoot_area/10000) ~ dia,data=subset(SummaryInd), log="xy",col=col.age[as.factor(age)], pch=16,ylim=c(0.01,500),cex=.7)
+points((change_basal_area) ~ dia,data=subset(SummaryInd), log="xy",col=col.age[as.factor(age)], pch=1)
 
 yvar <- "change_shoot_diam"
 xvar <- "change_basal_diam"

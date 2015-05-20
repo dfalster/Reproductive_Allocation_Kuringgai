@@ -196,7 +196,7 @@ PEPU, PHPH show a marginally significant DECREASE in accessory costs with increa
 If leaf lifespan based on leaf births is used instead, there are a number of significant INCREASES in leaf lifespan with increasing size
 ```{r, echo=FALSE,message=FALSE}
 yvar <- "LL_death"
-xvar <- "FinalWeight"
+xvar <- "total_weight"
 data <- filter(SummaryInd,LL_death<8&age>2)
 
 data <- split(data, data$species)
@@ -340,18 +340,18 @@ There is a stronger trend with respect to weight, even after the effect of speci
 
 The interactions terms weren't significant and were removed from the model
 ```{r, echo=FALSE,message=FALSE}
-mod <- lm(LMA_mean~species+log(FinalWeight_mean), SummarySppAge)
+mod <- lm(LMA_mean~species+log(total_weight_mean), SummarySppAge)
 summary(mod)
 anova(mod)
 
-mod <- lm(LMA_mean~species+log(FinalWeight_mean), data=subset(SummarySppAge,age>2))
+mod <- lm(LMA_mean~species+log(total_weight_mean), data=subset(SummarySppAge,age>2))
 summary(mod)
 anova(mod)
 
-plot(LMA_mean ~FinalWeight_mean, SummarySppAge, log="xy", col=col.spp[as.factor(species)], pch=16)
+plot(LMA_mean ~total_weight_mean, SummarySppAge, log="xy", col=col.spp[as.factor(species)], pch=16)
 legend("topleft",col=col.spp, pch=16,legend=labels.spp,cex=.8,bty="n")
 
-plot(LMA_mean ~FinalWeight_mean, data=subset(SummarySppAge), log="xy", col=col.age[as.factor(age)], pch=16, cex=1)
+plot(LMA_mean ~total_weight_mean, data=subset(SummarySppAge), log="xy", col=col.age[as.factor(age)], pch=16, cex=1)
 legend("topleft",col=col.age, pch=16,legend=labels.age,cex=.8,bty="n")
 
 ```

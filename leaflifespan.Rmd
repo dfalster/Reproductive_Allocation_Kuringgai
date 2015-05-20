@@ -202,11 +202,11 @@ SummaryInd <- merge(SummaryInd, select(harvest, -species, -age), by="individual"
 
 #adding variables to look at change across years, RGR
 SummaryInd$change_shoot_diam <- SummaryInd$d_end - SummaryInd$d_start
-SummaryInd$change_basal_diam <- SummaryInd$FinalBasalDiam - SummaryInd$StartBasalDiam
+SummaryInd$change_basal_diam <- SummaryInd$growth_stem_diam
 SummaryInd$change_shoot_area <- (3.14*((SummaryInd$d_end/2)^2)) - (3.14*((SummaryInd$d_start/2)^2))
-SummaryInd$change_basal_area <- (3.14*((SummaryInd$FinalBasalDiam/2)^2)) - (3.14*((SummaryInd$StartBasalDiam/2)^2))
+SummaryInd$change_basal_area <- SummaryInd$growth_stem_area
 SummaryInd$lvs_end_total <- SummaryInd$lvs_end + SummaryInd$lvs_new
-SummaryInd$RGR <- log(SummaryInd$FinalWeight)-log(SummaryInd$FinalWeight-SummaryInd$GrowthInv)
+SummaryInd$RGR <- log(SummaryInd$total_weight)-log(SummaryInd$total_weight-SummaryInd$GrowthInv)
 ```
 
 ```{r, echo=FALSE,results='hide', message=FALSE}
@@ -237,7 +237,7 @@ accessory_summary2 <- accessory %>%
 #investment summary by species, age
 investment_summary <- investment %>%
   group_by(species, age) %>%
-  summarise_each(funs(mean, se, length), GrowthInv, FinalWeight, FinalBasalDiamAv, TotalInvestment, RA)
+  summarise_each(funs(mean, se, length), GrowthInv, total_weight, dia, TotalInvestment, RA)
 
 #harvest summary by species, age
 harvest_summary <- harvest %>%
@@ -526,15 +526,15 @@ summary(mod)
 this should be another way to get at the decreasing "leafiness" of plants with age
 
 ```{r, echo=FALSE,results='hide', message=FALSE}
-plot(total_leaf_weight~FinalWeight,SummaryInd, log="xy",col=col.age[as.factor(age)], pch=16, cex=0.8)
+plot(total_leaf_weight~total_weight,SummaryInd, log="xy",col=col.age[as.factor(age)], pch=16, cex=0.8)
 legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
-mod <-lm(FinalWeight~total_leaf_weight+age+species,SummaryInd)
+mod <-lm(total_weight~total_leaf_weight+age+species,SummaryInd)
 summary(mod)
 
 plot_LeafWeight <- function(spp) {
-  plot(total_leaf_weight~FinalWeight,data=subset(SummaryInd,species==spp), xlab="total weight (mg)", ylab ="leaf weight (mg)", log="xy",col=col.age[as.factor(age)], pch=16,     cex=0.8,main=labels.spp[spp])
+  plot(total_leaf_weight~total_weight,data=subset(SummaryInd,species==spp), xlab="total weight (mg)", ylab ="leaf weight (mg)", log="xy",col=col.age[as.factor(age)], pch=16,     cex=0.8,main=labels.spp[spp])
   legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
-  mod <-lm(FinalWeight~total_leaf_weight+age,data=subset(SummaryInd,species==spp))
+  mod <-lm(total_weight~total_leaf_weight+age,data=subset(SummaryInd,species==spp))
   abline(mod)
   summary(mod)
 }
@@ -544,15 +544,15 @@ for(n in names(labels.spp)) {
 
 #plot looking at leaf area versus plant weight
 #USE THIS PLOT IN LAB MEETING - CLEARLY SHOWS DECLINE IN INTERCEPT WITH AGE
-plot(leafArea~FinalWeight,SummaryInd, log="xy",col=col.age[as.factor(age)], pch=16, cex=0.8)
+plot(leafArea~total_weight,SummaryInd, log="xy",col=col.age[as.factor(age)], pch=16, cex=0.8)
 legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
-mod <-lm(FinalWeight~leafArea+age+species,SummaryInd)
+mod <-lm(total_weight~leafArea+age+species,SummaryInd)
 summary(mod)
 
 plot_LeafArea <- function(spp) {
-  plot(leafArea~FinalWeight,data=subset(SummaryInd,species==spp), xlab="total weight (mg)", ylab ="leaf weight (mg)", log="xy",col=col.age[as.factor(age)], pch=16,     cex=0.8,main=labels.spp[spp])
+  plot(leafArea~total_weight,data=subset(SummaryInd,species==spp), xlab="total weight (mg)", ylab ="leaf weight (mg)", log="xy",col=col.age[as.factor(age)], pch=16,     cex=0.8,main=labels.spp[spp])
   legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
-  mod <-lm(FinalWeight~leafArea+age,data=subset(SummaryInd,species==spp))
+  mod <-lm(total_weight~leafArea+age,data=subset(SummaryInd,species==spp))
   abline(mod)
   summary(mod)
 }
@@ -563,15 +563,15 @@ for(n in names(labels.spp)) {
 
 
 #plots looking at shoot extension versus plant size
-plot(new_length~FinalWeight,SummaryInd, log="xy",col=col.age[as.factor(age)], pch=16, cex=0.8)
+plot(new_length~total_weight,SummaryInd, log="xy",col=col.age[as.factor(age)], pch=16, cex=0.8)
 legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
-mod <-lm(FinalWeight~new_length+age+species,SummaryInd)
+mod <-lm(total_weight~new_length+age+species,SummaryInd)
 summary(mod)
 
 plot_LeaderExtension <- function(spp) {
-  plot(new_length~FinalWeight,data=subset(SummaryInd,species==spp), xlab="total weight (mg)", ylab ="leaf weight (mg)", log="xy",col=col.age[as.factor(age)], pch=16,     cex=0.8,main=labels.spp[spp])
+  plot(new_length~total_weight,data=subset(SummaryInd,species==spp), xlab="total weight (mg)", ylab ="leaf weight (mg)", log="xy",col=col.age[as.factor(age)], pch=16,     cex=0.8,main=labels.spp[spp])
   legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
-  mod <-lm(FinalWeight~new_length+age,data=subset(SummaryInd,species==spp))
+  mod <-lm(total_weight~new_length+age,data=subset(SummaryInd,species==spp))
   abline(mod)
   summary(mod)
 }

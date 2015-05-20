@@ -129,7 +129,7 @@ summary(mod)
 - PEPU shows a marginally significant INCREASE in accessory costs with increasing size (0.05<p<0.10)  
 ```{r, echo=FALSE, message=FALSE}
 yvar <- "PerAcc"
-xvar <- "FinalWeight"
+xvar <- "total_weight"
 
 data <- filter(SummaryInd,Total>0)
 data <- split(data, data$species)
@@ -220,7 +220,7 @@ Overall, proportion of energy allocation to accessory tissues (versus propagules
 - PUTU shows a marginally significant decrease in accessory costs with increasing RA (p ~ 0.10)  
 ```{r, echo=FALSE, message=FALSE}
 yvar <- "PerPrePol_A"
-xvar <- "FinalWeight"
+xvar <- "total_weight"
 
 data <- filter(SummaryInd,Total>0)
 data <- split(data, data$species)
@@ -308,7 +308,7 @@ for(spp in names(data)) {
 
 ```{r, echo=FALSE, message=FALSE}
 yvar <- "PerPrePol_All"
-xvar <- "FinalWeight"
+xvar <- "total_weight"
 
 data <- filter(SummaryInd,Total>0)
 data <- split(data, data$species)

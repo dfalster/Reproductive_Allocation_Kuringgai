@@ -27,8 +27,8 @@ source("scripts/functions.R")
 ###Plots of size against reproductive investment
 * Plots of total reproductive investment against size or height are both highly significant
 ```{r, echo=FALSE,message=FALSE, fig.width=7, fig.height=7}
-mod <- lm(log(FinalWeight)~log(ReproInv), data=subset(SummaryInd,ReproInv>0))
-plot(ReproInv~FinalWeight, SummaryInd, log="xy",col=col.spp[as.factor(species)],pch=16)
+mod <- lm(log(total_weight)~log(ReproInv), data=subset(SummaryInd,ReproInv>0))
+plot(ReproInv~total_weight, SummaryInd, log="xy",col=col.spp[as.factor(species)],pch=16)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.bottom.right.logxy(mod)
 
@@ -48,8 +48,8 @@ legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
 ```{r, echo=FALSE,message=FALSE, fig.width=7, fig.height=7}
 par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2)) 
-mod <- lm(log(FinalWeight)~asin(sqrt(RA)), data=subset(SummaryInd,ReproInv>0))
-plot(asin(sqrt(RA))~FinalWeight, SummaryInd, log="x",col=col.spp[as.factor(species)],pch=16)
+mod <- lm(log(total_weight)~asin(sqrt(RA)), data=subset(SummaryInd,ReproInv>0))
+plot(asin(sqrt(RA))~total_weight, SummaryInd, log="x",col=col.spp[as.factor(species)],pch=16)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right.logx(mod)
 
@@ -137,7 +137,7 @@ yvar <- "ReproInv"
 xvar <- "age"
 
 yvar2 <- "ReproInv"
-xvar2 <- "FinalWeight"
+xvar2 <- "total_weight"
 
 yvar3 <- "ReproInv"
 xvar3 <- "height"
@@ -177,7 +177,7 @@ results
 * Reproductive investment vs. weight for each species
 ```{r, echo=FALSE,message=FALSE, fig.width=7, fig.height=7}
 yvar <- "ReproInv"
-xvar <- "FinalWeight"
+xvar <- "total_weight"
 
 data <- SummaryInd
 data <- split(data, data$species)

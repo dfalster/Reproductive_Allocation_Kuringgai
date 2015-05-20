@@ -60,17 +60,17 @@ summarise_all_fits_2var <- function(x) {
 - The plot that includes all species shows that *once* a given species has ramped up reproduction, the log-log plot of reproductive investment vs final weight is nearly linear across all species; in other words, to first order, all species allocate the same amount to reproduction relative to their weight.
 - However, it is important to note that species early in their reproductive trajectory do not follow this pattern
 ```{r, echo=FALSE,message=FALSE}
-plot(ReproInv~FinalWeight, SummaryInd, log="xy",col=col.spp[as.factor(species)],pch=16)
+plot(ReproInv~total_weight, SummaryInd, log="xy",col=col.spp[as.factor(species)],pch=16)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
-plot(ReproInv~FinalWeight, SummaryInd, log="xy", col=col.age[as.factor(age)],pch=16)
+plot(ReproInv~total_weight, SummaryInd, log="xy", col=col.age[as.factor(age)],pch=16)
 legend("bottomright",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
 
-plot((1+ReproInv_mean)~FinalWeight_mean,SummarySppAge,log="xy", col=col.spp[as.factor(species)],pch=16)
+plot((1+ReproInv_mean)~total_weight_mean,SummarySppAge,log="xy", col=col.spp[as.factor(species)],pch=16)
 legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
 yvar <- "ReproInv"
-xvar <- "FinalWeight"
+xvar <- "total_weight"
 
 data <- SummaryInd
 data <- split(data, data$species)
@@ -229,14 +229,14 @@ for(spp in names(data)) {
 2. If Only individuals with RA>0 are included only COER, EPMI, GRBU, HATE and LEES still have a significant positive correlation - for the remaining species correlation only exists because of small, non-reproductive plants having a strong effect on the curve  
 
 ```{r, echo=FALSE,message=FALSE}
-plot(RA~FinalWeight, SummaryInd, log="x", col=col.spp[as.factor(species)],pch=16)
+plot(RA~total_weight, SummaryInd, log="x", col=col.spp[as.factor(species)],pch=16)
 legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
-plot(RA_mean~FinalWeight_mean,SummarySppAge,log="x", col=col.spp[as.factor(species)],pch=16)
+plot(RA_mean~total_weight_mean,SummarySppAge,log="x", col=col.spp[as.factor(species)],pch=16)
 legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
 yvar <- "RA"
-xvar <- "FinalWeight"
+xvar <- "total_weight"
 
 data <- subset(SummaryInd)
 data <- split(data, data$species)
@@ -448,7 +448,7 @@ for(spp in names(data)) {
 ```
 
 
-These plots show very clearly that for all species RGR suddenly dips when RA becomes non-zero. Plotting against "FinalWeight" or "GrowthInvestment" is much less clear - in other words, an individual's height is the best way to sort them into plants investing more in growth vs reproduction. There are of course some non-reproductive plants with "PropH" above the obvious cut-off, but these are almost certainly "reproductively mature" plants not reproducing in a given year.  
+These plots show very clearly that for all species RGR suddenly dips when RA becomes non-zero. Plotting against "total_weight" or "GrowthInvestment" is much less clear - in other words, an individual's height is the best way to sort them into plants investing more in growth vs reproduction. There are of course some non-reproductive plants with "PropH" above the obvious cut-off, but these are almost certainly "reproductively mature" plants not reproducing in a given year.  
 
 
 

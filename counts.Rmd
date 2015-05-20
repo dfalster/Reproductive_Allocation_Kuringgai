@@ -10,7 +10,7 @@ count_lots_columns <- separate(accessory_count,count,into=c("bud_small","bud_mid
 
 par(mfrow=c(1,2), cex=1, omi=c(.1,0.1,0.1,0.1), mai=c(1.2,1,0.1,0.1))
 
-plot(seedset ~ FinalWeight,data=subset(SummaryInd,seedset>0),
+plot(seedset ~ total_weight,data=subset(SummaryInd,seedset>0),
           col=col.spp[as.factor(species)],
           pch=16,log="xy",xlab="plant weight",ylab="seed set") 
 plot(seedset ~ RA,data=subset(SummaryInd,seedset>0),

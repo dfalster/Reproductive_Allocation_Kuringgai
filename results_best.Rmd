@@ -134,7 +134,7 @@ yvar <- "RA"
 xvar <- "PropH"
 
 yvar2 <- "RA"
-xvar2 <- "FinalWeight"
+xvar2 <- "total_weight"
 
 data <- SummaryInd
 data <- split(data, data$species)
@@ -156,7 +156,7 @@ yvar <- "ReproInv"
 xvar <- "PropH"
 
 yvar2 <- "ReproInv"
-xvar2 <- "FinalWeight"
+xvar2 <- "total_weight"
 
 data <- SummaryInd
 data <- split(data, data$species)
@@ -178,7 +178,7 @@ par(mfrow=c(1,1), pin=c(5,7),mar=c(5,4,4,2)+.1,omi=c(.1,.1,.1,.1))
 plot((ReproInv)~(PropH), SummaryInd, log="y",col=col.spp[as.factor(species)],pch=16,xlim=c(4e-03,1),xlab=xvar)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
-plot(ReproInv~FinalWeight, SummaryInd, log="xy",col=col.spp[as.factor(species)],pch=16)
+plot(ReproInv~total_weight, SummaryInd, log="xy",col=col.spp[as.factor(species)],pch=16)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
 plot(ReproInv~height, SummaryInd, log="xy",col=col.spp[as.factor(species)],pch=16)
@@ -321,23 +321,23 @@ words.bottom.right.logxy(mod)
 - NEXT: Once I have all parts weights, plot against fruit weight
 
 ```{r, echo=FALSE,message=FALSE}
-mod <- lm (log(FinalWeight)~log(ReproInv), data=subset(SummaryInd,ReproInv>0))
-plot(ReproInv~FinalWeight,data=subset(SummaryInd,ReproInv>0), log="xy",col=col.spp[as.factor(species)], pch=16)
+mod <- lm (log(total_weight)~log(ReproInv), data=subset(SummaryInd,ReproInv>0))
+plot(ReproInv~total_weight,data=subset(SummaryInd,ReproInv>0), log="xy",col=col.spp[as.factor(species)], pch=16)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.bottom.right.logxy(mod)
 
-mod <- lm (log(FinalWeight)~log(Prop), data=subset(SummaryInd,Prop>0))
-plot(Prop~FinalWeight,data=subset(SummaryInd,Prop>0), log="xy",col=col.spp[as.factor(species)], pch=16)
+mod <- lm (log(total_weight)~log(Prop), data=subset(SummaryInd,Prop>0))
+plot(Prop~total_weight,data=subset(SummaryInd,Prop>0), log="xy",col=col.spp[as.factor(species)], pch=16)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.bottom.right.logxy(mod)
 
-mod <- lm (log(FinalWeight)~log(Prop+PD), data=subset(SummaryInd,Prop>0))
-plot((Prop+PD)~FinalWeight,data=subset(SummaryInd,Prop>0), log="xy",col=col.spp[as.factor(species)], pch=16)
+mod <- lm (log(total_weight)~log(Prop+PD), data=subset(SummaryInd,Prop>0))
+plot((Prop+PD)~total_weight,data=subset(SummaryInd,Prop>0), log="xy",col=col.spp[as.factor(species)], pch=16)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.bottom.right.logxy(mod)
 
-mod <- lm (log(FinalWeight)~log(PrePol_All), data=subset(SummaryInd,PrePol_All>0))
-plot((PrePol_All)~FinalWeight,data=subset(SummaryInd,PrePol_All>0), log="xy",col=col.spp[as.factor(species)], pch=16)
+mod <- lm (log(total_weight)~log(PrePol_All), data=subset(SummaryInd,PrePol_All>0))
+plot((PrePol_All)~total_weight,data=subset(SummaryInd,PrePol_All>0), log="xy",col=col.spp[as.factor(species)], pch=16)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.bottom.right.logxy(mod)
 ```
@@ -353,9 +353,9 @@ words.bottom.right.logxy(mod)
    1.  This is another way of showing that larger species get less of a return on their investment in reproduction. They have higher accessory costs. 
    - There is also an increase in propagule investment with age
 ```{r, echo=FALSE,message=FALSE, fig.width=14, fig.height=7, out.width=792, out.height=576}
-mod <- lm(log(FinalWeight) ~ (log(PerPropagule))+age,data=subset(SummaryInd,PerPropagule>0))
+mod <- lm(log(total_weight) ~ (log(PerPropagule))+age,data=subset(SummaryInd,PerPropagule>0))
 summary(mod)
-plot(PerPropagule ~FinalWeight, data=subset(SummaryInd,RA>0&PerPropagule>0),log="xy", col=col.spp[as.factor(species)],pch=16)
+plot(PerPropagule ~total_weight, data=subset(SummaryInd,RA>0&PerPropagule>0),log="xy", col=col.spp[as.factor(species)],pch=16)
 legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right.logxy(mod)
 text(10^((0.70*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.85*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),"includes age effect",adj=0) 
@@ -364,8 +364,8 @@ text(10^((0.70*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.85*(par("usr
 - Species that are bigger also invest a lower proportion of their TOTAL surplus energy in propagules (proportion propagules*RA) 
   + This is noisier than looking simply at proportion reproductive allocation to propagules, because of the RA effects - see below
 ```{r, echo=FALSE, message=FALSE}
-mod <- lm(log(FinalWeight) ~ (log(PropAllocation))*age,data=subset(SummaryInd,PerPropagule>0))
-plot(PropAllocation ~FinalWeight, data=subset(SummaryInd,RA>0&PerPropagule>0),log="xy", col=col.spp[as.factor(species)],pch=16)
+mod <- lm(log(total_weight) ~ (log(PropAllocation))*age,data=subset(SummaryInd,PerPropagule>0))
+plot(PropAllocation ~total_weight, data=subset(SummaryInd,RA>0&PerPropagule>0),log="xy", col=col.spp[as.factor(species)],pch=16)
 legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right.logxy(mod)
 text(1000,.6e-4,"includes age effect (increase in Prop Allocation with age)",adj=0)
@@ -379,29 +379,29 @@ summary(mod)
 - The first plot is all points  
 - The second plot is just 7-year olds, showing the decrease in RA with plant size  
 ```{r, echo=FALSE, message=FALSE}
-mod <- lm(log(FinalWeight) ~ (log(RA)),data=subset(SummaryInd,RA>0))
-plot(RA ~FinalWeight, data=subset(SummaryInd,RA>0),log="xy", col=col.spp[as.factor(species)],pch=16)
+mod <- lm(log(total_weight) ~ (log(RA)),data=subset(SummaryInd,RA>0))
+plot(RA ~total_weight, data=subset(SummaryInd,RA>0),log="xy", col=col.spp[as.factor(species)],pch=16)
 legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.bottom.right.logxy(mod)
 anova(mod)
 
-mod <- lm(log(FinalWeight) ~ (log(RA)),data=subset(SummaryInd,RA>5e-3&age==7))
-plot(RA ~FinalWeight, data=subset(SummaryInd,RA>5e-3&age==7),log="xy", col=col.spp[as.factor(species)],pch=16)
+mod <- lm(log(total_weight) ~ (log(RA)),data=subset(SummaryInd,RA>5e-3&age==7))
+plot(RA ~total_weight, data=subset(SummaryInd,RA>5e-3&age==7),log="xy", col=col.spp[as.factor(species)],pch=16)
 legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right.logxy(mod)
 ```
 
-- A model including the effect of both PerPropagule and RA on FinalWeight confirms this - there is a strong species effect and strong PerPropagule effect, but RA is much less significant  
+- A model including the effect of both PerPropagule and RA on total_weight confirms this - there is a strong species effect and strong PerPropagule effect, but RA is much less significant  
 ```{r, echo=FALSE, message=FALSE}
-mod <- lm(log(FinalWeight) ~ (log(RA))*log(PerPropagule)*species,data=subset(SummaryInd,PerPropagule>0))
+mod <- lm(log(total_weight) ~ (log(RA))*log(PerPropagule)*species,data=subset(SummaryInd,PerPropagule>0))
 anova(mod)
 ```
 
 - Proportional investment in all pre-pollination tissues is uncorrelated with plant size (at most ages)  
   +  if age included in model, becomes highly significant  
 ```{r, echo=FALSE, message=FALSE}
-mod <- lm(log(FinalWeight) ~ asin(sqrt(PerPrePol_All)),data=subset(SummaryInd,PerPrePol_All>0&age>3))
-plot(asin(sqrt(PerPrePol_All)) ~ FinalWeight, data=subset(SummaryInd,PerPrePol_All>0),log="x", col=col.spp[as.factor(species)],pch=16)
+mod <- lm(log(total_weight) ~ asin(sqrt(PerPrePol_All)),data=subset(SummaryInd,PerPrePol_All>0&age>3))
+plot(asin(sqrt(PerPrePol_All)) ~ total_weight, data=subset(SummaryInd,PerPrePol_All>0),log="x", col=col.spp[as.factor(species)],pch=16)
 legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right.logx(mod)
 ```
@@ -410,8 +410,8 @@ words.top.right.logx(mod)
 - Species very different from one another, but no shift with size 
 - Also no pattern w/r RA (not shown)
 ```{r, echo=FALSE, message=FALSE}
-mod <- lm(log(FinalWeight) ~ asin(sqrt(PerPackDisp)),data=subset(SummaryInd,PerPackDisp>0))
-plot(asin(sqrt(PerPackDisp)) ~FinalWeight, data=subset(SummaryInd,PerPackDisp>0),log="x", col=col.spp[as.factor(species)],pch=16)
+mod <- lm(log(total_weight) ~ asin(sqrt(PerPackDisp)),data=subset(SummaryInd,PerPackDisp>0))
+plot(asin(sqrt(PerPackDisp)) ~total_weight, data=subset(SummaryInd,PerPackDisp>0),log="x", col=col.spp[as.factor(species)],pch=16)
 legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right.logx(mod)
 ```
@@ -428,7 +428,7 @@ words.top.right.logx(mod)
 NOTE: Plot nearly same as above, except y-axis arcsine transformed, not log transformed and R^2 values without species term
 ```{r, echo=FALSE, message=FALSE}
 yvar <- "PerPropagule"
-xvar <- "FinalWeight"
+xvar <- "total_weight"
 
 data <- subset(SummaryInd, Total>0)
 data <- split(data, data$species)
@@ -441,8 +441,8 @@ results$a <- round(results$a,digits=2)
 results$b <- round(results$b,digits=2)
 results
 
-mod <- lm(log(FinalWeight)~asin(sqrt(PerPropagule)),data=subset(SummaryInd,PerPropagule>0))
-plot(asin(sqrt(PerPropagule))~log(FinalWeight), data=subset(SummaryInd,PerPropagule>0),col=col.spp[as.factor(species)],pch=16)
+mod <- lm(log(total_weight)~asin(sqrt(PerPropagule)),data=subset(SummaryInd,PerPropagule>0))
+plot(asin(sqrt(PerPropagule))~log(total_weight), data=subset(SummaryInd,PerPropagule>0),col=col.spp[as.factor(species)],pch=16)
 legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right(mod)
 ```
@@ -475,7 +475,7 @@ words.top.right(mod)
 - only a few species show a significant correlation -> as plants grow, they don't shift this allocation  
 ```{r, echo=FALSE, message=FALSE}
 yvar <- "PerPrePol_All"
-xvar <- "FinalWeight"
+xvar <- "total_weight"
 
 data <- subset(SummaryInd, Total>0)
 data <- split(data, data$species)
@@ -627,8 +627,8 @@ se_function(mean1,se1)
 
 ```{r, echo=FALSE, message=FALSE}
 par(mfrow=c(2,2), cex=1, omi=c(.1,0.1,0.1,0.1), mai=c(1.2,1,0.1,0.1))
-mod <- lm(log(FinalWeight)~log(seedset),data=subset(SummaryInd,seedset>0))
-plot(seedset ~ FinalWeight,data=subset(SummaryInd,seedset>0),
+mod <- lm(log(total_weight)~log(seedset),data=subset(SummaryInd,seedset>0))
+plot(seedset ~ total_weight,data=subset(SummaryInd,seedset>0),
           col=col.spp[as.factor(species)],
           pch=16,log="xy",xlab="",ylab="seed set")
 words.bottom.right.logxy(mod)
@@ -638,8 +638,8 @@ plot(seedset ~ RA,data=subset(SummaryInd,seedset>0),
           col=col.spp[as.factor(species)],
           pch=16,log="xy",ylab="",xlab="")
 words.bottom.right.logxy(mod)
-mod <- lm(log(FinalWeight)~log(seed_count),data=subset(SummaryInd,seed_count>0))
-plot(seed_count ~ FinalWeight,data=subset(SummaryInd,seed_count>0),
+mod <- lm(log(total_weight)~log(seed_count),data=subset(SummaryInd,seed_count>0))
+plot(seed_count ~ total_weight,data=subset(SummaryInd,seed_count>0),
           col=col.spp[as.factor(species)],
           pch=16,log="xy",xlab="plant weight",ylab="seed count")
 words.bottom.right.logxy(mod)
@@ -652,22 +652,22 @@ legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 ```
 
 ```{r, echo=FALSE, message=FALSE}
-mod <- lm(log(FinalWeight)~log(PerPropagule),data=subset(SummaryInd,seedset>0))
-plot(PerPropagule~FinalWeight,data=subset(SummaryInd,PerPropagule>0),col=col.spp[as.factor(species)],pch=16,log="xy")
+mod <- lm(log(total_weight)~log(PerPropagule),data=subset(SummaryInd,seedset>0))
+plot(PerPropagule~total_weight,data=subset(SummaryInd,PerPropagule>0),col=col.spp[as.factor(species)],pch=16,log="xy")
 legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right.logxy(mod)
 ```
 
 - However, as shown above, there is no clear shift across plant size in pre-pollination allocation   
 ```{r, echo=FALSE, message=FALSE}
-mod <- lm(asin(sqrt(PerPrePol_All)) ~log(FinalWeight)*age, data=subset(SummaryInd,PerPrePol_All>0))
+mod <- lm(asin(sqrt(PerPrePol_All)) ~log(total_weight)*age, data=subset(SummaryInd,PerPrePol_All>0))
 anova(mod)
 ```
 
 - There is however a decrease in RA with plant size at a given age (across species effect)
 ```{r, echo=FALSE, message=FALSE}
-mod <- lm(asin(sqrt(RA)) ~ log(FinalWeight)*age, data=subset(SummaryInd,RA>0))
-plot(asin(sqrt(RA))~FinalWeight,data=subset(SummaryInd,seedset>0),col=col.spp[as.factor(species)],pch=16,log="x")
+mod <- lm(asin(sqrt(RA)) ~ log(total_weight)*age, data=subset(SummaryInd,RA>0))
+plot(asin(sqrt(RA))~total_weight,data=subset(SummaryInd,seedset>0),col=col.spp[as.factor(species)],pch=16,log="x")
 legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right.logx(mod)
 anova(mod)
@@ -702,15 +702,15 @@ words.top.right.logxy(mod)
 
 - there is no relationship between seed_count and Final Weight
 ```{r, echo=FALSE, message=FALSE}
-mod <- lm(log(FinalWeight)~log(seed_count),data=subset(SummaryInd,seed_count>0))
-plot(seed_count~FinalWeight,data=subset(SummaryInd,seed_count>0),col=col.spp[as.factor(species)],pch=16,log="xy")
+mod <- lm(log(total_weight)~log(seed_count),data=subset(SummaryInd,seed_count>0))
+plot(seed_count~total_weight,data=subset(SummaryInd,seed_count>0),col=col.spp[as.factor(species)],pch=16,log="xy")
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.bottom.right.logxy(mod)
 ```
 
 ```{r, echo=FALSE, message=FALSE}
-mod <- lm(log(FinalWeight)~log(fruit_weight),data=subset(SummaryInd,fruit_weight>0))
-plot(fruit_weight~FinalWeight,data=subset(SummaryInd,fruit_weight>0),col=col.spp[as.factor(species)],pch=16,log="xy")
+mod <- lm(log(total_weight)~log(fruit_weight),data=subset(SummaryInd,fruit_weight>0))
+plot(fruit_weight~total_weight,data=subset(SummaryInd,fruit_weight>0),col=col.spp[as.factor(species)],pch=16,log="xy")
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.bottom.right.logxy(mod)
 ```
