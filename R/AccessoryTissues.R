@@ -25,7 +25,7 @@ InvestmentInAccessoryTissues <- function(individual, species, InvestmentCategori
 
   # Read in the information about lost elements
   SpeciesLoss <- species_INV$FD
-  Lost <- SpeciesLoss[SpeciesLoss$Individual == individual, ]
+  Lost <- SpeciesLoss[SpeciesLoss$individual == individual, ]
 
   # Find the list of investment categories partition for the species
   IC <- InvestmentCategories[, c("flower_part", species)]

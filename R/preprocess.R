@@ -8,8 +8,3 @@ filterForAllocation <- function(data, IndividualsList){
  data %>% filter(individual %in% keep)
  }
 
-preprocessHarvest <- function(HarvestData_raw, IndividualsList) {
-
-	keep <- filter(IndividualsList, use_for_allometric_equations)$individual
-  filter(HarvestData_raw, individual %in% keep)
-}

@@ -43,13 +43,13 @@ CalculateInvestmentForIndiviualPlant <- function(individual, Reproduction, Flowe
 
   Err <- Res[["Err"]]
   if (!is.null(Err)) {
-    Err["Individual"] <- individual
+    Err["individual"] <- individual
     Err <- Err[, c(4, (1:3))] # TODO: what are there. Use name not numbers to select columns
   }
   Lost <- Res[["Lost"]]
   if (!is.null(Lost)) {
     if (nrow(Lost) > 0) {
-      Lost["Individual"] <- individual
+      Lost["individual"] <- individual
       Lost["age"] <- as.numeric(unique(Reproduction$age))
       Lost <- Lost[, c(5, 6, 1:4)] # TODO: what are there. Use name not numbers to select columns
     }
@@ -62,7 +62,7 @@ CalculateInvestmentForIndiviualPlant <- function(individual, Reproduction, Flowe
 
   if (!is.null(FD)) {
     if (nrow(FD) > 0) {
-      FD["Individual"] <- individual
+      FD["individual"] <- individual
       FD["age"] <- as.numeric(unique(Reproduction$age))
       FD <- FD[, c(5, 6, 1:4)]
     }
@@ -251,7 +251,7 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
   Investments <- Investments[complete.cases(Investments), ]
 
 
-  # Aggregare and order the result
+  # Aggregate and order the result
   ErrList <- ErrList[complete.cases(ErrList), ]
   if (nrow(ErrList) > 0) {
     Err <- aggregate(Count ~ Element + Census, data = ErrList, FUN = "sum")
@@ -263,7 +263,7 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
     Inv <- aggregate(Count ~ FromCensus + ToCensus + From + To + Inv, FUN = "sum", data = Investments)
     Inv <- Inv[order(Inv$ToCensus), ]
     Inv["Total"] <- Inv$Inv * Inv$Count
-    Inv["Individual"] <- rep(TreeListOrig[[1]], nrow(Inv))
+    Inv["individual"] <- rep(TreeListOrig[[1]], nrow(Inv))
   }
   Lost <- unique(Lost)
   FinishedDevelopement <- unique(FinishedDevelopement)

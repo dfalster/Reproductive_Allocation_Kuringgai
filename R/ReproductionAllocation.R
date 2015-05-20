@@ -1,84 +1,64 @@
 RA_Calculations <- function(thisSpecies, Species_Investment, HarvestData, Maps, IndividualsList) {
 
+  individuals <- filter(IndividualsList, use_for_allocation_calculations & alive)$individual
+  HarvestData_basal <- filter(HarvestData,  individual %in% individuals & node_above == 1)
+  HarvestData_basal_end  <- filter(HarvestData_basal, start_end=="end")
+
   ### Calculate Regression coefficients based on common slope and intercept by the basal diameter at year 2013
+  ## allow intercept to vary by individual
 
-  WD.species <- CalculateMassAndDiameters(HarvestData)
-
-  lm.fit <- lm(log(total_weight) ~ log(dia), data = WD.species)
-  common_slope <- as.numeric(coef(lm.fit)[2])
-
-  WD.specie.basal <- WD.species[WD.species$node_above == 1, ]
-  intercept.ind <- log(WD.specie.basal$total_weight) - common_slope * log(WD.specie.basal$dia)
-  RegTable <- data.frame(TreeID = WD.specie.basal$individual, Intercept = intercept.ind, Slope = common_slope)
-
-  ### Use the regrsssion to obtain weights year 2012 (and 2013).
-  # Use only basal diameter of the trees that are alive and have status use.
-
-  Individuals <- filter(IndividualsList, use_for_allocation_calculations & alive)$individual
-
-  DiameterData <- HarvestData %>%
-    filter(individual %in% Individuals) %>%
-    filter(segment == 1)  %>%
-    select(individual, age, start_end, diameter_1, diameter_2, diameter_3, total_plant_weight)
-
-  for (i in seq_len(nrow(DiameterData))) {
-    individual <- DiameterData$individual[i]
-    I <- (RegTable$TreeID == individual)
-    if (sum(I) == 1) {
-      coef <- RegTable[I, ]
-      diams <- DiameterData[i, c("diameter_1", "diameter_2", "diameter_3")]
-      diam.av <- mean(as.numeric(diams), na.rm = T)
-      DiameterData$EstWeight[i] <- exp(coef$Intercept + coef$Slope * log(diam.av))
-      DiameterData[i, "Basal.Diameter.Av"] <- diam.av
-    }
+  lm.fit <- function(var, data) {
+    lm(log(data[[var]]) ~ log(data[["dia"]]))
   }
-  DiameterData <- DiameterData[!is.na(DiameterData$EstWeight), ]
 
-  ### Calculate change in the weight, i.e., Growth Investement
-  GrowthInv <- data.frame(individual = c(), GrowthInv = c(), StartWeight = c(), FinalWeight = c(), StartBasalDiamAv = c(), FinalBasalDiamAv = c(), age = c())
-  for (i in 1:length(unique(DiameterData$individual))) {
-    end <- "end"
-    individual <- unique(DiameterData$individual)[i]
-    IndData <- DiameterData[DiameterData$individual == individual, ]
-    if (nrow(IndData) != 2) {
-      print(paste0("Incorrect number of measurments for ", individual))
-    }
-    if (nrow(IndData) == 2) {
-      GrowthInv[i, "individual"] <- individual
-      GrowthInv[i, "age"] <- unique(IndData$age)
-      GrowthInv[i, "GrowthInv"] <- IndData[IndData$start_end == end, "EstWeight"] - IndData[IndData$start_end == "start", "EstWeight"]
-      GrowthInv[i, "StartWeight"] <- IndData[IndData$start_end == "start", "EstWeight"]
-      GrowthInv[i, "FinalWeight"] <- IndData[IndData$start_end == end, "EstWeight"]
-      GrowthInv[i, "StartBasalDiamAv"] <- IndData[IndData$start_end == "start", "Basal.Diameter.Av"]
-      GrowthInv[i, "FinalBasalDiamAv"] <- IndData[IndData$start_end == end, "Basal.Diameter.Av"]
+  fit_total <- lm.fit("total_weight", HarvestData_basal_end)
+  fit_stem <- lm.fit("stem_weight", HarvestData_basal_end)
 
-    }
+  HarvestData_basal_end <- HarvestData_basal_end %>%
+    mutate(
+      slope_total  = as.numeric(coef( fit_total)[2]),
+      intercept_total = log(total_weight) - slope_total * log(dia),
+      slope_stem  = as.numeric(coef( fit_stem)[2]),
+      intercept_stem = log(stem_weight) - slope_stem * log(dia))
+
+
+  predict_total_weight <- function(dia, thisindividual) {
+    x <- HarvestData_basal_end %>% filter(individual==thisindividual)
+    exp(x$intercept_total + x$slope_total * log(dia))
   }
-  GrowthInv <- GrowthInv[complete.cases(GrowthInv), ]
 
-  ### Use saved data to calculate total reproduction investment per individual plant
-  InvSpecies <- Species_Investment$Investment
+  predict_stem_weight <- function(dia, thisindividual) {
+    x <- HarvestData_basal_end %>% filter(individual==thisindividual)
+    exp(x$intercept_stem + x$slope_stem * log(dia))
+  }
 
-  RepoInv <- data.frame(individual = c(), ReproInv = c())
-  for (individual in unique(InvSpecies$Individual)) {
-      InvIndividual <- InvSpecies[InvSpecies$Individual == individual, ]
-      RepoInv <- rbind(RepoInv, data.frame(individual = individual, ReproInv = c(sum(InvIndividual$Total))))
-    }
+  ## Estimate weight at beginning and end  (year 2012 and 2013) using fitted regression
+  GrowthEst <- HarvestData_basal %>%
+    group_by(individual) %>%
+    mutate(total_weight_est =  predict_total_weight(dia, individual[1]),
+           GrowthInv = c(NA, diff(total_weight_est)),
+           stem_weight_est = predict_stem_weight(dia, individual[1]),
+           growth_stem = c(NA, diff(stem_weight_est)),
+           growth_leaf =  GrowthInv - growth_stem,
+           growth_dia = c(NA, diff(dia))
+           ) %>%
+    filter(start_end == "end") %>%
+    select(species, individual, age, dia, stem.area, leaf_weight, stem_weight, total_weight, GrowthInv, growth_stem, growth_leaf, growth_dia)
 
+    # Use saved data to calculate total reproduction investment per individual plant
+    ReproTotal <- Species_Investment$Investment %>%
+     group_by(individual) %>%
+     summarise(
+      ReproInv = sum(Total)
+      )
 
-
-  ### Merge two tables and calculate total investment and RAR
-  InvestmentSummary <- merge(RepoInv, GrowthInv, by.y = "individual", all.y = T)
-  # NA that appeared correspond to zeoro reproductive investment
+  # Merge two tables and calculate total investment and RAR
+  InvestmentSummary <- merge(ReproTotal, GrowthEst, by = "individual", all.y = TRUE)
+  # NA that appeared correspond to zero reproductive investment
   InvestmentSummary[is.na(InvestmentSummary)] <- 0
-  # Recode ages if at some place there are old time tags used. InvestmentSummary[str_sub(InvestmentSummary$individual,6,6)=='0','age']=7
-  # InvestmentSummary[str_sub(InvestmentSummary$individual,6,6)=='1','age']=1.3 InvestmentSummary[str_sub(InvestmentSummary$individual,6,6)=='4','age']=5
-  # InvestmentSummary[str_sub(InvestmentSummary$individual,6,6)=='8','age']=9 InvestmentSummary[str_sub(InvestmentSummary$individual,6,6)=='9','age']=32
 
-
-  InvestmentSummary[["TotalInvestment"]] <- InvestmentSummary$ReproInv + InvestmentSummary$GrowthInv
-  InvestmentSummary[["RA"]] <- InvestmentSummary$ReproInv/InvestmentSummary$TotalInvestment
-  row.names(InvestmentSummary) <- NULL
-  InvestmentSummary[["species"]] <- str_sub(InvestmentSummary$individual, 1, 4)
-  InvestmentSummary[order(InvestmentSummary$species), ]
+  InvestmentSummary %>%
+    mutate(
+      TotalInvestment = ReproInv + GrowthInv,
+      RA = ReproInv/TotalInvestment)
 }

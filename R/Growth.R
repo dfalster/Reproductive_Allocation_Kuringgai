@@ -1,6 +1,10 @@
-CalculateMassAndDiameters <- function(harvestData) {
+preprocessHarvest <- function(HarvestData_raw, IndividualsList) {
 
-  data <- harvestData %>% filter(start_end == "end") %>% arrange(individual, date, segment)
+  keep <- filter(IndividualsList, use_for_allometric_equations)$individual
+  CalculateMassAndDiameters(filter(HarvestData_raw, individual %in% keep))
+}
+
+CalculateMassAndDiameters <- function(HarvestData) {
 
   segments <- list()
   segments[["1"]] <- c(as.character(1:8, "1.2", "1.3", "1.2.1", "1.2.1.1", "1.1.2", "1.1.2.1", "1.1.1.2"))
@@ -20,24 +24,44 @@ CalculateMassAndDiameters <- function(harvestData) {
   segments[["15"]] <- c("1.1.1.2")
 
   # only use segments present in data, otherwise dplyr will fail
-  segments <- segments[names(segments) %in% unique(harvestData$segment)]
+  segments <- segments[names(segments) %in% unique(HarvestData$segment)]
 
-  ## Get total mass of all material subteneded by given node
-  get.mass.at.node <- function(data, segments) {
-    data %>% filter(segment %in% segments) %>% group_by(individual) %>% summarise(species = species[1], site = site[1], age = age[1], leaf_weight = sum(leaf_weight),
-      stem_weight = sum(stem_weight), total_weight = sum(leaf_weight, stem_weight))
+  ## Get total mass of all material subtended by given node
+  get.mass.at.node <- function(segment_name, data) {
+    data %>%
+      filter(segment %in% segments[[segment_name]]) %>%
+      summarise(
+          node_above = segment_name,
+          leaf_weight = sum(leaf_weight),
+          stem_weight = sum(stem_weight),
+          total_weight = sum(leaf_weight, stem_weight))
   }
 
-  mass <- ldply(segments, function(x) get.mass.at.node(data, x)) %>% plyr::rename(c(.id = "node_above")) %>% arrange(individual, node_above)
-
-  # Get avergae diameter for base of segment. This is given by diameter readings for segment with names in list above
-  get.diam.node.above <- function(data, level) {
-    data %>% filter(node_above == level) %>% group_by(individual) %>% summarise(node_above = level, dia = mean(c(diameter_1, diameter_2, diameter_3), na.rm = TRUE),
-      stem.area = dia^2 * pi/4)
+  get.mass.at.node.by.segement <- function(data) {
+    lapply(names(segments), get.mass.at.node, data=data)  %>% rbind_all()
   }
 
-  diameters <- ldply(names(segments), function(x) get.diam.node.above(data, x)) %>% arrange(individual, node_above)
+  # Get average diameter for base of segment. This is given by diameter readings for segment with names in list above
+  get.diam.node.above <- function(level, data) {
+    data %>%
+      filter(node_above == level) %>%
+      group_by(individual) %>%
+      summarise(
+        node_above = level,
+        dia = mean(c(diameter_1, diameter_2, diameter_3), na.rm = TRUE),
+        stem.area = dia^2 * pi/4)
+  }
+
+  get.diam.node.above.by.segement <- function(data) {
+    lapply(names(segments),  get.diam.node.above, data=data)  %>% rbind_all()
+  }
+
+  data <- group_by(HarvestData, species, individual, age, start_end)
+
+  mass <-  do(data, get.mass.at.node.by.segement(.))
+  diameters <- do(data, get.diam.node.above.by.segement(.))
 
   # Merge mass and diameter measurements
-  merge(mass, diameters, by = c("individual", "node_above")) %>% filter(!is.na(total_weight), !is.na(dia))
+  merge(diameters, mass, by = c("species", "individual", "age", "node_above", "start_end")) %>%
+   arrange(species, individual, age, node_above, desc(start_end))
 }
