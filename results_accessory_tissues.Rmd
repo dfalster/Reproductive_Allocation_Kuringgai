@@ -49,13 +49,13 @@ arrows(i,mean1[i]+se1[i],i,mean1[i]-se1[i],code=3,angle=90, length=0.1)
 - Larger-seeded species have higher accessory costs. 
 - Also shown in other studies and suggested as a mechanism for why angiosperms were able to have such small seeds (relative to gymnosperms, with no decrease in proportional accessory costs - with decreasing size)  
 ```{r, echo=FALSE,message=FALSE}
-yvar <- "PerAcc_mean"
+yvar <- "prop_accessory_mean"
 xvar <- "seed_size"
 data <- SummarySpp
 
 plot_yvar_vs_xvar(data, yvar, xvar,log="x",
                   xlab=xvar, ylab=yvar)
-mod <- lm(log(seed_size)~PerAcc_mean,SummarySpp)
+mod <- lm(log(seed_size)~prop_accessory_mean,SummarySpp)
 summary(mod)
 anova(mod)
 ```
@@ -63,13 +63,13 @@ anova(mod)
 ###Do species differ in the proportional energy allocated to propagules (vs. accessory tissues)  
 - COER, EPMI, HEPU, LEES, PILI invest the most energy in propagules  
 ```{r, echo=FALSE, message=FALSE}
-yvar <- "PerPropagule"
+yvar <- "prop_propagule"
 xvar <- "species"
 data <- filter(SummaryInd,Total>0)
 
 plot_yvar_vs_xvar(data, yvar, xvar,
                  xlab=xvar, ylab=yvar)
-mod <- lm(asin(sqrt(PerPropagule)) ~ species-1, data)
+mod <- lm(asin(sqrt(prop_propagule)) ~ species-1, data)
 summary(mod)
 data.frame(
     select(glance(mod), r.squared, p.value),
@@ -83,26 +83,26 @@ tmp <- tmp$coefficients
 tmp <-as.data.frame(tmp)
 tmp <- cbind(names(labels.spp),tmp)
 names(tmp) <- c("species","estimate.trans","se.trans","t.value","p.value")
-tmp2 <- select(SummarySpp, species, PerPropagule_mean, PerPropagule_se)
+tmp2 <- select(SummarySpp, species, prop_propagule_mean, prop_propagule_se)
 tmp <- merge(tmp, tmp2, by="species")
 tmp
-plot(PerPropagule_mean~species,tmp,cex.axis=.8,pch=16,log="y",ylim=c(.001,.25),main="Percent reproductive investment put into propagules")
+plot(prop_propagule_mean~species,tmp,cex.axis=.8,pch=16,log="y",ylim=c(.001,.25),main="Percent reproductive investment put into propagules")
 
-mean1 <- tmp$PerPropagule_mean
-se1 <- tmp$PerPropagule_se
+mean1 <- tmp$prop_propagule_mean
+se1 <- tmp$prop_propagule_se
 
 se_function(mean1,se1)
 
 #for(i in 1:14) {
-#arrows(i,tmp$PerPropagule_mean[i]+tmp$PerPropagule_se[i],i,tmp$PerPropagule_mean[i]-tmp$PerPropagule_se[i],code=3,angle=90, length=0.1)}
+#arrows(i,tmp$prop_propagule_mean[i]+tmp$prop_propagule_se[i],i,tmp$prop_propagule_mean[i]-tmp$prop_propagule_se[i],code=3,angle=90, length=0.1)}
 
 
-#barplot(height=test$PerPropagule_mean, names=test$species,cex.axis=.8,ylim=c(0,.25),cex.names=.8)
-#xv <- barplot(height=test$PerPropagule_mean, names=test$species,cex.axis=.8,ylim=c(0,.25),cex.names=.8)
+#barplot(height=test$prop_propagule_mean, names=test$species,cex.axis=.8,ylim=c(0,.25),cex.names=.8)
+#xv <- barplot(height=test$prop_propagule_mean, names=test$species,cex.axis=.8,ylim=c(0,.25),cex.names=.8)
 #xv
 
-#points((PerPropagule_mean+PerPropagule_se)~species,test,pch=25)
-#points((PerPropagule_mean-PerPropagule_se)~species,test,pch=24)
+#points((prop_propagule_mean+prop_propagule_se)~species,test,pch=25)
+#points((prop_propagule_mean-prop_propagule_se)~species,test,pch=24)
 
 #Tuk <- TukeyHSD(mod)
 ```
@@ -110,25 +110,25 @@ se_function(mean1,se1)
 ###Do species differ in the proportional energy allocated to aborted pre-pollination tissues
 - BOLE, EPMI, GRSP, HATE invest the most energy in aborted pre-pollination tissues  
 ```{r, echo=FALSE, message=FALSE}
-yvar <- "PerPrePol_A"
+yvar <- "prop_prepollen_aborted"
 xvar <- "species"
 data <- filter(SummaryInd,Total>0 & age>2)
 
 
 plot_yvar_vs_xvar(data, yvar, xvar,
                   xlab=xvar, ylab=yvar)
-mod <- lm(asin(sqrt(PerPrePol_A)) ~ species, data)
+mod <- lm(asin(sqrt(prop_prepollen_aborted)) ~ species, data)
 summary(mod)
 ```
 
 ##Do individual species decrease accessory costs as they increase in size, age or RA?
 ###Change in accesory costs With size:  
-- PerAcc is arcsine transformed, size is log transformed  
+- prop_accessory is arcsine transformed, size is log transformed  
 - COER, HATE, and PILI show a significant decrease in accessory costs with increasing size (p<0.05)  
 - GRSP shows a marginally significant decrease in accessory costs with increasing size (0.05<p<0.10)  
 - PEPU shows a marginally significant INCREASE in accessory costs with increasing size (0.05<p<0.10)  
 ```{r, echo=FALSE, message=FALSE}
-yvar <- "PerAcc"
+yvar <- "prop_accessory"
 xvar <- "total_weight"
 
 data <- filter(SummaryInd,Total>0)
@@ -153,12 +153,12 @@ for(spp in names(data)) {
 ```
 
 ###Change in accesory costs With age:
-- PerAcc is arcsine transformed, age is log transformed  
+- prop_accessory is arcsine transformed, age is log transformed  
 - BOLE, COER, GRSP, HATE, HEPU, PELA show a significant decrease in accessory costs with increasing age (p<0.05)  
 - EPMI, GRBU shows a marginally significant decrease in accessory costs with increasing age (0.05<p<0.10)  
 - PUTU shows a sig INCREASE in accessory costs with increasing age  
 ```{r, echo=FALSE, message=FALSE}
-yvar <- "PerAcc"
+yvar <- "prop_accessory"
 xvar <- "age"
 
 data <- filter(SummaryInd,Total>0&age>2)
@@ -183,11 +183,11 @@ for(spp in names(data)) {
 ```
 
 ###Change in accesory costs With respect to RA:  
-- both RA and PerAcc are arcsine transformed  
+- both RA and prop_accessory are arcsine transformed  
 - BAER, COER, GRBU, GRSP, HATE, LEES, PELA, PEPU show a significant decrease in accessory costs with increasing RA (p<0.05)  
 - BOLE shows a marginally significant decrease in accessory costs with increasing RA (p ~ 0.10)  
 ```{r, echo=FALSE, message=FALSE}
-yvar <- "PerPropagule"
+yvar <- "prop_propagule"
 xvar <- "RA"
 
 data <- filter(SummaryInd,Total>0&age>2)
@@ -215,11 +215,11 @@ Overall, proportion of energy allocation to accessory tissues (versus propagules
 
 ##Next considering if the amount of energy spent on aborted buds shifts with age, size, RA  
 ###Change in aborted bud investment with size:  
-- PerPrePol_A is arcsine transformed, size is log transformed  
+- prop_prepollen_aborted is arcsine transformed, size is log transformed  
 - GRSP, HATE, HEPU show a significant decrease in aborted buds with increasing size (p<0.05)  
 - PUTU shows a marginally significant decrease in accessory costs with increasing RA (p ~ 0.10)  
 ```{r, echo=FALSE, message=FALSE}
-yvar <- "PerPrePol_A"
+yvar <- "prop_prepollen_aborted"
 xvar <- "total_weight"
 
 data <- filter(SummaryInd,Total>0)
@@ -244,11 +244,11 @@ for(spp in names(data)) {
 ```
 
 ###Change in aborted bud investment with respect to age:  
-- PerPrePol_A is arcsine transformed, age is log transformed  
+- prop_prepollen_aborted is arcsine transformed, age is log transformed  
 - BAER, BOLE, COER, EPMI, LEES, PHPH, PILI show a significant decrease in aborted buds with increasing age (p<0.05)  
 - GRSP, HATE show a marginally significant decrease in aborted buds with increasing age (0.05<p<0.10)  
 ```{r, echo=FALSE, message=FALSE}
-yvar <- "PerPrePol_A"
+yvar <- "prop_prepollen_aborted"
 xvar <- "age"
 
 data <- filter(SummaryInd,Total>0&age>2)
@@ -273,10 +273,10 @@ for(spp in names(data)) {
 ```
 
 ###Change in aborted bud investment with respect to RA:
-- both RA and PerPrePol_A are arcsine transformed  
+- both RA and prop_prepollen_aborted are arcsine transformed  
 - BAER, BOLE, COER, GRSP, HATE, LEES, PELA, PEPU show a significant decrease in aborted buds with increasing RA (p<0.05)  
 ```{r, echo=FALSE, message=FALSE}
-yvar <- "PerPrePol_A"
+yvar <- "prop_prepollen_aborted"
 xvar <- "RA"
 
 data <- filter(SummaryInd,Total>0&age>2)
@@ -302,15 +302,15 @@ for(spp in names(data)) {
 
 ##Do individual species decrease total pre-pollination costs as they increase in size, age or RA?  
 ###Do total pre-pollination costs change with respect to size:  
-- PerPrePol_All is arcsine transformed, size is log transformed  
+- prop_prepollen_all is arcsine transformed, size is log transformed  
 - GRSP, HATE show a significant decrease in total pre-pollination costs with increasing size (p<0.05)  
 - HEPU shows a marginally significant decrease in total pre-pollination costs with increasing size (0.05<p<0.10)  
 
 ```{r, echo=FALSE, message=FALSE}
-yvar <- "PerPrePol_All"
+yvar <- "prop_prepollen_all"
 xvar <- "total_weight"
 
-data <- filter(SummaryInd,Total>0)
+data <- filter(SummaryInd,ReproInv>0)
 data <- split(data, data$species)
 lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  log(x[[xvar]])))
 results <- summarise_all_fits(lmfits)
@@ -332,15 +332,15 @@ for(spp in names(data)) {
 ```
 
 ###Do total pre-pollination costs change with respect to age:
-- PerPrePol_All is arcsine transformed, age is log transformed  
+- prop_prepollen_all is arcsine transformed, age is log transformed  
 - BAER, BOLE, COER, HEPU, LEES, PILI show a significant decrease in total pre-pollination costs with increasing age (p<0.05)  
 - EPMI, GRBU, GRSP, HATE shows a marginally significant decrease in total pre-pollination costs with increasing age (0.05<p<0.10)  
 - PUTU shows a sig INCREASE in total pre-pollination  costs with increasing age  
 ```{r, echo=FALSE, message=FALSE}
-yvar <- "PerPrePol_All"
+yvar <- "prop_prepollen_all"
 xvar <- "age"
 
-data <- filter(SummaryInd,Total>0&age>2)
+data <- filter(SummaryInd,ReproInv>0&age>2)
 data <- split(data, data$species)
 lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  log(x[[xvar]])))
 results <- summarise_all_fits(lmfits)
@@ -362,14 +362,14 @@ for(spp in names(data)) {
 ```
 
 ### Do total pre-pollination costs change with respect to RA:  
-- both RA and PerPrePol_All are arcsine transformed    
+- both RA and prop_prepollen_all are arcsine transformed    
 - BAER, BOLE, COER, GRSP, HATE, HEPU, LEES, PEPU show a significant decrease in total pre-pollination costs with increasing RA (p<0.05)  
 - PELA shows a marginally significant decrease in total pre-pollination costs with increasing RA (0.05<p<0.10)  
 ```{r, echo=FALSE, message=FALSE}
-yvar <- "PerPrePol_All"
+yvar <- "prop_prepollen_all"
 xvar <- "RA"
 
-data <- filter(SummaryInd,Total>0&age>2)
+data <- filter(SummaryInd,ReproInv>0&age>2)
 data <- split(data, data$species)
 lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  asin(sqrt(x[[xvar]]))))
 results <- summarise_all_fits(lmfits)
@@ -391,14 +391,14 @@ for(spp in names(data)) {
 ```
 
 ### Do total pre-pollination costs change with respect to Reproductive Investment:
-- PerPrePol_All is arcsine transformed, ReproInv is log transformed  
+- prop_prepollen_all is arcsine transformed, ReproInv is log transformed  
 - COER, GRBU, GRSP, HATE, PEPU, PHPH, PILI show a significant decrease in total pre-pollination costs with increasing reproductive investment (p<0.05)  
 - LEES shows a marginally significant decrease in total pre-pollination costs with increasing reproductive investment (0.05<p<0.10)  
 ```{r, echo=FALSE, message=FALSE}
-yvar <- "PerPrePol_All"
+yvar <- "prop_prepollen_all"
 xvar <- "ReproInv"
 
-data <- filter(SummaryInd,Total>0&age>2)
+data <- filter(SummaryInd,ReproInv>0&age>2)
 data <- split(data, data$species)
 lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  log(x[[xvar]])))
 results <- summarise_all_fits(lmfits)
@@ -425,12 +425,12 @@ for(spp in names(data)) {
 ```{r, echo=FALSE, message=FALSE}
 plot_Acc_by_Spp <- function(spp) {
 data2 <- filter(SummarySppAge, species==spp)
-plot(PerPropagule_mean ~ age, data=data2, xlab="age", ylab="proportion tissue", cex.axis=.8, las=1,
+plot(prop_propagule_mean ~ age, data=data2, xlab="age", ylab="proportion tissue", cex.axis=.8, las=1,
        main=labels.spp[spp], ylim=c(0,1), xlim=c(1,35), log="x", pch=16,col="orange")
-points(PerPrePol_A_mean ~ age, data=subset(SummarySppAge, species==spp), cex=1.3, pch=8, col="red")
-points(PerPrePol_S_mean ~ age, data=subset(SummarySppAge, species==spp), cex=1.3, pch=17, col="blue")
-points(PerPostPol_A_mean ~ age, data=subset(SummarySppAge, species==spp), cex=1.3, pch=18, col="black")
-points(PerPackDisp_mean ~ age, data=subset(SummarySppAge, species==spp), cex=1.3, pch=19, col="light green")
+points(prop_prepollen_aborted_mean ~ age, data=subset(SummarySppAge, species==spp), cex=1.3, pch=8, col="red")
+points(prop_prepollen_success_mean ~ age, data=subset(SummarySppAge, species==spp), cex=1.3, pch=17, col="blue")
+points(prop_postpollen_aborted_mean ~ age, data=subset(SummarySppAge, species==spp), cex=1.3, pch=18, col="black")
+points(prop_packaging_dispersal_mean ~ age, data=subset(SummarySppAge, species==spp), cex=1.3, pch=19, col="light green")
 legend(.9,.7, pch=c(16,8,17,18,19),legend=c("Propagule","Aborted pre-poll","Successful pre-poll","Aborted post-poll","Packaging & disp"), col=c("orange","red","blue","black","light green"), cex=.8, bty="n")
 }
 
@@ -443,9 +443,9 @@ for(n in names(labels.spp)) {
 - Using models that look at all the various factors at once - but need to include species in these models and probably use some sort of a MANOVA  
 - also issues because significance of various variables changes enormously with transformations  
 ```{r, echo=FALSE, message=FALSE}
-mod <- lm(asin(sqrt(RA))~asin(sqrt(PerPropagule))+asin(sqrt(PerPrePol_A))+ asin(sqrt(PerPrePol_S))+ asin(sqrt(PerPostPol_A))+ asin(sqrt(PerPackDisp)) + species,data=subset(SummaryInd,Total>0))
+mod <- lm(asin(sqrt(RA))~asin(sqrt(prop_propagule))+asin(sqrt(prop_prepollen_aborted))+ asin(sqrt(prop_prepollen_success))+ asin(sqrt(prop_postpollen_aborted))+ asin(sqrt(prop_packaging_dispersal)) + species,data=subset(SummaryInd,Total>0))
 
-mod <- lm(asin(sqrt(RA))~asin(sqrt(PerPropagule))+asin(sqrt(PerPrePol_A))+ asin(sqrt(PerPrePol_S))+ asin(sqrt(PerPostPol_A))+ asin(sqrt(PerPackDisp)) +asin(sqrt(PerPropagule))*species+asin(sqrt(PerPrePol_A))*species+ asin(sqrt(PerPrePol_S))*species+ asin(sqrt(PerPostPol_A))*species+ asin(sqrt(PerPackDisp))*species+ species,data=subset(SummaryInd,Total>0))
+mod <- lm(asin(sqrt(RA))~asin(sqrt(prop_propagule))+asin(sqrt(prop_prepollen_aborted))+ asin(sqrt(prop_prepollen_success))+ asin(sqrt(prop_postpollen_aborted))+ asin(sqrt(prop_packaging_dispersal)) +asin(sqrt(prop_propagule))*species+asin(sqrt(prop_prepollen_aborted))*species+ asin(sqrt(prop_prepollen_success))*species+ asin(sqrt(prop_postpollen_aborted))*species+ asin(sqrt(prop_packaging_dispersal))*species+ species,data=subset(SummaryInd,Total>0))
 summary(mod)
 plot(mod)
 step(mod)

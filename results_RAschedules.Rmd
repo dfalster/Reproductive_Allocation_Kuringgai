@@ -127,11 +127,11 @@ for(spp in names(data)) {
 - In a sense, by using proportion max H, these figures are showing the proportion of total growth the plant undergoes before starting reproduction
 - You could also plot against "PropMaxWeight", the proportion of the heaviest individual of that species. The two measures look "best" for different species
 ```{r, echo=FALSE,message=FALSE}
-plot((PropMaxRepro+.1)~(PropH), SummaryInd, log="y",col=col.spp[as.factor(species)],pch=16,xlim=c(4e-03,1))
+plot((prop_max_repro+.1)~(prop_maxH), SummaryInd, log="y",col=col.spp[as.factor(species)],pch=16,xlim=c(4e-03,1))
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
 yvar <- "ReproInv"
-xvar <- "PropH"
+xvar <- "prop_maxH"
 
 data <- SummaryInd
 data <- split(data, data$species)
@@ -153,9 +153,9 @@ for(spp in names(data)) {
 }
 ```
 
-#RA schedules (vs. propH)  
+#RA schedules (vs. prop_maxH)  
 - these curves are particularly good for a number of species such as EPMI, COER, PELA  
-- they also show that for PILI that among individuals that reproduce, the "potential" RA decreases with increasing propH  
+- they also show that for PILI that among individuals that reproduce, the "potential" RA decreases with increasing prop_maxH  
 - when all data points are included, all species except PEPU, PHPH, and PULU show increasing RA with increasing height  
 - when RA =0 is excluded, the following species still have a significant positive correlation: BOLE, COER, EPMI, GRBU, GRSP, HATE. LEES and PELA have a p-value between 0.05-0.10   
 - PEPU has a negative correlation - matches Mark's suggestion that it is "hanging on"  
@@ -163,14 +163,14 @@ for(spp in names(data)) {
  NOTE: Again, a linear line is not necessarily the most appropriate 
 
 ```{r, echo=FALSE, message=FALSE}
-plot((RA~PropH), SummaryInd, col=col.spp[as.factor(species)],pch=16)
+plot((RA~prop_maxH), SummaryInd, col=col.spp[as.factor(species)],pch=16)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
-plot(RA~PropH, SummaryInd, col=col.age[as.factor(age)],pch=16)
+plot(RA~prop_maxH, SummaryInd, col=col.age[as.factor(age)],pch=16)
 legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
 
 yvar <- "RA"
-xvar <- "PropH"
+xvar <- "prop_maxH"
 
 data <- subset(SummaryInd)
 data <- split(data, data$species)
@@ -414,18 +414,18 @@ for(spp in names(data)) {
 
 
 #Reproductive Investment by scaled height 
-For these calculations, height is scaled relative to max height. This should be a way to determine RSOM - RSOM would be the PropH at which Reproductive Investment begins.
+For these calculations, height is scaled relative to max height. This should be a way to determine RSOM - RSOM would be the prop_maxH at which Reproductive Investment begins.
 For species such as BOLE which begin reproduction so young, data could be included that have pre-reproductive heights from mid-year censuses of "babies"
 
 ```{r, echo=FALSE, message=FALSE}
-plot((RA~PropH), SummaryInd, col=col.spp[as.factor(species)],pch=16)
+plot((RA~prop_maxH), SummaryInd, col=col.spp[as.factor(species)],pch=16)
 legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
-plot((RA)~PropH, SummaryInd, col=col.age[as.factor(age)],pch=16)
+plot((RA)~prop_maxH, SummaryInd, col=col.age[as.factor(age)],pch=16)
 legend("bottomright",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
 
 yvar <- "RA"
-xvar <- "PropH"
+xvar <- "prop_maxH"
 
 data <- subset(SummaryInd)
 data <- split(data, data$species)
@@ -448,11 +448,11 @@ for(spp in names(data)) {
 ```
 
 
-These plots show very clearly that for all species RGR suddenly dips when RA becomes non-zero. Plotting against "total_weight" or "GrowthInvestment" is much less clear - in other words, an individual's height is the best way to sort them into plants investing more in growth vs reproduction. There are of course some non-reproductive plants with "PropH" above the obvious cut-off, but these are almost certainly "reproductively mature" plants not reproducing in a given year.  
+These plots show very clearly that for all species RGR suddenly dips when RA becomes non-zero. Plotting against "total_weight" or "GrowthInvestment" is much less clear - in other words, an individual's height is the best way to sort them into plants investing more in growth vs reproduction. There are of course some non-reproductive plants with "prop_maxH" above the obvious cut-off, but these are almost certainly "reproductively mature" plants not reproducing in a given year.  
 
 
 
-Model analyzed is: lm(log([[GrowthInv]]) ~  asin(sqrt([[RA]]))*asin(sqrt([[PropH]]))))
+Model analyzed is: lm(log([[GrowthInv]]) ~  asin(sqrt([[RA]]))*asin(sqrt([[prop_maxH]]))))
 
 The canopy species have, not suprisingly, a very obvious maxH, with Growth Investment or RGR tapering markedly at the maxH is approached. In these species growth investment is poorly correlated with RA, but well correlated with height.  
 In some of the mid-height species (GRSP, BOLE, GRBU), growth investment is very poorly correlated with height, but well correlated with RA - in other words, increased RA = less growth.
@@ -462,7 +462,7 @@ Now my current analyses still lack the ability to tease apart the most obvious p
 ```{r, echo=FALSE, message=FALSE}
 yvar <- "GrowthInv"
 xvar <- "RA"
-x2var <- "PropH"
+x2var <- "prop_maxH"
 
 data <- SummaryInd
 data <- split(data, data$species)
@@ -471,11 +471,11 @@ results <- summarise_all_fits_2var(lmfits)
 
 results$r.squared <- round(results$r.squared,digits=3)
 results$p.value <- round(results$p.value,digits=3)
-names(results) <- c("species","r.sq_total","p-total","n","intercept","coef_RA","coef_PropH","coef_interaction","SS_RA","SS_PropH","SS_interaction")
+names(results) <- c("species","r.sq_total","p-total","n","intercept","coef_RA","coef_prop_maxH","coef_interaction","SS_RA","SS_prop_maxH","SS_interaction")
 results
 
 yvar <- "GrowthInv"
-xvar <- "PropH"
+xvar <- "prop_maxH"
 
 data <- subset(SummaryInd)
 data <- split(data, data$species)
@@ -484,7 +484,7 @@ results2 <- summarise_all_fits(lmfits)
 
 results2$r.squared <- round(results2$r.squared,digits=3)
 results2$p.value <- round(results2$p.value,digits=3)
-names(results2) <- c("species","r.sq.PropH","p.PropH","n","a","b")
+names(results2) <- c("species","r.sq.prop_maxH","p.prop_maxH","n","a","b")
 results2
 
 yvar <- "GrowthInv"

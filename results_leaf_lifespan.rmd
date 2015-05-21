@@ -357,14 +357,14 @@ legend("topleft",col=col.age, pch=16,legend=labels.age,cex=.8,bty="n")
 ```
 
 
-#PropH vs LL_death
+#prop_maxH vs LL_death
 - Have just plotted overall data, because no relationships across or within species; only GRSP has significant negative relationship and BOLE has significant positive relationship
 ```{r, echo=FALSE,message=FALSE}
-plot((LL_death~PropH), data=subset(SummaryInd,LL_death<10), col=col.spp[as.factor(species)],pch=16)
+plot((LL_death~prop_maxH), data=subset(SummaryInd,LL_death<10), col=col.spp[as.factor(species)],pch=16)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
 
-plot((PropH~log(age)), data=subset(SummaryInd), col=col.spp[as.factor(species)],pch=16)
+plot((prop_maxH~log(age)), data=subset(SummaryInd), col=col.spp[as.factor(species)],pch=16)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 ```
 

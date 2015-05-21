@@ -9,9 +9,9 @@ source("scripts/functions.R")
 #RA schedule paper
 * I have a dataset with enough resolution across species and ages to show patterns of growth and reproductive investment across ages  
 * This includes both RA schedules and RV curves  
-* Below are curves plotted relative to "PropH", which is a better fit for most species - but other species should be plotted against total plant weight  
+* Below are curves plotted relative to "prop_maxH", which is a better fit for most species - but other species should be plotted against total plant weight  
 * Plants that grow more also reproduce more, but plants that allocate more to reproduction have lower RGR 
-* There is a disinct decline in RGR (or Growth Investment) at the exact "PropH" that plants begin to reproduce 
+* There is a disinct decline in RGR (or Growth Investment) at the exact "prop_maxH" that plants begin to reproduce 
 * Plotting reproductive investment (ReproInv) against RGR yields a much lower r^2 - for every single species. Only RA captures the actual trade-off incurred by plants that allocate more to reproduction, showing one way RA schedules are important  
 - As discussed in the review, RA schedule differentiate between greater reproductive output because you are bigger (a positive correlation with plant growth) and greater reproductive output because you are allocating more to reproduction (a negative correlation with plant growth)  
 * RV curves continue to be the more relevent metric to determine the actual amount of reproductive output produced by a plant of a given size or height  
@@ -37,14 +37,14 @@ plot(ReproInv~height, SummaryInd, log="xy",col=col.spp[as.factor(species)],pch=1
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.bottom.right.logxy(mod)
 
-mod <- lm((PropH)~log(ReproInv), data=subset(SummaryInd,ReproInv>0))
-plot((ReproInv)~(PropH), SummaryInd, log="y",col=col.spp[as.factor(species)],pch=16,xlim=c(4e-03,1))
+mod <- lm((prop_maxH)~log(ReproInv), data=subset(SummaryInd,ReproInv>0))
+plot((ReproInv)~(prop_maxH), SummaryInd, log="y",col=col.spp[as.factor(species)],pch=16,xlim=c(4e-03,1))
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 ```
 
 ###Plots of size against RA
 * RA not significantly correlated with total height or weight, but of course across and within species effects opposite - bigger individuals of a species have higher RA, but species that are overall bigger have lower RA
-* Therefore, there is a negative correlation between PropH (proportion of a species' maximum height) and RA; highly significant, but very low R^2
+* Therefore, there is a negative correlation between prop_maxH (proportion of a species' maximum height) and RA; highly significant, but very low R^2
 
 ```{r, echo=FALSE,message=FALSE, fig.width=7, fig.height=7}
 par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2)) 
@@ -58,8 +58,8 @@ plot(asin(sqrt(RA))~height, SummaryInd, log="x",col=col.spp[as.factor(species)],
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right.logx(mod)
 
-mod <- lm((PropH)~asin(sqrt(RA)), data=subset(SummaryInd,ReproInv>0))
-plot((asin(sqrt(RA)))~(PropH), SummaryInd,col=col.spp[as.factor(species)],pch=16,xlim=c(4e-03,1))
+mod <- lm((prop_maxH)~asin(sqrt(RA)), data=subset(SummaryInd,ReproInv>0))
+plot((asin(sqrt(RA)))~(prop_maxH), SummaryInd,col=col.spp[as.factor(species)],pch=16,xlim=c(4e-03,1))
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.bottom.right(mod)
 ```
@@ -67,7 +67,7 @@ words.bottom.right(mod)
 ##RA schedules (vs. age and height)  
 - RA schedules still look "best" plotted against age  
 - RA schedules plotted against height are particularly good for a number of species such as EPMI, COER, PELA  
-  1. they also show that for PILI that among individuals that reproduce, the "potential" RA decreases with increasing propH  
+  1. they also show that for PILI that among individuals that reproduce, the "potential" RA decreases with increasing prop_maxH  
   2. when all data points are included, all species except PEPU, PHPH, and PULU show increasing RA with increasing height  
   3. when RA =0 is excluded, the following species still have a significant positive correlation: BOLE, COER, EPMI, GRBU, GRSP, HATE. LEES and PELA have a p-value between 0.05-0.10   
   4. PEPU has the lowest slope - matches Mark's suggestion that it is "hanging on"  
@@ -218,13 +218,13 @@ words.top.right.logxy(mod)
 ```
 
 ###To think about regarding RA schedules and RV curves
-- What does it mean that PropH is the better correlate that plant weight?  
+- What does it mean that prop_maxH is the better correlate that plant weight?  
 1. That "plant weight" is a mis-leading number, since it includes dead "heartwood"  
 2. That this is a community where height is the most important variable? Because height = light access or because of some relationship between height and leaf area.  
-** Once I have leaf weights, I'll be curious how leaf weight plots against PropH, this might be more of the story  
+** Once I have leaf weights, I'll be curious how leaf weight plots against prop_maxH, this might be more of the story  
 
-###Looking jointly at effects of RA and PropH on growth inveestment
-- Model analyzed is: lm(log([[GrowthInv]]) ~  asin(sqrt([[RA]]))*asin(sqrt([[PropH]]))))  
+###Looking jointly at effects of RA and prop_maxH on growth inveestment
+- Model analyzed is: lm(log([[GrowthInv]]) ~  asin(sqrt([[RA]]))*asin(sqrt([[prop_maxH]]))))  
 - The canopy species have, not suprisingly, a very obvious maxH, with Growth Investment or RGR tapering markedly at the maxH is approached. In these species growth investment is poorly correlated with RA, but well correlated with height.  
 - In some of the mid-height species (GRSP, BOLE, GRBU), growth investment is very poorly correlated with height, but better correlated with RA - in other words, increased RA = less growth.  
 - One of the difficult features interpreting this, is that there are species with overall higher correlations and overall lower correlations, and this pattern dominates, not the relative strength  
@@ -232,7 +232,7 @@ words.top.right.logxy(mod)
 ```{r, echo=FALSE, message=FALSE, out.width=900, out.height=576}
 yvar <- "GrowthInv"
 xvar <- "RA"
-x2var <- "PropH"
+x2var <- "prop_maxH"
 
 data <- SummaryInd
 data <- split(data, data$species)
@@ -241,6 +241,6 @@ results <- summarise_all_fits_2var(lmfits)
 
 results$r.squared <- round(results$r.squared,digits=3)
 results$p.value <- round(results$p.value,digits=3)
-names(results) <- c("species","r,squared","p-value","n","intercept","coef_RA","coef_PropH","coef_interaction","SS_RA","SS_PropH","SS_interaction")
+names(results) <- c("species","r,squared","p-value","n","intercept","coef_RA","coef_prop_maxH","coef_interaction","SS_RA","SS_prop_maxH","SS_interaction")
 results
 ```

@@ -1,0 +1,49 @@
+BAER_parts <- as.data.frame(BAER_PartsSummary[4])
+names(BAER_parts) <- c("species","what","count","weight")
+BOLE_parts <- as.data.frame(BOLE_PartsSummary[4])
+names(BOLE_parts) <- c("species","what","count","weight")
+COER_parts <- as.data.frame(COER_PartsSummary[4])
+names(EPMI_parts) <- c("species","what","count","weight")
+EPMI_parts <- as.data.frame(EPMI_PartsSummary[4])
+names(EPMI_parts) <- c("species","what","count","weight")
+GRBU_parts <- as.data.frame(GRBU_PartsSummary[4])
+names(GRBU_parts) <- c("species","what","count","weight")
+GRSP_parts <- as.data.frame(GRSP_PartsSummary[4])
+names(GRSP_parts) <- c("species","what","count","weight")
+HATE_parts <- as.data.frame(HATE_PartsSummary[4])
+names(HATE_parts) <- c("species","what","count","weight")
+HEPU_parts <- as.data.frame(HEPU_PartsSummary[4])
+names(HEPU_parts) <- c("species","what","count","weight")
+LEES_parts <- as.data.frame(LEES_PartsSummary[4])
+names(LEES_parts) <- c("species","what","count","weight")
+PELA_parts <- as.data.frame(PELA_PartsSummary[4])
+names(PELA_parts) <- c("species","what","count","weight")
+PEPU_parts <- as.data.frame(PEPU_PartsSummary[4])
+names(PEPU_parts) <- c("species","what","count","weight")
+PHPH_parts <- as.data.frame(PHPH_PartsSummary[4])
+names(PHPH_parts) <- c("species","what","count","weight")
+PILI_parts <- as.data.frame(PILI_PartsSummary[4])
+names(PILI_parts) <- c("species","what","count","weight")
+PUTU_parts <- as.data.frame(PUTU_PartsSummary[4])
+names(PUTU_parts) <- c("species","what","count","weight")
+
+seedcosts <- as.data.frame(c(1:14))
+seedcosts$species <- c("BAER","BOLE","COER","EPMI","GRBU","GRSP","HATE","HEPU","LEES","PELA","PEPU","PHPH","PILI","PUTU")
+names(seedcosts) <- c("seedcosts","species")
+
+seedcosts[1,1] <- (BAER_parts[2,4])/10+(BAER_parts[4,4])/10+BAER_parts[13,4]+BAER_parts[12,4]+BAER_parts[19,4]+BAER_parts[20,4]
+seedcosts[2,1] <- BOLE_parts[5,4]+BOLE_parts[6,4]+BOLE_parts[11,4]+BOLE_parts[15,4]+BOLE_parts[16,4]
+seedcosts[3,1] <- (COER_parts[5,4])/6+COER_parts[8,4]+COER_parts[12,4]+COER_parts[15,4]
+seedcosts[4,1] <- EPMI_parts[4,4]+EPMI_parts[9,4]
+seedcosts[5,1] <- GRBU_parts[2,4]+GRBU_parts[7,4]+GRBU_parts[12,4]+GRBU_parts[14,4]+GRBU_parts[15,4]
+seedcosts[6,1] <- GRSP_parts[4,4]+GRSP_parts[9,4]+GRSP_parts[14,4]+GRSP_parts[16,4]+GRSP_parts[18,4]
+seedcosts[7,1] <- HATE_parts[4,4]+HATE_parts[6,4]+HATE_parts[13,4]+HATE_parts[16,4]
+seedcosts[8,1] <- HEPU_parts[3,4]+HEPU_parts[10,4]+HEPU_parts[15,4]
+seedcosts[9,1] <- LEES_parts[5,4]+LEES_parts[10,4]+LEES_parts[13,4]
+seedcosts[10,1] <- PELA_parts[4,4]+PELA_parts[5,4]+PELA_parts[11,4]+PELA_parts[12,4]
+seedcosts[11,1] <- (PEPU_parts[4,4])/30+PEPU_parts[9,4]+PEPU_parts[16,4]
+seedcosts[12,1] <- PHPH_parts[4,4]+PHPH_parts[5,4]+PHPH_parts[6,4]+PHPH_parts[15,4]+PHPH_parts[16,4]
+seedcosts[13,1] <- (PILI_parts[2,4])/10+PILI_parts[3,4]+PILI_parts[5,4]+PILI_parts[7,4]+PILI_parts[11,4]+PILI_parts[12,4]
+seedcosts[14,1] <- PUTU_parts[2,4]+PUTU_parts[3,4]+PUTU_parts[4,4]+PUTU_parts[10,4]+PUTU_parts[11,4]
+
+seedsize <- merge(seedsize, seedcosts, by="species",all.x=TRUE)

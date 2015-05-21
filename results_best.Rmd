@@ -3,104 +3,7 @@ library(remake)
 create_bindings()
 
 source("scripts/summary_dataframes.R")
-plot_yvar_vs_xvar <- function(data, yvar = "y", xvar = "x", ...) {
-  Y <- data[[yvar]]
-  X <- data[[xvar]]
-  plot(Y ~ X, data=data,  cex.axis=.8, las=1, pch=16, ...)
-}
-
-plot_yvar2_vs_xvar2 <- function(data, yvar2 = "y", xvar2 = "x", ...) {
-  Y <- data[[yvar2]]
-  X <- data[[xvar2]]
-  plot(Y ~ X, data=data,  cex.axis=.8, las=1, pch=16, ...)
-}
-
-summarise_fit <- function(x) {
-  data.frame(
-    select(glance(x), r.squared, p.value),
-    n= length(resid(x)),
-    a = coef(x)[1],
-    b = coef(x)[2]
-  )
-}
-
-summarise_all_fits <- function(x) {
-  tmp <- lapply(x, summarise_fit) %>%
-    bind_rows
-  data.frame(species=names(x), tmp)
-}
-
-summarise_fit_2var <- function(x) {
-  data.frame(
-    select(glance(x), r.squared, p.value),
-    n= length(resid(x)),
-    intercept = coef(x)[1],
-    coef_var1 = coef(x)[2],
-    coef_var2 = coef(x)[3],
-    coef_var1var2 = coef(x)[4],
-    SS_var1 = anova(x)[1,2],
-    SS_var2 = anova(x)[2,2],
-    SS_var1var2 =anova(x)[3,2]
-      )
-}
-
-summarise_all_fits_2var <- function(x) {
-  tmp <- lapply(x, summarise_fit_2var) %>%
-    bind_rows
-  data.frame(species=names(x), tmp)
-}
-
-xy.error.bars <- function (x,y,xbar,ybar) {
-  plot(x,y,pch=16, ylim=c(min(y-ybar),max(y+ybar)),xlim=c(min(x-xbar),max(x+xbar)))
-  arrows(x,y-ybar,x,y+ybar,code=3,angle=90, length=0.1)
-  arrows(x-xbar,y,x+xbar,y,code=3,angle=90, length=0.1)
-}
-
-se_function <- function(mean1,se1) {
-for(i in 1:14) {
-arrows(i,mean1[i]+se1[i],i,mean1[i]-se1[i],code=3,angle=90, length=0.1)
-}
-}
-
-words.top.right.logxy <- function (x) {
-output <- data.frame(select(glance(x), r.squared, p.value))
-output <- round(output,4)
-text(10^((0.75*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.93*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("r squared = ",output[1]),adj=0,cex=.9)
-text(10^((0.75*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.88*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("p-value = ",output[2]),adj=0,cex=.9)
-text(10^((0.99*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.98*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),summary(mod)[1],cex=.7,adj=1)
-}
-
-words.top.right.logx <- function (x) {
-output <- data.frame(select(glance(x), r.squared, p.value))
-output <- round(output,4)
-text(10^((0.75*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.93*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("r squared = ",output[1]),adj=0,cex=.9)
-text(10^((0.75*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.88*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("p-value = ",output[2]),adj=0,cex=.9)
-text(10^((0.99*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.98*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),summary(mod)[1],cex=.7,adj=1)
-}
-
-words.top.right <- function (x) {
-output <- data.frame(select(glance(x), r.squared, p.value))
-output <- round(output,4)
-text(((0.75*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.93*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("r squared = ",output[1]),adj=0,cex=.9)
-text(((0.75*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.88*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("p-value = ",output[2]),adj=0,cex=.9)
-text(((0.99*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.98*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),summary(mod)[1],cex=.7,adj=1)
-}
-
-words.bottom.right.logxy <- function (x) {
-output <- data.frame(select(glance(x), r.squared, p.value))
-output <- round(output,4)
-text(10^((0.75*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.12*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("r squared = ",output[1]),adj=0,cex=.9)
-text(10^((0.75*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.07*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("p-value = ",output[2]),adj=0,cex=.9)
-text(10^((0.99*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.02*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),summary(mod)[1],cex=.7,adj=1)
-}
-
-words.bottom.right.logx <- function (x) {
-  output <- data.frame(select(glance(x), r.squared, p.value))
-  output <- round(output,4)
-  text(10^((0.75*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.12*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("r squared = ",output[1]),adj=0,cex=.9)
-  text(10^((0.75*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.07*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("p-value = ",output[2]),adj=0,cex=.9)
-  text(10^((0.99*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.02*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),summary(mod)[1],cex=.7,adj=1)
-}
+source("scripts/functions.R")
 ```
 
 #Changes in growth and tissue allocation with age and size
@@ -109,15 +12,15 @@ words.bottom.right.logx <- function (x) {
 
 ###More ways to ask how much - and when - reproduction impacts growth  
 - It is clear that different species reach a different "proportion maxH" (RSOM) before reproducing. Need to do curve fitting to determine where this occurs.  
-- The plot of Growth Investment vs. PropH shows a decrease in growth rate at a given PropH (for most species). Is this the same PropH at which reproduction begins?  
-- It seems that some of the early reproducers begin reproducing at a larger PropH, as predicted by others. But because they allocate so much to reproduction, their growth rate declines more precipitously with the onset of reproduction.  
+- The plot of Growth Investment vs. prop_maxH shows a decrease in growth rate at a given prop_maxH (for most species). Is this the same prop_maxH at which reproduction begins?  
+- It seems that some of the early reproducers begin reproducing at a larger prop_maxH, as predicted by others. But because they allocate so much to reproduction, their growth rate declines more precipitously with the onset of reproduction.  
 
 #RA schedule paper
 * I have a dataset with enough resolution across species and ages to show patterns of growth and reproductive investment across ages  
 * This includes both RA schedules and RV curves  
-* Below are curves plotted relative to "PropH", which is a better fit for most species - but other species should be plotted against total plant weight  
+* Below are curves plotted relative to "prop_maxH", which is a better fit for most species - but other species should be plotted against total plant weight  
 * Plants that grow more also reproduce more, but plants that allocate more to reproduction have lower RGR 
-* There is a disinct decline in RGR (or Growth Investment) at the exact "PropH" that plants begin to reproduce 
+* There is a disinct decline in RGR (or Growth Investment) at the exact "prop_maxH" that plants begin to reproduce 
 * Plotting reproductive investment (ReproInv) against RGR yields a much lower r^2 - for every single species. Only RA captures the actual trade-off incurred by plants that allocate more to reproduction, showing one way RA schedules are important  
   - As discussed in the review, RA schedule differentiate between greater reproductive output because you are bigger (a positive correlation with plant growth) and greater reproductive output because you are allocating more to reproduction (a negative correlation with plant growth)  
 * RV curves continue to be the more relevent metric to determine the actual amount of reproductive output produced by a plant of a given size or height  
@@ -131,7 +34,7 @@ words.bottom.right.logx <- function (x) {
 
 ```{r, echo=FALSE,message=FALSE, fig.width=14, fig.height=7}
 yvar <- "RA"
-xvar <- "PropH"
+xvar <- "prop_maxH"
 
 yvar2 <- "RA"
 xvar2 <- "total_weight"
@@ -153,7 +56,7 @@ plot.new()
 
 ```{r, echo=FALSE,message=FALSE, fig.width=14, fig.height=7}
 yvar <- "ReproInv"
-xvar <- "PropH"
+xvar <- "prop_maxH"
 
 yvar2 <- "ReproInv"
 xvar2 <- "total_weight"
@@ -175,7 +78,7 @@ par(mfrow=c(1,1), pin=c(5,7),mar=c(5,4,4,2)+.1,omi=c(.1,.1,.1,.1))
 
 
 ```{r, echo=FALSE,message=FALSE, fig.width=7, fig.height=7, out.width=792, out.height=576}
-plot((ReproInv)~(PropH), SummaryInd, log="y",col=col.spp[as.factor(species)],pch=16,xlim=c(4e-03,1),xlab=xvar)
+plot((ReproInv)~(prop_maxH), SummaryInd, log="y",col=col.spp[as.factor(species)],pch=16,xlim=c(4e-03,1),xlab=xvar)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
 plot(ReproInv~total_weight, SummaryInd, log="xy",col=col.spp[as.factor(species)],pch=16)
@@ -185,10 +88,10 @@ plot(ReproInv~height, SummaryInd, log="xy",col=col.spp[as.factor(species)],pch=1
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 ```
 
-* Reproductive investment vs. PropH
+* Reproductive investment vs. prop_maxH
 ```{r, echo=FALSE,message=FALSE, fig.width=7, fig.height=7, out.width=792, out.height=576}
 yvar <- "ReproInv"
-xvar <- "PropH"
+xvar <- "prop_maxH"
 
 data <- SummaryInd
 data <- split(data, data$species)
@@ -203,26 +106,26 @@ results$b <- round(results$b,digits=2)
 results
 ```
 
-##RA schedules (vs. propH)  
+##RA schedules (vs. prop_maxH)  
 - RA schedules still look "best" plotted against age; not shown here  
 - these curves are particularly good for a number of species such as EPMI, COER, PELA  
-- they also show that for PILI that among individuals that reproduce, the "potential" RA decreases with increasing propH  
+- they also show that for PILI that among individuals that reproduce, the "potential" RA decreases with increasing prop_maxH  
 - when all data points are included, all species except PEPU, PHPH, and PULU show increasing RA with increasing height  
 - when RA =0 is excluded, the following species still have a significant positive correlation: BOLE, COER, EPMI, GRBU, GRSP, HATE. LEES and PELA have a p-value between 0.05-0.10   
 - PEPU has a negative correlation - matches Mark's suggestion that it is "hanging on"  
-- There are species - such as BOLE - which have a much "cleaner" plot against age instead of PropH (or any other size measure). This indicates that these species are programmed to reproduce at a certain "rate" regardless of their size  
+- There are species - such as BOLE - which have a much "cleaner" plot against age instead of prop_maxH (or any other size measure). This indicates that these species are programmed to reproduce at a certain "rate" regardless of their size  
 
  NOTE: Again, a linear line is not necessarily the most appropriate 
 
 ```{r, echo=FALSE, message=FALSE}
-plot((RA~PropH), SummaryInd, col=col.spp[as.factor(species)],pch=16)
+plot((RA~prop_maxH), SummaryInd, col=col.spp[as.factor(species)],pch=16)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
-plot(RA~PropH, SummaryInd, col=col.age[as.factor(age)],pch=16)
+plot(RA~prop_maxH, SummaryInd, col=col.age[as.factor(age)],pch=16)
 legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
 
 yvar <- "RA"
-xvar <- "PropH"
+xvar <- "prop_maxH"
 
 data <- subset(SummaryInd)
 data <- split(data, data$species)
@@ -260,13 +163,13 @@ anova(mod)
 ```
 
 ###To think about regarding RA schedules and RV curves
-- What does it mean that PropH is the better correlate that plant weight?  
+- What does it mean that prop_maxH is the better correlate that plant weight?  
 1. That "plant weight" is a mis-leading number, since it includes dead "heartwood"  
 2. That this is a community where height is the most important variable? Because height = light access or because of some relationship between height and leaf area.  
-** Once I have leaf weights, I'll be curious how leaf weight plots against PropH, this might be more of the story  
+** Once I have leaf weights, I'll be curious how leaf weight plots against prop_maxH, this might be more of the story  
 
-###Looking jointly at effects of RA and PropH on growth inveestment
-- Model analyzed is: lm(log([[GrowthInv]]) ~  asin(sqrt([[RA]]))*asin(sqrt([[PropH]]))))  
+###Looking jointly at effects of RA and prop_maxH on growth inveestment
+- Model analyzed is: lm(log([[GrowthInv]]) ~  asin(sqrt([[RA]]))*asin(sqrt([[prop_maxH]]))))  
 - The canopy species have, not suprisingly, a very obvious maxH, with Growth Investment or RGR tapering markedly at the maxH is approached. In these species growth investment is poorly correlated with RA, but well correlated with height.  
 - In some of the mid-height species (GRSP, BOLE, GRBU), growth investment is very poorly correlated with height, but better correlated with RA - in other words, increased RA = less growth.  
 - One of the difficult features interpreting this, is that there are species with overall higher correlations and overall lower correlations, and this pattern dominates, not the relative strength  
@@ -274,7 +177,7 @@ anova(mod)
 ```{r, echo=FALSE, message=FALSE}
 yvar <- "GrowthInv"
 xvar <- "RA"
-x2var <- "PropH"
+x2var <- "prop_maxH"
 
 data <- SummaryInd
 data <- split(data, data$species)
@@ -283,489 +186,8 @@ results <- summarise_all_fits_2var(lmfits)
 
 results$r.squared <- round(results$r.squared,digits=3)
 results$p.value <- round(results$p.value,digits=3)
-names(results) <- c("species","r,squared","p-value","n","intercept","coef_RA","coef_PropH","coef_interaction","SS_RA","SS_PropH","SS_interaction")
+names(results) <- c("species","r,squared","p-value","n","intercept","coef_RA","coef_prop_maxH","coef_interaction","SS_RA","SS_prop_maxH","SS_interaction")
 results
 ```
 
 
-#Shifts in accessory costs across species and ages
-##Overall results
-- Accessory costs higher for bigger seeds  
-  
-- Accessory costs higher for bigger species; these are the same species that invest less in RA  
-  
-- Of course there is also a correlation between seed size and plant size, but actually not as strong as the accessory cost one, presumably because older plants have lower accessory costs as well as species that are inherently bigger  
-  
-- A number of species show fairly consistent declines in accessory costs with various measures of "bigger", including size, age, RA. Other species show no patterns  
-- Lower pre-pollination costs in plants with higher RA: 9 (of 14) species decrease the proportion of reproductive investment in "pre-pollination" tissues as their RA increases. in other words, they get better returns on investment the more they invest. (This is just a pattern within, not across, species)  
-- Species very different in which accessory tissues they invest the most in - which reflects the differences in basic structure (i.e. Banksia cones), but also more subtlely that some species abort lots of buds (pre-pollination aborted), while other species abort more fully formed flowers  
-- Haven't actually run all the tests, but assume all reproductive tissue types will differ in proportional allocation across species
-- For most of the statistical analyses, the youngest site has been removed, since it included individuals that were harvested while flowering (and therefore never "got to" set fruit) and automatically have no "successful" reproduction. There are of course some individuals like this at other ages as well, but far fewer  
-
-##Basic questions
-###How do accessory costs shift with seed size?
-- Larger-seeded species have higher accessory costs. 
-- Also shown in other studies and suggested as a mechanism for why angiosperms were able to have such small seeds (relative to gymnosperms, with no decrease in proportional accessory costs - with decreasing size)  
--  As shown below, bigger species also have higher accessory costs (and also bigger seeds - cause vs. effect unknown)
-```{r, echo=FALSE,message=FALSE}
-mod <- lm(log(seed_size)~asin(sqrt(PerAcc_mean)),SummarySpp)
-plot(PerAcc_mean~seed_size,SummarySpp, log="xy", pch=16,col=col.spp[as.factor(species)])
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.bottom.right.logxy(mod)
-```
-
-###Why measure "Total Reproductive Investment" instead of "seed weight" or "fruit weight"?  
-- The R^2 for the plot of total reproductive investment against total plant size is much stronger than plotting seed weight against total plant size (R^2 = 0.61 vs 0.33)  
-- Adding propagule + packaging & dispersal (i.e. successful reproduction costs), improves the fit somewhat (R^2 =0.55)  
-- Total pre-pollination costs are also well-correlated with plant size, indicating bigger plants have more flowers
-- NEXT: Once I have all parts weights, plot against fruit weight
-
-```{r, echo=FALSE,message=FALSE}
-mod <- lm (log(total_weight)~log(ReproInv), data=subset(SummaryInd,ReproInv>0))
-plot(ReproInv~total_weight,data=subset(SummaryInd,ReproInv>0), log="xy",col=col.spp[as.factor(species)], pch=16)
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.bottom.right.logxy(mod)
-
-mod <- lm (log(total_weight)~log(Prop), data=subset(SummaryInd,Prop>0))
-plot(Prop~total_weight,data=subset(SummaryInd,Prop>0), log="xy",col=col.spp[as.factor(species)], pch=16)
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.bottom.right.logxy(mod)
-
-mod <- lm (log(total_weight)~log(Prop+PD), data=subset(SummaryInd,Prop>0))
-plot((Prop+PD)~total_weight,data=subset(SummaryInd,Prop>0), log="xy",col=col.spp[as.factor(species)], pch=16)
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.bottom.right.logxy(mod)
-
-mod <- lm (log(total_weight)~log(PrePol_All), data=subset(SummaryInd,PrePol_All>0))
-plot((PrePol_All)~total_weight,data=subset(SummaryInd,PrePol_All>0), log="xy",col=col.spp[as.factor(species)], pch=16)
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.bottom.right.logxy(mod)
-```
-
-###Looking at counts
-- Final weight vs. #flowers+buds
-- Final weight vs. #fruit
-
-
-##Across species patterns of note
-###Size versus proportional propagule investment
-- Species that are bigger (by weight) invest a lower proportion of their reproduction in propagules  
-   1.  This is another way of showing that larger species get less of a return on their investment in reproduction. They have higher accessory costs. 
-   - There is also an increase in propagule investment with age
-```{r, echo=FALSE,message=FALSE, fig.width=14, fig.height=7, out.width=792, out.height=576}
-mod <- lm(log(total_weight) ~ (log(PerPropagule))+age,data=subset(SummaryInd,PerPropagule>0))
-summary(mod)
-plot(PerPropagule ~total_weight, data=subset(SummaryInd,RA>0&PerPropagule>0),log="xy", col=col.spp[as.factor(species)],pch=16)
-legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.top.right.logxy(mod)
-text(10^((0.70*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.85*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),"includes age effect",adj=0) 
-```
-  
-- Species that are bigger also invest a lower proportion of their TOTAL surplus energy in propagules (proportion propagules*RA) 
-  + This is noisier than looking simply at proportion reproductive allocation to propagules, because of the RA effects - see below
-```{r, echo=FALSE, message=FALSE}
-mod <- lm(log(total_weight) ~ (log(PropAllocation))*age,data=subset(SummaryInd,PerPropagule>0))
-plot(PropAllocation ~total_weight, data=subset(SummaryInd,RA>0&PerPropagule>0),log="xy", col=col.spp[as.factor(species)],pch=16)
-legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.top.right.logxy(mod)
-text(1000,.6e-4,"includes age effect (increase in Prop Allocation with age)",adj=0)
-summary(mod)
-```
-
-- Looking at RA with plant size is not very informative, because:
-  1. RA increases with plant size within a species  
-  2. decreases with plant size across species  
-  3. in combination they are noisy
-- The first plot is all points  
-- The second plot is just 7-year olds, showing the decrease in RA with plant size  
-```{r, echo=FALSE, message=FALSE}
-mod <- lm(log(total_weight) ~ (log(RA)),data=subset(SummaryInd,RA>0))
-plot(RA ~total_weight, data=subset(SummaryInd,RA>0),log="xy", col=col.spp[as.factor(species)],pch=16)
-legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.bottom.right.logxy(mod)
-anova(mod)
-
-mod <- lm(log(total_weight) ~ (log(RA)),data=subset(SummaryInd,RA>5e-3&age==7))
-plot(RA ~total_weight, data=subset(SummaryInd,RA>5e-3&age==7),log="xy", col=col.spp[as.factor(species)],pch=16)
-legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.top.right.logxy(mod)
-```
-
-- A model including the effect of both PerPropagule and RA on total_weight confirms this - there is a strong species effect and strong PerPropagule effect, but RA is much less significant  
-```{r, echo=FALSE, message=FALSE}
-mod <- lm(log(total_weight) ~ (log(RA))*log(PerPropagule)*species,data=subset(SummaryInd,PerPropagule>0))
-anova(mod)
-```
-
-- Proportional investment in all pre-pollination tissues is uncorrelated with plant size (at most ages)  
-  +  if age included in model, becomes highly significant  
-```{r, echo=FALSE, message=FALSE}
-mod <- lm(log(total_weight) ~ asin(sqrt(PerPrePol_All)),data=subset(SummaryInd,PerPrePol_All>0&age>3))
-plot(asin(sqrt(PerPrePol_All)) ~ total_weight, data=subset(SummaryInd,PerPrePol_All>0),log="x", col=col.spp[as.factor(species)],pch=16)
-legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.top.right.logx(mod)
-```
-
-- Shifts in packaging and dispersal costs with plant weight
-- Species very different from one another, but no shift with size 
-- Also no pattern w/r RA (not shown)
-```{r, echo=FALSE, message=FALSE}
-mod <- lm(log(total_weight) ~ asin(sqrt(PerPackDisp)),data=subset(SummaryInd,PerPackDisp>0))
-plot(asin(sqrt(PerPackDisp)) ~total_weight, data=subset(SummaryInd,PerPackDisp>0),log="x", col=col.spp[as.factor(species)],pch=16)
-legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.top.right.logx(mod)
-```
-
-###Across species summary
-- greater plant weight = lower RA  (spending more on growth and survival)**  
-- greater plant weight = lower proportion to propagules  (bigger species get less for their allocation)**  
-- plant weight = little effect on pre-pollination tissues  
-
-
-##Within species (across age, size, or RA) patterns to note
-- Only COER and HATE increase allocation to propagules with increased plant size  
-- This, together with other plots, indicates that only the plants (of a species) that have higher RA, have higher propagule investment; but not all bigger individuals have higher RA
-NOTE: Plot nearly same as above, except y-axis arcsine transformed, not log transformed and R^2 values without species term
-```{r, echo=FALSE, message=FALSE}
-yvar <- "PerPropagule"
-xvar <- "total_weight"
-
-data <- subset(SummaryInd, Total>0)
-data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  log(x[[xvar]])))
-results <- summarise_all_fits(lmfits)
-
-results$r.squared <- round(results$r.squared,digits=3)
-results$p.value <- round(results$p.value,digits=3)
-results$a <- round(results$a,digits=2)
-results$b <- round(results$b,digits=2)
-results
-
-mod <- lm(log(total_weight)~asin(sqrt(PerPropagule)),data=subset(SummaryInd,PerPropagule>0))
-plot(asin(sqrt(PerPropagule))~log(total_weight), data=subset(SummaryInd,PerPropagule>0),col=col.spp[as.factor(species)],pch=16)
-legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.top.right(mod)
-```
-
-- Allocation to propagules increases with RA in all species except EPMI, PHPH, PILI, PUTU  
-- again, probably a figment of overall increased allocation (higher RA) if propagules form  
-```{r, echo=FALSE, message=FALSE}
-yvar <- "PerPropagule"
-xvar <- "RA"
-
-data <- subset(SummaryInd, Total>0)
-data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  asin(sqrt(x[[xvar]]))))
-results <- summarise_all_fits(lmfits)
-
-results$r.squared <- round(results$r.squared,digits=3)
-results$p.value <- round(results$p.value,digits=3)
-results$a <- round(results$a,digits=2)
-results$b <- round(results$b,digits=2)
-
-results
-
-mod <- lm(asin(sqrt(RA))~asin(sqrt(PerPropagule)),data=subset(SummaryInd,PerPropagule>0))
-plot(asin(sqrt(PerPropagule))~asin(sqrt(RA)), data=subset(SummaryInd,PerPropagule>0),col=col.spp[as.factor(species)],pch=16)
-legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.top.right(mod)
-```
-
-###Change in proportional allocation to pre-pollination tissues with plant weight 
-- only a few species show a significant correlation -> as plants grow, they don't shift this allocation  
-```{r, echo=FALSE, message=FALSE}
-yvar <- "PerPrePol_All"
-xvar <- "total_weight"
-
-data <- subset(SummaryInd, Total>0)
-data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  log(x[[xvar]])))
-results <- summarise_all_fits(lmfits)
-
-results$r.squared <- round(results$r.squared,digits=3)
-results$p.value <- round(results$p.value,digits=3)
-results$a <- round(results$a,digits=2)
-results$b <- round(results$b,digits=2)
-
-results
-```
-
-###Change in proportional allocation to pre-pollination tissues with RA
-- 9 species decrease allocation to pre-pollination tissues with increased RA  
-- this could simply be because when/if flowers are pollinated, there is increased reproductive investment, increasing RA and decreasing pre-pollination allocation  
-- Interesting that RA increases with plant size, and pre-pollination decreases with RA, but very low correlation between pre- pollination allocation and plant size  
-```{r, echo=FALSE, message=FALSE}
-yvar <- "PerPrePol_All"
-xvar <- "RA"
-
-data <- subset(SummaryInd, Total>0)
-data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  asin(sqrt(x[[xvar]]))))
-results <- summarise_all_fits(lmfits)
-
-results$r.squared <- round(results$r.squared,digits=3)
-results$p.value <- round(results$p.value,digits=3)
-results$a <- round(results$a,digits=2)
-results$b <- round(results$b,digits=2)
-
-results
-
-mod <- lm(asin(sqrt(RA))~asin(sqrt(PerPrePol_All)),data=subset(SummaryInd,PerPrePol_All>0))
-plot(asin(sqrt(PerPrePol_All))~asin(sqrt(RA)), data=subset(SummaryInd,PerPrePol_All>0),col=col.spp[as.factor(species)],pch=16)
-legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.top.right(mod)
-```
-
-- Quite a few species (BAER, BOLE, COER, GRBU, GRSP, HATE, HEPU, PEPU, PHPH increase the percent reproductive investment spent on packaging and dispersal with age 
-- This probably reflects increased seed set with age and the simulatenous increase in this pool
-```{r, echo=FALSE, message=FALSE}
-yvar <- "PerPackDisp"
-xvar <- "RA"
-
-data <- subset(SummaryInd, Total>0)
-data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  asin(sqrt(x[[xvar]]))))
-results <- summarise_all_fits(lmfits)
-
-results$r.squared <- round(results$r.squared,digits=3)
-results$p.value <- round(results$p.value,digits=3)
-results$a <- round(results$a,digits=2)
-results$b <- round(results$b,digits=2)
-
-results
-```
-
-###Within species summary
-- greater plant weight = higher RA  (plants allocate more to reproduction when bigger/older)**
-- plant weight = little effect on proportion to propagules  
-- plant weight = little effect on pre-pollination tissues  
-- higher RA = lower allocation to pre-pollination tissues (probably because more seed set)
-- higher RA = greater allocation to propagules (probably because more seed set)
-
-##Shifts in proportion to tissue types across species  
-- Propagule allocation across species  
-- COER, EPMI, LEES, PILI invest the most energy in propagules  
-- HATE invests by far the least into propagules  
-```{r, echo=FALSE, message=FALSE}
-#mod <- lm(asin(sqrt(PerPropagule)) ~ species-1, data=subset((SummaryInd,Total>0))
-#tmp <- summary(mod)
-#tmp <- tmp$coefficients
-#tmp <-as.data.frame(tmp)
-#tmp <- cbind(names(labels.spp),tmp)
-#names(tmp) <- c("species","estimate.trans","se.trans","t.value","p.value")
-mean1 <- SummarySpp$PerPropagule_mean
-se1 <- SummarySpp$PerPropagule_se
-plot(mean1~species,SummarySpp,cex.axis=.7,pch=16,log="y",ylim=c(.002,.25),main="Percent reproductive investment put into propagules")
-se_function(mean1,se1)
-```
-
-- pre-pollination allocation across species  
-
-```{r, echo=FALSE, message=FALSE}
-mean1 <- SummarySpp$PerPrePol_All_mean
-se1 <- SummarySpp$PerPrePol_All_se
-plot(mean1~species,data=subset(SummarySpp),cex.axis=.8,pch=16,ylim=c(.1,1),main="Percent reproductive investment put into pre-pollination tissues")
-se_function(mean1,se1)
-```
-
-- just looking among plants >3 years old  
-
-```{r, echo=FALSE, message=FALSE}
-tmp <- SummaryInd %>%
-  filter(Total!=0&age>3) %>%
-  group_by(species) %>%
-  summarise_each(funs(mean, se), PerPrePol_All)
-
-plot(mean~species,
-    tmp,
-     cex.axis=.7,pch=16,log="y",ylim=c(.1,1),
-     main="Percent reproductive investment put into pre-pollination tissues")
-
-mean1 <- tmp$mean
-se1 <- tmp$se
-se_function(mean1,se1)
-```
- 
-- Packaging and dispersal allocation across species  
-
-```{r, echo=FALSE, message=FALSE}
-mean1 <- SummarySpp$PerPackDisp_mean
-se1 <- SummarySpp$PerPackDisp_se
-
-plot(mean1~species,SummarySpp,cex.axis=.8,pch=16,log="y",ylim=c(.02,1),main="Percent reproductive investment put into packaging and dispersal")
-se_function(mean1,se1)
-```
-
-- just looking among plants >3 years old  
-
-```{r, echo=FALSE, message=FALSE}
-tmp2 <- SummaryInd %>%
-  filter(Total!=0&age>3) %>%
-  group_by(species) %>%
-  summarise_each(funs(mean, se), PerPackDisp)
-
-plot(mean~species,
-    tmp2,
-     cex.axis=.7,pch=16,log="y",ylim=c(0.02,.8),
-     main="Percent reproductive investment put into packaging & dispersal tissues")
-
-mean1 <- tmp2$mean
-se1 <- tmp2$se
-
-se_function(mean1,se1)
-```
-  
-###Across species summary
-- nothing much shifts with plant size
-- most pool shift with RA, but that is likely because higher RA often means increased seed set - higher RA occurs because some flowers pollinated and mature, which shifts proportional allocation to post-pollination pools
-- has interesting implications for what RA means if it is closely linked to increased seed set (or aborted fruit production) 
-
-
-##Looking at 
-- Species that are smaller have lower seed set -> this is likely what is causing Propagule allocation to decrease with size
-- Also a small increase in seedset with age - but a smaller effect 
-
-```{r, echo=FALSE, message=FALSE}
-par(mfrow=c(2,2), cex=1, omi=c(.1,0.1,0.1,0.1), mai=c(1.2,1,0.1,0.1))
-mod <- lm(log(total_weight)~log(seedset),data=subset(SummaryInd,seedset>0))
-plot(seedset ~ total_weight,data=subset(SummaryInd,seedset>0),
-          col=col.spp[as.factor(species)],
-          pch=16,log="xy",xlab="",ylab="seed set")
-words.bottom.right.logxy(mod)
-
-mod <- lm(log(RA)~log(seedset),data=subset(SummaryInd,seedset>0))
-plot(seedset ~ RA,data=subset(SummaryInd,seedset>0),
-          col=col.spp[as.factor(species)],
-          pch=16,log="xy",ylab="",xlab="")
-words.bottom.right.logxy(mod)
-mod <- lm(log(total_weight)~log(seed_count),data=subset(SummaryInd,seed_count>0))
-plot(seed_count ~ total_weight,data=subset(SummaryInd,seed_count>0),
-          col=col.spp[as.factor(species)],
-          pch=16,log="xy",xlab="plant weight",ylab="seed count")
-words.bottom.right.logxy(mod)
-mod <- lm(log(RA)~log(seed_count),data=subset(SummaryInd,seed_count>0))
-plot(seed_count ~ RA,data=subset(SummaryInd,seed_count>0),
-          col=col.spp[as.factor(species)],
-          pch=16,log="xy",ylab="")
-words.bottom.right.logxy(mod)
-legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-```
-
-```{r, echo=FALSE, message=FALSE}
-mod <- lm(log(total_weight)~log(PerPropagule),data=subset(SummaryInd,seedset>0))
-plot(PerPropagule~total_weight,data=subset(SummaryInd,PerPropagule>0),col=col.spp[as.factor(species)],pch=16,log="xy")
-legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.top.right.logxy(mod)
-```
-
-- However, as shown above, there is no clear shift across plant size in pre-pollination allocation   
-```{r, echo=FALSE, message=FALSE}
-mod <- lm(asin(sqrt(PerPrePol_All)) ~log(total_weight)*age, data=subset(SummaryInd,PerPrePol_All>0))
-anova(mod)
-```
-
-- There is however a decrease in RA with plant size at a given age (across species effect)
-```{r, echo=FALSE, message=FALSE}
-mod <- lm(asin(sqrt(RA)) ~ log(total_weight)*age, data=subset(SummaryInd,RA>0))
-plot(asin(sqrt(RA))~total_weight,data=subset(SummaryInd,seedset>0),col=col.spp[as.factor(species)],pch=16,log="x")
-legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.top.right.logx(mod)
-anova(mod)
-```
-
-- Together this indicates that increased propagule allocation is due to increased seedset, which increases RA in smaller-sized species
-```{r, echo=FALSE, message=FALSE}
-mod <- lm(asin(sqrt(RA))~age*species,data=subset(SummaryInd,RA>0))
-anova(mod)
-```
-
-- seedset and Proportional allocation to propagules (vs. all accessory tissues) are well correlated, within and across species  
-```{r, echo=FALSE, message=FALSE}
-mod <- lm(log(seedset)~log(PerPropagule),data=subset(SummaryInd,seedset>0))
-plot(PerPropagule~seedset,data=subset(SummaryInd,seedset>0),col=col.spp[as.factor(species)],pch=16,log="xy")
-legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.bottom.right.logxy(mod)
-
-anova(mod)
-```
-
-- however, seedset and seed size are much less well correlated
-- so for this collection of species, shifts in accessory costs are closely linked to seed_set
-- seed set therefore clearly plays a role in the (small) shifts in RA with plant size
-```{r, echo=FALSE, message=FALSE}
-mod <- lm(log(seedset)~log(seed_size),data=subset(SummaryInd,seedset>0))
-
-plot(seed_size~seedset,data=subset(SummaryInd,PerPropagule>0),col=col.spp[as.factor(species)],pch=16,log="xy")
-legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.top.right.logxy(mod)
-```
-
-- there is no relationship between seed_count and Final Weight
-```{r, echo=FALSE, message=FALSE}
-mod <- lm(log(total_weight)~log(seed_count),data=subset(SummaryInd,seed_count>0))
-plot(seed_count~total_weight,data=subset(SummaryInd,seed_count>0),col=col.spp[as.factor(species)],pch=16,log="xy")
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.bottom.right.logxy(mod)
-```
-
-```{r, echo=FALSE, message=FALSE}
-mod <- lm(log(total_weight)~log(fruit_weight),data=subset(SummaryInd,fruit_weight>0))
-plot(fruit_weight~total_weight,data=subset(SummaryInd,fruit_weight>0),col=col.spp[as.factor(species)],pch=16,log="xy")
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.bottom.right.logxy(mod)
-```
-
-
-```{r, echo=FALSE, message=FALSE}
-mod <- lm(log(ReproInv)~log(fruit_weight),data=subset(SummaryInd,fruit_weight>0))
-plot(fruit_weight~ReproInv,data=subset(SummaryInd,fruit_weight>0),col=col.spp[as.factor(species)],pch=16,log="xy")
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.bottom.right.logxy(mod)
-```
-
-- producing more seeds has a limited effect on RA  
-- it is proprtion of flowers/buds that become seeds (seed set) that matters
-```{r, echo=FALSE, message=FALSE}
-mod <- lm(log(RA)~log(seed_count),data=subset(SummaryInd,seed_count>0))
-plot(seed_count~RA,data=subset(SummaryInd,seed_count>0),col=col.spp[as.factor(species)],pch=16,log="xy")
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.bottom.right.logxy(mod)
-
-yvar <- "seed_count"
-xvar <- "RA"
-
-data <- subset(SummaryInd, seed_count>0)
-data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm((log(x[[yvar]])) ~  log(x[[xvar]])))
-results <- summarise_all_fits(lmfits)
-
-results$r.squared <- round(results$r.squared,digits=3)
-results$p.value <- round(results$p.value,digits=3)
-results$a <- round(results$a,digits=2)
-results$b <- round(results$b,digits=2)
-
-results
-```
-
-- However, producing more reproductive units increases RA  - this is a within species effect mostly  
-```{r, echo=FALSE, message=FALSE}
-mod <- lm(log(RA)~log(repro_count),data=subset(SummaryInd,repro_count>0))
-plot(repro_count~RA,data=subset(SummaryInd,repro_count>0),col=col.spp[as.factor(species)],pch=16,log="xy")
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.bottom.right.logxy(mod)
-
-yvar <- "repro_count"
-xvar <- "RA"
-
-data <- subset(SummaryInd, repro_count>0)
-data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm((log(x[[yvar]])) ~  log(x[[xvar]])))
-results <- summarise_all_fits(lmfits)
-
-results$r.squared <- round(results$r.squared,digits=3)
-results$p.value <- round(results$p.value,digits=3)
-results$a <- round(results$a,digits=2)
-results$b <- round(results$b,digits=2)
-
-results
-```

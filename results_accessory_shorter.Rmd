@@ -48,13 +48,13 @@ mod <- lm (log(total_weight)~log(fruit_weight), data=subset(SummaryInd,fruit_wei
 plot(fruit_weight~total_weight,data=subset(SummaryInd,fruit_weight>0), log="xy",col=col.spp[as.factor(species)], pch=16, ylab="Fruit weight (mg)",xlim=c(100,2000000),xlab="")
 words.bottom.right.logxy(mod)
 
-mod <- lm (log(total_weight)~log(propagules), data=subset(SummaryInd,propagules>0))
-plot(propagules~total_weight,data=subset(SummaryInd,propagules>0), log="xy",col=col.spp[as.factor(species)], pch=16, xlab="", ylab="Propagule investment (mg)", xlim=c(100,2000000))
+mod <- lm (log(total_weight)~log(propagule_inv), data=subset(SummaryInd,propagule_inv>0))
+plot(propagule_inv~total_weight,data=subset(SummaryInd,propagule_inv>0), log="xy",col=col.spp[as.factor(species)], pch=16, xlab="", ylab="Propagule investment (mg)", xlim=c(100,2000000))
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.bottom.right.logxy(mod)
 
-mod <- lm (log(total_weight)~log(prop_propagules), data=subset(SummaryInd,prop_propagules>0))
-plot(prop_propagules~total_weight,data=subset(SummaryInd,prop_propagules>0), log="xy",col=col.spp[as.factor(species)], pch=16, ylab="Proportion reproductive investment to propagules",xlim=c(100,2000000),xlab="Total size (mg)")
+mod <- lm (log(total_weight)~log(seedset), data=subset(SummaryInd,seedset>0))
+plot(seedset~total_weight,data=subset(SummaryInd,prop_propagule>0), log="xy",col=col.spp[as.factor(species)], pch=16, ylab="seedset",xlim=c(100,2000000),xlab="Total size (mg)")
 words.bottom.right.logxy(mod)
 mtext("Total size (mg)", 1, outer=TRUE)
 ```
@@ -69,8 +69,8 @@ mtext("Total size (mg)", 1, outer=TRUE)
 
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
 par(mfrow=c(2,2), cex=1, omi=c(.1,0.3,.5,0.2), mai=c(1.1,1,.1,0.2))  
-mod <- lm(log(seed_size)~asin(sqrt(prop_accessory_mean),SummarySpp))
-plot(asin(sqrt(prop_accessory_mean))~seed_size,SummarySpp, log="x", pch=16,col=col.spp[as.factor(species)],ylab="Accessory costs (asin transformed)",xlab="seed size (mg)",cex=1.3)
+mod <- lm(log(seed_size)~asin(sqrt(prop_accessory_mean)),SummarySpp)
+plot(asin(sqrt(prop_accessory_mean))~seed_size,SummarySpp, log="x", pch=16,col=col.spp[as.factor(species)],ylab="",xlab="seed size (mg)",cex=1.3)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.bottom.right.logx(mod)
 
@@ -79,30 +79,73 @@ plot(asin(sqrt(prop_accessory_mean))~total_weight_mean,SummarySpp, log="x", pch=
 words.bottom.right.logx(mod)
 
 mod <- lm(log(seedset_mean)~asin(sqrt(prop_accessory_mean)),SummarySpp)
-plot(asin(sqrt(prop_accessory_mean))~seedset_mean,SummarySpp, log="x", pch=16,col=col.spp[as.factor(species)],ylab="Accessory costs (asin transformed)",xlab="seed set",cex=1.3)
+plot(asin(sqrt(prop_accessory_mean))~seedset_mean,SummarySpp, log="x", pch=16,col=col.spp[as.factor(species)],ylab="",cex=1.3)
 words.top.right.logx(mod)
 
-mod <- lm(asin(sqrt(seedset_mean))~asin(sqrt(prop_prepollen_all)),SummarySpp)
-plot(asin(sqrt(prop_prepollen_all))~seedset_mean,SummarySpp, log="", pch=16,col=col.spp[as.factor(species)],ylab="",xlab="pre-pollination costs (proportional)",cex=1.3)
+mod <- lm(asin(sqrt(prop_prepollen_all_mean))~asin(sqrt(prop_accessory_mean)),SummarySpp)
+plot(asin(sqrt(prop_accessory_mean))~asin(sqrt(prop_prepollen_all_mean)),SummarySpp, log="", pch=16,col=col.spp[as.factor(species)],ylab="",xlab="pre-pollination costs (proportional)",cex=1.3)
 words.top.right(mod)
+mtext("Proportion accessory investment (asin transformed)",2, outer=TRUE)
 ```
+###Looking at investment vs. costs per successful seed
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(2,2), cex=1, omi=c(.1,0.3,.5,0.2), mai=c(1.1,1,.1,0.2))  
+mod <- lm(log(seed_size)~(accessory_per_seed_mean),SummarySpp)
+plot(accessory_per_seed_mean~seed_size,SummarySpp, log="xy", pch=16,col=col.spp[as.factor(species)],ylab="",xlab="seed size (mg)",cex=1.3)
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+words.bottom.right.logxy(mod)
+
+mod <- lm(log(total_weight_mean)~log(accessory_per_seed_mean),SummarySpp)
+plot(accessory_per_seed_mean~total_weight_mean,SummarySpp, log="xy", pch=16,col=col.spp[as.factor(species)],ylab="",xlab="Total weight (mg)",cex=1.3)
+words.bottom.right.logxy(mod)
+
+mod <- lm(log(seedset_mean)~log(accessory_per_seed_mean),SummarySpp)
+plot((accessory_per_seed_mean)~seedset_mean,SummarySpp, log="xy", pch=16,col=col.spp[as.factor(species)],ylab="",cex=1.3)
+words.top.right.logxy(mod)
+
+mod <- lm(log(prepollen_all_per_seed_mean)~log(accessory_per_seed_mean),SummarySpp)
+plot(log(accessory_per_seed_mean)~log(prepollen_all_per_seed_mean),SummarySpp, log="", pch=16,col=col.spp[as.factor(species)],ylab="",xlab="pre-pollination costs (proportional)",cex=1.3)
+words.top.right(mod)
+mtext("Accessory investment per successful seed (log scale)",2, outer=TRUE)
+```
+
+###Plotting accessory costs that go into making a single seed - ignoring aborted tissues
+* Bigger seeds have bigger fixed costs of making that seed (1st plot)
+* But other than LEES having much lower costs, no shifts across species in their relative costs to make a seed (2nd plot)
+* In other words, patterns of accessory costs vs. seed size, plant size, etc come about due to the differential effect of bud, flower abortion across species  
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=7}
+par(mfrow=c(1,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))
+plot(seed_size~seedcosts,data=subset(SummarySpp),log="xy",pch=16,col=col.spp[as.factor(species)])
+legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+par(mfrow=c(1,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))
+plot(seed_size~costs_per_seed,data=subset(SummarySpp),log="y",pch=16,col=col.spp[as.factor(species)])
+legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+```
+
+
 
 * Here is the plot just of seed set by propagule investment (for all individuals), showing the effect is true within and across species
 * This is the complement to the plot of accessory costs  
 ```{r, echo=FALSE,message=FALSE}
-par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))  
-mod <- lm(asin(sqrt(seedset))~log(prop_propagules),data=subset(SummaryInd,seedset>0&seedset<1))
-plot(prop_propagules~seedset,data=subset(SummaryInd,seedset>0&seedset<1), log="xy", pch=16,col=col.spp[as.factor(species)],ylab="Accessory costs (asin transformed)",xlab="seed set")
+par(mfrow=c(1,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))  
+mod <- lm(log(seedset)~(prop_accessory),data=subset(SummaryInd,seedset>0&seedset<1))
+plot(prop_accessory~seedset,data=subset(SummaryInd,seedset>0&seedset<1), log="x", pch=16,col=col.spp[as.factor(species)],xlab="seed set")
+words.bottom.right.logx(mod)
+
+mod <- lm(log(seedset)~log(accessory_per_seed),data=subset(SummaryInd,seedset>0&seedset<1&accessory_per_seed>0))
+plot(accessory_per_seed~seedset,data=subset(SummaryInd,seedset>0&seedset<1), log="xy", pch=16,col=col.spp[as.factor(species)],xlab="seed set")
 words.bottom.right.logxy(mod)
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 ```
+
 
 * Replotting the same data by age, shows that the pattern is not age-driven
 * At most, there are most "old" plants with very low seedset  
 ```{r, echo=FALSE,message=FALSE}
 par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))  
-mod <- lm(asin(sqrt(seedset))~log(prop_propagules),data=subset(SummaryInd,seedset>0&seedset<1))
-plot(prop_propagules~seedset,data=subset(SummaryInd,seedset>0&seedset<1), log="xy", pch=16,col=col.age[as.factor(age)],ylab="Accessory costs (asin transformed)",xlab="seed set")
+mod <- lm(asin(sqrt(seedset))~log(prop_propagule),data=subset(SummaryInd,seedset>0&seedset<1))
+plot(prop_propagule~seedset,data=subset(SummaryInd,seedset>0&seedset<1), log="xy", pch=16,col=col.age[as.factor(age)],ylab="Accessory costs (asin transformed)",xlab="seed set")
 words.bottom.right.logxy(mod)
 legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
 ```
@@ -114,13 +157,13 @@ legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
 * There is also no pattern with respect to proportional investment in packaging and dispersal (R^2=0, p-value=0.959) and a slight decrease in aborted post-pollination tissues with increasing reproductive investment (R^2=0.0661, p-value=0.0002)
 ```{r, echo=FALSE,message=FALSE, ,fig.width=14, fig.height=7}
 par(mfrow=c(1,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))  
-mod <- lm(asin(sqrt(PerPrePol_All))~log((ReproInv)),data=subset(SummaryInd,PerPrePol_All>0&PerPrePol_All<1))
-plot(asin(sqrt(PerPrePol_All))~ReproInv,data=subset(SummaryInd,PerPrePol_All>0&PerPrePol_All<1), log="x", pch=16,col=col.spp[as.factor(species)])
+mod <- lm(asin(sqrt(prop_prepollen_all))~log((ReproInv)),data=subset(SummaryInd,prop_prepollen_all>0&prop_prepollen_all<1))
+plot(asin(sqrt(prop_prepollen_all))~ReproInv,data=subset(SummaryInd,prop_prepollen_all>0&prop_prepollen_all<1), log="x", pch=16,col=col.spp[as.factor(species)])
 words.top.right.logx(mod)
 legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
  
-mod <- lm(asin(sqrt(PerPropagule))~log((ReproInv)),data=subset(SummaryInd,PerPropagule>0))
-plot(asin(sqrt(PerPropagule))~ReproInv,data=subset(SummaryInd,PerPropagule>0), log="x", pch=16,col=col.spp[as.factor(species)])
+mod <- lm(asin(sqrt(prop_propagule))~log((ReproInv)),data=subset(SummaryInd,prop_propagule>0))
+plot(asin(sqrt(prop_propagule))~ReproInv,data=subset(SummaryInd,prop_propagule>0), log="x", pch=16,col=col.spp[as.factor(species)])
 words.top.right.logx(mod)
 ```
 
@@ -141,15 +184,15 @@ words.bottom.right.logxy(mod)
 * RA is also correlated with count of floral units - the total number of buds produced (i.e. final development stage can be buds, flowers, aborted fruit or fruit)
 * This is true for many individual species as well as across species
 ```{r, echo=FALSE,message=FALSE}
-mod <- lm(log(RA)~log(repro_count),data=subset(SummaryInd,repro_count>0))
-plot(repro_count~RA,data=subset(SummaryInd,repro_count>0),col=col.spp[as.factor(species)],pch=16,log="xy")
+mod <- lm(log(RA)~log(repro_all_count),data=subset(SummaryInd,repro_all_count>0))
+plot(repro_all_count~RA,data=subset(SummaryInd,repro_all_count>0),col=col.spp[as.factor(species)],pch=16,log="xy")
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.bottom.right.logxy(mod)
 
-yvar <- "repro_count"
+yvar <- "repro_all_count"
 xvar <- "RA"
 
-data <- subset(SummaryInd, repro_count>0)
+data <- subset(SummaryInd, repro_all_count>0)
 data <- split(data, data$species)
 lmfits <- lapply(data, function(x) lm((log(x[[yvar]])) ~  log(x[[xvar]])))
 results <- summarise_all_fits(lmfits)
@@ -166,12 +209,12 @@ results
 * Plants that invest more in some reproductive tissues, on average, invest more in other reproductive tissues, so have a higher RA
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=7}
 par(mfrow=c(1,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))  
-mod <- lm(log(RA)~log((PrePol_All)),data=subset(SummaryInd,RA>0&PrePol_All>0))
-plot(PrePol_All~(RA),data=subset(SummaryInd,RA<1&RA>0), pch=16,col=col.spp[as.factor(species)],log="xy",ylab="pre-pollination tissues (mg)")
+mod <- lm(log(RA)~log((prepollen_all_inv)),data=subset(SummaryInd,RA>0&prepollen_all_inv>0))
+plot(prepollen_all_inv~(RA),data=subset(SummaryInd,RA<1&RA>0), pch=16,col=col.spp[as.factor(species)],log="xy",ylab="pre-pollination tissues (mg)")
 words.bottom.right.logxy(mod)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-mod <- lm(log(RA)~log((Prop)),data=subset(SummaryInd,RA>0&Prop>0))
-plot(Prop~(RA),data=subset(SummaryInd,RA>0&Prop>0), pch=16,col=col.spp[as.factor(species)],log="xy", ylab="energy to propagules (mg)")
+mod <- lm(log(RA)~log((propagule_inv)),data=subset(SummaryInd,RA>0&propagule_inv>0))
+plot(propagule_inv~(RA),data=subset(SummaryInd,RA>0&propagule_inv>0), pch=16,col=col.spp[as.factor(species)],log="xy", ylab="energy to propagules (mg)")
 words.bottom.right.logxy(mod)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 ```
@@ -182,12 +225,12 @@ legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=7}
 par(mfrow=c(1,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))  
-mod <- lm(asin(sqrt(RA))~asin(sqrt(PerPrePol_All)),data=subset(SummaryInd,RA>0&PerPrePol_All>0))
-plot(asin(sqrt(PerPrePol_All))~asin(sqrt(RA)),data=subset(SummaryInd,RA>0&PerPrePol_All>0), pch=16,col=col.spp[as.factor(species)])
+mod <- lm(asin(sqrt(RA))~asin(sqrt(prop_prepollen_all)),data=subset(SummaryInd,RA>0&prop_prepollen_all>0))
+plot(asin(sqrt(prop_prepollen_all))~asin(sqrt(RA)),data=subset(SummaryInd,RA>0&prop_prepollen_all>0), pch=16,col=col.spp[as.factor(species)])
 words.top.right(mod)
 
-mod <- lm(asin(sqrt(RA))~asin(sqrt(PerPropagule)),data=subset(SummaryInd,RA>0))
-plot(asin(sqrt(PerPropagule))~asin(sqrt(RA)),data=subset(SummaryInd,RA>0&PerPropagule>0), pch=16,col=col.spp[as.factor(species)])
+mod <- lm(asin(sqrt(RA))~asin(sqrt(prop_propagule)),data=subset(SummaryInd,RA>0))
+plot(asin(sqrt(prop_propagule))~asin(sqrt(RA)),data=subset(SummaryInd,RA>0&prop_propagule>0), pch=16,col=col.spp[as.factor(species)])
 words.top.right(mod)
 ```
 
@@ -201,13 +244,13 @@ words.top.right(mod)
 *Results, by species, for seedset by proportional height
 ```{r, echo=FALSE,message=FALSE}
 par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))  
-mod <- lm(asin(sqrt(PropH))~asin(sqrt(seedset)),data=subset(SummaryInd,seedset<1&seedset>0))
-plot(asin(sqrt(seedset))~PropH,data=subset(SummaryInd,seedset<1&seedset>0), pch=16,col=col.spp[as.factor(species)])
+mod <- lm(asin(sqrt(prop_maxH))~asin(sqrt(seedset)),data=subset(SummaryInd,seedset<1&seedset>0))
+plot(asin(sqrt(seedset))~prop_maxH,data=subset(SummaryInd,seedset<1&seedset>0), pch=16,col=col.spp[as.factor(species)])
 words.top.right(mod)
 legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
 yvar <- "seedset"
-xvar <- "PropH"
+xvar <- "prop_maxH"
 
 data <- subset(SummaryInd, seedset>0&seedset<1)
 data <- split(data, data$species)
@@ -242,7 +285,7 @@ results
 
 * A number of species show declines in accessory costs with age, but this effect disappears once you include only individuals that set *any* seed
 ```{r, echo=FALSE,message=FALSE}
-yvar <- "PerAcc"
+yvar <- "prop_accessory"
 xvar <- "age"
 
 data <- subset(SummaryInd)
@@ -260,7 +303,7 @@ results
 
 * 8 of the 14 species show declines in allocation to pre-pollination tissues with increasing age
 ```{r, echo=FALSE,message=FALSE}
-yvar <- "PerPrePol_All"
+yvar <- "prop_prepollen_all"
 xvar <- "age"
 
 data <- subset(SummaryInd)
@@ -282,16 +325,16 @@ results
 - COER, EPMI, LEES, PILI invest the most energy in propagules  
 - HATE invests by far the least into propagules  
 ```{r, echo=FALSE, message=FALSE}
-mean1 <- SummarySpp$PerPropagule_mean
-se1 <- SummarySpp$PerPropagule_se
+mean1 <- SummarySpp$prop_propagule_mean
+se1 <- SummarySpp$prop_propagule_se
 plot(mean1~species,SummarySpp,cex.axis=.7,pch=16,log="y",ylim=c(.002,.25),main="Percent reproductive investment put into propagules")
 se_function(mean1,se1)
 ```
 
 - pre-pollination allocation across species  
 ```{r, echo=FALSE, message=FALSE}
-mean1 <- SummarySpp$PerPrePol_All_mean
-se1 <- SummarySpp$PerPrePol_All_se
+mean1 <- SummarySpp$prop_prepollen_all_mean
+se1 <- SummarySpp$prop_prepollen_all_se
 plot(mean1~species,data=subset(SummarySpp),cex.axis=.8,pch=16,ylim=c(.1,1),main="Percent reproductive investment put into pre-pollination tissues")
 se_function(mean1,se1)
 ```
@@ -299,9 +342,9 @@ se_function(mean1,se1)
 - just looking among plants >3 years old  
 ```{r, echo=FALSE, message=FALSE}
 tmp <- SummaryInd %>%
-  filter(Total!=0&age>3) %>%
+  filter(ReproInv!=0&age>3) %>%
   group_by(species) %>%
-  summarise_each(funs(mean, se), PerPrePol_All)
+  summarise_each(funs(mean, se), prop_prepollen_all)
 
 plot(mean~species,
     tmp,
@@ -315,8 +358,8 @@ se_function(mean1,se1)
  
 - Packaging and dispersal allocation across species  
 ```{r, echo=FALSE, message=FALSE}
-mean1 <- SummarySpp$PerPackDisp_mean
-se1 <- SummarySpp$PerPackDisp_se
+mean1 <- SummarySpp$prop_packaging_dispersal_mean
+se1 <- SummarySpp$prop_packaging_dispersal_se
 
 plot(mean1~species,SummarySpp,cex.axis=.8,pch=16,log="y",ylim=c(.02,1),main="Percent reproductive investment put into packaging and dispersal")
 se_function(mean1,se1)
@@ -325,9 +368,9 @@ se_function(mean1,se1)
 - just looking among plants >3 years old  
 ```{r, echo=FALSE, message=FALSE}
 tmp2 <- SummaryInd %>%
-  filter(Total!=0&age>3) %>%
+  filter(ReproInv!=0&age>3) %>%
   group_by(species) %>%
-  summarise_each(funs(mean, se), PerPackDisp)
+  summarise_each(funs(mean, se), prop_packaging_dispersal)
 
 plot(mean~species,
     tmp2,
@@ -339,3 +382,17 @@ se1 <- tmp2$se
 
 se_function(mean1,se1)
 ```
+
+#Shifts in accessory costs across species and ages
+##Overall results
+- Accessory costs higher for bigger seeds  
+  
+- Accessory costs higher for bigger species; these are the same species that invest less in RA  
+  
+- Of course there is also a correlation between seed size and plant size, but actually not as strong as the accessory cost one, presumably because older plants have lower accessory costs as well as species that are inherently bigger  
+  
+- A number of species show fairly consistent declines in accessory costs with various measures of "bigger", including size, age, RA. Other species show no patterns  
+- Lower pre-pollination costs in plants with higher RA: 9 (of 14) species decrease the proportion of reproductive investment in "pre-pollination" tissues as their RA increases. in other words, they get better returns on investment the more they invest. (This is just a pattern within, not across, species)  
+- Species very different in which accessory tissues they invest the most in - which reflects the differences in basic structure (i.e. Banksia cones), but also more subtlely that some species abort lots of buds (pre-pollination aborted), while other species abort more fully formed flowers  
+- Haven't actually run all the tests, but assume all reproductive tissue types will differ in proportional allocation across species
+- For most of the statistical analyses, the youngest site has been removed, since it included individuals that were harvested while flowering (and therefore never "got to" set fruit) and automatically have no "successful" reproduction. There are of course some individuals like this at other ages as well, but far fewer  
