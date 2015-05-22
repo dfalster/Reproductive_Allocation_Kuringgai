@@ -127,7 +127,7 @@ names(BAER_parts) <- c("species","what","count","weight")
 BOLE_parts <- as.data.frame(BOLE_PartsSummary[4])
 names(BOLE_parts) <- c("species","what","count","weight")
 COER_parts <- as.data.frame(COER_PartsSummary[4])
-names(EPMI_parts) <- c("species","what","count","weight")
+names(COER_parts) <- c("species","what","count","weight")
 EPMI_parts <- as.data.frame(EPMI_PartsSummary[4])
 names(EPMI_parts) <- c("species","what","count","weight")
 GRBU_parts <- as.data.frame(GRBU_PartsSummary[4])
@@ -288,6 +288,7 @@ SummarySppAge <- merge(SummarySppAge, maxRA, by=c("species","age"))
 SummarySppAge <- merge(SummarySppAge, investment_summary, by=c("species","age"))
 SummarySppAge <- merge(SummarySppAge, accessory_summary, by=c("species","age"))
 SummarySppAge <- merge(SummarySppAge, accessory_summary2, by=c("species","age"),all=TRUE)
+SummarySppAge$leaf_area_mean <- SummarySppAge$leaf_weight_mean / SummarySppAge$LMA_mean
 #SummarySppAge <- merge(SummarySppAge, harvest_summary, by=c("species","age"))
 
 #merge various data summaries into SummarySpp dataframe
@@ -484,7 +485,7 @@ for(v in c("seedset")) {
 count_spp <- SummaryInd %>%
   filter(ReproInv>0) %>%
   group_by(species) %>%
-  summarise_each(funs(mean, se, length), seedset,seed_count,flower_count,fruit_weight)
+  summarise_each(funs(mean, se, length), seedset,seed_count,flower_count,fruit_weight,leaf_area)
 
 per_seed <- SummaryInd %>%
   filter(seed_count>0) %>%

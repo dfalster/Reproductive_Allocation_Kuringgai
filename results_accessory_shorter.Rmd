@@ -176,6 +176,9 @@ plot(RA~(ReproInv),data=subset(SummaryInd,RA>0), pch=16,col=col.spp[as.factor(sp
 words.bottom.right.logxy(mod)
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
+mod <- lm(log(RA)~species*age*log((ReproInv)),data=subset(SummaryInd,RA>0))
+anova(mod)
+
 mod <- lm(log(RA)~log((age)),data=subset(SummaryInd,RA>0))
 plot(RA~(age),data=subset(SummaryInd,RA>0), pch=16,col=col.spp[as.factor(species)],log="xy")
 words.bottom.right.logxy(mod)
@@ -383,6 +386,27 @@ se1 <- tmp2$se
 se_function(mean1,se1)
 ```
 
+###Plots across species, with accessory costs on a per seed produced basis
+```{r, echo=FALSE, message=FALSE}
+mean1 <- SummarySpp$prepollen_all_per_seed_mean
+se1 <- SummarySpp$prepollen_all_per_seed_se
+plot(mean1~species,data=subset(SummarySpp),cex.axis=.8,pch=16,main="Investment into pre-pollination tissues per seed produced",log="y")
+se_function(mean1,se1)
+```{r, echo=FALSE, message=FALSE}
+
+```{r, echo=FALSE, message=FALSE}
+mean1 <- SummarySpp$accessory_per_seed_mean
+se1 <- SummarySpp$accessory_per_seed_se
+plot(mean1~species,data=subset(SummarySpp),cex.axis=.8,pch=16,main="Investment into all accessory tissues per seed produced",log="y")
+se_function(mean1,se1)
+```{r, echo=FALSE, message=FALSE}
+
+```{r, echo=FALSE, message=FALSE}
+mean1 <- SummarySpp$packaging_dispersal_per_seed_mean
+se1 <- SummarySpp$packaging_dispersal_per_seed_se
+plot((mean1)~species,data=subset(SummarySpp),cex.axis=.8,pch=16,main="Investment into packaging and dispersal tissues per seed produced")
+se_function(mean1,se1)
+```{r, echo=FALSE, message=FALSE}
 #Shifts in accessory costs across species and ages
 ##Overall results
 - Accessory costs higher for bigger seeds  

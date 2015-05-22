@@ -28,6 +28,7 @@ source("scripts/functions.R")
 
 
 ```{r, echo=FALSE, message=FALSE}
+par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.6,0.2))
 plot((total_weight~prop_maxH), SummaryInd, col=col.spp[as.factor(species)],pch=16,log="y")
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
@@ -279,69 +280,149 @@ text(GrowthInv_mean ~ seed_size, data=subset(SummarySppAge,age==9), labels=speci
 ### Species with greater maximum height have higher growth rates
 - For younger plants there is no relationship with *SPECIES* overall maximum H  
 - There is a positive correlation with the maximum height the species reaches at a given age -i.e. fast growing young plants are tall when young.  
-```{r, echo=FALSE,message=FALSE}
-plot(GrowthInv_mean ~ maxH_spp,data=subset(SummarySppAge,age<3),log="xy",col=col.age[as.factor(age)],pch=16,cex=1.1,xlab="maximum height (mm)",ylab="growth investment (mg per year)",xlim=c(500,3200),main="Relationship between growth rates on maximum H")
-legend("bottomright",col=col.age, labels.age, pch=16, cex=1,bty="n")
-text(GrowthInv_mean ~ maxH_spp, data=subset(SummarySppAge,age==2.4), labels=species, pos=2, offset=-2.4, cex=0.9,col="blue")
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(.5,1,.6,0.2)) 
+plot(GrowthInv_mean ~ maxH_spp,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age[as.factor(age)],pch=16,cex=1,xlab="",ylab="",main="Seedlings")
+text(GrowthInv_mean ~ maxH_spp, data=subset(SummarySppAge,age==1.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
+mod <- lm(GrowthInv_mean ~ maxH_spp, data=subset(SummarySppAge,age==1.4))
+words.bottom.right.logxy(mod)
 
-plot(GrowthInv_mean ~ maxH_spp,data=subset(SummarySppAge,age>3),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1.1,xlab="maximum height (mm)",ylab="growth investment (mg per year)",xlim=c(500,3200),main="Relationship between growth rates on maximum H")
-legend("bottomright",col=col.age, labels.age, pch=16, cex=1,bty="n")
-text(GrowthInv_mean ~ maxH_spp, data=subset(SummarySppAge,age==9), labels=species, pos=2, offset=-2.4, cex=0.9,col="blue")
+plot(GrowthInv_mean ~ maxH_spp,data=subset(SummarySppAge,age==2.4),log="xy",col="gold1",pch=16,cex=1,xlab="",ylab="",main="Saplings")
+text(GrowthInv_mean ~ maxH_spp, data=subset(SummarySppAge,age==2.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
+mod <- lm(GrowthInv_mean ~ maxH_spp, data=subset(SummarySppAge,age==2.4))
+words.bottom.right.logxy(mod)
+
+
+plot(GrowthInv_mean ~ maxH_spp,data=subset(SummarySppAge,age>3),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1,xlab="",ylab="",main="Adults")
+text(GrowthInv_mean ~ maxH_spp, data=subset(SummarySppAge,age==5), labels=species, pos=1, offset=-1.1, cex=0.6,col="blue")
+mod <- lm(GrowthInv_mean ~ maxH_spp, data=subset(SummarySppAge,age>3))
+words.bottom.right.logxy(mod)
+legend("topleft",col=col.age,labels.age,pch=16, bty="n")
+
+mtext("maximum H",1,outer=TRUE)
+mtext("yearly growth (mg)",2,outer=TRUE)
 ```
+
 
 ### Species with higher wood density have lower growth rates  
 - Adult plants strongly show this pattern
 - However there is no relationship in younger plants  
-```{r, echo=FALSE,message=FALSE}
-plot(GrowthInv_mean ~ WD_mean,data=subset(SummarySppAge,age>3),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1,xlab="wood density",ylab="growth investment (mg per year)",xlim=c(0.57,0.9),main="Relationship between wood density and growth rates")
-text(GrowthInv_mean ~ WD_mean, data=subset(SummarySppAge,age==5), labels=species, pos=2, offset=-2.4, cex=0.9,col="blue")
-legend("bottomleft",col=col.age, labels.age, pch=16, cex=1, bty="n")
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(.5,1,.6,0.2)) 
+plot(GrowthInv_mean ~ WD_mean,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age[as.factor(age)],pch=16,cex=1,xlab="",ylab="",main="Seedlings")
+text(GrowthInv_mean ~ WD_mean, data=subset(SummarySppAge,age==1.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
+mod <- lm(GrowthInv_mean ~ WD_mean, data=subset(SummarySppAge,age==1.4))
+words.top.right.logxy(mod)
 
-plot(GrowthInv_mean ~ WD_mean,data=subset(SummarySppAge,age<3),log="xy",col=col.age[as.factor(age)],pch=16,cex=1,xlab="wood density",ylab="growth investment (mg per year)",xlim=c(0.57,0.9),main="Relationship between wood density and growth rates")
-text(GrowthInv_mean ~ WD_mean, data=subset(SummarySppAge,age==2.4), labels=species, pos=2, offset=-2.4, cex=0.9,col="blue")
-legend("bottomleft",col=col.age, labels.age, pch=16, cex=1, bty="n")
+plot(GrowthInv_mean ~ WD_mean,data=subset(SummarySppAge,age==2.4),log="xy",col="gold1",pch=16,cex=1,xlab="",ylab="",main="Saplings")
+text(GrowthInv_mean ~ WD_mean, data=subset(SummarySppAge,age==2.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
+mod <- lm(GrowthInv_mean ~ WD_mean, data=subset(SummarySppAge,age==2.4))
+words.bottom.right.logxy(mod)
+legend("topright",col=col.age,labels.age,pch=16, bty="n")
+
+plot(GrowthInv_mean ~ WD_mean,data=subset(SummarySppAge,age>3),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1,xlab="",ylab="",main="Adults")
+text(GrowthInv_mean ~ WD_mean, data=subset(SummarySppAge,age==5), labels=species, pos=1, offset=-1.1, cex=0.6,col="blue")
+mod <- lm(GrowthInv_mean ~ WD_mean, data=subset(SummarySppAge,age>3))
+words.top.right.logxy(mod)
+
+mtext("wood density",1,outer=TRUE)
+mtext("yearly growth (mg)",2,outer=TRUE)
+```
+
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(.5,1,.6,0.2)) 
+plot(RGR_mean ~ WD_mean,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age[as.factor(age)],pch=16,cex=1,xlab="",ylab="",main="Seedlings")
+text(RGR_mean ~ WD_mean, data=subset(SummarySppAge,age==1.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
+mod <- lm(RGR_mean ~ WD_mean, data=subset(SummarySppAge,age==1.4))
+words.bottom.right.logxy(mod)
+
+plot(RGR_mean ~ WD_mean,data=subset(SummarySppAge,age==2.4),log="xy",col="gold1",pch=16,cex=1,xlab="",ylab="",main="Saplings")
+text(RGR_mean ~ WD_mean, data=subset(SummarySppAge,age==2.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
+mod <- lm(RGR_mean ~ WD_mean, data=subset(SummarySppAge,age==2.4))
+words.bottom.right.logxy(mod)
+legend("topright",col=col.age,labels.age,pch=16, bty="n")
+
+plot(RGR_mean ~ WD_mean,data=subset(SummarySppAge,age>3),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1,xlab="",ylab="",main="Adults")
+text(RGR_mean ~ WD_mean, data=subset(SummarySppAge,age==5), labels=species, pos=1, offset=-1.1, cex=0.6,col="blue")
+mod <- lm(RGR_mean ~ WD_mean, data=subset(SummarySppAge,age>3))
+words.bottom.right.logxy(mod)
+
+mtext("wood density",1,outer=TRUE)
+mtext("yearly growth (mg)",2,outer=TRUE)
+```
+
+* Leaf area
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(.5,1,.6,0.2)) 
+plot(GrowthInv_mean ~ leaf_area_mean,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age[as.factor(age)],pch=16,cex=1,xlab="",ylab="",main="Seedlings",ylim=c(100,50000))
+text(GrowthInv_mean ~ leaf_area_mean, data=subset(SummarySppAge,age==1.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
+mod <- lm(GrowthInv_mean ~ leaf_area_mean, data=subset(SummarySppAge,age==1.4))
+words.bottom.right.logxy(mod)
+
+plot(GrowthInv_mean ~ leaf_area_mean,data=subset(SummarySppAge,age==2.4),log="xy",col="gold1",pch=16,cex=1,xlab="",ylab="",main="Saplings",ylim=c(100,100000))
+text(GrowthInv_mean ~ leaf_area_mean, data=subset(SummarySppAge,age==2.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
+mod <- lm(GrowthInv_mean ~ leaf_area_mean, data=subset(SummarySppAge,age==2.4))
+words.bottom.right.logxy(mod)
+
+
+plot(GrowthInv_mean ~ leaf_area_mean,data=subset(SummarySppAge,age>3),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1,xlab="",ylab="",main="Adults",ylim=c(100,1000000))
+text(GrowthInv_mean ~ leaf_area_mean, data=subset(SummarySppAge,age==7), labels=species, pos=1, offset=-1.1, cex=0.6,col="blue")
+mod <- lm(GrowthInv_mean ~ leaf_area_mean, data=subset(SummarySppAge,age>3))
+words.bottom.right.logxy(mod)
+legend("topleft",col=col.age,labels.age,pch=16, bty="n")
+
+mtext("leaf area",1,outer=TRUE)
+mtext("yearly growth (mg)",2,outer=TRUE)
 ```
 
 ### Species with higher LMA have higher growth rates  
 - This pattern is true for adult plants  
 - But there is no relationship in seedlings (age=1.4) or saplings (age=2.4)  
 - This is not predicted by Daniel's model or Anais' review; re-run with RGR
-```{r, echo=FALSE,message=FALSE}
-plot(GrowthInv_mean ~ LMA_mean,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age[as.factor(age)],pch=16,cex=1.2,xlab="LMA",ylab="growth investment (mg per year)",main="Seedlings")
-text(GrowthInv_mean ~ LMA_mean, data=subset(SummarySppAge,age==1.4), labels=species, pos=1, offset=-1.1, cex=0.9,col="blue")
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(.5,1,.6,0.2)) 
+plot(GrowthInv_mean ~ LMA_mean,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age[as.factor(age)],pch=16,cex=1,xlab="",ylab="",main="Seedlings")
+text(GrowthInv_mean ~ LMA_mean, data=subset(SummarySppAge,age==1.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
 mod <- lm(GrowthInv_mean ~ LMA_mean, data=subset(SummarySppAge,age==1.4))
-summary(mod)
+words.bottom.right.logxy(mod)
 
-plot(GrowthInv_mean ~ LMA_mean,data=subset(SummarySppAge,age==2.4),log="xy",col="pink",pch=16,cex=1.2,xlab="LMA",ylab="growth investment (mg per year)",main="Saplings")
-text(GrowthInv_mean ~ LMA_mean, data=subset(SummarySppAge,age==2.4), labels=species, pos=1, offset=-1.1, cex=0.9,col="blue")
+plot(GrowthInv_mean ~ LMA_mean,data=subset(SummarySppAge,age==2.4),log="xy",col="gold1",pch=16,cex=1,xlab="",ylab="",main="Saplings")
+text(GrowthInv_mean ~ LMA_mean, data=subset(SummarySppAge,age==2.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
 mod <- lm(GrowthInv_mean ~ LMA_mean, data=subset(SummarySppAge,age==2.4))
-summary(mod)
+words.bottom.right.logxy(mod)
+legend("topright",col=col.age,labels.age,pch=16, bty="n")
 
-plot(GrowthInv_mean ~ LMA_mean,data=subset(SummarySppAge,age>3),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1.2,xlab="LMA",ylab="growth investment (mg per year)",main="Adults")
+plot(GrowthInv_mean ~ LMA_mean,data=subset(SummarySppAge,age>3),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1,xlab="",ylab="",main="Adults")
 text(GrowthInv_mean ~ LMA_mean, data=subset(SummarySppAge,age>3), labels=species, pos=1, offset=-1.1, cex=0.6,col="blue")
-legend("bottomright",col=col.age,labels.age,pch=16, bty="n")
 mod <- lm(GrowthInv_mean ~ LMA_mean, data=subset(SummarySppAge,age>3))
-summary(mod)
+words.bottom.right.logxy(mod)
+
+mtext("LMA",1,outer=TRUE)
+mtext("yearly growth (mg)",2,outer=TRUE)
 ```
 
 ###Looking at LMA relative to RGR
 - There are no significant relationships at any age when RGR is used instead of actual growth investment 
-```{r, echo=FALSE,message=FALSE}
-plot(RGR_mean ~ LMA_mean,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age[as.factor(age)],pch=16,cex=1.2,xlab="LMA",ylab="RGR=",main="Seedlings")
-text(RGR_mean ~ LMA_mean, data=subset(SummarySppAge,age==1.4), labels=species, pos=1, offset=-1.1, cex=0.9,col="blue")
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(.5,1,.6,0.2)) 
+plot(RGR_mean ~ LMA_mean,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age[as.factor(age)],pch=16,cex=1,xlab="",ylab="",main="Seedlings")
+text(RGR_mean ~ LMA_mean, data=subset(SummarySppAge,age==1.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
 mod <- lm(GrowthInv_mean ~ LMA_mean, data=subset(SummarySppAge,age==1.4))
-summary(mod)
+words.bottom.right.logxy(mod)
 
-plot(RGR_mean ~ LMA_mean,data=subset(SummarySppAge,age==2.4),log="xy",col="pink",pch=16,cex=1.2,xlab="LMA",ylab="RGR",main="Saplings")
-text(RGR_mean ~ LMA_mean, data=subset(SummarySppAge,age==2.4), labels=species, pos=1, offset=-1.1, cex=0.9,col="blue")
+plot(RGR_mean ~ LMA_mean,data=subset(SummarySppAge,age==2.4),log="xy",col="gold1",pch=16,cex=1,xlab="",ylab="",main="Saplings")
+text(RGR_mean ~ LMA_mean, data=subset(SummarySppAge,age==2.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
 mod <- lm(RGR_mean ~ LMA_mean, data=subset(SummarySppAge,age==2.4))
-summary(mod)
+words.bottom.right.logxy(mod)
+legend("topright",col=col.age,labels.age,pch=16, bty="n")
 
-plot(RGR_mean ~ LMA_mean,data=subset(SummarySppAge,age>3),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1.2,xlab="LMA",ylab="RGR",main="Adults")
+plot(RGR_mean ~ LMA_mean,data=subset(SummarySppAge,age>3),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1,xlab="",ylab="",main="Adults")
 text(RGR_mean ~ LMA_mean, data=subset(SummarySppAge,age>3), labels=species, pos=1, offset=-1.1, cex=0.6,col="blue")
-legend("bottomright",col=col.age,labels.age,pch=16, bty="n")
 mod <- lm(RGR_mean ~ LMA_mean, data=subset(SummarySppAge,age>3))
-summary(mod)
+words.bottom.right.logxy(mod)
+
+mtext("LMA",1,outer=TRUE)
+mtext("RGR",2,outer=TRUE)
 ```
 
 ###Leaf lifespan vs growth investment
