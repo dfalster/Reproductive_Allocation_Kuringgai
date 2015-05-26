@@ -1,7 +1,8 @@
-
 # load packages and "open" dataframes to use
 LMA <- filter(LMA_raw, species!="" & species!=" ") %>%
-  select(species,age,LMA,branch_age)
+  select(species,age,LMA,branch_age,leaf_number,leaf_area)
+LMA$leaf_size <- LMA$leaf_area/LMA$leaf_number
+
 wood <- filter(woodDensity_raw, use=="use") %>%
   select(species,density)
 
@@ -119,6 +120,8 @@ SummaryInd$growth_shoot_diam <- SummaryInd$d_end - SummaryInd$d_start
 SummaryInd$growth_shoot_area <- (3.14*((SummaryInd$d_end/2)^2)) - (3.14*((SummaryInd$d_start/2)^2))
 SummaryInd$lvs_end_total <- SummaryInd$lvs_end + SummaryInd$lvs_new
 SummaryInd$RGR <- log(SummaryInd$total_weight)-log(SummaryInd$total_weight-SummaryInd$GrowthInv)
+SummaryInd$RGR_leaf <- log(SummaryInd$leaf_weight)-log(SummaryInd$leaf_weight-SummaryInd$growth_leaf)
+SummaryInd$RGR_stem <- log(SummaryInd$stem_weight)-log(SummaryInd$stem_weight-SummaryInd$growth_stem)
 SummaryInd$prop_prepollen_all <- SummaryInd$prop_prepollen_aborted + SummaryInd$prop_prepollen_success
 
 #adding info on all costs to produce 1 seed
@@ -184,8 +187,7 @@ LL_summary <- SummaryInd %>%
 #LMA summary by species, age
 LMA_summary <- LMA %>%
   group_by(species, age) %>%
-  summarise_each(funs(mean, se, length), LMA)
-names(LMA_summary)<-c("species","age","LMA_mean","LMA_se","LMA_length")
+  summarise_each(funs(mean, se, length), LMA, leaf_size)
 
 #accessory tissue summary by species, age
 accessory_summary <- SummaryInd %>%
@@ -218,12 +220,6 @@ investment_summary <- investment %>%
 maxRA <- investment %>%
   group_by(species, age) %>%
   summarise_each(funs(max), RA, height)
-
-#LMA summary by species, age
-LMA_summary <- LMA %>%
-  group_by(species, age) %>%
-  summarise_each(funs(mean, se, length), LMA)
-names(LMA_summary)<-c("species","age","LMA_mean","LMA_se","LMA_length")
 
 #wood density summary by species
 wood_summary <- wood %>%
@@ -276,8 +272,10 @@ SummaryInd$prop_maxH <- SummaryInd$height / SummaryInd$maxH_spp
 SummaryInd$prop_max_weight <- SummaryInd$total_weight / SummaryInd$max_total_weight
 SummaryInd$prop_max_repro <- SummaryInd$ReproInv / SummaryInd$max_repro_inv
 SummaryInd$prop_allocation <- SummaryInd$propagule_inv/(SummaryInd$GrowthInv + SummaryInd$ReproInv)
-
 SummaryInd$leaf_area <- SummaryInd$leaf_weight * SummaryInd$LMA_mean
+SummaryInd$leaf_area_growth <- SummaryInd$growth_leaf * SummaryInd$LMA_mean
+SummaryInd$shoot_leaf_area <- SummaryInd$lvs_end_total*SummaryInd$leaf_size_mean
+SummaryInd$shoot_leaf_area_growth <- SummaryInd$lvs_new*SummaryInd$leaf_size_mean
 
 #merge various data summaries into SummarySppAge dataframe
 SummarySppAge <- merge(LL_summary, LMA_summary, by=c("species","age"))
