@@ -244,3 +244,82 @@ results$p.value <- round(results$p.value,digits=3)
 names(results) <- c("species","r,squared","p-value","n","intercept","coef_RA","coef_prop_maxH","coef_interaction","SS_RA","SS_prop_maxH","SS_interaction")
 results
 ```
+
+###Plotting RA species means against various traits
+* species with higher wood density have higher RA
+* taller species have lower RA
+* species with higher LMA have lower RA
+* no relationship between RA and seed size
+* these are mean RA values across all plants, including babies and other non-reproducing individuals
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(2,2), cex=1, omi=c(.6,0.3,.1,0.2), mai=c(1.1,1,.5,0.2))
+plot(RA_mean~WD_mean,data=subset(SummarySpp,RA_mean>0), col=col.spp[as.factor(species)],pch=16,log="y",ylab="")
+mod <- lm(WD_mean~asin(sqrt(RA_mean)),SummarySpp)
+words.bottom.left.logy(mod)
+plot(RA_mean~seed_size, SummarySpp, col=col.spp[as.factor(species)],pch=16,log="xy",ylab="")
+mod <- lm(log(seed_size)~asin(sqrt(RA_mean)), SummarySpp)
+words.bottom.left.logxy(mod)
+legend(.05,.28,col=col.spp, legend=names(labels.spp), pch=16, cex=.8,bty="n")
+plot(RA_mean~LMA_mean, SummarySpp, col=col.spp[as.factor(species)],pch=16,log="xy",ylab="")
+mod <- lm(log(LMA_mean)~asin(sqrt(RA_mean)), data=subset(SummarySpp,RA_mean>0))
+words.top.right.logxy(mod)
+plot(RA_mean~maxH_spp, SummarySpp, col=col.spp[as.factor(species)],pch=16,log="xy",ylab="")
+mod <- lm(log(maxH_spp)~asin(sqrt(RA_mean)), data=subset(SummarySpp,RA_mean>0))
+words.bottom.left.logxy(mod)
+mtext("RA",2,outer=TRUE)
+```
+
+*just plotting mean RA of mature plants is similar, although BAER throws off many plots - surprised by how high its RA is, and wondering if something is wrong with these #s
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(2,2), cex=1, omi=c(.6,0.3,.1,0.2), mai=c(1.1,1,.5,0.2))
+plot(maxH_spp~WD_mean,data=subset(SummarySpp), col=col.spp[as.factor(species)],pch=16,log="y",ylab="")
+mod <- lm(mature_RA_mean~asin(sqrt(mature_RA_mean)),data=subset(SummarySpp,species!="BAER"))
+words.bottom.left.logy(mod)
+plot(mature_RA_mean~seed_size, data=subset(SummarySpp), col=col.spp[as.factor(species)],pch=16,log="xy",ylab="")
+mod <- lm(log(seed_size)~asin(sqrt(mature_RA_mean)), data=subset(SummarySpp,species!="BAER"))
+words.bottom.left.logxy(mod)
+legend(.05,.28,col=col.spp, legend=names(labels.spp), pch=16, cex=.8,bty="n")
+plot(mature_RA_mean~LMA_mean, data=subset(SummarySpp), col=col.spp[as.factor(species)],pch=16,log="xy",ylab="")
+mod <- lm(log(LMA_mean)~asin(sqrt(mature_RA_mean)), data=subset(SummarySpp,species!="BAER"))
+words.top.right.logxy(mod)
+plot(mature_RA_mean~maxH_spp, data=subset(SummarySpp), col=col.spp[as.factor(species)],pch=16,log="xy",ylab="")
+mod <- lm(log(maxH_spp)~asin(sqrt(mature_RA_mean)), data=subset(SummarySpp,species!="BAER"))
+words.bottom.left.logxy(mod)
+mtext("RA (mature plants only)",2,outer=TRUE)
+```
+
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
+mod <- lm(log(growth_stem_diam) ~ age*WD_mean*LMA_mean*maxH_spp*RA, SummaryInd)
+anova(mod)
+
+spp_zero_RA <- SummaryInd %>%
+  filter(RA==0) %>%
+  group_by(species) %>%
+  summarise_each(funs(length),RA)
+spp_zero_RA$RAcex <- (((spp_zero_RA$RA)/20))
+
+sppage_zero_RA <- SummaryInd %>%
+  filter(RA==0) %>%
+  group_by(species,age) %>%
+  summarise_each(funs(length),RA)
+sppage_zero_RA$RAcex <- (((sppage_zero_RA$RA)/10))
+
+par(mfrow=c(2,2), cex=1, omi=c(.6,0.3,.1,0.2), mai=c(1,1,.6,0.2))
+plot(RA~WD_mean,data=subset(SummaryInd,RA>0), col=col.spp[as.factor(species)],pch=16,log="y",ylim=c(.0008,1))
+points((RA+.001)~WD_mean,data=subset(SummaryInd,RA==0),col=col.spp[as.factor(species)],pch=16, cex=spp_zero_RA$RAcex)
+mod <- lm(WD_mean~asin(sqrt(RA)),SummaryInd)
+words.bottom.left.logy(mod)
+plot(RA~seed_size, SummaryInd, col=col.spp[as.factor(species)],pch=16,log="xy",ylim=c(.0008,1))
+points((RA+.001)~seed_size,data=subset(SummaryInd,RA==0),col=col.spp[as.factor(species)],pch=16, cex=spp_zero_RA$RAcex)
+mod <- lm(log(seed_size)~asin(sqrt(RA)), SummaryInd)
+words.bottom.left.logxy(mod)
+plot(RA~LMA_mean, SummaryInd, col=col.spp[as.factor(species)],pch=16,log="xy",ylim=c(.0008,1))
+points((RA+.001)~LMA_mean,data=subset(SummaryInd,RA==0),col=col.spp[as.factor(species)],pch=16, cex=sppage_zero_RA$RAcex)
+mod <- lm(log(LMA_mean)~asin(sqrt(RA)), data=subset(SummaryInd,RA>0))
+words.top.right.logxy(mod)
+plot(RA~maxH_spp, SummaryInd, col=col.spp[as.factor(species)],pch=16,log="xy",ylim=c(.0008,1))
+points((RA+.001)~maxH_spp,data=subset(SummaryInd,RA==0),col=col.spp[as.factor(species)],pch=16, cex=spp_zero_RA$RAcex)
+mod <- lm(log(maxH_spp)~asin(sqrt(RA)), data=subset(SummaryInd,RA>0))
+words.bottom.left.logxy(mod)
+```
+

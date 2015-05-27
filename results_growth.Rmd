@@ -528,3 +528,26 @@ words.bottom.right.logxy(mod)
 mtext("leaf lifespan",1,outer=TRUE)
 mtext("yearly growth (mg)",2,outer=TRUE)
 ```
+
+
+###Traits correlated
+- species maxH and wood density are highly correlated
+- the two species lying a bit outside are PUTU and PHPH which both often have multiple stems from the base - the second chart omits them
+-
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
+plot(WD_mean~maxH_spp,SummarySpp, log="x",col=col.spp[as.factor(species)],pch=16)
+mod <- lm(log(maxH_spp)~WD_mean,SummaryInd)
+words.bottom.left.logx(mod)
+
+plot(WD_mean~maxH_spp,data=subset(SummarySpp,species!="PUTU"&species!="PHPH"), log="x",col=col.spp[as.factor(species)],pch=16)
+mod <- lm(log(maxH_spp)~WD_mean,data=subset(SummarySpp,species!="PUTU"&species!="PHPH"))
+words.bottom.left.logx(mod)
+
+plot(seedset_mean~total_weight_mean,SummarySpp, log="x",col=col.spp[as.factor(species)],pch=16)
+mod <- lm(log(total_weight_mean) ~ (seedset_mean),SummarySpp)
+words.bottom.left.logx(mod)
+
+plot(seedset_mean~maxH_spp,SummarySpp, log="x",col=col.spp[as.factor(species)],pch=16)
+mod <- lm(log(maxH_spp) ~ (seedset_mean),SummarySpp)
+words.bottom.left.logx(mod)

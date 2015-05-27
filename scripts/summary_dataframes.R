@@ -9,7 +9,8 @@ wood <- filter(woodDensity_raw, use=="use") %>%
 seedsize <- seedSize_raw %>%
   select(species,seed_size)
 
-individuals <- IndividualsList
+individuals <- IndividualsList %>%
+  select(individual,species, age, mature)
 
 axis_labels <- read_csv("data/axis_labels.csv")
 
@@ -113,6 +114,7 @@ accessory$prop_accessory[which(is.nan(accessory$prop_accessory))] <- NA
 #adding investment and accessory costs data to leafLifespan dataframe to create a dataframe with all individual level data
 SummaryInd <- merge(investment, select(leafLifespan, -species, -age), by="individual",all.x=TRUE)
 SummaryInd <- merge(SummaryInd, select(accessory, -species, -age), by="individual",all.x=TRUE)
+SummaryInd <- merge(SummaryInd, select(individuals, -species, -age), by="individual",all.x=TRUE)
 #SummaryInd <- merge(SummaryInd, select(harvest, -species, -age), by="individual",all.x=TRUE)
 
 #adding variables to look at change across years, RGR
@@ -210,6 +212,15 @@ investment_summary <- investment %>%
   group_by(species, age) %>%
   summarise_each(funs(mean, se, length), height, GrowthInv, ReproInv, total_weight, TotalInv, RA, diameter, stem_area, leaf_weight, stem_weight, growth_stem_diam, growth_stem_area, growth_leaf, growth_stem)
 
+investment_spp_age <- investment_summary %>%
+  select(species, age, height_mean,RA_mean)
+  
+mature_RA <- SummaryInd %>%
+  filter(mature==TRUE) %>%
+  group_by(species) %>%
+  summarise_each(funs(mean, se, length), RA, ReproInv)
+names(mature_RA) <- c("species","mature_RA_mean" ,"ReproInv_mean","mature_RA_se","ReproInv_se","mature_RA_length","ReproInv_length")
+
 #harvest summary by species, age
 #harvest_summary <- harvest %>%
  # group_by(species, age) %>%
@@ -249,7 +260,7 @@ names(LMA_spp)<-c("species", "LMA_mean","LMA_se","LMA_length")
 #investment summary by species
 investment_spp <- investment %>%
     group_by(species) %>%
-  summarise_each(funs(mean, se, length), total_weight,ReproInv, leaf_weight, stem_weight)
+  summarise_each(funs(mean, se, length), total_weight,ReproInv, leaf_weight, stem_weight, RA)
 
 #maximum height for each species
 maxH_spp <- investment %>%
@@ -268,6 +279,7 @@ SummaryInd <- merge(SummaryInd,LMA_summary, by=c("species","age"),all.x=TRUE)
 SummaryInd <- merge(SummaryInd,maxH_spp, by=c("species"),all.x=TRUE)
 SummaryInd <- merge(SummaryInd,seedsize, by=c("species"),all.x=TRUE)
 SummaryInd <- merge(SummaryInd,max_investment_spp, by=c("species"),all.x=TRUE)
+SummaryInd <- merge(SummaryInd,investment_spp_age, by=c("species","age"),all.x=TRUE)
 SummaryInd$prop_maxH <- SummaryInd$height / SummaryInd$maxH_spp
 SummaryInd$prop_max_weight <- SummaryInd$total_weight / SummaryInd$max_total_weight
 SummaryInd$prop_max_repro <- SummaryInd$ReproInv / SummaryInd$max_repro_inv
@@ -297,6 +309,7 @@ SummarySpp <- merge(SummarySpp, seedsize, by=c("species"))
 SummarySpp <- merge(SummarySpp, maxH_spp, by=c("species"))
 SummarySpp <- merge(SummarySpp, accessory_spp, by=c("species"))
 SummarySpp <- merge(SummarySpp, investment_spp, by=c("species"))
+SummarySpp <- merge(SummarySpp, mature_RA, by=c("species"))
 
 SummaryInd$species <- as.factor(SummaryInd$species)
 SummarySppAge$species <- as.factor(SummarySppAge$species)
@@ -492,6 +505,13 @@ per_seed <- SummaryInd %>%
 
 SummarySpp <- merge(SummarySpp, count_spp, by="species",all.x=TRUE)
 SummarySpp <- merge(SummarySpp, per_seed, by="species",all.x=TRUE)
+
+
+SummaryIndPCA <- SummaryInd %>%
+  select(height,maxH_spp,WD_mean,LMA_mean,seedset,RA,seed_size,growth_leaf,propagule_inv,prepollen_all_inv,RGR,leaf_area, seed_count)
+  
+  seedsize <- seedSize_raw %>%
+  select(species,seed_size)
 
 #plotting and stats
 #creating lists of information for plotting symbols, colors, labels
