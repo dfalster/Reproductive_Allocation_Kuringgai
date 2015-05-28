@@ -536,13 +536,13 @@ mtext("yearly growth (mg)",2,outer=TRUE)
 * remove RGR leaf (similar to RGR)
 * remove prop_max_weight and prop_max_repro (similar to prop_maxH)
 
-```{r, echo=FALSE,message=FALSE,fig.width=10, fig.height=10}
+```{r, echo=FALSE,message=FALSE,fig.width=7, fig.height=7}
 par(mfrow=c(1,1), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
 SummaryIndPCA <- SummaryInd %>%
-  filter(lvs_end_total>0) %>%
+  filter(lvs_end_total>0&shoot_leaf_area>0&shoot_leaf_area_growth!=0) %>%
   select(prop_maxH,height,maxH_spp,WD_mean,LMA_mean,seed_size,growth_leaf,
          RGR,leaf_area,growth_shoot_area,growth_stem_area,lvs_end_total,total_weight,
-         RA,seedset,repro_all_count,accessory_inv,propagule_inv)
+         RA,seedset,repro_all_count,accessory_inv,propagule_inv,shoot_leaf_area,shoot_leaf_area_growth)
 
 SummaryIndPCA$leaf_area <- log((SummaryIndPCA$leaf_area)+.001)
 SummaryIndPCA$total_weight <- log(SummaryIndPCA$total_weight)
@@ -556,6 +556,8 @@ SummaryIndPCA$growth_leaf <- log(SummaryIndPCA$growth_leaf+10000)
 SummaryIndPCA$repro_all_count <- log(SummaryIndPCA$repro_all_count+1)
 SummaryIndPCA$lvs_end_total <- log(SummaryIndPCA$lvs_end_total)
 SummaryIndPCA$growth_stem_area <- log(SummaryIndPCA$growth_stem_area)
+SummaryIndPCA$shoot_leaf_area <- log(SummaryIndPCA$shoot_leaf_area)
+SummaryIndPCA$shoot_leaf_area_growth <- log(SummaryIndPCA$shoot_leaf_area_growth)
 
 PCA_mod <- prcomp(SummaryIndPCA, scale=TRUE)
 summary(PCA_mod)
@@ -568,38 +570,210 @@ PCA_scaling <- as.data.frame(PCA_mod$scale)
 PCA_scaling$variables <- row.names(PCA_scaling)
 names(PCA_scaling) <- c("scale","variables")
 PCA_loadings <- merge(PCA_loadings,PCA_scaling,by="variables")
-PCA_loadings$PC1 <- PCA_loadings$PC1*PCA_loadings$scale
-PCA_loadings$PC2 <- PCA_loadings$PC2*PCA_loadings$scale
-PCA_loadings$PC3 <- PCA_loadings$PC3*PCA_loadings$scale
 
-PCA_rotated <- as.data.frame(PCA_mod$x)
-PCA_rotated$individual <- subset(SummaryInd$individual, SummaryInd$lvs_end_total>0)
-SummaryInd_PCA_results <- merge(SummaryInd,PCA_rotated, by="individual", all.x=TRUE)
+PCA_lambda <- as.data.frame(PCA_mod$sdev)
 
-plot(PC1~PC2,SummaryInd_PCA_results,pch=16,col=col.spp[as.factor(species)])
-text(PC1~PC2,PCA_loadings,labels=variables, pos=2, offset=0, cex=0.9,col="black")
-legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+PCA_scores <- as.data.frame(PCA_mod$x)
+PCA_scores$individual <- subset(SummaryInd$individual, SummaryInd$lvs_end_total>0&SummaryInd$shoot_leaf_area_growth!=0)
+SummaryInd_PCA_results <- merge(SummaryInd,PCA_scores, by="individual", all.x=TRUE)
+
+n <- NROW(PCA_scores)
+scale =1
+
+PCA_lambda <- PCA_lambda*sqrt(n)
+PCA_lambda <- PCA_lambda^scale
+
+SummaryInd_PCA_results$PC1_scale <- SummaryInd_PCA_results$PC1/PCA_lambda[1]
+SummaryInd_PCA_results$PC2_scale <- SummaryInd_PCA_results$PC2/PCA_lambda[2]
+SummaryInd_PCA_results$PC3_scale <- SummaryInd_PCA_results$PC3/PCA_lambda[3]
+SummaryInd_PCA_results$PC4_scale <- SummaryInd_PCA_results$PC4/PCA_lambda[4]
+PCA_loadings$PC1_scale <- PCA_loadings$PC1 / 4.5
+PCA_loadings$PC2_scale <- PCA_loadings$PC2 / 4.5
+PCA_loadings$PC3_scale <- PCA_loadings$PC3 / 4.5
+PCA_loadings$PC4_scale <- PCA_loadings$PC4 / 4.5
 ```
-PCA_mod$rotation
-plot(PCA_mod)
-pairs(SummaryIndPCA,log="xy")
 
-looking at reproducing individuals - changes patterns quite a bit, with variables like maxH_spp pulling toward all the "big size" arrows
+#Looking at PCA by species
+* Main axis are across species affects (PC1) and within species shifts in RGR vs RA (PC2)
+* PC1 is WD vs a whole collection of traits that equate with "big plants" including measures of size, height, and growth increment
+* For PC2, interesting that "growth_shoot_area"" and other variables associated with shoot growth and species max H correlate somewhat with RGR, but "growth_stem_area" and other whole plant "size" variables do not
+* PC3 primarily separates LMA and maxH from WD; high wood density is also somewhat associated with higher RGR and various shoot growth and leafiness measures, reflecting that younger individuals have more shoot growth and higher RGR 
+* PC4 is effectively leaf count on shoots ("lvs_end_total") vs. seed size, shoot leaf area and shoot leaf area growth - to first order, some plants have lots of small leaves and others have fewer leaves but greater leaf area, Not sure how seed size fits in
+* amazing that RA and RGR almost completely orthoganal to PC1 and PC4; they are really a set of variables that are little correlated with an inter-specific traits or measures of plant size
+* these plots are another way of affirming that RA (and RGR) is a variable that does a good job of comparing trends across species * in other words there is a trade-off between RA and RGR in all species. And even though the RA trends are messy, individuals that are proportionally taller (prop_maxH) or invest more in reproduction (investment, count, or seedset) have a higher RA. 
+* this last set of variables are all ones that do not vary with the PC1 axis
+
+PCA related code to keep:  
+* plot(PCA_mod)
+* pairs(SummaryIndPCA,log="xy")
+* yy <- t(t(PCA_loadings[,2:3])*PCA_lambda[1:2])
+* xx <- t(t(SummaryInd_PCA_results[,105:106])/PCA_lambda[1:2])
+* biplot(xx,yy)
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
+
+PCA_by_species <- SummaryInd_PCA_results %>%
+  filter(lvs_end_total>0) %>%
+  group_by(species) %>%
+  summarise_each(funs(mean, se), PC1_scale, PC2_scale, PC3_scale, PC4_scale)
+
+plot(PC1_scale~(PC2_scale),SummaryInd_PCA_results,pch=16,col=col.spp[as.factor(species)])
+arrows(0, 0, (.9*PCA_loadings$PC2_scale), (.9*PCA_loadings$PC1_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
+text(PC1_scale ~ PC2_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
+legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+mean1 <- PCA_by_species$PC1_scale_mean
+se1 <- PCA_by_species$PC1_scale_se
+plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 1")
+se_function(mean1,se1)
+
+plot(PC2_scale~(PC1_scale),SummaryInd_PCA_results,pch=16,col=col.spp[as.factor(species)])
+arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC2_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
+text(PC2_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
+
+mean1 <- PCA_by_species$PC2_scale_mean
+se1 <- PCA_by_species$PC2_scale_se
+plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 2")
+se_function(mean1,se1)
+
+plot(PC3_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.spp[as.factor(species)])
+arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC3_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
+text(PC3_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
+
+mean1 <- PCA_by_species$PC3_scale_mean
+se1 <- PCA_by_species$PC3_scale_se
+plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 3")
+se_function(mean1,se1)
+
+plot(PC4_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.spp[as.factor(species)],ylim=c(-.15,.12))
+arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC4_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
+text(PC4_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
+legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+mean1 <- PCA_by_species$PC4_scale_mean
+se1 <- PCA_by_species$PC4_scale_se
+plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 4")
+se_function(mean1,se1)
+```
+
+###Coloring data by age
+* this confirms that PC2 is an axis the changes primarly by age - it is the RGR vs reproduction shift
+* PC1 has a slight age component, but more about species - across species, plant size is mostly a species effect, but of course age also matters
+* PC3 & PC4 all about species
+
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
+
+plot(PC2_scale~(PC1_scale),SummaryInd_PCA_results,pch=16,col=col.age[as.factor(age)])
+arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC2_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
+text(PC2_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
+legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+plot(PC3_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.age[as.factor(age)])
+arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC3_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
+text(PC3_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
+
+plot(PC4_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.age[as.factor(age)],ylim=c(-.15,.12))
+arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC4_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
+text(PC4_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
+
+plot(PC3_scale~PC2_scale,SummaryInd_PCA_results,pch=16,col=col.age[as.factor(age)])
+arrows(0, 0, (.9*PCA_loadings$PC2_scale), (.9*PCA_loadings$PC3_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
+text(PC3_scale ~ PC2_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
+```
+
+### Looking only at reproducing individuals - 
+* can now add in "prop_propagule","prop_accessory", but not "accessory_per_seed"
+* changes patterns quite a bit
+* PC1 is still WD vs lots of growth variables, but now reproductive investment (propagule_inv and accessory_inv) associate with "big size" not high RA
+* PC2 is RA, seedset, and prop_propagule vs. RGR, shoot growth variables and prop_accessory; interesting, but not surprising that prop_propagule and prop_accessory pulled to opposite ends
+* PC3 is somewhat similar. It is also prop_accessory and prop_maxH vs seed set and prop_propagule, but it now separates out all teh shoot growth values
+* PC4 is now the axis that separates LMA_mean and maxH vs. WD_mean
+
+, with variables like maxH_spp pulling toward all the "big size" arrows
+
+```{r, echo=FALSE,message=FALSE,fig.width=7, fig.height=7}
+par(mfrow=c(1,1), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
 SummaryIndPCA <- SummaryInd %>%
-  filter(lvs_end_total>0&accessory_inv>0) %>%
-  select(prop_maxH,maxH_spp,WD_mean,LMA_mean,seed_size,growth_leaf,
+  filter(lvs_end_total>0&accessory_inv>0&shoot_leaf_area_growth!=0) %>%
+  select(prop_maxH,height,maxH_spp,WD_mean,LMA_mean,seed_size,growth_leaf,
          RGR,leaf_area,growth_shoot_area,growth_stem_area,lvs_end_total,total_weight,
-         RA,seedset,repro_all_count,accessory_inv,prop_accessory)
+         RA,seedset,repro_all_count,accessory_inv,propagule_inv,shoot_leaf_area,shoot_leaf_area_growth,
+         prop_propagule, prop_accessory)
 
+SummaryIndPCA$leaf_area <- log((SummaryIndPCA$leaf_area)+.001)
+SummaryIndPCA$total_weight <- log(SummaryIndPCA$total_weight)
+SummaryIndPCA$height <- log(SummaryIndPCA$height)
+SummaryIndPCA$maxH_spp <- log(SummaryIndPCA$maxH_spp)
+SummaryIndPCA$seed_size <- log(SummaryIndPCA$seed_size)
+SummaryIndPCA$accessory_inv <- log(SummaryIndPCA$accessory_inv+.001)
+SummaryIndPCA$propagule_inv <- log(SummaryIndPCA$propagule_inv+.001)
+SummaryIndPCA$growth_shoot_area <- log(SummaryIndPCA$growth_shoot_area)
+SummaryIndPCA$growth_leaf <- log(SummaryIndPCA$growth_leaf+10000)
+SummaryIndPCA$repro_all_count <- log(SummaryIndPCA$repro_all_count+1)
+SummaryIndPCA$lvs_end_total <- log(SummaryIndPCA$lvs_end_total)
+SummaryIndPCA$growth_stem_area <- log(SummaryIndPCA$growth_stem_area)
+SummaryIndPCA$shoot_leaf_area <- log(SummaryIndPCA$shoot_leaf_area)
+SummaryIndPCA$shoot_leaf_area_growth <- log(SummaryIndPCA$shoot_leaf_area_growth)
 
-###PCA analyses indicate a few clusters of variables
-* one is between RGR vs RA, maxH and various other measures of reproductive investment
-* the model shows that indeed RA and maxH explain most of the variation in RGR once species accounted for
-* and total plant weight is not significant - whether put before or after "repro_all_count"
-* patterns quite different when species removed and other traits that vary by species included
+PCA_mod <- prcomp(SummaryIndPCA, scale=TRUE)
+summary(PCA_mod)
+biplot(PCA_mod)
 
+PCA_loadings <- as.data.frame(PCA_mod$rotation)
+PCA_loadings$variables <- row.names(PCA_loadings)
+
+PCA_scaling <- as.data.frame(PCA_mod$scale)
+PCA_scaling$variables <- row.names(PCA_scaling)
+names(PCA_scaling) <- c("scale","variables")
+PCA_loadings <- merge(PCA_loadings,PCA_scaling,by="variables")
+
+PCA_lambda <- as.data.frame(PCA_mod$sdev)
+
+PCA_scores <- as.data.frame(PCA_mod$x)
+PCA_scores$individual <- subset(SummaryInd$individual, SummaryInd$lvs_end_total>0&SummaryInd$shoot_leaf_area_growth!=0&SummaryInd$accessory_inv>0)
+SummaryInd_PCA_results <- merge(SummaryInd,PCA_scores, by="individual", all.x=TRUE)
+
+n <- NROW(PCA_scores)
+scale =1
+
+PCA_lambda <- PCA_lambda*sqrt(n)
+PCA_lambda <- PCA_lambda^scale
+
+SummaryInd_PCA_results$PC1_scale <- SummaryInd_PCA_results$PC1/PCA_lambda[1]
+SummaryInd_PCA_results$PC2_scale <- SummaryInd_PCA_results$PC2/PCA_lambda[2]
+SummaryInd_PCA_results$PC3_scale <- SummaryInd_PCA_results$PC3/PCA_lambda[3]
+SummaryInd_PCA_results$PC4_scale <- SummaryInd_PCA_results$PC4/PCA_lambda[4]
+PCA_loadings$PC1_scale <- PCA_loadings$PC1 / 4.5
+PCA_loadings$PC2_scale <- PCA_loadings$PC2 / 4.5
+PCA_loadings$PC3_scale <- PCA_loadings$PC3 / 4.5
+PCA_loadings$PC4_scale <- PCA_loadings$PC4 / 4.5
+```
+
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
+
+plot(PC2_scale~(PC1_scale),SummaryInd_PCA_results,pch=16,col=col.spp[as.factor(species)])
+arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC2_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
+text(PC2_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
+legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+plot(PC3_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.spp[as.factor(species)])
+arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC3_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
+text(PC3_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
+
+plot(PC4_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.spp[as.factor(species)],ylim=c(-.15,.12))
+arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC4_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
+text(PC4_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
+
+plot(PC3_scale~PC2_scale,SummaryInd_PCA_results,pch=16,col=col.spp[as.factor(species)])
+arrows(0, 0, (.9*PCA_loadings$PC2_scale), (.9*PCA_loadings$PC3_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
+text(PC3_scale ~ PC2_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
+```
+
+comparing
 ```{r, echo=FALSE,message=FALSE}
-mod <- lm(RGR~species*asin(sqrt(RA))+prop_maxH+log(propagule_inv+1)+log(accessory_inv+1)+log(total_weight)+log(repro_all_count+1),SummaryInd)
+mod <- lm(RGR~species+asin(sqrt(RA))+prop_maxH+log(propagule_inv+1)+log(accessory_inv+1)+log(total_weight)+log(repro_all_count+1),SummaryInd)
 anova(mod)
 glance(mod)[1]
 
@@ -614,7 +788,7 @@ glance(mod)[1]
 
 
 ```{r, echo=FALSE,message=FALSE}
-mod <- lm(log(growth_shoot_area)~log(maxH_spp)*WD_mean*log(growth_stem_area)*log(total_weight)*RGR*asin(sqrt(RA))*LMA_mean,SummaryInd)
+mod <- lm(log(growth_shoot_area)~log(maxH_spp)+WD_mean+log(growth_stem_area)+log(total_weight)+RGR+asin(sqrt(RA))+LMA_mean,SummaryInd)
 anova(mod)
 glance(mod)
 ```

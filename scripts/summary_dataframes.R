@@ -284,8 +284,8 @@ SummaryInd$prop_maxH <- SummaryInd$height / SummaryInd$maxH_spp
 SummaryInd$prop_max_weight <- SummaryInd$total_weight / SummaryInd$max_total_weight
 SummaryInd$prop_max_repro <- SummaryInd$ReproInv / SummaryInd$max_repro_inv
 SummaryInd$prop_allocation <- SummaryInd$propagule_inv/(SummaryInd$GrowthInv + SummaryInd$ReproInv)
-SummaryInd$leaf_area <- SummaryInd$leaf_weight * SummaryInd$LMA_mean
-SummaryInd$leaf_area_growth <- SummaryInd$growth_leaf * SummaryInd$LMA_mean
+SummaryInd$leaf_area <- SummaryInd$leaf_weight / (1000*SummaryInd$LMA_mean)
+SummaryInd$leaf_area_growth <- SummaryInd$growth_leaf / (1000*SummaryInd$LMA_mean)
 SummaryInd$shoot_leaf_area <- SummaryInd$lvs_end_total*SummaryInd$leaf_size_mean
 SummaryInd$shoot_leaf_area_growth <- SummaryInd$lvs_new*SummaryInd$leaf_size_mean
 

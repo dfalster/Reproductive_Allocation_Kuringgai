@@ -229,7 +229,7 @@ words.top.right.logxy(mod)
 - In some of the mid-height species (GRSP, BOLE, GRBU), growth investment is very poorly correlated with height, but better correlated with RA - in other words, increased RA = less growth.  
 - One of the difficult features interpreting this, is that there are species with overall higher correlations and overall lower correlations, and this pattern dominates, not the relative strength  
 - My current analyses still lack the ability to tease apart the most obvious pattern - because I don't actually want to show that growth and height are correlated, so much as that the   asymptoting of growth is correlated with height - i.e. the change in slope of the relationship.  
-```{r, echo=FALSE, message=FALSE, out.width=900, out.height=576}
+```{r, echo=FALSE, message=FALSE}
 yvar <- "GrowthInv"
 xvar <- "RA"
 x2var <- "prop_maxH"
