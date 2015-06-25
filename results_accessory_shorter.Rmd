@@ -88,7 +88,11 @@ words.top.right(mod)
 mtext("Proportion reproductive investment to accessory tissues (asin transformed)",2, outer=TRUE,cex=1.2)
 ```
 
-* investment vs. costs per successful seed
+### Investment vs. costs per successful seed
+- calculating accessory costs on a per seed basis stratify the data much more by species  
+- there are also within species shifts, those associated with shifting seedset with age/size, but the across species differences are very pronounced at a given size/age for "per seed" accessory costs, and much less so for "prop total reproductive investment" accessory costs
+- I suppose this is because the plants that have more seeds, also have higher seedset, so cross-species variation is accentuated.
+
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
 par(mfrow=c(2,2), cex=1, omi=c(0.4,0.6,0.3,0.3), mai=c(1.1,0.8,0.3,0.3)) 
 mod <- lm(log(seed_size)~(accessory_per_seed_mean),SummarySpp)
@@ -108,6 +112,48 @@ mod <- lm(log(prepollen_all_per_seed_mean)~log(accessory_per_seed_mean),SummaryS
 plot(log(accessory_per_seed_mean)~log(prepollen_all_per_seed_mean),SummarySpp, log="", pch=16,col=col.spp[as.factor(species)],ylab="",xlab="pre-pollination costs (proportional)",cex=1.3)
 words.top.right(mod)
 mtext("Accessory tissue investment per successful seed (mg)",2, outer=TRUE,cex=1.2)
+```
+
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(2,2), cex=1, omi=c(0.4,0.6,0.3,0.3), mai=c(1.1,0.8,0.3,0.3)) 
+mod <- lm(log(seed_size)~log(accessory_per_seed),data=subset(SummaryInd,seed_count>0&accessory_per_seed>0))
+plot(accessory_per_seed~seed_size,SummaryInd, log="xy", pch=16,col=col.spp[as.factor(species)],ylab="",xlab="seed size (mg)",cex=1.3)
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+words.bottom.right.logxy(mod)
+
+mod <- lm(log(total_weight)~log(accessory_per_seed),data=subset(SummaryInd,seed_count>0&accessory_per_seed>0))
+plot(accessory_per_seed~total_weight,SummaryInd, log="xy", pch=16,col=col.spp[as.factor(species)],ylab="",xlab="Total weight (mg)",cex=1.3)
+words.bottom.right.logxy(mod)
+
+mod <- lm(log(seedset)~log(accessory_per_seed),data=subset(SummaryInd,seed_count>0&accessory_per_seed>0))
+plot((accessory_per_seed)~seedset,SummaryInd, log="xy", pch=16,col=col.spp[as.factor(species)],ylab="",cex=1.3)
+words.top.right.logxy(mod)
+
+mod <- lm(log(prepollen_all_per_seed)~log(accessory_per_seed),data=subset(SummaryInd,seed_count>0&accessory_per_seed>0&prepollen_all_per_seed>0))
+plot((accessory_per_seed)~(prepollen_all_per_seed),SummaryInd, log="xy",pch=16,col=col.spp[as.factor(species)],ylab="",xlab="pre-pollination costs (proportional)",cex=1.3)
+words.bottom.right.logxy(mod)
+mtext("Accessory tissue investment per successful seed (mg)",2, outer=TRUE,cex=1.2)
+```
+
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(2,2), cex=1, omi=c(0.4,0.6,0.3,0.3), mai=c(1.1,0.8,0.3,0.3)) 
+mod <- lm(log(seed_size)~asin(sqrt(prop_accessory)),data=subset(SummaryInd,seed_count>0&accessory_per_seed>0))
+plot(asin(sqrt(prop_accessory))~seed_size,SummaryInd, log="x", pch=16,col=col.spp[as.factor(species)],ylab="",xlab="seed size (mg)",cex=1.3)
+words.bottom.right.logx(mod)
+
+mod <- lm(log(total_weight)~asin(sqrt(prop_accessory)),data=subset(SummaryInd,seed_count>0&accessory_per_seed>0))
+plot(asin(sqrt(prop_accessory))~total_weight,SummaryInd, log="x", pch=16,col=col.spp[as.factor(species)],ylab="",xlab="Total weight (mg)",cex=1.3)
+words.bottom.right.logx(mod)
+
+mod <- lm(log(seedset)~asin(sqrt(prop_accessory)),data=subset(SummaryInd,seed_count>0&accessory_per_seed>0))
+plot(asin(sqrt(prop_accessory))~seedset,SummaryInd, log="x", pch=16,col=col.spp[as.factor(species)],ylab="",cex=1.3)
+legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+words.top.right.logx(mod)
+
+mod <- lm(asin(sqrt(prop_prepollen_all))~asin(sqrt(prop_accessory)),data=subset(SummaryInd,seed_count>0&accessory_per_seed>0&prepollen_all_per_seed>0))
+plot(asin(sqrt(prop_accessory))~asin(sqrt(prop_prepollen_all)),SummaryInd, log="", pch=16,col=col.spp[as.factor(species)],ylab="",xlab="pre-pollination costs (proportional)",cex=1.3)
+words.bottom.right(mod)
+mtext("Proportion reproductive investment to accessory tissues (asin transformed)",2, outer=TRUE,cex=1.2)
 ```
 
 ### Plotting accessory costs that go into making a single seed - ignoring aborted tissues

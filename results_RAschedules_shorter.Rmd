@@ -132,7 +132,7 @@ results
 ```
 
 ###RV curves, by age, weight and height
-```{r, echo=FALSE,message=FALSE, fig.width=21, fig.height=7}
+```{r, echo=FALSE,message=FALSE, warning=FALSE, fig.width=21, fig.height=7}
 yvar <- "ReproInv"
 xvar <- "age"
 
