@@ -49,6 +49,91 @@ words.bottom.right.logxy(mod)
 
 
 
+plot(dia~stem_weight,data=subset(check,age==32), pch=16,log="xy",col=col.spp[as.factor(individual)])
+text(dia~stem_weight,data=subset(check,segment==1&age==32),labels=individual,cex=.5,pos=3,offset=-.7)
+
+plot(dia~leaf_weight,data=subset(check,age==32), pch=16,log="xy",col=col.spp[as.factor(individual)])
+text(dia~leaf_weight,data=subset(check,segment==1&age==32),labels=individual,cex=.5,pos=3,offset=-.7)
+
+plot(leaf_weight~stem_weight,data=subset(check,age==32), pch=16,log="xy",col=col.spp[as.factor(individual)])
+text(leaf_weight~stem_weight,data=subset(check,segment==1&age==32),labels=individual,cex=.5,pos=3,offset=-.7)
+
+
+plot(dia~stem_weight,data=subset(check,age==9), pch=16,log="xy",col=col.spp[as.factor(individual)])
+text(dia~stem_weight,data=subset(check,segment==1&age==9),labels=individual,cex=.5,pos=3,offset=-.7)
+
+plot(dia~leaf_weight,data=subset(check,age==9), pch=16,log="xy",col=col.spp[as.factor(individual)])
+text(dia~leaf_weight,data=subset(check,segment==1&age==9),labels=individual,cex=.5,pos=3,offset=-.7)
+
+plot(leaf_weight~stem_weight,data=subset(check,age==9), pch=16,log="xy",col=col.spp[as.factor(individual)])
+text(leaf_weight~stem_weight,data=subset(check,segment==1&age==9),labels=individual,cex=.5,pos=3,offset=-.7)
+
+
+plot(dia~stem_weight,data=subset(check,age==7), pch=16,log="xy",col=col.spp[as.factor(individual)])
+text(dia~stem_weight,data=subset(check,segment==1&age==7),labels=individual,cex=.5,pos=3,offset=-.7)
+
+plot(dia~leaf_weight,data=subset(check,age==7), pch=16,log="xy",col=col.spp[as.factor(individual)])
+text(dia~leaf_weight,data=subset(check,segment==1&age==7),labels=individual,cex=.5,pos=3,offset=-.7)
+
+plot(leaf_weight~stem_weight,data=subset(check,age==7), pch=16,log="xy",col=col.spp[as.factor(individual)])
+text(leaf_weight~stem_weight,data=subset(check,segment==1&age==7),labels=individual,cex=.5,pos=3,offset=-.7)
+
+
+plot(dia~stem_weight,data=subset(check,age==5), pch=16,log="xy",col=col.spp[as.factor(individual)])
+text(dia~stem_weight,data=subset(check,segment==1&age==5),labels=individual,cex=.5,pos=3,offset=-.7)
+mod <- lm(log(stem_weight)~log(dia),data=subset(check,age==5))
+words.bottom.right.logxy(mod)
+
+plot(dia~leaf_weight,data=subset(check,age==5), pch=16,log="xy",col=col.spp[as.factor(individual)])
+text(dia~leaf_weight,data=subset(check,segment==1&age==5),labels=individual,cex=.5,pos=3,offset=-.7)
+
+plot(leaf_weight~stem_weight,data=subset(check,age==5), pch=16,log="xy",col=col.spp[as.factor(individual)])
+text(leaf_weight~stem_weight,data=subset(check,segment==1&age==5),labels=individual,cex=.5,pos=3,offset=-.7)
+mod <- lm(log(stem_weight)~log(leaf_weight),data=subset(check,age==5))
+words.bottom.right.logxy(mod)
+
+plot(dia~stem_weight,data=subset(check,age==2.4), pch=16,log="xy",col=col.spp[as.factor(individual)])
+text(dia~stem_weight,data=subset(check,segment==1&age==2.4),labels=individual,cex=.5,pos=3,offset=-.7)
+
+plot(dia~leaf_weight,data=subset(check,age==2.4), pch=16,log="xy",col=col.spp[as.factor(individual)])
+text(dia~leaf_weight,data=subset(check,segment==1&age==2.4),labels=individual,cex=.5,pos=3,offset=-.7)
+
+plot(leaf_weight~stem_weight,data=subset(check,age==2.4), pch=16,log="xy",col=col.spp[as.factor(individual)])
+text(leaf_weight~stem_weight,data=subset(check,segment==1&age==2.4),labels=individual,cex=.5,pos=3,offset=-.7)
+
+
+plot(dia~stem_weight,data=subset(check,age<=1.4), pch=16,log="xy",col=col.spp[as.factor(individual)])
+text(dia~stem_weight,data=subset(check,segment==1&age<=1.4),labels=individual,cex=.5,pos=3,offset=-.7)
+
+plot(dia~leaf_weight,data=subset(check,age<=1.4), pch=16,log="xy",col=col.spp[as.factor(individual)])
+text(dia~leaf_weight,data=subset(check,segment==1&age<=1.4),labels=individual,cex=.5,pos=3,offset=-.7)
+
+plot(leaf_weight~stem_weight,data=subset(check,age<=1.4), pch=16,log="xy",col=col.spp[as.factor(individual)])
+text(leaf_weight~stem_weight,data=subset(check,segment==1&age<=1.4),labels=individual,cex=.5,pos=3,offset=-.7)
+
+
+plot(dia~stem_weight,data=subset(check), pch=16,log="xy")
+text(dia~stem_weight,data=subset(check),labels=individual,cex=.5,pos=3,offset=-.7)
+mod <- lm(log(stem_weight)~log(dia),data=subset(check))
+words.bottom.right.logxy(mod)
+
+plot(dia~leaf_weight,data=subset(check), pch=16,log="xy")
+text(dia~leaf_weight,data=subset(check,segment==1&age<=1.4),labels=individual,cex=.5,pos=3,offset=-.7)
+
+plot(leaf_weight~stem_weight,data=subset(check), pch=16,log="xy")
+text(leaf_weight~stem_weight,data=subset(check,segment==1&age<=1.4),labels=individual,cex=.5,pos=3,offset=-.7)
+mod <- lm(log(stem_weight)~log(leaf_weight),data=subset(check))
+words.bottom.right.logxy(mod)
+
+#for individual
+plot(dia~stem_weight,data=subset(check), pch=16,log="xy",col="white")
+points(dia~stem_weight,data=subset(check,age=9), pch=16,log="xy",col=col.spp[as.factor(individual)])
+points(dia~stem_weight,data=subset(check,individual=="PUTU_401"), pch=16,log="xy",col="red")
+text(dia~stem_weight,data=subset(check,individual=="PUTU_401"&segment==1),labels=individual,cex=.5,pos=2,offset=-1)
+mod <- lm(log(stem_weight)~log(dia),data=subset(check,individual=="PUTU_401"))
+words.bottom.right.logxy(mod)
+
+
 plot(stem_weight~dia,data=subset(check,age==32),pch=16,log="xy",col="red")
 text(stem_weight~dia,data=subset(check,age==32),labels=individual,cex=.5,pos=2,offset=-1)
 

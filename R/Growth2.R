@@ -6,9 +6,9 @@ preprocessHarvest <- function(HarvestData_raw, IndividualsList) {
 
 CalculateMassAndDiameters <- function(HarvestData) {
   segments <- list()
-  segments[["1"]] <- c("1","2","3","4","5","6","7","8", "1.2", "1.3", "1.2.1", "1.2.1.1", "1.1.2", "1.1.2.1", "1.1.1.2")
-  segments[["2"]] <- c("2","3","4","5","6","7","8", "1.1.2", "1.1.2.1", "1.1.1.2")
-  segments[["3"]] <- c("3","4","5","6","7","8","1.1.1.2")
+  segments[["1"]] <- c(as.character(1:8, "1.2", "1.3", "1.2.1", "1.2.1.1", "1.1.2", "1.1.2.1", "1.1.1.2"))
+  segments[["2"]] <- c(as.character(2:8, "1.1.2", "1.1.2.1", "1.1.1.2"))
+  segments[["3"]] <- c(as.character(3:8, "1.1.1.2"))
   segments[["4"]] <- as.character(4:8)
   segments[["5"]] <- as.character(5:8)
   segments[["6"]] <- as.character(6:8)
