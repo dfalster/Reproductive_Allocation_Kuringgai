@@ -7,31 +7,33 @@ source("scripts/functions.R")
 ```
 #Growth data, general patterns
 - proportion of maxH matters more for some species than others. 
-  1. The 4 "canopy" species all tend to have high correlations between "prop maxH" and growth and reproductive investment (both relative and absolute)  
-  2. The lower-growing species are more variable, with "prop maxH mattering more for some than others"  
+    1. The 4 "canopy" species all tend to have high correlations between "prop maxH" and growth and reproductive investment (both relative and absolute)  (HATE, BAER, PELA, PEPU)
+    2. The lower-growing species are more variable, with "prop maxH"" mattering more for some than others - not surprising since some species like BOLE, PILI show inconsistent increases in H with increasing age, due to breakage, shedding
 
-- For almost all species there is a strong negative relationship between RGR and RA - indeed, more reproduction = less growth  
-  1. Meanwhile there is the strong positive relationship between growth investment and reproductive investment, because bigger plants grow and reproduce more.  
-  2. It is good to have a big enough data set to capture both trends - and to capture them consistently across many species
+- For almost all species there is a strong negative relationship between RGR and RA - more reproduction = less growth  
+    1. As expected, a cost of reproduction is reduced growth
+    2. Meanwhile there is the strong positive relationship between growth investment and reproductive investment, because bigger plants grow and reproduce more.  
+    3. It is good to have a big enough data set to capture both trends across a single dataset - and to capture them consistently across many species
 
 - Many plants have a clear upturn in RA and corresponding downturn in RGR at a specific prop maxH  
-  1. e.g. see EPMI for distinct pattern
+    1. e.g. see EPMI for distinct pattern
+    2. More robust curve-fitting techniques are required to better illustrate this pattern (**CURVE FITTING**)
 
 
-#Comparing growth between different measures and across age
+#Comparing different measures of growth and how these measures shift with age
 
 ###Weight vs. height
-- No surprises here , but need to fit proper lines to the data
+- No surprises here , but need to fit proper lines to the data (**CURVE FITTING**)
 - Plants asymptote in weight as they reach their maximum height. This is true for all species, although some species, like BOLE and GRBU, have a much messier scatter than others  
 - The follow on of course is to look at growth measures vs. height   
-- NOTE: All heights have been scaled 0-1 based on the maximum height of each species across all of the sites. This has no effect on within species analyses, but lets data from all species to be plotted together  
+- NOTE: The variable "prop_maxH" is "current height/maximum species height (across all sites)", hence varying from 0-1. This lets data from all species to be plotted together  
 ```{r, echo=FALSE, message=FALSE, fig.width=7, fig.height=7}
 par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.6,0.2))
 plot((total_weight~prop_maxH), SummaryInd, col=col.spp[as.factor(species)],pch=16,log="y")
 legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 ```
 
-```{r, echo=FALSE, message=FALSE, fig.width=21, fig.height=35}
+```{r, echo=FALSE, message=FALSE, fig.width=21, fig.height=28}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
 yvar <- "total_weight"
 xvar <- "prop_maxH"
@@ -59,8 +61,8 @@ mtext("Total weight", 2, outer=TRUE,cex=1.2)
 ```
 
 ###Growth Investment versus proportion max H
-- This turns out to be one of the most interesting sets of graphs  
-- For the canopy species, PELA, HATE, PEPU, BAER, investment in growth plateaus (i.e. growth relative to size decreases) at ~40% maxH  
+- For the canopy species, PELA, HATE, PEPU, BAER, investment in growth plateaus (i.e. growth relative to size decreases) at ~40% maxH
+- I think this suggests that relative height is a good predictor of growth investment in these species, but not in some of the lower-growing species
 - For the shorter and shorter-lived species there is much less of a relationship, or a complete lack of relationship (i.e. BOLE, PHPH)  
 - Quite interesting, there is a distinctly negative relationship for GRBU; its absolute growth investment actually declines as it increases in size  
 - For many of the species with a good relationship, it seems that there are two breakpoints in the curve - wondering what these mean with respect to reproductive onset and RA  
@@ -76,7 +78,7 @@ mtext("proportion Hmax", 1, outer=TRUE,cex=1.2)
 ```
 
 ### Growth investment by Proportion Hmax
-```{r, echo=FALSE, message=FALSE, fig.width=21, fig.height=35}
+```{r, echo=FALSE, message=FALSE, fig.width=21, fig.height=21}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
 yvar <- "GrowthInv"
 xvar <- "prop_maxH"
@@ -148,12 +150,13 @@ results
 
 ###Correlations between different growth measures
 - Increased cross-sectional area of a leader and the entire plant are fairly correlated and uneffected by age (once not seedlings)  
-- however, some species, such as BAER are much branciers and lower correlation
-TO DO: species should be a random effect for these stats- I want to know the effect of age on the relationship once the effect of species has been accounted for  
+- however, some species, such as BAER are much branchier and lower correlation
+TO DO: species should be a random effect for these stats- I want to know the effect of age on the relationship once the effect of species has been accounted for    
+
 
 ```{r, echo=FALSE,message=FALSE, fig.width=14, fig.height=7}
 par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,1,0.6)) 
-plot(growth_shoot_area~growth_stem_area,SummaryInd, log="xy",col=col.spp[as.factor(species)], pch=16, cex=.8,xlab="change in basal stem area",ylab="change in shoot area")
+plot(growth_shoot_area~growth_stem_area,data=subset(SummaryInd), log="xy",col=col.spp[as.factor(species)], pch=16, cex=.8,xlab="change in basal stem area",ylab="change in shoot area")
 legend("bottomright",col=col.spp, legend=names(labels.spp), pch=16, cex=1,bty="n")
 
 mod <- lm(growth_shoot_area~species*age*growth_stem_area,SummaryInd)
@@ -164,18 +167,18 @@ anova(mod)
 - Individual shoots looked decidedly "less leafy" in many older plants  
 - This led me to wonder how leaf lifespan - or some other variable - was shifting with age   
 - The number of leaves along a leader is overall uneffected by age  
-- However, looking at individual species: BOLE, GRBU, GRSP, HEPU, PILI, PUTU have declining leaf counts along a shoot with age  
-- And PELA, PEPU show a significant increase in leaf counts along a single shoot with age 
+- However, looking at individual species: BAER, BOLE, GRBU, GRSP, HEPU, PUTU have declining leaf counts along a shoot with age (omitting youngest cohort only)
+- And PELA, PEPU show a significant increase in leaf counts along a single shoot with age, probably because they have very few leaves when young and are slow to "start growing"
 
 ```{r, echo=FALSE,message=FALSE, fig.width=7, fig.height=7}
 par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,1,0.6)) 
-plot(lvs_end_total~age,SummaryInd,log="xy", xlab="age",ylab="final leaf count along shoot",col=col.spp[as.factor(species)])
+plot(lvs_end_total~age,data=subset(SummaryInd,age>2),log="xy", xlab="age",ylab="final leaf count along shoot",col=col.spp[as.factor(species)])
 legend("bottomright",col=col.spp, legend=names(labels.spp), pch=16, cex=1,bty="n")
 
 yvar <- "lvs_end_total"
 xvar <- "age"
 
-data <- subset(SummaryInd)
+data <- subset(SummaryInd,age>2)
 data <- split(data, data$species)
 lmfits <- lapply(data, function(x) lm((x[[yvar]]) ~  log(x[[xvar]])))
 results <- summarise_all_fits(lmfits)
@@ -198,10 +201,12 @@ legend("bottomright",col=col.spp, legend=names(labels.spp), pch=16, cex=.8, bty=
 ```
 
 ###Shifts in shoot extension with age
+- This is a weak effect - probably not worth pursuing
 - The decrease in leaf number along a shoot is largely caused by declining shoot extension, not shifts in leaf lifespan  
 - For many of these species, the shift is between the "sapling" and "adult" stages - i.e. when they begin reproducing  
 - PELA, PEPU stands out by showing increasing shoot extension with age - because it grows so slowly in the beginning; regression for these two species becomes highly significant when seedlings are included
-- this decline in shoot extension only appears when plotted against age, not prop maxH- not sure why this would be
+- this decline in shoot extension only appears when plotted against age, not prop maxH, emphasizing that it is not a very robust finding
+- I am surprised there isn't more of an effect, because the plants look so much less leafy when larger/older
 
 ```{r, echo=FALSE,message=FALSE,, fig.width=14, fig.height=7}
 par(mfrow=c(1,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,1,0.6)) 
@@ -531,10 +536,11 @@ mtext("yearly growth (mg)",2,outer=TRUE)
 
 ###PCA analysis
 * This combination of variables shows that RGR is approximately opposite a collection of variables that indicate a plant is "bigger" - so smaller plants have higher RGR
-* Orthoganal to these in WD vs. maxH, LMA_mean, seed_size, and shoot_growth - taller plants have bigger seeds, higher LMA, and greater shoot growth (both stem growth & leaf count), independent of their actual size
-* fine tuning above; no accessory proportions, because then have to use subset of reproducing individuals - see below
-* remove RGR leaf (similar to RGR)
-* remove prop_max_weight and prop_max_repro (similar to prop_maxH)
+* Orthoganal to these in WD vs. maxH, LMA_mean, seed_size, and shoot_growth - species that are taller as adults have bigger seeds, higher LMA, and greater shoot growth (both stem growth & leaf count), independent of their current (age dependent) size
+* this analysis doesn't include accessory proportions, because then I have to use subset of reproducing individuals - see below - greatly reducing sample size
+* fine tuning:  
+  ** remove RGR leaf (similar to RGR)
+  ** remove prop_max_weight and prop_max_repro (similar to prop_maxH)
 
 ```{r, echo=FALSE,message=FALSE,fig.width=7, fig.height=7}
 par(mfrow=c(1,1), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
@@ -594,13 +600,21 @@ PCA_loadings$PC4_scale <- PCA_loadings$PC4 / 4.5
 ```
 
 #Looking at PCA by species
-* Main axis are across species affects (PC1) and within species shifts in RGR vs RA (PC2)
-* PC1 is WD vs a whole collection of traits that equate with "big plants" including measures of size, height, and growth increment
-* For PC2, interesting that "growth_shoot_area"" and other variables associated with shoot growth and species max H correlate somewhat with RGR, but "growth_stem_area" and other whole plant "size" variables do not
+* Main axes are (1) across species affects in trait values (PC1) and (2) within species shifts in RGR vs RA with plant size/age (PC2)
+* PC1 is WD vs a whole collection of traits that have higher "values" in plants that are larger as adults, including measures of size, height, and growth increment; PELA is a rare exception in shifting along this axis. 
+* PC2 most strongly separates RGR from RA (and a collection of strongly correlated traits, such as propagule investment, prop maxH). 
 * PC3 primarily separates LMA and maxH from WD; high wood density is also somewhat associated with higher RGR and various shoot growth and leafiness measures, reflecting that younger individuals have more shoot growth and higher RGR 
-* PC4 is effectively leaf count on shoots ("lvs_end_total") vs. seed size, shoot leaf area and shoot leaf area growth - to first order, some plants have lots of small leaves and others have fewer leaves but greater leaf area, Not sure how seed size fits in
-* amazing that RA and RGR almost completely orthoganal to PC1 and PC4; they are really a set of variables that are little correlated with an inter-specific traits or measures of plant size
+* PC4 is effectively leaf count on shoots ("lvs_end_total") and seed set vs. seed size, shoot leaf area and shoot leaf area growth - to first order, some plants have lots of small leaves and others have fewer leaves but greater leaf area, Not sure how seed size fits in
+
+* amazing that RA and RGR almost completely orthoganal to PC1 and PC4; To reiterate, RA and RGR are 2 variables that shift across each species' lifetime and much less across species. I suspect the inter-specific difference are effectively what proportion of individuals in this study are reproductively mature - with early maturing species having overall higher RA and lower RGR (i.e. BOLE) than do late maturing species (i.e. PELA). 
+
+* Continuing, RGR and RA are measures that give little insight to a species trait values - or vice versa, trait values do not provide much information about RA...
+
+* "growth_stem_area" and "growth leaf", two whole plant measures of size increase are orthoganal to RGR, while some shoot-level variables (i.e. "growth_shoot_area") and other whole plant variables (e.g. "leaf_area_growth"), are somewhat correlated with both RGR (PC2) and the "maxH" direction (PC1). I suppose this suggests that for plants with high
+
+* For PC2, interesting that "growth_shoot_area"" and other variables associated with shoot growth and species max H correlate somewhat with RGR, but "growth_stem_area" and other whole plant "size" variables do not
 * these plots are another way of affirming that RA (and RGR) is a variable that does a good job of comparing trends across species * in other words there is a trade-off between RA and RGR in all species. And even though the RA trends are messy, individuals that are proportionally taller (prop_maxH) or invest more in reproduction (investment, count, or seedset) have a higher RA. 
+
 * this last set of variables are all ones that do not vary with the PC1 axis
 
 PCA related code to keep:  
@@ -617,7 +631,7 @@ PCA_by_species <- SummaryInd_PCA_results %>%
   group_by(species) %>%
   summarise_each(funs(mean, se), PC1_scale, PC2_scale, PC3_scale, PC4_scale)
 
-plot(PC1_scale~(PC2_scale),SummaryInd_PCA_results,pch=16,col=col.spp[as.factor(species)])
+plot(PC1_scale~(PC2_scale),SummaryInd_PCA_results,pch=16,col=col.spp[as.factor(species)],xlim=c(-.1,.1))
 arrows(0, 0, (.9*PCA_loadings$PC2_scale), (.9*PCA_loadings$PC1_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
 text(PC1_scale ~ PC2_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
 legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
@@ -645,14 +659,14 @@ se1 <- PCA_by_species$PC3_scale_se
 plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 3")
 se_function(mean1,se1)
 
-plot(PC4_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.spp[as.factor(species)],ylim=c(-.15,.12))
+plot(PC4_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.spp[as.factor(species)],ylim=c(-.15,.15))
 arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC4_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
 text(PC4_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
 legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 
 mean1 <- PCA_by_species$PC4_scale_mean
 se1 <- PCA_by_species$PC4_scale_se
-plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 4")
+plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 4",,ylim=c(-.07,.04))
 se_function(mean1,se1)
 ```
 
@@ -685,12 +699,10 @@ text(PC3_scale ~ PC2_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex
 ### Looking only at reproducing individuals - 
 * can now add in "prop_propagule","prop_accessory", but not "accessory_per_seed"
 * changes patterns quite a bit
-* PC1 is still WD vs lots of growth variables, but now reproductive investment (propagule_inv and accessory_inv) associate with "big size" not high RA
-* PC2 is RA, seedset, and prop_propagule vs. RGR, shoot growth variables and prop_accessory; interesting, but not surprising that prop_propagule and prop_accessory pulled to opposite ends
-* PC3 is somewhat similar. It is also prop_accessory and prop_maxH vs seed set and prop_propagule, but it now separates out all teh shoot growth values
-* PC4 is now the axis that separates LMA_mean and maxH vs. WD_mean
-
-, with variables like maxH_spp pulling toward all the "big size" arrows
+* PC1 is still WD vs lots of growth variables, but now absolute measures of reproductive investment (propagule_inv and accessory_inv) associate with absolute "big size" not high RA
+* PC2 is RA, seedset, and prop_propagule vs. RGR, shoot growth variables and prop_accessory; not surprising that prop_propagule and prop_accessory pulled to opposite ends
+* PC3 is somewhat similar. It is also prop_accessory and prop_maxH vs seed set and prop_propagule, but it now separates out all the shoot growth values
+* PC4 is now the axis that separates LMA_mean and maxH vs. WD_mean, with variables like maxH_spp pulling toward all the "big size" arrows
 
 ```{r, echo=FALSE,message=FALSE,fig.width=7, fig.height=7}
 par(mfrow=c(1,1), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
