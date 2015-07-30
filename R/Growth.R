@@ -1,30 +1,26 @@
 preprocessHarvest <- function(HarvestData_raw, IndividualsList) {
 
   keep <- filter(IndividualsList, use_for_allometric_equations)$individual
-  CalculateMassAndDiameters(filter(HarvestData_raw, individual %in% keep))
-}
 
-CalculateMassAndDiameters <- function(HarvestData) {
+  data <- filter(HarvestData_raw, individual %in% keep) %>%
+          group_by(species, individual, site, age, start_end)
+
   segments <- list()
-  segments[["1"]] <- c("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","17")
-  segments[["2"]] <- c("2","3","4","5","6","7","8","13","14","15","17")
-  segments[["3"]] <- c("3","4","5","6","7","8","15")
+  segments[["1"]] <- c(as.character(1:8), "1.2", "1.3", "1.2.1", "1.2.1.1", "1.1.2", "1.1.2.1", "1.1.1.2")
+  segments[["2"]] <- c(as.character(2:8), "1.1.2", "1.1.2.1", "1.1.1.2")
+  segments[["3"]] <- c(as.character(3:8), "1.1.1.2")
   segments[["4"]] <- as.character(4:8)
   segments[["5"]] <- as.character(5:8)
   segments[["6"]] <- as.character(6:8)
   segments[["7"]] <- as.character(7:8)
   segments[["8"]] <- as.character(8)
-  segments[["9"]] <- c("9","11","12")
-  segments[["10"]] <- c("11","12")
-  segments[["11"]] <- c("12")
-  segments[["12"]] <- c("10")
-  segments[["13"]] <- c("13","14","17")
-  segments[["14"]] <- c("14","17")
-  segments[["15"]] <- c("15")
-  segments[["17"]] <- c("17")
-  
-  # only use segments present in data, otherwise dplyr will fail
-  segments <- segments[names(segments) %in% unique(HarvestData$segment)]
+  segments[["1.2"]] <- c("1.2", "1.2.1", "1.2.1.1")
+  segments[["1.3"]] <- c("1.3")
+  segments[["1.2.1"]] <- c("1.2.1", "1.2.1.1")
+  segments[["1.2.1.1"]] <- c("1.2.1.1")
+  segments[["1.1.2"]] <- c("1.1.2", "1.1.2.1")
+  segments[["1.1.2.1"]] <- c("1.1.2.1")
+  segments[["1.1.1.2"]] <- c("1.1.1.2")
 
   ## Get total mass of all material subtended by given node
   get.mass.at.node <- function(segment_name, data) {
@@ -37,7 +33,7 @@ CalculateMassAndDiameters <- function(HarvestData) {
           total_weight = sum(leaf_weight, stem_weight))
   }
 
-  get.mass.at.node.by.segement <- function(data) {
+  get.mass.at.node.by.segment <- function(data) {
     lapply(names(segments), get.mass.at.node, data=data)  %>% rbind_all()
   }
 
@@ -53,14 +49,12 @@ CalculateMassAndDiameters <- function(HarvestData) {
         height = height)
   }
 
-  get.diam.node.above.by.segement <- function(data) {
+  get.diam.node.above.by.segment <- function(data) {
     lapply(names(segments),  get.diam.node.above, data=data)  %>% rbind_all()
   }
 
-  data <- group_by(HarvestData, species, individual, site, age, start_end)
-
-  mass <-  do(data, get.mass.at.node.by.segement(.))
-  diameters <- do(data, get.diam.node.above.by.segement(.))
+  mass <-  do(data, get.mass.at.node.by.segment(.))
+  diameters <- do(data, get.diam.node.above.by.segment(.))
 
   # Merge mass and diameter measurements
   merge(diameters, mass, by = c("species", "site", "individual", "age", "segment", "start_end")) %>%
