@@ -533,4 +533,6 @@ col.spp.noHATE <- c("red", "darkolivegreen4", "blue", "purple", "grey", "light g
 col.LMA <-c("orchid1","gold1","darkolivegreen3","cyan2","dodgerblue","purple","red")
 labels.LMA <-c("age 1.4", "age 2.4", "age 5", "age 7", "age 9", "age 32", "HATE")
 col.lots <- c("red", "darkolivegreen4", "blue", "purple", "grey", "light green","gold1","cyan2","black", "chocolate1","light blue","brown","deep pink","orchid1",
+              "dodgerblue","darkcyan","brown2","bisque4","blue4","cadetblue","darkseagreen","darkslateblue","firebrick4","red", "darkolivegreen4", "blue", "purple", "grey", "light green","gold1","cyan2","black", "chocolate1","light blue","brown","deep pink","orchid1",
+              "dodgerblue","darkcyan","brown2","bisque4","blue4","cadetblue","darkseagreen","darkslateblue","firebrick4","red", "darkolivegreen4", "blue", "purple", "grey", "light green","gold1","cyan2","black", "chocolate1","light blue","brown","deep pink","orchid1",
               "dodgerblue","darkcyan","brown2","bisque4","blue4","cadetblue","darkseagreen","darkslateblue","firebrick4")
