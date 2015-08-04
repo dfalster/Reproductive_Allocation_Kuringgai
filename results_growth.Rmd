@@ -60,6 +60,31 @@ mtext("proportion Hmax", 1, outer=TRUE,cex=1.2)
 mtext("Total weight", 2, outer=TRUE,cex=1.2)
 ```
 
+```{r, echo=FALSE, message=FALSE, fig.width=21, fig.height=28}
+par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
+yvar <- "growth_stem_area"
+xvar <- "RA"
+
+data <- subset(SummaryInd,RA>0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="y",
+                    main=spp)
+  abline(lmfits[[spp]])
+}
+
+```
+
 ###Growth Investment versus proportion max H
 - For the canopy species, PELA, HATE, PEPU, BAER, investment in growth plateaus (i.e. growth relative to size decreases) at ~40% maxH
 - I think this suggests that relative height is a good predictor of growth investment in these species, but not in some of the lower-growing species

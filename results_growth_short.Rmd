@@ -4,6 +4,7 @@ create_bindings()
 
 source("scripts/summary_dataframes.R")
 source("scripts/functions.R")
+
 ```
 ##Growth data, general patterns
 1. Growth-reproduction trade-off illustrated by plots of RA vs RGR
@@ -23,9 +24,17 @@ source("scripts/functions.R")
 ```{r, echo=FALSE,message=FALSE}
 par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2)) 
 mod <- lm(log(GrowthInv)~log(ReproInv),data=subset(SummaryInd,ReproInv>0))
-plot((1+ReproInv)~GrowthInv, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
+plot((1+ReproInv)~GrowthInv, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16,xlim=c(1,1000000),ylim=c(1,1000000))
+words.top.left.logxy(mod)
 legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.bottom.right.logxy(mod)
+abline(0,1)
+text(5,6.5,srt=38,"RA = 0.5")
+abline(log10(9),1)
+text(2,23,srt=38,"RA = 0.9")
+abline(log10(.1),1)
+text(20,2.6,srt=38,"RA = 0.1")
+abline(log10(.01),1)
+text(170,2.2,srt=38,"RA = 0.01")
 ```
 
 ###Plants that allocate more to reproduction (higher RA) have a lower RGR
@@ -34,11 +43,32 @@ words.bottom.right.logxy(mod)
 - More robust curve-fitting techniques are required to better illustrate this pattern (**CURVE FITTING**)
 
 ```{r, echo=FALSE,message=FALSE}
-par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2)) 
-mod <- lm(RGR~asin(sqrt(RA))*species,data=subset(SummaryInd,RA>0))
+par(mfrow=c(2,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2)) 
+mod <- lm(RGR~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
 plot((RA+.01)~RGR, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
 legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right.logxy(mod)
+
+mod <- lm(log(growth_stem_diam)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
+plot((RA+.01)~growth_stem_diam, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
+legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+words.top.right.logxy(mod)
+
+mod <- lm(log(growth_stem_area)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
+plot((RA+.01)~growth_stem_area, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
+legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+words.top.right.logxy(mod)
+
+SummaryInd$prop_growth_height <- SummaryInd$growth_height/SummaryInd$maxH_spp
+
+mod <- lm(log(prop_growth_height)~asin(sqrt(RA)),data=subset(SummaryInd,growth_height>0&species!="PEPU"&species!="PELA"&species!="COER"))
+plot((RA+.01)~(prop_growth_height), data=subset(SummaryInd,species!="PEPU"&species!="PELA"), log="xy", col=col.spp[as.factor(species)],pch=16)
+
+legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+words.top.right.logxy(mod)
+
+mod <- lm(log(growth_height)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0&growth_height>0))
+plot((RA+.01)~(growth_height), SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
 ```
 
 ###PCA analysis indicates the same two patterns
@@ -55,8 +85,8 @@ par(mfrow=c(1,1), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
 SummaryIndPCA <- SummaryInd %>%
   filter(lvs_end_total>0&shoot_leaf_area>0&shoot_leaf_area_growth!=0) %>%
   select(prop_maxH,height,maxH_spp,WD_mean,LMA_mean,seed_size,growth_leaf,
-         RGR,leaf_area,growth_shoot_area,growth_stem_area,lvs_end_total,total_weight,
-         RA,seedset,repro_all_count,accessory_inv,propagule_inv,shoot_leaf_area,shoot_leaf_area_growth)
+         growth_stem_diam,leaf_area,growth_shoot_area,growth_stem_area,lvs_end_total,total_weight,
+         RA,seedset,repro_all_count,accessory_inv,propagule_inv,shoot_leaf_area,shoot_leaf_area_growth,RGR)
 
 SummaryIndPCA$leaf_area <- log((SummaryIndPCA$leaf_area)+.001)
 SummaryIndPCA$total_weight <- log(SummaryIndPCA$total_weight)
@@ -70,6 +100,7 @@ SummaryIndPCA$growth_leaf <- log(SummaryIndPCA$growth_leaf+10000)
 SummaryIndPCA$repro_all_count <- log(SummaryIndPCA$repro_all_count+1)
 SummaryIndPCA$lvs_end_total <- log(SummaryIndPCA$lvs_end_total)
 SummaryIndPCA$growth_stem_area <- log(SummaryIndPCA$growth_stem_area)
+SummaryIndPCA$growth_stem_diam <- log(SummaryIndPCA$growth_stem_diam)
 SummaryIndPCA$shoot_leaf_area <- log(SummaryIndPCA$shoot_leaf_area)
 SummaryIndPCA$shoot_leaf_area_growth <- log(SummaryIndPCA$shoot_leaf_area_growth)
 

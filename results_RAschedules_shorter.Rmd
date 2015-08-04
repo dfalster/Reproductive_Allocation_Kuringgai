@@ -323,3 +323,10 @@ mod <- lm(log(maxH_spp)~asin(sqrt(RA)), data=subset(SummaryInd,RA>0))
 words.bottom.left.logxy(mod)
 ```
 
+
+As plants approach maximum height, less of their reproductive investment is going to propagules...This only includes individuals with some propagule investment
+```{r, echo=FALSE,message=FALSE,fig.width=6, fig.height=6}
+mod <- lm(log(prop_maxH)~asin(sqrt(prop_propagule)),data=subset(SummaryInd,prop_maxH>0))
+plot(asin(sqrt(prop_propagule))~prop_maxH,data=subset(SummaryInd,prop_maxH>0&prop_propagule>0), log="x", pch=16,col=col.spp[as.factor(species)],ylab="propagules (as proportion repro inv)")
+words.bottom.left.logx(mod)
+```
