@@ -20,7 +20,7 @@ axis_labels <- read_csv("data/axis_labels.csv")
 
 investment <- ReproductionAllocation_all
 
-names(investment) <-  c("individual","ReproInv","species","site","age","height","diameter","stem_area","leaf_weight","stem_weight","total_weight","GrowthInv","growth_stem","growth_leaf","growth_stem_diam","growth_stem_area","TotalInv","RA")
+names(investment) <-  c("individual","ReproInv","species","site","age","height","diameter","stem_area","leaf_weight","stem_weight","total_weight","GrowthInv","growth_stem","growth_leaf","growth_height","growth_stem_diam","growth_stem_area","TotalInv","RA")
 
 investment$age <- round(investment$age, digits=1)
 
@@ -265,8 +265,8 @@ investment_spp <- investment %>%
 #maximum height for each species
 maxH_spp <- investment %>%
   group_by(species) %>%
-  summarise_each(funs(max), height)
-names(maxH_spp)<-c("species", "maxH_spp")
+  summarise_each(funs(max), height, stem_area)
+names(maxH_spp)<-c("species", "maxH_spp","max_stem_area_spp")
 
 #maximum height for each species
 max_investment_spp <- investment %>%
@@ -284,6 +284,7 @@ SummaryInd$prop_maxH <- SummaryInd$height / SummaryInd$maxH_spp
 SummaryInd$prop_max_weight <- SummaryInd$total_weight / SummaryInd$max_total_weight
 SummaryInd$prop_max_repro <- SummaryInd$ReproInv / SummaryInd$max_repro_inv
 SummaryInd$prop_allocation <- SummaryInd$propagule_inv/(SummaryInd$GrowthInv + SummaryInd$ReproInv)
+SummaryInd$prop_growth_stem_area <- SummaryInd$growth_stem_area / SummaryInd$max_stem_area_spp
 SummaryInd$leaf_area <- SummaryInd$leaf_weight / (1000*SummaryInd$LMA_mean)
 SummaryInd$leaf_area_growth <- SummaryInd$growth_leaf / (1000*SummaryInd$LMA_mean)
 SummaryInd$shoot_leaf_area <- SummaryInd$lvs_end_total*SummaryInd$leaf_size_mean
