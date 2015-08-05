@@ -265,8 +265,8 @@ investment_spp <- investment %>%
 #maximum height for each species
 maxH_spp <- investment %>%
   group_by(species) %>%
-  summarise_each(funs(max), height, stem_area)
-names(maxH_spp)<-c("species", "maxH_spp","max_stem_area_spp")
+  summarise_each(funs(max), height, stem_area, growth_stem_diam)
+names(maxH_spp)<-c("species", "maxH_spp","max_stem_area_spp","max_growth_stem_diam_spp")
 
 #maximum height for each species
 max_investment_spp <- investment %>%
@@ -284,11 +284,14 @@ SummaryInd$prop_maxH <- SummaryInd$height / SummaryInd$maxH_spp
 SummaryInd$prop_max_weight <- SummaryInd$total_weight / SummaryInd$max_total_weight
 SummaryInd$prop_max_repro <- SummaryInd$ReproInv / SummaryInd$max_repro_inv
 SummaryInd$prop_allocation <- SummaryInd$propagule_inv/(SummaryInd$GrowthInv + SummaryInd$ReproInv)
-SummaryInd$prop_growth_stem_area <- SummaryInd$growth_stem_area / SummaryInd$max_stem_area_spp
+SummaryInd$prop_growth_stem_diam <- SummaryInd$growth_stem_diam / SummaryInd$max_growth_stem_diam_spp
 SummaryInd$leaf_area <- SummaryInd$leaf_weight / (1000*SummaryInd$LMA_mean)
 SummaryInd$leaf_area_growth <- SummaryInd$growth_leaf / (1000*SummaryInd$LMA_mean)
 SummaryInd$shoot_leaf_area <- SummaryInd$lvs_end_total*SummaryInd$leaf_size_mean
 SummaryInd$shoot_leaf_area_growth <- SummaryInd$lvs_new*SummaryInd$leaf_size_mean
+
+SummaryInd$RA_asin <- asin(sqrt(SummaryInd$RA))
+SummaryInd$prop_propagule_asin <- asin(sqrt(SummaryInd$prop_propagule))
 
 #merge various data summaries into SummarySppAge dataframe
 SummarySppAge <- merge(LL_summary, LMA_summary, by=c("species","age"))
@@ -430,11 +433,11 @@ PUTU_count$species <- "PUTU"
 
 accessory_count <- rbind(BAER_count,BOLE_count,COER_count,EPMI_count,GRBU_count,GRSP_count,HATE_count,HEPU_count,LEES_count,PELA_count,PEPU_count,PHPH_count,PILI_count,PUTU_count)
 
-count_flower <- subset(accessory_count, what=="flower_petals",select=c("individual","count"))
+count_flower <- subset(accessory_count, what=="flower_petals"|what=="flower_petals_small",select=c("individual","count"))
 names(count_flower) <- c("individual","flower_count")
 count_flower$individual <- as.factor(count_flower$individual)
 
-count_bud <- subset(accessory_count, what=="bud_small"|what=="bud_mid"|what=="bud_large")
+count_bud <- subset(accessory_count, what=="bud_tiny"|what=="bud_small"|what=="bud_mid"|what=="bud_large"|what=="flower_aborted_without_petals")
 count_bud <- count_bud %>%
   group_by(individual) %>%
   summarise_each(funs(sum), count)

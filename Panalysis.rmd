@@ -1,0 +1,130 @@
+```{r, echo=FALSE,results='hide', message=FALSE}
+libReproInvry(remake)
+create_bindings()
+
+source("scripts/summary_datafReproInvmes.R")
+source("scripts/functions.R")
+```
+
+```{r, echo=FALSE,results='hide', message=FALSE,warning=FALSE}
+par(mfrow=c(5,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))  
+
+mod <- lm(log(ReproInv)~log((propagule_inv)),data=subset(SummaryInd,ReproInv>0&propagule_inv>0))
+plot(propagule_inv~ReproInv,data=subset(SummaryInd,ReproInv>0&propagule_inv>0), pch=16,col=col.spp[as.factor(species)],log="xy", ylab="energy to propagules (mg)")
+abline(0,1)
+words.bottom.right.logxy(mod)
+
+mod <- lm(log(ReproInv)~asin(sqrt(prop_propagule)),data=subset(SummaryInd,ReproInv>0&prop_propagule>0))
+plot(asin(sqrt(prop_propagule))~ReproInv,data=subset(SummaryInd,ReproInv>0&prop_propagule>0), log="x", pch=16,col=col.spp[as.factor(species)],ylab="propagules (as proportion repro inv)")
+words.bottom.left.logx(mod)
+
+mod <- lm(log(ReproInv)~log((prepollen_aborted_inv)),data=subset(SummaryInd,ReproInv>0&prepollen_aborted_inv>0))
+plot(prepollen_aborted_inv~ReproInv,data=subset(SummaryInd,ReproInv>0), pch=16,col=col.spp[as.factor(species)],log="xy",ylab="pre-pollination aborted tissues (mg)")
+abline(0,1)
+words.bottom.right.logxy(mod)
+
+mod <- lm(log(ReproInv)~asin(sqrt(prop_prepollen_aborted)),data=subset(SummaryInd,ReproInv>0&prop_prepollen_aborted>0))
+plot(asin(sqrt(prop_prepollen_aborted))~ReproInv,data=subset(SummaryInd,ReproInv>0&prop_prepollen_aborted>0), pch=16,col=col.spp[as.factor(species)], log="x",ylab="pre-pollination aborted tissues (as proportion repro inv) (asin)")
+words.bottom.right.logx(mod)
+
+mod <- lm(log(ReproInv)~log((prepollen_success_inv)),data=subset(SummaryInd,ReproInv>0&prepollen_success_inv>0))
+plot(prepollen_success_inv~ReproInv,data=subset(SummaryInd,ReproInv>0), pch=16,col=col.spp[as.factor(species)],log="xy",ylab="pre-pollination successful tissues (mg)")
+abline(0,1)
+words.bottom.right.logxy(mod)
+
+mod <- lm(log(ReproInv)~asin(sqrt(prop_prepollen_success)),data=subset(SummaryInd,ReproInv>0&prop_prepollen_success>0))
+plot(asin(sqrt(prop_prepollen_success))~ReproInv,data=subset(SummaryInd,ReproInv>0&prop_prepollen_success>0), pch=16,col=col.spp[as.factor(species)], log="x",ylab="pre-pollination successful tissues (as proportion repro inv) (asin)")
+words.bottom.right.logx(mod)
+
+mod <- lm(log(ReproInv)~log((packaging_dispersal_inv)),data=subset(SummaryInd,ReproInv>0&packaging_dispersal_inv>0))
+plot(packaging_dispersal_inv~ReproInv,data=subset(SummaryInd,ReproInv>0&packaging_dispersal_inv>0), pch=16,col=col.spp[as.factor(species)],log="xy", ylab="energy to packaging and dispersal (mg)")
+abline(0,1)
+words.bottom.right.logxy(mod)
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+mod <- lm(log(ReproInv)~asin(sqrt(prop_packaging_dispersal)),data=subset(SummaryInd,ReproInv>0&prop_packaging_dispersal>0))
+plot(asin(sqrt(prop_packaging_dispersal))~ReproInv,data=subset(SummaryInd,ReproInv>0&prop_packaging_dispersal>0), log="x", pch=16,col=col.spp[as.factor(species)],ylab="packaging and dispersal (as proportion repro inv)")
+words.bottom.left.logx(mod)
+
+mod <- lm(log(ReproInv)~log((postpollen_aborted_inv)),data=subset(SummaryInd,ReproInv>0&postpollen_aborted_inv>0))
+plot(postpollen_aborted_inv~ReproInv,data=subset(SummaryInd,ReproInv>0&postpollen_aborted_inv>0), pch=16,col=col.spp[as.factor(species)],log="xy", ylab="energy to tissues aborted postpollination (mg)")
+abline(0,1)
+words.bottom.right.logxy(mod)
+
+mod <- lm(log(ReproInv)~asin(sqrt(prop_postpollen_aborted)),data=subset(SummaryInd,ReproInv>0&prop_postpollen_aborted>0))
+plot(asin(sqrt(prop_postpollen_aborted))~ReproInv,data=subset(SummaryInd,ReproInv>0&prop_postpollen_aborted>0), log="x", pch=16,col=col.spp[as.factor(species)],ylab="tissues aborted postpollination (as proportion repro inv)")
+words.bottom.left.logx(mod)
+```
+
+
+
+
+
+
+par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
+yvar <- "repro_all_count"
+xvar <- "ReproInv"
+
+data <- 
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm((log(x[[yvar]])) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",
+                    main=spp)
+    }
+
+
+
+plot(ReproInv~repro_all_count,data=subset(SummaryInd, repro_all_count>0&species=="PEPU"),log="xy")
+text(ReproInv~repro_all_count,data=subset(SummaryInd, repro_all_count>0&species=="PEPU"),labels=individual, pos=1,offset=.6,cex=0.8,col="black")
+
+
+
+check <- PEPU_Investment
+check_FD <-check[3]
+View(check_FD)
+check3 <- subset(check_FD,FD.what=="cone_aborted")
+
+names(check_FD)
+
+
+
+```{r}
+par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
+yvar <- "leaf_a"
+xvar <- "seed_count"
+
+data <- subset(SummaryInd,seedset>0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",
+                    main=spp)
+    }
+
+mtext("RA", 1, outer=TRUE,cex=1.2)
+mtext("Yearly increase in stem diameter (mm)", 2, outer=TRUE,cex=1.2)
+
+par(mfrow=c(1,1), cex=1, omi=c(.8,.8,.1,.1), mai=c(1.1,1,.4,0.2)) 
+plot(asin(sqrt(prop_growth_stem_diam))~asin(sqrt(RA)),data=subset(SummaryInd,RA>0),pch=16,col=col.spp[as.factor(species)])
+mod <- lm(asin(sqrt(RA))~asin(sqrt(prop_growth_stem_diam)),data=subset(SummaryInd,RA>0))
+words.bottom.left(mod)
+```

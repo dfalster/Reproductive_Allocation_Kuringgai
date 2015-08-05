@@ -37,12 +37,12 @@ abline(log10(.01),1)
 text(170,2.2,srt=38,"RA = 0.01")
 ```
 
-###Plants that allocate more to reproduction (higher RA) have a lower RGR
-- When looked at individually, this pattern holds for all species except PEPU and PELA, although there is lots of variation in the exact trade-off pattern displayed by different species  
-- You can also look at the plots of RGR vs RA and identify the RA at which RGR is impacted. Some plots show a very linear decline throught, whereas for others there is a distinct "knickpoint" -i.e. BOLE, EPMI, HATE   
-- More robust curve-fitting techniques are required to better illustrate this pattern (**CURVE FITTING**)
+###Plants that allocate more to reproduction (higher RA) have lower growth
+- When looked at individually, this pattern holds for most species, although there is lots of variation in the exact trade-off pattern displayed by different species  
+    * when plotted again stem diameter increment, most species show a distinctly linear pattern - decline in stem diameter increment fairly exactly offset by increases in RA across all individuals of the species   
+    * for plots of RGR vs RA some species have a distinct "knickpoint" where growth impacted -i.e. BOLE, EPMI, HATE   
 
-```{r, echo=FALSE,message=FALSE}
+```{r, echo=FALSE,message=FALSE, warning=FALSE}
 par(mfrow=c(2,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2)) 
 mod <- lm(RGR~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
 plot((RA+.01)~RGR, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
@@ -54,8 +54,8 @@ plot((RA+.01)~growth_stem_diam, SummaryInd, log="xy", col=col.spp[as.factor(spec
 legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right.logxy(mod)
 
-mod <- lm(log(growth_stem_area)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
-plot((RA+.01)~growth_stem_area, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
+mod <- lm(log(prop_growth_stem_diam)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
+plot((RA+.01)~prop_growth_stem_diam, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
 legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right.logxy(mod)
 
@@ -63,14 +63,33 @@ SummaryInd$prop_growth_height <- SummaryInd$growth_height/SummaryInd$maxH_spp
 
 mod <- lm(log(prop_growth_height)~asin(sqrt(RA)),data=subset(SummaryInd,growth_height>0&species!="PEPU"&species!="PELA"&species!="COER"))
 plot((RA+.01)~(prop_growth_height), data=subset(SummaryInd,species!="PEPU"&species!="PELA"), log="xy", col=col.spp[as.factor(species)],pch=16)
-
-legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-words.top.right.logxy(mod)
-
-mod <- lm(log(growth_height)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0&growth_height>0))
-plot((RA+.01)~(growth_height), SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
 ```
 
+```{r, echo=FALSE,message=FALSE, warning=FALSE}
+par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
+yvar <- "growth_stem_diam"
+xvar <- "RA"
+
+data <- subset(SummaryInd,RA>0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  asin(sqrt(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="y",
+                    main=spp)
+    }
+
+mtext("RA", 1, outer=TRUE,cex=1.2)
+mtext("Yearly increase in stem diameter (mm)", 2, outer=TRUE,cex=1.2)
+```
 ###PCA analysis indicates the same two patterns
 * This combination of variables shows that RGR is approximately opposite a collection of variables that indicate a plant is "bigger" - so smaller plants have higher RGR
 * Orthoganal to these in WD vs. maxH, LMA_mean, seed_size, and shoot_growth - species that are taller as adults have bigger seeds, higher LMA, and greater shoot growth (both stem growth & leaf count), independent of their current (age dependent) size
