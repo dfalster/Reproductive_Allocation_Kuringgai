@@ -87,14 +87,16 @@ for(spp in names(data)) {
 plot(ReproInv~repro_all_count,data=subset(SummaryInd, repro_all_count>0&species=="PEPU"),log="xy")
 text(ReproInv~repro_all_count,data=subset(SummaryInd, repro_all_count>0&species=="PEPU"),labels=individual, pos=1,offset=.6,cex=0.8,col="black")
 
+check_FD <-as.data.frame(PEPU_Investment[3])
+check_FD_aborted <- subset(check_FD,FD.what=="cone_aborted")
+check_FD_aborted
+
+check_parts <- subset(as.data.frame(PEPU_FlowerPartsData),what=="cone_aborted")
+check_parts <- subset(as.data.frame(PEPU_FlowerPartsData),part=="cone_aborted")
+check_parts
 
 
-check <- PEPU_Investment
-check_FD <-check[3]
-View(check_FD)
-check3 <- subset(check_FD,FD.what=="cone_aborted")
-
-names(check_FD)
+names(check_parts)
 
 
 

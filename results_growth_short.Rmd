@@ -1,4 +1,4 @@
-```{r, echo=FALSE,results='hide', message=FALSE}
+ ```{r, echo=FALSE,results='hide', message=FALSE}
 library(remake)
 create_bindings()
 
@@ -64,7 +64,6 @@ SummaryInd$prop_growth_height <- SummaryInd$growth_height/SummaryInd$maxH_spp
 mod <- lm(log(prop_growth_height)~asin(sqrt(RA)),data=subset(SummaryInd,growth_height>0&species!="PEPU"&species!="PELA"&species!="COER"))
 plot((RA+.01)~(prop_growth_height), data=subset(SummaryInd,species!="PEPU"&species!="PELA"), log="xy", col=col.spp[as.factor(species)],pch=16)
 ```
-
 ```{r, echo=FALSE,message=FALSE, warning=FALSE}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
 yvar <- "growth_stem_diam"
@@ -85,11 +84,62 @@ results
 for(spp in names(data)) {
   plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="y",
                     main=spp)
-    }
+}
 
 mtext("RA", 1, outer=TRUE,cex=1.2)
 mtext("Yearly increase in stem diameter (mm)", 2, outer=TRUE,cex=1.2)
 ```
+
+
+```{r, echo=FALSE,message=FALSE, warning=FALSE}
+par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
+yvar <- "RA"
+xvar <- "age"
+
+data <- subset(SummaryInd,RA>0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="x",
+                    main=spp,xlim=c(1,35))
+}
+
+mtext("RA", 1, outer=TRUE,cex=1.2)
+mtext("age", 2, outer=TRUE,cex=1.2)
+```
+
+```{r, echo=FALSE,message=FALSE, warning=FALSE}
+par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
+yvar <- "RA"
+xvar <- "diameter"
+
+data <- subset(SummaryInd,RA>0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(asin(sqrt(x[[yvar]])) ~  log(x[[xvar]])))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="x",
+                    main=spp)
+}
+
+mtext("RA", 1, outer=TRUE,cex=1.2)
+mtext("basal diameter", 2, outer=TRUE,cex=1.2)
+```
+
+
 ###PCA analysis indicates the same two patterns
 * This combination of variables shows that RGR is approximately opposite a collection of variables that indicate a plant is "bigger" - so smaller plants have higher RGR
 * Orthoganal to these in WD vs. maxH, LMA_mean, seed_size, and shoot_growth - species that are taller as adults have bigger seeds, higher LMA, and greater shoot growth (both stem growth & leaf count), independent of their current (age dependent) size
