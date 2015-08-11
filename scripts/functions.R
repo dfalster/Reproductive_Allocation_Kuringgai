@@ -16,6 +16,8 @@ plot_yvar3_vs_xvar3 <- function(data, yvar3 = "y", xvar3 = "x", ...) {
   plot(Y ~ X, data=data,  cex.axis=.8, las=1, pch=16, ...)
 }
 
+
+
 summarise_fit <- function(x) {
   data.frame(
     select(glance(x), r.squared, p.value),

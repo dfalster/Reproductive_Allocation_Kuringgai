@@ -1,0 +1,350 @@
+```{r, echo=FALSE,results='hide', message=FALSE,warning=FALSE}
+library(remake)
+create_bindings()
+
+source("scripts/summary_dataframes.R")
+source("scripts/functions.R")
+```
+
+##Summary
+    1. Species show a marked decline in leaf investment with age and a most limited decline in stem investment with age
+    2. 
+
+
+
+
+###1. Vegetative investment by size curves by species  
+  * Individuals within a site show a remarkably linear increase in total vegetative investment with increasing size  
+  * However, across species, there is a distinct decrease in the intercept of the line as plants age, turning into a scatter plot at the oldest sites
+  * This is because of a rapid decrease in investment in leaves with age  
+  * For most species there is only a decline in stem investment at the oldest sites  
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=28, fig.height=28}
+par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
+yvar <- "GrowthInv"
+xvar <- "total_weight"
+
+data <- subset(SummaryInd)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (log(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",cex=1.4,
+                    main=spp,col=col.age[as.factor(data[[spp]]$age)])
+}
+
+mtext("Vegetative investment (mg)", 2, outer=TRUE,cex=1.2)
+mtext("Total plant weight (mg)", 1, outer=TRUE,cex=1.2)
+```
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=28, fig.height=28}
+par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
+yvar <- "growth_leaf"
+xvar <- "total_weight"
+
+data <- subset(SummaryInd)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (log(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",
+                    main=spp,col=col.age[as.factor(data[[spp]]$age)])
+}
+
+mtext("Investment in leaves (mg)", 2, outer=TRUE,cex=1.2)
+mtext("Total plant weight (mg)", 1, outer=TRUE,cex=1.2)
+```
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=28, fig.height=28}
+par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
+yvar <- "growth_stem"
+xvar <- "total_weight"
+
+data <- subset(SummaryInd)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (log(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",
+                    main=spp,col=col.age[as.factor(data[[spp]]$age)])
+}
+
+mtext("Investment in stems (mg)", 2, outer=TRUE,cex=1.2)
+mtext("Total plant weight (mg)", 1, outer=TRUE,cex=1.2)
+```
+    
+###2. Plants that allocate more to reproduction (higher RA) have lower growth
+* When plotted again stem diameter increment, most species show a distinct trade-off 
+* The pattern is weaker for growth in shoot diameter
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=28, fig.height=28}
+par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
+yvar <- "RA"
+xvar <- "growth_stem_diam"
+
+data <- subset(SummaryInd,RA>0)
+data <- split(data, data$species)
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",
+                    main=spp,,col=col.age[as.factor(data[[spp]]$age)])
+}
+
+mtext("Shoot diameter growth", 1, outer=TRUE,cex=1.2)
+mtext("RA", 2, outer=TRUE,cex=1.2)  
+```
+    
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=28, fig.height=28}
+par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
+yvar <- "RA"
+xvar <- "growth_shoot_diam"
+    
+data <- subset(SummaryInd,RA>0)
+data <- split(data, data$species)
+    
+for(spp in names(data)) {
+plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",
+                        main=spp,,col=col.age[as.factor(data[[spp]]$age)])
+}
+
+mtext("Shoot diameter growth", 1, outer=TRUE,cex=1.2)
+mtext("RA", 2, outer=TRUE,cex=1.2)  
+```
+
+    
+###3.PCA analysis also indicates a decline in growth with increasing RA - as well as species level differences
+* This combination of variables shows that RGR is approximately opposite a collection of variables that indicate a plant is "bigger" - so smaller plants have higher RGR
+* Orthoganal to these in WD vs. maxH, LMA_mean, seed_size, and shoot_growth - species that are taller as adults have bigger seeds, higher LMA, and greater shoot growth (both stem growth & leaf count), independent of their current (age dependent) size
+* I interpret this to mean that the three traits (Hmax, LMA, WD) strongly influence each other - presumably, Hmax a function of WD and LMA), but do not particularly 
+* this analysis doesn't include accessory proportions, because then I have to use subset of reproducing individuals, greatly reducing sample size. Including these variables, doesn't change the basic story.
+* fine tuning:  
+  ** remove RGR leaf (similar to RGR)
+** remove prop_max_weight and prop_max_repro (similar to prop_maxH)
+
+    
+    plot(shoot_leaf_area_growth~total_weight,SummaryInd,col=col.spp[as.factor(species)],log="xy",pch=16)
+```{r, echo=FALSE,message=FALSE,fig.width=7, fig.height=7}
+par(mfrow=c(1,1), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
+SummaryIndPCA <- SummaryInd %>%
+  filter(lvs_end_total>0&shoot_leaf_area>0&shoot_leaf_area_growth!=0) %>%
+  select(prop_maxH,height,maxH_spp,WD_mean,LMA_mean,seed_size,growth_leaf,
+         growth_stem_diam,leaf_area,growth_shoot_diam,growth_stem_area,lvs_end_total,total_weight,
+         RA,seedset,repro_all_count,accessory_inv,propagule_inv,shoot_leaf_area,shoot_leaf_area_growth,scaled_growth_stem_diam)
+
+SummaryIndPCA$leaf_area <- log((SummaryIndPCA$leaf_area)+.001)
+SummaryIndPCA$total_weight <- log(SummaryIndPCA$total_weight)
+SummaryIndPCA$height <- log(SummaryIndPCA$height)
+SummaryIndPCA$maxH_spp <- log(SummaryIndPCA$maxH_spp)
+SummaryIndPCA$seed_size <- log(SummaryIndPCA$seed_size)
+SummaryIndPCA$accessory_inv <- log(SummaryIndPCA$accessory_inv+.001)
+SummaryIndPCA$propagule_inv <- log(SummaryIndPCA$propagule_inv+.001)
+SummaryIndPCA$growth_shoot_diam <- log(SummaryIndPCA$growth_shoot_diam+.001)
+SummaryIndPCA$growth_leaf <- log(SummaryIndPCA$growth_leaf+10000)
+SummaryIndPCA$repro_all_count <- log(SummaryIndPCA$repro_all_count+1)
+SummaryIndPCA$lvs_end_total <- log(SummaryIndPCA$lvs_end_total)
+SummaryIndPCA$growth_stem_diam <- log(SummaryIndPCA$growth_stem_diam)
+SummaryIndPCA$shoot_leaf_area <- log(SummaryIndPCA$shoot_leaf_area)
+SummaryIndPCA$shoot_leaf_area_growth <- log(SummaryIndPCA$shoot_leaf_area_growth)
+SummaryIndPCA$scaled_growth_stem_diam <- log(SummaryIndPCA$scaled_growth_stem_diam)
+
+PCA_mod <- prcomp(SummaryIndPCA, scale=TRUE)
+summary(PCA_mod)
+biplot(PCA_mod,xlim=c(-.1,.15),ylim=c(-.15,.1),cex=.8)
+
+PCA_loadings <- as.data.frame(PCA_mod$rotation)
+PCA_loadings$variables <- row.names(PCA_loadings)
+
+PCA_scaling <- as.data.frame(PCA_mod$scale)
+PCA_scaling$variables <- row.names(PCA_scaling)
+names(PCA_scaling) <- c("scale","variables")
+PCA_loadings <- merge(PCA_loadings,PCA_scaling,by="variables")
+
+PCA_lambda <- as.data.frame(PCA_mod$sdev)
+
+PCA_scores <- as.data.frame(PCA_mod$x)
+PCA_scores$individual <- subset(SummaryInd$individual, SummaryInd$lvs_end_total>0&SummaryInd$shoot_leaf_area_growth!=0)
+SummaryInd_PCA_results <- merge(SummaryInd,PCA_scores, by="individual", all.x=TRUE)
+
+n <- NROW(PCA_scores)
+scale =1
+
+PCA_lambda <- PCA_lambda*sqrt(n)
+PCA_lambda <- PCA_lambda^scale
+
+
+SummaryInd_PCA_results$PC1_scale <- SummaryInd_PCA_results$PC1/PCA_lambda[1]
+SummaryInd_PCA_results$PC2_scale <- SummaryInd_PCA_results$PC2/PCA_lambda[2]
+SummaryInd_PCA_results$PC3_scale <- SummaryInd_PCA_results$PC3/PCA_lambda[3]
+SummaryInd_PCA_results$PC4_scale <- SummaryInd_PCA_results$PC4/PCA_lambda[4]
+PCA_loadings$PC1_scale <- PCA_loadings$PC1 / 4.5
+PCA_loadings$PC2_scale <- PCA_loadings$PC2 / 4.5
+PCA_loadings$PC3_scale <- PCA_loadings$PC3 / 4.5
+PCA_loadings$PC4_scale <- PCA_loadings$PC4 / 4.5
+```
+
+#Looking at PCA by species
+* I have removed RGR from the PCA and added in a scaled stem diameter measure  
+* Although RGR and "Stem diameter increment" have a similar negative correlation with RA, RGR created a much easer to describe PCA - it fell out wonderfully opposite RGR and orthogonal to WD, seedsize, LMA, total plant size  
+
+
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
+SummaryInd_PCA_results <-SummaryInd_PCA_results %>%
+  filter(complete.cases(SummaryInd_PCA_results$PC1_scale))
+
+SummaryInd_PCA_results <-SummaryInd_PCA_results %>%
+  filter(complete.cases(SummaryInd_PCA_results$PC2_scale))
+
+SummaryInd_PCA_results <-SummaryInd_PCA_results %>%
+  filter(complete.cases(SummaryInd_PCA_results$PC3_scale))
+
+SummaryInd_PCA_results <-SummaryInd_PCA_results %>%
+  filter(complete.cases(SummaryInd_PCA_results$PC4_scale))
+
+PCA_by_species <- SummaryInd_PCA_results %>%
+  group_by(species) %>%
+summarise_each(funs(mean, se), PC1_scale, PC2_scale, PC3_scale, PC4_scale)
+
+PCA_by_age <- SummaryInd_PCA_results %>%
+group_by(age) %>%
+summarise_each(funs(mean, se), PC1_scale, PC2_scale, PC3_scale, PC4_scale)
+```
+
+###PCA axis 1 is across species  
+* it separates species with high wood density (WD_mean), seedset, RA versus species with large total size, high leaf area, high LMA, large seedsize etc
+* the age indepentent measures like prop_maxH and scaled_growth_stem_area have near-zero loadings
+* BAER, HATE have by far the highest loadings and BOLE, COER, EPMI, HEPU, LEES, PILI the lowest  
+* not sure why high wood density species also have high seedset - is this just by chance with my species?
+
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
+plot(PC1_scale~(PC2_scale),SummaryInd_PCA_results,pch=16,col=col.spp[as.factor(species)],xlim=c(-.1,.1))
+arrows(0, 0, (.8*PCA_loadings$PC2_scale), (.8*PCA_loadings$PC1_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
+text(PC1_scale ~ PC2_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
+legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+mean1 <- PCA_by_species$PC1_scale_mean
+se1 <- PCA_by_species$PC1_scale_se
+plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 1")
+se_function(mean1,se1)
+
+plot(PC1_scale~(PC2_scale),SummaryInd_PCA_results,pch=16,col=col.age[as.factor(age)])
+arrows(0, 0, (.9*PCA_loadings$PC2_scale), (.9*PCA_loadings$PC1_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
+text(PC1_scale ~ PC2_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
+legend("topright",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
+
+mean1 <- PCA_by_age$PC1_scale_mean
+se1 <- PCA_by_age$PC1_scale_se
+plot(mean1~as.factor(age),PCA_by_age,cex.axis=.5,pch=16,ylab="PCA axis 1")
+se_function(mean1,se1)
+```
+
+###PCA axis 2 is about age  
+* top variable loadings: shoot_leaf_area_growth and growth_shoot_diam vs repro_all_count, RA, prop_maxH - a collection of variables that shift fro each to late in life   
+* COER, EPMI,PELA, and PEPU have the higher loadings and BOLE, LEES have the lowest, but mostly about age  
+
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
+plot(PC2_scale~(PC1_scale),SummaryInd_PCA_results,pch=16,col=col.spp[as.factor(species)])
+arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC2_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
+text(PC2_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
+
+mean1 <- PCA_by_species$PC2_scale_mean
+se1 <- PCA_by_species$PC2_scale_se
+plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 2")
+se_function(mean1,se1)
+
+plot(PC2_scale~(PC1_scale),SummaryInd_PCA_results,pch=16,col=col.age[as.factor(age)])
+arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC2_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
+text(PC2_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
+
+mean1 <- PCA_by_age$PC2_scale_mean
+se1 <- PCA_by_age$PC2_scale_se
+plot(mean1~as.factor(age),PCA_by_age,cex.axis=.5,pch=16,ylab="PCA axis 2")
+se_function(mean1,se1)
+```
+
+#PCA axis 3 again divides by species
+* top variable loadings: scaled_growth_stem_diam, WD_mean,growth_stem_diam, lvs_end_total vs. maxH_spp, LMA_mean, seed_size, RA  
+* not terribly interpretable, since doesn't make sense that scaled_growth_stem_diam with WD_mean  
+
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
+plot(PC3_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.spp[as.factor(species)],ylim=c(-.15,.15))
+
+arrows(0, 0, (.8*PCA_loadings$PC1_scale), (.8*PCA_loadings$PC3_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
+text(1.1*PC3_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=.8,col="black")
+
+mean1 <- PCA_by_species$PC3_scale_mean
+se1 <- PCA_by_species$PC3_scale_se
+plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 3")
+se_function(mean1,se1)
+
+plot(PC3_scale~(PC1_scale),SummaryInd_PCA_results,pch=16,col=col.age[as.factor(age)],ylim=c(-.15,.15))
+arrows(0, 0, (.8*PCA_loadings$PC1_scale), (.8*PCA_loadings$PC3_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
+text(1.1*PC3_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
+
+mean1 <- PCA_by_age$PC3_scale_mean
+se1 <- PCA_by_age$PC3_scale_se
+plot(mean1~as.factor(age),PCA_by_age,cex.axis=.5,pch=16,ylab="PCA axis 2")
+se_function(mean1,se1)
+```
+
+#PCA axis 4  
+* this axis explains only 5% of the total, but quite interesting that it divides stem vs shoot growth variables  
+* high loadings for growth_stem_area, growth_leaf, LMA_mean, seed_set vs low loadings for shoot_leaf_area_growth, WD_mean, prop_maxH, seed_size  
+* BAER, EPMI, HATE and HEPU have higher values vs. BOLE, GRBU, GRSP with lower values; in a sense these later species have more shoot growth than stem growth and spend more of their life close to their maxH - which is true  
+* there is no significant age component  
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
+
+plot(PC4_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.spp[as.factor(species)],ylim=c(-.15,.15))
+arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC4_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
+text(PC4_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
+legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+mean1 <- PCA_by_species$PC4_scale_mean
+se1 <- PCA_by_species$PC4_scale_se
+plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 4",ylim=c(-.05,.06))
+se_function(mean1,se1)
+
+plot(PC4_scale~(PC1_scale),SummaryInd_PCA_results,pch=16,col=col.age[as.factor(age)],ylim=c(-.15,.15))
+arrows(0, 0, (.8*PCA_loadings$PC1_scale), (.8*PCA_loadings$PC4_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
+text(1.1*PC4_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
+
+mean1 <- PCA_by_age$PC4_scale_mean
+se1 <- PCA_by_age$PC4_scale_se
+plot(mean1~as.factor(age),PCA_by_age,cex.axis=.5,pch=16,ylab="PCA axis 2")
+se_function(mean1,se1)
+```
+
+
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(2,1,.6,0.2))
+PCA_loadings <- transform(PCA_loadings,variables=reorder(variables,-PC1_scale))
+plot(PC1_scale~as.factor(variables),PCA_loadings,cex.axis=.8,las=3,xlab="")
+PCA_loadings <- transform(PCA_loadings,variables=reorder(variables,-PC2_scale))
+plot(PC2_scale~as.factor(variables),PCA_loadings,cex.axis=.8,las=3,xlab="")
+PCA_loadings <- transform(PCA_loadings,variables=reorder(variables,-PC3_scale))
+plot(PC3_scale~as.factor(variables),PCA_loadings,cex.axis=.8,las=3,xlab="")
+PCA_loadings <- transform(PCA_loadings,variables=reorder(variables,-PC4_scale))
+plot(PC4_scale~as.factor(variables),PCA_loadings,cex.axis=.8,las=3,xlab="")
+```
+

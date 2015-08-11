@@ -265,8 +265,8 @@ investment_spp <- investment %>%
 #maximum height for each species
 maxH_spp <- investment %>%
   group_by(species) %>%
-  summarise_each(funs(max), height, stem_area, growth_stem_diam)
-names(maxH_spp)<-c("species", "maxH_spp","max_stem_area_spp","max_growth_stem_diam_spp")
+  summarise_each(funs(max), height, stem_area, diameter)
+names(maxH_spp)<-c("species", "maxH_spp","max_stem_area_spp","max_stem_diam_spp")
 
 #maximum height for each species
 max_investment_spp <- investment %>%
@@ -284,14 +284,24 @@ SummaryInd$prop_maxH <- SummaryInd$height / SummaryInd$maxH_spp
 SummaryInd$prop_max_weight <- SummaryInd$total_weight / SummaryInd$max_total_weight
 SummaryInd$prop_max_repro <- SummaryInd$ReproInv / SummaryInd$max_repro_inv
 SummaryInd$prop_allocation <- SummaryInd$propagule_inv/(SummaryInd$GrowthInv + SummaryInd$ReproInv)
-SummaryInd$prop_growth_stem_diam <- SummaryInd$growth_stem_diam / SummaryInd$max_growth_stem_diam_spp
 SummaryInd$leaf_area <- SummaryInd$leaf_weight / (1000*SummaryInd$LMA_mean)
 SummaryInd$leaf_area_growth <- SummaryInd$growth_leaf / (1000*SummaryInd$LMA_mean)
 SummaryInd$shoot_leaf_area <- SummaryInd$lvs_end_total*SummaryInd$leaf_size_mean
 SummaryInd$shoot_leaf_area_growth <- SummaryInd$lvs_new*SummaryInd$leaf_size_mean
+SummaryInd$RA2 <- SummaryInd$total_repro_inv/SummaryInd$TotalInv
 
 SummaryInd$RA_asin <- asin(sqrt(SummaryInd$RA))
 SummaryInd$prop_propagule_asin <- asin(sqrt(SummaryInd$prop_propagule))
+
+#mean stem, shoot diam for each species
+mean_value_spp <- SummaryInd %>%
+  group_by(species) %>%
+  summarise_each(funs(median), stem_area, diameter, d_end)
+names(mean_value_spp)<-c("species", "mean_stem_area_spp","mean_stem_diam_spp","mean_shoot_diam_spp")
+
+SummaryInd <- merge(SummaryInd,mean_value_spp, by=c("species"),all.x=TRUE)
+SummaryInd$scaled_growth_stem_diam <- SummaryInd$growth_stem_diam / SummaryInd$mean_stem_diam_spp
+SummaryInd$scaled_growth_shoot_diam <- SummaryInd$growth_shoot_diam / SummaryInd$mean_shoot_diam_spp
 
 #merge various data summaries into SummarySppAge dataframe
 SummarySppAge <- merge(LL_summary, LMA_summary, by=c("species","age"))

@@ -211,7 +211,7 @@ for(spp in names(data)) {
 mtext("Shoot diameter growth", 1, outer=TRUE,cex=1.2)
 mtext("RA", 2, outer=TRUE,cex=1.2)
 
-par(mfrow=c(1,2), cex=1, omi=c(.4,.,.1,.1), mai=c(1,1,.4,0.2)) 
+par(mfrow=c(2,2), cex=1, omi=c(.4,.,.1,.1), mai=c(1,1,.4,0.2)) 
 plot(RA~growth_shoot_diam,data=subset(SummaryInd,RA>0),log="xy", col=col.spp[as.factor(species)],pch=16)
 mod <- lm(log(growth_shoot_diam)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
 words.bottom.left.logxy(mod)
