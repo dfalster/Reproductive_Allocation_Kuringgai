@@ -144,7 +144,7 @@ words.bottom.right(mod)
 * the "per seed" variant greatly reduces the accessory costs of species that produce lots of seeds - and since species vary considerably in seed production it stratifies species more  
 * the "proportional" calculation essentially assumes total propagule investment (by weight) is equivalent, whether it is many small seeds or fewer big ones
 
-##4. Does increasing RA, Reproductive investment or relative height yield compounding returns in the form of higher seedset or increased propagule allocation?
+##4. Does increasing RA, reproductive investment or relative height yield compounding returns in the form of higher seedset or increased propagule allocation?
 
 ###for RA:
 * NO - seedset and relative propagule investment do not increase with increasing RA 
@@ -222,8 +222,8 @@ words.bottom.right.logy(mod)
 
 
 ###5. What influences the correlation between RA and plant size (or total reproductive investment)?
-  ***Don't trust anything until I know RA and ReproInv are correct, because PHPH and PUTU have huge influence on patterns
-```{r, echo=FALSE,message=FALSE,fig.width=12, fig.height=30}
+  ***Don't trust anything until I know RA and ReproInv are correct, because PHPH and PUTU have huge influence on patterns***
+```{r, echo=FALSE,message=FALSE,fig.width=12, fig.height=30,warning=FALSE}
 par(mfrow=c(5,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))  
 
 mod <- lm(log(RA)~log((propagule_inv)),data=subset(SummaryInd,RA>0&propagule_inv>0))
