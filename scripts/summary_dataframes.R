@@ -118,8 +118,8 @@ SummaryInd <- merge(SummaryInd, select(individuals, -species, -age), by="individ
 #SummaryInd <- merge(SummaryInd, select(harvest, -species, -age), by="individual",all.x=TRUE)
 
 #adding variables to look at change across years, RGR
-SummaryInd$growth_shoot_diam <- SummaryInd$d_end - SummaryInd$d_start
-SummaryInd$growth_shoot_area <- (3.14*((SummaryInd$d_end/2)^2)) - (3.14*((SummaryInd$d_start/2)^2))
+SummaryInd$growth_shoot_diam <- (SummaryInd$d_end - SummaryInd$d_start)/100
+SummaryInd$growth_shoot_area <- (3.14*((SummaryInd$d_end/200)^2)) - (3.14*((SummaryInd$d_start/200)^2))
 SummaryInd$lvs_end_total <- SummaryInd$lvs_end + SummaryInd$lvs_new
 SummaryInd$RGR <- log(SummaryInd$total_weight)-log(SummaryInd$total_weight-SummaryInd$GrowthInv)
 SummaryInd$RGR_leaf <- log(SummaryInd$leaf_weight)-log(SummaryInd$leaf_weight-SummaryInd$growth_leaf)
@@ -289,6 +289,7 @@ SummaryInd$leaf_area_growth <- SummaryInd$growth_leaf / (1000*SummaryInd$LMA_mea
 SummaryInd$shoot_leaf_area <- SummaryInd$lvs_end_total*SummaryInd$leaf_size_mean
 SummaryInd$shoot_leaf_area_growth <- SummaryInd$lvs_new*SummaryInd$leaf_size_mean
 SummaryInd$RA2 <- SummaryInd$total_repro_inv/SummaryInd$TotalInv
+SummaryInd$reproducing <- SummaryInd$RA>0
 
 SummaryInd$RA_asin <- asin(sqrt(SummaryInd$RA))
 SummaryInd$prop_propagule_asin <- asin(sqrt(SummaryInd$prop_propagule))
@@ -550,3 +551,6 @@ col.lots <- c("red", "darkolivegreen4", "blue", "purple", "grey", "light green",
               "dodgerblue","darkcyan","brown2","bisque4","blue4","cadetblue","darkseagreen","darkslateblue","firebrick4","red", "darkolivegreen4", "blue", "purple", "grey", "light green","gold1","cyan2","black", "chocolate1","light blue","brown","deep pink","orchid1",
               "dodgerblue","darkcyan","brown2","bisque4","blue4","cadetblue","darkseagreen","darkslateblue","firebrick4","red", "darkolivegreen4", "blue", "purple", "grey", "light green","gold1","cyan2","black", "chocolate1","light blue","brown","deep pink","orchid1",
               "dodgerblue","darkcyan","brown2","bisque4","blue4","cadetblue","darkseagreen","darkslateblue","firebrick4")
+col.mature <- c("cyan3","red")
+labels.mature <- c("juvenile","mature")
+names(labels.mature) <- c("juvenile","mature")
