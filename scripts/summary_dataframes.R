@@ -12,12 +12,6 @@ seedsize <- seedSize_raw %>%
 individuals <- IndividualsList %>%
   select(individual,species, age, mature)
 
-axis_labels <- read_csv("data/axis_labels.csv")
-
-#harvest <- filter(HarvestData,
-#                  individuals$use_for_allocation_calculations[match(HarvestData$individual, individuals$individual)] & segment==1 & start_end=="end") %>%
-#  select(species,individual,age,leaf_weight,stem_weight, total_weight,height,site)
-
 investment <- ReproductionAllocation_all
 
 names(investment) <-  c("individual","ReproInv","species","site","age","height","diameter","stem_area","leaf_weight","stem_weight","total_weight","GrowthInv","growth_stem","growth_leaf","growth_height","growth_stem_diam","growth_stem_area","TotalInv","RA")
@@ -26,15 +20,7 @@ investment$age <- round(investment$age, digits=1)
 
 accessory <- AccessoryCosts_all
 names(accessory) <- c("individual","species","age","prepollen_aborted_inv","prepollen_success_inv","postpollen_aborted_inv","packaging_dispersal_inv","propagule_inv","total_repro_inv")
-#accessory$age2 <- accessory$age
-#accessory$age <- round(accessory$age, digits=1)
 
-#accessory$PerAccessory <- {
-#  select(accessory, Total >0,
-#  1 - (accessory$propagule_inv/accessory$Total)
-#}
-
-#accessory$PerPropagule = 1 - accessory$PerAccessory
 
 leafLifespan <- filter(leafLifespan_raw, dont_use!="dead" & dont_use!="dont_use") %>%
   select(species,age,individual,d_start,d_end,length_start,new_length,lvs_start_length,lvs_start_count,lvs_end_length,lvs_end_count,lvs_new_length,lvs_new_count,new_but_shed_count,mm_lvs_spec,count_lvs_spec)
@@ -520,37 +506,3 @@ per_seed <- SummaryInd %>%
 
 SummarySpp <- merge(SummarySpp, count_spp, by="species",all.x=TRUE)
 SummarySpp <- merge(SummarySpp, per_seed, by="species",all.x=TRUE)
-
-
-SummaryIndPCA <- SummaryInd %>%
-  select(height,maxH_spp,WD_mean,LMA_mean,seedset,RA,seed_size,growth_leaf,propagule_inv,prepollen_all_inv,RGR,leaf_area, seed_count)
-  
-  seedsize <- seedSize_raw %>%
-  select(species,seed_size)
-
-#plotting and stats
-#creating lists of information for plotting symbols, colors, labels
-pch.spp <- c(0,1,2,15,16,17,18,0,1,2,15,16,17,18)
-col.spp <- c("red", "darkolivegreen4", "blue", "purple", "grey", "light green","gold1","cyan2","black", "chocolate1","light blue","brown","deep pink","orchid1")
-col.age <-c("orchid1","gold1","darkolivegreen3","cyan2","dodgerblue","purple")
-pch.age <- c(1,1,16,16,16,16)
-labels.spp <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris micraphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia","Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile puchella", "Phyllota phyllicoides", "Pimelea linifolia", "Pultanaea tuberculata")
-names(labels.spp) <- c("BAER","BOLE","COER","EPMI","GRBU","GRSP","HATE","HEPU","LEES","PELA","PEPU","PHPH","PILI","PUTU")
-labels.age <- c("1.4","2.4","5","7","9","32")
-names(labels.age) <- c("1.4","2.4","5","7","9","32")
-labels.age2 <- c("2.4","5","7","9","32")
-col.age2 <-c("gold1","darkolivegreen3","cyan2","dodgerblue","purple")
-labels.age3 <- c("5","7","9","32")
-col.age3 <-c("darkolivegreen3","cyan2","dodgerblue","purple")
-labels.spp.noHATE <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris micraphylla", "Grevillea buxifolia","Grevillea speciosa","Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile puchella", "Phyllota phyllicoides", "Pimelea linifolia", "Pultanaea tuberculata")
-names(labels.spp.noHATE) <- c("BAER","BOLE","COER","EPMI","GRBU","GRSP","HEPU","LEES","PELA","PEPU","PHPH","PILI","PUTU")
-col.spp.noHATE <- c("red", "darkolivegreen4", "blue", "purple", "grey", "light green","cyan2","black", "chocolate1","light blue","brown","deep pink","orchid1")
-col.LMA <-c("orchid1","gold1","darkolivegreen3","cyan2","dodgerblue","purple","red")
-labels.LMA <-c("age 1.4", "age 2.4", "age 5", "age 7", "age 9", "age 32", "HATE")
-col.lots <- c("red", "darkolivegreen4", "blue", "purple", "grey", "light green","gold1","cyan2","black", "chocolate1","light blue","brown","deep pink","orchid1",
-              "dodgerblue","darkcyan","brown2","bisque4","blue4","cadetblue","darkseagreen","darkslateblue","firebrick4","red", "darkolivegreen4", "blue", "purple", "grey", "light green","gold1","cyan2","black", "chocolate1","light blue","brown","deep pink","orchid1",
-              "dodgerblue","darkcyan","brown2","bisque4","blue4","cadetblue","darkseagreen","darkslateblue","firebrick4","red", "darkolivegreen4", "blue", "purple", "grey", "light green","gold1","cyan2","black", "chocolate1","light blue","brown","deep pink","orchid1",
-              "dodgerblue","darkcyan","brown2","bisque4","blue4","cadetblue","darkseagreen","darkslateblue","firebrick4")
-col.mature <- c("cyan3","red")
-labels.mature <- c("juvenile","mature")
-names(labels.mature) <- c("juvenile","mature")
