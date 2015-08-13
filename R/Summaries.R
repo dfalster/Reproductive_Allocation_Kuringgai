@@ -41,7 +41,7 @@ process_seed_costs <- function(seedSize_raw, PartsSummary_all) {
   seedsize
 }
 
-porcess_LMA <- function(LMA_raw) {
+process_LMA <- function(LMA_raw) {
   LMA <- filter(LMA_raw, species!="" & species!=" ") %>%
     select(species, age, LMA, branch_age, leaf_number, leaf_area)
   LMA$leaf_size <- LMA$leaf_area/LMA$leaf_number

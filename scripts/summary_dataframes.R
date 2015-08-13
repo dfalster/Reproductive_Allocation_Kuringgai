@@ -1,7 +1,4 @@
 # load packages and "open" dataframes to use
-LMA <- filter(LMA_raw, species!="" & species!=" ") %>%
-  select(species,age,LMA,branch_age,leaf_number,leaf_area)
-LMA$leaf_size <- LMA$leaf_area/LMA$leaf_number
 
 wood <- filter(woodDensity_raw, use=="use") %>%
   select(species,density)
