@@ -4202,9 +4202,9 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 2340,PEPU,,8-Feb-13,42,,,,bud_big,6,,,,,used,30.3,,5.05,,,,,,
 5070,PEPU,Waratah2003,12-Apr-13,62,PEPU_803,,not_used,bud_mid,3,,,,,category_not_used,8.3,,2.77,2013 cone,,,,,
 5927,PEPU,Basin2005,14-May-13,83,PEPU_007,,not_used,cone_aborted,1,,,32,11.5,used,1100.3,,1100.3,2012 cone; cone aborted; no fruit expanded at all,,,,,1058
-3630,PEPU,Waratah2003,12-Apr-13,52,PEPU_802,14,used,cone_aborted,1,,,35,10,used,838.1,,838.1,,,,,,875
-3628,PEPU,Waratah2003,12-Apr-13,50,PEPU_807,14,used,cone_aborted,1,,,13,8,used,121.5,,121.5,2013 cone,,,,,208
-3629,PEPU,Waratah2003,12-Apr-13,51,PEPU_807,15,used,cone_aborted,1,,,13,8,used,158.2,,158.2,2013 cone,,,,,208
+3630,PEPU,Waratah2003,12-Apr-13,52,PEPU_802,14,used,cone_aborted,1,,,35,,used,838.1,,838.1,,,,,,875
+3628,PEPU,Waratah2003,12-Apr-13,50,PEPU_807,15,used,cone_aborted,1,,,15,,used,121.5,,121.5,2013 cone,,,,,208
+3629,PEPU,Waratah2003,12-Apr-13,51,PEPU_807,15,used,cone_aborted,1,,,15,,used,158.2,,158.2,2013 cone,,,,,208
 5680,PEPU,Basin2005,10-May-13,77,PEPU_003,,not_used,cone_brown,1,,,24,13.5,used,1117.8,,1117.8,2012 cone,,,,,
 5716,PEPU,Basin2005,10-May-13,78,PEPU_003,17,not_used,cone_brown,1,,,34.4,14.3,mean_used,2387.3,,2387.3,2013 cone,,,,,
 5829,PEPU,Basin2005,10-May-13,80,PEPU_004,,not_used,cone_brown,1,,,24.2,12.2,used,1338,,1338,2012 cone,,,,,

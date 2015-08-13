@@ -89,8 +89,15 @@ WeightFromRegression <- function(height, diameter, species, part, individual, ce
   }
   w <- NA
 
-  I <- (IBW$individual == individual) & (IBW$part == part) & (IBW$census_to_use == census) & (IBW$dimension_height == height) & ((IBW$dimension_diameter == diameter) |
-    (is.na(IBW$dimension_diameter) & (is.na(diameter))))
+  I <- (IBW$individual == individual) &
+       (IBW$part == part) & 
+       (IBW$census_to_use == census) & 
+       (IBW$dimension_height == height) & 
+       (
+        (is.na(IBW$dimension_diameter) & (is.na(diameter))) |
+        (IBW$dimension_diameter == diameter)
+       )
+
   n_i <- sum(I)
   if (n_i == 1) {
     w <- IBW[I, "av_weights"]
@@ -108,7 +115,7 @@ WeightFromRegression <- function(height, diameter, species, part, individual, ce
 }
 
 
-# Function that for given Census contruct the list that contains the information about the weight of each part
+# Function that for given Census construct the list that contains the information about the weight of each part
 
 WeightCalculationsAtCensus <- function(C, TreeID, census, FloweringCategories, PartsSummary) {
 
@@ -223,7 +230,7 @@ WeightCalculationsAtCensus <- function(C, TreeID, census, FloweringCategories, P
 
   # Checking if we need to merge the results
   if (sum(duplicated(unlist(sapply(C_list, function(x) x[1])))) > 0) {
-    # there are duplicates from different measurment methods and we need to join them together.
+    # there are duplicates from different measurement methods and we need to join them together.
     C_list <- RemoveDuplicates(C_list)
   }
   C_list

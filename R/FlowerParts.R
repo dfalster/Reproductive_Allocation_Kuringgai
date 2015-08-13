@@ -87,11 +87,10 @@ make_RegressionTable <- function(FPSummary) {
     c("PEPU","cone_young",            1, "averageWeight"),
     c("PEPU","cone_green",            1,"volume"),
     c("PEPU","cone_brown",            1, "volume"),
-    c("PEPU","cone_aborted",          1, "volume")), stringsAsFactors=FALSE)
+    c("PEPU","cone_aborted",          1, "height_noIntercept")), stringsAsFactors=FALSE)
   names(regToFit) <- c("species", "part", "reg.order", "reg.type")
   regToFit$reg.order <- as.numeric(regToFit$reg.order)
   regToFit <- filter(regToFit, species %in% unique(FPSummary$species))
-
   FPSummary <- filter(FPSummary, category_use == "used")
   ddply(regToFit, c("species","part", "reg.type", "reg.order"),
     function(x) fit_regression(filter(FPSummary, part==x$part, species == x$species), x$reg.order, x$reg.type)
@@ -193,7 +192,6 @@ make_IndividualBasedWeights <- function(FPSummary) {
   IndividualBasedWeights[IndividualBasedWeights == 0] <- NA
   IndividualBasedWeights["av_weights"] <- IndividualBasedWeights$weight/IndividualBasedWeights$count
   IndividualBasedWeights
-
 }
 
 

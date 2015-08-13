@@ -250,7 +250,6 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
   }
   Investments <- Investments[complete.cases(Investments), ]
 
-
   # Aggregate and order the result
   ErrList <- ErrList[complete.cases(ErrList), ]
   if (nrow(ErrList) > 0) {
