@@ -10,26 +10,6 @@ investment$age <- round(investment$age, digits=1)
 
 accessory <- AccessoryCosts_all
 
-#calculating percentages of various accessory tissues
-
-accessory$accessory_inv <- accessory$total_repro_inv - accessory$propagule_inv
-accessory$prepollen_all_inv <- accessory$prepollen_aborted_inv + accessory$prepollen_success_inv
-
-accessory$prop_prepollen_aborted <- accessory$prepollen_aborted_inv / accessory$total_repro_inv
-accessory$prop_prepollen_success <- accessory$prepollen_success_inv / accessory$total_repro_inv
-accessory$prop_postpollen_aborted <- accessory$postpollen_aborted_inv / accessory$total_repro_inv
-accessory$prop_packaging_dispersal <- accessory$packaging_dispersal_inv / accessory$total_repro_inv
-accessory$prop_propagule <- accessory$propagule_inv / accessory$total_repro_inv
-accessory$prop_accessory <- 1- accessory$prop_propagule
-
-
-accessory$prop_prepollen_aborted[which(is.nan(accessory$prop_prepollen_aborted))] <- NA
-accessory$prop_prepollen_success[which(is.nan(accessory$prop_prepollen_success))] <- NA
-accessory$prop_postpollen_aborted[which(is.nan(accessory$prop_postpollen_aborted))] <- NA
-accessory$prop_packaging_dispersal[which(is.nan(accessory$prop_packaging_dispersal))] <- NA
-accessory$prop_propagule[which(is.nan(accessory$prop_propagule))] <- NA
-accessory$prop_accessory[which(is.nan(accessory$prop_accessory))] <- NA
-
 #adding investment and accessory costs data to leafLifespan dataframe to create a dataframe with all individual level data
 SummaryInd <- merge(investment, select(leafLifespan, -species, -age), by="individual",all.x=TRUE)
 SummaryInd <- merge(SummaryInd, select(accessory, -species, -age), by="individual",all.x=TRUE)

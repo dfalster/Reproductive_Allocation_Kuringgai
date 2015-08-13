@@ -12,7 +12,29 @@ AccessoryCosts <- function(species, IndividualsList, InvestmentCategories, speci
   # TODO: This is temp fix to remove some NAs in prepollen_success_inv. 
   # Figure out why these are needed
   InvDist$prepollen_success_inv[which(is.na(InvDist$prepollen_success_inv))] <- 0
-  merge(AgeData, InvDist, by="individual")
+
+# TODO: Lizzy - is this next line needed? causes errors
+#  InvDist$Total= (InvDist$prepollen_aborted_inv + InvDist$prepollen_success_inv + InvDist$postpollen_aborted_inv + InvDist$PD + InvDist$Prop)
+
+  accessory <- merge(AgeData, InvDist, by="individual")
+
+  #calculating percentages of various accessory tissues
+  accessory <- accessory %>%
+    mutate(accessory_inv = total_repro_inv - propagule_inv,
+        prepollen_all_inv = prepollen_aborted_inv + prepollen_success_inv,
+        prop_prepollen_aborted = prepollen_aborted_inv / total_repro_inv,
+        prop_prepollen_success = prepollen_success_inv / total_repro_inv,
+        prop_postpollen_aborted = postpollen_aborted_inv / total_repro_inv,
+        prop_packaging_dispersal = packaging_dispersal_inv / total_repro_inv,
+        prop_propagule = propagule_inv / total_repro_inv,
+        prop_accessory = 1 - prop_propagule
+        )
+
+  for(v in c("prop_prepollen_aborted", "prop_prepollen_success", "prop_postpollen_aborted",
+        "prop_packaging_dispersal", "prop_propagule", "prop_accessory")) {
+      accessory[[v]][which(is.nan(accessory[[v]]))] <- NA
+  }
+  accessory
 }
 
 
