@@ -83,8 +83,10 @@ targets:
   woodDensity_raw:
     command: read_csv("data/woodDensity.csv")
 
-  seedSize_raw:
-    command: read_csv("data/seedsize.csv")
+  seedsize:
+    command:
+      - read_csv("data/seedsize.csv")
+      - process_seed_costs(., PartsSummary_all)
 
   leafLifespan_raw:
     command: read_csv("data/leaderGrowthLL.csv")

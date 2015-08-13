@@ -105,13 +105,11 @@ DeriveMissingParts <- function(data) {
 
   ####### COER #########
   nr <- which(data[["part"]] == "flower_stigma" && data[["species"]] ==  "COER")
-  data[nr, "n"] <- NA
   data[nr, "weight"] <- data[data$part == "flower_all_parts", 4] - data[data$part == "flower_petals", 4]
   data <- data[!data$part == "flower_all_parts", ]
 
   ####### PILI #########
   nr <- which(data[["part"]] == "flower_stigma" && data[["species"]] == "PILI")
-  data[nr, "n"] <- NA
   data[nr, "weight"] <- data[data$part == "fruit_young", 4] * 0.1
 
   data
@@ -144,7 +142,7 @@ make_AvWeightPerUnit <- function(FPSummary, PartList) {
         count[i] <- NA
       }
     }
-  out <- data.frame(species = species.name, part = PartList, n = n, count = count, weight = weight, stringsAsFactors = FALSE)
+  out <- data.frame(species = species.name, part = PartList, weight = weight, stringsAsFactors = FALSE)
 
   # Add additional parts which are derivative of the existing measurments
  DeriveMissingParts(out)
@@ -184,3 +182,4 @@ combine_ReproductionAllocation <- function(..., d=list(...), IndividualsList) {
       stop("problem with individuals list")
     ret
  }
+

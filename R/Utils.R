@@ -22,3 +22,7 @@ con95 <- function(x){
 combine_data_frames <- function(..., d=list(...)) {
    ldply(d, function(x) x)
  }
+
+combine_list_elements <- function(..., d=list(...), element) {
+   ldply(d, function(x) x[[element]])
+ }

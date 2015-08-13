@@ -8,9 +8,8 @@ targets:
       - AccessoryCosts_all
       - LMA_raw
       - woodDensity_raw
-      - seedSize_raw
+      - seedsize
       - HarvestData
-      - IndividualsList
       - leafLifespan_raw
       - leavesPerLength_raw
       - BAER_IndividualsList
@@ -161,7 +160,7 @@ targets:
       - AccessoryCosts_all
       - LMA_raw
       - woodDensity_raw
-      - seedSize_raw
+      - seedsize
       - HarvestData
       - leafLifespan_raw
       - BAER_IndividualsList
@@ -805,3 +804,22 @@ targets:
         PILI_AccessoryCosts,
         PUTU_AccessoryCosts,
         NULL)
+
+  PartsSummary_all:
+    command: >
+      combine_list_elements(
+        BAER_PartsSummary,
+        BOLE_PartsSummary,
+        COER_PartsSummary,
+        EPMI_PartsSummary,
+        GRBU_PartsSummary,
+        GRSP_PartsSummary,
+        HATE_PartsSummary,
+        HEPU_PartsSummary,
+        LEES_PartsSummary,
+        PELA_PartsSummary,
+        PEPU_PartsSummary,
+        PHPH_PartsSummary,
+        PILI_PartsSummary,
+        PUTU_PartsSummary,
+      element=I("AvWeightPerUnit"))
