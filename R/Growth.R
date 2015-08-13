@@ -44,8 +44,8 @@ preprocessHarvest <- function(HarvestData_raw, IndividualsList) {
       group_by(individual) %>%
       summarise(
         segment = level,
-        dia = mean(c(diameter_1, diameter_2, diameter_3), na.rm = TRUE),
-        stem.area = dia^2 * pi/4,
+        diameter = mean(c(diameter_1, diameter_2, diameter_3), na.rm = TRUE),
+        stem_area = diameter^2 * pi/4,
         height = height)
   }
 

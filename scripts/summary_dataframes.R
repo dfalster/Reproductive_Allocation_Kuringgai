@@ -13,14 +13,9 @@ individuals <- IndividualsList %>%
   select(individual,species, age, mature)
 
 investment <- ReproductionAllocation_all
-
-names(investment) <-  c("individual","ReproInv","species","site","age","height","diameter","stem_area","leaf_weight","stem_weight","total_weight","GrowthInv","growth_stem","growth_leaf","growth_height","growth_stem_diam","growth_stem_area","TotalInv","RA")
-
 investment$age <- round(investment$age, digits=1)
 
 accessory <- AccessoryCosts_all
-names(accessory) <- c("individual","species","age","prepollen_aborted_inv","prepollen_success_inv","postpollen_aborted_inv","packaging_dispersal_inv","propagule_inv","total_repro_inv")
-
 
 leafLifespan <- filter(leafLifespan_raw, dont_use!="dead" & dont_use!="dont_use") %>%
   select(species,age,individual,d_start,d_end,length_start,new_length,lvs_start_length,lvs_start_count,lvs_end_length,lvs_end_count,lvs_new_length,lvs_new_count,new_but_shed_count,mm_lvs_spec,count_lvs_spec)

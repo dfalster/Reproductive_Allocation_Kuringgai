@@ -22,12 +22,12 @@ RA_Calculations <- function(thisSpecies, Species_Investment, HarvestData, Maps, 
       intercept_stem = log(stem_weight) - slope_stem * log(dia))
 
 
-  predict_total_weight <- function(dia, thisindividual) {
+  predict_total_weight <- function(diameter, thisindividual) {
     x <- HarvestData_basal_end %>% filter(individual==thisindividual)
     exp(x$intercept_total + x$slope_total * log(dia))
   }
 
-  predict_stem_weight <- function(dia, thisindividual) {
+  predict_stem_weight <- function(diameter, thisindividual) {
     x <- HarvestData_basal_end %>% filter(individual==thisindividual)
     exp(x$intercept_stem + x$slope_stem * log(dia))
   }
@@ -35,9 +35,9 @@ RA_Calculations <- function(thisSpecies, Species_Investment, HarvestData, Maps, 
   ## Estimate weight at beginning and end  (year 2012 and 2013) using fitted regression
   GrowthEst <- HarvestData_basal %>%
     group_by(individual) %>%
-    mutate(total_weight_est =  predict_total_weight(dia, individual[1]),
+    mutate(total_weight_est =  predict_total_weight(diameter, individual[1]),
            GrowthInv = c(NA, diff(total_weight_est)),
-           stem_weight_est = predict_stem_weight(dia, individual[1]),
+           stem_weight_est = predict_stem_weight(diameter, individual[1]),
            growth_stem = c(NA, diff(stem_weight_est)),
            growth_leaf =  GrowthInv - growth_stem,
            growth_height = c(NA, diff(height)),
@@ -45,7 +45,7 @@ RA_Calculations <- function(thisSpecies, Species_Investment, HarvestData, Maps, 
            growth_stem_area = c(NA, diff(stem.area))
            ) %>%
     filter(start_end == "end") %>%
-    select(species, site, individual, age, height, dia, stem.area, leaf_weight, stem_weight, total_weight, GrowthInv, growth_stem, growth_leaf, growth_height, growth_stem_diam, growth_stem_area)
+    select(species, site, individual, age, height, diameter, stem.area, leaf_weight, stem_weight, total_weight, GrowthInv, growth_stem, growth_leaf, growth_height, growth_stem_diam, growth_stem_area)
 
     # Use saved data to calculate total reproduction investment per individual plant
     ReproTotal <- Species_Investment$Investment %>%
@@ -61,6 +61,6 @@ RA_Calculations <- function(thisSpecies, Species_Investment, HarvestData, Maps, 
 
   InvestmentSummary %>%
     mutate(
-      TotalInvestment = ReproInv + GrowthInv,
-      RA = ReproInv/TotalInvestment)
+      TotalInv = ReproInv + GrowthInv,
+      RA = ReproInv/TotalInv)
 }
