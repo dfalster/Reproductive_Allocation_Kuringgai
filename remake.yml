@@ -90,11 +90,15 @@ targets:
       - read_csv("data/seedsize.csv")
       - process_seed_costs(., PartsSummary_all)
 
-  leafLifespan_raw:
-    command: read_csv("data/leaderGrowthLL.csv")
+  leavesPerLength:
+    command: 
+      - read_csv("data/leaves_per_length.csv")
+      - process_leaves_per_length(.)
 
-  leavesPerLength_raw:
-    command: read_csv("data/leaves_per_length.csv")
+  leafLifespan:
+    command: 
+      - read_csv("data/leaderGrowthLL.csv")
+      - process_leaf_lifespan(., leavesPerLength)
 
   figures:
     depends:

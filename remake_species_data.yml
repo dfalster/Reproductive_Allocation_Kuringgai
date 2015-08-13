@@ -10,8 +10,8 @@ targets:
       - woodDensity_raw
       - seedsize
       - HarvestData
-      - leafLifespan_raw
-      - leavesPerLength_raw
+      - leafLifespan
+      - leavesPerLength
       - BAER_IndividualsList
       - BAER_FlowerPartsData
       - BAER_ReproductionData
@@ -162,7 +162,7 @@ targets:
       - woodDensity_raw
       - seedsize
       - HarvestData
-      - leafLifespan_raw
+      - leafLifespan
       - BAER_IndividualsList
       - BAER_FlowerPartsData
       - BAER_ReproductionData
