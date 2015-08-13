@@ -33,43 +33,43 @@ InvestmentInAccessoryTissues <- function(individual, species, InvestmentCategori
   ############### * Prepolination_abort *
   PreP_A_parts <- IC[IC[, 2] == "prepollination_abort", 1]
   # check if any of the parts can be found in the data for this individual
-  PreP_A_parts <- PreP_A_parts[PreP_A_parts %in% Lost$what]
+  PreP_A_parts <- PreP_A_parts[PreP_A_parts %in% Lost$part]
   prepollen_aborted_inv <- 0
   if (length(PreP_A_parts) > 0) {
-    prepollen_aborted_inv <- sum(as.numeric(Lost[(Lost$what %in% PreP_A_parts), ]$weight))
+    prepollen_aborted_inv <- sum(as.numeric(Lost[(Lost$part %in% PreP_A_parts), ]$weight))
   }
   ############### * Prepolination_success *
   PreP_S_parts <- IC[IC[, 2] == "prepollination_success", 1]
   # check if any of the parts can be found in the data for this individual
-  PreP_S_parts <- PreP_S_parts[PreP_S_parts %in% Lost$what]
+  PreP_S_parts <- PreP_S_parts[PreP_S_parts %in% Lost$part]
   prepollen_success_inv <- 0
   if (length(PreP_A_parts) > 0) {
-    prepollen_success_inv <- sum(as.numeric(Lost[(Lost$what %in% PreP_S_parts), ]$weight))
+    prepollen_success_inv <- sum(as.numeric(Lost[(Lost$part %in% PreP_S_parts), ]$weight))
   }
   ############### * Postpollination_abort *
   PostP_A_parts <- IC[IC[, 2] == "postpollination_abort", 1]
   # check if any of the parts can be found in the data for this individual
-  PostP_A_parts <- PostP_A_parts[PostP_A_parts %in% Lost$what]
+  PostP_A_parts <- PostP_A_parts[PostP_A_parts %in% Lost$part]
   postpollen_aborted_inv <- 0
   if (length(PostP_A_parts) > 0) {
-    postpollen_aborted_inv <- sum(as.numeric(Lost[(Lost$what %in% PostP_A_parts), ]$weight))
+    postpollen_aborted_inv <- sum(as.numeric(Lost[(Lost$part %in% PostP_A_parts), ]$weight))
   }
 
   ############### * Packaging Dispersal *
   PD_parts <- IC[IC[, 2] == "packaging_dispersal", 1]
   # check if any of the parts can be found in the data for this individual
-  PD_parts <- PD_parts[PD_parts %in% Lost$what]
+  PD_parts <- PD_parts[PD_parts %in% Lost$part]
   packaging_dispersal_inv <- 0
   if (length(PD_parts) > 0) {
-    packaging_dispersal_inv <- sum(as.numeric(Lost[(Lost$what %in% PD_parts), ]$weight))
+    packaging_dispersal_inv <- sum(as.numeric(Lost[(Lost$part %in% PD_parts), ]$weight))
   }
   ############### * Propagule *
   PROP_parts <- IC[IC[, 2] == "propagule", 1]
   # check if any of the parts can be found in the data for this individual
-  PROP_parts <- PROP_parts[PROP_parts %in% Lost$what]
+  PROP_parts <- PROP_parts[PROP_parts %in% Lost$part]
   propagule_inv <- 0
   if (length(PROP_parts) > 0) {
-    propagule_inv <- sum(as.numeric(Lost[(Lost$what %in% PROP_parts), ]$weight))
+    propagule_inv <- sum(as.numeric(Lost[(Lost$part %in% PROP_parts), ]$weight))
   }
   total_repro_inv <- prepollen_aborted_inv + prepollen_success_inv + postpollen_aborted_inv + packaging_dispersal_inv + propagule_inv
   data.frame(individual = individual, 

@@ -81,10 +81,10 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
   species <- substr(TreeListOrig[[1]], 1, 4)
   # Initialize the variables
   ErrList <- data.frame(Element = NA, Census = NA, Count = NA)
-  Lost <- data.frame(what = c(), Census = c(), count = c(), weight = c())
-  FinishedDevelopement <- data.frame(what = c(), Census = c(), count = c(), weight = c())
+  Lost <- data.frame(part = c(), Census = c(), count = c(), weight = c())
+  FinishedDevelopement <- data.frame(part = c(), Census = c(), count = c(), weight = c())
   if ((length(sapply(TreeListOrig[[last.census]]$total, function(x) x$type) > 0))) {
-    FinishedDevelopement <- rbind(FinishedDevelopement, data.frame(what = sapply(TreeListOrig[[last.census]]$total, function(x) x$type), Census = rep(n.censuses,
+    FinishedDevelopement <- rbind(FinishedDevelopement, data.frame(part = sapply(TreeListOrig[[last.census]]$total, function(x) x$type), Census = rep(n.censuses,
       length(sapply(TreeListOrig[[last.census]]$total, function(x) x$type))), count = sapply(TreeListOrig[[last.census]]$total, function(x) x$count), weight = sapply(TreeListOrig[[last.census]]$total,
       function(x) sum(x$weight))))
   }
@@ -102,8 +102,8 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
   Paths <- GraphMaps$Paths
   # For each of the paths
   for (a in seq_len(n.paths)) {
-    L <- data.frame(what = c(), Census = c(), count = c(), weight = c())
-    FD <- data.frame(what = c(), Census = c(), count = c(), weight = c())
+    L <- data.frame(part = c(), Census = c(), count = c(), weight = c())
+    FD <- data.frame(part = c(), Census = c(), count = c(), weight = c())
     # Determine beginning and end of the path.
     BE <- (GraphMaps$Paths[a, ])
     # Read in plant graph
@@ -149,7 +149,7 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
           # Find the ones that are not the original value
           which.are.not.the.orig <- !(V(Plant.Graph)$name == Progression[j])
 
-          # The list of the XOR parts (mostly aborted fruits,seeds,a.s.o which should be taken into consideration when calculating what was lost. This parts are ancesstors
+          # The list of the XOR parts (mostly aborted fruits,seeds,a.s.o which should be taken into consideration when calculating part was lost. This parts are ancesstors
           # of the previous part as the one on the main axis is)
           XOR.Part <- V(Plant.Graph)[which.have.the.same.dist & which.have.the.same.col & which.are.not.the.orig]
           XOR.Part <- XOR.Part$name
@@ -170,7 +170,7 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
       # hence they are lost.
       if ((i > 2) & (i < n.censuses)) {
         if ((length(sapply(TreeList_Pred[[i - 1]]$total, function(x) x$type) > 0))) {
-          L <- rbind(L, data.frame(what = sapply(TreeList_Pred[[i - 1]]$total, function(x) x$type), Census = rep(i - 2, length(sapply(TreeList_Pred[[i -
+          L <- rbind(L, data.frame(part = sapply(TreeList_Pred[[i - 1]]$total, function(x) x$type), Census = rep(i - 2, length(sapply(TreeList_Pred[[i -
           1]]$total, function(x) x$type))), count = sapply(TreeList_Pred[[i - 1]]$total, function(x) x$count), weight = sapply(TreeList_Pred[[i - 1]]$total,
           function(x) sum(x$weight))))
         }
@@ -178,7 +178,7 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
 
       if (i > 2) {
         if ((length(sapply(TreeList_Pred[[i - 1]]$total, function(x) x$type) > 0))) {
-          FD <- rbind(FD, data.frame(what = sapply(TreeList_Pred[[i - 1]]$total, function(x) x$type), Census = rep(i - 2, length(sapply(TreeList_Pred[[i -
+          FD <- rbind(FD, data.frame(part = sapply(TreeList_Pred[[i - 1]]$total, function(x) x$type), Census = rep(i - 2, length(sapply(TreeList_Pred[[i -
           1]]$total, function(x) x$type))), count = sapply(TreeList_Pred[[i - 1]]$total, function(x) x$count), weight = sapply(TreeList_Pred[[i - 1]]$total,
           function(x) sum(x$weight))))
         }
@@ -186,9 +186,9 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
     }
 
     # Restrict loses to the line that you made your calculations on
-    Lost <- rbind(Lost, L[as.character(L$what) %in% V(Plant.Graph)$name[V(Plant.Graph)$col == get.vertex.attribute(Plant.Graph, "col", index = Progression[1])],
+    Lost <- rbind(Lost, L[as.character(L$part) %in% V(Plant.Graph)$name[V(Plant.Graph)$col == get.vertex.attribute(Plant.Graph, "col", index = Progression[1])],
       ])
-    FinishedDevelopement <- rbind(FinishedDevelopement, FD[as.character(FD$what) %in% V(Plant.Graph)$name[V(Plant.Graph)$col == get.vertex.attribute(Plant.Graph,
+    FinishedDevelopement <- rbind(FinishedDevelopement, FD[as.character(FD$part) %in% V(Plant.Graph)$name[V(Plant.Graph)$col == get.vertex.attribute(Plant.Graph,
       "col", index = Progression[1])], ])
 
     ################### Calculating cost of accesorries Check the color of main progression line
@@ -197,8 +197,8 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
     Acc.Finals <- V(Plant.Graph)[(V(Plant.Graph)$col == (Progression_color + 1)) & (degree(Plant.Graph) == 1)]$name
     # If there are accesories
       for (k in seq_len(length(Acc.Finals))) {
-        L <- data.frame(what = c(), Census = c(), count = c(), weight = c())
-        FD <- data.frame(what = c(), Census = c(), count = c(), weight = c())
+        L <- data.frame(part = c(), Census = c(), count = c(), weight = c())
+        FD <- data.frame(part = c(), Census = c(), count = c(), weight = c())
 
         Accessory <- Acc.Finals[k]
         # Reset the lists to the original ones.
@@ -227,14 +227,14 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
           # Calculate lost elements
           if ((i > 2) & (i < n.censuses)) {
             if ((length(sapply(TreeList_Acc[[i - 1]]$total, function(x) x$type) > 0))) {
-            L <- rbind(L, data.frame(what = sapply(TreeList_Acc[[i - 1]]$total, function(x) x$type), Census = rep(i - 2, length(sapply(TreeList_Acc[[i -
+            L <- rbind(L, data.frame(part = sapply(TreeList_Acc[[i - 1]]$total, function(x) x$type), Census = rep(i - 2, length(sapply(TreeList_Acc[[i -
               1]]$total, function(x) x$type))), count = sapply(TreeList_Acc[[i - 1]]$total, function(x) x$count), weight = sapply(TreeList_Acc[[i - 1]]$total,
               function(x) sum(x$weight))))
             }
           }
           if (i > 2) {
             if ((length(sapply(TreeList_Acc[[i - 1]]$total, function(x) x$type) > 0))) {
-            FD <- rbind(FD, data.frame(what = sapply(TreeList_Acc[[i - 1]]$total, function(x) x$type), Census = rep(i - 2, length(sapply(TreeList_Acc[[i -
+            FD <- rbind(FD, data.frame(part = sapply(TreeList_Acc[[i - 1]]$total, function(x) x$type), Census = rep(i - 2, length(sapply(TreeList_Acc[[i -
               1]]$total, function(x) x$type))), count = sapply(TreeList_Acc[[i - 1]]$total, function(x) x$count), weight = sapply(TreeList_Acc[[i - 1]]$total,
               function(x) sum(x$weight))))
             }
@@ -242,8 +242,8 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
           }
         }
         # Restrict loss calculations to the elements outside main progression line and only in the progression line of question (for k).
-        Lost <- rbind(Lost, L[as.character(L$what) %in% Progression_Not_on_Main, ])
-        FinishedDevelopement <- rbind(FinishedDevelopement, FD[as.character(FD$what) %in% Progression_Not_on_Main, ])
+        Lost <- rbind(Lost, L[as.character(L$part) %in% Progression_Not_on_Main, ])
+        FinishedDevelopement <- rbind(FinishedDevelopement, FD[as.character(FD$part) %in% Progression_Not_on_Main, ])
 
       }
 
@@ -272,7 +272,7 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
   NonAtomicPathsBeginning <- as.character(Paths[as.character(Paths[, 1]) != as.character(Paths[, 2]), 1])
   # Progressable parts are defined by union of the both
   Progressable <- c(LeavesOfGraph, NonAtomicPathsBeginning)
-  Lost <- Lost[Lost$what %in% Progressable, ]
+  Lost <- Lost[Lost$part %in% Progressable, ]
 
   if (nrow(Lost) > 0) {
     Lost <- Lost[order(Lost$Census), ]

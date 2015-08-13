@@ -103,28 +103,17 @@ make_RegressionTable <- function(FPSummary) {
 # existing weights It alse deletes from the list the elements that are used only for the derivation purposes only.
 DeriveMissingParts <- function(data) {
 
-  ####### EPMI #########
-  # nr=which(data[["part"]]=="flower_calyx" && data[["species"]] == "EPMI")
-  # data[nr, "n"]=NA
-  # data[nr, "av.weight"]=data[data$part=="flower_all_parts",4]-data[data$part=="flower_petals",4]
-  # data=data[!data$part=="flower_all_parts",]
-  ######################
-
   ####### COER #########
   nr <- which(data[["part"]] == "flower_stigma" && data[["species"]] ==  "COER")
   data[nr, "n"] <- NA
-  data[nr, "av.weight"] <- data[data$part == "flower_all_parts", 4] - data[data$part == "flower_petals", 4]
+  data[nr, "weight"] <- data[data$part == "flower_all_parts", 4] - data[data$part == "flower_petals", 4]
   data <- data[!data$part == "flower_all_parts", ]
 
   ####### PILI #########
   nr <- which(data[["part"]] == "flower_stigma" && data[["species"]] == "PILI")
   data[nr, "n"] <- NA
-  data[nr, "av.weight"] <- data[data$part == "fruit_young", 4] * 0.1
+  data[nr, "weight"] <- data[data$part == "fruit_young", 4] * 0.1
 
-  ####### HEPU #########
-  #nr=which(data[["part"]]=="fruit_aborted" && data[["species"]] == "HEPU")
-  #data[nr,3]=NA
-  #data[nr, "av.weight"]=data[data$part=="calyx_aborted_fruit",4]+data[data$part=="fruit_aborted",4]
   data
 }
 
@@ -137,7 +126,7 @@ make_AvWeightPerUnit <- function(FPSummary, PartList) {
   species.name <- FPSummary$species[1]
   Sp.Data <- FPSummary[FPSummary$category_use == "used", ]
 
-    av.weight <- n <- count <- c()
+    weight <- n <- count <- c()
     for (i in seq_len(length(PartList))) {
       I <- (Sp.Data$part == PartList[i])
       if (sum(I) > 0) {
@@ -146,26 +135,20 @@ make_AvWeightPerUnit <- function(FPSummary, PartList) {
         if (sum(!is.na(DataForPart$weight) & is.na(DataForPart$count)) > 0) {
           DataForPart[!is.na(DataForPart$weight) & is.na(DataForPart$count), ]$count <- 1
         }
-        av.weight[i] <- (sum(as.numeric(DataForPart$weight))/sum(DataForPart$count))
+        weight[i] <- (sum(as.numeric(DataForPart$weight))/sum(DataForPart$count))
         n[i] <- length(DataForPart$weight)
         count[i] <- sum(DataForPart$count)
       } else {
-        av.weight[i] <- NA
+        weight[i] <- NA
         n[i] <- NA
         count[i] <- NA
       }
     }
-  out <- data.frame(species = species.name, part = PartList, n = n, av.weight = av.weight, stringsAsFactors = FALSE)
+  out <- data.frame(species = species.name, part = PartList, n = n, count = count, weight = weight, stringsAsFactors = FALSE)
 
   # Add additional parts which are derivative of the existing measurments
  DeriveMissingParts(out)
 
-  # summarise.parts <- function(df){
-  #   index <- !is.na(df$weight)& is.na(df$count)& !is.na(df$length)
-  #   if(sum(index)>0) df$count[index] <- 1 # reset count for length.measurements. Why?
-  #   data.frame(n=length(df$weight), av.weight=sum(as.numeric(df$weight))/sum(df$count))
-  # }
-  # summary.all <- ddply(FPSummary, .(species, part), summarise.parts)
 }
 
 

@@ -108,34 +108,20 @@ SummaryInd$RGR_stem <- log(SummaryInd$stem_weight)-log(SummaryInd$stem_weight-Su
 SummaryInd$prop_prepollen_all <- SummaryInd$prop_prepollen_aborted + SummaryInd$prop_prepollen_success
 
 #adding info on all costs to produce 1 seed
-BAER_parts <- as.data.frame(BAER_PartsSummary[4])
-names(BAER_parts) <- c("species","what","count","weight")
-BOLE_parts <- as.data.frame(BOLE_PartsSummary[4])
-names(BOLE_parts) <- c("species","what","count","weight")
-COER_parts <- as.data.frame(COER_PartsSummary[4])
-names(COER_parts) <- c("species","what","count","weight")
-EPMI_parts <- as.data.frame(EPMI_PartsSummary[4])
-names(EPMI_parts) <- c("species","what","count","weight")
-GRBU_parts <- as.data.frame(GRBU_PartsSummary[4])
-names(GRBU_parts) <- c("species","what","count","weight")
-GRSP_parts <- as.data.frame(GRSP_PartsSummary[4])
-names(GRSP_parts) <- c("species","what","count","weight")
-HATE_parts <- as.data.frame(HATE_PartsSummary[4])
-names(HATE_parts) <- c("species","what","count","weight")
-HEPU_parts <- as.data.frame(HEPU_PartsSummary[4])
-names(HEPU_parts) <- c("species","what","count","weight")
-LEES_parts <- as.data.frame(LEES_PartsSummary[4])
-names(LEES_parts) <- c("species","what","count","weight")
-PELA_parts <- as.data.frame(PELA_PartsSummary[4])
-names(PELA_parts) <- c("species","what","count","weight")
-PEPU_parts <- as.data.frame(PEPU_PartsSummary[4])
-names(PEPU_parts) <- c("species","what","count","weight")
-PHPH_parts <- as.data.frame(PHPH_PartsSummary[4])
-names(PHPH_parts) <- c("species","what","count","weight")
-PILI_parts <- as.data.frame(PILI_PartsSummary[4])
-names(PILI_parts) <- c("species","what","count","weight")
-PUTU_parts <- as.data.frame(PUTU_PartsSummary[4])
-names(PUTU_parts) <- c("species","what","count","weight")
+BAER_parts <- BAER_PartsSummary[4]
+BOLE_parts <- BOLE_PartsSummary[4)
+COER_parts <- COER_PartsSummary[4]
+EPMI_parts <- EPMI_PartsSummary[4]
+GRBU_parts <- GRBU_PartsSummary[4]
+GRSP_parts <- GRSP_PartsSummary[4]
+HATE_parts <- HATE_PartsSummary[4]
+HEPU_parts <- HEPU_PartsSummary[4]
+LEES_parts <- LEES_PartsSummary[4]
+PELA_parts <- PELA_PartsSummary[4]
+PEPU_parts <- PEPU_PartsSummary[4]
+PHPH_parts <- PHPH_PartsSummary[4]
+PILI_parts <- PILI_PartsSummary[4]
+PUTU_parts <- PUTU_PartsSummary[4]
 
 seedcosts <- as.data.frame(c(1:14))
 seedcosts$species <- c("BAER","BOLE","COER","EPMI","GRBU","GRSP","HATE","HEPU","LEES","PELA","PEPU","PHPH","PILI","PUTU")
@@ -314,7 +300,7 @@ SummarySppAge$species <- as.factor(SummarySppAge$species)
 tmp <- BAER_Investment
 FD <- as.data.frame(tmp$FD)
 BAER_count <- FD %>%
-  group_by(individual, what) %>%
+  group_by(individual, part) %>%
   summarise_each(funs(sum), count, weight)
 BAER_count <- subset(BAER_count, count!=0)
 BAER_count$species <- "BAER"
@@ -322,7 +308,7 @@ BAER_count$species <- "BAER"
 tmp <- BOLE_Investment
 FD <- as.data.frame(tmp$FD)
 BOLE_count <- FD %>%
-  group_by(individual, what) %>%
+  group_by(individual, part) %>%
   summarise_each(funs(sum), count, weight)
 BOLE_count <- subset(BOLE_count, count!=0)
 BOLE_count$species <- "BOLE"
@@ -330,7 +316,7 @@ BOLE_count$species <- "BOLE"
 tmp <- COER_Investment
 FD <- as.data.frame(tmp$FD)
 COER_count <- FD %>%
-  group_by(individual, what) %>%
+  group_by(individual, part) %>%
   summarise_each(funs(sum), count, weight)
 COER_count <- subset(COER_count, count!=0)
 COER_count$species <- "COER"
@@ -338,7 +324,7 @@ COER_count$species <- "COER"
 tmp <- EPMI_Investment
 FD <- as.data.frame(tmp$FD)
 EPMI_count <- FD %>%
-  group_by(individual, what) %>%
+  group_by(individual, part) %>%
   summarise_each(funs(sum), count, weight)
 EPMI_count <- subset(EPMI_count, count!=0)
 EPMI_count$species <- "EPMI"
@@ -346,7 +332,7 @@ EPMI_count$species <- "EPMI"
 tmp <- GRBU_Investment
 FD <- as.data.frame(tmp$FD)
 GRBU_count <- FD %>%
-  group_by(individual, what) %>%
+  group_by(individual, part) %>%
   summarise_each(funs(sum), count, weight)
 GRBU_count <- subset(GRBU_count, count!=0)
 GRBU_count$species <- "GRBU"
@@ -354,7 +340,7 @@ GRBU_count$species <- "GRBU"
 tmp <- GRSP_Investment
 FD <- as.data.frame(tmp$FD)
 GRSP_count <- FD %>%
-  group_by(individual, what) %>%
+  group_by(individual, part) %>%
   summarise_each(funs(sum), count, weight)
 GRSP_count <- subset(GRSP_count, count!=0)
 GRSP_count$species <- "GRSP"
@@ -362,7 +348,7 @@ GRSP_count$species <- "GRSP"
 tmp <- HATE_Investment
 FD <- as.data.frame(tmp$FD)
 HATE_count <- FD %>%
-  group_by(individual, what) %>%
+  group_by(individual, part) %>%
   summarise_each(funs(sum), count, weight)
 HATE_count <- subset(HATE_count, count!=0)
 HATE_count$species <- "HATE"
@@ -370,7 +356,7 @@ HATE_count$species <- "HATE"
 tmp <- HEPU_Investment
 FD <- as.data.frame(tmp$FD)
 HEPU_count <- FD %>%
-  group_by(individual, what) %>%
+  group_by(individual, part) %>%
   summarise_each(funs(sum), count, weight)
 HEPU_count <- subset(HEPU_count, count!=0)
 HEPU_count$species <- "HEPU"
@@ -378,7 +364,7 @@ HEPU_count$species <- "HEPU"
 tmp <- LEES_Investment
 FD <- as.data.frame(tmp$FD)
 LEES_count <- FD %>%
-  group_by(individual, what) %>%
+  group_by(individual, part) %>%
   summarise_each(funs(sum), count, weight)
 LEES_count <- subset(LEES_count, count!=0)
 LEES_count$species <- "LEES"
@@ -386,7 +372,7 @@ LEES_count$species <- "LEES"
 tmp <- PELA_Investment
 FD <- as.data.frame(tmp$FD)
 PELA_count <- FD %>%
-  group_by(individual, what) %>%
+  group_by(individual, part) %>%
   summarise_each(funs(sum), count, weight)
 PELA_count <- subset(PELA_count, count!=0)
 PELA_count$species <- "PELA"
@@ -394,7 +380,7 @@ PELA_count$species <- "PELA"
 tmp <- PEPU_Investment
 FD <- as.data.frame(tmp$FD)
 PEPU_count <- FD %>%
-  group_by(individual, what) %>%
+  group_by(individual, part) %>%
   summarise_each(funs(sum), count, weight)
 PEPU_count <- subset(PEPU_count, count!=0)
 PEPU_count$species <- "PEPU"
@@ -402,7 +388,7 @@ PEPU_count$species <- "PEPU"
 tmp <- PHPH_Investment
 FD <- as.data.frame(tmp$FD)
 PHPH_count <- FD %>%
-  group_by(individual, what) %>%
+  group_by(individual, part) %>%
   summarise_each(funs(sum), count, weight)
 PHPH_count <- subset(PHPH_count, count!=0)
 PHPH_count$species <- "PHPH"
@@ -410,7 +396,7 @@ PHPH_count$species <- "PHPH"
 tmp <- PILI_Investment
 FD <- as.data.frame(tmp$FD)
 PILI_count <- FD %>%
-  group_by(individual, what) %>%
+  group_by(individual, part) %>%
   summarise_each(funs(sum), count, weight)
 PILI_count <- subset(PILI_count, count!=0)
 PILI_count$species <- "PILI"
@@ -418,43 +404,43 @@ PILI_count$species <- "PILI"
 tmp <- PUTU_Investment
 FD <- as.data.frame(tmp$FD)
 PUTU_count <- FD %>%
-  group_by(individual, what) %>%
+  group_by(individual, part) %>%
   summarise_each(funs(sum), count, weight)
 PUTU_count <- subset(PUTU_count, count!=0)
 PUTU_count$species <- "PUTU"
 
 accessory_count <- rbind(BAER_count,BOLE_count,COER_count,EPMI_count,GRBU_count,GRSP_count,HATE_count,HEPU_count,LEES_count,PELA_count,PEPU_count,PHPH_count,PILI_count,PUTU_count)
 
-count_flower <- subset(accessory_count, what=="flower_petals"|what=="flower_petals_small",select=c("individual","count"))
+count_flower <- subset(accessory_count, part=="flower_petals"|part=="flower_petals_small",select=c("individual","count"))
 names(count_flower) <- c("individual","flower_count")
 count_flower$individual <- as.factor(count_flower$individual)
 
-count_bud <- subset(accessory_count, what=="bud_tiny"|what=="bud_small"|what=="bud_mid"|what=="bud_large"|what=="flower_aborted_without_petals")
+count_bud <- subset(accessory_count, part=="bud_tiny"|part=="bud_small"|part=="bud_mid"|part=="bud_large"|part=="flower_aborted_without_petals")
 count_bud <- count_bud %>%
   group_by(individual) %>%
   summarise_each(funs(sum), count)
 names(count_bud) <- c("individual","bud_count")
 count_bud$individual <- as.factor(count_bud$individual)
 
-count_seed <- subset(accessory_count, what=="seed"|what=="fruit_mature")
+count_seed <- subset(accessory_count, part=="seed"|part=="fruit_mature")
 count_seed <- count_seed %>%
   group_by(individual) %>%
   summarise_each(funs(sum), count)
 names(count_seed) <- c("individual","seed_count")
 count_seed$individual <- as.factor(count_seed$individual)
 
-count_fruit_aborted <- subset(accessory_count, what=="fruit_just_starting"|what=="fruit_young"|what=="fruit_large_immature_01"|what=="fruit_large_immature_02"|what=="fruit_large_immature_03"|what=="fruit_large_immature_04"|what==" fruit_large_immature_05"|what==" fruit_large_immature_06"|what=="fruit_empty")
+count_fruit_aborted <- subset(accessory_count, part=="fruit_just_starting"|part=="fruit_young"|part=="fruit_large_immature_01"|part=="fruit_large_immature_02"|part=="fruit_large_immature_03"|part=="fruit_large_immature_04"|part==" fruit_large_immature_05"|part==" fruit_large_immature_06"|part=="fruit_empty")
 count_fruit_aborted <- count_fruit_aborted %>%
   group_by(individual) %>%
   summarise_each(funs(sum), count)
 names(count_fruit_aborted) <- c("individual","aborted_fruit_count")
 count_fruit_aborted$individual <- as.factor(count_fruit_aborted$individual)
 
-count_seed_pod <- subset(accessory_count, what=="seed_pod",select=c("individual","weight"))
+count_seed_pod <- subset(accessory_count, part=="seed_pod",select=c("individual","weight"))
 names(count_seed_pod) <- c("individual","seedpod_weight")
 count_seed_pod$individual <- as.factor(count_seed_pod$individual)
 
-count_fruit_mature <- subset(accessory_count, what=="fruit_mature",select=c("individual","weight"))
+count_fruit_mature <- subset(accessory_count, part=="fruit_mature",select=c("individual","weight"))
 names(count_fruit_mature) <- c("individual","fruit_weight")
 count_fruit_mature$individual <- as.factor(count_fruit_mature$individual)
 
