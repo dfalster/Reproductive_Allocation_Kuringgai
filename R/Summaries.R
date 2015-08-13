@@ -107,3 +107,13 @@ process_leaf_lifespan <- function(leafLifespan_raw, leavesPerLength) {
   leafLifespan$LL_bd[which(is.infinite(leafLifespan$LL_death))] <- NA
   leafLifespan$LL_birth[which(is.infinite(leafLifespan$LL_death))] <- NA
 }
+
+process_wood_density <- function(wood_density_spp) {
+  # wood density summary by species
+  wood <- filter(wood_density_spp, use=="use") %>%
+    select(species, density) %>%
+    group_by(species) %>%
+    summarise_each(funs(mean, se, length), density)
+  names(wood)<-c("species","WD_mean","WD_se","WD_length")
+  wood
+}

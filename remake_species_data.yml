@@ -7,7 +7,7 @@ targets:
       - ReproductionAllocation_all
       - AccessoryCosts_all
       - LMA
-      - woodDensity_raw
+      - wood_density_spp
       - seedsize
       - HarvestData
       - leafLifespan
@@ -159,7 +159,7 @@ targets:
       - ReproductionAllocation_all
       - AccessoryCosts_all
       - LMA
-      - woodDensity_raw
+      - wood_density_spp
       - seedsize
       - HarvestData
       - leafLifespan

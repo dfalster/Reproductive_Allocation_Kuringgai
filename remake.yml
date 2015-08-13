@@ -82,8 +82,10 @@ targets:
       - read_csv("data/LMA.csv")
       - process_LMA(.)
 
-  woodDensity_raw:
-    command: read_csv("data/woodDensity.csv")
+  wood_density_spp:
+    command:
+      - read_csv("data/woodDensity.csv")
+      - process_wood_density(.)
 
   seedsize:
     command:

@@ -1,7 +1,6 @@
 # load packages and "open" dataframes to use
 
-wood <- filter(woodDensity_raw, use=="use") %>%
-  select(species,density)
+
 
 individuals <- IndividualsList %>%
   select(individual,species, age, mature)
@@ -101,12 +100,6 @@ maxRA <- investment %>%
   group_by(species, age) %>%
   summarise_each(funs(max), RA, height)
 
-#wood density summary by species
-wood_summary <- wood %>%
-  group_by(species) %>%
-  summarise_each(funs(mean, se, length), density)
-names(wood_summary)<-c("species","WD_mean","WD_se","WD_length")
-
 #leaf lifespan summary by species
 LL_spp1 <- leafLifespan %>%
   filter(age>2 & LL_death!="NA"&LL_death<10) %>%
@@ -143,7 +136,7 @@ max_investment_spp <- investment %>%
   summarise_each(funs(max),RA,ReproInv,total_weight,leaf_weight)
 names(max_investment_spp)<-c("species", "max_RA", "max_repro_inv","max_total_weight","max_leaf_weight")
 
-SummaryInd <- merge(SummaryInd,wood_summary, by=c("species"),all.x=TRUE)
+SummaryInd <- merge(SummaryInd, wood_density_spp, by=c("species"),all.x=TRUE)
 SummaryInd <- merge(SummaryInd,LMA_summary, by=c("species","age"),all.x=TRUE)
 SummaryInd <- merge(SummaryInd,maxH_spp, by=c("species"),all.x=TRUE)
 SummaryInd <- merge(SummaryInd,seedsize, by=c("species"),all.x=TRUE)
@@ -175,7 +168,7 @@ SummaryInd$scaled_growth_shoot_diam <- SummaryInd$growth_shoot_diam / SummaryInd
 
 #merge various data summaries into SummarySppAge dataframe
 SummarySppAge <- merge(LL_summary, LMA_summary, by=c("species","age"))
-SummarySppAge <- merge(SummarySppAge, wood_summary, by=c("species"))
+SummarySppAge <- merge(SummarySppAge, wood_density_spp, by=c("species"))
 SummarySppAge <- merge(SummarySppAge, seedsize, by=c("species"))
 SummarySppAge <- merge(SummarySppAge, maxH_spp, by=c("species"))
 SummarySppAge <- merge(SummarySppAge, maxRA, by=c("species","age"))
@@ -188,7 +181,7 @@ SummarySppAge$leaf_area_mean <- SummarySppAge$leaf_weight_mean / SummarySppAge$L
 #merge various data summaries into SummarySpp dataframe
 SummarySpp <- merge(LL_spp1, LL_spp2, by=c("species"))
 SummarySpp <- merge(SummarySpp, LMA_spp, by=c("species"))
-SummarySpp <- merge(SummarySpp, wood_summary, by=c("species"))
+SummarySpp <- merge(SummarySpp, wood_density_spp, by=c("species"))
 SummarySpp <- merge(SummarySpp, seedsize, by=c("species"))
 SummarySpp <- merge(SummarySpp, maxH_spp, by=c("species"))
 SummarySpp <- merge(SummarySpp, accessory_spp, by=c("species"))
