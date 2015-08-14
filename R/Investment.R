@@ -82,13 +82,16 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
   # Initialize the variables
   ErrList <- data.frame(Element = NA, Census = NA, Count = NA)
   Lost <- data.frame(part = c(), Census = c(), count = c(), weight = c())
-  FinishedDevelopement <- data.frame(part = c(), Census = c(), count = c(), weight = c())
+  FinishedDevelopement <- data.frame(species = c(), part = c(), Census = c(), count = c(), weight = c())
   if ((length(sapply(TreeListOrig[[last.census]]$total, function(x) x$type) > 0))) {
-    FinishedDevelopement <- rbind(FinishedDevelopement, data.frame(part = sapply(TreeListOrig[[last.census]]$total, function(x) x$type), Census = rep(n.censuses,
-      length(sapply(TreeListOrig[[last.census]]$total, function(x) x$type))), count = sapply(TreeListOrig[[last.census]]$total, function(x) x$count), weight = sapply(TreeListOrig[[last.census]]$total,
-      function(x) sum(x$weight))))
+    FinishedDevelopement <- rbind(FinishedDevelopement, 
+      data.frame(
+        species = species,
+        part = sapply(TreeListOrig[[last.census]]$total, function(x) x$type), 
+        Census = rep(n.censuses, length(sapply(TreeListOrig[[last.census]]$total, function(x) x$type))), 
+        count = sapply(TreeListOrig[[last.census]]$total, function(x) x$count), 
+        weight = sapply(TreeListOrig[[last.census]]$total, function(x) sum(x$weight))))
   }
-
 
   Investments <- data.frame(FromCensus = c(), ToCensus = c(), From = c(), To = c(), Inv = c(), Count = c())
   Err <- c()
@@ -103,7 +106,7 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
   # For each of the paths
   for (a in seq_len(n.paths)) {
     L <- data.frame(part = c(), Census = c(), count = c(), weight = c())
-    FD <- data.frame(part = c(), Census = c(), count = c(), weight = c())
+    FD <- data.frame(species = c(), part = c(), Census = c(), count = c(), weight = c())
     # Determine beginning and end of the path.
     BE <- (GraphMaps$Paths[a, ])
     # Read in plant graph
@@ -178,9 +181,12 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
 
       if (i > 2) {
         if ((length(sapply(TreeList_Pred[[i - 1]]$total, function(x) x$type) > 0))) {
-          FD <- rbind(FD, data.frame(part = sapply(TreeList_Pred[[i - 1]]$total, function(x) x$type), Census = rep(i - 2, length(sapply(TreeList_Pred[[i -
-          1]]$total, function(x) x$type))), count = sapply(TreeList_Pred[[i - 1]]$total, function(x) x$count), weight = sapply(TreeList_Pred[[i - 1]]$total,
-          function(x) sum(x$weight))))
+          FD <- rbind(FD, data.frame(
+              species=species,
+              part = sapply(TreeList_Pred[[i - 1]]$total, function(x) x$type), 
+              Census = rep(i - 2, length(sapply(TreeList_Pred[[i -1]]$total, function(x) x$type))), 
+              count = sapply(TreeList_Pred[[i - 1]]$total, function(x) x$count), 
+              weight = sapply(TreeList_Pred[[i - 1]]$total, function(x) sum(x$weight))))
         }
       }
     }
@@ -198,7 +204,7 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
     # If there are accesories
       for (k in seq_len(length(Acc.Finals))) {
         L <- data.frame(part = c(), Census = c(), count = c(), weight = c())
-        FD <- data.frame(part = c(), Census = c(), count = c(), weight = c())
+        FD <- data.frame(species= c(), part = c(), Census = c(), count = c(), weight = c())
 
         Accessory <- Acc.Finals[k]
         # Reset the lists to the original ones.
@@ -234,9 +240,12 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
           }
           if (i > 2) {
             if ((length(sapply(TreeList_Acc[[i - 1]]$total, function(x) x$type) > 0))) {
-            FD <- rbind(FD, data.frame(part = sapply(TreeList_Acc[[i - 1]]$total, function(x) x$type), Census = rep(i - 2, length(sapply(TreeList_Acc[[i -
-              1]]$total, function(x) x$type))), count = sapply(TreeList_Acc[[i - 1]]$total, function(x) x$count), weight = sapply(TreeList_Acc[[i - 1]]$total,
-              function(x) sum(x$weight))))
+            FD <- rbind(FD, data.frame(
+              species=species,
+              part = sapply(TreeList_Acc[[i - 1]]$total, function(x) x$type), 
+              Census = rep(i - 2, length(sapply(TreeList_Acc[[i -1]]$total, function(x) x$type))), 
+              count = sapply(TreeList_Acc[[i - 1]]$total, function(x) x$count), 
+              weight = sapply(TreeList_Acc[[i - 1]]$total, function(x) sum(x$weight))))
             }
           }
           }

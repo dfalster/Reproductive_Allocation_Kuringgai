@@ -823,3 +823,12 @@ targets:
         PILI_PartsSummary,
         PUTU_PartsSummary,
       element=I("AvWeightPerUnit"))
+
+  Investment_FD_all:
+    command: >
+      combine_list_elements(
+        BOLE_Investment,
+        COER_Investment,
+        EPMI_Investment,
+        GRBU_Investment,
+      element=I("FD"))
