@@ -827,8 +827,18 @@ targets:
   Investment_FD_all:
     command: >
       combine_list_elements(
+        BAER_Investment,
         BOLE_Investment,
         COER_Investment,
         EPMI_Investment,
         GRBU_Investment,
+        GRSP_Investment,
+        HATE_Investment,
+        HEPU_Investment,
+        LEES_Investment,
+        PELA_Investment,
+        PEPU_Investment,
+        PHPH_Investment,
+        PILI_Investment,
+        PUTU_Investment,
       element=I("FD"))

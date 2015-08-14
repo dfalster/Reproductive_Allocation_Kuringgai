@@ -117,3 +117,8 @@ targets:
   figure/RA_comparison_weight.pdf:
     command: plot_ReproductionAllocation_comparison_weight(ReproductionAllocation_all)
     plot: wide
+
+  SummaryInd:
+    command: > 
+      summarise_by_individual(IndividualsList, ReproductionAllocation_all, Investment_FD_all,
+        AccessoryCosts_all, LMA, leafLifespan, wood_density_spp, seedsize)

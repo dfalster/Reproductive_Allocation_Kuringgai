@@ -27,7 +27,8 @@ AccessoryCosts <- function(species, IndividualsList, InvestmentCategories, speci
         prop_postpollen_aborted = postpollen_aborted_inv / total_repro_inv,
         prop_packaging_dispersal = packaging_dispersal_inv / total_repro_inv,
         prop_propagule = propagule_inv / total_repro_inv,
-        prop_accessory = 1 - prop_propagule
+        prop_accessory = 1 - prop_propagule,
+        prop_prepollen_all = prop_prepollen_aborted + prop_prepollen_success
         )
 
   for(v in c("prop_prepollen_aborted", "prop_prepollen_success", "prop_postpollen_aborted",
