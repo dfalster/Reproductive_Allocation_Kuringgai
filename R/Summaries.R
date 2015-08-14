@@ -8,25 +8,25 @@ make_summary_species <- function() {
 process_seed_costs <- function(seedSize_raw, PartsSummary_all) {
 
   seedsize <- seedSize_raw %>%
-      select(species,seed_size)
+      select(species, seed_size)
 
   # adding info on all costs to produce 1 seed
   # Todo: Lizzy you need to replace numbers below with actual names, see examples
   seedcosts <- list() 
-  seedcosts[["BAER"]] <- list(parts=NULL, scale=1)  #w[2]/10+w[4]/10+w[13]+w[12]+w[19]+w[20]
-  seedcosts[["BOLE"]] <- list(parts=NULL, scale=1) #w[5]+w[6]+w[11]+w[15]+w[16]
+  seedcosts[["BAER"]] <- list(parts=NULL, scale=1)  #w[2]/10 + w[4]/10 + w[13] + w[12] + w[19] + w[20]
+  seedcosts[["BOLE"]] <- list(parts=NULL, scale=1) #w[5] + w[6] + w[11] + w[15] + w[16]
   seedcosts[["COER"]] <- list(parts=c("inflorescence_stalk_in_fruit","flower_petals", "bract_fruit","fruit_mature"), scale=c(1/6,1,1,1))
   seedcosts[["EPMI"]] <- list(parts=c("flower_petals", "fruit_mature"), scale=1)
-  seedcosts[["GRBU"]] <- list(parts=NULL, scale=1) #w[2]+w[7]+w[12]+w[14]+w[15]
-  seedcosts[["GRSP"]] <- list(parts=NULL, scale=1) #w[4]+w[9]+w[14]+w[16]+w[18]
-  seedcosts[["HATE"]] <- list(parts=NULL, scale=1) #w[4]+w[6]+w[13]+w[16]
-  seedcosts[["HEPU"]] <- list(parts=NULL, scale=1) #w[3]+w[10]+w[15]
-  seedcosts[["LEES"]] <- list(parts=NULL, scale=1) #w[5]+w[10]+w[13]
-  seedcosts[["PELA"]] <- list(parts=NULL, scale=1) #w[4]+w[5]+w[11]+w[12]
-  seedcosts[["PEPU"]] <- list(parts=NULL, scale=1) #w[4]/30+w[9]+w[16]
-  seedcosts[["PHPH"]] <- list(parts=NULL, scale=1) #w[4]+w[5]+w[6]+w[15]+w[16]
-  seedcosts[["PILI"]] <- list(parts=NULL, scale=1) #w[2]/10+w[3]+w[5]+w[7]+w[11]+w[12]
-  seedcosts[["PUTU"]] <- list(parts=NULL, scale=1) # w[2]+w[3]+w[4]+w[10]+w[11]
+  seedcosts[["GRBU"]] <- list(parts=NULL, scale=1) #w[2] + w[7] + w[12] + w[14] + w[15]
+  seedcosts[["GRSP"]] <- list(parts=NULL, scale=1) #w[4] + w[9] + w[14] + w[16] + w[18]
+  seedcosts[["HATE"]] <- list(parts=NULL, scale=1) #w[4] + w[6] + w[13] + w[16]
+  seedcosts[["HEPU"]] <- list(parts=NULL, scale=1) #w[3] + w[10] + w[15]
+  seedcosts[["LEES"]] <- list(parts=NULL, scale=1) #w[5] + w[10] + w[13]
+  seedcosts[["PELA"]] <- list(parts=NULL, scale=1) #w[4] + w[5] + w[11] + w[12]
+  seedcosts[["PEPU"]] <- list(parts=NULL, scale=1) #w[4]/30 + w[9] + w[16]
+  seedcosts[["PHPH"]] <- list(parts=NULL, scale=1) #w[4] + w[5] + w[6] + w[15] + w[16]
+  seedcosts[["PILI"]] <- list(parts=NULL, scale=1) #w[2]/10 + w[3] + w[5] + w[7] + w[11] + w[12]
+  seedcosts[["PUTU"]] <- list(parts=NULL, scale=1) # w[2] + w[3] + w[4] + w[10] + w[11]
 
   species <- names(seedcosts)
 
@@ -37,7 +37,7 @@ process_seed_costs <- function(seedSize_raw, PartsSummary_all) {
                           * seedcosts[[sp]][["scale"]]) 
                     }))
   seedsize <- merge(seedsize, costs, by="species", all.x=TRUE)
-  seedsize$costs_per_seed <- (seedsize$seedcosts-seedsize$seed_size)/(seedsize$seedcosts)
+  seedsize$costs_per_seed <- (seedsize$seedcosts - seedsize$seed_size)/(seedsize$seedcosts)
   seedsize
 }
 
@@ -50,7 +50,7 @@ process_LMA <- function(LMA_raw) {
 
 process_leaves_per_length <- function(leavesPerLength_raw) {
     # get average leaves per length for spp
-  filter(leavesPerLength_raw,use=="yes") %>%
+  filter(leavesPerLength_raw, use=="yes") %>%
     mutate(count_per_length = leaf_count/length_mm) %>%
     group_by(species) %>%
     summarise(count_per_length = mean(count_per_length, na.rm=TRUE))
@@ -60,7 +60,7 @@ process_leaf_lifespan <- function(leafLifespan_raw, leavesPerLength) {
 
 
   leafLifespan <- filter(leafLifespan_raw, dont_use!="dead" & dont_use!="dont_use") %>%
-    select(species,age,individual,d_start,d_end,length_start,new_length,lvs_start_length,lvs_start_count,lvs_end_length,lvs_end_count,lvs_new_length,lvs_new_count,new_but_shed_count,mm_lvs_spec,count_lvs_spec)
+    select(species, age, individual, d_start, d_end, length_start, new_length, lvs_start_length, lvs_start_count, lvs_end_length, lvs_end_count, lvs_new_length, lvs_new_count, new_but_shed_count, mm_lvs_spec, count_lvs_spec)
 
   #TODO Lizzy: why do we need this next line?
   leafLifespan$individual <- as.factor(leafLifespan$individual)
@@ -97,7 +97,7 @@ process_leaf_lifespan <- function(leafLifespan_raw, leavesPerLength) {
     lvs_start = lvs_start_count + (lvs_start_length * count_per_length),
     lvs_end = lvs_end_count + (lvs_end_length * count_per_length),
     lvs_new = lvs_new_count + (lvs_new_length * count_per_length),
-    LL_bd = (lvs_start)/(((lvs_start)-(lvs_end))+(lvs_new)/2),
+    LL_bd = (lvs_start)/(((lvs_start)-(lvs_end)) + (lvs_new)/2),
     LL_death = (lvs_start)/((lvs_start)-(lvs_end)),
     LL_birth = (lvs_start)/(lvs_new)
     )
@@ -128,18 +128,18 @@ summarise_by_individual <- function(IndividualsList, ReproductionAllocation_all,
   accessory <- AccessoryCosts_all
 
   #adding investment and accessory costs data to leafLifespan dataframe to create a dataframe with all individual level data
-  SummaryInd <- merge(investment, select(leafLifespan, -species, -age), by="individual",all.x=TRUE)
-  SummaryInd <- merge(SummaryInd, select(accessory, -species, -age), by="individual",all.x=TRUE)
-  SummaryInd <- merge(SummaryInd, select(IndividualsList, individual, mature), by="individual",all.x=TRUE)
+  SummaryInd <- merge(investment, select(leafLifespan, -species, -age), by="individual", all.x=TRUE)
+  SummaryInd <- merge(SummaryInd, select(accessory, -species, -age), by="individual", all.x=TRUE)
+  SummaryInd <- merge(SummaryInd, select(IndividualsList, individual, mature), by="individual", all.x=TRUE)
 
   #adding variables to look at change across years, RGR
   SummaryInd <- SummaryInd %>% mutate(
     growth_shoot_diam = (d_end - d_start)/100,
     growth_shoot_area = (3.14*((d_end/200)^2)) - (3.14*((d_start/200)^2)),
     lvs_end_total = lvs_end + lvs_new,
-    RGR = log(total_weight)-log(total_weight-GrowthInv),
-    RGR_leaf = log(leaf_weight)-log(leaf_weight-growth_leaf),
-    RGR_stem = log(stem_weight)-log(stem_weight-growth_stem)
+    RGR = log(total_weight)-log(total_weight - GrowthInv),
+    RGR_leaf = log(leaf_weight)-log(leaf_weight - growth_leaf),
+    RGR_stem = log(stem_weight)-log(stem_weight - growth_stem)
   )
 
   #summarizing data by species, age
@@ -148,7 +148,7 @@ summarise_by_individual <- function(IndividualsList, ReproductionAllocation_all,
   LL_summary <- SummaryInd %>%
     filter(LL_bd>0 & LL_bd<6 & LL_birth<8 & LL_death<8) %>%
     group_by(species, age) %>%
-    summarise_each(funs(mean, se, length), LL_bd, LL_death,LL_birth,new_length, lvs_end, lvs_end_total, growth_shoot_diam, growth_shoot_area, RGR)
+    summarise_each(funs(mean, se, length), LL_bd, LL_death, LL_birth, new_length, lvs_end, lvs_end_total, growth_shoot_diam, growth_shoot_area, RGR)
 
   #LMA summary by species, age
   LMA_summary <- LMA %>%
@@ -158,7 +158,7 @@ summarise_by_individual <- function(IndividualsList, ReproductionAllocation_all,
   #accessory tissue summary by species, age
   accessory_summary <- SummaryInd %>%
     group_by(species, age) %>%
-    summarise_each(funs(mean, se, length),prepollen_aborted_inv,prepollen_success_inv, postpollen_aborted_inv, packaging_dispersal_inv, propagule_inv, prepollen_all_inv)
+    summarise_each(funs(mean, se, length), prepollen_aborted_inv, prepollen_success_inv, postpollen_aborted_inv, packaging_dispersal_inv, propagule_inv, prepollen_all_inv)
 
   accessory_summary2 <- SummaryInd %>%
     filter(total_repro_inv!=0) %>%
@@ -177,7 +177,7 @@ summarise_by_individual <- function(IndividualsList, ReproductionAllocation_all,
     summarise_each(funs(mean, se, length), height, GrowthInv, ReproInv, total_weight, TotalInv, RA, diameter, stem_area, leaf_weight, stem_weight, growth_stem_diam, growth_stem_area, growth_leaf, growth_stem)
 
   investment_spp_age <- investment_summary %>%
-    select(species, age, height_mean,RA_mean)
+    select(species, age, height_mean, RA_mean)
     
   mature_RA <- SummaryInd %>%
     filter(mature==TRUE) %>%
@@ -212,7 +212,7 @@ summarise_by_individual <- function(IndividualsList, ReproductionAllocation_all,
   #investment summary by species
   investment_spp <- investment %>%
       group_by(species) %>%
-    summarise_each(funs(mean, se, length), total_weight,ReproInv, leaf_weight, stem_weight, RA)
+    summarise_each(funs(mean, se, length), total_weight, ReproInv, leaf_weight, stem_weight, RA)
 
   #maximum height for each species
   maxH_spp <- investment %>%
@@ -223,7 +223,7 @@ summarise_by_individual <- function(IndividualsList, ReproductionAllocation_all,
   #maximum height for each species
   max_investment_spp <- investment %>%
     group_by(species) %>%
-    summarise_each(funs(max),RA,ReproInv,total_weight,leaf_weight)
+    summarise_each(funs(max), RA, ReproInv, total_weight, leaf_weight)
   names(max_investment_spp)<-c("species", "max_RA", "max_repro_inv","max_total_weight","max_leaf_weight")
 
   #mean stem, shoot diam for each species
@@ -232,13 +232,13 @@ summarise_by_individual <- function(IndividualsList, ReproductionAllocation_all,
     summarise_each(funs(median), stem_area, diameter, d_end)
   names(mean_value_spp)<-c("species", "mean_stem_area_spp","mean_stem_diam_spp","mean_shoot_diam_spp")
 
-  SummaryInd <- merge(SummaryInd, wood_density_spp, by=c("species"),all.x=TRUE)
-  SummaryInd <- merge(SummaryInd,LMA_summary, by=c("species","age"),all.x=TRUE)
-  SummaryInd <- merge(SummaryInd,maxH_spp, by=c("species"),all.x=TRUE)
-  SummaryInd <- merge(SummaryInd,seedsize, by=c("species"),all.x=TRUE)
-  SummaryInd <- merge(SummaryInd,max_investment_spp, by=c("species"),all.x=TRUE)
-  SummaryInd <- merge(SummaryInd,investment_spp_age, by=c("species","age"),all.x=TRUE)
-  SummaryInd <- merge(SummaryInd, mean_value_spp, by=c("species"),all.x=TRUE)
+  SummaryInd <- merge(SummaryInd, wood_density_spp, by=c("species"), all.x=TRUE)
+  SummaryInd <- merge(SummaryInd, LMA_summary, by=c("species","age"), all.x=TRUE)
+  SummaryInd <- merge(SummaryInd, maxH_spp, by=c("species"), all.x=TRUE)
+  SummaryInd <- merge(SummaryInd, seedsize, by=c("species"), all.x=TRUE)
+  SummaryInd <- merge(SummaryInd, max_investment_spp, by=c("species"), all.x=TRUE)
+  SummaryInd <- merge(SummaryInd, investment_spp_age, by=c("species","age"), all.x=TRUE)
+  SummaryInd <- merge(SummaryInd, mean_value_spp, by=c("species"), all.x=TRUE)
 
   SummaryInd <- SummaryInd %>% mutate(
     prop_maxH = height / maxH_spp,
@@ -261,7 +261,7 @@ summarise_by_individual <- function(IndividualsList, ReproductionAllocation_all,
       summarise_each(funs(sum), count, weight) %>%
       filter(count >0)
 
-  count_flower <- subset(accessory_count, part=="flower_petals"|part=="flower_petals_small",select=c("individual","count"))
+  count_flower <- subset(accessory_count, part=="flower_petals"|part=="flower_petals_small", select=c("individual","count"))
   names(count_flower) <- c("individual","flower_count")
   count_flower$individual <- as.factor(count_flower$individual)
 
@@ -286,21 +286,21 @@ summarise_by_individual <- function(IndividualsList, ReproductionAllocation_all,
   names(count_fruit_aborted) <- c("individual","aborted_fruit_count")
   count_fruit_aborted$individual <- as.factor(count_fruit_aborted$individual)
 
-  count_seed_pod <- subset(accessory_count, part=="seed_pod",select=c("individual","weight"))
+  count_seed_pod <- subset(accessory_count, part=="seed_pod", select=c("individual","weight"))
   names(count_seed_pod) <- c("individual","seedpod_weight")
   count_seed_pod$individual <- as.factor(count_seed_pod$individual)
 
-  count_fruit_mature <- subset(accessory_count, part=="fruit_mature",select=c("individual","weight"))
+  count_fruit_mature <- subset(accessory_count, part=="fruit_mature", select=c("individual","weight"))
   names(count_fruit_mature) <- c("individual","fruit_weight")
   count_fruit_mature$individual <- as.factor(count_fruit_mature$individual)
 
 
-  SummaryInd <- merge(SummaryInd, count_flower, by="individual",all.x=TRUE)
-  SummaryInd <- merge(SummaryInd, count_bud, by="individual",all.x=TRUE)
-  SummaryInd <- merge(SummaryInd, count_fruit_aborted, by="individual",all.x=TRUE)
-  SummaryInd <- merge(SummaryInd, count_seed, by="individual",all.x=TRUE)
-  SummaryInd <- merge(SummaryInd, count_seed_pod, by="individual",all.x=TRUE)
-  SummaryInd <- merge(SummaryInd, count_fruit_mature, by="individual",all.x=TRUE)
+  SummaryInd <- merge(SummaryInd, count_flower, by="individual", all.x=TRUE)
+  SummaryInd <- merge(SummaryInd, count_bud, by="individual", all.x=TRUE)
+  SummaryInd <- merge(SummaryInd, count_fruit_aborted, by="individual", all.x=TRUE)
+  SummaryInd <- merge(SummaryInd, count_seed, by="individual", all.x=TRUE)
+  SummaryInd <- merge(SummaryInd, count_seed_pod, by="individual", all.x=TRUE)
+  SummaryInd <- merge(SummaryInd, count_fruit_mature, by="individual", all.x=TRUE)
 
   #TODO Lizzy: why do we need this next line?
   for(v in c("flower_count","bud_count","seed_count","aborted_fruit_count","seedpod_weight","fruit_weight")) {
@@ -309,11 +309,11 @@ summarise_by_individual <- function(IndividualsList, ReproductionAllocation_all,
   }
 
   SummaryInd <- mutate(SummaryInd,
-    seedset = seed_count/(bud_count+flower_count+seed_count+aborted_fruit_count),
+    seedset = seed_count/(bud_count + flower_count + seed_count + aborted_fruit_count),
     fruit_weight = propagule_inv + seedpod_weight + fruit_weight,
-    prepollen_all_count = bud_count+flower_count,
-    prop_prepollen_count = (bud_count+flower_count)/(bud_count+flower_count+seed_count+aborted_fruit_count),
-    repro_all_count = bud_count+flower_count+seed_count,
+    prepollen_all_count = bud_count + flower_count,
+    prop_prepollen_count = (bud_count + flower_count)/(bud_count + flower_count + seed_count + aborted_fruit_count),
+    repro_all_count = bud_count + flower_count + seed_count,
     accessory_per_seed = accessory_inv/seed_count,
     propagule_per_seed = propagule_inv/seed_count,
     prepollen_all_per_seed = prepollen_all_inv/seed_count,
