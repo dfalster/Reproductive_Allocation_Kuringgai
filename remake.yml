@@ -118,7 +118,7 @@ targets:
     command: plot_ReproductionAllocation_comparison_weight(ReproductionAllocation_all)
     plot: wide
 
-  SummaryInd:
+  Individual_all:
     command: > 
-      summarise_by_individual(IndividualsList, ReproductionAllocation_all, Accessory_counts_all,
+      combine_by_individual(IndividualsList, ReproductionAllocation_all, Accessory_counts_all,
         AccessoryCosts_all, LMA, leafLifespan, wood_density_spp, seedsize)

@@ -275,7 +275,7 @@ legend("bottomleft",legend=names(labels.age),col=col.age,pch=16, cex=1.1,bty="n"
 par(mfrow=c(1,1), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
 SummaryIndPCA <- SummaryInd %>%
   filter(lvs_end_total>0&shoot_leaf_area>0&shoot_leaf_area_growth!=0) %>%
-  select(prop_maxH,height,maxH_spp,WD_mean,LMA_mean,seed_size,growth_leaf,
+  select(prop_maxH,height,maxH_spp,wood_density,LMA_mean,seed_size,growth_leaf,
          growth_stem_diam,leaf_area,growth_shoot_diam,growth_stem_area,lvs_end_total,total_weight,
          RA,seedset,repro_all_count,accessory_inv,propagule_inv,shoot_leaf_area,shoot_leaf_area_growth,scaled_growth_stem_diam)
 
@@ -352,7 +352,7 @@ summarise_each(funs(mean, se), PC1_scale, PC2_scale, PC3_scale, PC4_scale)
 
 ####PCA axis 1 is across species  
 * it explains 34% of the variance  
-* it separates species with high wood density (WD_mean), seedset, RA versus species with large total size, high leaf area, high LMA, large seedsize etc
+* it separates species with high wood density (wood_density), seedset, RA versus species with large total size, high leaf area, high LMA, large seedsize etc
 * the age indepentent measures like prop_maxH and scaled_growth_stem_area have near-zero loadings
 * BAER, HATE have by far the highest loadings and BOLE, COER, EPMI, HEPU, LEES, PILI the lowest  
 * not sure why high wood density species also have high seedset - is this just by chance with my species?
@@ -416,8 +416,8 @@ se_function(mean1,se1)
 ####PCA axis 3 again divides mainly by species
 * it explains 9% of the variance (total variance explained now at 68%)  
 * It is dividing the three (of 4) canopy species, HATE, PEPU, PELA, (BAER) versus
-* top variable loadings: scaled_growth_stem_diam, WD_mean,growth_stem_diam, lvs_end_total vs. maxH_spp, LMA_mean, seed_size, RA  
-* not terribly interpretable, since doesn't make sense that scaled_growth_stem_diam with WD_mean  
+* top variable loadings: scaled_growth_stem_diam, wood_density,growth_stem_diam, lvs_end_total vs. maxH_spp, LMA_mean, seed_size, RA  
+* not terribly interpretable, since doesn't make sense that scaled_growth_stem_diam with wood_density  
 
 ```{r, echo=FALSE,message=FALSE,fig.width=20, fig.height=14}
 par(mfrow=c(2,3), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
@@ -447,7 +447,7 @@ se_function(mean1,se1)
 ####PCA axis 4  
 * it explains 7% of the variance (total variance explained now at 74%)
 * it divides stem vs shoot growth variables  
-* high loadings for growth_stem_area, growth_leaf, LMA_mean, seed_set vs low loadings for shoot_leaf_area_growth, WD_mean, prop_maxH, seed_size  
+* high loadings for growth_stem_area, growth_leaf, LMA_mean, seed_set vs low loadings for shoot_leaf_area_growth, wood_density, prop_maxH, seed_size  
 * BAER, EPMI, HATE and HEPU have higher values vs. BOLE, GRBU, GRSP with lower values; in a sense these later species have more shoot growth than stem growth and spend more of their life close to their maxH - which is true  
 * there is no significant age component  
 ```{r, echo=FALSE,message=FALSE,fig.width=20, fig.height=14}

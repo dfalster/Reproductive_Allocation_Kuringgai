@@ -51,7 +51,7 @@ change_shoot_area,change in shoot area (mm^2/year)
 change_basal_area,change in basal area (mm^2/year)
 lvs_end_total,N/A
 RGR,relative growth rate
-WD_mean,wood density (grams per cm^3)
+wood_density,wood density (grams per cm^3)
 WD_se,N/A
 WD_length,N/A
 LMA_mean,LMA (grams per cm^2)
