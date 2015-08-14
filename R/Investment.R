@@ -12,12 +12,52 @@ CalculateInvestmentForSpecies <- function(species, Reproduction, FloweringCatego
     ldply(d, function(x) x[[name]])
   }
 
-  R <- llply(unique(Reproduction$individual), function(x) CalculateInvestmentForIndiviualPlant(x,
-    filter(Reproduction,  individual==x), FloweringCategories, MultiplierTable, GraphMaps, PartsSummary))
+  R <- llply(unique(Reproduction$individual), function(x) 
+      CalculateInvestmentForIndiviualPlant(x,
+                  filter(Reproduction,  individual==x), 
+                  FloweringCategories, MultiplierTable, GraphMaps, PartsSummary))
+    R <- llply(unique(Reproduction$individual), function(x) 
+      CalculateInvestmentForIndiviualPlant(x,
+                  filter(Reproduction,  individual==x), 
+                  FloweringCategories, MultiplierTable, GraphMaps, PartsSummary))
+  
+  FD <- combine("FD", R)
+
+  accessory_count <- FD %>%
+      group_by(individual, part) %>%
+      summarise_each(funs(sum), count, weight) %>%
+      filter(count > 0)
+
+  parts_counts <- list(
+      flower_count= c("flower_petals","flower_petals_small"),
+      bud_count = c("bud_tiny","bud_small","bud_mid","bud_large","flower_aborted_without_petals"),
+      seed_count= c("seed"),
+      aborted_fruit_count = c("fruit_just_starting","fruit_young","fruit_large_immature_01","fruit_large_immature_02","fruit_large_immature_03","fruit_large_immature_04"," fruit_large_immature_05"," fruit_large_immature_06","fruit_empty")
+      )
+
+  counts <- ddply(accessory_count, "individual", function(x) {
+      sapply(names(parts_counts), function(n)
+         sum(filter(x, part %in% parts_counts[[n]])$count))}) 
+
+  counts <- mutate(counts,
+    seedset = seed_count/(bud_count + flower_count + seed_count + aborted_fruit_count),
+    prepollen_all_count = bud_count + flower_count,
+    prop_prepollen_count = (bud_count + flower_count)/(bud_count + flower_count + seed_count + aborted_fruit_count),
+    repro_all_count = bud_count + flower_count + seed_count
+    )
+
+  parts_weights <- list(
+      seedpod_weight = "seed_pod",
+      fruit_weight   = "fruit_mature")
+  
+  weights <- ddply(accessory_count, "individual", function(x) {
+      sapply(names(parts_weights), function(n)
+         sum(filter(x, part %in% parts_weights[[n]])$weight))}) 
 
   list(Investment=combine("Investment", R),
       Lost=combine("Lost", R),
-      FD=combine("FD", R),
+      FD=FD,
+      accessory_counts = merge(counts, weights, by="individual", all=TRUE),
       Error=combine("Error", R))
 }
 

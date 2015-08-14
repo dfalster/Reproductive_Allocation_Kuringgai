@@ -120,17 +120,17 @@ process_wood_density <- function(wood_density_spp) {
   wood
 }
 
-summarise_by_individual <- function(IndividualsList, ReproductionAllocation_all, Investment_FD_all, AccessoryCosts_all, LMA, leafLifespan, wood_density_spp, seedsize) {
+summarise_by_individual <- function(IndividualsList, ReproductionAllocation_all, Accessory_counts_all, AccessoryCosts_all, LMA, leafLifespan, wood_density_spp, seedsize) {
 
   investment <- ReproductionAllocation_all
   investment$age <- round(investment$age, digits=1)
 
   accessory <- AccessoryCosts_all
-
   #adding investment and accessory costs data to leafLifespan dataframe to create a dataframe with all individual level data
   SummaryInd <- merge(investment, select(leafLifespan, -species, -age), by="individual", all.x=TRUE)
   SummaryInd <- merge(SummaryInd, select(accessory, -species, -age), by="individual", all.x=TRUE)
   SummaryInd <- merge(SummaryInd, select(IndividualsList, individual, mature), by="individual", all.x=TRUE)
+  SummaryInd <- merge(SummaryInd, Accessory_counts_all, by="individual", all.x=TRUE)
 
   #adding variables to look at change across years, RGR
   SummaryInd <- SummaryInd %>% mutate(
@@ -256,64 +256,9 @@ summarise_by_individual <- function(IndividualsList, ReproductionAllocation_all,
     scaled_growth_stem_diam = growth_stem_diam / mean_stem_diam_spp,
     scaled_growth_shoot_diam = growth_shoot_diam / mean_shoot_diam_spp
     ) 
-  accessory_count <- Investment_FD_all %>%
-      group_by(species, individual, part) %>%
-      summarise_each(funs(sum), count, weight) %>%
-      filter(count >0)
-
-  count_flower <- subset(accessory_count, part=="flower_petals"|part=="flower_petals_small", select=c("individual","count"))
-  names(count_flower) <- c("individual","flower_count")
-  count_flower$individual <- as.factor(count_flower$individual)
-
-  count_bud <- subset(accessory_count, part=="bud_tiny"|part=="bud_small"|part=="bud_mid"|part=="bud_large"|part=="flower_aborted_without_petals")
-  count_bud <- count_bud %>%
-    group_by(individual) %>%
-    summarise_each(funs(sum), count)
-  names(count_bud) <- c("individual","bud_count")
-  count_bud$individual <- as.factor(count_bud$individual)
-
-  count_seed <- subset(accessory_count, part=="seed"|part=="fruit_mature")
-  count_seed <- count_seed %>%
-    group_by(individual) %>%
-    summarise_each(funs(sum), count)
-  names(count_seed) <- c("individual","seed_count")
-  count_seed$individual <- as.factor(count_seed$individual)
-
-  count_fruit_aborted <- subset(accessory_count, part=="fruit_just_starting"|part=="fruit_young"|part=="fruit_large_immature_01"|part=="fruit_large_immature_02"|part=="fruit_large_immature_03"|part=="fruit_large_immature_04"|part==" fruit_large_immature_05"|part==" fruit_large_immature_06"|part=="fruit_empty")
-  count_fruit_aborted <- count_fruit_aborted %>%
-    group_by(individual) %>%
-    summarise_each(funs(sum), count)
-  names(count_fruit_aborted) <- c("individual","aborted_fruit_count")
-  count_fruit_aborted$individual <- as.factor(count_fruit_aborted$individual)
-
-  count_seed_pod <- subset(accessory_count, part=="seed_pod", select=c("individual","weight"))
-  names(count_seed_pod) <- c("individual","seedpod_weight")
-  count_seed_pod$individual <- as.factor(count_seed_pod$individual)
-
-  count_fruit_mature <- subset(accessory_count, part=="fruit_mature", select=c("individual","weight"))
-  names(count_fruit_mature) <- c("individual","fruit_weight")
-  count_fruit_mature$individual <- as.factor(count_fruit_mature$individual)
-
-
-  SummaryInd <- merge(SummaryInd, count_flower, by="individual", all.x=TRUE)
-  SummaryInd <- merge(SummaryInd, count_bud, by="individual", all.x=TRUE)
-  SummaryInd <- merge(SummaryInd, count_fruit_aborted, by="individual", all.x=TRUE)
-  SummaryInd <- merge(SummaryInd, count_seed, by="individual", all.x=TRUE)
-  SummaryInd <- merge(SummaryInd, count_seed_pod, by="individual", all.x=TRUE)
-  SummaryInd <- merge(SummaryInd, count_fruit_mature, by="individual", all.x=TRUE)
-
-  #TODO Lizzy: why do we need this next line?
-  for(v in c("flower_count","bud_count","seed_count","aborted_fruit_count","seedpod_weight","fruit_weight")) {
-    i <- is.na(SummaryInd[[v]])
-    SummaryInd[[v]][i] <- 0
-  }
 
   SummaryInd <- mutate(SummaryInd,
-    seedset = seed_count/(bud_count + flower_count + seed_count + aborted_fruit_count),
     fruit_weight = propagule_inv + seedpod_weight + fruit_weight,
-    prepollen_all_count = bud_count + flower_count,
-    prop_prepollen_count = (bud_count + flower_count)/(bud_count + flower_count + seed_count + aborted_fruit_count),
-    repro_all_count = bud_count + flower_count + seed_count,
     accessory_per_seed = accessory_inv/seed_count,
     propagule_per_seed = propagule_inv/seed_count,
     prepollen_all_per_seed = prepollen_all_inv/seed_count,
@@ -323,12 +268,6 @@ summarise_by_individual <- function(IndividualsList, ReproductionAllocation_all,
     packaging_dispersal_per_seed = packaging_dispersal_inv/seed_count)
 
   #TODO Lizzy: why do we need this next line?
-  for(v in c("seedset")) {
-    i <- is.na(SummaryInd[[v]])
-    SummaryInd[[v]][i] <- 0
-  }
-
-
   SummaryInd$species <- as.factor(SummaryInd$species)
   SummaryInd
 }
