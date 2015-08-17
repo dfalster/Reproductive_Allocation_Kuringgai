@@ -150,8 +150,5 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
     postpollen_aborted_per_seed = postpollen_aborted_inv/seed_count,
     packaging_dispersal_per_seed = packaging_dispersal_inv/seed_count)
 
-  #TODO Lizzy: why do we need this next line?
-  SummaryInd$species <- as.factor(SummaryInd$species)
-
   SummaryInd
 }
