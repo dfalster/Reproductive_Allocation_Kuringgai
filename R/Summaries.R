@@ -122,8 +122,6 @@ process_wood_density <- function(wood_density_spp) {
 
 combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, Accessory_counts_all, AccessoryCosts_all, LMA, leafLifespan, wood_density_spp, seedsize) {
 
-  # TODO Lizzy: Can we please look over this function together?
-
   #adding investment and accessory costs data to leafLifespan dataframe to create a dataframe with all individual level data
   SummaryInd <- merge(ReproductionAllocation_all, select(leafLifespan, -species, -age), by="individual", all=TRUE)
   SummaryInd <- merge(SummaryInd, select(AccessoryCosts_all, -species, -age), by="individual", all=TRUE)
@@ -133,6 +131,9 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
   SummaryInd <- merge(SummaryInd, wood_density_spp, by=c("species"), all=TRUE)
   SummaryInd <- merge(SummaryInd, seedsize, by=c("species"), all=TRUE)
 
+  #TODO: Why do we need these, where are NAs coming from?
+  SummaryInd <- filter(SummaryInd, !is.na(species) & !is.na(individual))
+  
   SummaryInd <- SummaryInd %>% mutate(
     RGR = log(total_weight)-log(total_weight - GrowthInv),
     leaf_area = leaf_weight / (1000*LMA),
@@ -151,4 +152,97 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
     packaging_dispersal_per_seed = packaging_dispersal_inv/seed_count)
 
   SummaryInd
+}
+
+
+get_species_values <- function(SummaryInd, groups) {
+
+  # function to apply
+  fs <- c("max", "mean", "sd", "length")
+
+  # note use of `group_by_` below - allows for passing in of 
+  # character vectors
+  dots <-  lapply(groups, as.symbol)
+
+  # summarizing data by species, age
+  out <- list()
+  out[[1]] <-lapply(fs, function(f) {
+    SummaryInd %>%
+    group_by_(.dots=dots) %>%
+    summarise_each(f, prepollen_aborted_inv, prepollen_success_inv, 
+      postpollen_aborted_inv, packaging_dispersal_inv, propagule_inv, prepollen_all_inv,
+      height, GrowthInv, ReproInv, total_weight, TotalInv, RA, diameter, stem_area, 
+      leaf_weight, stem_weight, growth_stem_diam, growth_stem_area, growth_leaf, 
+      growth_stem, diameter)
+  })
+  names(out[[1]]) <- fs
+
+  out[[2]] <-lapply(fs, function(f) {
+    SummaryInd %>%
+    filter(LL_bd > 0 & LL_bd < 6 & LL_birth < 8 & LL_death < 8) %>%
+    group_by_(.dots=dots) %>%
+    summarise_each(f, LL_bd, LL_death, LL_birth, new_length, lvs_end, 
+      lvs_end_total, growth_shoot_diam, growth_shoot_area, RGR, d_end)
+  })  
+  names(out[[2]]) <- fs
+ 
+  out[[3]] <-lapply(fs, function(f) {
+    SummaryInd %>%
+    filter(total_repro_inv != 0) %>%
+    group_by_(.dots=dots) %>%
+    summarise_each(f, prop_prepollen_aborted, prop_prepollen_success, 
+      prop_postpollen_aborted, prop_packaging_dispersal, prop_propagule, 
+      prop_prepollen_all, prop_accessory)
+  })  
+  names(out[[3]]) <- fs
+
+  out[[4]] <-lapply(fs, function(f) {
+    SummaryInd %>%
+    filter(ReproInv > 0) %>%
+    group_by_(.dots=dots) %>%
+    summarise_each(f, seedset, seed_count, flower_count,fruit_weight,leaf_area)
+  })  
+  names(out[[4]]) <- fs
+
+  out[[5]] <-lapply(fs, function(f) {
+    SummaryInd %>%
+    filter(seed_count > 0) %>%
+    group_by_(.dots=dots) %>%
+    summarise_each(f, accessory_per_seed, propagule_per_seed, prepollen_all_per_seed,
+      prepollen_aborted_per_seed, prepollen_success_per_seed, postpollen_aborted_per_seed, 
+      packaging_dispersal_per_seed)
+  })  
+  names(out[[5]]) <- fs
+
+ ret <- list()
+  for(f in fs){
+    ret[[f]] <- out[[1]][[f]]
+    for(i in 2:5)
+      ret[[f]] <- merge(ret[[f]], out[[i]][[f]], by=groups, all=TRUE)
+
+    # reorder to be same as input
+    order <- names(SummaryInd)[names(SummaryInd) %in% names(ret[[f]])]
+    ret[[f]] <- ret[[f]][, order]
+  }
+  ret
+}
+
+filterToMature <- function(data) {
+  filter(data, mature==TRUE)
+}
+
+scale_individual_variable <- function(SummaryInd, SummarySpp) {
+    
+    get_species_value <- function(f, v) {
+      i <- match(SummaryInd[["species"]], SummarySpp[[f]][["species"]])
+      SummarySpp[[f]][[v]][i]
+    }
+
+    mutate(SummaryInd,
+      prop_maxH = height / get_species_value("max", "height"),
+      prop_max_weight = total_weight / get_species_value("max", "total_weight"),
+      prop_max_repro = ReproInv / get_species_value("max", "ReproInv"),
+      scaled_growth_stem_diam = growth_stem_diam / get_species_value("mean", "growth_stem_diam"),
+      scaled_growth_shoot_diam = growth_shoot_diam / get_species_value("mean", "growth_shoot_diam")
+      ) 
 }
