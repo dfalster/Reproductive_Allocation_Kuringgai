@@ -135,16 +135,11 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
 
   SummaryInd <- SummaryInd %>% mutate(
     RGR = log(total_weight)-log(total_weight - GrowthInv),
-    RGR_leaf = log(leaf_weight)-log(leaf_weight - growth_leaf),
-    RGR_stem = log(stem_weight)-log(stem_weight - growth_stem),
     leaf_area = leaf_weight / (1000*LMA),
     leaf_area_growth = growth_leaf / (1000*LMA),
     shoot_leaf_area = lvs_end_total*leaf_size,
     shoot_leaf_area_growth = lvs_new*leaf_size,
-    RA2 = total_repro_inv/TotalInv,
     reproducing = RA>0,
-    RA_asin = asin(sqrt(RA)),
-    prop_propagule_asin = asin(sqrt(prop_propagule)),
     prop_allocation = propagule_inv/(GrowthInv + ReproInv),
     fruit_weight = propagule_inv + seedpod_weight + fruit_weight,
     accessory_per_seed = accessory_inv/seed_count,
