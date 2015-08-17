@@ -153,8 +153,8 @@ legend("bottomright",col=col.age,labels.age,pch=16)
 #Species with greater wood density have higher growth rates
 Again there is no relationship in younger plants
 ```{r, echo=FALSE,results='hide', message=FALSE}
-plot(GrowthInv_mean ~ WD_mean,data=subset(SummarySppAge,age>3),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1,xlab="wood density",ylab="growth investment (mg per year)",xlim=c(0.57,0.9),main="Relationship between wood density and growth rates")
-text(GrowthInv_mean ~ WD_mean, data=subset(SummarySppAge,age==5), labels=species, pos=2, offset=-2.4, cex=0.9,col="blue")
+plot(GrowthInv_mean ~ wood_density,data=subset(SummarySppAge,age>3),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1,xlab="wood density",ylab="growth investment (mg per year)",xlim=c(0.57,0.9),main="Relationship between wood density and growth rates")
+text(GrowthInv_mean ~ wood_density, data=subset(SummarySppAge,age==5), labels=species, pos=2, offset=-2.4, cex=0.9,col="blue")
 legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
 ```
 

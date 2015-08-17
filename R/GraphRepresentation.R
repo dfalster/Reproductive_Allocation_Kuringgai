@@ -1,5 +1,5 @@
 AV_W <- function(species, part, AvWeightPerUnit) {
-  AvWeightPerUnit[(AvWeightPerUnit$species == species) & (AvWeightPerUnit$part == part), "av.weight"]
+  AvWeightPerUnit[(AvWeightPerUnit$species == species) & (AvWeightPerUnit$part == part), "weight"]
 }
 
 AdjustEdgeWeightsForMultiplicity <- function(graph, species, MultiplierTable) {

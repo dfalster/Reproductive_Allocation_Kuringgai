@@ -77,20 +77,30 @@ targets:
   InvestmentCategories:
     command: read_csv("data/accessoryParts.csv")
 
-  LMA_raw:
-    command: read_csv("data/LMA.csv")
+  LMA:
+    command:
+      - read_csv("data/LMA.csv")
+      - process_LMA(.)
 
-  woodDensity_raw:
-    command: read_csv("data/woodDensity.csv")
+  wood_density_spp:
+    command:
+      - read_csv("data/woodDensity.csv")
+      - process_wood_density(.)
 
-  seedSize_raw:
-    command: read_csv("data/seedsize.csv")
+  seedsize:
+    command:
+      - read_csv("data/seedsize.csv")
+      - process_seed_costs(., PartsSummary_all)
 
-  leafLifespan_raw:
-    command: read_csv("data/leaderGrowthLL.csv")
+  leavesPerLength:
+    command: 
+      - read_csv("data/leaves_per_length.csv")
+      - process_leaves_per_length(.)
 
-  leavesPerLength_raw:
-    command: read_csv("data/leaves_per_length.csv")
+  leafLifespan:
+    command: 
+      - read_csv("data/leaderGrowthLL.csv")
+      - process_leaf_lifespan(., leavesPerLength)
 
   figures:
     depends:
@@ -107,3 +117,23 @@ targets:
   figure/RA_comparison_weight.pdf:
     command: plot_ReproductionAllocation_comparison_weight(ReproductionAllocation_all)
     plot: wide
+
+  SummaryInd1:
+    command: > 
+      combine_by_individual(IndividualsList, ReproductionAllocation_all, Accessory_counts_all,
+        AccessoryCosts_all, LMA, leafLifespan, wood_density_spp, seedsize)
+
+  SummarySppAge:
+    command: get_species_values(SummaryInd1, groups=I(c("species", "age")))
+
+  SummarySpp:
+    command: get_species_values(SummaryInd1, groups=I("species"))
+
+  SummaryInd_mature:
+    command: filterToMature(SummaryInd1)
+
+  SummarySpp_mature:
+    command: get_species_values(SummaryInd_mature, groups=I("species"))
+
+  SummaryInd:
+    command: scale_individual_variable(SummaryInd1, SummarySpp)

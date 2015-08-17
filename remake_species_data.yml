@@ -6,13 +6,12 @@ targets:
     depends:
       - ReproductionAllocation_all
       - AccessoryCosts_all
-      - LMA_raw
-      - woodDensity_raw
-      - seedSize_raw
+      - LMA
+      - wood_density_spp
+      - seedsize
       - HarvestData
-      - IndividualsList
-      - leafLifespan_raw
-      - leavesPerLength_raw
+      - leafLifespan
+      - leavesPerLength
       - BAER_IndividualsList
       - BAER_FlowerPartsData
       - BAER_ReproductionData
@@ -159,11 +158,11 @@ targets:
     depends:
       - ReproductionAllocation_all
       - AccessoryCosts_all
-      - LMA_raw
-      - woodDensity_raw
-      - seedSize_raw
+      - LMA
+      - wood_density_spp
+      - seedsize
       - HarvestData
-      - leafLifespan_raw
+      - leafLifespan
       - BAER_IndividualsList
       - BAER_FlowerPartsData
       - BAER_ReproductionData
@@ -805,3 +804,60 @@ targets:
         PILI_AccessoryCosts,
         PUTU_AccessoryCosts,
         NULL)
+
+  PartsSummary_all:
+    command: >
+      combine_list_elements(
+        BAER_PartsSummary,
+        BOLE_PartsSummary,
+        COER_PartsSummary,
+        EPMI_PartsSummary,
+        GRBU_PartsSummary,
+        GRSP_PartsSummary,
+        HATE_PartsSummary,
+        HEPU_PartsSummary,
+        LEES_PartsSummary,
+        PELA_PartsSummary,
+        PEPU_PartsSummary,
+        PHPH_PartsSummary,
+        PILI_PartsSummary,
+        PUTU_PartsSummary,
+      element=I("AvWeightPerUnit"))
+
+  Investment_FD_all:
+    command: >
+      combine_list_elements(
+        BAER_Investment,
+        BOLE_Investment,
+        COER_Investment,
+        EPMI_Investment,
+        GRBU_Investment,
+        GRSP_Investment,
+        HATE_Investment,
+        HEPU_Investment,
+        LEES_Investment,
+        PELA_Investment,
+        PEPU_Investment,
+        PHPH_Investment,
+        PILI_Investment,
+        PUTU_Investment,
+      element=I("FD"))
+
+  Accessory_counts_all:
+    command: >
+      combine_list_elements(
+        BAER_Investment,
+        BOLE_Investment,
+        COER_Investment,
+        EPMI_Investment,
+        GRBU_Investment,
+        GRSP_Investment,
+        HATE_Investment,
+        HEPU_Investment,
+        LEES_Investment,
+        PELA_Investment,
+        PEPU_Investment,
+        PHPH_Investment,
+        PILI_Investment,
+        PUTU_Investment,
+      element=I("accessory_counts"))

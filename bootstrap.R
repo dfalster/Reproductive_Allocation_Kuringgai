@@ -1,7 +1,9 @@
 #!/usr/bin/env Rscript
 library(whisker)
 
+
 allspecies <- c("BAER", "BOLE", "COER", "EPMI", "GRBU", "GRSP", "HATE", "HEPU", "LEES", "PELA", "PEPU", "PHPH", "PILI", "PUTU")
+#allspecies <- c("COER", "EPMI", "PUTU")
 
 vals <- list(allspecies=iteratelist(allspecies, value="species"))
 str <- whisker.render(readLines("x_remake_species_data.yml.whisker"), vals)

@@ -299,7 +299,7 @@ legend("bottomright",legend=names(labels.mature),col=col.mature,pch=16, cex=1.1,
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=14, fig.height=7}
 par(mfrow=c(1,2), cex=1, omi=c(0.2,0.3,0.3,0.3), mai=c(1.1,1,0.3,0.3)) 
 
-plot(WD_mean~leaf_area_growth,SummaryInd,log="y",pch=16,col=col.age[as.factor(age)])
-mod <- lm(log(leaf_area_growth)~age*WD_mean,SummaryInd)
+plot(wood_density~leaf_area_growth,SummaryInd,log="y",pch=16,col=col.age[as.factor(age)])
+mod <- lm(log(leaf_area_growth)~age*wood_density,SummaryInd)
 summary(mod)
 ```

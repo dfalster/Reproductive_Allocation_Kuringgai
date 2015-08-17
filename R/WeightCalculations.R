@@ -62,13 +62,13 @@ WeightFromCount <- function(count, species, part, individual, census, AvWeightPe
   I <- (IBW$individual == individual) & (IBW$part == part) & (IBW$census_to_use == census)
   n_i <- sum(I)
   if (n_i == 1) {
-    av.weight <- IBW[I, "av_weights"]
-    # print(paste('Using exact weight',part,census,av.weight,sep=' '))
+    weight <- IBW[I, "av_weights"]
+    # print(paste('Using exact weight',part,census,weight,sep=' '))
   }
   if (n_i == 0) {
-    av.weight <- AvWeightPerUnit[(AvWeightPerUnit$species == species) & (AvWeightPerUnit$part == part), ]$av.weight
+    weight <- AvWeightPerUnit[(AvWeightPerUnit$species == species) & (AvWeightPerUnit$part == part), ]$weight
   }
-  w <- rep(1, count) * av.weight
+  w <- rep(1, count) * weight
   w
 }
 
