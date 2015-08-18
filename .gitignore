@@ -7,19 +7,14 @@ output
 .maker
 .remake
 *.html
-
 talk.md
 talk.pdf
-
 figure*
 CarbonInvestments.pdf
 CarbonInvestments.tex
-
 results.md
-
 *.whisker
 ./bootstrap
-
 # LaTeX #
 #########
 *.aux
@@ -35,3 +30,4 @@ results.md
 *.log
 *.gz
 .Rproj.user
+figs2
