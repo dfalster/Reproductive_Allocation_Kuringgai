@@ -1,0 +1,482 @@
+```{r, echo=FALSE,results='hide', message=FALSE,warning=FALSE}
+library(remake)
+create_bindings()
+
+source("scripts/summary_dataframes.R")
+source("scripts/functions.R")
+```
+
+#Accessory costs
+##Basic questions
+* Total reproductive investment can be divided into energy invested in propagules vs. other reproductive tissues (accessory costs)
+* Reproductive investment can be considered on an energy or "count" (fecundity) basis
+
+    1. What reproduction "pool" should one measure?
+        * Is fecundity good enough?
+        * Is fruit or propagule weight good enough?
+    2. What might cause shifts in accessory costs across species?
+        * Previous studies have shown smaller-seeded species have lower accessory costs.
+    3. How does alotment to different accessory tissue types shift within a species as it ages, grows, or increases RA? 
+        * If accessory costs decrease with increased RA, increasing RA yields compounding returns. 
+
+##Summary of outcomes
+1. Total reproductive investment is the best correlate with total plant size (or growth investment)  
+2. Accessory costs are enormous across all species
+2. Plants with smaller seeds, smaller adult sizes, and higher seedset have lower accessory costs. It is mathematically plausable that the concept of "accessory costs" is not all that different from "seed set"
+    * In other words, plants with higher seed set, have lower accessory costs due to calculations
+    * Across  the 14 species, plants with larger adult size have lower seed set.
+3. Bigger plants have higher RA. 
+    * Plants that produce more buds, invest more absolute energy into either pre-pollination tissues or propagules also have higher RA.
+    * As plants get bigger, there is a slight shift of energy from pre-pollination tissues to propagules, but this is a small effect 
+    *(i.e. accessory costs decline slightly with increasing plant size)
+4. Among reproducing individuals, bigger or older plants DO NOT have higher seedset, although more individuals become reproductively mature over time. 
+    * Proportional pre-pollination costs also decrease with plant age in most species
+5. Species differ enormously in their relative investment in different reproductive tissue types
+6. Lower pre-pollination costs in plants with higher RA: 9 (of 14) species decrease the proportion of reproductive investment in "pre-pollination" tissues as their RA increases. in other words, they get better returns on investment the more they invest. (This is just a pattern within, not across, species)  
+
+###Still thinking about
+1. Most analyses look at propagules and pre-pollination tissues, but allocation can be further divided - it would be interesting to look at proportion energy to aborted buds vs. flowers (I do know aborted buds decrease)
+
+###Looking at reproductive investment, total accessory tissue investment, and pre-pollination tissue investment  
+* Something needs fixing here, for there are points that have higher accesory investment than reproductive investment  
+* Also, don't think the results for PUTU and PILI are accurate  
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(1,2), cex=1, omi=c(.6,0.3,.3,0.3), mai=c(1.1,1,.3,0.3))
+plot(accessory_inv~total_repro_inv,data=subset(SummaryInd,accessory_inv>0),log="xy",pch=16,col=col.spp[as.factor(species)])
+abline(0,1)
+abline(-0.30103,1)
+abline(-1,1)
+text(120,350,"all RE to accessory tissues",srt=43)
+text(12000,720,"10% RE to accessory tissues",srt=43)
+text(5,1.5,"50%",srt=43)
+
+plot(prepollen_all_inv~accessory_inv,data=subset(SummaryInd,accessory_inv>0),log="xy",pch=16,col=col.spp[as.factor(species)])
+abline(0,1)
+abline(-0.30103,1)
+abline(-1,1)
+text(120,250,"all acc costs pre-pollination",srt=45)
+text(3000,180,"10% acc costs pre-pollination",srt=45)
+text(10,3,"50%",srt=45)
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+```
+
+##Which measure of reproductive output best correlates with plant size or growth
+* Measuring total reproductive output has a much stronger correlation than investment in fruit weight or propagules
+* The regression of total weight against prepollination investment is as good as total reproductive investment - one could just count buds + flowers!
+    * This is likely because prepollination investment is much a large proportion of total reproductive investment
+* Note that each of these figures (and models) only includes individuals with non-zero investment in the reproductive pool plotted
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.width=14, fig.height=14}
+options(scipen=10)
+par(mfrow=c(2,2), cex=1, omi=c(.6,0.3,.3,0.3), mai=c(.8,1,.3,0.3))
+mod <- lm (log(total_weight)~log(total_repro_inv), data=subset(SummaryInd,total_repro_inv>0))
+plot(total_repro_inv~total_weight,data=subset(SummaryInd,total_repro_inv>0), log="xy",xlab="", col=col.spp[as.factor(species)], pch=16, ylab="Total reproductive investment (mg)",xlim=c(100,2000000))
+words.bottom.right.logxy(mod)
+
+mod <- lm (log(total_weight)~log(fruit_weight), data=subset(SummaryInd,fruit_weight>0))
+plot(fruit_weight~total_weight,data=subset(SummaryInd,fruit_weight>0), log="xy",col=col.spp[as.factor(species)], pch=16, ylab="Fruit weight (mg)",xlim=c(100,2000000),xlab="")
+words.bottom.right.logxy(mod)
+
+mod <- lm (log(total_weight)~log(propagule_inv), data=subset(SummaryInd,propagule_inv>0))
+plot(propagule_inv~total_weight,data=subset(SummaryInd,propagule_inv>0), log="xy",col=col.spp[as.factor(species)], pch=16, xlab="", ylab="Propagule investment (mg)", xlim=c(100,2000000))
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+words.bottom.right.logxy(mod)
+
+mod <- lm (log(total_weight)~log(prepollen_all_inv), data=subset(SummaryInd,prepollen_all_inv>0))
+plot(prepollen_all_inv~total_weight,data=subset(SummaryInd,prepollen_all_inv>0), log="xy",col=col.spp[as.factor(species)], pch=16, xlab="", ylab="prepollen investment (mg)", xlim=c(100,2000000))
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+words.bottom.right.logxy(mod)
+
+mtext("Total plant size (mg)",1, outer=TRUE,cex=1.2)
+```
+    
+### Comparing accessory cost calculations expressed as "per successful seed" versus "proportion reproductive investment"  
+  - The difference between the two calculations is seed count
+  - calculating accessory costs on a per seed basis stratify the data much more by species 
+      * this is because the species that have more seeds (lower proportional accessory costs), also have higher seedset
+  - Calculations per seed tell you energy input relative to fecundity
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.width=14, fig.height=7}
+options(scipen=10)
+par(mfrow=c(1,2), cex=1, omi=c(0.4,0.6,0.7,0.3), mai=c(1.1,1,0.3,0.3)) 
+mod <- lm(log(seed_count)~species*accessory_per_seed,data=subset(SummaryInd,seed_count>0))
+plot(seed_count~accessory_per_seed,SummaryInd, log="xy", pch=16,col=col.spp[as.factor(species)],ylab="seed count",xlab="accessory costs per successful seed (mg)",cex=.9)
+words.bottom.left.logxy(mod)
+
+plot(seed_count~(prop_accessory),SummaryInd, log="y", pch=16,col=col.spp[as.factor(species)],ylab="",xlab="proportion of reproduction to accessory tissues",cex=.9)
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+```
+  
+### Do accessory costs shift with seed size?
+    * These plots presented using both accessory cost calculations
+    
+Results:  
+    - Larger-seeded species have higher accessory costs, as has been shown in other studies  
+    - Also: "larger species" and species with lower seed set have higher accessory costs  
+    - And: species with greater prepollination investment have higher accessory costs (since this is the majority of accessory costs for most species)  
+    - When all 4 variables put into a single model, depending on lots of little changes, different factors (seedset, seed size, maxH-species, pre-pollination costs come out as have the best explanatory power) 
+
+Interpretation:  
+    - Not sure one can separate the effect of plant size, seed set, seed size on what drive accessory costs  
+    - the reason seed set is strongly correlated, is because if flowers are pollinated and develop into mature seeds, the individual plant ends up investing more energy in reproduction and that extra energy is being invested into propagules, reducing accessory costs.   
+        * This is true at the species and individual level.  
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.width=14, fig.height=7}
+par(mfrow=c(1,2), cex=1, omi=c(0.4,0.6,0.7,0.3), mai=c(.7,1,0.3,0.3))
+#mod <- lm(log(seed_size)~log(accessory_per_seed),data=subset(SummaryInd,seed_count>0&accessory_per_seed>0))
+mod <- lm(log(seed_size)~(accessory_per_seed_mean),SummarySpp)
+plot(accessory_per_seed~seed_size,SummaryInd, log="xy", pch=16,col=col.spp[as.factor(species)],ylab="accessory costs per successful seed",xlab="",cex=.9)
+points((accessory_per_seed_mean)~seed_size,SummarySpp, pch=16,col=col.spp[as.factor(species)],cex=1.8)
+words.bottom.right.logxy(mod)
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+#mod <- lm(log(seed_size)~asin(sqrt(prop_accessory)),data=subset(SummaryInd,seed_count>0&accessory_per_seed>0))
+mod <- lm(log(seed_size)~asin(sqrt(prop_accessory_mean)),SummarySpp)
+plot(asin(sqrt(prop_accessory))~seed_size,SummaryInd, log="x", pch=16,col=col.spp[as.factor(species)],ylab="proportional accessory costs",xlab="",cex=.9)
+words.bottom.right.logx(mod)
+points(asin(sqrt(prop_accessory_mean))~seed_size,SummarySpp, pch=16,col=col.spp[as.factor(species)],cex=1.8)
+mtext("seed size (mg)",1, outer=TRUE,cex=1.2)
+
+
+#mod <- lm(log(total_weight)~log(accessory_per_seed),data=subset(SummaryInd,seed_count>0&accessory_per_seed>0))
+mod <- lm(log(total_weight_mean)~log(accessory_per_seed_mean),SummarySpp)
+plot(accessory_per_seed~total_weight,SummaryInd, log="xy", pch=16,col=col.spp[as.factor(species)],ylab="accessory costs per successful seed",xlab="",cex=.9)
+points((accessory_per_seed_mean)~total_weight_mean,SummarySpp, pch=16,col=col.spp[as.factor(species)],cex=1.8)
+words.bottom.right.logxy(mod)
+
+#mod <- lm(log(total_weight)~asin(sqrt(prop_accessory)),data=subset(SummaryInd,seed_count>0&accessory_per_seed>0))
+mod <- lm(log(total_weight_mean)~asin(sqrt(prop_accessory_mean)),SummarySpp)
+plot(asin(sqrt(prop_accessory))~total_weight,SummaryInd, log="x", pch=16,col=col.spp[as.factor(species)],ylab="proportional accessory costs",xlab="",cex=0.9)
+points(asin(sqrt(prop_accessory_mean))~total_weight_mean,SummarySpp, pch=16,col=col.spp[as.factor(species)],cex=1.8)
+words.bottom.right.logx(mod)
+mtext("total plant weight (mg)",1, outer=TRUE,cex=1.2)
+
+
+#mod <- lm(log(seedset)~log(accessory_per_seed),data=subset(SummaryInd,seed_count>0&accessory_per_seed>0))
+mod <- lm(log(seedset_mean)~log(accessory_per_seed_mean),SummarySpp)
+plot((accessory_per_seed)~seedset,SummaryInd, log="xy", pch=16,col=col.spp[as.factor(species)],ylab="accessory costs per successful seed",xlab="",cex=0.9)
+points((accessory_per_seed_mean)~seedset_mean,SummarySpp, pch=16,col=col.spp[as.factor(species)],cex=1.8)
+words.top.right.logxy(mod)
+
+#mod <- lm(log(seedset)~asin(sqrt(prop_accessory)),data=subset(SummaryInd,seed_count>0&accessory_per_seed>0))
+mod <- lm(log(seedset_mean)~asin(sqrt(prop_accessory_mean)),SummarySpp)
+plot(asin(sqrt(prop_accessory))~seedset,SummaryInd, log="x", pch=16,col=col.spp[as.factor(species)],ylab="proportional accessory costs",xlab="",cex=0.9)
+legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+points(asin(sqrt(prop_accessory_mean))~seedset_mean,SummarySpp, pch=16,col=col.spp[as.factor(species)],cex=1.8)
+words.top.right.logx(mod)
+mtext("seedset",1, outer=TRUE,cex=1.2)
+
+
+#mod <- lm(log(prepollen_all_per_seed)~log(accessory_per_seed),data=subset(SummaryInd,seed_count>0&accessory_per_seed>0&prepollen_all_per_seed>0))
+mod <- lm(log(prepollen_all_per_seed_mean)~log(accessory_per_seed_mean),SummarySpp)
+plot((accessory_per_seed)~(prepollen_all_per_seed),SummaryInd, log="xy",pch=16,col=col.spp[as.factor(species)],ylab="accessory costs per successful seed",xlab="",cex=0.9)
+points((accessory_per_seed_mean)~prepollen_all_per_seed_mean,SummarySpp, pch=16,col=col.spp[as.factor(species)],cex=1.8)
+words.bottom.right.logxy(mod)
+
+#mod <- lm(asin(sqrt(prop_prepollen_all))~asin(sqrt(prop_accessory)),data=subset(SummaryInd,seed_count>0&accessory_per_seed>0&prepollen_all_per_seed>0))
+mod <- lm(asin(sqrt(prop_prepollen_all_mean))~asin(sqrt(prop_accessory_mean)),SummarySpp)
+plot(asin(sqrt(prop_accessory))~asin(sqrt(prop_prepollen_all)),SummaryInd, log="", pch=16,col=col.spp[as.factor(species)],ylab="proportional accessory costs",xlab="",cex=0.9)
+points(asin(sqrt(prop_accessory_mean))~asin(sqrt(prop_prepollen_all_mean)),SummarySpp, pch=16,col=col.spp[as.factor(species)],cex=1.8)
+words.bottom.right(mod)
+mtext("pre-pollination costs (proportional)",1, outer=TRUE,cex=1.2)
+```
+
+### Plotting accessory costs that go into making a single seed
+- These calculations sum up all the tissue parts required to make a single seed, ignoring the cost of aborted tissues  
+- They are a bit rough at the moment, with estimates for the cost of tissues that support multiple seeds (i.e. a cone)
+
+* Bigger seeds have bigger fixed costs of making that seed (1st plot)
+* But other than LEES having much lower costs, no shifts across species in their relative costs to make a seed (2nd plot); and LEES is one of the species where I use "propagule" not a single seed, so its "seed size" is higher and "accessory costs" slightly lower, since all fruit parts are part of the propagule 
+* In other words, patterns of accessory costs vs. seed size, plant size, etc come about due to the differential effect of bud, flower abortion across species  
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.width=14, fig.height=7}
+par(mfrow=c(1,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))
+plot(seed_size~seedcosts,data=subset(SummarySpp),log="xy",pch=16,col=col.spp[as.factor(species)],xlab="costs to make 1 seed (mg)",ylab="seed size (mg)",cex=1.2)
+mod <- lm(seedcosts~seed_size, SummarySpp)
+abline(0,1)
+abline(-1,1)
+abline(-2,1)
+text(5,6.5,srt=40,"no accessory costs")
+text(2.5,.35,srt=40,"90%")
+text(7,.1,srt=40,"accessory costs = 99%")
+words.top.left.logxy(mod)
+text(seed_size~seedcosts,data=subset(SummarySpp),labels=species, pos=1,offset=.6,cex=0.8,col="black")
+
+plot(seed_size~costs_per_seed,data=subset(SummarySpp),log="y",pch=16,col=col.spp[as.factor(species)],ylab="",xlab="proportional accessory costs, scaled by seed weight",cex=1.2)
+text(seed_size~costs_per_seed,data=subset(SummarySpp),labels=species, pos=1,offset=.6,cex=0.8,col="black")
+mod <- lm(costs_per_seed~seed_size, SummarySpp)
+words.bottom.left.logy(mod)
+```
+
+
+* Replotting the seedset data by age, showing that the correlation between seedset and accessory costs is not age related
+* At most, there are most "old" plants with very low seedset  
+* these plots only include individuals with some seedset, thereby ignoring most young plants
+
+```{r, echo=FALSE,message=FALSE,fig.width=7, fig.height=7}
+par(mfrow=c(1,1), cex=1, omi=c(0.2,0.3,0.3,0.3), mai=c(1.1,1,0.3,0.3))  
+
+mod <- lm(log(seedset)~log(prop_propagule),data=subset(SummaryInd,seedset>0&seedset<1))
+plot(prop_propagule~seedset,data=subset(SummaryInd,seedset>0&seedset<1), log="xy", pch=16,col=col.age[as.factor(age)],ylab="proportion RE to propagules (1-accessory)",xlab="seed set")
+words.bottom.right.logxy(mod)
+legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
+```
+
+###Does increasing RA yield compounding returns in the form of higher seedset or increased propagule allocation?
+* NO - seedset and relative propagule investment do not increase with increasing RA 
+* Furthermore, looking within species  
+    - Not a single species shows an increase in prop_propagule with increasing RA  
+    - And for seedset vs RA, only HATE shows an increase, and HEPU a decrease  
+    - So no, there are no compounding benefits to increasing RA    
+    
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14,warning=FALSE}
+par(mfrow=c(2,2), cex=1, omi=c(0.2,0.3,0.3,0.3), mai=c(1.1,1,0.3,0.3)) 
+mod <- lm(asin(sqrt(seedset))~asin(sqrt(RA2)),data=subset(SummaryInd,seedset>0&seedset<1))
+plot(asin(sqrt(RA2))~asin(sqrt(seedset)),data=subset(SummaryInd,seedset>0&seedset<1), pch=16,col=col.spp[as.factor(species)])
+words.bottom.right(mod)
+
+mod <- lm(asin(sqrt(prop_propagule))~asin(sqrt(RA2)),data=subset(SummaryInd,prop_propagule>0))
+plot(asin(sqrt(RA2))~asin(sqrt(prop_propagule)),data=subset(SummaryInd,seedset>0&seedset<1), pch=16,col=col.spp[as.factor(species)])
+words.bottom.right(mod)
+legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+mod <- lm(asin(sqrt(propagule_per_seed))~asin(sqrt(RA2)),data=subset(SummaryInd,prop_propagule>0))
+plot(asin(sqrt(RA2))~(propagule_per_seed),data=subset(SummaryInd,seedset>0&seedset<1), log="x",pch=16,col=col.spp[as.factor(species)])
+words.bottom.right.logx(mod)
+```
+
+###Does increasing overall reproductive investment yield compoinding returns in the form of higher seedset or increased propagule allocation?  
+* Not within species - as total reproductive investment increases there are no within species shifts with respect to seed set, proportional propagule allocation, or propagule allocation per seed
+* Plotting all data shows the between species effect - that species with larger adult plants have lower seedset and proportional propagule investment  
+* the third plot shows scatter for species where some (or all) individuals have actual seeds weighed, but not for species that really just have a mean seed weight plugged in for all individuals
+
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14,warning=FALSE}
+par(mfrow=c(2,2), cex=1, omi=c(0.2,0.3,0.3,0.3), mai=c(1.1,1,0.3,0.3)) 
+options(scipen=20)
+mod <- lm(asin(sqrt(seedset))~log(total_repro_inv),data=subset(SummaryInd,seedset>0&seedset<1))
+plot((total_repro_inv)~asin(sqrt(seedset)),data=subset(SummaryInd,seedset>0&seedset<1), pch=16,col=col.spp[as.factor(species)],log="y")
+words.bottom.right.logy(mod)
+
+mod <- lm(asin(sqrt(prop_propagule))~log(total_repro_inv),data=subset(SummaryInd,prop_propagule>0))
+plot((total_repro_inv)~asin(sqrt(prop_propagule)),data=subset(SummaryInd,seedset>0&seedset<1), pch=16,col=col.spp[as.factor(species)],log="y")
+words.bottom.right.logy(mod)
+legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+mod <- lm(log(propagule_per_seed)~log(total_repro_inv),data=subset(SummaryInd,seedset>0&seedset<1))
+plot((total_repro_inv)~(propagule_per_seed),data=subset(SummaryInd,seedset>0&seedset<1), log="xy",pch=16,col=col.spp[as.factor(species)])
+words.bottom.right.logxy(mod)
+```
+
+###Does seedset or allocation to propagules shift with prop_maxH?
+* Not within species - looked at within species regressions for prop_maxH against seedset, prop_propagule, propagule_per_seed and no consistent patterns  
+* However there is a strong across species effect, such that species where more of the reproducing individuals have lower "prop_maxH" have higher seed set vs. the opposites  
+* This indicates that species that begin reproducing at smaller sizes have higher seedset  
+    * We already knew that individuals from species with shorter Hmax and individuals that are overall shorter have higher seedset  
+    * In part this is suggetsing that the species with high seedset have, on average, mostly individuals that are much 
+      shorter than the maxH achieved and that reproduction is curtailing their growth even more than maxH_spp indicates 
+
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14,warning=FALSE}
+par(mfrow=c(2,2), cex=1, omi=c(0.2,0.3,0.3,0.3), mai=c(1.1,1,0.3,0.3)) 
+options(scipen=20)
+mod <- lm((prop_maxH)~asin(sqrt(seedset)),data=subset(SummaryInd,seedset>0&seedset<1))
+plot(asin(sqrt(seedset))~(prop_maxH),data=subset(SummaryInd,seedset>0&seedset<1), pch=16,col=col.spp[as.factor(species)])
+words.bottom.right(mod)
+
+mod <- lm(log(height)~asin(sqrt(seedset)),data=subset(SummaryInd,seedset>0&seedset<1))
+plot(asin(sqrt(seedset))~(height),data=subset(SummaryInd,seedset>0&seedset<1), pch=16,col=col.spp[as.factor(species)],log="x")
+words.bottom.right.logx(mod)
+
+mod <- lm((prop_maxH)~asin(sqrt(prop_propagule)),data=subset(SummaryInd,prop_propagule>0))
+plot(asin(sqrt(prop_propagule))~(prop_maxH),data=subset(SummaryInd,seedset>0&seedset<1), pch=16,col=col.spp[as.factor(species)])
+words.bottom.right(mod)
+legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+mod <- lm((prop_maxH)~log(propagule_per_seed),data=subset(SummaryInd,seedset>0&seedset<1))
+plot((propagule_per_seed)~(prop_maxH),data=subset(SummaryInd,seedset>0&seedset<1), log="y",pch=16,col=col.spp[as.factor(species)])
+words.bottom.right.logy(mod)
+```
+
+###What causes the correlation between RA and plant size (or total reproductive investment)?
+```{r, echo=FALSE,message=FALSE,fig.width=12, fig.height=30}
+par(mfrow=c(5,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))  
+
+mod <- lm(log(RA2)~log((propagule_inv)),data=subset(SummaryInd,RA2>0&propagule_inv>0))
+plot(propagule_inv~RA2,data=subset(SummaryInd,RA2>0&propagule_inv>0), pch=16,col=col.spp[as.factor(species)],log="xy", ylab="energy to propagules (mg)")
+words.bottom.right.logxy(mod)
+
+mod <- lm(log(RA2)~asin(sqrt(prop_propagule)),data=subset(SummaryInd,RA2>0&prop_propagule>0))
+plot(asin(sqrt(prop_propagule))~RA2,data=subset(SummaryInd,RA2>0&prop_propagule>0), log="x", pch=16,col=col.spp[as.factor(species)],ylab="propagules (as proportion repro inv)")
+words.bottom.left.logx(mod)
+
+
+mod <- lm(log(RA2)~log((prepollen_aborted_inv)),data=subset(SummaryInd,RA2>0&prepollen_aborted_inv>0))
+plot(prepollen_aborted_inv~RA2,data=subset(SummaryInd,RA2<1&RA2>0), pch=16,col=col.spp[as.factor(species)],log="xy",ylab="pre-pollination aborted tissues (mg)")
+words.bottom.right.logxy(mod)
+
+mod <- lm(log(RA2)~asin(sqrt(prop_prepollen_aborted)),data=subset(SummaryInd,RA2>0&prop_prepollen_aborted>0))
+plot(asin(sqrt(prop_prepollen_aborted))~RA2,data=subset(SummaryInd,RA2>0&prop_prepollen_aborted>0), pch=16,col=col.spp[as.factor(species)], log="x",ylab="pre-pollination aborted tissues (as proportion repro inv) (asin)")
+words.bottom.right.logx(mod)
+
+mod <- lm(log(RA2)~log((prepollen_success_inv)),data=subset(SummaryInd,RA2>0&prepollen_success_inv>0))
+plot(prepollen_success_inv~RA2,data=subset(SummaryInd,RA2<1&RA2>0), pch=16,col=col.spp[as.factor(species)],log="xy",ylab="pre-pollination successful tissues (mg)")
+words.bottom.right.logxy(mod)
+
+mod <- lm(log(RA2)~asin(sqrt(prop_prepollen_success)),data=subset(SummaryInd,RA2>0&prop_prepollen_success>0))
+plot(asin(sqrt(prop_prepollen_success))~RA2,data=subset(SummaryInd,RA2>0&prop_prepollen_success>0), pch=16,col=col.spp[as.factor(species)], log="x",ylab="pre-pollination successful tissues (as proportion repro inv) (asin)")
+words.bottom.right.logx(mod)
+
+mod <- lm(log(RA2)~log((packaging_dispersal_inv)),data=subset(SummaryInd,RA2>0&packaging_dispersal_inv>0))
+plot(packaging_dispersal_inv~RA2,data=subset(SummaryInd,RA2>0&packaging_dispersal_inv>0), pch=16,col=col.spp[as.factor(species)],log="xy", ylab="energy to packaging and dispersal (mg)")
+words.bottom.right.logxy(mod)
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+mod <- lm(log(RA2)~asin(sqrt(prop_packaging_dispersal)),data=subset(SummaryInd,RA2>0&prop_packaging_dispersal>0))
+plot(asin(sqrt(prop_packaging_dispersal))~RA2,data=subset(SummaryInd,RA2>0&prop_packaging_dispersal>0), log="x", pch=16,col=col.spp[as.factor(species)],ylab="packaging and dispersal (as proportion repro inv)")
+words.bottom.left.logx(mod)
+
+mod <- lm(log(RA2)~log((postpollen_aborted_inv)),data=subset(SummaryInd,RA2>0&postpollen_aborted_inv>0))
+plot(postpollen_aborted_inv~RA2,data=subset(SummaryInd,RA2>0&postpollen_aborted_inv>0), pch=16,col=col.spp[as.factor(species)],log="xy", ylab="energy to tissues aborted postpollination (mg)")
+words.bottom.right.logxy(mod)
+
+mod <- lm(log(RA2)~asin(sqrt(prop_postpollen_aborted)),data=subset(SummaryInd,RA2>0&prop_postpollen_aborted>0))
+plot(asin(sqrt(prop_postpollen_aborted))~RA2,data=subset(SummaryInd,RA2>0&prop_postpollen_aborted>0), log="x", pch=16,col=col.spp[as.factor(species)],ylab="tissues aborted postpollination (as proportion repro inv)")
+words.bottom.left.logx(mod)
+```
+
+### Looking at the same patterns against maxH  
+
+```{r, echo=FALSE, message=FALSE, fig.width=12, fig.height=36}
+par(mfrow=c(6,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))  
+
+mod <- lm((prop_maxH)~log((total_repro_inv)),data=subset(SummaryInd,prop_maxH>0&total_repro_inv>0))
+plot(total_repro_inv~prop_maxH,data=subset(SummaryInd,prop_maxH>0&total_repro_inv>0), pch=16,col=col.spp[as.factor(species)],log="y", ylab="total reproductive investment (mg)")
+words.bottom.right.logy(mod)
+
+mod <- lm((prop_maxH)~asin(sqrt(RA2)),data=subset(SummaryInd,prop_maxH>0))
+plot(asin(sqrt(RA2))~prop_maxH,data=subset(SummaryInd,prop_maxH>0),pch=16,col=col.spp[as.factor(species)],ylab="RA2")
+words.bottom.left(mod)
+
+mod <- lm((prop_maxH)~log((propagule_inv)),data=subset(SummaryInd,prop_maxH>0&propagule_inv>0))
+plot(propagule_inv~prop_maxH,data=subset(SummaryInd,prop_maxH>0&propagule_inv>0), pch=16,col=col.spp[as.factor(species)],log="y", ylab="energy to propagules (mg)")
+words.bottom.right.logy(mod)
+
+mod <- lm((prop_maxH)~asin(sqrt(prop_propagule)),data=subset(SummaryInd,prop_maxH>0))
+plot(asin(sqrt(prop_propagule))~prop_maxH,data=subset(SummaryInd,prop_maxH>0),pch=16,col=col.spp[as.factor(species)],ylab="propagules (as proportion repro inv)")
+words.bottom.left(mod)
+
+mod <- lm((prop_maxH)~log((prepollen_aborted_inv)),data=subset(SummaryInd,prop_maxH>0&prepollen_aborted_inv>0))
+plot(prepollen_aborted_inv~prop_maxH,data=subset(SummaryInd,prop_maxH>0&prepollen_aborted_inv>0), pch=16,col=col.spp[as.factor(species)],log="y",ylab="pre-pollination aborted tissues (mg)")
+words.bottom.right.logy(mod)
+
+mod <- lm((prop_maxH)~asin(sqrt(prop_prepollen_aborted)),data=subset(SummaryInd,prop_maxH>0))
+plot(asin(sqrt(prop_prepollen_aborted))~prop_maxH,data=subset(SummaryInd,prop_maxH>0), pch=16,col=col.spp[as.factor(species)], ylab="pre-pollination aborted tissues (as proportion repro inv) (asin)")
+words.bottom.left(mod)
+
+mod <- lm((prop_maxH)~log((prepollen_success_inv)),data=subset(SummaryInd,prop_maxH>0&prepollen_success_inv>0))
+plot(prepollen_success_inv~prop_maxH,data=subset(SummaryInd,prop_maxH>0&prepollen_success_inv>0), pch=16,col=col.spp[as.factor(species)],log="y",ylab="pre-pollination successful tissues (mg)")
+words.bottom.right.logy(mod)
+
+mod <- lm((prop_maxH)~asin(sqrt(prop_prepollen_success)),data=subset(SummaryInd,prop_maxH>0))
+plot(asin(sqrt(prop_prepollen_success))~prop_maxH,data=subset(SummaryInd,prop_maxH>0), pch=16,col=col.spp[as.factor(species)], ylab="pre-pollination successful tissues (as proportion repro inv) (asin)")
+words.bottom.left(mod)
+
+mod <- lm((prop_maxH)~log((packaging_dispersal_inv)),data=subset(SummaryInd,prop_maxH>0&packaging_dispersal_inv>0))
+plot(packaging_dispersal_inv~prop_maxH,data=subset(SummaryInd,prop_maxH>0&packaging_dispersal_inv>0), pch=16,col=col.spp[as.factor(species)],log="y", ylab="energy to packaging and dispersal (mg)")
+words.bottom.right.logy(mod)
+legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+
+mod <- lm((prop_maxH)~asin(sqrt(prop_packaging_dispersal)),data=subset(SummaryInd,prop_maxH>0))
+plot(asin(sqrt(prop_packaging_dispersal))~prop_maxH,data=subset(SummaryInd,prop_maxH>0), pch=16,col=col.spp[as.factor(species)],ylab="packaging and dispersal (as proportion repro inv)")
+words.bottom.left(mod)
+
+mod <- lm((prop_maxH)~log((postpollen_aborted_inv)),data=subset(SummaryInd,prop_maxH>0&postpollen_aborted_inv>0))
+plot(postpollen_aborted_inv~prop_maxH,data=subset(SummaryInd,prop_maxH>0&postpollen_aborted_inv>0), pch=16,col=col.spp[as.factor(species)],log="y", ylab="energy to tissues aborted postpollination (mg)")
+words.bottom.right.logy(mod)
+
+mod <- lm((prop_maxH)~asin(sqrt(prop_postpollen_aborted)),data=subset(SummaryInd,prop_maxH>0))
+plot(asin(sqrt(prop_postpollen_aborted))~prop_maxH,data=subset(SummaryInd,prop_maxH>0), pch=16,col=col.spp[as.factor(species)],ylab="tissues aborted postpollination (as proportion repro inv)")
+words.bottom.left(mod)
+```
+
+##Shifts in proportion to tissue types across species  
+- Reasonably idiosyncratic patterns  
+- Species very different in which accessory tissues they invest the most in - which reflects the differences in basic structure (i.e. Banksia cones), but also more subtlely that some species abort lots of buds (pre-pollination aborted), while other species abort more fully formed flowers   
+- COER, EPMI, LEES, PILI invest the most energy in propagules  
+- HATE invests by far the least into propagules  
+```{r, echo=FALSE, message=FALSE, fig.width=14, fig.height=28}
+par(mfrow=c(4,2), cex=1, omi=c(1,.1,.7,.1), mai=c(.5,1.1,.2,0.2))  
+mean1 <- SummarySpp$prop_propagule_mean
+se1 <- SummarySpp$prop_propagule_se
+plot(mean1~species,SummarySpp,cex.axis=.5,pch=16,log="y",ylim=c(.002,.25),ylab="propagules",xlab="")
+se_function(mean1,se1)
+
+mean1 <- SummarySpp$propagule_per_seed_mean
+se1 <- SummarySpp$propagule_per_seed_se
+plot(mean1~species,SummarySpp,cex.axis=.5,pch=16,log="y",ylab="propagules",xlab="")
+se_function(mean1,se1)
+
+mean1 <- SummarySpp$prop_prepollen_all_mean
+se1 <- SummarySpp$prop_prepollen_all_se
+plot(mean1~species,data=subset(SummarySpp),cex.axis=.5,pch=16,ylim=c(.1,1),ylab="pre-pollination tissues",xlab="")
+se_function(mean1,se1)
+
+mean1 <- SummarySpp$prepollen_all_per_seed_mean
+se1 <- SummarySpp$prepollen_all_per_seed_se
+plot((.01+prepollen_all_per_seed_mean)~species,data=subset(SummarySpp),cex.axis=.5,pch=16,ylab="pre-pollination tissues",xlab="",log="y")
+se_function(mean1,se1)
+
+mean1 <- SummarySpp$prop_packaging_dispersal_mean
+se1 <- SummarySpp$prop_packaging_dispersal_se
+plot(mean1~species,SummarySpp,cex.axis=.5,pch=16,log="y",ylim=c(.02,1),ylab="packaging and dispersal")
+se_function(mean1,se1)
+
+mean1 <- SummarySpp$packaging_dispersal_per_seed_mean
+se1 <- SummarySpp$packaging_dispersal_per_seed_se
+plot((packaging_dispersal_per_seed_mean+.1)~species,SummarySpp,cex.axis=.5,pch=16,ylab="packaging and dispersal",log="y")
+se_function(mean1,se1)
+
+mean1 <- SummarySpp$prop_postpollen_aborted_mean
+se1 <- SummarySpp$prop_postpollen_aborted_se
+plot(mean1~species,SummarySpp,cex.axis=.5,pch=16,log="y",ylim=c(.02,1),ylab="aborted post-pollination tissues")
+se_function(mean1,se1)
+
+mean1 <- SummarySpp$postpollen_aborted_per_seed_mean
+se1 <- SummarySpp$postpollen_aborted_per_seed_se
+plot((postpollen_aborted_per_seed_mean+.1)~species,SummarySpp,cex.axis=.5,pch=16,ylab="aborted post-pollination tissues",log="y")
+se_function(mean1,se1)
+            
+mtext("proportion of reproductive investment                                                                       mg investment per seed",3,outer=TRUE,cex=1.1)
+mtext("species",1, outer=TRUE,cex=1.1)
+```
+
+- just looking among plants >3 years old  
+```{r, echo=FALSE, message=FALSE, fig.width=14, fig.height=7}
+par(mfrow=c(1,2), cex=1, omi=c(1,.1,.7,.1), mai=c(.5,1.1,.2,0.2)) 
+tmp <- SummaryInd %>%
+  filter(total_repro_inv!=0&age>3) %>%
+  group_by(species) %>%
+  summarise_each(funs(mean, se), prop_prepollen_all)
+
+plot(mean~species,
+    tmp,
+     cex.axis=.5,pch=16,log="y",ylim=c(.02,1),
+     ylab="Prop reproductive investment put into pre-pollination tissues")
+
+mean1 <- tmp$mean
+se1 <- tmp$se
+se_function(mean1,se1)
+
+tmp2 <- SummaryInd %>%
+  filter(total_repro_inv!=0&age>3) %>%
+  group_by(species) %>%
+  summarise_each(funs(mean, se), prop_packaging_dispersal)
+
+plot(mean~species,
+    tmp2,
+     cex.axis=.5,pch=16,log="y",ylim=c(0.08,.8),
+     ylab="Prop reproductive investment put into packaging & dispersal tissues")
+
+mean1 <- tmp2$mean
+se1 <- tmp2$se
+
+se_function(mean1,se1)
+```
