@@ -335,14 +335,14 @@ legend("bottomleft",legend=names(labels.age),col=col.age,pch=16, cex=1.1,bty="n"
 par(mfrow=c(1,1), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
 SummaryIndPCA <- SummaryInd %>%
   filter(lvs_end_total>0&shoot_leaf_area>0&shoot_leaf_area_growth!=0) %>%
-  select(prop_maxH,height,maxH_spp,wood_density,LMA_mean,seed_size,growth_leaf,
+  select(prop_maxH,height,maxH,wood_density,LMA_mean,seed_size,growth_leaf,
          growth_stem_diam,leaf_area,growth_shoot_diam,growth_stem_area,lvs_end_total,total_weight,
          RA,seedset,repro_all_count,accessory_inv,propagule_inv,shoot_leaf_area,shoot_leaf_area_growth,scaled_growth_stem_diam)
 
 SummaryIndPCA$leaf_area <- log((SummaryIndPCA$leaf_area)+.001)
 SummaryIndPCA$total_weight <- log(SummaryIndPCA$total_weight)
 SummaryIndPCA$height <- log(SummaryIndPCA$height)
-SummaryIndPCA$maxH_spp <- log(SummaryIndPCA$maxH_spp)
+SummaryIndPCA$maxH <- log(SummaryIndPCA$maxH)
 SummaryIndPCA$seed_size <- log(SummaryIndPCA$seed_size)
 SummaryIndPCA$accessory_inv <- log(SummaryIndPCA$accessory_inv+.001)
 SummaryIndPCA$propagule_inv <- log(SummaryIndPCA$propagule_inv+.001)
@@ -476,7 +476,7 @@ se_function(mean1,se1)
 ####PCA axis 3 again divides mainly by species
 * it explains 9% of the variance (total variance explained now at 68%)  
 * It is dividing the three (of 4) canopy species, HATE, PEPU, PELA, (BAER) versus
-* top variable loadings: scaled_growth_stem_diam, wood_density,growth_stem_diam, lvs_end_total vs. maxH_spp, LMA_mean, seed_size, RA  
+* top variable loadings: scaled_growth_stem_diam, wood_density,growth_stem_diam, lvs_end_total vs. maxH, LMA_mean, seed_size, RA  
 * not terribly interpretable, since doesn't make sense that scaled_growth_stem_diam with wood_density  
 
 ```{r, echo=FALSE,message=FALSE,fig.width=20, fig.height=14}

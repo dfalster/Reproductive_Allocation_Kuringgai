@@ -272,7 +272,7 @@ words.bottom.right.logxy(mod)
 * This indicates that species that begin reproducing at smaller sizes have higher seedset  
     * We already knew that individuals from species with shorter Hmax and individuals that are overall shorter have higher seedset  
     * In part this is suggetsing that the species with high seedset have, on average, mostly individuals that are much 
-      shorter than the maxH achieved and that reproduction is curtailing their growth even more than maxH_spp indicates 
+      shorter than the maxH achieved and that reproduction is curtailing their growth even more than maxH indicates 
 
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14,warning=FALSE}
 par(mfrow=c(2,2), cex=1, omi=c(0.2,0.3,0.3,0.3), mai=c(1.1,1,0.3,0.3)) 

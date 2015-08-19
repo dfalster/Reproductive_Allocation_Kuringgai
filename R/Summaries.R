@@ -239,7 +239,8 @@ scale_individual_variable <- function(SummaryInd, SummarySpp) {
     }
 
     mutate(SummaryInd,
-      prop_maxH = height / get_species_value("max", "height"),
+      maxH =  get_species_value("max", "height"),
+      prop_maxH = height / maxH,
       prop_max_weight = total_weight / get_species_value("max", "total_weight"),
       prop_max_repro = ReproInv / get_species_value("max", "ReproInv"),
       scaled_growth_stem_diam = growth_stem_diam / get_species_value("mean", "growth_stem_diam"),

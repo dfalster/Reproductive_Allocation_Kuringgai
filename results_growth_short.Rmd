@@ -78,7 +78,7 @@ plot((RA+.01)~prop_growth_stem_diam, SummaryInd, log="xy", col=col.spp[as.factor
 legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right.logxy(mod)
 
-SummaryInd$prop_growth_height <- SummaryInd$growth_height/SummaryInd$maxH_spp
+SummaryInd$prop_growth_height <- SummaryInd$growth_height/SummaryInd$maxH
 
 mod <- lm(log(prop_growth_height)~asin(sqrt(RA)),data=subset(SummaryInd,growth_height>0&species!="PEPU"&species!="PELA"&species!="COER"))
 plot((RA+.01)~(prop_growth_height), data=subset(SummaryInd,species!="PEPU"&species!="PELA"), log="xy", col=col.spp[as.factor(species)],pch=16)
@@ -172,14 +172,14 @@ mtext("basal diameter", 2, outer=TRUE,cex=1.2)
 par(mfrow=c(1,1), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
 SummaryIndPCA <- SummaryInd %>%
   filter(lvs_end_total>0&shoot_leaf_area>0&shoot_leaf_area_growth!=0) %>%
-  select(prop_maxH,height,maxH_spp,WD_mean,LMA_mean,seed_size,growth_leaf,
+  select(prop_maxH,height,maxH,WD_mean,LMA_mean,seed_size,growth_leaf,
          growth_stem_diam,leaf_area,growth_shoot_area,growth_stem_area,lvs_end_total,total_weight,
          RA,seedset,repro_all_count,accessory_inv,propagule_inv,shoot_leaf_area,shoot_leaf_area_growth,RGR)
 
 SummaryIndPCA$leaf_area <- log((SummaryIndPCA$leaf_area)+.001)
 SummaryIndPCA$total_weight <- log(SummaryIndPCA$total_weight)
 SummaryIndPCA$height <- log(SummaryIndPCA$height)
-SummaryIndPCA$maxH_spp <- log(SummaryIndPCA$maxH_spp)
+SummaryIndPCA$maxH <- log(SummaryIndPCA$maxH)
 SummaryIndPCA$seed_size <- log(SummaryIndPCA$seed_size)
 SummaryIndPCA$accessory_inv <- log(SummaryIndPCA$accessory_inv+.001)
 SummaryIndPCA$propagule_inv <- log(SummaryIndPCA$propagule_inv+.001)

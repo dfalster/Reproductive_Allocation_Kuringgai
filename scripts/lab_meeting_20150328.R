@@ -169,9 +169,9 @@ text(GrowthInv_mean ~ seed_size, data=subset(SummarySppAge,age==9), labels=speci
 #Species with greater maximum height have higher growth rates
 For younger plants there is no relationship with *SPECIES* overall maximum H, but there is a positive correlation with the maximum height the species reaches at a given age -i.e. fast growing young plants are tall when young.
 ```{r, echo=FALSE,results='hide', message=FALSE}
-plot(GrowthInv_mean ~ maxH_spp,data=subset(SummarySppAge,age>3),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1.2,xlab="maximum height (mm)",ylab="growth investment (mg per year)",xlim=c(500,3200),main="Relationship between growth rates on maximum H")
+plot(GrowthInv_mean ~ maxH,data=subset(SummarySppAge,age>3),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1.2,xlab="maximum height (mm)",ylab="growth investment (mg per year)",xlim=c(500,3200),main="Relationship between growth rates on maximum H")
 legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
-text(GrowthInv_mean ~ maxH_spp, data=subset(SummarySppAge,age==9), labels=species, pos=2, offset=-2.4, cex=0.9,col="blue")
+text(GrowthInv_mean ~ maxH, data=subset(SummarySppAge,age==9), labels=species, pos=2, offset=-2.4, cex=0.9,col="blue")
 ```
 
 

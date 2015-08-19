@@ -36,7 +36,7 @@ old sequence,sequence,variable,new_name,axis_label,notes
 40,35,growth_shoot_diam,growth_shoot_diameter,increase in shoot diameter (mm/yr),
 41,36,growth_shoot_area,,increase in shoot area (mm^2/yr),
 70,37,leaf_size,,species mean leaf area (mm^2),
-xx,38,maxH_spp,maxH,species maximum height (mm),"Daniel, please add back in maxH_spp, either here or where you add in the scaled values. It is used as a variable for many plots"
+xx,38,maxH,maxH,species maximum height (mm),"Daniel, please add back in maxH, either here or where you add in the scaled values. It is used as a variable for many plots"
 69,39,LMA,,LMA (grams per cm^2),
 37,40,LL_bd,,leaf lifespan (average of leaf births and deaths) (yr-1),
 38,41,LL_death,,leaf lifespan (using leaf deaths) (yr-1),

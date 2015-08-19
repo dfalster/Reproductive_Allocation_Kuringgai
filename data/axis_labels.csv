@@ -57,6 +57,6 @@ WD_length,N/A
 LMA_mean,LMA (grams per cm^2)
 LMA_se,N/A
 LMA_length,N/A
-maxH_spp,species maximum height (mm)
+maxH,species maximum height (mm)
 seed_size,seed size (mg)
 leafArea,leaf area

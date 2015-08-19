@@ -263,8 +263,8 @@ legend(.05,.28,col=col.spp, legend=names(labels.spp), pch=16, cex=.8,bty="n")
 plot(RA_mean~LMA_mean, SummarySpp, col=col.spp[as.factor(species)],pch=16,log="xy",ylab="")
 mod <- lm(log(LMA_mean)~asin(sqrt(RA_mean)), data=subset(SummarySpp,RA_mean>0))
 words.top.right.logxy(mod)
-plot(RA_mean~maxH_spp, SummarySpp, col=col.spp[as.factor(species)],pch=16,log="xy",ylab="")
-mod <- lm(log(maxH_spp)~asin(sqrt(RA_mean)), data=subset(SummarySpp,RA_mean>0))
+plot(RA_mean~maxH, SummarySpp, col=col.spp[as.factor(species)],pch=16,log="xy",ylab="")
+mod <- lm(log(maxH)~asin(sqrt(RA_mean)), data=subset(SummarySpp,RA_mean>0))
 words.bottom.left.logxy(mod)
 mtext("RA",2,outer=TRUE)
 ```
@@ -272,7 +272,7 @@ mtext("RA",2,outer=TRUE)
 *just plotting mean RA of mature plants is similar, although BAER throws off many plots - surprised by how high its RA is, and wondering if something is wrong with these #s
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
 par(mfrow=c(2,2), cex=1, omi=c(.6,0.3,.1,0.2), mai=c(1.1,1,.5,0.2))
-plot(maxH_spp~WD_mean,data=subset(SummarySpp), col=col.spp[as.factor(species)],pch=16,log="y",ylab="")
+plot(maxH~WD_mean,data=subset(SummarySpp), col=col.spp[as.factor(species)],pch=16,log="y",ylab="")
 mod <- lm(mature_RA_mean~asin(sqrt(mature_RA_mean)),data=subset(SummarySpp,species!="BAER"))
 words.bottom.left.logy(mod)
 plot(mature_RA_mean~seed_size, data=subset(SummarySpp), col=col.spp[as.factor(species)],pch=16,log="xy",ylab="")
@@ -282,14 +282,14 @@ legend(.05,.28,col=col.spp, legend=names(labels.spp), pch=16, cex=.8,bty="n")
 plot(mature_RA_mean~LMA_mean, data=subset(SummarySpp), col=col.spp[as.factor(species)],pch=16,log="xy",ylab="")
 mod <- lm(log(LMA_mean)~asin(sqrt(mature_RA_mean)), data=subset(SummarySpp,species!="BAER"))
 words.top.right.logxy(mod)
-plot(mature_RA_mean~maxH_spp, data=subset(SummarySpp), col=col.spp[as.factor(species)],pch=16,log="xy",ylab="")
-mod <- lm(log(maxH_spp)~asin(sqrt(mature_RA_mean)), data=subset(SummarySpp,species!="BAER"))
+plot(mature_RA_mean~maxH, data=subset(SummarySpp), col=col.spp[as.factor(species)],pch=16,log="xy",ylab="")
+mod <- lm(log(maxH)~asin(sqrt(mature_RA_mean)), data=subset(SummarySpp,species!="BAER"))
 words.bottom.left.logxy(mod)
 mtext("RA (mature plants only)",2,outer=TRUE)
 ```
 
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
-mod <- lm(log(growth_stem_diam) ~ age*WD_mean*LMA_mean*maxH_spp*RA, SummaryInd)
+mod <- lm(log(growth_stem_diam) ~ age*WD_mean*LMA_mean*maxH*RA, SummaryInd)
 anova(mod)
 
 spp_zero_RA <- SummaryInd %>%
@@ -317,9 +317,9 @@ plot(RA~LMA_mean, SummaryInd, col=col.spp[as.factor(species)],pch=16,log="xy",yl
 points((RA+.001)~LMA_mean,data=subset(SummaryInd,RA==0),col=col.spp[as.factor(species)],pch=16, cex=sppage_zero_RA$RAcex)
 mod <- lm(log(LMA_mean)~asin(sqrt(RA)), data=subset(SummaryInd,RA>0))
 words.top.right.logxy(mod)
-plot(RA~maxH_spp, SummaryInd, col=col.spp[as.factor(species)],pch=16,log="xy",ylim=c(.0008,1))
-points((RA+.001)~maxH_spp,data=subset(SummaryInd,RA==0),col=col.spp[as.factor(species)],pch=16, cex=spp_zero_RA$RAcex)
-mod <- lm(log(maxH_spp)~asin(sqrt(RA)), data=subset(SummaryInd,RA>0))
+plot(RA~maxH, SummaryInd, col=col.spp[as.factor(species)],pch=16,log="xy",ylim=c(.0008,1))
+points((RA+.001)~maxH,data=subset(SummaryInd,RA==0),col=col.spp[as.factor(species)],pch=16, cex=spp_zero_RA$RAcex)
+mod <- lm(log(maxH)~asin(sqrt(RA)), data=subset(SummaryInd,RA>0))
 words.bottom.left.logxy(mod)
 ```
 
