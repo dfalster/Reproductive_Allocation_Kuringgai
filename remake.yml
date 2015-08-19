@@ -38,10 +38,7 @@ plot_options:
 targets:
   all:
     depends:
-      - results.html
-
-  results.html:
-    command: render("results.md", output_format = I("html_document"))
+      - SummaryInd
 
   CarbonInvestments.pdf:
     depends:
