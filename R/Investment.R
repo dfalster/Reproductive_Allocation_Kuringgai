@@ -16,10 +16,6 @@ CalculateInvestmentForSpecies <- function(species, Reproduction, FloweringCatego
       CalculateInvestmentForIndiviualPlant(x,
                   filter(Reproduction,  individual==x), 
                   FloweringCategories, MultiplierTable, GraphMaps, PartsSummary))
-    R <- llply(unique(Reproduction$individual), function(x) 
-      CalculateInvestmentForIndiviualPlant(x,
-                  filter(Reproduction,  individual==x), 
-                  FloweringCategories, MultiplierTable, GraphMaps, PartsSummary))
   
   FD <- combine("FD", R)
 
