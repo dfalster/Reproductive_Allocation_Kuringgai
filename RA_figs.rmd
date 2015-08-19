@@ -1,9 +1,4 @@
-```{r, echo=FALSE,results='hide', message=FALSE,warning=FALSE}
-library(remake)
-create_bindings()
 
-source("scripts/functions.R")
-```
 
 ##Summary  
 1. RA shifts across species and, on average, increases with increasing age  

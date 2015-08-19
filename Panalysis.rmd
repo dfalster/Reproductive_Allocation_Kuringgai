@@ -1,10 +1,4 @@
-```{r, echo=FALSE,results='hide', message=FALSE}
-librepro_invry(remake)
-create_bindings()
 
-source("scripts/summary_datafrepro_invmes.R")
-source("scripts/functions.R")
-```
 
 ```{r, echo=FALSE,results='hide', message=FALSE,warning=FALSE}
 par(mfrow=c(5,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))  

@@ -1,10 +1,4 @@
-```{r, echo=FALSE,results='hide', message=FALSE,warning=FALSE}
-library(remake)
-create_bindings()
 
-
-source("scripts/functions.R")
-```
 
 ###Problem.  
 * There are two problems with the calculation of PEPU cones. I discovered this, because there were a few plants, especially PEPU_802, with huge repro_inv relative to repro_all_count  

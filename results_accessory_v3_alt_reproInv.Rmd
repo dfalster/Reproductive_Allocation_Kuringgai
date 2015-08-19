@@ -1,10 +1,4 @@
-```{r, echo=FALSE,results='hide', message=FALSE,warning=FALSE}
-library(remake)
-create_bindings()
 
-
-source("scripts/functions.R")
-```
 
 #Accessory costs
 ##Basic questions

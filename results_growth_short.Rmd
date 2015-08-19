@@ -1,11 +1,4 @@
- ```{r, echo=FALSE,results='hide', message=FALSE}
-library(remake)
-create_bindings()
 
-
-source("scripts/functions.R")
-
-```
 ##Growth data, general patterns
 1. Growth-reproduction trade-off illustrated by plots of RA vs RGR
     -  As expected, a cost of reproduction is reduced growth

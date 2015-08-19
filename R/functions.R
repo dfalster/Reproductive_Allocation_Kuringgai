@@ -2,8 +2,6 @@
 #plotting and stats
 #creating lists of information for plotting symbols, colors, labels
 
-axis_labels <- read_csv("data/axis_labels.csv")
-
 plot_yvar_vs_xvar <- function(data, yvar = "y", xvar = "x", ...) {
   Y <- data[[yvar]]
   X <- data[[xvar]]
@@ -21,8 +19,6 @@ plot_yvar3_vs_xvar3 <- function(data, yvar3 = "y", xvar3 = "x", ...) {
   X <- data[[xvar3]]
   plot(Y ~ X, data=data,  cex.axis=.8, las=1, pch=16, ...)
 }
-
-
 
 summarise_fit <- function(x) {
   data.frame(

@@ -1,10 +1,4 @@
-```{r, echo=FALSE,results='hide', message=FALSE,warning=FALSE}
-library(remake)
-create_bindings()
 
-
-source("scripts/functions.R")
-```
 #Summary  
 1. Total reproductive investment (vs. propagule investment or fruit investment) shows the strongest correlation with total plant size
 2. Accessory costs represent the majority of reproductive investment  

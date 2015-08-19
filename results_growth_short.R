@@ -1,10 +1,4 @@
-```{r, echo=FALSE,results='hide', message=FALSE}
-library(remake)
-create_bindings()
 
-
-source("scripts/functions.R")
-```
 #Growth data, general patterns
 - proportion of maxH matters more for some species than others. 
 1. The 4 "canopy" species all tend to have high correlations between "prop maxH" and growth and reproductive investment (both relative and absolute)  (HATE, BAER, PELA, PEPU)

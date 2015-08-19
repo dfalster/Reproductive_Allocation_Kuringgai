@@ -1,9 +1,3 @@
-```{r, echo=FALSE,results='hide', message=FALSE}
-library(remake)
-create_bindings()
-
-source("scripts/functions.R")
-```
 
 #RA schedule paper
 * I have a dataset with enough resolution across species and ages to show patterns of growth and reproductive investment across ages  

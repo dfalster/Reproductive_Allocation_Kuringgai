@@ -1,10 +1,4 @@
-```{r, echo=FALSE,results='hide', message=FALSE,warning=FALSE}
-library(remake)
-create_bindings()
 
-
-source("scripts/functions.R")
-```
 
 ##Summary
     1. Species show a marked decline in leaf investment with age and a limited decline in stem investment with age
