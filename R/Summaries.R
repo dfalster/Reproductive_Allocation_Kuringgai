@@ -135,13 +135,13 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
   SummaryInd <- filter(SummaryInd, !is.na(species) & !is.na(individual))
   
   SummaryInd <- SummaryInd %>% mutate(
-    RGR = log(total_weight)-log(total_weight - GrowthInv),
+    RGR = log(total_weight)-log(total_weight - growth_inv),
     leaf_area = leaf_weight / (1000*LMA),
     leaf_area_growth = growth_leaf / (1000*LMA),
     shoot_leaf_area = lvs_end_total*leaf_size,
     shoot_leaf_area_growth = lvs_new*leaf_size,
     reproducing = RA>0,
-    prop_allocation = propagule_inv/(GrowthInv + ReproInv),
+    prop_allocation = propagule_inv/(growth_inv + repro_inv),
     fruit_weight = propagule_inv + seedpod_weight + fruit_weight,
     accessory_per_seed = accessory_inv/seed_count,
     propagule_per_seed = propagule_inv/seed_count,
@@ -171,7 +171,7 @@ get_species_values <- function(SummaryInd, groups) {
     group_by_(.dots=dots) %>%
     summarise_each(f, prepollen_aborted_inv, prepollen_success_inv, 
       postpollen_aborted_inv, packaging_dispersal_inv, propagule_inv, prepollen_all_inv,
-      height, GrowthInv, ReproInv, total_weight, TotalInv, RA, diameter, stem_area, 
+      height, growth_inv, repro_inv, total_weight, total_inv, RA, diameter, stem_area, 
       leaf_weight, stem_weight, growth_stem_diam, growth_stem_area, growth_leaf, 
       growth_stem, diameter)
   })
@@ -198,7 +198,7 @@ get_species_values <- function(SummaryInd, groups) {
 
   out[[4]] <-lapply(fs, function(f) {
     SummaryInd %>%
-    filter(ReproInv > 0) %>%
+    filter(repro_inv > 0) %>%
     group_by_(.dots=dots) %>%
     summarise_each(f, seedset, seed_count, flower_count,fruit_weight,leaf_area)
   })  
@@ -242,7 +242,7 @@ scale_individual_variable <- function(SummaryInd, SummarySpp) {
       maxH =  get_species_value("max", "height"),
       prop_maxH = height / maxH,
       prop_max_weight = total_weight / get_species_value("max", "total_weight"),
-      prop_max_repro = ReproInv / get_species_value("max", "ReproInv"),
+      prop_max_repro = repro_inv / get_species_value("max", "repro_inv"),
       scaled_growth_stem_diam = growth_stem_diam / get_species_value("mean", "growth_stem_diam"),
       scaled_growth_shoot_diam = growth_shoot_diam / get_species_value("mean", "growth_shoot_diam")
       ) 

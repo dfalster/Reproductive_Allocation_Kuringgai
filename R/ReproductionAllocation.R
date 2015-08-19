@@ -36,22 +36,22 @@ RA_Calculations <- function(thisSpecies, Species_Investment, HarvestData, Maps, 
   GrowthEst <- HarvestData_basal %>%
     group_by(individual) %>%
     mutate(total_weight_est =  predict_total_weight(diameter, individual[1]),
-           GrowthInv = c(NA, diff(total_weight_est)),
+           growth_inv = c(NA, diff(total_weight_est)),
            stem_weight_est = predict_stem_weight(diameter, individual[1]),
            growth_stem = c(NA, diff(stem_weight_est)),
-           growth_leaf =  GrowthInv - growth_stem,
+           growth_leaf =  growth_inv - growth_stem,
            growth_height = c(NA, diff(height)),
            growth_stem_diam = c(NA, diff(diameter)),
            growth_stem_area = c(NA, diff(stem_area))
            ) %>%
     filter(start_end == "end") %>%
-    select(species, site, individual, age, height, diameter, stem_area, leaf_weight, stem_weight, total_weight, GrowthInv, growth_stem, growth_leaf, growth_height, growth_stem_diam, growth_stem_area)
+    select(species, site, individual, age, height, diameter, stem_area, leaf_weight, stem_weight, total_weight, growth_inv, growth_stem, growth_leaf, growth_height, growth_stem_diam, growth_stem_area)
 
     # Use saved data to calculate total reproduction investment per individual plant
     ReproTotal <- Species_Investment$Investment %>%
      group_by(individual) %>%
      summarise(
-      ReproInv = sum(Total)
+      repro_inv = sum(Total)
       )
 
   # Merge two tables and calculate total investment and RAR
@@ -61,6 +61,6 @@ RA_Calculations <- function(thisSpecies, Species_Investment, HarvestData, Maps, 
 
   InvestmentSummary %>%
     mutate(
-      TotalInv = ReproInv + GrowthInv,
-      RA = ReproInv/TotalInv)
+      total_inv = repro_inv + growth_inv,
+      RA = repro_inv/total_inv)
 }

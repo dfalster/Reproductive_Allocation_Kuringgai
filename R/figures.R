@@ -10,12 +10,12 @@ get_ReproductionAllocation_means_by_age <- function(ReproductionAllocation_all){
   group_by(ReproductionAllocation_all, species, age) %>%
     summarise(
       n=length(age),
-      GI_M = mean(GrowthInv),
-      GI_L = mean(GrowthInv) - 1.96/sqrt(n) * sd(GrowthInv),
-      GI_U = mean(GrowthInv) + 1.96/sqrt(n) * sd(GrowthInv),
-      RI_M = mean(ReproInv),
-      RI_L = mean(ReproInv) - 1.96/sqrt(n) * sd(ReproInv),
-      RI_U = mean(ReproInv) + 1.96/sqrt(n) * sd(ReproInv),
+      GI_M = mean(growth_inv),
+      GI_L = mean(growth_inv) - 1.96/sqrt(n) * sd(growth_inv),
+      GI_U = mean(growth_inv) + 1.96/sqrt(n) * sd(growth_inv),
+      RI_M = mean(repro_inv),
+      RI_L = mean(repro_inv) - 1.96/sqrt(n) * sd(repro_inv),
+      RI_U = mean(repro_inv) + 1.96/sqrt(n) * sd(repro_inv),
       RA_M = mean(RA),
       RA_L = mean(RA) - 1.96/sqrt(n) * sd(RA),
       RA_U = mean(RA) + 1.96/sqrt(n) * sd(RA)) %>%
@@ -29,17 +29,17 @@ plot_species_ReproductionAllocation_age_panel <- function(InvBySpecies) {
   cols <- col.table()[InvBySpecies$species]
 
   par(mfrow = c(1, 3), cex.main = 1, cex.lab = 1)
-  plot(InvByAge$age, InvByAge$GI_M, type = "b", lwd = 3, pch = as.character(InvByAge$age), cex = 1, col = cols, ylim = range(c(InvBySpecies$ReproInv, InvBySpecies$GrowthInv)),
+  plot(InvByAge$age, InvByAge$GI_M, type = "b", lwd = 3, pch = as.character(InvByAge$age), cex = 1, col = cols, ylim = range(c(InvBySpecies$repro_inv, InvBySpecies$growth_inv)),
     main = "Growth Investment", xlab = "Age (years)", ylab = "Growth Investment (mg)")
   points(InvByAge$age, InvByAge$GI_L, pch = 2, cex = 1, col = cols)
   points(InvByAge$age, InvByAge$GI_U, pch = 6, cex = 1, col = cols)
-  points(InvBySpecies$age, InvBySpecies$GrowthInv, pch = "o", cex = 1, col = "grey")
+  points(InvBySpecies$age, InvBySpecies$growth_inv, pch = "o", cex = 1, col = "grey")
 
-  plot(InvByAge$age, InvByAge$RI_M, type = "b", lwd = 1, pch = as.character(InvByAge$age), cex = 1, col = cols, ylim = range(c(InvBySpecies$ReproInv, InvBySpecies$GrowthInv)),
+  plot(InvByAge$age, InvByAge$RI_M, type = "b", lwd = 1, pch = as.character(InvByAge$age), cex = 1, col = cols, ylim = range(c(InvBySpecies$repro_inv, InvBySpecies$growth_inv)),
     main = "Reproductive Investment", xlab = "Age (years)", ylab = "Reproductive Investment (mg)")
   points(InvByAge$age, InvByAge$RI_L, pch = 2, cex = 1, col = cols)
   points(InvByAge$age, InvByAge$RI_U, pch = 6, cex = 1, col = cols)
-  points(InvBySpecies$age, InvBySpecies$ReproInv, pch = "o", cex = 1, col = "grey")
+  points(InvBySpecies$age, InvBySpecies$repro_inv, pch = "o", cex = 1, col = "grey")
 
 
   plot(InvByAge$age, InvByAge$RA_M, type = "b", lwd = 1, pch = as.character(InvByAge$age), cex = 1, col = cols, ylim = range(InvBySpecies$RA), main = "Reproductive Allocation",

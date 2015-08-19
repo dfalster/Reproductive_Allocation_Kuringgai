@@ -24,7 +24,7 @@ source("scripts/functions.R")
 
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=28, fig.height=28}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
-yvar <- "GrowthInv"
+yvar <- "growth_inv"
 xvar <- "prop_maxH"
 
 data <- subset(SummaryInd)

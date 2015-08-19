@@ -11,8 +11,8 @@
 
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=7.5}
 par(mfrow=c(1,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2)) 
-mod <- lm(log(GrowthInv)~log(ReproInv),data=subset(SummaryInd,ReproInv>0))
-plot((1+ReproInv)~GrowthInv, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16,xlim=c(1,1000000),ylim=c(1,1000000))
+mod <- lm(log(growth_inv)~log(repro_inv),data=subset(SummaryInd,repro_inv>0))
+plot((1+repro_inv)~growth_inv, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16,xlim=c(1,1000000),ylim=c(1,1000000))
 words.top.left.logxy(mod)
 legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 abline(0,1)
@@ -28,7 +28,7 @@ text(19,3,srt=45,"RA = 0.1")
 abline(log10(.010101),1)
 text(170,2.4,srt=45,"RA = 0.01")
 
-plot((1+ReproInv)~GrowthInv, SummaryInd, log="xy", col=col.age[as.factor(age)],pch=16,xlim=c(1,1000000),ylim=c(1,1000000))
+plot((1+repro_inv)~growth_inv, SummaryInd, log="xy", col=col.age[as.factor(age)],pch=16,xlim=c(1,1000000),ylim=c(1,1000000))
 legend("bottomright",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
 abline(0,1)
 text(2.1,3,srt=45,"RA = 0.5")
@@ -81,7 +81,7 @@ mtext("Total plant weight (mg)", 1, outer=TRUE,cex=1.2)
 ###RV curves by species
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
-yvar <- "ReproInv"
+yvar <- "repro_inv"
 xvar <- "total_weight"
 
 data <- subset(SummaryInd,RA>0)
@@ -107,7 +107,7 @@ mtext("Total plant weight (mg)", 1, outer=TRUE,cex=1.2)
 * colored by age, but legend not correct, because "age 1" color used for youngest age with reproducing individuals
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=14, fig.height=7.5}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
-yvar <- "GrowthInv"
+yvar <- "growth_inv"
 xvar <- "total_weight"
 
 data <- subset(SummaryInd, RA>0)
@@ -132,7 +132,7 @@ mtext("Total plant weight (mg)", 1, outer=TRUE,cex=1.2)
 * 
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=14, fig.height=7.5}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
-yvar <- "GrowthInv"
+yvar <- "growth_inv"
 xvar <- "total_weight"
 
 data <- subset(SummaryInd)

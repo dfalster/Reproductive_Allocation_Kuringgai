@@ -1,7 +1,7 @@
 ###RV curves by species
 ```{r, echo=FALSE,message=FALSE, warning=FALSE}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
-yvar <- "ReproInv"
+yvar <- "repro_inv"
 xvar <- "total_weight"
 
 data <- subset(SummaryInd,RA>0)
@@ -49,7 +49,7 @@ mtext("Reproductive investment (mg)", 2, outer=TRUE,cex=1.2)
 ###Vegetative growth by plant size
 ```{r, echo=FALSE,message=FALSE, warning=FALSE}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
-yvar <- "GrowthInv"
+yvar <- "growth_inv"
 xvar <- "total_weight"
 
 data <- subset(SummaryInd,RA>0)
@@ -132,7 +132,7 @@ mtext("RA", 2, outer=TRUE,cex=1.2)
 ###"RV curve" using plant height
 ```{r, echo=FALSE,message=FALSE, warning=FALSE}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
-yvar <- "ReproInv"
+yvar <- "repro_inv"
 xvar <- "height"
 
 data <- subset(SummaryInd,RA>0)
@@ -159,7 +159,7 @@ mtext("Reproductive investment (mg)", 2, outer=TRUE,cex=1.2)
 ###Vegetative investment using plant height
 ```{r, echo=FALSE,message=FALSE, warning=FALSE}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
-yvar <- "GrowthInv"
+yvar <- "growth_inv"
 xvar <- "height"
 
 data <- subset(SummaryInd,RA>0)

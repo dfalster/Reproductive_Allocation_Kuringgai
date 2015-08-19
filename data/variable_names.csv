@@ -6,9 +6,9 @@ old sequence,sequence,variable,new_name,axis_label,notes
 6,5,height,,plant height (mm),
 7,6,diameter,,basal diameter (mm),
 11,7,total_weight,,plant weight (mg),
-18,8,TotalInv,total_inv,total carbon investment (mg),
-12,9,GrowthInv,growth_inv,growth investment (mg/year),
-4,10,ReproInv,repro_inv,reproductive investment (mg/year),
+18,8,total_inv,total_inv,total carbon investment (mg),
+12,9,growth_inv,growth_inv,growth investment (mg/year),
+4,10,repro_inv,repro_inv,reproductive investment (mg/year),
 58,11,mature,,"categorical variable, indicating whether an individual has reached reproductive maturity",
 80,12,reproducing,,"categorical variable, indicating whether an individual is reproducing in a given year",
 19,13,RA,,RA,
@@ -47,7 +47,7 @@ xx,38,maxH,maxH,species maximum height (mm),"Daniel, please add back in maxH, ei
 67,46,seedpod_weight,,seedpod weight (mg),
 73,47,seedcosts,,total reproductive investment required to make a single seed (mg),
 74,48,costs_per_seed,,total reproductive costs / seed count (mg),
-48,49,total_repro_inv,,total reproductive investment (mg/year),remove from list once we have total_repro_inv = ReproInv
+48,49,total_repro_inv,,total reproductive investment (mg/year),remove from list once we have total_repro_inv = repro_inv
 47,50,propagule_inv,,investment in propagules (mg),
 49,51,accessory_inv,,investment in all accessory tissues (mg),
 43,52,prepollen_aborted_inv,,investment in tissues aborted pre-pollination (mg),
