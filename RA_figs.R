@@ -12,9 +12,9 @@
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=7.5}
 par(mfrow=c(1,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2)) 
 mod <- lm(log(growth_inv)~log(repro_inv),data=subset(SummaryInd,repro_inv>0))
-plot((1+repro_inv)~growth_inv, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16,xlim=c(1,1000000),ylim=c(1,1000000))
+plot((1+repro_inv)~growth_inv, SummaryInd, log="xy", col=col.spp(species),pch=16,xlim=c(1,1000000),ylim=c(1,1000000))
 words.top.left.logxy(mod)
-legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+legend("bottomright",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 abline(0,1)
 text(2.1,3,srt=45,"RA = 0.5")
 abline(log10(3),1)
@@ -28,8 +28,8 @@ text(19,3,srt=45,"RA = 0.1")
 abline(log10(.010101),1)
 text(170,2.4,srt=45,"RA = 0.01")
 
-plot((1+repro_inv)~growth_inv, SummaryInd, log="xy", col=col.age[as.factor(age)],pch=16,xlim=c(1,1000000),ylim=c(1,1000000))
-legend("bottomright",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
+plot((1+repro_inv)~growth_inv, SummaryInd, log="xy", col=col.age(age),pch=16,xlim=c(1,1000000),ylim=c(1,1000000))
+legend("bottomright",legend=labels.age(),col=col.age,pch=16, cex=.8,bty="n")
 abline(0,1)
 text(2.1,3,srt=45,"RA = 0.5")
 abline(log10(3),1)
@@ -71,7 +71,7 @@ results$b <- round(results$b,digits=2)
 
 for(spp in names(data)) {
   plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",
-                    main=spp,col=col.age[as.factor(data[[spp]]$age)])
+                    main=spp,col=col.age(data[[spp]]$age)
 }
 
 mtext("RA", 2, outer=TRUE,cex=1.2)
@@ -96,7 +96,7 @@ results$b <- round(results$b,digits=2)
 
 for(spp in names(data)) {
   plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",
-                    main=spp,col=col.age[as.factor(data[[spp]]$age)])
+                    main=spp,col=col.age(data[[spp]]$age)
 }
 
 mtext("Reproductive investment (mg)", 2, outer=TRUE,cex=1.2)
@@ -122,7 +122,7 @@ results$b <- round(results$b,digits=2)
 
 for(spp in names(data)) {
   plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",
-                    main=spp,col=col.age[as.factor(data[[spp]]$age)])
+                    main=spp,col=col.age(data[[spp]]$age)
 }
 
 mtext("Vegetative investment (mg)", 2, outer=TRUE,cex=1.2)
@@ -147,7 +147,7 @@ results$b <- round(results$b,digits=2)
 
 for(spp in names(data)) {
   plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",
-                    main=spp,col=col.age[as.factor(data[[spp]]$age)])
+                    main=spp,col=col.age(data[[spp]]$age)
 }
 
 mtext("Vegetative investment (mg)", 2, outer=TRUE,cex=1.2)

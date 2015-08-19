@@ -10,49 +10,49 @@ source("scripts/functions.R")
 par(mfrow=c(5,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))  
 
 mod <- lm(log(repro_inv)~log((propagule_inv)),data=subset(SummaryInd,repro_inv>0&propagule_inv>0))
-plot(propagule_inv~repro_inv,data=subset(SummaryInd,repro_inv>0&propagule_inv>0), pch=16,col=col.spp[as.factor(species)],log="xy", ylab="energy to propagules (mg)")
+plot(propagule_inv~repro_inv,data=subset(SummaryInd,repro_inv>0&propagule_inv>0), pch=16,col=col.spp(species),log="xy", ylab="energy to propagules (mg)")
 abline(0,1)
 words.bottom.right.logxy(mod)
 
 mod <- lm(log(repro_inv)~asin(sqrt(prop_propagule)),data=subset(SummaryInd,repro_inv>0&prop_propagule>0))
-plot(asin(sqrt(prop_propagule))~repro_inv,data=subset(SummaryInd,repro_inv>0&prop_propagule>0), log="x", pch=16,col=col.spp[as.factor(species)],ylab="propagules (as proportion repro inv)")
+plot(asin(sqrt(prop_propagule))~repro_inv,data=subset(SummaryInd,repro_inv>0&prop_propagule>0), log="x", pch=16,col=col.spp(species),ylab="propagules (as proportion repro inv)")
 words.bottom.left.logx(mod)
 
 mod <- lm(log(repro_inv)~log((prepollen_aborted_inv)),data=subset(SummaryInd,repro_inv>0&prepollen_aborted_inv>0))
-plot(prepollen_aborted_inv~repro_inv,data=subset(SummaryInd,repro_inv>0), pch=16,col=col.spp[as.factor(species)],log="xy",ylab="pre-pollination aborted tissues (mg)")
+plot(prepollen_aborted_inv~repro_inv,data=subset(SummaryInd,repro_inv>0), pch=16,col=col.spp(species),log="xy",ylab="pre-pollination aborted tissues (mg)")
 abline(0,1)
 words.bottom.right.logxy(mod)
 
 mod <- lm(log(repro_inv)~asin(sqrt(prop_prepollen_aborted)),data=subset(SummaryInd,repro_inv>0&prop_prepollen_aborted>0))
-plot(asin(sqrt(prop_prepollen_aborted))~repro_inv,data=subset(SummaryInd,repro_inv>0&prop_prepollen_aborted>0), pch=16,col=col.spp[as.factor(species)], log="x",ylab="pre-pollination aborted tissues (as proportion repro inv) (asin)")
+plot(asin(sqrt(prop_prepollen_aborted))~repro_inv,data=subset(SummaryInd,repro_inv>0&prop_prepollen_aborted>0), pch=16,col=col.spp(species), log="x",ylab="pre-pollination aborted tissues (as proportion repro inv) (asin)")
 words.bottom.right.logx(mod)
 
 mod <- lm(log(repro_inv)~log((prepollen_success_inv)),data=subset(SummaryInd,repro_inv>0&prepollen_success_inv>0))
-plot(prepollen_success_inv~repro_inv,data=subset(SummaryInd,repro_inv>0), pch=16,col=col.spp[as.factor(species)],log="xy",ylab="pre-pollination successful tissues (mg)")
+plot(prepollen_success_inv~repro_inv,data=subset(SummaryInd,repro_inv>0), pch=16,col=col.spp(species),log="xy",ylab="pre-pollination successful tissues (mg)")
 abline(0,1)
 words.bottom.right.logxy(mod)
 
 mod <- lm(log(repro_inv)~asin(sqrt(prop_prepollen_success)),data=subset(SummaryInd,repro_inv>0&prop_prepollen_success>0))
-plot(asin(sqrt(prop_prepollen_success))~repro_inv,data=subset(SummaryInd,repro_inv>0&prop_prepollen_success>0), pch=16,col=col.spp[as.factor(species)], log="x",ylab="pre-pollination successful tissues (as proportion repro inv) (asin)")
+plot(asin(sqrt(prop_prepollen_success))~repro_inv,data=subset(SummaryInd,repro_inv>0&prop_prepollen_success>0), pch=16,col=col.spp(species), log="x",ylab="pre-pollination successful tissues (as proportion repro inv) (asin)")
 words.bottom.right.logx(mod)
 
 mod <- lm(log(repro_inv)~log((packaging_dispersal_inv)),data=subset(SummaryInd,repro_inv>0&packaging_dispersal_inv>0))
-plot(packaging_dispersal_inv~repro_inv,data=subset(SummaryInd,repro_inv>0&packaging_dispersal_inv>0), pch=16,col=col.spp[as.factor(species)],log="xy", ylab="energy to packaging and dispersal (mg)")
+plot(packaging_dispersal_inv~repro_inv,data=subset(SummaryInd,repro_inv>0&packaging_dispersal_inv>0), pch=16,col=col.spp(species),log="xy", ylab="energy to packaging and dispersal (mg)")
 abline(0,1)
 words.bottom.right.logxy(mod)
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+legend("topleft",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 
 mod <- lm(log(repro_inv)~asin(sqrt(prop_packaging_dispersal)),data=subset(SummaryInd,repro_inv>0&prop_packaging_dispersal>0))
-plot(asin(sqrt(prop_packaging_dispersal))~repro_inv,data=subset(SummaryInd,repro_inv>0&prop_packaging_dispersal>0), log="x", pch=16,col=col.spp[as.factor(species)],ylab="packaging and dispersal (as proportion repro inv)")
+plot(asin(sqrt(prop_packaging_dispersal))~repro_inv,data=subset(SummaryInd,repro_inv>0&prop_packaging_dispersal>0), log="x", pch=16,col=col.spp(species),ylab="packaging and dispersal (as proportion repro inv)")
 words.bottom.left.logx(mod)
 
 mod <- lm(log(repro_inv)~log((postpollen_aborted_inv)),data=subset(SummaryInd,repro_inv>0&postpollen_aborted_inv>0))
-plot(postpollen_aborted_inv~repro_inv,data=subset(SummaryInd,repro_inv>0&postpollen_aborted_inv>0), pch=16,col=col.spp[as.factor(species)],log="xy", ylab="energy to tissues aborted postpollination (mg)")
+plot(postpollen_aborted_inv~repro_inv,data=subset(SummaryInd,repro_inv>0&postpollen_aborted_inv>0), pch=16,col=col.spp(species),log="xy", ylab="energy to tissues aborted postpollination (mg)")
 abline(0,1)
 words.bottom.right.logxy(mod)
 
 mod <- lm(log(repro_inv)~asin(sqrt(prop_postpollen_aborted)),data=subset(SummaryInd,repro_inv>0&prop_postpollen_aborted>0))
-plot(asin(sqrt(prop_postpollen_aborted))~repro_inv,data=subset(SummaryInd,repro_inv>0&prop_postpollen_aborted>0), log="x", pch=16,col=col.spp[as.factor(species)],ylab="tissues aborted postpollination (as proportion repro inv)")
+plot(asin(sqrt(prop_postpollen_aborted))~repro_inv,data=subset(SummaryInd,repro_inv>0&prop_postpollen_aborted>0), log="x", pch=16,col=col.spp(species),ylab="tissues aborted postpollination (as proportion repro inv)")
 words.bottom.left.logx(mod)
 ```
 
@@ -126,7 +126,7 @@ mtext("RA", 1, outer=TRUE,cex=1.2)
 mtext("Yearly increase in stem diameter (mm)", 2, outer=TRUE,cex=1.2)
 
 par(mfrow=c(1,1), cex=1, omi=c(.8,.8,.1,.1), mai=c(1.1,1,.4,0.2)) 
-plot(asin(sqrt(prop_growth_stem_diameter))~asin(sqrt(RA)),data=subset(SummaryInd,RA>0),pch=16,col=col.spp[as.factor(species)])
+plot(asin(sqrt(prop_growth_stem_diameter))~asin(sqrt(RA)),data=subset(SummaryInd,RA>0),pch=16,col=col.spp(species))
 mod <- lm(asin(sqrt(RA))~asin(sqrt(prop_growth_stem_diameter)),data=subset(SummaryInd,RA>0))
 words.bottom.left(mod)
 ```

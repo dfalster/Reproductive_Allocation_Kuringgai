@@ -2,7 +2,7 @@
 library(remake)
 create_bindings()
 
-source("scripts/summary_dataframes.R")
+
 source("scripts/functions.R")
 ```
 
@@ -42,10 +42,10 @@ check_parts
 par(mfrow=c(1,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))
 check <- BOLE_HarvestData
 
-plot(dia~stem_weight,data=subset(check), pch=16,log="xy",col=col.lots[as.factor(segment)])
+plot(dia~stem_weight,data=subset(check), pch=16,log="xy",col=col.lots(segment)
 text(dia~stem_weight,data=subset(check,segment==1),labels=individual,cex=.5,pos=3,offset=-.7)
 
-plot(dia~leaf_weight,data=subset(check), pch=16,log="xy",col=col.lots[as.factor(segment)])
+plot(dia~leaf_weight,data=subset(check), pch=16,log="xy",col=col.lots(segment)
 text(dia~leaf_weight,data=subset(check,segment==1),labels=individual,cex=.5,pos=3,offset=-.7)
 ```
 
@@ -96,7 +96,7 @@ text(dia~leaf_weight,data=subset(check,segment==1&age>5),labels=individual,cex=.
 * The first plot below shows that there are individuals where absolute investment in accessory tissues is larger than total reproductive investmen* There are two different sources of reproductive investment, one which comes from the file "accessory" and is the sum of all the different accessory tissues and one which comes from the dataframe "investment". The "investment" variant is what is currently being used, but not sure which one should be being used
 * They are quite different from each other
 ```{r, echo=FALSE, message=FALSE, fig.width=7, fig.height=7}
-plot(accessory_inv~repro_inv,data=subset(SummaryInd,accessory_inv>0),log="xy",pch=16,col=col.spp[as.factor(species)])
+plot(accessory_inv~repro_inv,data=subset(SummaryInd,accessory_inv>0),log="xy",pch=16,col=col.spp(species))
 abline(0,1)
 text(120,350,"all RE to accessory tissues",srt=45)
 

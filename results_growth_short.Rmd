@@ -2,7 +2,7 @@
 library(remake)
 create_bindings()
 
-source("scripts/summary_dataframes.R")
+
 source("scripts/functions.R")
 
 ```
@@ -24,9 +24,9 @@ source("scripts/functions.R")
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=7.5}
 par(mfrow=c(1,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2)) 
 mod <- lm(log(growth_inv)~log(repro_inv),data=subset(SummaryInd,repro_inv>0))
-plot((1+repro_inv)~growth_inv, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16,xlim=c(1,1000000),ylim=c(1,1000000))
+plot((1+repro_inv)~growth_inv, SummaryInd, log="xy", col=col.spp(species),pch=16,xlim=c(1,1000000),ylim=c(1,1000000))
 words.top.left.logxy(mod)
-legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+legend("bottomright",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 abline(0,1)
 text(2.1,3,srt=45,"RA = 0.5")
 abline(log10(3),1)
@@ -40,8 +40,8 @@ text(19,3,srt=45,"RA = 0.1")
 abline(log10(.010101),1)
 text(170,2.4,srt=45,"RA = 0.01")
 
-plot((1+repro_inv)~growth_inv, SummaryInd, log="xy", col=col.age[as.factor(age)],pch=16,xlim=c(1,1000000),ylim=c(1,1000000))
-legend("bottomright",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
+plot((1+repro_inv)~growth_inv, SummaryInd, log="xy", col=col.age(age),pch=16,xlim=c(1,1000000),ylim=c(1,1000000))
+legend("bottomright",legend=labels.age(),col=col.age,pch=16, cex=.8,bty="n")
 abline(0,1)
 text(2.1,3,srt=45,"RA = 0.5")
 abline(log10(3),1)
@@ -64,24 +64,24 @@ text(170,2.4,srt=45,"RA = 0.01")
 ```{r, echo=FALSE,message=FALSE, warning=FALSE}
 par(mfrow=c(2,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2)) 
 mod <- lm(RGR~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
-plot((RA+.01)~RGR, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
-legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+plot((RA+.01)~RGR, SummaryInd, log="xy", col=col.spp(species),pch=16)
+legend("bottomleft",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right.logxy(mod)
 
 mod <- lm(log(growth_stem_diameter)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
-plot((RA+.01)~growth_stem_diameter, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
-legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+plot((RA+.01)~growth_stem_diameter, SummaryInd, log="xy", col=col.spp(species),pch=16)
+legend("bottomleft",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right.logxy(mod)
 
 mod <- lm(log(prop_growth_stem_diameter)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
-plot((RA+.01)~prop_growth_stem_diameter, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
-legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+plot((RA+.01)~prop_growth_stem_diameter, SummaryInd, log="xy", col=col.spp(species),pch=16)
+legend("bottomleft",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right.logxy(mod)
 
 SummaryInd$prop_growth_height <- SummaryInd$growth_height/SummaryInd$maxH
 
 mod <- lm(log(prop_growth_height)~asin(sqrt(RA)),data=subset(SummaryInd,growth_height>0&species!="PEPU"&species!="PELA"&species!="COER"))
-plot((RA+.01)~(prop_growth_height), data=subset(SummaryInd,species!="PEPU"&species!="PELA"), log="xy", col=col.spp[as.factor(species)],pch=16)
+plot((RA+.01)~(prop_growth_height), data=subset(SummaryInd,species!="PEPU"&species!="PELA"), log="xy", col=col.spp(species),pch=16)
 ```
 ```{r, echo=FALSE,message=FALSE, warning=FALSE}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
@@ -258,17 +258,17 @@ PCA_by_species <- SummaryInd_PCA_results %>%
   group_by(species) %>%
   summarise_each(funs(mean, se), PC1_scale, PC2_scale, PC3_scale, PC4_scale)
 
-plot(PC1_scale~(PC2_scale),SummaryInd_PCA_results,pch=16,col=col.spp[as.factor(species)],xlim=c(-.1,.1))
+plot(PC1_scale~(PC2_scale),SummaryInd_PCA_results,pch=16,col=col.spp(species),xlim=c(-.1,.1))
 arrows(0, 0, (.9*PCA_loadings$PC2_scale), (.9*PCA_loadings$PC1_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
 text(PC1_scale ~ PC2_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
-legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+legend("topright",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 
 mean1 <- PCA_by_species$PC1_scale_mean
 se1 <- PCA_by_species$PC1_scale_se
 plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 1")
 se_function(mean1,se1)
 
-plot(PC2_scale~(PC1_scale),SummaryInd_PCA_results,pch=16,col=col.spp[as.factor(species)])
+plot(PC2_scale~(PC1_scale),SummaryInd_PCA_results,pch=16,col=col.spp(species))
 arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC2_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
 text(PC2_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
 
@@ -277,7 +277,7 @@ se1 <- PCA_by_species$PC2_scale_se
 plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 2")
 se_function(mean1,se1)
 
-plot(PC3_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.spp[as.factor(species)])
+plot(PC3_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.spp(species))
 arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC3_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
 text(PC3_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
 
@@ -286,10 +286,10 @@ se1 <- PCA_by_species$PC3_scale_se
 plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 3")
 se_function(mean1,se1)
 
-plot(PC4_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.spp[as.factor(species)],ylim=c(-.15,.15))
+plot(PC4_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.spp(species),ylim=c(-.15,.15))
 arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC4_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
 text(PC4_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
-legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+legend("topright",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 
 mean1 <- PCA_by_species$PC4_scale_mean
 se1 <- PCA_by_species$PC4_scale_se
@@ -306,11 +306,11 @@ se_function(mean1,se1)
  
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=7}
 par(mfrow=c(1,2), cex=1, omi=c(.8,0.3,.5,0.2), mai=c(.7,1,.1,0.2))
-plot((growth_inv~prop_maxH), SummaryInd, log="y", col=col.spp[as.factor(species)],pch=16,xlab="")
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+plot((growth_inv~prop_maxH), SummaryInd, log="y", col=col.spp(species),pch=16,xlab="")
+legend("topleft",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 
-plot(growth_inv~prop_maxH, SummaryInd, log="y", col=col.age[as.factor(age)],pch=16,ylab="",xlab="")
-legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
+plot(growth_inv~prop_maxH, SummaryInd, log="y", col=col.age(age),pch=16,ylab="",xlab="")
+legend("topleft",legend=labels.age(),col=col.age,pch=16, cex=.8,bty="n")
 mtext("proportion Hmax", 1, outer=TRUE,cex=1.2)
 ```
 
@@ -356,8 +356,8 @@ results
 
 ```{r, echo=FALSE, message=FALSE, fig.width=7, fig.height=7}
 par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,1,0.6)) 
-plot(RGR~prop_maxH,SummaryInd,col=col.spp[as.factor(species)],pch=16)
-legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+plot(RGR~prop_maxH,SummaryInd,col=col.spp(species),pch=16)
+legend("topright",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 ```
 
 ```{r, echo=FALSE, message=FALSE, fig.width=24, fig.height=24}
@@ -391,8 +391,8 @@ results
 ###RA by proportion Hmax
 ```{r, echo=FALSE, message=FALSE, fig.width=7, fig.height=7}
 par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,1,0.6)) 
-plot(RA~prop_maxH,SummaryInd,col=col.spp[as.factor(species)],pch=16)
-legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+plot(RA~prop_maxH,SummaryInd,col=col.spp(species),pch=16)
+legend("topright",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 ```
 
 ```{r, echo=FALSE, message=FALSE, fig.width=24, fig.height=24}

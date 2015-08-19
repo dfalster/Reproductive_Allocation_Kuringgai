@@ -2,7 +2,7 @@
 library(remake)
 create_bindings()
 
-source("scripts/summary_dataframes.R")
+
 source("scripts/functions.R")
 ```
 
@@ -43,7 +43,7 @@ source("scripts/functions.R")
 
 ```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.width=14, fig.height=14}
 par(mfrow=c(1,2), cex=1, omi=c(.6,0.3,.3,0.3), mai=c(1.1,1,.3,0.3))
-plot(accessory_inv~total_repro_inv,data=subset(SummaryInd,accessory_inv>0),log="xy",pch=16,col=col.spp[as.factor(species)])
+plot(accessory_inv~total_repro_inv,data=subset(SummaryInd,accessory_inv>0),log="xy",pch=16,col=col.spp(species))
 abline(0,1)
 abline(-0.30103,1)
 abline(-1,1)
@@ -51,14 +51,14 @@ text(120,350,"all RE to accessory tissues",srt=43)
 text(12000,720,"10% RE to accessory tissues",srt=43)
 text(5,1.5,"50%",srt=43)
 
-plot(prepollen_all_inv~accessory_inv,data=subset(SummaryInd,accessory_inv>0),log="xy",pch=16,col=col.spp[as.factor(species)])
+plot(prepollen_all_inv~accessory_inv,data=subset(SummaryInd,accessory_inv>0),log="xy",pch=16,col=col.spp(species))
 abline(0,1)
 abline(-0.30103,1)
 abline(-1,1)
 text(120,250,"all acc costs pre-pollination",srt=45)
 text(3000,180,"10% acc costs pre-pollination",srt=45)
 text(10,3,"50%",srt=45)
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+legend("topleft",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 ```
 
 ##Which measure of reproductive output best correlates with plant size or growth
@@ -71,21 +71,21 @@ legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 options(scipen=10)
 par(mfrow=c(2,2), cex=1, omi=c(.6,0.3,.3,0.3), mai=c(.8,1,.3,0.3))
 mod <- lm (log(total_weight)~log(total_repro_inv), data=subset(SummaryInd,total_repro_inv>0))
-plot(total_repro_inv~total_weight,data=subset(SummaryInd,total_repro_inv>0), log="xy",xlab="", col=col.spp[as.factor(species)], pch=16, ylab="Total reproductive investment (mg)",xlim=c(100,2000000))
+plot(total_repro_inv~total_weight,data=subset(SummaryInd,total_repro_inv>0), log="xy",xlab="", col=col.spp(species), pch=16, ylab="Total reproductive investment (mg)",xlim=c(100,2000000))
 words.bottom.right.logxy(mod)
 
 mod <- lm (log(total_weight)~log(fruit_weight), data=subset(SummaryInd,fruit_weight>0))
-plot(fruit_weight~total_weight,data=subset(SummaryInd,fruit_weight>0), log="xy",col=col.spp[as.factor(species)], pch=16, ylab="Fruit weight (mg)",xlim=c(100,2000000),xlab="")
+plot(fruit_weight~total_weight,data=subset(SummaryInd,fruit_weight>0), log="xy",col=col.spp(species), pch=16, ylab="Fruit weight (mg)",xlim=c(100,2000000),xlab="")
 words.bottom.right.logxy(mod)
 
 mod <- lm (log(total_weight)~log(propagule_inv), data=subset(SummaryInd,propagule_inv>0))
-plot(propagule_inv~total_weight,data=subset(SummaryInd,propagule_inv>0), log="xy",col=col.spp[as.factor(species)], pch=16, xlab="", ylab="Propagule investment (mg)", xlim=c(100,2000000))
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+plot(propagule_inv~total_weight,data=subset(SummaryInd,propagule_inv>0), log="xy",col=col.spp(species), pch=16, xlab="", ylab="Propagule investment (mg)", xlim=c(100,2000000))
+legend("topleft",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 words.bottom.right.logxy(mod)
 
 mod <- lm (log(total_weight)~log(prepollen_all_inv), data=subset(SummaryInd,prepollen_all_inv>0))
-plot(prepollen_all_inv~total_weight,data=subset(SummaryInd,prepollen_all_inv>0), log="xy",col=col.spp[as.factor(species)], pch=16, xlab="", ylab="prepollen investment (mg)", xlim=c(100,2000000))
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+plot(prepollen_all_inv~total_weight,data=subset(SummaryInd,prepollen_all_inv>0), log="xy",col=col.spp(species), pch=16, xlab="", ylab="prepollen investment (mg)", xlim=c(100,2000000))
+legend("topleft",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 words.bottom.right.logxy(mod)
 
 mtext("Total plant size (mg)",1, outer=TRUE,cex=1.2)
@@ -100,11 +100,11 @@ mtext("Total plant size (mg)",1, outer=TRUE,cex=1.2)
 options(scipen=10)
 par(mfrow=c(1,2), cex=1, omi=c(0.4,0.6,0.7,0.3), mai=c(1.1,1,0.3,0.3)) 
 mod <- lm(log(seed_count)~species*accessory_per_seed,data=subset(SummaryInd,seed_count>0))
-plot(seed_count~accessory_per_seed,SummaryInd, log="xy", pch=16,col=col.spp[as.factor(species)],ylab="seed count",xlab="accessory costs per successful seed (mg)",cex=.9)
+plot(seed_count~accessory_per_seed,SummaryInd, log="xy", pch=16,col=col.spp(species),ylab="seed count",xlab="accessory costs per successful seed (mg)",cex=.9)
 words.bottom.left.logxy(mod)
 
-plot(seed_count~(prop_accessory),SummaryInd, log="y", pch=16,col=col.spp[as.factor(species)],ylab="",xlab="proportion of reproduction to accessory tissues",cex=.9)
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+plot(seed_count~(prop_accessory),SummaryInd, log="y", pch=16,col=col.spp(species),ylab="",xlab="proportion of reproduction to accessory tissues",cex=.9)
+legend("topleft",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 ```
   
 ### Do accessory costs shift with seed size?
@@ -125,58 +125,58 @@ Interpretation:
 par(mfrow=c(1,2), cex=1, omi=c(0.4,0.6,0.7,0.3), mai=c(.7,1,0.3,0.3))
 #mod <- lm(log(seed_size)~log(accessory_per_seed),data=subset(SummaryInd,seed_count>0&accessory_per_seed>0))
 mod <- lm(log(seed_size)~(accessory_per_seed_mean),SummarySpp)
-plot(accessory_per_seed~seed_size,SummaryInd, log="xy", pch=16,col=col.spp[as.factor(species)],ylab="accessory costs per successful seed",xlab="",cex=.9)
-points((accessory_per_seed_mean)~seed_size,SummarySpp, pch=16,col=col.spp[as.factor(species)],cex=1.8)
+plot(accessory_per_seed~seed_size,SummaryInd, log="xy", pch=16,col=col.spp(species),ylab="accessory costs per successful seed",xlab="",cex=.9)
+points((accessory_per_seed_mean)~seed_size,SummarySpp, pch=16,col=col.spp(species),cex=1.8)
 words.bottom.right.logxy(mod)
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+legend("topleft",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 
 #mod <- lm(log(seed_size)~asin(sqrt(prop_accessory)),data=subset(SummaryInd,seed_count>0&accessory_per_seed>0))
 mod <- lm(log(seed_size)~asin(sqrt(prop_accessory_mean)),SummarySpp)
-plot(asin(sqrt(prop_accessory))~seed_size,SummaryInd, log="x", pch=16,col=col.spp[as.factor(species)],ylab="proportional accessory costs",xlab="",cex=.9)
+plot(asin(sqrt(prop_accessory))~seed_size,SummaryInd, log="x", pch=16,col=col.spp(species),ylab="proportional accessory costs",xlab="",cex=.9)
 words.bottom.right.logx(mod)
-points(asin(sqrt(prop_accessory_mean))~seed_size,SummarySpp, pch=16,col=col.spp[as.factor(species)],cex=1.8)
+points(asin(sqrt(prop_accessory_mean))~seed_size,SummarySpp, pch=16,col=col.spp(species),cex=1.8)
 mtext("seed size (mg)",1, outer=TRUE,cex=1.2)
 
 
 #mod <- lm(log(total_weight)~log(accessory_per_seed),data=subset(SummaryInd,seed_count>0&accessory_per_seed>0))
 mod <- lm(log(total_weight_mean)~log(accessory_per_seed_mean),SummarySpp)
-plot(accessory_per_seed~total_weight,SummaryInd, log="xy", pch=16,col=col.spp[as.factor(species)],ylab="accessory costs per successful seed",xlab="",cex=.9)
-points((accessory_per_seed_mean)~total_weight_mean,SummarySpp, pch=16,col=col.spp[as.factor(species)],cex=1.8)
+plot(accessory_per_seed~total_weight,SummaryInd, log="xy", pch=16,col=col.spp(species),ylab="accessory costs per successful seed",xlab="",cex=.9)
+points((accessory_per_seed_mean)~total_weight_mean,SummarySpp, pch=16,col=col.spp(species),cex=1.8)
 words.bottom.right.logxy(mod)
 
 #mod <- lm(log(total_weight)~asin(sqrt(prop_accessory)),data=subset(SummaryInd,seed_count>0&accessory_per_seed>0))
 mod <- lm(log(total_weight_mean)~asin(sqrt(prop_accessory_mean)),SummarySpp)
-plot(asin(sqrt(prop_accessory))~total_weight,SummaryInd, log="x", pch=16,col=col.spp[as.factor(species)],ylab="proportional accessory costs",xlab="",cex=0.9)
-points(asin(sqrt(prop_accessory_mean))~total_weight_mean,SummarySpp, pch=16,col=col.spp[as.factor(species)],cex=1.8)
+plot(asin(sqrt(prop_accessory))~total_weight,SummaryInd, log="x", pch=16,col=col.spp(species),ylab="proportional accessory costs",xlab="",cex=0.9)
+points(asin(sqrt(prop_accessory_mean))~total_weight_mean,SummarySpp, pch=16,col=col.spp(species),cex=1.8)
 words.bottom.right.logx(mod)
 mtext("total plant weight (mg)",1, outer=TRUE,cex=1.2)
 
 
 #mod <- lm(log(seedset)~log(accessory_per_seed),data=subset(SummaryInd,seed_count>0&accessory_per_seed>0))
 mod <- lm(log(seedset_mean)~log(accessory_per_seed_mean),SummarySpp)
-plot((accessory_per_seed)~seedset,SummaryInd, log="xy", pch=16,col=col.spp[as.factor(species)],ylab="accessory costs per successful seed",xlab="",cex=0.9)
-points((accessory_per_seed_mean)~seedset_mean,SummarySpp, pch=16,col=col.spp[as.factor(species)],cex=1.8)
+plot((accessory_per_seed)~seedset,SummaryInd, log="xy", pch=16,col=col.spp(species),ylab="accessory costs per successful seed",xlab="",cex=0.9)
+points((accessory_per_seed_mean)~seedset_mean,SummarySpp, pch=16,col=col.spp(species),cex=1.8)
 words.top.right.logxy(mod)
 
 #mod <- lm(log(seedset)~asin(sqrt(prop_accessory)),data=subset(SummaryInd,seed_count>0&accessory_per_seed>0))
 mod <- lm(log(seedset_mean)~asin(sqrt(prop_accessory_mean)),SummarySpp)
-plot(asin(sqrt(prop_accessory))~seedset,SummaryInd, log="x", pch=16,col=col.spp[as.factor(species)],ylab="proportional accessory costs",xlab="",cex=0.9)
-legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
-points(asin(sqrt(prop_accessory_mean))~seedset_mean,SummarySpp, pch=16,col=col.spp[as.factor(species)],cex=1.8)
+plot(asin(sqrt(prop_accessory))~seedset,SummaryInd, log="x", pch=16,col=col.spp(species),ylab="proportional accessory costs",xlab="",cex=0.9)
+legend("bottomleft",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
+points(asin(sqrt(prop_accessory_mean))~seedset_mean,SummarySpp, pch=16,col=col.spp(species),cex=1.8)
 words.top.right.logx(mod)
 mtext("seedset",1, outer=TRUE,cex=1.2)
 
 
 #mod <- lm(log(prepollen_all_per_seed)~log(accessory_per_seed),data=subset(SummaryInd,seed_count>0&accessory_per_seed>0&prepollen_all_per_seed>0))
 mod <- lm(log(prepollen_all_per_seed_mean)~log(accessory_per_seed_mean),SummarySpp)
-plot((accessory_per_seed)~(prepollen_all_per_seed),SummaryInd, log="xy",pch=16,col=col.spp[as.factor(species)],ylab="accessory costs per successful seed",xlab="",cex=0.9)
-points((accessory_per_seed_mean)~prepollen_all_per_seed_mean,SummarySpp, pch=16,col=col.spp[as.factor(species)],cex=1.8)
+plot((accessory_per_seed)~(prepollen_all_per_seed),SummaryInd, log="xy",pch=16,col=col.spp(species),ylab="accessory costs per successful seed",xlab="",cex=0.9)
+points((accessory_per_seed_mean)~prepollen_all_per_seed_mean,SummarySpp, pch=16,col=col.spp(species),cex=1.8)
 words.bottom.right.logxy(mod)
 
 #mod <- lm(asin(sqrt(prop_prepollen_all))~asin(sqrt(prop_accessory)),data=subset(SummaryInd,seed_count>0&accessory_per_seed>0&prepollen_all_per_seed>0))
 mod <- lm(asin(sqrt(prop_prepollen_all_mean))~asin(sqrt(prop_accessory_mean)),SummarySpp)
-plot(asin(sqrt(prop_accessory))~asin(sqrt(prop_prepollen_all)),SummaryInd, log="", pch=16,col=col.spp[as.factor(species)],ylab="proportional accessory costs",xlab="",cex=0.9)
-points(asin(sqrt(prop_accessory_mean))~asin(sqrt(prop_prepollen_all_mean)),SummarySpp, pch=16,col=col.spp[as.factor(species)],cex=1.8)
+plot(asin(sqrt(prop_accessory))~asin(sqrt(prop_prepollen_all)),SummaryInd, log="", pch=16,col=col.spp(species),ylab="proportional accessory costs",xlab="",cex=0.9)
+points(asin(sqrt(prop_accessory_mean))~asin(sqrt(prop_prepollen_all_mean)),SummarySpp, pch=16,col=col.spp(species),cex=1.8)
 words.bottom.right(mod)
 mtext("pre-pollination costs (proportional)",1, outer=TRUE,cex=1.2)
 ```
@@ -190,7 +190,7 @@ mtext("pre-pollination costs (proportional)",1, outer=TRUE,cex=1.2)
 * In other words, patterns of accessory costs vs. seed size, plant size, etc come about due to the differential effect of bud, flower abortion across species  
 ```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.width=14, fig.height=7}
 par(mfrow=c(1,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))
-plot(seed_size~seedcosts,data=subset(SummarySpp),log="xy",pch=16,col=col.spp[as.factor(species)],xlab="costs to make 1 seed (mg)",ylab="seed size (mg)",cex=1.2)
+plot(seed_size~seedcosts,data=subset(SummarySpp),log="xy",pch=16,col=col.spp(species),xlab="costs to make 1 seed (mg)",ylab="seed size (mg)",cex=1.2)
 mod <- lm(seedcosts~seed_size, SummarySpp)
 abline(0,1)
 abline(-1,1)
@@ -201,7 +201,7 @@ text(7,.1,srt=40,"accessory costs = 99%")
 words.top.left.logxy(mod)
 text(seed_size~seedcosts,data=subset(SummarySpp),labels=species, pos=1,offset=.6,cex=0.8,col="black")
 
-plot(seed_size~costs_per_seed,data=subset(SummarySpp),log="y",pch=16,col=col.spp[as.factor(species)],ylab="",xlab="proportional accessory costs, scaled by seed weight",cex=1.2)
+plot(seed_size~costs_per_seed,data=subset(SummarySpp),log="y",pch=16,col=col.spp(species),ylab="",xlab="proportional accessory costs, scaled by seed weight",cex=1.2)
 text(seed_size~costs_per_seed,data=subset(SummarySpp),labels=species, pos=1,offset=.6,cex=0.8,col="black")
 mod <- lm(costs_per_seed~seed_size, SummarySpp)
 words.bottom.left.logy(mod)
@@ -216,9 +216,9 @@ words.bottom.left.logy(mod)
 par(mfrow=c(1,1), cex=1, omi=c(0.2,0.3,0.3,0.3), mai=c(1.1,1,0.3,0.3))  
 
 mod <- lm(log(seedset)~log(prop_propagule),data=subset(SummaryInd,seedset>0&seedset<1))
-plot(prop_propagule~seedset,data=subset(SummaryInd,seedset>0&seedset<1), log="xy", pch=16,col=col.age[as.factor(age)],ylab="proportion RE to propagules (1-accessory)",xlab="seed set")
+plot(prop_propagule~seedset,data=subset(SummaryInd,seedset>0&seedset<1), log="xy", pch=16,col=col.age(age),ylab="proportion RE to propagules (1-accessory)",xlab="seed set")
 words.bottom.right.logxy(mod)
-legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
+legend("topleft",legend=labels.age(),col=col.age,pch=16, cex=.8,bty="n")
 ```
 
 ###Does increasing RA yield compounding returns in the form of higher seedset or increased propagule allocation?
@@ -231,16 +231,16 @@ legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=.8,bty="n")
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14,warning=FALSE}
 par(mfrow=c(2,2), cex=1, omi=c(0.2,0.3,0.3,0.3), mai=c(1.1,1,0.3,0.3)) 
 mod <- lm(asin(sqrt(seedset))~asin(sqrt(RA2)),data=subset(SummaryInd,seedset>0&seedset<1))
-plot(asin(sqrt(RA2))~asin(sqrt(seedset)),data=subset(SummaryInd,seedset>0&seedset<1), pch=16,col=col.spp[as.factor(species)])
+plot(asin(sqrt(RA2))~asin(sqrt(seedset)),data=subset(SummaryInd,seedset>0&seedset<1), pch=16,col=col.spp(species))
 words.bottom.right(mod)
 
 mod <- lm(asin(sqrt(prop_propagule))~asin(sqrt(RA2)),data=subset(SummaryInd,prop_propagule>0))
-plot(asin(sqrt(RA2))~asin(sqrt(prop_propagule)),data=subset(SummaryInd,seedset>0&seedset<1), pch=16,col=col.spp[as.factor(species)])
+plot(asin(sqrt(RA2))~asin(sqrt(prop_propagule)),data=subset(SummaryInd,seedset>0&seedset<1), pch=16,col=col.spp(species))
 words.bottom.right(mod)
-legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+legend("topright",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 
 mod <- lm(asin(sqrt(propagule_per_seed))~asin(sqrt(RA2)),data=subset(SummaryInd,prop_propagule>0))
-plot(asin(sqrt(RA2))~(propagule_per_seed),data=subset(SummaryInd,seedset>0&seedset<1), log="x",pch=16,col=col.spp[as.factor(species)])
+plot(asin(sqrt(RA2))~(propagule_per_seed),data=subset(SummaryInd,seedset>0&seedset<1), log="x",pch=16,col=col.spp(species))
 words.bottom.right.logx(mod)
 ```
 
@@ -253,16 +253,16 @@ words.bottom.right.logx(mod)
 par(mfrow=c(2,2), cex=1, omi=c(0.2,0.3,0.3,0.3), mai=c(1.1,1,0.3,0.3)) 
 options(scipen=20)
 mod <- lm(asin(sqrt(seedset))~log(total_repro_inv),data=subset(SummaryInd,seedset>0&seedset<1))
-plot((total_repro_inv)~asin(sqrt(seedset)),data=subset(SummaryInd,seedset>0&seedset<1), pch=16,col=col.spp[as.factor(species)],log="y")
+plot((total_repro_inv)~asin(sqrt(seedset)),data=subset(SummaryInd,seedset>0&seedset<1), pch=16,col=col.spp(species),log="y")
 words.bottom.right.logy(mod)
 
 mod <- lm(asin(sqrt(prop_propagule))~log(total_repro_inv),data=subset(SummaryInd,prop_propagule>0))
-plot((total_repro_inv)~asin(sqrt(prop_propagule)),data=subset(SummaryInd,seedset>0&seedset<1), pch=16,col=col.spp[as.factor(species)],log="y")
+plot((total_repro_inv)~asin(sqrt(prop_propagule)),data=subset(SummaryInd,seedset>0&seedset<1), pch=16,col=col.spp(species),log="y")
 words.bottom.right.logy(mod)
-legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+legend("topright",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 
 mod <- lm(log(propagule_per_seed)~log(total_repro_inv),data=subset(SummaryInd,seedset>0&seedset<1))
-plot((total_repro_inv)~(propagule_per_seed),data=subset(SummaryInd,seedset>0&seedset<1), log="xy",pch=16,col=col.spp[as.factor(species)])
+plot((total_repro_inv)~(propagule_per_seed),data=subset(SummaryInd,seedset>0&seedset<1), log="xy",pch=16,col=col.spp(species))
 words.bottom.right.logxy(mod)
 ```
 
@@ -278,20 +278,20 @@ words.bottom.right.logxy(mod)
 par(mfrow=c(2,2), cex=1, omi=c(0.2,0.3,0.3,0.3), mai=c(1.1,1,0.3,0.3)) 
 options(scipen=20)
 mod <- lm((prop_maxH)~asin(sqrt(seedset)),data=subset(SummaryInd,seedset>0&seedset<1))
-plot(asin(sqrt(seedset))~(prop_maxH),data=subset(SummaryInd,seedset>0&seedset<1), pch=16,col=col.spp[as.factor(species)])
+plot(asin(sqrt(seedset))~(prop_maxH),data=subset(SummaryInd,seedset>0&seedset<1), pch=16,col=col.spp(species))
 words.bottom.right(mod)
 
 mod <- lm(log(height)~asin(sqrt(seedset)),data=subset(SummaryInd,seedset>0&seedset<1))
-plot(asin(sqrt(seedset))~(height),data=subset(SummaryInd,seedset>0&seedset<1), pch=16,col=col.spp[as.factor(species)],log="x")
+plot(asin(sqrt(seedset))~(height),data=subset(SummaryInd,seedset>0&seedset<1), pch=16,col=col.spp(species),log="x")
 words.bottom.right.logx(mod)
 
 mod <- lm((prop_maxH)~asin(sqrt(prop_propagule)),data=subset(SummaryInd,prop_propagule>0))
-plot(asin(sqrt(prop_propagule))~(prop_maxH),data=subset(SummaryInd,seedset>0&seedset<1), pch=16,col=col.spp[as.factor(species)])
+plot(asin(sqrt(prop_propagule))~(prop_maxH),data=subset(SummaryInd,seedset>0&seedset<1), pch=16,col=col.spp(species))
 words.bottom.right(mod)
-legend("topright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+legend("topright",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 
 mod <- lm((prop_maxH)~log(propagule_per_seed),data=subset(SummaryInd,seedset>0&seedset<1))
-plot((propagule_per_seed)~(prop_maxH),data=subset(SummaryInd,seedset>0&seedset<1), log="y",pch=16,col=col.spp[as.factor(species)])
+plot((propagule_per_seed)~(prop_maxH),data=subset(SummaryInd,seedset>0&seedset<1), log="y",pch=16,col=col.spp(species))
 words.bottom.right.logy(mod)
 ```
 
@@ -300,45 +300,45 @@ words.bottom.right.logy(mod)
 par(mfrow=c(5,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))  
 
 mod <- lm(log(RA2)~log((propagule_inv)),data=subset(SummaryInd,RA2>0&propagule_inv>0))
-plot(propagule_inv~RA2,data=subset(SummaryInd,RA2>0&propagule_inv>0), pch=16,col=col.spp[as.factor(species)],log="xy", ylab="energy to propagules (mg)")
+plot(propagule_inv~RA2,data=subset(SummaryInd,RA2>0&propagule_inv>0), pch=16,col=col.spp(species),log="xy", ylab="energy to propagules (mg)")
 words.bottom.right.logxy(mod)
 
 mod <- lm(log(RA2)~asin(sqrt(prop_propagule)),data=subset(SummaryInd,RA2>0&prop_propagule>0))
-plot(asin(sqrt(prop_propagule))~RA2,data=subset(SummaryInd,RA2>0&prop_propagule>0), log="x", pch=16,col=col.spp[as.factor(species)],ylab="propagules (as proportion repro inv)")
+plot(asin(sqrt(prop_propagule))~RA2,data=subset(SummaryInd,RA2>0&prop_propagule>0), log="x", pch=16,col=col.spp(species),ylab="propagules (as proportion repro inv)")
 words.bottom.left.logx(mod)
 
 
 mod <- lm(log(RA2)~log((prepollen_aborted_inv)),data=subset(SummaryInd,RA2>0&prepollen_aborted_inv>0))
-plot(prepollen_aborted_inv~RA2,data=subset(SummaryInd,RA2<1&RA2>0), pch=16,col=col.spp[as.factor(species)],log="xy",ylab="pre-pollination aborted tissues (mg)")
+plot(prepollen_aborted_inv~RA2,data=subset(SummaryInd,RA2<1&RA2>0), pch=16,col=col.spp(species),log="xy",ylab="pre-pollination aborted tissues (mg)")
 words.bottom.right.logxy(mod)
 
 mod <- lm(log(RA2)~asin(sqrt(prop_prepollen_aborted)),data=subset(SummaryInd,RA2>0&prop_prepollen_aborted>0))
-plot(asin(sqrt(prop_prepollen_aborted))~RA2,data=subset(SummaryInd,RA2>0&prop_prepollen_aborted>0), pch=16,col=col.spp[as.factor(species)], log="x",ylab="pre-pollination aborted tissues (as proportion repro inv) (asin)")
+plot(asin(sqrt(prop_prepollen_aborted))~RA2,data=subset(SummaryInd,RA2>0&prop_prepollen_aborted>0), pch=16,col=col.spp(species), log="x",ylab="pre-pollination aborted tissues (as proportion repro inv) (asin)")
 words.bottom.right.logx(mod)
 
 mod <- lm(log(RA2)~log((prepollen_success_inv)),data=subset(SummaryInd,RA2>0&prepollen_success_inv>0))
-plot(prepollen_success_inv~RA2,data=subset(SummaryInd,RA2<1&RA2>0), pch=16,col=col.spp[as.factor(species)],log="xy",ylab="pre-pollination successful tissues (mg)")
+plot(prepollen_success_inv~RA2,data=subset(SummaryInd,RA2<1&RA2>0), pch=16,col=col.spp(species),log="xy",ylab="pre-pollination successful tissues (mg)")
 words.bottom.right.logxy(mod)
 
 mod <- lm(log(RA2)~asin(sqrt(prop_prepollen_success)),data=subset(SummaryInd,RA2>0&prop_prepollen_success>0))
-plot(asin(sqrt(prop_prepollen_success))~RA2,data=subset(SummaryInd,RA2>0&prop_prepollen_success>0), pch=16,col=col.spp[as.factor(species)], log="x",ylab="pre-pollination successful tissues (as proportion repro inv) (asin)")
+plot(asin(sqrt(prop_prepollen_success))~RA2,data=subset(SummaryInd,RA2>0&prop_prepollen_success>0), pch=16,col=col.spp(species), log="x",ylab="pre-pollination successful tissues (as proportion repro inv) (asin)")
 words.bottom.right.logx(mod)
 
 mod <- lm(log(RA2)~log((packaging_dispersal_inv)),data=subset(SummaryInd,RA2>0&packaging_dispersal_inv>0))
-plot(packaging_dispersal_inv~RA2,data=subset(SummaryInd,RA2>0&packaging_dispersal_inv>0), pch=16,col=col.spp[as.factor(species)],log="xy", ylab="energy to packaging and dispersal (mg)")
+plot(packaging_dispersal_inv~RA2,data=subset(SummaryInd,RA2>0&packaging_dispersal_inv>0), pch=16,col=col.spp(species),log="xy", ylab="energy to packaging and dispersal (mg)")
 words.bottom.right.logxy(mod)
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+legend("topleft",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 
 mod <- lm(log(RA2)~asin(sqrt(prop_packaging_dispersal)),data=subset(SummaryInd,RA2>0&prop_packaging_dispersal>0))
-plot(asin(sqrt(prop_packaging_dispersal))~RA2,data=subset(SummaryInd,RA2>0&prop_packaging_dispersal>0), log="x", pch=16,col=col.spp[as.factor(species)],ylab="packaging and dispersal (as proportion repro inv)")
+plot(asin(sqrt(prop_packaging_dispersal))~RA2,data=subset(SummaryInd,RA2>0&prop_packaging_dispersal>0), log="x", pch=16,col=col.spp(species),ylab="packaging and dispersal (as proportion repro inv)")
 words.bottom.left.logx(mod)
 
 mod <- lm(log(RA2)~log((postpollen_aborted_inv)),data=subset(SummaryInd,RA2>0&postpollen_aborted_inv>0))
-plot(postpollen_aborted_inv~RA2,data=subset(SummaryInd,RA2>0&postpollen_aborted_inv>0), pch=16,col=col.spp[as.factor(species)],log="xy", ylab="energy to tissues aborted postpollination (mg)")
+plot(postpollen_aborted_inv~RA2,data=subset(SummaryInd,RA2>0&postpollen_aborted_inv>0), pch=16,col=col.spp(species),log="xy", ylab="energy to tissues aborted postpollination (mg)")
 words.bottom.right.logxy(mod)
 
 mod <- lm(log(RA2)~asin(sqrt(prop_postpollen_aborted)),data=subset(SummaryInd,RA2>0&prop_postpollen_aborted>0))
-plot(asin(sqrt(prop_postpollen_aborted))~RA2,data=subset(SummaryInd,RA2>0&prop_postpollen_aborted>0), log="x", pch=16,col=col.spp[as.factor(species)],ylab="tissues aborted postpollination (as proportion repro inv)")
+plot(asin(sqrt(prop_postpollen_aborted))~RA2,data=subset(SummaryInd,RA2>0&prop_postpollen_aborted>0), log="x", pch=16,col=col.spp(species),ylab="tissues aborted postpollination (as proportion repro inv)")
 words.bottom.left.logx(mod)
 ```
 
@@ -348,52 +348,52 @@ words.bottom.left.logx(mod)
 par(mfrow=c(6,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))  
 
 mod <- lm((prop_maxH)~log((total_repro_inv)),data=subset(SummaryInd,prop_maxH>0&total_repro_inv>0))
-plot(total_repro_inv~prop_maxH,data=subset(SummaryInd,prop_maxH>0&total_repro_inv>0), pch=16,col=col.spp[as.factor(species)],log="y", ylab="total reproductive investment (mg)")
+plot(total_repro_inv~prop_maxH,data=subset(SummaryInd,prop_maxH>0&total_repro_inv>0), pch=16,col=col.spp(species),log="y", ylab="total reproductive investment (mg)")
 words.bottom.right.logy(mod)
 
 mod <- lm((prop_maxH)~asin(sqrt(RA2)),data=subset(SummaryInd,prop_maxH>0))
-plot(asin(sqrt(RA2))~prop_maxH,data=subset(SummaryInd,prop_maxH>0),pch=16,col=col.spp[as.factor(species)],ylab="RA2")
+plot(asin(sqrt(RA2))~prop_maxH,data=subset(SummaryInd,prop_maxH>0),pch=16,col=col.spp(species),ylab="RA2")
 words.bottom.left(mod)
 
 mod <- lm((prop_maxH)~log((propagule_inv)),data=subset(SummaryInd,prop_maxH>0&propagule_inv>0))
-plot(propagule_inv~prop_maxH,data=subset(SummaryInd,prop_maxH>0&propagule_inv>0), pch=16,col=col.spp[as.factor(species)],log="y", ylab="energy to propagules (mg)")
+plot(propagule_inv~prop_maxH,data=subset(SummaryInd,prop_maxH>0&propagule_inv>0), pch=16,col=col.spp(species),log="y", ylab="energy to propagules (mg)")
 words.bottom.right.logy(mod)
 
 mod <- lm((prop_maxH)~asin(sqrt(prop_propagule)),data=subset(SummaryInd,prop_maxH>0))
-plot(asin(sqrt(prop_propagule))~prop_maxH,data=subset(SummaryInd,prop_maxH>0),pch=16,col=col.spp[as.factor(species)],ylab="propagules (as proportion repro inv)")
+plot(asin(sqrt(prop_propagule))~prop_maxH,data=subset(SummaryInd,prop_maxH>0),pch=16,col=col.spp(species),ylab="propagules (as proportion repro inv)")
 words.bottom.left(mod)
 
 mod <- lm((prop_maxH)~log((prepollen_aborted_inv)),data=subset(SummaryInd,prop_maxH>0&prepollen_aborted_inv>0))
-plot(prepollen_aborted_inv~prop_maxH,data=subset(SummaryInd,prop_maxH>0&prepollen_aborted_inv>0), pch=16,col=col.spp[as.factor(species)],log="y",ylab="pre-pollination aborted tissues (mg)")
+plot(prepollen_aborted_inv~prop_maxH,data=subset(SummaryInd,prop_maxH>0&prepollen_aborted_inv>0), pch=16,col=col.spp(species),log="y",ylab="pre-pollination aborted tissues (mg)")
 words.bottom.right.logy(mod)
 
 mod <- lm((prop_maxH)~asin(sqrt(prop_prepollen_aborted)),data=subset(SummaryInd,prop_maxH>0))
-plot(asin(sqrt(prop_prepollen_aborted))~prop_maxH,data=subset(SummaryInd,prop_maxH>0), pch=16,col=col.spp[as.factor(species)], ylab="pre-pollination aborted tissues (as proportion repro inv) (asin)")
+plot(asin(sqrt(prop_prepollen_aborted))~prop_maxH,data=subset(SummaryInd,prop_maxH>0), pch=16,col=col.spp(species), ylab="pre-pollination aborted tissues (as proportion repro inv) (asin)")
 words.bottom.left(mod)
 
 mod <- lm((prop_maxH)~log((prepollen_success_inv)),data=subset(SummaryInd,prop_maxH>0&prepollen_success_inv>0))
-plot(prepollen_success_inv~prop_maxH,data=subset(SummaryInd,prop_maxH>0&prepollen_success_inv>0), pch=16,col=col.spp[as.factor(species)],log="y",ylab="pre-pollination successful tissues (mg)")
+plot(prepollen_success_inv~prop_maxH,data=subset(SummaryInd,prop_maxH>0&prepollen_success_inv>0), pch=16,col=col.spp(species),log="y",ylab="pre-pollination successful tissues (mg)")
 words.bottom.right.logy(mod)
 
 mod <- lm((prop_maxH)~asin(sqrt(prop_prepollen_success)),data=subset(SummaryInd,prop_maxH>0))
-plot(asin(sqrt(prop_prepollen_success))~prop_maxH,data=subset(SummaryInd,prop_maxH>0), pch=16,col=col.spp[as.factor(species)], ylab="pre-pollination successful tissues (as proportion repro inv) (asin)")
+plot(asin(sqrt(prop_prepollen_success))~prop_maxH,data=subset(SummaryInd,prop_maxH>0), pch=16,col=col.spp(species), ylab="pre-pollination successful tissues (as proportion repro inv) (asin)")
 words.bottom.left(mod)
 
 mod <- lm((prop_maxH)~log((packaging_dispersal_inv)),data=subset(SummaryInd,prop_maxH>0&packaging_dispersal_inv>0))
-plot(packaging_dispersal_inv~prop_maxH,data=subset(SummaryInd,prop_maxH>0&packaging_dispersal_inv>0), pch=16,col=col.spp[as.factor(species)],log="y", ylab="energy to packaging and dispersal (mg)")
+plot(packaging_dispersal_inv~prop_maxH,data=subset(SummaryInd,prop_maxH>0&packaging_dispersal_inv>0), pch=16,col=col.spp(species),log="y", ylab="energy to packaging and dispersal (mg)")
 words.bottom.right.logy(mod)
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+legend("topleft",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 
 mod <- lm((prop_maxH)~asin(sqrt(prop_packaging_dispersal)),data=subset(SummaryInd,prop_maxH>0))
-plot(asin(sqrt(prop_packaging_dispersal))~prop_maxH,data=subset(SummaryInd,prop_maxH>0), pch=16,col=col.spp[as.factor(species)],ylab="packaging and dispersal (as proportion repro inv)")
+plot(asin(sqrt(prop_packaging_dispersal))~prop_maxH,data=subset(SummaryInd,prop_maxH>0), pch=16,col=col.spp(species),ylab="packaging and dispersal (as proportion repro inv)")
 words.bottom.left(mod)
 
 mod <- lm((prop_maxH)~log((postpollen_aborted_inv)),data=subset(SummaryInd,prop_maxH>0&postpollen_aborted_inv>0))
-plot(postpollen_aborted_inv~prop_maxH,data=subset(SummaryInd,prop_maxH>0&postpollen_aborted_inv>0), pch=16,col=col.spp[as.factor(species)],log="y", ylab="energy to tissues aborted postpollination (mg)")
+plot(postpollen_aborted_inv~prop_maxH,data=subset(SummaryInd,prop_maxH>0&postpollen_aborted_inv>0), pch=16,col=col.spp(species),log="y", ylab="energy to tissues aborted postpollination (mg)")
 words.bottom.right.logy(mod)
 
 mod <- lm((prop_maxH)~asin(sqrt(prop_postpollen_aborted)),data=subset(SummaryInd,prop_maxH>0))
-plot(asin(sqrt(prop_postpollen_aborted))~prop_maxH,data=subset(SummaryInd,prop_maxH>0), pch=16,col=col.spp[as.factor(species)],ylab="tissues aborted postpollination (as proportion repro inv)")
+plot(asin(sqrt(prop_postpollen_aborted))~prop_maxH,data=subset(SummaryInd,prop_maxH>0), pch=16,col=col.spp(species),ylab="tissues aborted postpollination (as proportion repro inv)")
 words.bottom.left(mod)
 ```
 

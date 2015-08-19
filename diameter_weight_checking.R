@@ -13,7 +13,7 @@ check <- PHPH_HarvestData
 check <- PILI_HarvestData
 check <- PUTU_HarvestData
 
-plot(dia~stem_weight,data=subset(check,segment==1), pch=16,log="xy",col=col.lots[as.factor(individual)])
+plot(dia~stem_weight,data=subset(check,segment==1), pch=16,log="xy",col=col.lots(individual))
 text(dia~stem_weight,data=subset(check,segment==1),labels=individual,cex=.5,pos=3,offset=-.7)
 mod <- lm(log(stem_weight)~log(dia),data=subset(check,segment==1))
 words.bottom.right.logxy(mod)
@@ -119,19 +119,19 @@ plot(leaf_weight~stem_weight,data=subset(check,age==2.4), pch=16,log="xy",col=co
 text(leaf_weight~stem_weight,data=subset(check,segment==1&age==2.4),labels=individual,cex=.5,pos=3,offset=-.7)
 
 
-plot(dia~stem_weight,data=subset(check,age<=1.4), pch=16,log="xy",col=col.lots[as.factor(individual)])
+plot(dia~stem_weight,data=subset(check,age<=1.4), pch=16,log="xy",col=col.lots(individual))
 text(dia~stem_weight,data=subset(check,segment==1&age<=1.4),labels=individual,cex=.5,pos=3,offset=-.7)
 mod <- lm(log(stem_weight)~log(dia),data=subset(check,age==1.4))
 words.bottom.right.logxy(mod)
 
-plot(dia~leaf_weight,data=subset(check,age<=1.4), pch=16,log="xy",col=col.lots[as.factor(individual)])
+plot(dia~leaf_weight,data=subset(check,age<=1.4), pch=16,log="xy",col=col.lots(individual))
 text(dia~leaf_weight,data=subset(check,segment==1&age<=1.4),labels=individual,cex=.5,pos=3,offset=-.7)
 
-plot(leaf_weight~stem_weight,data=subset(check,age<=1.4), pch=16,log="xy",col=col.lots[as.factor(individual)])
+plot(leaf_weight~stem_weight,data=subset(check,age<=1.4), pch=16,log="xy",col=col.lots(individual))
 text(leaf_weight~stem_weight,data=subset(check,segment==1&age<=1.4),labels=individual,cex=.5,pos=3,offset=-.7)
 
 
-plot(dia~stem_weight,data=subset(check,segment==1), pch=16,log="xy",col=col.lots[as.factor(individual)])
+plot(dia~stem_weight,data=subset(check,segment==1), pch=16,log="xy",col=col.lots(individual))
 text(dia~stem_weight,data=subset(check,segment==1),labels=individual,cex=.5,pos=3,offset=-.7)
 mod <- lm(log(stem_weight)~log(dia),data=subset(check,segment==1))
 words.bottom.right.logxy(mod)
@@ -272,4 +272,4 @@ PUTU_check <- PUTU_HarvestData
 
 check_all <- rbind(BAER_check,BOLE_check,COER_check,EPMI_check,GRBU_check,GRSP_check,HATE_check,HEPU_check,LEES_check,PELA_check,PEPU_check,PHPH_check,PILI_check,PUTU_check)
 
-plot(leaf_weight~dia,data=check_all, pch=16,log="xy",col=col.spp[as.factor(species)])
+plot(leaf_weight~dia,data=check_all, pch=16,log="xy",col=col.spp(species))

@@ -2,7 +2,7 @@
 library(remake)
 create_bindings()
 
-source("scripts/summary_dataframes.R")
+
 source("scripts/functions.R")
 ```
 #Growth data, general patterns

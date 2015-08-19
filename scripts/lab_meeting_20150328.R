@@ -27,7 +27,7 @@ plot_RAbyAge <- function(spp) {
 }
 
 
-for(n in names(labels.spp)) {
+for(n in labels.spp()) {
   plot_RAbyAge(n)
 }
 ```
@@ -36,8 +36,8 @@ This led me to wonder how leaf lifespan - or some other variable - was shifting 
 
 The number of leaves along a leader is overall uneffected by age, although some species show a marked decline
 ```{r, echo=FALSE,results='hide', message=FALSE}
-plot(shoot_leaf_count~age,SummaryInd,log="xy", xlab="age",ylab="final leaf count along shoot",col=col.spp[as.factor(species)])
-legend("bottomright",col=col.spp, labels.spp, pch=16, cex=1)
+plot(shoot_leaf_count~age,SummaryInd,log="xy", xlab="age",ylab="final leaf count along shoot",col=col.spp(species))
+legend("bottomright",col=col.spp, labels.spp.full(), pch=16, cex=1)
 ```
 
 #LMA versus age
@@ -47,15 +47,15 @@ There is a significant increase with age (p=0.002) and many species differ from 
 Age is only borderline significant (p=0.04) when the seedlings are removed
 
 ```{r, echo=FALSE,results='hide', message=FALSE}
-plot(LMA~age,data=subset(LMA,branch_age=="mid"),log="xy", xlab="age",ylab="LMA",col=col.spp[as.factor(species)],pch=16)
-legend("bottomright",col=col.spp, labels.spp, pch=16, cex=1)
+plot(LMA~age,data=subset(LMA,branch_age=="mid"),log="xy", xlab="age",ylab="LMA",col=col.spp(species),pch=16)
+legend("bottomright",col=col.spp, labels.spp.full(), pch=16, cex=1)
 ```
 
 #Leaf lifespan with age
 Leaf lifespan increases from seedlings (1.4 yrs) to saplings (2.4 years) to adults (>4 years), but there are no differences between the different adult populations
 ```{r, echo=FALSE,results='hide', message=FALSE}
-plot(LL_birth~age,SummaryInd,log="xy", xlab="age",ylab="leaf lifespan (based on leaf births)",col=col.spp[as.factor(species)])
-legend("bottomright",col=col.spp, labels.spp, pch=16, cex=1)
+plot(LL_birth~age,SummaryInd,log="xy", xlab="age",ylab="leaf lifespan (based on leaf births)",col=col.spp(species))
+legend("bottomright",col=col.spp, labels.spp.full(), pch=16, cex=1)
 ```
 
 # Plots of individual species show that no species has a significant change either - although several show slight declines at the end
@@ -72,7 +72,7 @@ plot_LLvAge <- function(spp) {
   # abline(fit)
 }
 
-for(n in names(labels.spp)) {
+for(n in labels.spp()) {
   plot_LLvAge(n)
   #  mod_LMAvAge(n)
   #  summary(mod_LMAvAge(n))
@@ -93,7 +93,7 @@ mod_newlengthvAge <- function(spp) {
   lm(growth_shoot_length ~ age, data=subset(SummaryInd,age>2.4 & species==spp))
 }
 
-for(n in names(labels.spp)) {
+for(n in labels.spp()) {
   plot_newlengthvAge(n)
   mod_newlengthvAge(n)
   summary(mod_newlengthvAge(n))
@@ -105,8 +105,8 @@ Apparently it is simply that older plants have more stem - plotting total leaf w
 (Yes, I know the 2.4 yr olds are missing...)
 
 ```{r, echo=FALSE,results='hide', message=FALSE}
-plot(total_leaf_weight~FinalWeight,SummaryInd, log="xy",col=col.age[as.factor(age)], pch=16, cex=0.8)
-legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+plot(total_leaf_weight~FinalWeight,SummaryInd, log="xy",col=col.age(age), pch=16, cex=0.8)
+legend("bottomright",col=col.age, labels.age(), pch=16, cex=1)
 ```
 #Next steps?
 As I begin to analyze RA patterns, think more specifically about the species that do show a distinct change with age in one of hte "leaf" parameters.
@@ -122,7 +122,7 @@ This correlation is as expected, except for the babies
 col.LMA <-c("purple", "pink", "light green", "orange","blue", "light blue","red")
 labels.LMA <-c("age 1.4", "age 2.4", "age 5", "age 7", "age 9", "age 32", "HATE")
 plot(LL_birth_mean ~ LMA_mean, SummarySppAge, type="n", xlab="LMA", ylab="leaf lifespan (years)", main="leaf lifespan versus LMA (all species and ages)", las=1,pch=17, log="xy")
-points(LL_birth_mean ~ LMA_mean, data=subset(SummarySppAge, species!="HATE"), pch=16, cex=1.2, col=col.age[as.factor(age)])
+points(LL_birth_mean ~ LMA_mean, data=subset(SummarySppAge, species!="HATE"), pch=16, cex=1.2, col=col.age(age)
 points(LL_birth_mean ~ LMA_mean, col="red", data=subset(SummarySppAge, species=="HATE"), pch=17)
 legend("bottomright",col=col.LMA, labels.LMA, pch=16, cex=1.4)
 ```
@@ -131,46 +131,46 @@ legend("bottomright",col=col.LMA, labels.LMA, pch=16, cex=1.4)
 The pattern becomes more obvious when young plants (and Hakea) are omitted
 
 ```{r, echo=FALSE,results='hide', message=FALSE}
-plot(LL_bd_mean ~ LMA_mean, data=subset(SummarySppAge, species!="HATE" & age>1.5), pch=16, cex=1.2, col=col.age2[as.factor(age)])
-legend("bottomright",col=col.age2,labels.age2,pch=16)
+plot(LL_bd_mean ~ LMA_mean, data=subset(SummarySppAge, species!="HATE" & age>1.5), pch=16, cex=1.2, col=col.age(age)
+legend("bottomright",col=col.age,labels.age(),pch=16)
 ```
 
 #Growth rates increase with increasing LMA in adult plants
 But there is no relationship in seedlings (age=1.4) or saplings (age=2.4)
 This is not predicted by Daniel's model or Anais' review
 ```{r, echo=FALSE,results='hide', message=FALSE}
-plot(growth_inv_mean ~ LMA_mean,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age[as.factor(age)],pch=16,cex=1.2,xlab="LMA",ylab="growth investment (mg per year)",main="Seedlings")
+plot(growth_inv_mean ~ LMA_mean,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age(age),pch=16,cex=1.2,xlab="LMA",ylab="growth investment (mg per year)",main="Seedlings")
 text(growth_inv_mean ~ LMA_mean, data=subset(SummarySppAge,age==1.4), labels=species, pos=1, offset=-1.1, cex=0.9,col="blue")
 
 plot(growth_inv_mean ~ LMA_mean,data=subset(SummarySppAge,age==2.4),log="xy",col="pink",pch=16,cex=1.2,xlab="LMA",ylab="growth investment (mg per year)",main="Saplings")
 text(growth_inv_mean ~ LMA_mean, data=subset(SummarySppAge,age==2.4), labels=species, pos=1, offset=-1.1, cex=0.9,col="blue")
 
-plot(growth_inv_mean ~ LMA_mean,data=subset(SummarySppAge,age>3),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1.2,xlab="LMA",ylab="growth investment (mg per year)",main="Adults")
+plot(growth_inv_mean ~ LMA_mean,data=subset(SummarySppAge,age>3),log="xy",col=col.age(age),pch=16,cex=1.2,xlab="LMA",ylab="growth investment (mg per year)",main="Adults")
 text(growth_inv_mean ~ LMA_mean, data=subset(SummarySppAge,age>3), labels=species, pos=1, offset=-1.1, cex=0.6,col="blue")
-legend("bottomright",col=col.age,labels.age,pch=16)
+legend("bottomright",col=col.age,labels.age(),pch=16)
 ```
 
 #Species with greater wood density have higher growth rates
 Again there is no relationship in younger plants
 ```{r, echo=FALSE,results='hide', message=FALSE}
-plot(growth_inv_mean ~ wood_density,data=subset(SummarySppAge,age>3),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1,xlab="wood density",ylab="growth investment (mg per year)",xlim=c(0.57,0.9),main="Relationship between wood density and growth rates")
+plot(growth_inv_mean ~ wood_density,data=subset(SummarySppAge,age>3),log="xy",col=col.age(age),pch=16,cex=1,xlab="wood density",ylab="growth investment (mg per year)",xlim=c(0.57,0.9),main="Relationship between wood density and growth rates")
 text(growth_inv_mean ~ wood_density, data=subset(SummarySppAge,age==5), labels=species, pos=2, offset=-2.4, cex=0.9,col="blue")
-legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+legend("bottomright",col=col.age, labels.age(), pch=16, cex=1)
 ```
 
 #Species with larger seeds have higher growth rates
 The same basic relationship exists across all ages, so combined all data here
 ```{r, echo=FALSE,results='hide', message=FALSE}
-plot(growth_inv_mean ~ seed_size,data=subset(SummarySppAge,age>.5),log="xy",col=col.age[as.factor(age)],pch=16,cex=1,xlab="seed size (mg)",ylab="growth investment (mg per year)",main="Effect of seed size on growth rates")
-legend("topleft",col=col.age, labels.age, pch=16, cex=1)
+plot(growth_inv_mean ~ seed_size,data=subset(SummarySppAge,age>.5),log="xy",col=col.age(age),pch=16,cex=1,xlab="seed size (mg)",ylab="growth investment (mg per year)",main="Effect of seed size on growth rates")
+legend("topleft",col=col.age, labels.age(), pch=16, cex=1)
 text(growth_inv_mean ~ seed_size, data=subset(SummarySppAge,age==9), labels=species, pos=2, offset=-2.4, cex=0.9,col="blue")
 ```
 
 #Species with greater maximum height have higher growth rates
 For younger plants there is no relationship with *SPECIES* overall maximum H, but there is a positive correlation with the maximum height the species reaches at a given age -i.e. fast growing young plants are tall when young.
 ```{r, echo=FALSE,results='hide', message=FALSE}
-plot(growth_inv_mean ~ maxH,data=subset(SummarySppAge,age>3),log="xy",col=col.age3[as.factor(age)],pch=16,cex=1.2,xlab="maximum height (mm)",ylab="growth investment (mg per year)",xlim=c(500,3200),main="Relationship between growth rates on maximum H")
-legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+plot(growth_inv_mean ~ maxH,data=subset(SummarySppAge,age>3),log="xy",col=col.age(age),pch=16,cex=1.2,xlab="maximum height (mm)",ylab="growth investment (mg per year)",xlim=c(500,3200),main="Relationship between growth rates on maximum H")
+legend("bottomright",col=col.age, labels.age(), pch=16, cex=1)
 text(growth_inv_mean ~ maxH, data=subset(SummarySppAge,age==9), labels=species, pos=2, offset=-2.4, cex=0.9,col="blue")
 ```
 
@@ -179,6 +179,6 @@ text(growth_inv_mean ~ maxH, data=subset(SummarySppAge,age==9), labels=species, 
 #Correlations between different growth measures
 Increased cross-sectional area of a leader and the entire plant are fairly correlated and uneffected by age (once not baby)
 ```{r, echo=FALSE,results='hide', message=FALSE}
-plot(change_shoot_area~change_basal_area,SummaryInd, log="xy",col=col.age[as.factor(age)], pch=16, cex=.8,xlab="change in basal stem area",ylab="change in shoot area")
-legend("bottomright",col=col.age, labels.age, pch=16, cex=1)
+plot(change_shoot_area~change_basal_area,SummaryInd, log="xy",col=col.age(age), pch=16, cex=.8,xlab="change in basal stem area",ylab="change in shoot area")
+legend("bottomright",col=col.age, labels.age(), pch=16, cex=1)
 ```

@@ -2,7 +2,6 @@
 library(remake)
 create_bindings()
 
-source("scripts/summary_dataframes.R")
 source("scripts/functions.R")
 ```
 
@@ -28,18 +27,18 @@ source("scripts/functions.R")
 * Plots of total reproductive investment against size or height are both highly significant
 ```{r, echo=FALSE,message=FALSE, fig.width=7, fig.height=7}
 mod <- lm(log(total_weight)~log(repro_inv), data=subset(SummaryInd,repro_inv>0))
-plot(repro_inv~total_weight, SummaryInd, log="xy",col=col.spp[as.factor(species)],pch=16)
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+plot(repro_inv~total_weight, SummaryInd, log="xy",col=col.spp(species),pch=16)
+legend("topleft",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 words.bottom.right.logxy(mod)
 
 mod <- lm(log(height)~log(repro_inv), data=subset(SummaryInd,repro_inv>0))
-plot(repro_inv~height, SummaryInd, log="xy",col=col.spp[as.factor(species)],pch=16)
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+plot(repro_inv~height, SummaryInd, log="xy",col=col.spp(species),pch=16)
+legend("topleft",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 words.bottom.right.logxy(mod)
 
 mod <- lm((prop_maxH)~log(repro_inv), data=subset(SummaryInd,repro_inv>0))
-plot((repro_inv)~(prop_maxH), SummaryInd, log="y",col=col.spp[as.factor(species)],pch=16,xlim=c(4e-03,1))
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+plot((repro_inv)~(prop_maxH), SummaryInd, log="y",col=col.spp(species),pch=16,xlim=c(4e-03,1))
+legend("topleft",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 ```
 
 ###Plots of size against RA
@@ -49,18 +48,18 @@ legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 ```{r, echo=FALSE,message=FALSE, fig.width=7, fig.height=7}
 par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2)) 
 mod <- lm(log(total_weight)~asin(sqrt(RA)), data=subset(SummaryInd,repro_inv>0))
-plot(asin(sqrt(RA))~total_weight, SummaryInd, log="x",col=col.spp[as.factor(species)],pch=16)
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+plot(asin(sqrt(RA))~total_weight, SummaryInd, log="x",col=col.spp(species),pch=16)
+legend("topleft",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right.logx(mod)
 
 mod <- lm(log(height)~asin(sqrt(RA)), data=subset(SummaryInd,repro_inv>0))
-plot(asin(sqrt(RA))~height, SummaryInd, log="x",col=col.spp[as.factor(species)],pch=16)
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+plot(asin(sqrt(RA))~height, SummaryInd, log="x",col=col.spp(species),pch=16)
+legend("topleft",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right.logx(mod)
 
 mod <- lm((prop_maxH)~asin(sqrt(RA)), data=subset(SummaryInd,repro_inv>0))
-plot((asin(sqrt(RA)))~(prop_maxH), SummaryInd,col=col.spp[as.factor(species)],pch=16,xlim=c(4e-03,1))
-legend("topleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+plot((asin(sqrt(RA)))~(prop_maxH), SummaryInd,col=col.spp(species),pch=16,xlim=c(4e-03,1))
+legend("topleft",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 words.bottom.right(mod)
 ```
 
@@ -200,8 +199,8 @@ results
 ```{r, echo=FALSE,message=FALSE}
 par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2)) 
 mod <- lm(log(growth_inv)~log(repro_inv),data=subset(SummaryInd,repro_inv>0))
-plot((1+repro_inv)~growth_inv, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
-legend("bottomright",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+plot((1+repro_inv)~growth_inv, SummaryInd, log="xy", col=col.spp(species),pch=16)
+legend("bottomright",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 words.bottom.right.logxy(mod)
 ```
 
@@ -212,8 +211,8 @@ words.bottom.right.logxy(mod)
 ```{r, echo=FALSE,message=FALSE}
 par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2)) 
 mod <- lm(RGR~asin(sqrt(RA))*species,data=subset(SummaryInd,RA>0))
-plot((RA+.01)~RGR, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
-legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
+plot((RA+.01)~RGR, SummaryInd, log="xy", col=col.spp(species),pch=16)
+legend("bottomleft",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right.logxy(mod)
 ```
 
@@ -253,17 +252,17 @@ results
 * these are mean RA values across all plants, including babies and other non-reproducing individuals
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
 par(mfrow=c(2,2), cex=1, omi=c(.6,0.3,.1,0.2), mai=c(1.1,1,.5,0.2))
-plot(RA_mean~WD_mean,data=subset(SummarySpp,RA_mean>0), col=col.spp[as.factor(species)],pch=16,log="y",ylab="")
+plot(RA_mean~WD_mean,data=subset(SummarySpp,RA_mean>0), col=col.spp(species),pch=16,log="y",ylab="")
 mod <- lm(WD_mean~asin(sqrt(RA_mean)),SummarySpp)
 words.bottom.left.logy(mod)
-plot(RA_mean~seed_size, SummarySpp, col=col.spp[as.factor(species)],pch=16,log="xy",ylab="")
+plot(RA_mean~seed_size, SummarySpp, col=col.spp(species),pch=16,log="xy",ylab="")
 mod <- lm(log(seed_size)~asin(sqrt(RA_mean)), SummarySpp)
 words.bottom.left.logxy(mod)
-legend(.05,.28,col=col.spp, legend=names(labels.spp), pch=16, cex=.8,bty="n")
-plot(RA_mean~LMA_mean, SummarySpp, col=col.spp[as.factor(species)],pch=16,log="xy",ylab="")
+legend(.05,.28,col=col.spp, legend=labels.spp(), pch=16, cex=.8,bty="n")
+plot(RA_mean~LMA_mean, SummarySpp, col=col.spp(species),pch=16,log="xy",ylab="")
 mod <- lm(log(LMA_mean)~asin(sqrt(RA_mean)), data=subset(SummarySpp,RA_mean>0))
 words.top.right.logxy(mod)
-plot(RA_mean~maxH, SummarySpp, col=col.spp[as.factor(species)],pch=16,log="xy",ylab="")
+plot(RA_mean~maxH, SummarySpp, col=col.spp(species),pch=16,log="xy",ylab="")
 mod <- lm(log(maxH)~asin(sqrt(RA_mean)), data=subset(SummarySpp,RA_mean>0))
 words.bottom.left.logxy(mod)
 mtext("RA",2,outer=TRUE)
@@ -272,17 +271,17 @@ mtext("RA",2,outer=TRUE)
 *just plotting mean RA of mature plants is similar, although BAER throws off many plots - surprised by how high its RA is, and wondering if something is wrong with these #s
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
 par(mfrow=c(2,2), cex=1, omi=c(.6,0.3,.1,0.2), mai=c(1.1,1,.5,0.2))
-plot(maxH~WD_mean,data=subset(SummarySpp), col=col.spp[as.factor(species)],pch=16,log="y",ylab="")
+plot(maxH~WD_mean,data=subset(SummarySpp), col=col.spp(species),pch=16,log="y",ylab="")
 mod <- lm(mature_RA_mean~asin(sqrt(mature_RA_mean)),data=subset(SummarySpp,species!="BAER"))
 words.bottom.left.logy(mod)
-plot(mature_RA_mean~seed_size, data=subset(SummarySpp), col=col.spp[as.factor(species)],pch=16,log="xy",ylab="")
+plot(mature_RA_mean~seed_size, data=subset(SummarySpp), col=col.spp(species),pch=16,log="xy",ylab="")
 mod <- lm(log(seed_size)~asin(sqrt(mature_RA_mean)), data=subset(SummarySpp,species!="BAER"))
 words.bottom.left.logxy(mod)
-legend(.05,.28,col=col.spp, legend=names(labels.spp), pch=16, cex=.8,bty="n")
-plot(mature_RA_mean~LMA_mean, data=subset(SummarySpp), col=col.spp[as.factor(species)],pch=16,log="xy",ylab="")
+legend(.05,.28,col=col.spp, legend=labels.spp(), pch=16, cex=.8,bty="n")
+plot(mature_RA_mean~LMA_mean, data=subset(SummarySpp), col=col.spp(species),pch=16,log="xy",ylab="")
 mod <- lm(log(LMA_mean)~asin(sqrt(mature_RA_mean)), data=subset(SummarySpp,species!="BAER"))
 words.top.right.logxy(mod)
-plot(mature_RA_mean~maxH, data=subset(SummarySpp), col=col.spp[as.factor(species)],pch=16,log="xy",ylab="")
+plot(mature_RA_mean~maxH, data=subset(SummarySpp), col=col.spp(species),pch=16,log="xy",ylab="")
 mod <- lm(log(maxH)~asin(sqrt(mature_RA_mean)), data=subset(SummarySpp,species!="BAER"))
 words.bottom.left.logxy(mod)
 mtext("RA (mature plants only)",2,outer=TRUE)
@@ -305,20 +304,20 @@ sppage_zero_RA <- SummaryInd %>%
 sppage_zero_RA$RAcex <- (((sppage_zero_RA$RA)/10))
 
 par(mfrow=c(2,2), cex=1, omi=c(.6,0.3,.1,0.2), mai=c(1,1,.6,0.2))
-plot(RA~WD_mean,data=subset(SummaryInd,RA>0), col=col.spp[as.factor(species)],pch=16,log="y",ylim=c(.0008,1))
-points((RA+.001)~WD_mean,data=subset(SummaryInd,RA==0),col=col.spp[as.factor(species)],pch=16, cex=spp_zero_RA$RAcex)
+plot(RA~WD_mean,data=subset(SummaryInd,RA>0), col=col.spp(species),pch=16,log="y",ylim=c(.0008,1))
+points((RA+.001)~WD_mean,data=subset(SummaryInd,RA==0),col=col.spp(species),pch=16, cex=spp_zero_RA$RAcex)
 mod <- lm(WD_mean~asin(sqrt(RA)),SummaryInd)
 words.bottom.left.logy(mod)
-plot(RA~seed_size, SummaryInd, col=col.spp[as.factor(species)],pch=16,log="xy",ylim=c(.0008,1))
-points((RA+.001)~seed_size,data=subset(SummaryInd,RA==0),col=col.spp[as.factor(species)],pch=16, cex=spp_zero_RA$RAcex)
+plot(RA~seed_size, SummaryInd, col=col.spp(species),pch=16,log="xy",ylim=c(.0008,1))
+points((RA+.001)~seed_size,data=subset(SummaryInd,RA==0),col=col.spp(species),pch=16, cex=spp_zero_RA$RAcex)
 mod <- lm(log(seed_size)~asin(sqrt(RA)), SummaryInd)
 words.bottom.left.logxy(mod)
-plot(RA~LMA_mean, SummaryInd, col=col.spp[as.factor(species)],pch=16,log="xy",ylim=c(.0008,1))
-points((RA+.001)~LMA_mean,data=subset(SummaryInd,RA==0),col=col.spp[as.factor(species)],pch=16, cex=sppage_zero_RA$RAcex)
+plot(RA~LMA_mean, SummaryInd, col=col.spp(species),pch=16,log="xy",ylim=c(.0008,1))
+points((RA+.001)~LMA_mean,data=subset(SummaryInd,RA==0),col=col.spp(species),pch=16, cex=sppage_zero_RA$RAcex)
 mod <- lm(log(LMA_mean)~asin(sqrt(RA)), data=subset(SummaryInd,RA>0))
 words.top.right.logxy(mod)
-plot(RA~maxH, SummaryInd, col=col.spp[as.factor(species)],pch=16,log="xy",ylim=c(.0008,1))
-points((RA+.001)~maxH,data=subset(SummaryInd,RA==0),col=col.spp[as.factor(species)],pch=16, cex=spp_zero_RA$RAcex)
+plot(RA~maxH, SummaryInd, col=col.spp(species),pch=16,log="xy",ylim=c(.0008,1))
+points((RA+.001)~maxH,data=subset(SummaryInd,RA==0),col=col.spp(species),pch=16, cex=spp_zero_RA$RAcex)
 mod <- lm(log(maxH)~asin(sqrt(RA)), data=subset(SummaryInd,RA>0))
 words.bottom.left.logxy(mod)
 ```
@@ -327,6 +326,6 @@ words.bottom.left.logxy(mod)
 As plants approach maximum height, less of their reproductive investment is going to propagules...This only includes individuals with some propagule investment
 ```{r, echo=FALSE,message=FALSE,fig.width=6, fig.height=6}
 mod <- lm(log(prop_maxH)~asin(sqrt(prop_propagule)),data=subset(SummaryInd,prop_maxH>0))
-plot(asin(sqrt(prop_propagule))~prop_maxH,data=subset(SummaryInd,prop_maxH>0&prop_propagule>0), log="x", pch=16,col=col.spp[as.factor(species)],ylab="propagules (as proportion repro inv)")
+plot(asin(sqrt(prop_propagule))~prop_maxH,data=subset(SummaryInd,prop_maxH>0&prop_propagule>0), log="x", pch=16,col=col.spp(species),ylab="propagules (as proportion repro inv)")
 words.bottom.left.logx(mod)
 ```
