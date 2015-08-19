@@ -2,7 +2,6 @@
 library(remake)
 create_bindings()
 
-source("scripts/summary_dataframes.R")
 source("scripts/functions.R")
 ```
 
@@ -179,6 +178,67 @@ for(spp in names(data)) {
 
 mtext("Vegetative investment (mg)", 2, outer=TRUE,cex=1.2)
 mtext("Total plant weight (mg)", 1, outer=TRUE,cex=1.2)
+legend("topleft",legend=names(labels.mature),col=col.mature,pch=16, cex=1.1,bty="n")
+```
+
+###Including all investment vs. growth  
+* reproducing individuals now plot closer to the "expected line" (as defined by juvenile individuals), but for most species there is still a considerable discrepency
+* fit line of veg investment vs. total plant weight through non-reproductive plants
+* derive "predicted" total investment (veg+repro) for reproducing individuals
+* determine proportional reproductive cost for reproducing individuals; probably look by age
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
+par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
+yvar <- "TotalInv"
+xvar <- "total_weight"
+
+data <- subset(SummaryInd)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (log(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",cex=1.3,
+                    main=spp,col=col.mature[as.factor(data[[spp]]$mature)])
+}
+
+mtext("Vegetative + reproductive investment (mg)", 2, outer=TRUE,cex=1.2)
+mtext("Total plant weight (mg)", 1, outer=TRUE,cex=1.2)
+legend("topleft",legend=names(labels.mature),col=col.mature,pch=16, cex=1.1,bty="n")
+```
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
+par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
+yvar <- "growth_height"
+xvar <- "height"
+
+data <- subset(SummaryInd)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (log(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",cex=1.3,
+                    main=spp,col=col.mature[as.factor(data[[spp]]$mature)])
+}
+
+###calc_veg <- merge(SummaryInd, select(results, -species), by="species",all.x=TRUE)
+###WORK HERE
+
+mtext("Increase in plant height (mm)", 2, outer=TRUE,cex=1.2)
+mtext("Plant height (mm)", 1, outer=TRUE,cex=1.2)
 legend("topleft",legend=names(labels.mature),col=col.mature,pch=16, cex=1.1,bty="n")
 ```
 
