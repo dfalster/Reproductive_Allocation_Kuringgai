@@ -11,22 +11,21 @@ process_seed_costs <- function(seedSize_raw, PartsSummary_all) {
       select(species, seed_size)
 
   # adding info on all costs to produce 1 seed
-  # Todo: Lizzy you need to replace numbers below with actual names, see examples
   seedcosts <- list() 
   seedcosts[["BAER"]] <- list(parts=c("cone_brown","cone_base_brown","flower_petals","seed_pod","seed","flower_style"), scale=c(1/10,1/10,1,1,1,1))
   seedcosts[["BOLE"]] <- list(parts=c("late_flower_petals","seed_pod","seed","late_finished_flower","pedicel"), scale=1) 
   seedcosts[["COER"]] <- list(parts=c("inflorescence_stalk_in_fruit","flower_petals", "bract_fruit","fruit_mature"), scale=c(1/6,1,1,1))
   seedcosts[["EPMI"]] <- list(parts=c("flower_petals", "fruit_mature"), scale=1)
-  seedcosts[["GRBU"]] <- list(parts=NULL, scale=1) #w[2] + w[7] + w[12] + w[14] + w[15]
-  seedcosts[["GRSP"]] <- list(parts=NULL, scale=1) #w[4] + w[9] + w[14] + w[16] + w[18]
-  seedcosts[["HATE"]] <- list(parts=NULL, scale=1) #w[4] + w[6] + w[13] + w[16]
-  seedcosts[["HEPU"]] <- list(parts=NULL, scale=1) #w[3] + w[10] + w[15]
-  seedcosts[["LEES"]] <- list(parts=NULL, scale=1) #w[5] + w[10] + w[13]
-  seedcosts[["PELA"]] <- list(parts=NULL, scale=1) #w[4] + w[5] + w[11] + w[12]
-  seedcosts[["PEPU"]] <- list(parts=NULL, scale=c(1/30,1,1)) #w[4]/30 + w[9] + w[16]
-  seedcosts[["PHPH"]] <- list(parts=NULL, scale=1) #w[4] + w[5] + w[6] + w[15] + w[16]
-  seedcosts[["PILI"]] <- list(parts=NULL, scale=c(1/10,1,1,1,1,1)) #w[2]/10 + w[3] + w[5] + w[7] + w[11] + w[12]
-  seedcosts[["PUTU"]] <- list(parts=NULL, scale=1) # w[2] + w[3] + w[4] + w[10] + w[11]
+  seedcosts[["GRBU"]] <- list(parts=c("inflorescence_stalk","flower_petals","pedicel","seed_pod","seed"), scale=1)
+  seedcosts[["GRSP"]] <- list(parts=c("inflorescence_stalk_in_fruit","flower_petals","pedicel","seed_pod","seed"), scale=1)
+  seedcosts[["HATE"]] <- list(parts=c("inflorescence_bud_big_bracts","flower_petals","seed_pod","seed", scale=1)
+  seedcosts[["HEPU"]] <- list(parts=c("flower_petals","calyx_fruit","fruit_mature"), scale=1)
+  seedcosts[["LEES"]] <- list(parts=c("flower_petals","calyx_fruit","fruit_mature"), scale=1)
+  seedcosts[["PELA"]] <- list(parts=c("flower_petals","pedicel","seed_pod","seed"), scale=1)
+  seedcosts[["PEPU"]] <- list(parts=c("cone_brown","flower_petals","flower_calyx","fruit_mature"), scale=c(1/30,1,1,1))
+  seedcosts[["PHPH"]] <- list(parts=c("flower_petals","flower_calyx","bract_flower_or_finished_flower","seed_pod","seed"), scale=1)
+  seedcosts[["PILI"]] <- list(parts=c("inflorescence_stalk","bract_flower_or_finished_flower","flower_petals","flower_calyx","seed_pod","seed"), scale=c(1/10,1,1,1,1,1))
+  seedcosts[["PUTU"]] <- list(parts=c("flower_petals","flower_calyx","bract_flower_or_finished_flower","seed_pod","seed"), scale=1)
 
   species <- names(seedcosts)
 
