@@ -36,7 +36,7 @@ This led me to wonder how leaf lifespan - or some other variable - was shifting 
 
 The number of leaves along a leader is overall uneffected by age, although some species show a marked decline
 ```{r, echo=FALSE,results='hide', message=FALSE}
-plot(lvs_end_total~age,SummaryInd,log="xy", xlab="age",ylab="final leaf count along shoot",col=col.spp[as.factor(species)])
+plot(shoot_leaf_count~age,SummaryInd,log="xy", xlab="age",ylab="final leaf count along shoot",col=col.spp[as.factor(species)])
 legend("bottomright",col=col.spp, labels.spp, pch=16, cex=1)
 ```
 
@@ -82,15 +82,15 @@ for(n in names(labels.spp)) {
 #Several species show significant declines in shoot extension with age
 ```{r, echo=FALSE,results='hide', message=FALSE}
 plot_newlengthvAge <- function(spp) {
-  plot(new_length ~ age, data=subset(SummaryInd,species==spp), xlab="age", ylab="leader shoot extention", cex.axis=.8, las=1, pch=16, log="x",
+  plot(growth_shoot_length ~ age, data=subset(SummaryInd,species==spp), xlab="age", ylab="leader shoot extention", cex.axis=.8, las=1, pch=16, log="x",
        main=labels.spp[spp])
-  points(new_length_mean ~ age, data=subset(SummarySppAge, species==spp), cex=1.3, pch=8)
-  points((new_length_mean+new_length_se) ~ age, data=subset(SummarySppAge, species==spp), cex=1.5, pch=25)
-  points((new_length_mean-new_length_se) ~ age, data=subset(SummarySppAge, species==spp), cex=1.5, pch=24)
+  points(growth_shoot_length_mean ~ age, data=subset(SummarySppAge, species==spp), cex=1.3, pch=8)
+  points((growth_shoot_length_mean+growth_shoot_length_se) ~ age, data=subset(SummarySppAge, species==spp), cex=1.5, pch=25)
+  points((growth_shoot_length_mean-growth_shoot_length_se) ~ age, data=subset(SummarySppAge, species==spp), cex=1.5, pch=24)
 }
 
 mod_newlengthvAge <- function(spp) {
-  lm(new_length ~ age, data=subset(SummaryInd,age>2.4 & species==spp))
+  lm(growth_shoot_length ~ age, data=subset(SummaryInd,age>2.4 & species==spp))
 }
 
 for(n in names(labels.spp)) {

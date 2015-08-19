@@ -41,11 +41,11 @@ RA_Calculations <- function(thisSpecies, Species_Investment, HarvestData, Maps, 
            growth_stem = c(NA, diff(stem_weight_est)),
            growth_leaf =  growth_inv - growth_stem,
            growth_height = c(NA, diff(height)),
-           growth_stem_diam = c(NA, diff(diameter)),
+           growth_stem_diameter = c(NA, diff(diameter)),
            growth_stem_area = c(NA, diff(stem_area))
            ) %>%
     filter(start_end == "end") %>%
-    select(species, site, individual, age, height, diameter, stem_area, leaf_weight, stem_weight, total_weight, growth_inv, growth_stem, growth_leaf, growth_height, growth_stem_diam, growth_stem_area)
+    select(species, site, individual, age, height, diameter, stem_area, leaf_weight, stem_weight, total_weight, growth_inv, growth_stem, growth_leaf, growth_height, growth_stem_diameter, growth_stem_area)
 
     # Use saved data to calculate total reproduction investment per individual plant
     ReproTotal <- Species_Investment$Investment %>%

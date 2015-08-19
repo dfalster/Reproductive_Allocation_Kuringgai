@@ -126,7 +126,7 @@ mtext("RA", 1, outer=TRUE,cex=1.2)
 mtext("Yearly increase in stem diameter (mm)", 2, outer=TRUE,cex=1.2)
 
 par(mfrow=c(1,1), cex=1, omi=c(.8,.8,.1,.1), mai=c(1.1,1,.4,0.2)) 
-plot(asin(sqrt(prop_growth_stem_diam))~asin(sqrt(RA)),data=subset(SummaryInd,RA>0),pch=16,col=col.spp[as.factor(species)])
-mod <- lm(asin(sqrt(RA))~asin(sqrt(prop_growth_stem_diam)),data=subset(SummaryInd,RA>0))
+plot(asin(sqrt(prop_growth_stem_diameter))~asin(sqrt(RA)),data=subset(SummaryInd,RA>0),pch=16,col=col.spp[as.factor(species)])
+mod <- lm(asin(sqrt(RA))~asin(sqrt(prop_growth_stem_diameter)),data=subset(SummaryInd,RA>0))
 words.bottom.left(mod)
 ```

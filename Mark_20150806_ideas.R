@@ -189,7 +189,7 @@ mtext("Growth investment (mg)", 2, outer=TRUE,cex=1.2)
 ```{r, echo=FALSE,message=FALSE, warning=FALSE}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
 yvar <- "RA"
-xvar <- "growth_shoot_diam"
+xvar <- "growth_shoot_diameter"
 
 data <- subset(SummaryInd,RA>0)
 data <- split(data, data$species)
@@ -212,22 +212,22 @@ mtext("Shoot diameter growth", 1, outer=TRUE,cex=1.2)
 mtext("RA", 2, outer=TRUE,cex=1.2)
 
 par(mfrow=c(2,2), cex=1, omi=c(.4,.,.1,.1), mai=c(1,1,.4,0.2)) 
-plot(RA~growth_shoot_diam,data=subset(SummaryInd,RA>0),log="xy", col=col.spp[as.factor(species)],pch=16)
-mod <- lm(log(growth_shoot_diam)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
+plot(RA~growth_shoot_diameter,data=subset(SummaryInd,RA>0),log="xy", col=col.spp[as.factor(species)],pch=16)
+mod <- lm(log(growth_shoot_diameter)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
 words.bottom.left.logxy(mod)
 
-plot(RA~new_length,data=subset(SummaryInd,RA>0),log="xy", col=col.spp[as.factor(species)],pch=16)
-mod <- lm(log(new_length)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
+plot(RA~growth_shoot_length,data=subset(SummaryInd,RA>0),log="xy", col=col.spp[as.factor(species)],pch=16)
+mod <- lm(log(growth_shoot_length)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
 words.bottom.left.logxy(mod)
 
-plot(RA~shoot_leaf_area_growth,data=subset(SummaryInd,RA>0),log="xy", col=col.spp[as.factor(species)],pch=16)
-mod <- lm(log(shoot_leaf_area_growth)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0&shoot_leaf_area_growth>0))
+plot(RA~shoot_growth_leaf_area,data=subset(SummaryInd,RA>0),log="xy", col=col.spp[as.factor(species)],pch=16)
+mod <- lm(log(shoot_growth_leaf_area)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0&shoot_growth_leaf_area>0))
 words.bottom.left.logxy(mod)
 
 
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
 yvar <- "RA"
-xvar <- "shoot_leaf_area_growth"
+xvar <- "shoot_growth_leaf_area"
 
 data <- subset(SummaryInd,RA>0)
 data <- split(data, data$species)
@@ -249,7 +249,7 @@ for(spp in names(data)) {
 
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
 yvar <- "RA"
-xvar <- "new_length"
+xvar <- "growth_shoot_length"
 
 data <- subset(SummaryInd,RA>0)
 data <- split(data, data$species)

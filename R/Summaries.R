@@ -13,8 +13,8 @@ process_seed_costs <- function(seedSize_raw, PartsSummary_all) {
   # adding info on all costs to produce 1 seed
   # Todo: Lizzy you need to replace numbers below with actual names, see examples
   seedcosts <- list() 
-  seedcosts[["BAER"]] <- list(parts=NULL, scale=1)  #w[2]/10 + w[4]/10 + w[13] + w[12] + w[19] + w[20]
-  seedcosts[["BOLE"]] <- list(parts=NULL, scale=1) #w[5] + w[6] + w[11] + w[15] + w[16]
+  seedcosts[["BAER"]] <- list(parts=c("cone_brown","cone_base_brown","flower_petals","seed_pod","seed","flower_style"), scale=c(1/10,1/10,1,1,1,1))
+  seedcosts[["BOLE"]] <- list(parts=c("late_flower_petals","seed_pod","seed","late_finished_flower","pedicel"), scale=1) 
   seedcosts[["COER"]] <- list(parts=c("inflorescence_stalk_in_fruit","flower_petals", "bract_fruit","fruit_mature"), scale=c(1/6,1,1,1))
   seedcosts[["EPMI"]] <- list(parts=c("flower_petals", "fruit_mature"), scale=1)
   seedcosts[["GRBU"]] <- list(parts=NULL, scale=1) #w[2] + w[7] + w[12] + w[14] + w[15]
@@ -23,9 +23,9 @@ process_seed_costs <- function(seedSize_raw, PartsSummary_all) {
   seedcosts[["HEPU"]] <- list(parts=NULL, scale=1) #w[3] + w[10] + w[15]
   seedcosts[["LEES"]] <- list(parts=NULL, scale=1) #w[5] + w[10] + w[13]
   seedcosts[["PELA"]] <- list(parts=NULL, scale=1) #w[4] + w[5] + w[11] + w[12]
-  seedcosts[["PEPU"]] <- list(parts=NULL, scale=1) #w[4]/30 + w[9] + w[16]
+  seedcosts[["PEPU"]] <- list(parts=NULL, scale=c(1/30,1,1)) #w[4]/30 + w[9] + w[16]
   seedcosts[["PHPH"]] <- list(parts=NULL, scale=1) #w[4] + w[5] + w[6] + w[15] + w[16]
-  seedcosts[["PILI"]] <- list(parts=NULL, scale=1) #w[2]/10 + w[3] + w[5] + w[7] + w[11] + w[12]
+  seedcosts[["PILI"]] <- list(parts=NULL, scale=c(1/10,1,1,1,1,1)) #w[2]/10 + w[3] + w[5] + w[7] + w[11] + w[12]
   seedcosts[["PUTU"]] <- list(parts=NULL, scale=1) # w[2] + w[3] + w[4] + w[10] + w[11]
 
   species <- names(seedcosts)
@@ -63,12 +63,12 @@ process_leaf_lifespan <- function(leafLifespan_raw, leavesPerLength) {
 
 
   leafLifespan <- filter(leafLifespan_raw, dont_use!="dead" & dont_use!="dont_use") %>%
-    select(species, age, individual, d_start, d_end, length_start, new_length, lvs_start_length, lvs_start_count, lvs_end_length, lvs_end_count, lvs_new_length, lvs_new_count, new_but_shed_count, mm_lvs_spec, count_lvs_spec)
+    select(species, age, individual, shoot_diameter_start, shoot_diameter_end, shoot_length_start, growth_shoot_length, shoot_leaf_count_start_length, shoot_leaf_count_start_count, lvs_end_length, lvs_end_count, shoot_leaf_count_growth_shoot_length, shoot_leaf_count_new_count, shoot_leaf_count_new_and_shed_count, mm_lvs_spec, count_lvs_spec)
 
   # Calculating Leaf Lifespan
 
   # where counts did not previously exists, set as 0; CHECK WITH DANIEL THAT "V" IS A SET "NAME" IN THESE FUNCTIONS
-  for(v in c("lvs_start_count","lvs_end_count","lvs_new_count","new_but_shed_count")) {
+  for(v in c("shoot_leaf_count_start_count","lvs_end_count","shoot_leaf_count_new_count","shoot_leaf_count_new_and_shed_count")) {
     i <- is.na(leafLifespan[[v]])
     leafLifespan[[v]][i] <- 0
   }
@@ -84,22 +84,22 @@ process_leaf_lifespan <- function(leafLifespan_raw, leavesPerLength) {
   #  leafLifespan$count_per_length[i] <- (leafLifespan$count_lvs_spec/leafLifespan$mm_lvs)[i]
 
   #get total leaf counts
-  for(v in c("lvs_start_length","lvs_start_count","lvs_end_length","lvs_end_count","lvs_new_length","lvs_new_count","new_but_shed_count")) {
+  for(v in c("shoot_leaf_count_start_length","shoot_leaf_count_start_count","lvs_end_length","lvs_end_count","shoot_leaf_count_growth_shoot_length","shoot_leaf_count_new_count","shoot_leaf_count_new_and_shed_count")) {
     i <- is.na(leafLifespan[[v]])
     leafLifespan[[v]][i] <- 0
    }
 
   #calculating leaf lifespan
   leafLifespan <- mutate(leafLifespan,
-    lvs_start = lvs_start_count + (lvs_start_length * count_per_length),
+    shoot_leaf_count_start = shoot_leaf_count_start_count + (shoot_leaf_count_start_length * count_per_length),
     lvs_end = lvs_end_count + (lvs_end_length * count_per_length),
-    lvs_new = lvs_new_count + (lvs_new_length * count_per_length),
-    LL_bd = (lvs_start)/(((lvs_start)-(lvs_end)) + (lvs_new)/2),
-    LL_death = (lvs_start)/((lvs_start)-(lvs_end)),
-    LL_birth = (lvs_start)/(lvs_new),
-    growth_shoot_diam = (d_end - d_start),
-    growth_shoot_area = (3.14*((d_end/2)^2)) - (3.14*((d_start/2)^2)),
-    lvs_end_total = lvs_end + lvs_new
+    shoot_leaf_count_new = shoot_leaf_count_new_count + (shoot_leaf_count_growth_shoot_length * count_per_length),
+    LL_bd = (shoot_leaf_count_start)/(((shoot_leaf_count_start)-(lvs_end)) + (shoot_leaf_count_new)/2),
+    LL_death = (shoot_leaf_count_start)/((shoot_leaf_count_start)-(lvs_end)),
+    LL_birth = (shoot_leaf_count_start)/(shoot_leaf_count_new),
+    growth_shoot_diameter = (shoot_diameter_end - shoot_diameter_start),
+    growth_shoot_area = (3.14*((shoot_diameter_end/2)^2)) - (3.14*((shoot_diameter_start/2)^2)),
+    shoot_leaf_count = lvs_end + shoot_leaf_count_new
     )
 
   #TODO Lizzy: why do we need this next line?
@@ -137,9 +137,9 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
   SummaryInd <- SummaryInd %>% mutate(
     RGR = log(total_weight)-log(total_weight - growth_inv),
     leaf_area = leaf_weight / (1000*LMA),
-    leaf_area_growth = growth_leaf / (1000*LMA),
-    shoot_leaf_area = lvs_end_total*leaf_size,
-    shoot_leaf_area_growth = lvs_new*leaf_size,
+    growth_leaf_area = growth_leaf / (1000*LMA),
+    shoot_leaf_area = shoot_leaf_count*leaf_size,
+    shoot_growth_leaf_area = shoot_leaf_count_new*leaf_size,
     reproducing = RA>0,
     prop_allocation = propagule_inv/(growth_inv + repro_inv),
     fruit_weight = propagule_inv + seedpod_weight + fruit_weight,
@@ -172,7 +172,7 @@ get_species_values <- function(SummaryInd, groups) {
     summarise_each(f, prepollen_aborted_inv, prepollen_success_inv, 
       postpollen_aborted_inv, packaging_dispersal_inv, propagule_inv, prepollen_all_inv,
       height, growth_inv, repro_inv, total_weight, total_inv, RA, diameter, stem_area, 
-      leaf_weight, stem_weight, growth_stem_diam, growth_stem_area, growth_leaf, 
+      leaf_weight, stem_weight, growth_stem_diameter, growth_stem_area, growth_leaf, 
       growth_stem, diameter)
   })
   names(out[[1]]) <- fs
@@ -181,8 +181,8 @@ get_species_values <- function(SummaryInd, groups) {
     SummaryInd %>%
     filter(LL_bd > 0 & LL_bd < 6 & LL_birth < 8 & LL_death < 8) %>%
     group_by_(.dots=dots) %>%
-    summarise_each(f, LL_bd, LL_death, LL_birth, new_length, lvs_end, 
-      lvs_end_total, growth_shoot_diam, growth_shoot_area, RGR, d_end)
+    summarise_each(f, LL_bd, LL_death, LL_birth, growth_shoot_length, lvs_end, 
+      shoot_leaf_count, growth_shoot_diameter, growth_shoot_area, RGR, shoot_diameter_end)
   })  
   names(out[[2]]) <- fs
  
@@ -243,7 +243,7 @@ scale_individual_variable <- function(SummaryInd, SummarySpp) {
       prop_maxH = height / maxH,
       prop_max_weight = total_weight / get_species_value("max", "total_weight"),
       prop_max_repro = repro_inv / get_species_value("max", "repro_inv"),
-      scaled_growth_stem_diam = growth_stem_diam / get_species_value("mean", "growth_stem_diam"),
-      scaled_growth_shoot_diam = growth_shoot_diam / get_species_value("mean", "growth_shoot_diam")
+      scaled_growth_stem_diameter = growth_stem_diameter / get_species_value("mean", "growth_stem_diameter"),
+      scaled_growth_shoot_diameter = growth_shoot_diameter / get_species_value("mean", "growth_shoot_diameter")
       ) 
 }

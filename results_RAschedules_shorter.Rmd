@@ -289,7 +289,7 @@ mtext("RA (mature plants only)",2,outer=TRUE)
 ```
 
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
-mod <- lm(log(growth_stem_diam) ~ age*WD_mean*LMA_mean*maxH*RA, SummaryInd)
+mod <- lm(log(growth_stem_diameter) ~ age*WD_mean*LMA_mean*maxH*RA, SummaryInd)
 anova(mod)
 
 spp_zero_RA <- SummaryInd %>%

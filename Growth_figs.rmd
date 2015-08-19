@@ -90,8 +90,8 @@ legend("bottomright",legend=names(labels.age),col=col.age,pch=16, cex=1.1,bty="n
 
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=28, fig.height=28}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
-yvar <- "growth_stem_diam"
-xvar <- "growth_shoot_diam"
+yvar <- "growth_stem_diameter"
+xvar <- "growth_shoot_diameter"
 
 data <- subset(SummaryInd)
 data <- split(data, data$species)
@@ -112,8 +112,8 @@ legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=0.9,bty="n")
 
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=28, fig.height=28}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
-yvar <- "leaf_area_growth"
-xvar <- "shoot_leaf_area_growth"
+yvar <- "growth_leaf_area"
+xvar <- "shoot_growth_leaf_area"
 
 data <- subset(SummaryInd)
 data <- split(data, data$species)
@@ -214,12 +214,12 @@ results
 ***growth stem diam vs. prop maxH***
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=14, fig.height=7}
 par(mfrow=c(1,2), cex=1, omi=c(0.2,0.3,0.3,0.3), mai=c(1.1,1,0.3,0.3)) 
-plot(growth_stem_diam~prop_maxH,SummaryInd,log="y",pch=16,col=col.spp[as.factor(species)])
+plot(growth_stem_diameter~prop_maxH,SummaryInd,log="y",pch=16,col=col.spp[as.factor(species)])
 ```
 
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=28, fig.height=28}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
-yvar <- "growth_stem_diam"
+yvar <- "growth_stem_diameter"
 xvar <- "prop_maxH"
 
 data <- subset(SummaryInd)
@@ -230,7 +230,7 @@ for(spp in names(data)) {
                     main=spp,col=col.age[as.factor(data[[spp]]$age)])
 }
 
-mtext("growth_stem_diam", 2, outer=TRUE,cex=1.2)
+mtext("growth_stem_diameter", 2, outer=TRUE,cex=1.2)
 mtext("prop_maxH", 1, outer=TRUE,cex=1.2)
 legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=1.1,bty="n")
 ```
@@ -238,12 +238,12 @@ legend("topleft",legend=names(labels.age),col=col.age,pch=16, cex=1.1,bty="n")
 ***growth leaf area vs. prop maxH***
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=14, fig.height=7}
 par(mfrow=c(1,2), cex=1, omi=c(0.2,0.3,0.3,0.3), mai=c(1.1,1,0.3,0.3)) 
-plot(leaf_area_growth~prop_maxH,SummaryInd,log="y",pch=16,col=col.spp[as.factor(species)])
+plot(growth_leaf_area~prop_maxH,SummaryInd,log="y",pch=16,col=col.spp[as.factor(species)])
 ```
 
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=28, fig.height=28}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
-yvar <- "leaf_area_growth"
+yvar <- "growth_leaf_area"
 xvar <- "prop_maxH"
 
 data <- subset(SummaryInd)
@@ -299,7 +299,7 @@ legend("bottomright",legend=names(labels.mature),col=col.mature,pch=16, cex=1.1,
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=14, fig.height=7}
 par(mfrow=c(1,2), cex=1, omi=c(0.2,0.3,0.3,0.3), mai=c(1.1,1,0.3,0.3)) 
 
-plot(wood_density~leaf_area_growth,SummaryInd,log="y",pch=16,col=col.age[as.factor(age)])
-mod <- lm(log(leaf_area_growth)~age*wood_density,SummaryInd)
+plot(wood_density~growth_leaf_area,SummaryInd,log="y",pch=16,col=col.age[as.factor(age)])
+mod <- lm(log(growth_leaf_area)~age*wood_density,SummaryInd)
 summary(mod)
 ```

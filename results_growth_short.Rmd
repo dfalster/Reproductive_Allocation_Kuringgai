@@ -68,13 +68,13 @@ plot((RA+.01)~RGR, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
 legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right.logxy(mod)
 
-mod <- lm(log(growth_stem_diam)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
-plot((RA+.01)~growth_stem_diam, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
+mod <- lm(log(growth_stem_diameter)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
+plot((RA+.01)~growth_stem_diameter, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
 legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right.logxy(mod)
 
-mod <- lm(log(prop_growth_stem_diam)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
-plot((RA+.01)~prop_growth_stem_diam, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
+mod <- lm(log(prop_growth_stem_diameter)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
+plot((RA+.01)~prop_growth_stem_diameter, SummaryInd, log="xy", col=col.spp[as.factor(species)],pch=16)
 legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=.8,bty="n")
 words.top.right.logxy(mod)
 
@@ -85,7 +85,7 @@ plot((RA+.01)~(prop_growth_height), data=subset(SummaryInd,species!="PEPU"&speci
 ```
 ```{r, echo=FALSE,message=FALSE, warning=FALSE}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
-yvar <- "growth_stem_diam"
+yvar <- "growth_stem_diameter"
 xvar <- "RA"
 
 data <- subset(SummaryInd,RA>0)
@@ -171,10 +171,10 @@ mtext("basal diameter", 2, outer=TRUE,cex=1.2)
 ```{r, echo=FALSE,message=FALSE,fig.width=7, fig.height=7}
 par(mfrow=c(1,1), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
 SummaryIndPCA <- SummaryInd %>%
-  filter(lvs_end_total>0&shoot_leaf_area>0&shoot_leaf_area_growth!=0) %>%
+  filter(shoot_leaf_count>0&shoot_leaf_area>0&shoot_growth_leaf_area!=0) %>%
   select(prop_maxH,height,maxH,WD_mean,LMA_mean,seed_size,growth_leaf,
-         growth_stem_diam,leaf_area,growth_shoot_area,growth_stem_area,lvs_end_total,total_weight,
-         RA,seedset,repro_all_count,accessory_inv,propagule_inv,shoot_leaf_area,shoot_leaf_area_growth,RGR)
+         growth_stem_diameter,leaf_area,growth_shoot_area,growth_stem_area,shoot_leaf_count,total_weight,
+         RA,seedset,repro_all_count,accessory_inv,propagule_inv,shoot_leaf_area,shoot_growth_leaf_area,RGR)
 
 SummaryIndPCA$leaf_area <- log((SummaryIndPCA$leaf_area)+.001)
 SummaryIndPCA$total_weight <- log(SummaryIndPCA$total_weight)
@@ -186,11 +186,11 @@ SummaryIndPCA$propagule_inv <- log(SummaryIndPCA$propagule_inv+.001)
 SummaryIndPCA$growth_shoot_area <- log(SummaryIndPCA$growth_shoot_area)
 SummaryIndPCA$growth_leaf <- log(SummaryIndPCA$growth_leaf+10000)
 SummaryIndPCA$repro_all_count <- log(SummaryIndPCA$repro_all_count+1)
-SummaryIndPCA$lvs_end_total <- log(SummaryIndPCA$lvs_end_total)
+SummaryIndPCA$shoot_leaf_count <- log(SummaryIndPCA$shoot_leaf_count)
 SummaryIndPCA$growth_stem_area <- log(SummaryIndPCA$growth_stem_area)
-SummaryIndPCA$growth_stem_diam <- log(SummaryIndPCA$growth_stem_diam)
+SummaryIndPCA$growth_stem_diameter <- log(SummaryIndPCA$growth_stem_diameter)
 SummaryIndPCA$shoot_leaf_area <- log(SummaryIndPCA$shoot_leaf_area)
-SummaryIndPCA$shoot_leaf_area_growth <- log(SummaryIndPCA$shoot_leaf_area_growth)
+SummaryIndPCA$shoot_growth_leaf_area <- log(SummaryIndPCA$shoot_growth_leaf_area)
 
 PCA_mod <- prcomp(SummaryIndPCA, scale=TRUE)
 summary(PCA_mod)
@@ -207,7 +207,7 @@ PCA_loadings <- merge(PCA_loadings,PCA_scaling,by="variables")
 PCA_lambda <- as.data.frame(PCA_mod$sdev)
 
 PCA_scores <- as.data.frame(PCA_mod$x)
-PCA_scores$individual <- subset(SummaryInd$individual, SummaryInd$lvs_end_total>0&SummaryInd$shoot_leaf_area_growth!=0)
+PCA_scores$individual <- subset(SummaryInd$individual, SummaryInd$shoot_leaf_count>0&SummaryInd$shoot_growth_leaf_area!=0)
 SummaryInd_PCA_results <- merge(SummaryInd,PCA_scores, by="individual", all.x=TRUE)
 
 n <- NROW(PCA_scores)
@@ -231,13 +231,13 @@ PCA_loadings$PC4_scale <- PCA_loadings$PC4 / 4.5
 * PC1 is WD vs a whole collection of traits that have higher "values" in plants that are larger as adults, including measures of size, height, and growth increment; PELA is a rare exception in shifting along this axis. 
 * PC2 most strongly separates RGR from RA (and a collection of strongly correlated traits, such as propagule investment, prop maxH). 
 * PC3 primarily separates LMA and maxH from WD; high wood density is also somewhat associated with higher RGR and various shoot growth and leafiness measures, reflecting that younger individuals have more shoot growth and higher RGR 
-* PC4 is effectively leaf count on shoots ("lvs_end_total") and seed set vs. seed size, shoot leaf area and shoot leaf area growth - to first order, some plants have lots of small leaves and others have fewer leaves but greater leaf area, Not sure how seed size fits in
+* PC4 is effectively leaf count on shoots ("shoot_leaf_count") and seed set vs. seed size, shoot leaf area and shoot leaf area growth - to first order, some plants have lots of small leaves and others have fewer leaves but greater leaf area, Not sure how seed size fits in
 
 * amazing that RA and RGR almost completely orthoganal to PC1 and PC4; To reiterate, RA and RGR are 2 variables that shift across each species' lifetime and much less across species. I suspect the inter-specific difference are effectively what proportion of individuals in this study are reproductively mature - with early maturing species having overall higher RA and lower RGR (i.e. BOLE) than do late maturing species (i.e. PELA). 
 
 * Continuing, RGR and RA are measures that give little insight to a species trait values - or vice versa, trait values do not provide much information about RA...
 
-* "growth_stem_area" and "growth leaf", two whole plant measures of size increase are orthoganal to RGR, while some shoot-level variables (i.e. "growth_shoot_area") and other whole plant variables (e.g. "leaf_area_growth"), are somewhat correlated with both RGR (PC2) and the "maxH" direction (PC1). I suppose this suggests that for plants with high
+* "growth_stem_area" and "growth leaf", two whole plant measures of size increase are orthoganal to RGR, while some shoot-level variables (i.e. "growth_shoot_area") and other whole plant variables (e.g. "growth_leaf_area"), are somewhat correlated with both RGR (PC2) and the "maxH" direction (PC1). I suppose this suggests that for plants with high
 
 * For PC2, interesting that "growth_shoot_area"" and other variables associated with shoot growth and species max H correlate somewhat with RGR, but "growth_stem_area" and other whole plant "size" variables do not
 * these plots are another way of affirming that RA (and RGR) is a variable that does a good job of comparing trends across species * in other words there is a trade-off between RA and RGR in all species. And even though the RA trends are messy, individuals that are proportionally taller (prop_maxH) or invest more in reproduction (investment, count, or seedset) have a higher RA. 
@@ -254,7 +254,7 @@ PCA related code to keep:
 par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
 
 PCA_by_species <- SummaryInd_PCA_results %>%
-  filter(lvs_end_total>0) %>%
+  filter(shoot_leaf_count>0) %>%
   group_by(species) %>%
   summarise_each(funs(mean, se), PC1_scale, PC2_scale, PC3_scale, PC4_scale)
 

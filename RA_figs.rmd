@@ -271,20 +271,20 @@ mtext("age", 2, outer=TRUE,cex=1.2)
 
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=14, fig.height=7}
 par(mfrow=c(1,2), cex=1, omi=c(.7,.7,.1,.1), mai=c(1.1,1.1,.4,0.2)) 
-plot(asin(sqrt(RA))~growth_stem_diam,data=subset(SummaryInd,RA>0),log="x",col=col.spp[as.factor(species)], pch=16)
-mod <- lm(log(growth_stem_diam)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
+plot(asin(sqrt(RA))~growth_stem_diameter,data=subset(SummaryInd,RA>0),log="x",col=col.spp[as.factor(species)], pch=16)
+mod <- lm(log(growth_stem_diameter)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
 words.top.right.logx(mod)
 legend("bottomleft",legend=names(labels.spp),col=col.spp,pch=16, cex=0.8,bty="n")
 
-plot(asin(sqrt(RA))~growth_shoot_diam,data=subset(SummaryInd,RA>0),log="x",col=col.spp[as.factor(species)], pch=16)
-mod <- lm(log(growth_shoot_diam)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
+plot(asin(sqrt(RA))~growth_shoot_diameter,data=subset(SummaryInd,RA>0),log="x",col=col.spp[as.factor(species)], pch=16)
+mod <- lm(log(growth_shoot_diameter)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
 words.top.right.logx(mod)
 ```
 
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
 yvar <- "RA"
-xvar <- "growth_stem_diam"
+xvar <- "growth_stem_diameter"
 
 data <- subset(SummaryInd,RA>0)
 data <- split(data, data$species)
@@ -302,7 +302,7 @@ legend("bottomleft",legend=names(labels.age),col=col.age,pch=16, cex=1.1,bty="n"
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
 yvar <- "RA"
-xvar <- "growth_shoot_diam"
+xvar <- "growth_shoot_diameter"
     
 data <- subset(SummaryInd,RA>0)
 data <- split(data, data$species)
@@ -334,10 +334,10 @@ legend("bottomleft",legend=names(labels.age),col=col.age,pch=16, cex=1.1,bty="n"
 ```{r, echo=FALSE,message=FALSE,fig.width=7, fig.height=7}
 par(mfrow=c(1,1), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
 SummaryIndPCA <- SummaryInd %>%
-  filter(lvs_end_total>0&shoot_leaf_area>0&shoot_leaf_area_growth!=0) %>%
+  filter(shoot_leaf_count>0&shoot_leaf_area>0&shoot_growth_leaf_area!=0) %>%
   select(prop_maxH,height,maxH,wood_density,LMA_mean,seed_size,growth_leaf,
-         growth_stem_diam,leaf_area,growth_shoot_diam,growth_stem_area,lvs_end_total,total_weight,
-         RA,seedset,repro_all_count,accessory_inv,propagule_inv,shoot_leaf_area,shoot_leaf_area_growth,scaled_growth_stem_diam)
+         growth_stem_diameter,leaf_area,growth_shoot_diameter,growth_stem_area,shoot_leaf_count,total_weight,
+         RA,seedset,repro_all_count,accessory_inv,propagule_inv,shoot_leaf_area,shoot_growth_leaf_area,scaled_growth_stem_diameter)
 
 SummaryIndPCA$leaf_area <- log((SummaryIndPCA$leaf_area)+.001)
 SummaryIndPCA$total_weight <- log(SummaryIndPCA$total_weight)
@@ -346,14 +346,14 @@ SummaryIndPCA$maxH <- log(SummaryIndPCA$maxH)
 SummaryIndPCA$seed_size <- log(SummaryIndPCA$seed_size)
 SummaryIndPCA$accessory_inv <- log(SummaryIndPCA$accessory_inv+.001)
 SummaryIndPCA$propagule_inv <- log(SummaryIndPCA$propagule_inv+.001)
-SummaryIndPCA$growth_shoot_diam <- log(SummaryIndPCA$growth_shoot_diam+.001)
+SummaryIndPCA$growth_shoot_diameter <- log(SummaryIndPCA$growth_shoot_diameter+.001)
 SummaryIndPCA$growth_leaf <- log(SummaryIndPCA$growth_leaf+10000)
 SummaryIndPCA$repro_all_count <- log(SummaryIndPCA$repro_all_count+1)
-SummaryIndPCA$lvs_end_total <- log(SummaryIndPCA$lvs_end_total)
-SummaryIndPCA$growth_stem_diam <- log(SummaryIndPCA$growth_stem_diam)
+SummaryIndPCA$shoot_leaf_count <- log(SummaryIndPCA$shoot_leaf_count)
+SummaryIndPCA$growth_stem_diameter <- log(SummaryIndPCA$growth_stem_diameter)
 SummaryIndPCA$shoot_leaf_area <- log(SummaryIndPCA$shoot_leaf_area)
-SummaryIndPCA$shoot_leaf_area_growth <- log(SummaryIndPCA$shoot_leaf_area_growth)
-SummaryIndPCA$scaled_growth_stem_diam <- log(SummaryIndPCA$scaled_growth_stem_diam)
+SummaryIndPCA$shoot_growth_leaf_area <- log(SummaryIndPCA$shoot_growth_leaf_area)
+SummaryIndPCA$scaled_growth_stem_diameter <- log(SummaryIndPCA$scaled_growth_stem_diameter)
 SummaryIndPCA$RA <- asin(sqrt(SummaryIndPCA$RA))
 
 PCA_mod <- prcomp(SummaryIndPCA, scale=TRUE)
@@ -371,7 +371,7 @@ PCA_loadings <- merge(PCA_loadings,PCA_scaling,by="variables")
 PCA_lambda <- as.data.frame(PCA_mod$sdev)
 
 PCA_scores <- as.data.frame(PCA_mod$x)
-PCA_scores$individual <- subset(SummaryInd$individual, SummaryInd$lvs_end_total>0&SummaryInd$shoot_leaf_area_growth!=0)
+PCA_scores$individual <- subset(SummaryInd$individual, SummaryInd$shoot_leaf_count>0&SummaryInd$shoot_growth_leaf_area!=0)
 SummaryInd_PCA_results <- merge(SummaryInd,PCA_scores, by="individual", all.x=TRUE)
 
 n <- NROW(PCA_scores)
@@ -446,7 +446,7 @@ se_function(mean1,se1)
 
 ####PCA axis 2 is about age  
 * it explains 23% of the variance 
-* top variable loadings: shoot_leaf_area_growth and growth_shoot_diam vs repro_all_count, RA, prop_maxH - a collection of variables that shift fro each to late in life   
+* top variable loadings: shoot_growth_leaf_area and growth_shoot_diameter vs repro_all_count, RA, prop_maxH - a collection of variables that shift fro each to late in life   
 * COER, EPMI,PELA, and PEPU have the higher loadings and BOLE, LEES have the lowest - to first order these differences are about the average age of reproducing individuals of each species
 ```{r, echo=FALSE,message=FALSE,fig.width=20, fig.height=14}
 par(mfrow=c(2,3), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
@@ -476,8 +476,8 @@ se_function(mean1,se1)
 ####PCA axis 3 again divides mainly by species
 * it explains 9% of the variance (total variance explained now at 68%)  
 * It is dividing the three (of 4) canopy species, HATE, PEPU, PELA, (BAER) versus
-* top variable loadings: scaled_growth_stem_diam, wood_density,growth_stem_diam, lvs_end_total vs. maxH, LMA_mean, seed_size, RA  
-* not terribly interpretable, since doesn't make sense that scaled_growth_stem_diam with wood_density  
+* top variable loadings: scaled_growth_stem_diameter, wood_density,growth_stem_diameter, shoot_leaf_count vs. maxH, LMA_mean, seed_size, RA  
+* not terribly interpretable, since doesn't make sense that scaled_growth_stem_diameter with wood_density  
 
 ```{r, echo=FALSE,message=FALSE,fig.width=20, fig.height=14}
 par(mfrow=c(2,3), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
@@ -507,7 +507,7 @@ se_function(mean1,se1)
 ####PCA axis 4  
 * it explains 7% of the variance (total variance explained now at 74%)
 * it divides stem vs shoot growth variables  
-* high loadings for growth_stem_area, growth_leaf, LMA_mean, seed_set vs low loadings for shoot_leaf_area_growth, wood_density, prop_maxH, seed_size  
+* high loadings for growth_stem_area, growth_leaf, LMA_mean, seed_set vs low loadings for shoot_growth_leaf_area, wood_density, prop_maxH, seed_size  
 * BAER, EPMI, HATE and HEPU have higher values vs. BOLE, GRBU, GRSP with lower values; in a sense these later species have more shoot growth than stem growth and spend more of their life close to their maxH - which is true  
 * there is no significant age component  
 ```{r, echo=FALSE,message=FALSE,fig.width=20, fig.height=14}

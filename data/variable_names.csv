@@ -17,23 +17,23 @@ old sequence,sequence,variable,new_name,axis_label,notes
 10,16,stem_weight,,weight of all stems (mg),
 9,17,leaf_weight,,leaf weight (mg),
 76,18,leaf_area,,leaf area (mm^2),
-20,19,d_start,shoot_diameter_start,shoot diameter at start of year (mm),
-21,20,d_end,shoot_diameter_end,shoot diameter (mm),
-22,21,length_start,shoot_length_start,shoot length at start of year (mm),
-34,22,lvs_start,shoot_leaf_count_start,starting count of leaves on shoot,
-42,23,lvs_end_total,shoot_leaf_count_end_total,final count of leaves on shoot,
-36,24,lvs_new,shoot_leaf_count_new,new leaves along leader,
-30,25,new_but_shed_count,shoot_leaf_count_new_and_shed,new leaves along shoot shed before end of year,
+20,19,shoot_diameter_start,shoot_diameter_start,shoot diameter at start of year (mm),
+21,20,shoot_diameter_end,shoot_diameter_end,shoot diameter (mm),
+22,21,shoot_length_start,shoot_shoot_length_start,shoot length at start of year (mm),
+34,22,shoot_leaf_count_start,shoot_leaf_count_start,starting count of leaves on shoot,
+42,23,shoot_leaf_count,shoot_leaf_count_end_total,final count of leaves on shoot,
+36,24,shoot_leaf_count_new,shoot_leaf_count_new,new leaves along leader,
+30,25,shoot_leaf_count_new_and_shed_count,shoot_leaf_count_new_and_shed,new leaves along shoot shed before end of year,
 78,26,shoot_leaf_area,,leaf area along shoot (mm^2),
 15,27,growth_height,,increase in plant height (mm),
 13,28,growth_stem,,increase in stem weight (mg),
-16,29,growth_stem_diam,growth_stem_diameter,increase in basal diameter (mm),
+16,29,growth_stem_diameter,growth_stem_diametereter,increase in basal diameter (mm),
 17,30,growth_stem_area,,increase in basal stem area (mm^2),
 14,31,growth_leaf,,increase in leaf weight (mg),
-77,32,leaf_area_growth,growth_leaf_area,increase in leaf area (mm^2/yr),
-79,33,shoot_leaf_area_growth,growth_shoot_leaf_area,increase in shoot leaf area (mm^2/yr),
-23,34,new_length,growth_shoot_length,increase in shoot length (mm/yr),
-40,35,growth_shoot_diam,growth_shoot_diameter,increase in shoot diameter (mm/yr),
+77,32,growth_leaf_area,growth_leaf_area,increase in leaf area (mm^2/yr),
+79,33,shoot_growth_leaf_area,growth_shoot_leaf_area,increase in shoot leaf area (mm^2/yr),
+23,34,growth_shoot_length,growth_shoot_length,increase in shoot length (mm/yr),
+40,35,growth_shoot_diameter,growth_shoot_diametereter,increase in shoot diameter (mm/yr),
 41,36,growth_shoot_area,,increase in shoot area (mm^2/yr),
 70,37,leaf_size,,species mean leaf area (mm^2),
 xx,38,maxH,maxH,species maximum height (mm),"Daniel, please add back in maxH, either here or where you add in the scaled values. It is used as a variable for many plots"
@@ -78,12 +78,12 @@ xx,38,maxH,maxH,species maximum height (mm),"Daniel, please add back in maxH, ei
 87,77,postpollen_aborted_per_seed,,investment in tissues aborted post-pollination per seed produced (mg),
 88,78,packaging_dispersal_per_seed,,investment in tissues used in packaging and dispersal per seed produced (mg),
 81,79,prop_allocation,,,have removed this variable
-24,80,lvs_start_length,leaf_start_length,,"variable only needed for processing  ""shoot_leaf_count"" variables; can be omitted from SummaryInd when merging  leafLifespan (line 127)"
-25,81,lvs_start_count,leaf_count_start,,"variable only needed for processing  ""shoot_leaf_count"" variables; can be omitted from SummaryInd when merging  leafLifespan (line 127)"
+24,80,shoot_leaf_count_start_length,leaf_start_length,,"variable only needed for processing  ""shoot_leaf_count"" variables; can be omitted from SummaryInd when merging  leafLifespan (line 127)"
+25,81,shoot_leaf_count_start_count,leaf_count_start,,"variable only needed for processing  ""shoot_leaf_count"" variables; can be omitted from SummaryInd when merging  leafLifespan (line 127)"
 26,82,lvs_end_length,leaf_end_length,,"variable only needed for processing  ""shoot_leaf_count"" variables; can be omitted from SummaryInd when merging  leafLifespan (line 127)"
 27,83,lvs_end_count,leaf_count_end,,"variable only needed for processing  ""shoot_leaf_count"" variables; can be omitted from SummaryInd when merging  leafLifespan (line 127)"
-28,84,lvs_new_length,leaf_new_length,,"variable only needed for processing  ""shoot_leaf_count"" variables; can be omitted from SummaryInd when merging  leafLifespan (line 127)"
-29,85,lvs_new_count,leaf_count_new,,"variable only needed for processing  ""shoot_leaf_count"" variables; can be omitted from SummaryInd when merging  leafLifespan (line 127)"
+28,84,shoot_leaf_count_growth_shoot_length,leaf_growth_shoot_length,,"variable only needed for processing  ""shoot_leaf_count"" variables; can be omitted from SummaryInd when merging  leafLifespan (line 127)"
+29,85,shoot_leaf_count_new_count,leaf_count_new,,"variable only needed for processing  ""shoot_leaf_count"" variables; can be omitted from SummaryInd when merging  leafLifespan (line 127)"
 31,86,mm_lvs_spec,mm_leaf_spec,,"variable only needed for processing  ""shoot_leaf_count"" variables; can be omitted from SummaryInd when merging  leafLifespan (line 127)"
 32,87,count_lvs_spec,count_leaf_spec,,"variable only needed for processing  ""shoot_leaf_count"" variables; can be omitted from SummaryInd when merging  leafLifespan (line 127)"
 33,88,count_per_length,,,"variable only needed for processing  ""shoot_leaf_count"" variables; can be omitted from SummaryInd when merging  leafLifespan (line 127)"

@@ -2,9 +2,9 @@ header,axis_label
 species,species
 age,age (years)
 individual,individual
-d_start,starting diameter (mm)
-d_end,final diameter (mm)
-length_start,shoot length at start (mm)
+shoot_diameter_start,starting diameter (mm)
+shoot_diameter_end,final diameter (mm)
+shoot_length_start,shoot length at start (mm)
 new_length,shoot extension (mm)
 lvs_start_length,N/A
 lvs_start_count,N/A
