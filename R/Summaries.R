@@ -18,7 +18,7 @@ process_seed_costs <- function(seedSize_raw, PartsSummary_all) {
   seedcosts[["EPMI"]] <- list(parts=c("flower_petals", "fruit_mature"), scale=1)
   seedcosts[["GRBU"]] <- list(parts=c("inflorescence_stalk","flower_petals","pedicel","seed_pod","seed"), scale=1)
   seedcosts[["GRSP"]] <- list(parts=c("inflorescence_stalk_in_fruit","flower_petals","pedicel","seed_pod","seed"), scale=1)
-  seedcosts[["HATE"]] <- list(parts=c("inflorescence_bud_big_bracts","flower_petals","seed_pod","seed", scale=1)
+  seedcosts[["HATE"]] <- list(parts=c("inflorescence_bud_big_bracts","flower_petals","seed_pod","seed"), scale=1)
   seedcosts[["HEPU"]] <- list(parts=c("flower_petals","calyx_fruit","fruit_mature"), scale=1)
   seedcosts[["LEES"]] <- list(parts=c("flower_petals","calyx_fruit","fruit_mature"), scale=1)
   seedcosts[["PELA"]] <- list(parts=c("flower_petals","pedicel","seed_pod","seed"), scale=1)
@@ -134,6 +134,8 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
   SummaryInd <- filter(SummaryInd, !is.na(species) & !is.na(individual))
   
   SummaryInd <- SummaryInd %>% mutate(
+    total_inv = repro_inv + growth_inv,
+    RA = repro_inv/total_inv,
     RGR = log(total_weight)-log(total_weight - growth_inv),
     leaf_area = leaf_weight / (1000*LMA),
     growth_leaf_area = growth_leaf / (1000*LMA),
@@ -187,7 +189,7 @@ get_species_values <- function(SummaryInd, groups) {
  
   out[[3]] <-lapply(fs, function(f) {
     SummaryInd %>%
-    filter(total_repro_inv != 0) %>%
+    filter(repro_inv != 0) %>%
     group_by_(.dots=dots) %>%
     summarise_each(f, prop_prepollen_aborted, prop_prepollen_success, 
       prop_postpollen_aborted, prop_packaging_dispersal, prop_propagule, 

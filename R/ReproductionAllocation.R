@@ -47,20 +47,22 @@ RA_Calculations <- function(thisSpecies, Species_Investment, HarvestData, Maps, 
     filter(start_end == "end") %>%
     select(species, site, individual, age, height, diameter, stem_area, leaf_weight, stem_weight, total_weight, growth_inv, growth_stem, growth_leaf, growth_height, growth_stem_diameter, growth_stem_area)
 
-    # Use saved data to calculate total reproduction investment per individual plant
-    ReproTotal <- Species_Investment$Investment %>%
-     group_by(individual) %>%
-     summarise(
-      repro_inv = sum(Total)
-      )
-
-  # Merge two tables and calculate total investment and RAR
-  InvestmentSummary <- merge(ReproTotal, GrowthEst, by = "individual", all.y = TRUE)
-  # NA that appeared correspond to zero reproductive investment
-  InvestmentSummary[is.na(InvestmentSummary)] <- 0
-
-  InvestmentSummary %>%
-    mutate(
-      total_inv = repro_inv + growth_inv,
-      RA = repro_inv/total_inv)
+#     # Use saved data to calculate total reproduction investment per individual plant
+#     ReproTotal <- Species_Investment$Investment %>%
+#      group_by(individual) %>%
+#      summarise(
+#       repro_inv = sum(Total)
+#       )
+# 
+#   # Merge two tables and calculate total investment and RAR
+#   InvestmentSummary <- merge(ReproTotal, GrowthEst, by = "individual", all.y = TRUE)
+#   # NA that appeared correspond to zero reproductive investment
+#   InvestmentSummary[is.na(InvestmentSummary)] <- 0
+# 
+#   browser()
+#   InvestmentSummary %>%
+#     mutate(
+#       total_inv = repro_inv + growth_inv,
+#       RA = repro_inv/total_inv)
+# InvestmentSummary <- GrowthEst
 }

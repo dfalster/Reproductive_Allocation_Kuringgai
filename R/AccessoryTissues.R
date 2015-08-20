@@ -20,13 +20,13 @@ AccessoryCosts <- function(species, IndividualsList, InvestmentCategories, speci
 
   #calculating percentages of various accessory tissues
   accessory <- accessory %>%
-    mutate(accessory_inv = total_repro_inv - propagule_inv,
+    mutate(accessory_inv = repro_inv - propagule_inv,
         prepollen_all_inv = prepollen_aborted_inv + prepollen_success_inv,
-        prop_prepollen_aborted = prepollen_aborted_inv / total_repro_inv,
-        prop_prepollen_success = prepollen_success_inv / total_repro_inv,
-        prop_postpollen_aborted = postpollen_aborted_inv / total_repro_inv,
-        prop_packaging_dispersal = packaging_dispersal_inv / total_repro_inv,
-        prop_propagule = propagule_inv / total_repro_inv,
+        prop_prepollen_aborted = prepollen_aborted_inv / repro_inv,
+        prop_prepollen_success = prepollen_success_inv / repro_inv,
+        prop_postpollen_aborted = postpollen_aborted_inv / repro_inv,
+        prop_packaging_dispersal = packaging_dispersal_inv / repro_inv,
+        prop_propagule = propagule_inv / repro_inv,
         prop_accessory = 1 - prop_propagule,
         prop_prepollen_all = prop_prepollen_aborted + prop_prepollen_success
         )
@@ -94,14 +94,14 @@ InvestmentInAccessoryTissues <- function(individual, species, InvestmentCategori
   if (length(PROP_parts) > 0) {
     propagule_inv <- sum(as.numeric(Lost[(Lost$part %in% PROP_parts), ]$weight))
   }
-  total_repro_inv <- prepollen_aborted_inv + prepollen_success_inv + postpollen_aborted_inv + packaging_dispersal_inv + propagule_inv
+  repro_inv <- prepollen_aborted_inv + prepollen_success_inv + postpollen_aborted_inv + packaging_dispersal_inv + propagule_inv
   data.frame(individual = individual, 
         prepollen_aborted_inv = prepollen_aborted_inv, 
         prepollen_success_inv = prepollen_success_inv, 
         postpollen_aborted_inv = postpollen_aborted_inv, 
         packaging_dispersal_inv = packaging_dispersal_inv,
         propagule_inv = propagule_inv, 
-        total_repro_inv = total_repro_inv, stringsAsFactors=FALSE)
+        repro_inv = repro_inv, stringsAsFactors=FALSE)
 
 }
 
