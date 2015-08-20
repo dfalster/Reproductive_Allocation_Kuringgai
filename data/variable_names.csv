@@ -47,7 +47,7 @@ xx,38,maxH,maxH,species maximum height (mm),"Daniel, please add back in maxH, ei
 67,46,seedpod_weight,,seedpod weight (mg),
 73,47,seedcosts,,total reproductive investment required to make a single seed (mg),
 74,48,costs_per_seed,,total reproductive costs / seed count (mg),
-48,49,total_repro_inv,,total reproductive investment (mg/year),remove from list once we have total_repro_inv = repro_inv
+48,49,repro_inv,,total reproductive investment (mg/year),remove from list once we have repro_inv = repro_inv
 47,50,propagule_inv,,investment in propagules (mg),
 49,51,accessory_inv,,investment in all accessory tissues (mg),
 43,52,prepollen_aborted_inv,,investment in tissues aborted pre-pollination (mg),
