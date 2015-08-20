@@ -38,7 +38,7 @@ plot_options:
 targets:
   all:
     depends:
-      - SummaryInd
+      - data
 
   CarbonInvestments.pdf:
     depends:
@@ -134,3 +134,9 @@ targets:
 
   SummaryInd:
     command: scale_individual_variable(SummaryInd1, SummarySpp)
+
+  data:
+    depends:
+      - SummaryInd
+      - SummarySpp
+      - SummarySppAge
