@@ -1,8 +1,8 @@
 individual,species,replicate,segment,branch_number,start_end,year,diameter,status,stem_weight,leaf_weight
 PHPH_801,PHPH,801,basal_side,1,start,2012,0,,,
-PHPH_801,PHPH,801,basal_side,1,end,2013,1.79,new,,
+PHPH_801,PHPH,801,basal_side,1,end,2013,1.79,new,366.5,255.7
 PHPH_801,PHPH,801,basal_side,2,start,2012,0,,,
-PHPH_801,PHPH,801,basal_side,2,end,2013,1.09,new,366.5,255.7
+PHPH_801,PHPH,801,basal_side,2,end,2013,1.09,new,,
 PHPH_807,PHPH,807,basal_side,1,start,2012,3.33,,,
 PHPH_807,PHPH,807,basal_side,1,end,2013,3.33,,,
 PHPH_807,PHPH,807,basal_side,2,start,2012,4.36,,,
@@ -13,12 +13,14 @@ PHPH_807,PHPH,807,basal_side,4,start,2012,6.34,,,
 PHPH_807,PHPH,807,basal_side,4,end,2013,8.02,,,
 PHPH_807,PHPH,807,basal_side,5,start,2012,7.42,,,
 PHPH_807,PHPH,807,basal_side,5,end,2013,8.35,,,
+PHPH_001,PHPH,1,basal_side,1,start,2012,,,,
+PHPH_001,PHPH,1,basal_side,1,end,2013,6.17,,5310,1901
 PHPH_002,PHPH,2,basal_side,1,start,2012,0,,,
-PHPH_002,PHPH,2,basal_side,1,end,2013,2.32,new,,
+PHPH_002,PHPH,2,basal_side,1,end,2013,2.32,new,69.8,30.1
 PHPH_002,PHPH,2,basal_side,2,start,2012,0,,,
 PHPH_002,PHPH,2,basal_side,2,end,2013,0.73,new,,
 PHPH_003,PHPH,3,basal_side,1,start,2012,2.43,,,
-PHPH_003,PHPH,3,basal_side,1,end,2013,2.44,,,
+PHPH_003,PHPH,3,basal_side,1,end,2013,2.44,,30100,24120
 PHPH_003,PHPH,3,basal_side,2,start,2012,2.49,,,
 PHPH_003,PHPH,3,basal_side,2,end,2013,2.66,,,
 PHPH_003,PHPH,3,basal_side,3,start,2012,2.99,,,
@@ -36,7 +38,7 @@ PHPH_003,PHPH,3,basal_side,8,end,2013,1.16,new,,
 PHPH_003,PHPH,3,basal_side,9,start,2012,0,,,
 PHPH_003,PHPH,3,basal_side,9,end,2013,1.74,new,,
 PHPH_006,PHPH,6,basal_side,1,start,2012,1.16,,,
-PHPH_006,PHPH,6,basal_side,1,end,2013,1.16,dead,,
+PHPH_006,PHPH,6,basal_side,1,end,2013,1.16,dead,15300,10920.5
 PHPH_006,PHPH,6,basal_side,2,start,2012,1.16,,,
 PHPH_006,PHPH,6,basal_side,2,end,2013,1.16,dead,,
 PHPH_006,PHPH,6,basal_side,3,start,2012,1.32,,,
@@ -48,7 +50,7 @@ PHPH_006,PHPH,6,basal_side,5,end,2013,5.14,,,
 PHPH_006,PHPH,6,basal_side,6,start,2012,5.66,,,
 PHPH_006,PHPH,6,basal_side,6,end,2013,6.3,,,
 PHPH_007,PHPH,7,basal_side,1,start,2012,2.38,,,
-PHPH_007,PHPH,7,basal_side,1,end,2013,2.8,,,
+PHPH_007,PHPH,7,basal_side,1,end,2013,2.8,,12160,8218.9
 PHPH_007,PHPH,7,basal_side,2,start,2012,2.81,,,
 PHPH_007,PHPH,7,basal_side,2,end,2013,4.03,,,
 PHPH_007,PHPH,7,basal_side,3,start,2012,3.36,,,
@@ -62,11 +64,11 @@ PHPH_402,PHPH,402,basal_side,1,end,2013,2.06,dead,,
 PHPH_402,PHPH,402,basal_side,2,start,2012,2.26,,,
 PHPH_402,PHPH,402,basal_side,2,end,2013,2.45,dead,,
 PHPH_405,PHPH,405,basal_side,1,start,2012,2.82,,,
-PHPH_405,PHPH,405,basal_side,1,end,2013,2.99,,,
+PHPH_405,PHPH,405,basal_side,1,end,2013,2.99,,2782.8,1403.9
 PUTU_801,PUTU,801,basal_side,1,start,2012,not recorded,,,
-PUTU_801,PUTU,801,basal_side,1,end,2013,5.606666667,,,
+PUTU_801,PUTU,801,basal_side,1,end,2013,5.606666667,,17210,4471.1
 PUTU_805,PUTU,805,basal_side,1,start,2012,4.67,,,
-PUTU_805,PUTU,805,basal_side,1,end,2013,5.66,,,
+PUTU_805,PUTU,805,basal_side,1,end,2013,5.66,,11020,5770
 PUTU_805,PUTU,805,basal_side,2,start,2012,2.53,,,
 PUTU_805,PUTU,805,basal_side,2,end,2013,3.56,,,
 HEPU_002,HEPU,2,basal_side,1,start,2012,0,,,
@@ -75,3 +77,5 @@ HEPU_002,HEPU,2,basal_side,2,start,2012,0,,,
 HEPU_002,HEPU,2,basal_side,2,end,2013,0.73,new,,
 PILI_801,PILI,801,basal_side,1,start,2012,0,,,
 PILI_801,PILI,801,basal_side,1,end,2013,1.15,new,455.1,0
+PHPH_007,PHPH,7,basal_side,dead,,,,,2778.8,
+PUTU_801,PUTU,801,basal_side,,,,dead,,255.3,
