@@ -16,7 +16,7 @@ CalculateAccesoryCostsFor{{species}} <- function(...) {
 }
 
 CalculateRAFor{{species}} <- function(...) {
-	RA_Calculations("{{species}}", ...)
+	growth_calculations("{{species}}", ...)
 }
 
 print_xtable_{{species}} <- function(...) {

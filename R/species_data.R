@@ -14,7 +14,7 @@ CalculateAccesoryCostsForBAER <- function(...) {
 }
 
 CalculateRAForBAER <- function(...) {
-	RA_Calculations("BAER", ...)
+	growth_calculations("BAER", ...)
 }
 
 print_xtable_BAER <- function(...) {
@@ -34,7 +34,7 @@ CalculateAccesoryCostsForBOLE <- function(...) {
 }
 
 CalculateRAForBOLE <- function(...) {
-	RA_Calculations("BOLE", ...)
+	growth_calculations("BOLE", ...)
 }
 
 print_xtable_BOLE <- function(...) {
@@ -54,7 +54,7 @@ CalculateAccesoryCostsForCOER <- function(...) {
 }
 
 CalculateRAForCOER <- function(...) {
-	RA_Calculations("COER", ...)
+	growth_calculations("COER", ...)
 }
 
 print_xtable_COER <- function(...) {
@@ -74,7 +74,7 @@ CalculateAccesoryCostsForEPMI <- function(...) {
 }
 
 CalculateRAForEPMI <- function(...) {
-	RA_Calculations("EPMI", ...)
+	growth_calculations("EPMI", ...)
 }
 
 print_xtable_EPMI <- function(...) {
@@ -94,7 +94,7 @@ CalculateAccesoryCostsForGRBU <- function(...) {
 }
 
 CalculateRAForGRBU <- function(...) {
-	RA_Calculations("GRBU", ...)
+	growth_calculations("GRBU", ...)
 }
 
 print_xtable_GRBU <- function(...) {
@@ -114,7 +114,7 @@ CalculateAccesoryCostsForGRSP <- function(...) {
 }
 
 CalculateRAForGRSP <- function(...) {
-	RA_Calculations("GRSP", ...)
+	growth_calculations("GRSP", ...)
 }
 
 print_xtable_GRSP <- function(...) {
@@ -134,7 +134,7 @@ CalculateAccesoryCostsForHATE <- function(...) {
 }
 
 CalculateRAForHATE <- function(...) {
-	RA_Calculations("HATE", ...)
+	growth_calculations("HATE", ...)
 }
 
 print_xtable_HATE <- function(...) {
@@ -154,7 +154,7 @@ CalculateAccesoryCostsForHEPU <- function(...) {
 }
 
 CalculateRAForHEPU <- function(...) {
-	RA_Calculations("HEPU", ...)
+	growth_calculations("HEPU", ...)
 }
 
 print_xtable_HEPU <- function(...) {
@@ -174,7 +174,7 @@ CalculateAccesoryCostsForLEES <- function(...) {
 }
 
 CalculateRAForLEES <- function(...) {
-	RA_Calculations("LEES", ...)
+	growth_calculations("LEES", ...)
 }
 
 print_xtable_LEES <- function(...) {
@@ -194,7 +194,7 @@ CalculateAccesoryCostsForPELA <- function(...) {
 }
 
 CalculateRAForPELA <- function(...) {
-	RA_Calculations("PELA", ...)
+	growth_calculations("PELA", ...)
 }
 
 print_xtable_PELA <- function(...) {
@@ -214,7 +214,7 @@ CalculateAccesoryCostsForPEPU <- function(...) {
 }
 
 CalculateRAForPEPU <- function(...) {
-	RA_Calculations("PEPU", ...)
+	growth_calculations("PEPU", ...)
 }
 
 print_xtable_PEPU <- function(...) {
@@ -234,7 +234,7 @@ CalculateAccesoryCostsForPHPH <- function(...) {
 }
 
 CalculateRAForPHPH <- function(...) {
-	RA_Calculations("PHPH", ...)
+	growth_calculations("PHPH", ...)
 }
 
 print_xtable_PHPH <- function(...) {
@@ -254,7 +254,7 @@ CalculateAccesoryCostsForPILI <- function(...) {
 }
 
 CalculateRAForPILI <- function(...) {
-	RA_Calculations("PILI", ...)
+	growth_calculations("PILI", ...)
 }
 
 print_xtable_PILI <- function(...) {
@@ -274,7 +274,7 @@ CalculateAccesoryCostsForPUTU <- function(...) {
 }
 
 CalculateRAForPUTU <- function(...) {
-	RA_Calculations("PUTU", ...)
+	growth_calculations("PUTU", ...)
 }
 
 print_xtable_PUTU <- function(...) {
