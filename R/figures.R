@@ -3,7 +3,7 @@
 col.spp <- function(x=NULL){
 
   ret <- c(BAER="red", BOLE="darkolivegreen4", COER="blue", EPMI="purple", GRBU="grey",
-    GRSP="light green", HATE="gold1", HEPU="cyan2",LEES="#E193BF", PELA="chocolate1",
+    GRSP="light green", HATE="gold1", HEPU="cyan2",LEES="black", PELA="chocolate1",
     PEPU="light blue", PHPH= "brown", PILI="deep pink", PUTU="orchid1")
   
   if(!is.null(x)) {
@@ -45,7 +45,7 @@ labels.age <- function(x=NULL){
 col.mature <- function(x=NULL){
 
   ret <- c("cyan3","red")
-  names(ret) <- c("juvenile","mature")
+  names(ret) <- c("FALSE","TRUE")
 
   if(!is.null(x)) {
     ret <- ret[as.character(x)]
