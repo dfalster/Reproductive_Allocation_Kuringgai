@@ -38,7 +38,9 @@ plot_options:
 targets:
   all:
     depends:
-      - data
+      - SummaryInd
+      - SummarySpp
+      - SummarySppAge
 
   CarbonInvestments.pdf:
     depends:

@@ -13,7 +13,7 @@ col.spp <- function(x=NULL){
 }
 
 labels.spp <- function(x=NULL){  
-  names(col.species(x))
+  names(col.spp(x))
 }
 
 labels.spp.full <- function(x=NULL){
@@ -65,7 +65,7 @@ col.lots <- function(x) {
             ceiling(n/80))
   cols[as.factor(x)]
 }
-get_ReproductionAllocation_means_by_age <- function(ReproductionAllocation_all){
+get_ReproductionAllocations_by_age <- function(ReproductionAllocation_all){
   group_by(ReproductionAllocation_all, species, age) %>%
     summarise(
       n=length(age),
@@ -83,7 +83,7 @@ get_ReproductionAllocation_means_by_age <- function(ReproductionAllocation_all){
 
 plot_species_ReproductionAllocation_age_panel <- function(InvBySpecies) {
 
-  InvByAge <- get_ReproductionAllocation_means_by_age(InvBySpecies)
+  InvByAge <- get_ReproductionAllocations_by_age(InvBySpecies)
 
   cols <- col.spp()[InvBySpecies$species]
 
@@ -110,7 +110,7 @@ plot_species_ReproductionAllocation_age_panel <- function(InvBySpecies) {
 
 plot_ReproductionAllocation_comparison_age <- function(ReproductionAllocation_all) {
 
-  InvByAge <- get_ReproductionAllocation_means_by_age(ReproductionAllocation_all)
+  InvByAge <- get_ReproductionAllocations_by_age(ReproductionAllocation_all)
   cols <- col.spp()
   plot(InvByAge$age, InvByAge$RA_M, type="n", main = "Reproductive Allovation for 14 species along time", lty = 1, lwd = 3, xlim = c(0, 35), bty = "L", xlab = "Age (years)", ylab = "Reproductive Allocation")
   d_ply(InvByAge, "species", function(x) points(x$age, x$RA_M, type = "b", pch = "o", col= cols[x$species]))

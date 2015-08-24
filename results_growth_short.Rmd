@@ -19,7 +19,7 @@ par(mfrow=c(1,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))
 mod <- lm(log(growth_inv)~log(repro_inv),data=subset(SummaryInd,repro_inv>0))
 plot((1+repro_inv)~growth_inv, SummaryInd, log="xy", col=col.spp(species),pch=16,xlim=c(1,1000000),ylim=c(1,1000000))
 words.top.left.logxy(mod)
-legend("bottomright",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
+legend("bottomright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 abline(0,1)
 text(2.1,3,srt=45,"RA = 0.5")
 abline(log10(3),1)
@@ -58,17 +58,17 @@ text(170,2.4,srt=45,"RA = 0.01")
 par(mfrow=c(2,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2)) 
 mod <- lm(RGR~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
 plot((RA+.01)~RGR, SummaryInd, log="xy", col=col.spp(species),pch=16)
-legend("bottomleft",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
+legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 words.top.right.logxy(mod)
 
 mod <- lm(log(growth_stem_diameter)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
 plot((RA+.01)~growth_stem_diameter, SummaryInd, log="xy", col=col.spp(species),pch=16)
-legend("bottomleft",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
+legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 words.top.right.logxy(mod)
 
 mod <- lm(log(prop_growth_stem_diameter)~asin(sqrt(RA)),data=subset(SummaryInd,RA>0))
 plot((RA+.01)~prop_growth_stem_diameter, SummaryInd, log="xy", col=col.spp(species),pch=16)
-legend("bottomleft",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
+legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 words.top.right.logxy(mod)
 
 SummaryInd$prop_growth_height <- SummaryInd$growth_height/SummaryInd$maxH
@@ -154,7 +154,7 @@ mtext("basal diameter", 2, outer=TRUE,cex=1.2)
 
 ###PCA analysis indicates the same two patterns
 * This combination of variables shows that RGR is approximately opposite a collection of variables that indicate a plant is "bigger" - so smaller plants have higher RGR
-* Orthoganal to these in WD vs. maxH, LMA_mean, seed_size, and shoot_growth - species that are taller as adults have bigger seeds, higher LMA, and greater shoot growth (both stem growth & leaf count), independent of their current (age dependent) size
+* Orthoganal to these in WD vs. maxH, LMA, seed_size, and shoot_growth - species that are taller as adults have bigger seeds, higher LMA, and greater shoot growth (both stem growth & leaf count), independent of their current (age dependent) size
 * I interpret this to mean that the three traits (Hmax, LMA, WD) strongly influence each other - presumably, Hmax a function of WD and LMA), but do not particularly 
 * this analysis doesn't include accessory proportions, because then I have to use subset of reproducing individuals, greatly reducing sample size. Including these variables, doesn't change the basic story.
 * fine tuning:  
@@ -165,7 +165,7 @@ mtext("basal diameter", 2, outer=TRUE,cex=1.2)
 par(mfrow=c(1,1), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
 SummaryIndPCA <- SummaryInd %>%
   filter(shoot_leaf_count>0&shoot_leaf_area>0&shoot_growth_leaf_area!=0) %>%
-  select(prop_maxH,height,maxH,WD_mean,LMA_mean,seed_size,growth_leaf,
+  select(prop_maxH,height,maxH,WD,LMA,seed_size,growth_leaf,
          growth_stem_diameter,leaf_area,growth_shoot_area,growth_stem_area,shoot_leaf_count,total_weight,
          RA,seedset,repro_all_count,accessory_inv,propagule_inv,shoot_leaf_area,shoot_growth_leaf_area,RGR)
 
@@ -254,9 +254,9 @@ PCA_by_species <- SummaryInd_PCA_results %>%
 plot(PC1_scale~(PC2_scale),SummaryInd_PCA_results,pch=16,col=col.spp(species),xlim=c(-.1,.1))
 arrows(0, 0, (.9*PCA_loadings$PC2_scale), (.9*PCA_loadings$PC1_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
 text(PC1_scale ~ PC2_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
-legend("topright",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
+legend("topright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 
-mean1 <- PCA_by_species$PC1_scale_mean
+mean1 <- PCA_by_species$PC1_scale
 se1 <- PCA_by_species$PC1_scale_se
 plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 1")
 se_function(mean1,se1)
@@ -265,7 +265,7 @@ plot(PC2_scale~(PC1_scale),SummaryInd_PCA_results,pch=16,col=col.spp(species))
 arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC2_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
 text(PC2_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
 
-mean1 <- PCA_by_species$PC2_scale_mean
+mean1 <- PCA_by_species$PC2_scale
 se1 <- PCA_by_species$PC2_scale_se
 plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 2")
 se_function(mean1,se1)
@@ -274,7 +274,7 @@ plot(PC3_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.spp(species))
 arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC3_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
 text(PC3_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
 
-mean1 <- PCA_by_species$PC3_scale_mean
+mean1 <- PCA_by_species$PC3_scale
 se1 <- PCA_by_species$PC3_scale_se
 plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 3")
 se_function(mean1,se1)
@@ -282,9 +282,9 @@ se_function(mean1,se1)
 plot(PC4_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.spp(species),ylim=c(-.15,.15))
 arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC4_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
 text(PC4_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
-legend("topright",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
+legend("topright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 
-mean1 <- PCA_by_species$PC4_scale_mean
+mean1 <- PCA_by_species$PC4_scale
 se1 <- PCA_by_species$PC4_scale_se
 plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 4",ylim=c(-.07,.04))
 se_function(mean1,se1)
@@ -300,7 +300,7 @@ se_function(mean1,se1)
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=7}
 par(mfrow=c(1,2), cex=1, omi=c(.8,0.3,.5,0.2), mai=c(.7,1,.1,0.2))
 plot((growth_inv~prop_maxH), SummaryInd, log="y", col=col.spp(species),pch=16,xlab="")
-legend("topleft",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
+legend("topleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 
 plot(growth_inv~prop_maxH, SummaryInd, log="y", col=col.age(age),pch=16,ylab="",xlab="")
 legend("topleft",legend=labels.age(),col=col.age,pch=16, cex=.8,bty="n")
@@ -350,7 +350,7 @@ results
 ```{r, echo=FALSE, message=FALSE, fig.width=7, fig.height=7}
 par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,1,0.6)) 
 plot(RGR~prop_maxH,SummaryInd,col=col.spp(species),pch=16)
-legend("topright",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
+legend("topright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 ```
 
 ```{r, echo=FALSE, message=FALSE, fig.width=24, fig.height=24}
@@ -385,7 +385,7 @@ results
 ```{r, echo=FALSE, message=FALSE, fig.width=7, fig.height=7}
 par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,1,0.6)) 
 plot(RA~prop_maxH,SummaryInd,col=col.spp(species),pch=16)
-legend("topright",legend=labels.spp(),col=col.spp,pch=16, cex=.8,bty="n")
+legend("topright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 ```
 
 ```{r, echo=FALSE, message=FALSE, fig.width=24, fig.height=24}

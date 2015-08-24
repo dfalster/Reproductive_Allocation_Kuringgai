@@ -170,7 +170,7 @@ get_species_values <- function(SummaryInd, groups) {
   out[[1]] <-lapply(fs, function(f) {
     SummaryInd %>%
     group_by_(.dots=dots) %>%
-    summarise_each(f, prepollen_aborted_inv, prepollen_success_inv, 
+    summarise_each(f, seed_size, prepollen_aborted_inv, prepollen_success_inv, 
       postpollen_aborted_inv, packaging_dispersal_inv, propagule_inv, prepollen_all_inv,
       height, growth_inv, repro_inv, total_weight, total_inv, RA, diameter, stem_area, 
       leaf_weight, stem_weight, growth_stem_diameter, growth_stem_area, growth_leaf, 

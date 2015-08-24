@@ -1,0 +1,5 @@
+library(remake)
+make("SummaryInd")
+make("SummarySpp")
+make("SummarySppAge")
+create_bindings()

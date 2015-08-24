@@ -54,7 +54,7 @@ RGR,relative growth rate
 wood_density,wood density (grams per cm^3)
 WD_se,N/A
 WD_length,N/A
-LMA_mean,LMA (grams per cm^2)
+LMA,LMA (grams per cm^2)
 LMA_se,N/A
 LMA_length,N/A
 maxH,species maximum height (mm)
