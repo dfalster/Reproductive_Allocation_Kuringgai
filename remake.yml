@@ -38,9 +38,7 @@ plot_options:
 targets:
   all:
     depends:
-      - SummaryInd
-      - SummarySpp
-      - SummarySppAge
+      - export
 
   CarbonInvestments.pdf:
     depends:
@@ -92,12 +90,12 @@ targets:
       - process_seed_costs(., PartsSummary_all)
 
   leavesPerLength:
-    command: 
+    command:
       - read_csv("data/leaves_per_length.csv")
       - process_leaves_per_length(.)
 
   leafLifespan:
-    command: 
+    command:
       - read_csv("data/leaderGrowthLL.csv")
       - process_leaf_lifespan(., leavesPerLength)
 
@@ -141,3 +139,18 @@ targets:
 
   SummaryInd:
     command: scale_individual_variable(SummaryInd1, SummarySpp)
+
+  export:
+    depends:
+      - export/SummaryInd.rds
+      - export/SummarySpp.rds
+      - export/SummarySppAge.rds
+
+  export/SummaryInd.rds:
+    command: saveRDS(SummaryInd, target_name)
+
+  export/SummarySpp.rds:
+    command: saveRDS(SummarySpp, target_name)
+
+  export/SummarySppAge.rds:
+    command: saveRDS(SummarySppAge, target_name)
