@@ -177,7 +177,7 @@ make_EPMI_GraphMaps <- function(PartsSummary, MultiplierTable){
   AvWeightPerUnit <-  PartsSummary$AvWeightPerUnit
 
   EPMI.graph <- graph.formula("bud_tiny" - "bud_mid" - "bud_big" - "flower_calyx" - "finished_flower" - "fruit_young" - "fruit_large_immature_01" - "fruit_mature",
-    "bud_big" - "flower_petals")
+                              "bud_big" - "flower_petals")
   from <- "bud_tiny"
   to <- "fruit_mature"
   Paths <- data.frame(from = from, to = to)
@@ -206,8 +206,11 @@ make_COER_GraphMaps <- function(PartsSummary, MultiplierTable){
   AvWeightPerUnit <-  PartsSummary$AvWeightPerUnit
 
   COER.graph <- graph.formula("bud_big" - "flower_stigma" - "finished_flower" - "fruit_just_starting" - "fruit_young" - "fruit_large_immature_01" - "fruit_mature",
-    "inflorescence_bud_tiny" - "inflorescence_bud_mid" - "inflorescence_stalk" - "inflorescence_stalk_in_fruit", "inflorescence_stalk" - "inflorescence_stalk_in_fruit_large",
-    "inflorescence_stalk" - "inflorescence_stalk_in_fruit_very_large", "bud_big" - "flower_petals", "fruit_just_starting" - "bract_fruit")
+                              "inflorescence_bud_tiny" - "inflorescence_bud_mid" - "inflorescence_stalk" - "inflorescence_stalk_in_fruit", 
+                              "inflorescence_stalk" - "inflorescence_stalk_in_fruit_large",
+                              "inflorescence_stalk" - "inflorescence_stalk_in_fruit_very_large", 
+                              "bud_big" - "flower_petals", 
+                              "fruit_just_starting" - "bract_fruit")
   from <- c("bud_big", "inflorescence_bud_tiny")
   to <- c("fruit_mature", "inflorescence_stalk_in_fruit_very_large")
   Paths <- data.frame(from = from, to = to)
@@ -247,9 +250,14 @@ make_PUTU_GraphMaps <- function(PartsSummary, MultiplierTable){
 
   AvWeightPerUnit <-  PartsSummary$AvWeightPerUnit
 
-  PUTU.graph <- graph.formula("bud_big" - "flower_stigma" - "finished_flower_stigma" - "fruit_large_immature_01" - "seed", "bud_big" - "flower_petals", "bud_big" -
-    "flower_calyx", "bud_big" - "bract_flower_or_finished_flower", "flower_aborted", "flower_stigma" - "fruit_aborted", "fruit_large_immature_01" - "seed_pod", "fruit_large_immature_01" -
-    "seed_aborted")
+  PUTU.graph <- graph.formula("bud_big" - "flower_stigma" - "finished_flower_stigma" - "fruit_large_immature_01" - "seed", 
+                              "bud_big" - "flower_petals", 
+                              "bud_big" - "flower_calyx", 
+                              "bud_big" - "bract_flower_or_finished_flower", 
+                              "flower_aborted", 
+                              "flower_stigma" - "fruit_aborted", 
+                              "fruit_large_immature_01" - "seed_pod", 
+                              "fruit_large_immature_01" - "seed_aborted")
   from <- c("bud_big", "flower_aborted")
   to <- c("seed_pod", "flower_aborted")
   Paths <- data.frame(from = from, to = to)
