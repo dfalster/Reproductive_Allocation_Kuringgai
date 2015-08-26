@@ -66,7 +66,7 @@ InvestmentInAccessoryTissues <- function(individual, species, InvestmentCategori
   # check if any of the parts can be found in the data for this individual
   PreP_S_parts <- PreP_S_parts[PreP_S_parts %in% Lost$part]
   prepollen_success_inv <- 0
-  if (length(PreP_A_parts) > 0) {
+  if (length(PreP_S_parts) > 0) {
     prepollen_success_inv <- sum(as.numeric(Lost[(Lost$part %in% PreP_S_parts), ]$weight))
   }
   ############### * Postpollination_abort *
@@ -94,6 +94,9 @@ InvestmentInAccessoryTissues <- function(individual, species, InvestmentCategori
   if (length(PROP_parts) > 0) {
     propagule_inv <- sum(as.numeric(Lost[(Lost$part %in% PROP_parts), ]$weight))
   }
+  
+  
+  ##Daniel-here is where the NAs are being introduced into repro_inv, have redone calculation once in Summaries to remove them
   repro_inv <- prepollen_aborted_inv + prepollen_success_inv + postpollen_aborted_inv + packaging_dispersal_inv + propagule_inv
   data.frame(individual = individual, 
         prepollen_aborted_inv = prepollen_aborted_inv, 
@@ -101,7 +104,8 @@ InvestmentInAccessoryTissues <- function(individual, species, InvestmentCategori
         postpollen_aborted_inv = postpollen_aborted_inv, 
         packaging_dispersal_inv = packaging_dispersal_inv,
         propagule_inv = propagule_inv, 
-        repro_inv = repro_inv, stringsAsFactors=FALSE)
+        repro_inv = repro_inv,
+        stringsAsFactors=FALSE)
 
 }
 
