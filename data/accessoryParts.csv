@@ -24,7 +24,7 @@ flower_aborted_without_petals,18,,,,,,,,,,,,prepollination_abort,,
 flower_style,19,prepollination_success,,,,,,,,,,,,,
 finished_flower,20,,prepollination_success,prepollination_success,prepollination_success,,,,prepollination_success,prepollination_success,,,prepollination_success,,
 finished_flower_aborting,20.1,,,,,,,,prepollination_success,,,,,,
-finished_flower_stigma,21,prepollination_success,prepollination_success,,,prepollination_success,prepollination_success,prepollination_success,,,prepollination_success,,prepollination_success,,
+finished_flower_stigma,21,prepollination_success,prepollination_success,,,prepollination_success,prepollination_success,prepollination_success,,,prepollination_success,,prepollination_success,,prepollination_success
 late_finished_flower,22,,prepollination_success,,,,,,,,,,prepollination_success,,
 late_flower_petals,22.5,,packaging_dispersal,,,,,,,,,,,,
 bract_flower_or_finished_flower,23,,,,,,,,,,,,prepollination_success,prepollination_success,prepollination_success
