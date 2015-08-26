@@ -36,9 +36,9 @@ CalculateInvestmentForSpecies <- function(species, Reproduction, FloweringCatego
          sum(filter(x, part %in% parts_counts[[n]])$count))}) 
 
   counts <- mutate(counts,
-    seedset = seed_count/(bud_count + flower_count + seed_count + aborted_fruit_count),
+    seedset = divide_zero(seed_count, bud_count + flower_count + seed_count + aborted_fruit_count),
     prepollen_all_count = bud_count + flower_count,
-    prop_prepollen_count = (bud_count + flower_count)/(bud_count + flower_count + seed_count + aborted_fruit_count),
+    prop_prepollen_count = divide_zero(bud_count + flower_count, bud_count + flower_count + seed_count + aborted_fruit_count),
     repro_all_count = bud_count + flower_count + seed_count
     )
 

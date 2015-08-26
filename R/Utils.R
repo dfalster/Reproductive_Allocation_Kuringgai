@@ -1,4 +1,12 @@
 
+divide_zero <- function(x,y) {
+  if(length(x) != length(y)) stop("bad")
+  ret <- y*0
+  i <- y!=0 
+  ret[i] <- (x/y)[i]
+  ret
+}
+
 read_csv <- function(filename) {
   read.csv(filename, header = TRUE, sep = ",", stringsAsFactors = FALSE)
 }
