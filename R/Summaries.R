@@ -130,6 +130,9 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
   #TODO: Why do we need these, where are NAs coming from?
   SummaryInd <- filter(SummaryInd, !is.na(species) & !is.na(individual))
 
+  SummaryInd$repro_inv = SummaryInd$prepollen_aborted_inv + SummaryInd$prepollen_success_inv + SummaryInd$postpollen_aborted_inv + SummaryInd$packaging_dispersal_inv + SummaryInd$propagule_inv
+  
+  #DANIEL TODO: For the various "per_seed" measures, need to include only individuals that have non-zero seed count, otherwise end up
   SummaryInd <- SummaryInd %>% mutate(
     total_inv = repro_inv + growth_inv,
     RA = repro_inv/total_inv,
@@ -149,8 +152,26 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
     postpollen_aborted_per_seed = postpollen_aborted_inv/seed_count,
     packaging_dispersal_per_seed = packaging_dispersal_inv/seed_count)
 
+    years_reproducing <- function(RA, age) {
+      ret <- age-min(age[RA>0])
+      ret[ret<0] <-0
+#      if(any(is.na(ret))) browser()
+      ret
+    }
+  
+  SummaryInd <-  SummaryInd %>% 
+    group_by(species) %>%
+    mutate(years_repro = years_reproducing(RA, age)) %>%
+    ungroup()
+  
   SummaryInd
+
 }
+
+#for(v in c("seedset","repro_all_count","accessory_per_seed","propagule_per_seed","prepollen_all_per_seed","prepollen_aborted_per_seed",
+#           "prepollen_success_per_seed","postpollen_aborted_per_seed","packaging_dispersal_per_seed","seed_count","fruit_count")){
+#  SummaryInd[[v]][is.na(SummaryInd[[v]])] <- 0
+#}
 
 # re-orders columns in data to match order of values in "variable" column of 
 # variable_list
@@ -175,7 +196,7 @@ get_species_values <- function(SummaryInd, groups) {
   out[[1]] <-lapply(fs, function(f) {
     SummaryInd %>%
     group_by_(.dots=dots) %>%
-    summarise_each(f, seed_size, prepollen_aborted_inv, prepollen_success_inv,
+    summarise_each(f, seed_size, accessory_inv, prepollen_aborted_inv, prepollen_success_inv,
       postpollen_aborted_inv, packaging_dispersal_inv, propagule_inv, prepollen_all_inv,
       height, growth_inv, repro_inv, total_weight, total_inv, RA, diameter, stem_area,
       leaf_weight, stem_weight, growth_stem_diameter, growth_stem_area, growth_leaf,
@@ -213,6 +234,7 @@ get_species_values <- function(SummaryInd, groups) {
   out[[5]] <-lapply(fs, function(f) {
     SummaryInd %>%
     filter(seed_count > 0) %>%
+    filter(repro_inv >0 ) %>%
     group_by_(.dots=dots) %>%
     summarise_each(f, accessory_per_seed, propagule_per_seed, prepollen_all_per_seed,
       prepollen_aborted_per_seed, prepollen_success_per_seed, postpollen_aborted_per_seed,
