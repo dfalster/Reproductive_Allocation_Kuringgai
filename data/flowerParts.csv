@@ -7257,3 +7257,6 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 6909,PUTU,Waratah2011,30-Jul-14,143,PUTU_155,28,used,seed_pod,1,,,,,used,14.2,,14.2,,,,,,
 6911,PUTU,Waratah2011,30-Jul-14,144,PUTU_156,29,used,seed_pod,2,,,,,used,3.769,,1.8845,,,,,,
 6913,PUTU,Waratah2011,30-Jul-14,145,PUTU_157,28,used,seed_pod,3,,,,,used,5.187,,1.729,,,,,,
+,PEPU,,,,,,,flower_calyx,1,,,,,used,0,,,,,,,,
+,PEPU,,,,,,,flower_calyx,1,,,,,used,0,,,,,,,,
+,PEPU,,,,,,,flower_calyx,1,,,,,used,0,,,,,,,,

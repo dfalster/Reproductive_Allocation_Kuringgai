@@ -21,9 +21,8 @@ CalculateInvestmentForSpecies <- function(species, Reproduction, FloweringCatego
 
   accessory_count <- FD %>%
       group_by(individual, part) %>%
-      summarise_each(funs(sum), count, weight) %>%
-      filter(count > 0)
-
+      summarise_each(funs(sum), count, weight)
+      
   parts_counts <- list(
       flower_count= c("flower_petals","flower_petals_small"),
       bud_count = c("bud_tiny","bud_small","bud_mid","bud_large","flower_aborted_without_petals"),

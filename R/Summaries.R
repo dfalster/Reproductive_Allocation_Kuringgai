@@ -132,6 +132,11 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
 
   SummaryInd$repro_inv = SummaryInd$prepollen_aborted_inv + SummaryInd$prepollen_success_inv + SummaryInd$postpollen_aborted_inv + SummaryInd$packaging_dispersal_inv + SummaryInd$propagule_inv
   
+  for(v in c("seed_count","seedset","propagule_inv" , "seedpod_weight" , "fruit_weight","accessory_inv")) {
+    i <- is.na(SummaryInd[[v]])
+    SummaryInd[[v]][i] <- 0
+    }
+  
   #DANIEL TODO: For the various "per_seed" measures, need to include only individuals that have non-zero seed count, otherwise end up
   SummaryInd <- SummaryInd %>% mutate(
     total_inv = repro_inv + growth_inv,
@@ -152,6 +157,17 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
     postpollen_aborted_per_seed = postpollen_aborted_inv/seed_count,
     packaging_dispersal_per_seed = packaging_dispersal_inv/seed_count)
 
+  
+  for(v in c("packaging_dispersal_per_seed", "accessory_per_seed","propagule_per_seed",
+             "prepollen_all_per_seed","prepollen_aborted_per_seed","prepollen_success_per_seed","postpollen_aborted_per_seed",
+             "prop_prepollen_aborted", "prop_prepollen_success",
+             "prop_postpollen_aborted", "prop_packaging_dispersal", "prop_propagule",
+             "prop_prepollen_all", "prop_accessory")) {
+    i <- is.na(SummaryInd[[v]])
+    SummaryInd[[v]][i] <- 0
+  }
+  
+  
     years_reproducing <- function(RA, age) {
       ret <- age-min(age[RA>0])
       ret[ret<0] <-0
@@ -167,11 +183,6 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
   SummaryInd
 
 }
-
-#for(v in c("seedset","repro_all_count","accessory_per_seed","propagule_per_seed","prepollen_all_per_seed","prepollen_aborted_per_seed",
-#           "prepollen_success_per_seed","postpollen_aborted_per_seed","packaging_dispersal_per_seed","seed_count","fruit_count")){
-#  SummaryInd[[v]][is.na(SummaryInd[[v]])] <- 0
-#}
 
 # re-orders columns in data to match order of values in "variable" column of 
 # variable_list
@@ -252,6 +263,9 @@ get_species_values <- function(SummaryInd, groups) {
     order <- names(SummaryInd)[names(SummaryInd) %in% names(ret[[f]])]
     ret[[f]] <- ret[[f]][, order]
   }
+  ret[["se"]] <- ret[["sd"]]
+  ii <- sapply(ret[["se"]], is.numeric) & names(ret[["se"]]) != "age"
+  ret[["se"]][,ii] <- ret[["se"]][,ii]/sqrt(ret[["length"]][,ii])
   ret
 }
 
@@ -266,6 +280,7 @@ scale_individual_variable <- function(SummaryInd, SummarySpp) {
       SummarySpp[[f]][[v]][i]
     }
 
+    
     mutate(SummaryInd,
       maxH =  get_species_value("max", "height"),
       prop_maxH = height / maxH,
