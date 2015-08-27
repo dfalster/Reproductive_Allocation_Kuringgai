@@ -38,7 +38,7 @@ abline(log10(.010101),1)
 text(170,2.4,srt=45,"RA = 0.01")
 
 plot((1+repro_inv)~growth_inv, SummaryInd, log="xy", col=col.age(age),pch=16,xlim=c(1,1000000),ylim=c(1,1000000))
-legend("bottomright",legend=labels.age(),col=col.age,pch=16, cex=.8,bty="n")
+legend("bottomright",legend=labels.age(),col=col.age(),pch=16, cex=.8,bty="n")
 abline(0,1)
 text(2.1,3,srt=45,"RA = 0.5")
 abline(log10(3),1)
@@ -158,7 +158,7 @@ xvar <- "total_weight"
 
 data <- subset(SummaryInd)
 data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (log(x[[xvar]]))))
+lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
 results <- summarise_all_fits(lmfits)
 
 results$r.squared <- round(results$r.squared,digits=3)
@@ -176,44 +176,6 @@ mtext("Vegetative investment (mg)", 2, outer=TRUE,cex=1.2)
 mtext("Total plant weight (mg)", 1, outer=TRUE,cex=1.2)
 legend("topleft",legend=labels.mature(),col=col.mature(),pch=16, cex=1.1,bty="n")
 ```
-lmfits
-
-###Calculating cost of reproduction as a growth deficit
-```
-par(mfrow=c(1,2), cex=1, omi=c(.7,.7,.1,.1), mai=c(1.1,1.1,.4,0.2)) 
-Summary2 <- SummaryInd
-Summary2 <- merge(Summary2,select(results, -n), by=c("species"), all=TRUE)
-Summary2$predict_growth <- ((Summary2$total_weight)*(10^(Summary2$b))) + (Summary2$a)
-Summary2$cost <- Summary2$predict_growth - Summary2$growth_inv
-Summary2$cost_plus_growth <- Summary2$cost + Summary2$growth_inv
-plot(total_weight ~ cost_plus_growth,data=subset(Summary2),log="xy",col=col.spp(species),pch=16,xlim=c(1,1000000),ylim=c(1,1000000))
-abline(0,1)
-
-legend("bottomright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
-
-par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
-yvar <- "cost"
-xvar <- "repro_inv"
-
-data <- subset(Summary2)
-data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (log(x[[xvar]]))))
-results <- summarise_all_fits(lmfits)
-
-results$r.squared <- round(results$r.squared,digits=3)
-results$p.value <- round(results$p.value,digits=3)
-results$a <- round(results$a,digits=2)
-results$b <- round(results$b,digits=2)
-
-for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",cex=1.3,
-                    main=spp,col=col.age(data[[spp]]$age))
-  abline(0,1)                  
-}
-
-mtext("Growth deficit (mg)", 2, outer=TRUE,cex=1.2)
-mtext("Reproductive investment (mg)", 1, outer=TRUE,cex=1.2)
-legend("topleft",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
 
 
 ###Including all investment vs. growth  
@@ -221,7 +183,7 @@ legend("topleft",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
 * fit line of veg investment vs. total plant weight through non-reproductive plants
 * derive "predicted" total investment (veg+repro) for reproducing individuals
 * determine proportional reproductive cost for reproducing individuals; probably look by age
-
+*LEES, BOLE, EPMI become much tighter when reproductive investment included - all but 1 species
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
 yvar <- "total_inv"
@@ -248,6 +210,109 @@ mtext("Total plant weight (mg)", 1, outer=TRUE,cex=1.2)
 legend("topleft",legend=labels.mature(),col=col.mature(),pch=16, cex=1.1,bty="n")
 ```
 
+###Calculating cost of reproduction as a growth deficit
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=14, fig.height=7}
+pdf("figs2/cost_of_repro1.pdf", height=12, width=12)
+  plot
+par(mfrow=c(1,2), cex=1, omi=c(.7,.7,.1,.1), mai=c(1.1,1.1,.4,0.2)) 
+yvar <- "growth_inv"
+xvar <- "total_weight"
+
+data <- subset(SummaryInd,repro_inv=0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
+results_cost <- summarise_all_fits(lmfits)
+
+results_cost$r.squared <- round(results_cost$r.squared,digits=3)
+results_cost$p.value <- round(results_cost$p.value,digits=3)
+results_cost$a <- round(results_cost$a,digits=2)
+results_cost$b <- round(results_cost$b,digits=2)
+results_cost
+
+Summary2 <- SummaryInd
+Summary2 <- merge(Summary2,select(results_cost, -n), by=c("species"), all=TRUE)
+
+Summary2$predict_growth <- 10^Summary2$a * Summary2$total_weight^Summary2$b
+Summary2$cost <- Summary2$predict_growth - Summary2$growth_inv
+Summary2$cost_plus_growth <- Summary2$cost + Summary2$growth_inv
+Summary2$cost_ratio <- Summary2$predict_growth / Summary2$growth_inv
+
+
+plot(predict_growth~growth_inv,Summary2,col=col.spp(species),pch=16,log="xy",xlim=c(10,1000000),ylim=c(10,1000000))
+abline(0,1)
+legend("bottomright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
+
+plot(predict_growth~growth_inv,Summary2,log="xy",col=col.age(age),pch=16,xlim=c(10,1000000),ylim=c(10,1000000))
+abline(0,1)
+legend("bottomright",legend=labels.age(),col=col.age(),pch=16, cex=.8,bty="n")
+
+plot(cost_ratio~RA,Summary2,col=col.spp(species),pch=16,log="y",ylab="ratio of predicted growth to actual growth")
+mod <- lm(RA~log(cost_ratio),data=subset(Summary2,RA>0))
+words.bottom.left.logy(mod)
+legend("bottomright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
+
+plot(cost_ratio~RA,Summary2,col=col.age(age),pch=16,log="y",ylab="ratio of predicted growth to actual growth")
+legend("bottomright",legend=labels.age(),col=col.age(),pch=16, cex=.8,bty="n")
+dev.off()
+```
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
+pdf("figs2/cost_of_repro1.pdf", height=12, width=12)
+  plot
+par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
+yvar <- "cost_ratio"
+xvar <- "RA"
+
+data <- subset(Summary2,RA>0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  ((x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="y",xlab="",ylab="",cex=1.3,
+                    main=spp,col=col.age(data[[spp]]$age))
+  }
+
+mtext("ratio of predicted growth to actual growth", 2, outer=TRUE,cex=1.2)
+mtext("RA", 1, outer=TRUE,cex=1.2)
+legend("topleft",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
+dev.off()
+```
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
+par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
+yvar <- "cost"
+xvar <- "repro_inv"
+
+data <- subset(Summary2)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm((x[[yvar]]) ~  ((x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="",xlab="",ylab="",cex=1.3,
+                    main=spp,col=col.age(data[[spp]]$age))
+  abline(0,1)                  
+}
+
+mtext("Growth deficit (mg)", 2, outer=TRUE,cex=1.2)
+mtext("Reproductive investment (mg)", 1, outer=TRUE,cex=1.2)
+legend("topleft",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
+```
+
+####There is a much less clearcut pattern with respect to height growth - for most species height growth declines dramatically with age, overshadowing any reprodutive maturity affects  
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
 yvar <- "growth_height"
@@ -266,11 +331,34 @@ results
 
 for(spp in names(data)) {
   plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",cex=1.3,
-                    main=spp,col=col.mature(data[[spp]]$mature)
+                    main=spp,col=col.age(data[[spp]]$age))
 }
-#doesn't like preceding lines of text - PROBLEM
-###calc_veg <- merge(SummaryInd, select(results, -species), by="species",all.x=TRUE)
-###WORK HERE
+
+mtext("Increase in plant height (mm)", 2, outer=TRUE,cex=1.2)
+mtext("Plant height (mm)", 1, outer=TRUE,cex=1.2)
+legend("topleft",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
+```
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
+par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
+yvar <- "growth_height"
+xvar <- "height"
+
+data <- subset(SummaryInd)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (log(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",cex=1.3,
+                    main=spp,col=col.mature(data[[spp]]$mature))
+}
 
 mtext("Increase in plant height (mm)", 2, outer=TRUE,cex=1.2)
 mtext("Plant height (mm)", 1, outer=TRUE,cex=1.2)
@@ -326,7 +414,7 @@ data <- split(data, data$species)
 
 for(spp in names(data)) {
   plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",cex=1.4, xlab="",ylab="",
-                    main=spp,col=col.age(data[[spp]]$age)
+                    main=spp,col=col.age(data[[spp]]$age))
 }
 
 mtext("Stem diameter growth", 1, outer=TRUE,cex=1.2)

@@ -226,52 +226,55 @@ words.bottom.right.logy(mod)
 ```
 
 
-###5. What influences the correlation between RA and plant size (or total reproductive investment)?
-  ***Don't trust anything until I know RA and repro_inv are correct, because PHPH and PUTU have huge influence on patterns***
+###5. What influences the correlation between RA and plant size (or total reproductive investment)?  
+* we know bigger plants have higher RA - do all accessory tissue components shift equally or do some have greater proportional effects
+* total energy to propagules increases with RA, because RA increases with plant size  
+* relative investment in pre-pollination aborted tissues decreases with RA - but that energy is split across lots of different pools
+* other regressions have significant slopes, but R^2 < .1, so not putting much meaning in them
 ```{r, echo=FALSE,message=FALSE,fig.width=12, fig.height=30,warning=FALSE}
-par(mfrow=c(5,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))  
+par(mfrow=c(2,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2))  
 
 mod <- lm(RA~log(propagule_inv),data=subset(SummaryInd,RA>0&propagule_inv>0))
 plot(propagule_inv~RA,data=subset(SummaryInd,RA>0&propagule_inv>0), pch=16,col=col.spp(species),log="y", ylab="energy to propagules (mg)")
-words.top.left.logxy(mod)
+words.bottom.right.logy(mod)
 
 mod <- lm(RA~prop_propagule,data=subset(SummaryInd,RA>0&prop_propagule>0))
 plot(prop_propagule~RA,data=subset(SummaryInd,RA>0&prop_propagule>0), log="", pch=16,col=col.spp(species),ylab="propagules (as proportion repro inv)")
-words.bottom.left.logx(mod)
+words.bottom.left(mod)
 
 
 mod <- lm(RA~log(prepollen_aborted_inv),data=subset(SummaryInd,RA>0&prepollen_aborted_inv>0))
 plot(prepollen_aborted_inv~RA,data=subset(SummaryInd,RA<1&RA>0), pch=16,col=col.spp(species),log="y",ylab="pre-pollination aborted tissues (mg)")
-words.top.left.logxy(mod)
+words.bottom.right.logy(mod)
 
 mod <- lm(RA~prop_prepollen_aborted,data=subset(SummaryInd,RA>0&prop_prepollen_aborted>0))
 plot(prop_prepollen_aborted~RA,data=subset(SummaryInd,RA>0&prop_prepollen_aborted>0), pch=16,col=col.spp(species), log="",ylab="pre-pollination aborted tissues (as proportion repro inv)")
-words.bottom.right.logx(mod)
+words.bottom.right(mod)
 
 mod <- lm(RA~log(prepollen_success_inv),data=subset(SummaryInd,RA>0&prepollen_success_inv>0))
 plot(prepollen_success_inv~RA,data=subset(SummaryInd,RA<1&RA>0), pch=16,col=col.spp(species),log="y",ylab="pre-pollination successful tissues (mg)")
-words.top.left.logxy(mod)
+words.bottom.right.logy(mod)
 
 mod <- lm(RA~prop_prepollen_success,data=subset(SummaryInd,RA>0&prop_prepollen_success>0))
 plot(prop_prepollen_success~RA,data=subset(SummaryInd,RA>0&prop_prepollen_success>0), pch=16,col=col.spp(species), log="",ylab="pre-pollination successful tissues (as proportion repro inv)")
-words.bottom.right.logx(mod)
+words.bottom.right(mod)
 
 mod <- lm(RA~log(packaging_dispersal_inv),data=subset(SummaryInd,RA>0&packaging_dispersal_inv>0))
 plot(packaging_dispersal_inv~RA,data=subset(SummaryInd,RA>0&packaging_dispersal_inv>0), pch=16,col=col.spp(species),log="y", ylab="energy to packaging and dispersal (mg)")
-words.bottom.right.logxy(mod)
+words.bottom.right.logy(mod)
 legend("topleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 
 mod <- lm(RA~prop_packaging_dispersal,data=subset(SummaryInd,RA>0&prop_packaging_dispersal>0))
 plot(prop_packaging_dispersal~RA,data=subset(SummaryInd,RA>0&prop_packaging_dispersal>0), log="", pch=16,col=col.spp(species),ylab="packaging and dispersal (as proportion repro inv)")
-words.bottom.left.logx(mod)
+words.bottom.left(mod)
 
 mod <- lm(RA~log(postpollen_aborted_inv),data=subset(SummaryInd,RA>0&postpollen_aborted_inv>0))
 plot(postpollen_aborted_inv~RA,data=subset(SummaryInd,RA>0&postpollen_aborted_inv>0), pch=16,col=col.spp(species),log="y", ylab="energy to tissues aborted postpollination (mg)")
-words.bottom.right.logxy(mod)
+words.bottom.right.logy(mod)
 
 mod <- lm(RA~prop_postpollen_aborted,data=subset(SummaryInd,RA>0&prop_postpollen_aborted>0))
 plot(prop_postpollen_aborted~RA,data=subset(SummaryInd,RA>0&prop_postpollen_aborted>0), log="", pch=16,col=col.spp(species),ylab="tissues aborted postpollination (as proportion repro inv)")
-words.bottom.left.logx(mod)
+words.bottom.left(mod)
 ```
 
 ##6. Shifts in proportion to tissue types across species  
@@ -280,44 +283,44 @@ words.bottom.left.logx(mod)
 - COER, EPMI, LEES, PILI invest the most energy in propagules  
 - HATE invests by far the least into propagules  
 ```{r, echo=FALSE, message=FALSE, fig.width=14, fig.height=28,warning=FALSE}
-par(mfrow=c(4,2), cex=1, omi=c(1,.1,.7,.1), mai=c(.5,1.1,.2,0.2))  
+par(mfrow=c(2,2), cex=1, omi=c(1,.1,.7,.1), mai=c(.5,1.1,.2,0.2))  
 mean1 <- SummarySpp[["mean"]]$prop_propagule
-se1 <- SummarySpp[["sd"]]$prop_propagule
+se1 <- SummarySpp[["se"]]$prop_propagule
 boxplot(mean1~species,SummarySpp[["mean"]],cex.axis=.5,pch=16,log="y",ylab="proportion propagules",xlab="")
 se_function(mean1,se1)
 
 mean1 <- SummarySpp[["mean"]]$propagule_per_seed
-se1 <- SummarySpp[["sd"]]$propagule_per_seed
+se1 <- SummarySpp[["se"]]$propagule_per_seed
 boxplot(mean1~species,SummarySpp[["mean"]],cex.axis=.5,pch=16,log="y",ylab="propagules",xlab="")
 se_function(mean1,se1)
 
 mean1 <- SummarySpp[["mean"]]$prop_prepollen_all
-se1 <- SummarySpp[["sd"]]$prop_prepollen_all
+se1 <- SummarySpp[["se"]]$prop_prepollen_all
 boxplot(mean1~species,data=subset(SummarySpp[["mean"]]),cex.axis=.5,pch=16,ylim=c(.1,1),ylab="pre-pollination tissues",xlab="")
 se_function(mean1,se1)
 
 mean1 <- SummarySpp[["mean"]]$prepollen_all_per_seed
-se1 <- SummarySpp[["sd"]]$prepollen_all_per_seed
+se1 <- SummarySpp[["se"]]$prepollen_all_per_seed
 boxplot((.01+prepollen_all_per_seed)~species,data=subset(SummarySpp[["mean"]]),cex.axis=.5,pch=16,ylab="pre-pollination tissues",xlab="",log="y")
 se_function(mean1,se1)
 
 mean1 <- SummarySpp[["mean"]]$prop_packaging_dispersal
-se1 <- SummarySpp[["sd"]]$prop_packaging_dispersal
+se1 <- SummarySpp[["se"]]$prop_packaging_dispersal
 boxplot(mean1~species,SummarySpp[["mean"]],cex.axis=.5,pch=16,log="y",ylim=c(.02,1),ylab="packaging and dispersal")
 se_function(mean1,se1)
 
 mean1 <- SummarySpp[["mean"]]$packaging_dispersal_per_seed
-se1 <- SummarySpp[["sd"]]$packaging_dispersal_per_seed
+se1 <- SummarySpp[["se"]]$packaging_dispersal_per_seed
 boxplot((packaging_dispersal_per_seed+.1)~species,SummarySpp[["mean"]],cex.axis=.5,pch=16,ylab="packaging and dispersal",log="y")
 se_function(mean1,se1)
 
 mean1 <- SummarySpp[["mean"]]$prop_postpollen_aborted
-se1 <- SummarySpp[["sd"]]$prop_postpollen_aborted
-boxplot(mean1~species,SummarySpp[["mean"]],cex.axis=.5,pch=16,log="y",ylim=c(.02,1),ylab="aborted post-pollination tissues")
+se1 <- SummarySpp[["se"]]$prop_postpollen_aborted
+boxplot(mean1~species,SummarySpp[["mean"]],cex.axis=.5,pch=16,log="y",ylim=c(.005,1),ylab="aborted post-pollination tissues")
 se_function(mean1,se1)
 
 mean1 <- SummarySpp[["mean"]]$postpollen_aborted_per_seed
-se1 <- SummarySpp[["sd"]]$postpollen_aborted_per_seed
+se1 <- SummarySpp[["se"]]$postpollen_aborted_per_seed
 boxplot((postpollen_aborted_per_seed+.1)~species,SummarySpp[["mean"]],cex.axis=.5,pch=16,ylab="aborted post-pollination tissues",log="y")
 se_function(mean1,se1)
 
