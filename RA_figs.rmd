@@ -1,4 +1,12 @@
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=7.5}
+remake::make("export")
 
+SummaryInd <- readRDS("export/SummaryInd.rds")
+SummarySpp <- readRDS("export/SummarySpp.rds")
+SummarySppAge <- readRDS("export/SummarySppAge.rds")
+
+source("R/figures.R")
+```
 
 ##Summary  
 1. RA shifts across species and, on average, increases with increasing age  
@@ -95,7 +103,7 @@ legend("bottomright",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
 yvar <- "repro_inv"
-xvar <- "total_weight"
+xvar <- "total_weight_0"
 
 data <- subset(SummaryInd,RA>0)
 data <- split(data, data$species)
@@ -113,17 +121,17 @@ for(spp in names(data)) {
 }
 
 mtext("Reproductive investment (mg)", 2, outer=TRUE,cex=1.2)
-mtext("Total plant weight (mg)", 1, outer=TRUE,cex=1.2)
+mtext("Initial plant weight (mg)", 1, outer=TRUE,cex=1.2)
 legend("bottomright",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
 ```
 
 ###Vegetative invesment by size curves by species, only including reproducing individuals  
-* colored by age, but legend not correct, because "age 1" color used for youngest age with reproducing individuals  
+* colored by age
 
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
 yvar <- "growth_inv"
-xvar <- "total_weight"
+xvar <- "total_weight_0"
 
 data <- subset(SummaryInd, RA>0)
 data <- split(data, data$species)
@@ -141,7 +149,7 @@ for(spp in names(data)) {
 }
 
 mtext("Vegetative investment (mg)", 2, outer=TRUE,cex=1.2)
-mtext("Total plant weight (mg)", 1, outer=TRUE,cex=1.2)
+mtext("Initial plant weight (mg)", 1, outer=TRUE,cex=1.2)
 legend("bottomright",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
 ```
 
@@ -154,7 +162,7 @@ legend("bottomright",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
 yvar <- "growth_inv"
-xvar <- "total_weight"
+xvar <- "total_weight_0"
 
 data <- subset(SummaryInd)
 data <- split(data, data$species)
@@ -173,10 +181,117 @@ for(spp in names(data)) {
 }
 
 mtext("Vegetative investment (mg)", 2, outer=TRUE,cex=1.2)
-mtext("Total plant weight (mg)", 1, outer=TRUE,cex=1.2)
+mtext("Initial plant weight (mg)", 1, outer=TRUE,cex=1.2)
 legend("topleft",legend=labels.mature(),col=col.mature(),pch=16, cex=1.1,bty="n")
 ```
 
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
+par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
+yvar <- "growth_inv"
+xvar <- "leaf_area_0"
+
+data <- subset(SummaryInd)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",cex=1.3,
+                    main=spp,col=col.age(data[[spp]]$age))
+}
+
+mtext("Vegetative investment (mg)", 2, outer=TRUE,cex=1.2)
+mtext("Initial leaf area", 1, outer=TRUE,cex=1.2)
+legend("topleft",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
+```
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
+par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
+yvar <- "repro_inv"
+xvar <- "leaf_area_0"
+
+data <- subset(SummaryInd,repro_inv>0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",cex=1.3,
+                    main=spp,col=col.age(data[[spp]]$age))
+}
+
+mtext("Reproductive investment (mg)", 2, outer=TRUE,cex=1.2)
+mtext("Initial leaf area", 1, outer=TRUE,cex=1.2)
+legend("topleft",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
+```
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
+par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
+yvar <- "total_inv"
+xvar <- "leaf_area_0"
+
+data <- subset(SummaryInd)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",cex=1.3,
+                    main=spp,col=col.age(data[[spp]]$age))
+}
+
+mtext("Total investment (mg)", 2, outer=TRUE,cex=1.2)
+mtext("Initial leaf area", 1, outer=TRUE,cex=1.2)
+legend("topleft",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
+```
+
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=15, fig.height=15}
+par(mfcol=c(3,3), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,1,.4,0.2)) 
+yvar <- "growth_inv"
+xvar <- "leaf_area_0"
+
+yvar2 <- "repro_inv"
+xvar2 <- "leaf_area_0"
+
+yvar3 <- "total_inv"
+xvar3 <- "leaf_area_0"
+
+data <- subset(SummaryInd)
+data <- split(data, data$species)
+
+for(spp in names(data)) {
+  plot_yvar3_vs_xvar3(data[[spp]], yvar3, xvar3,log="xy",xlab="",ylab="total invest (mg)",cex=1.3,
+                    main=spp,col=col.age(data[[spp]]$age))
+  arrows(data[[spp]]$leaf_area_0,data[[spp]]$growth_inv,data[[spp]]$leaf_area_0,data[[spp]]$total_inv,length = 0, angle = 30, code = 2, col = "black",lwd=1)
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="veg invest (mg)",cex=1.3,
+                    col=col.age(data[[spp]]$age))
+  plot_yvar2_vs_xvar2(data[[spp]], yvar2, xvar2,log="xy",xlab="",ylab="repro invest (mg)",cex=1.3,
+                    col=col.age(data[[spp]]$age))
+  #points(data[[spp]]$leaf_area_0,data[[spp]]$growth_inv,pch=1,cex=.8,col=col.age(data[[spp]]$age))
+}
+
+mtext("Initial leaf area", 1, outer=TRUE,cex=1.2)
+legend("topleft",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
+```
 
 ###Including all investment vs. growth  
 * reproducing individuals now plot closer to the "expected line" (as defined by juvenile individuals), but for most species there is still a considerable discrepency
@@ -211,16 +326,15 @@ legend("topleft",legend=labels.mature(),col=col.mature(),pch=16, cex=1.1,bty="n"
 ```
 
 ###Calculating cost of reproduction as a growth deficit
+    * despite having a clause to subset SummaryInd,
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=14, fig.height=7}
-pdf("figs2/cost_of_repro1.pdf", height=12, width=12)
-  plot
 par(mfrow=c(1,2), cex=1, omi=c(.7,.7,.1,.1), mai=c(1.1,1.1,.4,0.2)) 
 yvar <- "growth_inv"
 xvar <- "total_weight"
 
-data <- subset(SummaryInd,repro_inv=0)
-data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
+data_RA0 <- subset(SummaryInd,repro_inv==0&species!="BOLE")
+data_RA0 <- split(data_RA0, data_RA0$species)
+lmfits <- lapply(data_RA0, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
 results_cost <- summarise_all_fits(lmfits)
 
 results_cost$r.squared <- round(results_cost$r.squared,digits=3)
@@ -246,51 +360,21 @@ plot(predict_growth~growth_inv,Summary2,log="xy",col=col.age(age),pch=16,xlim=c(
 abline(0,1)
 legend("bottomright",legend=labels.age(),col=col.age(),pch=16, cex=.8,bty="n")
 
-plot(cost_ratio~RA,Summary2,col=col.spp(species),pch=16,log="y",ylab="ratio of predicted growth to actual growth")
-mod <- lm(RA~log(cost_ratio),data=subset(Summary2,RA>0))
-words.bottom.left.logy(mod)
+plot(cost_ratio~repro_inv,Summary2,col=col.spp(species),pch=16,log="xy",ylab="ratio of predicted growth to actual growth")
+mod <- lm(log(repro_inv)~log(cost_ratio),data=subset(Summary2,RA>0))
+words.bottom.left.logxy(mod)
 legend("bottomright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 
-plot(cost_ratio~RA,Summary2,col=col.age(age),pch=16,log="y",ylab="ratio of predicted growth to actual growth")
+plot(cost_ratio~repro_inv,Summary2,col=col.age(age),pch=16,log="xy",ylab="ratio of predicted growth to actual growth")
 legend("bottomright",legend=labels.age(),col=col.age(),pch=16, cex=.8,bty="n")
-dev.off()
 ```
 
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
-pdf("figs2/cost_of_repro1.pdf", height=12, width=12)
-  plot
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
 yvar <- "cost_ratio"
-xvar <- "RA"
-
-data <- subset(Summary2,RA>0)
-data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  ((x[[xvar]]))))
-results <- summarise_all_fits(lmfits)
-
-results$r.squared <- round(results$r.squared,digits=3)
-results$p.value <- round(results$p.value,digits=3)
-results$a <- round(results$a,digits=2)
-results$b <- round(results$b,digits=2)
-results
-
-for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="y",xlab="",ylab="",cex=1.3,
-                    main=spp,col=col.age(data[[spp]]$age))
-  }
-
-mtext("ratio of predicted growth to actual growth", 2, outer=TRUE,cex=1.2)
-mtext("RA", 1, outer=TRUE,cex=1.2)
-legend("topleft",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
-dev.off()
-```
-
-```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
-par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
-yvar <- "cost"
 xvar <- "repro_inv"
 
-data <- subset(Summary2)
+data <- subset(Summary2,species!="BOLE")
 data <- split(data, data$species)
 lmfits <- lapply(data, function(x) lm((x[[yvar]]) ~  ((x[[xvar]]))))
 results <- summarise_all_fits(lmfits)
@@ -302,9 +386,8 @@ results$b <- round(results$b,digits=2)
 results
 
 for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="",xlab="",ylab="",cex=1.3,
-                    main=spp,col=col.age(data[[spp]]$age))
-  abline(0,1)                  
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="x",xlab="",ylab="",cex=1.3,
+                    main=spp,col=col.age(data[[spp]]$age))              
 }
 
 mtext("Growth deficit (mg)", 2, outer=TRUE,cex=1.2)
@@ -316,9 +399,9 @@ legend("topleft",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
 yvar <- "growth_height"
-xvar <- "height"
+xvar <- "height_0"
 
-data <- subset(SummaryInd)
+data <- subset(SummaryInd,growth_height>0)
 data <- split(data, data$species)
 lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (log(x[[xvar]]))))
 results <- summarise_all_fits(lmfits)
@@ -335,16 +418,16 @@ for(spp in names(data)) {
 }
 
 mtext("Increase in plant height (mm)", 2, outer=TRUE,cex=1.2)
-mtext("Plant height (mm)", 1, outer=TRUE,cex=1.2)
+mtext("Initial plant height (mm)", 1, outer=TRUE,cex=1.2)
 legend("topleft",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
 ```
 
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
 yvar <- "growth_height"
-xvar <- "height"
+xvar <- "height_0"
 
-data <- subset(SummaryInd)
+data <- subset(SummaryInd,growth_height>0)
 data <- split(data, data$species)
 lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (log(x[[xvar]]))))
 results <- summarise_all_fits(lmfits)
@@ -361,7 +444,7 @@ for(spp in names(data)) {
 }
 
 mtext("Increase in plant height (mm)", 2, outer=TRUE,cex=1.2)
-mtext("Plant height (mm)", 1, outer=TRUE,cex=1.2)
+mtext("Initial plant height (mm)", 1, outer=TRUE,cex=1.2)
 legend("topleft",legend=labels.mature(),col=col.mature(),pch=16, cex=1.1,bty="n")
 ```
 
@@ -419,7 +502,7 @@ for(spp in names(data)) {
 
 mtext("Stem diameter growth", 1, outer=TRUE,cex=1.2)
 mtext("RA", 2, outer=TRUE,cex=1.2)  
-legend("bottomleft",legend=labels.age(),col=col.age,pch=16, cex=1.1,bty="n")
+legend("bottomleft",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
 ```
     
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
@@ -432,12 +515,12 @@ data <- split(data, data$species)
     
 for(spp in names(data)) {
 plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",cex=1.4, xlab="",ylab="",
-                        main=spp,col=col.age(data[[spp]]$age)
+                        main=spp,col=col.age(data[[spp]]$age))
 }
 
 mtext("Shoot diameter growth", 1, outer=TRUE,cex=1.2)
 mtext("RA", 2, outer=TRUE,cex=1.2)  
-legend("bottomleft",legend=labels.age(),col=col.age,pch=16, cex=1.1,bty="n")
+legend("bottomleft",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
 ```
 
    
@@ -458,13 +541,13 @@ legend("bottomleft",legend=labels.age(),col=col.age,pch=16, cex=1.1,bty="n")
 par(mfrow=c(1,1), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
 SummaryIndPCA <- SummaryInd %>%
   filter(shoot_leaf_count>0&shoot_leaf_area>0&shoot_growth_leaf_area!=0) %>%
-  select(prop_maxH,height,maxH,wood_density,LMA,seed_size,growth_leaf,
-         growth_stem_diameter,leaf_area,growth_shoot_diameter,growth_stem_area,shoot_leaf_count,total_weight,
+  select(prop_maxH,height_0,maxH,wood_density,LMA,seed_size,growth_leaf, growth_height,
+         growth_stem_diameter,leaf_area_0,growth_shoot_diameter,growth_stem_area,shoot_leaf_count,total_weight_0,
          RA,seedset,repro_all_count,accessory_inv,propagule_inv,shoot_leaf_area,shoot_growth_leaf_area,scaled_growth_stem_diameter)
 
-SummaryIndPCA$leaf_area <- log((SummaryIndPCA$leaf_area)+.001)
-SummaryIndPCA$total_weight <- log(SummaryIndPCA$total_weight)
-SummaryIndPCA$height <- log(SummaryIndPCA$height)
+SummaryIndPCA$leaf_area_0 <- log((SummaryIndPCA$leaf_area_0)+.001)
+SummaryIndPCA$total_weight_0 <- log(SummaryIndPCA$total_weight_0)
+SummaryIndPCA$height_0 <- log(SummaryIndPCA$height_0)
 SummaryIndPCA$maxH <- log(SummaryIndPCA$maxH)
 SummaryIndPCA$seed_size <- log(SummaryIndPCA$seed_size)
 SummaryIndPCA$accessory_inv <- log(SummaryIndPCA$accessory_inv+.001)
@@ -478,6 +561,11 @@ SummaryIndPCA$shoot_leaf_area <- log(SummaryIndPCA$shoot_leaf_area)
 SummaryIndPCA$shoot_growth_leaf_area <- log(SummaryIndPCA$shoot_growth_leaf_area)
 SummaryIndPCA$scaled_growth_stem_diameter <- log(SummaryIndPCA$scaled_growth_stem_diameter)
 SummaryIndPCA$RA <- asin(sqrt(SummaryIndPCA$RA))
+
+  for(v in c("repro_all_count")) {
+    i <- is.na(SummaryIndPCA[[v]])
+    SummaryIndPCA[[v]][i] <- 0
+  }
 
 PCA_mod <- prcomp(SummaryIndPCA, scale=TRUE)
 summary(PCA_mod)
@@ -494,7 +582,7 @@ PCA_loadings <- merge(PCA_loadings,PCA_scaling,by="variables")
 PCA_lambda <- as.data.frame(PCA_mod$sdev)
 
 PCA_scores <- as.data.frame(PCA_mod$x)
-PCA_scores$individual <- subset(SummaryInd$individual, SummaryInd$shoot_leaf_count>0&SummaryInd$shoot_growth_leaf_area!=0)
+PCA_scores$individual <- subset(SummaryInd$individual, SummaryInd$shoot_leaf_count>0&SummaryInd$shoot_growth_leaf_area!=0,SummaryInd$shoot_leaf_area>0)
 SummaryInd_PCA_results <- merge(SummaryInd,PCA_scores, by="individual", all.x=TRUE)
 
 n <- NROW(PCA_scores)
@@ -543,27 +631,27 @@ summarise_each(funs(mean, se), PC1_scale, PC2_scale, PC3_scale, PC4_scale)
 ```{r, echo=FALSE,message=FALSE,fig.width=20, fig.height=14}
 par(mfrow=c(2,3), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
 
-plot(PC1_scale~(PC2_scale),SummaryInd_PCA_results,pch=16,col=col.spp(species),xlim=c(-.1,.1))
+plot(PC1_scale~PC2_scale,SummaryInd_PCA_results,pch=16,col=col.spp(species),xlim=c(-.1,.1))
 arrows(0, 0, (.8*PCA_loadings$PC2_scale), (.8*PCA_loadings$PC1_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
 text(PC1_scale ~ PC2_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
 legend("topright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 
-mean1 <- PCA_by_species$PC1_scale
+mean1 <- PCA_by_species$PC1_scale_mean
 se1 <- PCA_by_species$PC1_scale_se
-plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 1")
+boxplot(PC1_scale_mean~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 1")
 se_function(mean1,se1)
 
 PCA_loadings <- transform(PCA_loadings,variables=reorder(variables,-PC1_scale))
 plot(PC1_scale~as.factor(variables),PCA_loadings,cex.axis=.8,las=3,xlab="")
 
-plot(PC1_scale~(PC2_scale),SummaryInd_PCA_results,pch=16,col=col.age(age)
+plot(PC1_scale~PC2_scale,SummaryInd_PCA_results,pch=16,col=col.age(age))
 arrows(0, 0, (.9*PCA_loadings$PC2_scale), (.9*PCA_loadings$PC1_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
 text(PC1_scale ~ PC2_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
-legend("topright",legend=labels.age(),col=col.age,pch=16, cex=.8,bty="n")
+legend("topright",legend=labels.age(),col=col.age(),pch=16, cex=.8,bty="n")
 
-mean1 <- PCA_by_age$PC1_scale
+mean1 <- PCA_by_age$PC1_scale_mean
 se1 <- PCA_by_age$PC1_scale_se
-plot(mean1~as.factor(age),PCA_by_age,cex.axis=.5,pch=16,ylab="PCA axis 1")
+boxplot(mean1~as.factor(age),PCA_by_age,cex.axis=.5,pch=16,ylab="PCA axis 1")
 se_function(mean1,se1)
 ```
 
@@ -578,21 +666,21 @@ plot(PC2_scale~(PC1_scale),SummaryInd_PCA_results,pch=16,col=col.spp(species))
 arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC2_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
 text(PC2_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
 
-mean1 <- PCA_by_species$PC2_scale
+mean1 <- PCA_by_species$PC2_scale_mean
 se1 <- PCA_by_species$PC2_scale_se
-plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 2")
+boxplot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 2")
 se_function(mean1,se1)
 
 PCA_loadings <- transform(PCA_loadings,variables=reorder(variables,-PC2_scale))
 plot(PC2_scale~as.factor(variables),PCA_loadings,cex.axis=.8,las=3,xlab="")
 
-plot(PC2_scale~(PC1_scale),SummaryInd_PCA_results,pch=16,col=col.age(age)
+plot(PC2_scale~(PC1_scale),SummaryInd_PCA_results,pch=16,col=col.age(age))
 arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC2_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
 text(PC2_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
 
-mean1 <- PCA_by_age$PC2_scale
+mean1 <- PCA_by_age$PC2_scale_mean
 se1 <- PCA_by_age$PC2_scale_se
-plot(mean1~as.factor(age),PCA_by_age,cex.axis=.5,pch=16,ylab="PCA axis 2")
+boxplot(mean1~as.factor(age),PCA_by_age,cex.axis=.5,pch=16,ylab="PCA axis 2")
 se_function(mean1,se1)
 ```
 
@@ -609,9 +697,9 @@ plot(PC3_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.spp(species),ylim
 arrows(0, 0, (.8*PCA_loadings$PC1_scale), (.8*PCA_loadings$PC3_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
 text(1.1*PC3_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=.8,col="black")
 
-mean1 <- PCA_by_species$PC3_scale
+mean1 <- PCA_by_species$PC3_scale_mean
 se1 <- PCA_by_species$PC3_scale_se
-plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 3")
+boxplot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 3")
 se_function(mean1,se1)
 
 PCA_loadings <- transform(PCA_loadings,variables=reorder(variables,-PC3_scale))
@@ -621,9 +709,9 @@ plot(PC3_scale~(PC1_scale),SummaryInd_PCA_results,pch=16,col=col.age(age),ylim=c
 arrows(0, 0, (.8*PCA_loadings$PC1_scale), (.8*PCA_loadings$PC3_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
 text(1.1*PC3_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
 
-mean1 <- PCA_by_age$PC3_scale
+mean1 <- PCA_by_age$PC3_scale_mean
 se1 <- PCA_by_age$PC3_scale_se
-plot(mean1~as.factor(age),PCA_by_age,cex.axis=.5,pch=16,ylab="PCA axis 2")
+boxplot(mean1~as.factor(age),PCA_by_age,cex.axis=.5,pch=16,ylab="PCA axis 2")
 se_function(mean1,se1)
 ```
 
@@ -641,9 +729,9 @@ arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC4_scale), length = 
 text(PC4_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
 legend("topright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 
-mean1 <- PCA_by_species$PC4_scale
+mean1 <- PCA_by_species$PC4_scale_mean
 se1 <- PCA_by_species$PC4_scale_se
-plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 4",ylim=c(-.05,.06))
+boxplot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 4",ylim=c(-.05,.06))
 se_function(mean1,se1)
 
 PCA_loadings <- transform(PCA_loadings,variables=reorder(variables,-PC4_scale))
@@ -653,8 +741,8 @@ plot(PC4_scale~(PC1_scale),SummaryInd_PCA_results,pch=16,col=col.age(age),ylim=c
 arrows(0, 0, (.8*PCA_loadings$PC1_scale), (.8*PCA_loadings$PC4_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
 text(1.1*PC4_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
 
-mean1 <- PCA_by_age$PC4_scale
+mean1 <- PCA_by_age$PC4_scale_mean
 se1 <- PCA_by_age$PC4_scale_se
-plot(mean1~as.factor(age),PCA_by_age,cex.axis=.5,pch=16,ylab="PCA axis 2")
+boxplot(mean1~as.factor(age),PCA_by_age,cex.axis=.5,pch=16,ylab="PCA axis 2")
 se_function(mean1,se1)
 ```

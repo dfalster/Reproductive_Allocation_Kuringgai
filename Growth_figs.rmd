@@ -1,4 +1,12 @@
+```{r,message=FALSE,warning=FALSE, echo=FALSE}
+remake::make("export")
 
+SummaryInd <- readRDS("export/SummaryInd.rds")
+SummarySpp <- readRDS("export/SummarySpp.rds")
+SummarySppAge <- readRDS("export/SummarySppAge.rds")
+
+source("R/figures.R")
+```
 
 ##Summary
     1. Species show a marked decline in leaf investment with age and a limited decline in stem investment with age
@@ -33,7 +41,7 @@ results$b <- round(results$b,digits=2)
 
 for(spp in names(data)) {
   plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="y",xlab="",ylab="",cex=1.4,
-                    main=spp,col=col.mature(data[[spp]]$mature)
+                    main=spp,col=col.mature(data[[spp]]$mature))
 }
 
 mtext("Vegetative investment", 2, outer=TRUE,cex=1.2)
@@ -45,37 +53,37 @@ legend("topleft",legend=labels.mature(),col=col.mature(),pch=16, cex=1.1,bty="n"
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=28, fig.height=28}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
 yvar <- "growth_leaf"
-xvar <- "total_weight"
+xvar <- "total_weight_0"
 
-data <- subset(SummaryInd)
+data <- subset(SummaryInd,growth_leaf>0)
 data <- split(data, data$species)
 
 for(spp in names(data)) {
   plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",cex=1.4, xlab="",ylab="",
-                    main=spp,col=col.age(data[[spp]]$age)
+                    main=spp,col=col.age(data[[spp]]$age))
 }
 
 mtext("Investment in leaves (mg)", 2, outer=TRUE,cex=1.2)
-mtext("Total plant weight (mg)", 1, outer=TRUE,cex=1.2)
-legend("bottomright",legend=labels.age(),col=col.age,pch=16, cex=1.1,bty="n")
+mtext("Initial plant weight (mg)", 1, outer=TRUE,cex=1.2)
+legend("bottomright",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
 ```
 
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=28, fig.height=28}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
 yvar <- "growth_stem"
-xvar <- "total_weight"
+xvar <- "total_weight_0"
 
 data <- subset(SummaryInd)
 data <- split(data, data$species)
 
 for(spp in names(data)) {
   plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",cex=1.4, xlab="",ylab="",
-                    main=spp,col=col.age(data[[spp]]$age)
+                    main=spp,col=col.age(data[[spp]]$age))
 }
 
 mtext("Investment in stems (mg)", 2, outer=TRUE,cex=1.2)
-mtext("Total plant weight (mg)", 1, outer=TRUE,cex=1.2)
-legend("bottomright",legend=labels.age(),col=col.age,pch=16, cex=1.1,bty="n")
+mtext("Initial plant weight (mg)", 1, outer=TRUE,cex=1.2)
+legend("bottomright",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
 ```
 
 ####Growth along shoot vs. stem  
@@ -92,17 +100,17 @@ data <- split(data, data$species)
 
 for(spp in names(data)) {
   plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",cex=1.4,
-                    main=spp,col=col.age(data[[spp]]$age)
-  abline(0,1)
+                    main=spp,col=col.age(data[[spp]]$age))
 }
 
 mtext("increase in stem diameter (mm)", 2, outer=TRUE,cex=1.2)
 mtext("increase in shoot diameter (mm)", 1, outer=TRUE,cex=1.2)
-legend("topleft",legend=labels.age(),col=col.age,pch=16, cex=0.9,bty="n")
+legend("topleft",legend=labels.age(),col=col.age(),pch=16, cex=0.9,bty="n")
 ```
 
 ####Plots of increase in whole plant versus shoot leaf area  
 * Very different, patterns across species
+* Overall, the earlier successional species show a stronger correlation (BOLE, COER, HEPU, PHPH, GRSP) suggesting what is happening at the shoot level matters more to these species   
 
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=28, fig.height=28}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
@@ -114,8 +122,7 @@ data <- split(data, data$species)
 
 for(spp in names(data)) {
   plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",cex=1.4,
-                    main=spp,col=col.age(data[[spp]]$age)
-  abline(0,1)
+                    main=spp,col=col.age(data[[spp]]$age))
 }
 
 mtext("increase in whole plant leaf area", 2, outer=TRUE,cex=1.2)
@@ -131,12 +138,12 @@ mtext("increase in shoot leaf area", 1, outer=TRUE,cex=1.2)
     
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=14, fig.height=7}
 par(mfrow=c(1,2), cex=1, omi=c(0.2,0.3,0.3,0.3), mai=c(1.1,1,0.3,0.3)) 
-plot(LL_death~shoot_leaf_area,data=subset(SummaryInd,LL_death<6),log="x",pch=16,col=col.spp(species))
-mod <- lm(log(shoot_leaf_area)~LL_death,data=subset(SummaryInd,LL_death<6))
+plot(LL_death~shoot_leaf_area_0,data=subset(SummaryInd,LL_death<6),log="x",pch=16,col=col.spp(species))
+mod <- lm(log(shoot_leaf_area_0)~LL_death,data=subset(SummaryInd,LL_death<6&shoot_leaf_area_0>0))
 words.top.right.logx(mod)
 
-plot(LL_death~leaf_area,data=subset(SummaryInd,LL_death<6),log="x",pch=16,col=col.spp(species))
-mod <- lm(log(leaf_area)~LL_death,data=subset(SummaryInd,LL_death<6))
+plot(LL_death~leaf_area_0,data=subset(SummaryInd,LL_death<6),log="x",pch=16,col=col.spp(species))
+mod <- lm(log(leaf_area_0)~LL_death,data=subset(SummaryInd,LL_death<6))
 words.top.right.logx(mod)
 ```
 
@@ -161,12 +168,12 @@ results
 
 for(spp in names(data)) {
   plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="x",xlab="",ylab="",cex=1.4,
-                    main=spp,col=col.age(data[[spp]]$age)
+                    main=spp,col=col.age(data[[spp]]$age))
 }
 
 mtext("ll death", 2, outer=TRUE,cex=1.2)
 mtext("shoot leaf area", 1, outer=TRUE,cex=1.2)
-legend("topleft",legend=labels.age(),col=col.age,pch=16, cex=1.1,bty="n")
+legend("topleft",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
 ```
 
 ***leaf lifespan vs. whole plant leaf area***  
@@ -174,22 +181,22 @@ legend("topleft",legend=labels.age(),col=col.age,pch=16, cex=1.1,bty="n")
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=28, fig.height=28}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
 yvar <- "LL_death"
-xvar <- "leaf_area"
+xvar <- "leaf_area_0"
 
 data <- subset(SummaryInd, LL_death<6)
 data <- split(data, data$species)
 
 for(spp in names(data)) {
   plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="x",xlab="",ylab="",cex=1.4,
-                    main=spp,col=col.age(data[[spp]]$age)
+                    main=spp,col=col.age(data[[spp]]$age))
 }
 
 mtext("ll death", 2, outer=TRUE,cex=1.2)
-mtext("leaf area", 1, outer=TRUE,cex=1.2)
-legend("topleft",legend=labels.age(),col=col.age,pch=16, cex=1.1,bty="n")
+mtext("initial leaf area", 1, outer=TRUE,cex=1.2)
+legend("topleft",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
 
 yvar <- "LL_death"
-xvar <- "leaf_area"
+xvar <- "leaf_area_0"
 
 data <- subset(SummaryInd, LL_death<6&age>2)
 data <- split(data, data$species)
@@ -221,12 +228,12 @@ data <- split(data, data$species)
 
 for(spp in names(data)) {
   plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="y",xlab="",ylab="",cex=1.4,
-                    main=spp,col=col.age(data[[spp]]$age)
+                    main=spp,col=col.age(data[[spp]]$age))
 }
 
 mtext("growth_stem_diameter", 2, outer=TRUE,cex=1.2)
 mtext("prop_maxH", 1, outer=TRUE,cex=1.2)
-legend("topleft",legend=labels.age(),col=col.age,pch=16, cex=1.1,bty="n")
+legend("topleft",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
 ```
 
 ***growth leaf area vs. prop maxH***
@@ -237,26 +244,26 @@ plot(growth_leaf_area~prop_maxH,SummaryInd,log="y",pch=16,col=col.spp(species))
 
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=28, fig.height=28}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
-yvar <- "growth_leaf_area"
+yvar <- "growth_leaf_area_log"
 xvar <- "prop_maxH"
 
 data <- subset(SummaryInd)
 data <- split(data, data$species)
 
 for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="y",xlab="",ylab="",cex=1.4,
-                    main=spp,col=col.age(data[[spp]]$age)
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="",xlab="",ylab="",cex=1.4,
+                    main=spp,col=col.age(data[[spp]]$age))
 }
 
-mtext("increase in leaf area", 2, outer=TRUE,cex=1.2)
+mtext("increase in leaf area (log(LA_final)-log(LA_initial))", 2, outer=TRUE,cex=1.2)
 mtext("prop_maxH", 1, outer=TRUE,cex=1.2)
-legend("topleft",legend=labels.age(),col=col.age,pch=16, cex=1.1,bty="n")
+legend("topleft",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
 ```
 
 
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=28, fig.height=28}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
-yvar <- "total_weight"
+yvar <- "total_weight_0"
 xvar <- "prop_maxH"
 
 data <- subset(SummaryInd)
@@ -264,17 +271,20 @@ data <- split(data, data$species)
 
 for(spp in names(data)) {
   plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="y",xlab="",ylab="",cex=1.4,
-                    main=spp,col=col.age(data[[spp]]$age)
+                    main=spp,col=col.age(data[[spp]]$age))
 }
 
-mtext("total size", 2, outer=TRUE,cex=1.2)
+mtext("initial size", 2, outer=TRUE,cex=1.2)
 mtext("prop_maxH", 1, outer=TRUE,cex=1.2)
-legend("topleft",legend=labels.age(),col=col.age,pch=16, cex=1.1,bty="n")
+legend("topleft",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
 ```
+
+###RSOM: species differ in how much they increase in height after the onset of reproduction.   
+  * Late reproducing, taller species increase less in height after the onset of reproduction
 
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=28, fig.height=28}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
-yvar <- "total_weight"
+yvar <- "total_weight_0"
 xvar <- "prop_maxH"
 
 data <- subset(SummaryInd)
@@ -282,10 +292,10 @@ data <- split(data, data$species)
 
 for(spp in names(data)) {
   plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="y",xlab="",ylab="",cex=1.4,
-                    main=spp,col=col.mature(data[[spp]]$mature)
+                    main=spp,col=col.mature(data[[spp]]$mature))
 }
 
-mtext("total size", 2, outer=TRUE,cex=1.2)
+mtext("intial size", 2, outer=TRUE,cex=1.2)
 mtext("prop_maxH", 1, outer=TRUE,cex=1.2)
 legend("bottomright",legend=labels.mature(),col=col.mature(),pch=16, cex=1.1,bty="n")
 ```
@@ -293,7 +303,7 @@ legend("bottomright",legend=labels.mature(),col=col.mature(),pch=16, cex=1.1,bty
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=14, fig.height=7}
 par(mfrow=c(1,2), cex=1, omi=c(0.2,0.3,0.3,0.3), mai=c(1.1,1,0.3,0.3)) 
 
-plot(wood_density~growth_leaf_area,SummaryInd,log="y",pch=16,col=col.age(age)
+plot(wood_density~growth_leaf_area,SummaryInd,log="y",pch=16,col=col.age())
 mod <- lm(log(growth_leaf_area)~age*wood_density,SummaryInd)
 summary(mod)
 ```
