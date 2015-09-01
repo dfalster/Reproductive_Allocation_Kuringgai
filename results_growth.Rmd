@@ -1,186 +1,9 @@
-
 #Growth data, general patterns
 - proportion of maxH matters more for some species than others. 
     1. The 4 "canopy" species all tend to have high correlations between "prop maxH" and growth and reproductive investment (both relative and absolute)  (HATE, BAER, PELA, PEPU)
     2. The lower-growing species are more variable, with "prop maxH"" mattering more for some than others - not surprising since some species like BOLE, PILI show inconsistent increases in H with increasing age, due to breakage, shedding
 
-- For almost all species there is a strong negative relationship between RGR and RA - more reproduction = less growth  
-    1. As expected, a cost of reproduction is reduced growth
-    2. Meanwhile there is the strong positive relationship between growth investment and reproductive investment, because bigger plants grow and reproduce more.  
-    3. It is good to have a big enough data set to capture both trends across a single dataset - and to capture them consistently across many species
-
-- Many plants have a clear upturn in RA and corresponding downturn in RGR at a specific prop maxH  
-    1. e.g. see EPMI for distinct pattern
-    2. More robust curve-fitting techniques are required to better illustrate this pattern (**CURVE FITTING**)
-
-
-#Comparing different measures of growth and how these measures shift with age
-
-###Weight vs. height
-- No surprises here , but need to fit proper lines to the data (**CURVE FITTING**)
-- Plants asymptote in weight as they reach their maximum height. This is true for all species, although some species, like BOLE and GRBU, have a much messier scatter than others  
-- The follow on of course is to look at growth measures vs. height   
-- NOTE: The variable "prop_maxH" is "current height/maximum species height (across all sites)", hence varying from 0-1. This lets data from all species to be plotted together  
-```{r, echo=FALSE, message=FALSE, fig.width=7, fig.height=7}
-par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.6,0.2))
-plot((total_weight~prop_maxH), SummaryInd, col=col.spp(species),pch=16,log="y")
-legend("topleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
-```
-
-```{r, echo=FALSE, message=FALSE, fig.width=21, fig.height=28}
-par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
-yvar <- "total_weight"
-xvar <- "prop_maxH"
-
-data <- SummaryInd
-data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (x[[xvar]])))
-results <- summarise_all_fits(lmfits)
-
-results$r.squared <- round(results$r.squared,digits=3)
-results$p.value <- round(results$p.value,digits=3)
-results$a <- round(results$a,digits=2)
-results$b <- round(results$b,digits=2)
-
-results
-
-for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="y",
-                    main=spp, xlab="", ylab="")
-  abline(lmfits[[spp]])
-}
-
-mtext("proportion Hmax", 1, outer=TRUE,cex=1.2)
-mtext("Total weight", 2, outer=TRUE,cex=1.2)
-```
-
-```{r, echo=FALSE, message=FALSE, fig.width=21, fig.height=28}
-par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
-yvar <- "growth_stem_area"
-xvar <- "RA"
-
-data <- subset(SummaryInd,RA>0)
-data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (x[[xvar]])))
-results <- summarise_all_fits(lmfits)
-
-results$r.squared <- round(results$r.squared,digits=3)
-results$p.value <- round(results$p.value,digits=3)
-results$a <- round(results$a,digits=2)
-results$b <- round(results$b,digits=2)
-
-results
-
-for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="y",
-                    main=spp)
-  abline(lmfits[[spp]])
-}
-
-```
-
-###Growth Investment versus proportion max H
-- For the canopy species, PELA, HATE, PEPU, BAER, investment in growth plateaus (i.e. growth relative to size decreases) at ~40% maxH
-- I think this suggests that relative height is a good predictor of growth investment in these species, but not in some of the lower-growing species
-- For the shorter and shorter-lived species there is much less of a relationship, or a complete lack of relationship (i.e. BOLE, PHPH)  
-- Quite interesting, there is a distinctly negative relationship for GRBU; its absolute growth investment actually declines as it increases in size  
-- For many of the species with a good relationship, it seems that there are two breakpoints in the curve - wondering what these mean with respect to reproductive onset and RA  
- 
-```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=7}
-par(mfrow=c(1,2), cex=1, omi=c(.8,0.3,.5,0.2), mai=c(.7,1,.1,0.2))
-plot((growth_inv~prop_maxH), SummaryInd, log="y", col=col.spp(species),pch=16,xlab="")
-legend("topleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
-
-plot(growth_inv~prop_maxH, SummaryInd, log="y", col=col.age(age),pch=16,ylab="",xlab="")
-legend("topleft",legend=labels.age(),col=col.age,pch=16, cex=.8,bty="n")
-mtext("proportion Hmax", 1, outer=TRUE,cex=1.2)
-```
-
-### Growth investment by Proportion Hmax
-```{r, echo=FALSE, message=FALSE, fig.width=21, fig.height=21}
-par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
-yvar <- "growth_inv"
-xvar <- "prop_maxH"
-data <- SummaryInd
-data <- split(data, data$species)
-
-for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar, log="y",
-                    main=spp, xlab="",ylab="")
-}
-
-mtext("proportion Hmax", 1, outer=TRUE,cex=1.2)
-mtext("Growth investment", 2, outer=TRUE,cex=1.2)
-
-data <- SummaryInd
-data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm((x[[yvar]]) ~  (x[[xvar]])))
-results <- summarise_all_fits(lmfits)
-
-results$r.squared <- round(results$r.squared,digits=3)
-results$p.value <- round(results$p.value,digits=3)
-results$a <- round(results$a,digits=2)
-results$b <- round(results$b,digits=2)
-
-results
-```
-
-### RGR by proportion Hmax
-- Ignoring a few outliers, RGR declines with increasing height is 12 species  
-- Only in HEPU and PILI is there no significant trend  
-- The species with a poorer correlation are mostly shorter ones that are presumably often broken off   
-- These are continued ways to look at the question of how important is height (relative to the species maxH) in understanding its growth and reproduction  
-
-```{r, echo=FALSE, message=FALSE, fig.width=7, fig.height=7}
-par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,1,0.6)) 
-plot(RGR~prop_maxH,SummaryInd,col=col.spp(species),pch=16)
-legend("topright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
-```
-
-```{r, echo=FALSE, message=FALSE, fig.width=21, fig.height=35}
-par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.7,.5,0.2)) 
-yvar <- "RGR"
-xvar <- "prop_maxH"
-data <- SummaryInd
-data <- split(data, data$species)
-
-for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,
-                    main=spp, xlab="",ylab="")
-}
-
-mtext("proportion Hmax", 1, outer=TRUE,cex=1.2)
-mtext("RGR", 2, outer=TRUE,cex=1.2)
-
-data <- SummaryInd
-data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm((x[[yvar]]) ~  (x[[xvar]])))
-results <- summarise_all_fits(lmfits)
-
-results$r.squared <- round(results$r.squared,digits=3)
-results$p.value <- round(results$p.value,digits=3)
-results$a <- round(results$a,digits=2)
-results$b <- round(results$b,digits=2)
-
-results
-```
-
 #Comparing growth of whole plant vs. leader
-
-###Correlations between different growth measures
-- Increased cross-sectional area of a leader and the entire plant are fairly correlated and uneffected by age (once not seedlings)  
-- however, some species, such as BAER are much branchier and lower correlation
-TO DO: species should be a random effect for these stats- I want to know the effect of age on the relationship once the effect of species has been accounted for    
-
-
-```{r, echo=FALSE,message=FALSE, fig.width=14, fig.height=7}
-par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,1,0.6)) 
-plot(growth_shoot_area~growth_stem_area,data=subset(SummaryInd), log="xy",col=col.spp(species), pch=16, cex=.8,xlab="change in basal stem area",ylab="change in shoot area")
-legend("bottomright",col=col.spp(), legend=labels.spp(), pch=16, cex=1,bty="n")
-
-mod <- lm(growth_shoot_area~species*age*growth_stem_area,SummaryInd)
-anova(mod)
-``` 
 
 ###Shifts in leafiness with age  
 - Individual shoots looked decidedly "less leafy" in many older plants  
@@ -191,7 +14,7 @@ anova(mod)
 
 ```{r, echo=FALSE,message=FALSE, fig.width=7, fig.height=7}
 par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,1,0.6)) 
-plot(shoot_leaf_count~age,data=subset(SummaryInd,age>2),log="xy", xlab="age",ylab="final leaf count along shoot",col=col.spp(species))
+plot(shoot_leaf_count~age,data=subset(SummaryInd,age>2),log="xy", xlab="age",ylab="final leaf count along shoot",col=col.spp())
 legend("bottomright",col=col.spp(), legend=labels.spp(), pch=16, cex=1,bty="n")
 
 yvar <- "shoot_leaf_count"
@@ -215,7 +38,7 @@ results
 
 ```{r, echo=FALSE,message=FALSE,, fig.width=7, fig.height=7}
 par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,1,0.6)) 
-plot(leaf_weight~total_weight,SummaryInd, log="xy",col=col.spp(species), pch=16, cex=0.8)
+plot(leaf_weight~total_weight,SummaryInd, log="xy",col=col.spp(), pch=16, cex=0.8)
 legend("bottomright",col=col.spp(), legend=labels.spp(), pch=16, cex=.8, bty="n")
 ```
 
@@ -230,12 +53,12 @@ legend("bottomright",col=col.spp(), legend=labels.spp(), pch=16, cex=.8, bty="n"
 ```{r, echo=FALSE,message=FALSE,, fig.width=14, fig.height=7}
 par(mfrow=c(1,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,1,0.6)) 
 mod <- lm(prop_maxH~growth_shoot_length,data=subset(SummaryInd,age>2))
-plot(growth_shoot_length~prop_maxH,data=subset(SummaryInd,age>2),log="y", ylab="shoot extension (mm)",col=col.spp(species),pch=16)
+plot(growth_shoot_length~prop_maxH,data=subset(SummaryInd,age>2),log="y", ylab="shoot extension (mm)",col=col.spp(),pch=16)
 legend(12,200,col=col.spp(), legend=labels.spp(), pch=16, cex=.8,bty="n")
 words.bottom.right.logy(mod)
 
 mod <- lm(age~species*growth_shoot_length,data=subset(SummaryInd,age>2))
-plot(growth_shoot_length~age,data=subset(SummaryInd,age>2),log="xy", ylab="shoot extension (mm)",col=col.spp(species),pch=16)
+plot(growth_shoot_length~age,data=subset(SummaryInd,age>2),log="xy", ylab="shoot extension (mm)",col=col.spp(),pch=16)
 words.bottom.right.logxy(mod)
 anova(mod)
 
@@ -280,7 +103,7 @@ mtext("shoot extension (mm)", 2, outer=TRUE,cex=1.2)
 ```{r, echo=FALSE,message=FALSE}
 par(mfrow=c(1,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,1,0.6)) 
 mod <- lm (growth_shoot_area ~ growth_stem_area*species*age,data=subset(SummaryInd, age>1.4))
-plot((growth_shoot_area/10000) ~ growth_stem_area,data=subset(SummaryInd, age>1.4), log="xy",col=col.age(age), pch=16)
+plot((growth_shoot_area/10000) ~ growth_stem_area,data=subset(SummaryInd, age>1.4), log="xy",col=col.age(), pch=16)
 abline(0,1)
 words.bottom.right.logxy(mod)
 legend("topleft",col=col.age, labels.age(), pch=16, cex=1, bty="n")
@@ -329,16 +152,16 @@ mtext("growth in leader stem area", 2, outer=TRUE,cex=1.2)
 ### Leaf area versus plant size and height
 ```{r, echo=FALSE, message=FALSE, fig.width=14, fig.height=14}
 par(mfrow=c(2,2), cex=1, omi=c(.1,.2,.1,.1), mai=c(1,1,.5,0.2)) 
-plot(leaf_area~total_weight, SummaryInd,log="xy",col=col.age(age), pch=16)
+plot(leaf_area~total_weight, SummaryInd,log="xy",col=col.age(), pch=16)
 mod <- lm(log(total_weight)~log(leaf_area), SummaryInd)
 words.bottom.right.logxy(mod)
 
-plot(leaf_area~prop_maxH, SummaryInd,log="y",col=col.age(age), pch=16)
+plot(leaf_area~prop_maxH, SummaryInd,log="y",col=col.age(), pch=16)
 
-plot(leaf_area~total_weight, SummaryInd,log="xy",col=col.spp(species), pch=16)
+plot(leaf_area~total_weight, SummaryInd,log="xy",col=col.spp(), pch=16)
 words.bottom.right.logxy(mod)
 
-plot(leaf_area~prop_maxH, SummaryInd,log="y",col=col.spp(species), pch=16)
+plot(leaf_area~prop_maxH, SummaryInd,log="y",col=col.spp(), pch=16)
 ```
 
 ### Leaf weight versus plant size and height
@@ -347,47 +170,17 @@ plot(leaf_area~prop_maxH, SummaryInd,log="y",col=col.spp(species), pch=16)
 * oldest plants (&PILI) fall below the main line of points  
 ```{r, echo=FALSE, message=FALSE, fig.width=14, fig.height=14}
 par(mfrow=c(2,2), cex=1, omi=c(.1,.2,.1,.1), mai=c(1,1,.5,0.2)) 
-plot(leaf_weight~total_weight, SummaryInd,log="xy",col=col.age(age), pch=16)
+plot(leaf_weight~total_weight, SummaryInd,log="xy",col=col.age(), pch=16)
 mod <- lm(log(total_weight)~log(leaf_weight), SummaryInd)
 words.bottom.right.logxy(mod)
 
-plot(leaf_weight~prop_maxH, SummaryInd,log="y",col=col.age(age), pch=16)
+plot(leaf_weight~prop_maxH, SummaryInd,log="y",col=col.age(), pch=16)
 
-plot(leaf_weight~total_weight, SummaryInd,log="xy",col=col.spp(species), pch=16)
+plot(leaf_weight~total_weight, SummaryInd,log="xy",col=col.spp(), pch=16)
 words.bottom.right.logxy(mod)
 
-plot(leaf_weight~prop_maxH, SummaryInd,log="y",col=col.spp(species), pch=16)
+plot(leaf_weight~prop_maxH, SummaryInd,log="y",col=col.spp(), pch=16)
 ```
-
-
-###changes in leaf growth and area over time
-* different species have different leaf area/growth to stem weight - in particular, the "canopy species" have higher leaf area relative to their stem weight
-* all species show declines in leaf weight vs. stem weight as they age, but this is a much smaller effect than the across species effect
-```{r, echo=FALSE, message=FALSE, fig.width=14, fig.height=14}
-mod <- lm(leaf_area ~stem_weight*species*age, SummaryInd)
-anova(mod)
-
-par(mfrow=c(2,2), cex=1, omi=c(.1,.2,.1,.1), mai=c(1,1,.5,0.2)) 
-plot((RGR_leaf)~(RGR_stem), SummaryInd,col=col.age(age), pch=16,ylim=c(-1,4))
-abline(0,0)
-abline(0,1)
-legend("topleft",col=col.age, labels.age(), pch=16, cex=1, bty="n")
-
-plot((leaf_area)~(stem_weight), SummaryInd,col=col.age(age), pch=16,log="xy")
-abline(0,1)
-text(1000,1800,srt=39,labels="1:1 line")
-
-plot((RGR_leaf)~(RGR_stem), SummaryInd,col=col.spp(species), pch=16,ylim=c(-1,4),xlab="")
-abline(0,0)
-abline(0,1)
-legend("topleft",col=col.spp(), legend=labels.spp(), pch=16, cex=.9, bty="n")
-
-plot((leaf_area)~(stem_weight), SummaryInd,col=col.spp(species), pch=16,log="xy",xlab="")
-abline(0,1)
-text(1000,1800,srt=39,labels="1:1 line")
-words.bottom.right.logxy(mod)
-```
-
 ##Comparing growth rates of species with different trait values
 * same as for Anais review, looking at growth rates against maxH, leaf area, wood density, LMA, leaf lifespan, and seedsize
 * splitting plants into seedlings (1 yr), saplings (2 yr), and adults (3+ yrs)  
@@ -398,7 +191,7 @@ words.bottom.right.logxy(mod)
 - The same basic relationship exists across all ages, so combined all data here  
 ```{r, echo=FALSE,message=FALSE, fig.width=7, fig.height=7}
 par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,1,0.6)) 
-plot(growth_inv ~ seed_size,data=subset(SummarySppAge,age>.5),log="xy",col=col.age(age),pch=16,cex=1,xlab="seed size (mg)",ylab="growth investment (mg per year)",main="Effect of seed size on growth rates")
+plot(growth_inv ~ seed_size,data=subset(SummarySppAge,age>.5),log="xy",col=col.age(),pch=16,cex=1,xlab="seed size (mg)",ylab="growth investment (mg per year)",main="Effect of seed size on growth rates")
 legend("topleft",col=col.age, labels.age(), pch=16, cex=1,bty="n")
 text(growth_inv ~ seed_size, data=subset(SummarySppAge,age==9), labels=species, pos=2, offset=-2.4, cex=0.9,col="blue")
 ```
@@ -408,7 +201,7 @@ text(growth_inv ~ seed_size, data=subset(SummarySppAge,age==9), labels=species, 
 - There is a positive correlation with the maximum height the species reaches at a given age -i.e. fast growing young plants are tall when young.  
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
 par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(.5,1,.6,0.2)) 
-plot(growth_inv ~ maxH,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age(age),pch=16,cex=1,xlab="",ylab="",main="Seedlings")
+plot(growth_inv ~ maxH,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age(),pch=16,cex=1,xlab="",ylab="",main="Seedlings")
 text(growth_inv ~ maxH, data=subset(SummarySppAge,age==1.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
 mod <- lm(growth_inv ~ maxH, data=subset(SummarySppAge,age==1.4))
 words.bottom.right.logxy(mod)
@@ -419,7 +212,7 @@ mod <- lm(growth_inv ~ maxH, data=subset(SummarySppAge,age==2.4))
 words.bottom.right.logxy(mod)
 
 
-plot(growth_inv ~ maxH,data=subset(SummarySppAge,age>3),log="xy",col=col.age(age),pch=16,cex=1,xlab="",ylab="",main="Adults")
+plot(growth_inv ~ maxH,data=subset(SummarySppAge,age>3),log="xy",col=col.age(),pch=16,cex=1,xlab="",ylab="",main="Adults")
 text(growth_inv ~ maxH, data=subset(SummarySppAge,age==5), labels=species, pos=1, offset=-1.1, cex=0.6,col="blue")
 mod <- lm(growth_inv ~ maxH, data=subset(SummarySppAge,age>3))
 words.bottom.right.logxy(mod)
@@ -434,20 +227,20 @@ mtext("yearly growth (mg)",2,outer=TRUE)
 - However there is no relationship in younger plants  
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
 par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(.5,1,.6,0.2)) 
-plot(growth_inv ~ WD,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age(age),pch=16,cex=1,xlab="",ylab="",main="Seedlings")
-text(growth_inv ~ WD, data=subset(SummarySppAge,age==1.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
-mod <- lm(growth_inv ~ WD, data=subset(SummarySppAge,age==1.4))
+plot(growth_inv ~ wood_density,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age(),pch=16,cex=1,xlab="",ylab="",main="Seedlings")
+text(growth_inv ~ wood_density, data=subset(SummarySppAge,age==1.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
+mod <- lm(growth_inv ~ wood_density, data=subset(SummarySppAge,age==1.4))
 words.bottom.left.logxy(mod)
 
-plot(growth_inv ~ WD,data=subset(SummarySppAge,age==2.4),log="xy",col="gold1",pch=16,cex=1,xlab="",ylab="",main="Saplings")
-text(growth_inv ~ WD, data=subset(SummarySppAge,age==2.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
-mod <- lm(growth_inv ~ WD, data=subset(SummarySppAge,age==2.4))
+plot(growth_inv ~ wood_density,data=subset(SummarySppAge,age==2.4),log="xy",col="gold1",pch=16,cex=1,xlab="",ylab="",main="Saplings")
+text(growth_inv ~ wood_density, data=subset(SummarySppAge,age==2.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
+mod <- lm(growth_inv ~ wood_density, data=subset(SummarySppAge,age==2.4))
 words.bottom.left.logxy(mod)
 legend("topright",col=col.age,labels.age(),pch=16, bty="n")
 
-plot(growth_inv ~ WD,data=subset(SummarySppAge,age>3),log="xy",col=col.age(age),pch=16,cex=1,xlab="",ylab="",main="Adults")
-text(growth_inv ~ WD, data=subset(SummarySppAge,age==5), labels=species, pos=1, offset=-1.1, cex=0.6,col="blue")
-mod <- lm(growth_inv ~ WD, data=subset(SummarySppAge,age>3))
+plot(growth_inv ~ wood_density,data=subset(SummarySppAge,age>3),log="xy",col=col.age(),pch=16,cex=1,xlab="",ylab="",main="Adults")
+text(growth_inv ~ wood_density, data=subset(SummarySppAge,age==5), labels=species, pos=1, offset=-1.1, cex=0.6,col="blue")
+mod <- lm(growth_inv ~ wood_density, data=subset(SummarySppAge,age>3))
 words.bottom.left.logxy(mod)
 
 mtext("wood density",1,outer=TRUE)
@@ -457,14 +250,14 @@ mtext("yearly growth (mg)",2,outer=TRUE)
 * same wood density data plotted against RGR instead - also no pattern with young
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=7}
 par(mfrow=c(1,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(.5,1,.6,0.2)) 
-plot(RGR ~ WD,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age(age),pch=16,cex=1,xlab="",ylab="",main="Seedlings")
-text(RGR ~ WD, data=subset(SummarySppAge,age==1.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
-mod <- lm(RGR ~ WD, data=subset(SummarySppAge,age==1.4))
+plot(RGR ~ wood_density,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age(),pch=16,cex=1,xlab="",ylab="",main="Seedlings")
+text(RGR ~ wood_density, data=subset(SummarySppAge,age==1.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
+mod <- lm(RGR ~ wood_density, data=subset(SummarySppAge,age==1.4))
 words.bottom.right.logxy(mod)
 
-plot(RGR ~ WD,data=subset(SummarySppAge,age==2.4),log="xy",col="gold1",pch=16,cex=1,xlab="",ylab="",main="Saplings")
-text(RGR ~ WD, data=subset(SummarySppAge,age==2.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
-mod <- lm(RGR ~ WD, data=subset(SummarySppAge,age==2.4))
+plot(RGR ~ wood_density,data=subset(SummarySppAge,age==2.4),log="xy",col="gold1",pch=16,cex=1,xlab="",ylab="",main="Saplings")
+text(RGR ~ wood_density, data=subset(SummarySppAge,age==2.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
+mod <- lm(RGR ~ wood_density, data=subset(SummarySppAge,age==2.4))
 words.bottom.right.logxy(mod)
 legend("topright",col=col.age,labels.age(),pch=16, bty="n")
 
@@ -475,7 +268,7 @@ mtext("RGR",2,outer=TRUE)
 ### Leaf area vs growth investment
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
 par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(.5,1,.6,0.2)) 
-plot(growth_inv ~ leaf_area,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age(age),pch=16,cex=1,xlab="",ylab="",main="Seedlings",ylim=c(100,50000))
+plot(growth_inv ~ leaf_area,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age(),pch=16,cex=1,xlab="",ylab="",main="Seedlings",ylim=c(100,50000))
 text(growth_inv ~ leaf_area, data=subset(SummarySppAge,age==1.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
 mod <- lm(growth_inv ~ leaf_area, data=subset(SummarySppAge,age==1.4))
 words.bottom.right.logxy(mod)
@@ -486,7 +279,7 @@ mod <- lm(growth_inv ~ leaf_area, data=subset(SummarySppAge,age==2.4))
 words.bottom.right.logxy(mod)
 
 
-plot(growth_inv ~ leaf_area,data=subset(SummarySppAge,age>3),log="xy",col=col.age(age),pch=16,cex=1,xlab="",ylab="",main="Adults",ylim=c(100,1000000))
+plot(growth_inv ~ leaf_area,data=subset(SummarySppAge,age>3),log="xy",col=col.age(),pch=16,cex=1,xlab="",ylab="",main="Adults",ylim=c(100,1000000))
 text(growth_inv ~ leaf_area, data=subset(SummarySppAge,age==7), labels=species, pos=1, offset=-1.1, cex=0.6,col="blue")
 mod <- lm(growth_inv ~ leaf_area, data=subset(SummarySppAge,age>3))
 words.bottom.right.logxy(mod)
@@ -503,7 +296,7 @@ mtext("yearly growth (mg)",2,outer=TRUE)
 - But relationship in adults disappears when HATE is removed...
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
 par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(.5,1,.6,0.2)) 
-plot(growth_inv ~ LMA,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age(age),pch=16,cex=1,xlab="",ylab="",main="Seedlings")
+plot(growth_inv ~ LMA,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age(),pch=16,cex=1,xlab="",ylab="",main="Seedlings")
 text(growth_inv ~ LMA, data=subset(SummarySppAge,age==1.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
 mod <- lm(growth_inv ~ LMA, data=subset(SummarySppAge,age==1.4))
 words.bottom.right.logxy(mod)
@@ -514,12 +307,12 @@ mod <- lm(growth_inv ~ LMA, data=subset(SummarySppAge,age==2.4))
 words.bottom.right.logxy(mod)
 legend("topright",col=col.age,labels.age(),pch=16, bty="n")
 
-plot(growth_inv ~ LMA,data=subset(SummarySppAge,age>3),log="xy",col=col.age(age),pch=16,cex=1,xlab="",ylab="",main="Adults")
+plot(growth_inv ~ LMA,data=subset(SummarySppAge,age>3),log="xy",col=col.age(),pch=16,cex=1,xlab="",ylab="",main="Adults")
 text(growth_inv ~ LMA, data=subset(SummarySppAge,age>3), labels=species, pos=1, offset=-1.1, cex=0.6,col="blue")
 mod <- lm(growth_inv ~ LMA, data=subset(SummarySppAge,age>3))
 words.bottom.right.logxy(mod)
 
-plot(growth_inv ~ LMA,data=subset(SummarySppAge,age>3&species!="HATE"),log="xy",col=col.age(age),pch=16,cex=1,xlab="",ylab="",main="Adults")
+plot(growth_inv ~ LMA,data=subset(SummarySppAge,age>3&species!="HATE"),log="xy",col=col.age(),pch=16,cex=1,xlab="",ylab="",main="Adults")
 text(growth_inv ~ LMA, data=subset(SummarySppAge,age>3&species!="HATE"), labels=species, pos=1, offset=-1.1, cex=0.6,col="blue")
 mod <- lm(growth_inv ~ LMA, data=subset(SummarySppAge,age>3&species!="HATE"))
 words.bottom.right.logxy(mod)
@@ -528,321 +321,27 @@ mtext("LMA",1,outer=TRUE)
 mtext("yearly growth (mg)",2,outer=TRUE)
 ```
 
-###Leaf lifespan vs growth investment
-- There is no relationship between leaf lifespan and growth investment for any age group
-- And just barely a significant relationship between RGR and leaflifespan for adult plants
-```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
-par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(.5,1,.6,0.2))
-plot(growth_inv ~ LL_death,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age(age),pch=16,cex=1,xlab="",ylab="",main="Seedlings")
-text(growth_inv ~ LL_death, data=subset(SummarySppAge,age==1.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
-mod <- lm(log(LL_death)~log(growth_inv), data=subset(SummarySppAge,age==1.4))
-words.bottom.right.logxy(mod)
+* another of the interesting pattern is that the increase in shoot area of leaders is correlated with maxH and seed_size (and opposite wood_density) and somewhat offset from whole plant growth measures and whole plant size measures  
+* seed_size removed, because no additional explanatory power after wood_density and maxH included
 
-plot(growth_inv ~ LL_death,data=subset(SummarySppAge,age==2.4),log="xy",col="gold1",pch=16,cex=1,xlab="",ylab="",main="Saplings")
-text(growth_inv ~ LL_death, data=subset(SummarySppAge,age==2.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
-mod <- lm(growth_inv ~ LL_death, data=subset(SummarySppAge,age==2.4))
-words.bottom.right.logxy(mod)
-
-plot(growth_inv ~ LL_death,data=subset(SummarySppAge,age>3),log="xy",col=col.age(age),pch=16,cex=1,xlab="",ylab="",main="Adults")
-text(growth_inv ~ LL_death, data=subset(SummarySppAge,age>3), labels=species, pos=1, offset=-1.1, cex=0.6,col="blue")
-mod <- lm(growth_inv ~ LL_death, data=subset(SummarySppAge,age>3))
-legend("topright",col=col.age,labels.age(),pch=16, bty="n")
-words.bottom.right.logxy(mod)
-
-mtext("leaf lifespan",1,outer=TRUE)
-mtext("yearly growth (mg)",2,outer=TRUE)
-```
-
-###PCA analysis
-* This combination of variables shows that RGR is approximately opposite a collection of variables that indicate a plant is "bigger" - so smaller plants have higher RGR
-* Orthoganal to these in WD vs. maxH, LMA, seed_size, and shoot_growth - species that are taller as adults have bigger seeds, higher LMA, and greater shoot growth (both stem growth & leaf count), independent of their current (age dependent) size
-* this analysis doesn't include accessory proportions, because then I have to use subset of reproducing individuals - see below - greatly reducing sample size
-* fine tuning:  
-  ** remove RGR leaf (similar to RGR)
-  ** remove prop_max_weight and prop_max_repro (similar to prop_maxH)
-
-```{r, echo=FALSE,message=FALSE,fig.width=7, fig.height=7}
-par(mfrow=c(1,1), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
-SummaryIndPCA <- SummaryInd %>%
-  filter(shoot_leaf_count>0&shoot_leaf_area>0&shoot_growth_leaf_area!=0) %>%
-  select(prop_maxH,height,maxH,WD,LMA,seed_size,growth_leaf,
-         RGR,leaf_area,growth_shoot_area,growth_stem_area,shoot_leaf_count,total_weight,
-         RA,seedset,repro_all_count,accessory_inv,propagule_inv,shoot_leaf_area,shoot_growth_leaf_area)
-
-SummaryIndPCA$leaf_area <- log((SummaryIndPCA$leaf_area)+.001)
-SummaryIndPCA$total_weight <- log(SummaryIndPCA$total_weight)
-SummaryIndPCA$height <- log(SummaryIndPCA$height)
-SummaryIndPCA$maxH <- log(SummaryIndPCA$maxH)
-SummaryIndPCA$seed_size <- log(SummaryIndPCA$seed_size)
-SummaryIndPCA$accessory_inv <- log(SummaryIndPCA$accessory_inv+.001)
-SummaryIndPCA$propagule_inv <- log(SummaryIndPCA$propagule_inv+.001)
-SummaryIndPCA$growth_shoot_area <- log(SummaryIndPCA$growth_shoot_area)
-SummaryIndPCA$growth_leaf <- log(SummaryIndPCA$growth_leaf+10000)
-SummaryIndPCA$repro_all_count <- log(SummaryIndPCA$repro_all_count+1)
-SummaryIndPCA$shoot_leaf_count <- log(SummaryIndPCA$shoot_leaf_count)
-SummaryIndPCA$growth_stem_area <- log(SummaryIndPCA$growth_stem_area)
-SummaryIndPCA$shoot_leaf_area <- log(SummaryIndPCA$shoot_leaf_area)
-SummaryIndPCA$shoot_growth_leaf_area <- log(SummaryIndPCA$shoot_growth_leaf_area)
-
-PCA_mod <- prcomp(SummaryIndPCA, scale=TRUE)
-summary(PCA_mod)
-biplot(PCA_mod,xlim=c(-.1,.15),ylim=c(-.1,.1),cex=.8)
-
-PCA_loadings <- as.data.frame(PCA_mod$rotation)
-PCA_loadings$variables <- row.names(PCA_loadings)
-
-PCA_scaling <- as.data.frame(PCA_mod$scale)
-PCA_scaling$variables <- row.names(PCA_scaling)
-names(PCA_scaling) <- c("scale","variables")
-PCA_loadings <- merge(PCA_loadings,PCA_scaling,by="variables")
-
-PCA_lambda <- as.data.frame(PCA_mod$sdev)
-
-PCA_scores <- as.data.frame(PCA_mod$x)
-PCA_scores$individual <- subset(SummaryInd$individual, SummaryInd$shoot_leaf_count>0&SummaryInd$shoot_growth_leaf_area!=0)
-SummaryInd_PCA_results <- merge(SummaryInd,PCA_scores, by="individual", all.x=TRUE)
-
-n <- NROW(PCA_scores)
-scale =1
-
-PCA_lambda <- PCA_lambda*sqrt(n)
-PCA_lambda <- PCA_lambda^scale
-
-SummaryInd_PCA_results$PC1_scale <- SummaryInd_PCA_results$PC1/PCA_lambda[1]
-SummaryInd_PCA_results$PC2_scale <- SummaryInd_PCA_results$PC2/PCA_lambda[2]
-SummaryInd_PCA_results$PC3_scale <- SummaryInd_PCA_results$PC3/PCA_lambda[3]
-SummaryInd_PCA_results$PC4_scale <- SummaryInd_PCA_results$PC4/PCA_lambda[4]
-PCA_loadings$PC1_scale <- PCA_loadings$PC1 / 4.5
-PCA_loadings$PC2_scale <- PCA_loadings$PC2 / 4.5
-PCA_loadings$PC3_scale <- PCA_loadings$PC3 / 4.5
-PCA_loadings$PC4_scale <- PCA_loadings$PC4 / 4.5
-```
-
-#Looking at PCA by species
-* Main axes are (1) across species affects in trait values (PC1) and (2) within species shifts in RGR vs RA with plant size/age (PC2)
-* PC1 is WD vs a whole collection of traits that have higher "values" in plants that are larger as adults, including measures of size, height, and growth increment; PELA is a rare exception in shifting along this axis. 
-* PC2 most strongly separates RGR from RA (and a collection of strongly correlated traits, such as propagule investment, prop maxH). 
-* PC3 primarily separates LMA and maxH from WD; high wood density is also somewhat associated with higher RGR and various shoot growth and leafiness measures, reflecting that younger individuals have more shoot growth and higher RGR 
-* PC4 is effectively leaf count on shoots ("shoot_leaf_count") and seed set vs. seed size, shoot leaf area and shoot leaf area growth - to first order, some plants have lots of small leaves and others have fewer leaves but greater leaf area, Not sure how seed size fits in
-
-* amazing that RA and RGR almost completely orthoganal to PC1 and PC4; To reiterate, RA and RGR are 2 variables that shift across each species' lifetime and much less across species. I suspect the inter-specific difference are effectively what proportion of individuals in this study are reproductively mature - with early maturing species having overall higher RA and lower RGR (i.e. BOLE) than do late maturing species (i.e. PELA). 
-
-* Continuing, RGR and RA are measures that give little insight to a species trait values - or vice versa, trait values do not provide much information about RA...
-
-* "growth_stem_area" and "growth leaf", two whole plant measures of size increase are orthoganal to RGR, while some shoot-level variables (i.e. "growth_shoot_area") and other whole plant variables (e.g. "growth_leaf_area"), are somewhat correlated with both RGR (PC2) and the "maxH" direction (PC1). I suppose this suggests that for plants with high
-
-* For PC2, interesting that "growth_shoot_area"" and other variables associated with shoot growth and species max H correlate somewhat with RGR, but "growth_stem_area" and other whole plant "size" variables do not
-* these plots are another way of affirming that RA (and RGR) is a variable that does a good job of comparing trends across species * in other words there is a trade-off between RA and RGR in all species. And even though the RA trends are messy, individuals that are proportionally taller (prop_maxH) or invest more in reproduction (investment, count, or seedset) have a higher RA. 
-
-* this last set of variables are all ones that do not vary with the PC1 axis
-
-PCA related code to keep:  
-* plot(PCA_mod)
-* pairs(SummaryIndPCA,log="xy")
-* yy <- t(t(PCA_loadings[,2:3])*PCA_lambda[1:2])
-* xx <- t(t(SummaryInd_PCA_results[,105:106])/PCA_lambda[1:2])
-* biplot(xx,yy)
-```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
-par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
-
-PCA_by_species <- SummaryInd_PCA_results %>%
-  filter(shoot_leaf_count>0) %>%
-  group_by(species) %>%
-  summarise_each(funs(mean, se), PC1_scale, PC2_scale, PC3_scale, PC4_scale)
-
-plot(PC1_scale~(PC2_scale),SummaryInd_PCA_results,pch=16,col=col.spp(species),xlim=c(-.1,.1))
-arrows(0, 0, (.9*PCA_loadings$PC2_scale), (.9*PCA_loadings$PC1_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
-text(PC1_scale ~ PC2_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
-legend("topright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
-
-mean1 <- PCA_by_species$PC1_scale
-se1 <- PCA_by_species$PC1_scale_se
-plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 1")
-se_function(mean1,se1)
-
-plot(PC2_scale~(PC1_scale),SummaryInd_PCA_results,pch=16,col=col.spp(species))
-arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC2_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
-text(PC2_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
-
-mean1 <- PCA_by_species$PC2_scale
-se1 <- PCA_by_species$PC2_scale_se
-plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 2")
-se_function(mean1,se1)
-
-plot(PC3_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.spp(species))
-arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC3_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
-text(PC3_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
-
-mean1 <- PCA_by_species$PC3_scale
-se1 <- PCA_by_species$PC3_scale_se
-plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 3")
-se_function(mean1,se1)
-
-plot(PC4_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.spp(species),ylim=c(-.15,.15))
-arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC4_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
-text(PC4_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
-legend("topright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
-
-mean1 <- PCA_by_species$PC4_scale
-se1 <- PCA_by_species$PC4_scale_se
-plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 4",,ylim=c(-.07,.04))
-se_function(mean1,se1)
-```
-
-###Coloring data by age
-* this confirms that PC2 is an axis the changes primarly by age - it is the RGR vs reproduction shift
-* PC1 has a slight age component, but more about species - across species, plant size is mostly a species effect, but of course age also matters
-* PC3 & PC4 all about species
-
-```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
-par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
-
-plot(PC2_scale~(PC1_scale),SummaryInd_PCA_results,pch=16,col=col.age(age)
-arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC2_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
-text(PC2_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
-legend("topright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
-
-plot(PC3_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.age(age)
-arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC3_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
-text(PC3_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
-
-plot(PC4_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.age(age),ylim=c(-.15,.12))
-arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC4_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
-text(PC4_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
-
-plot(PC3_scale~PC2_scale,SummaryInd_PCA_results,pch=16,col=col.age(age)
-arrows(0, 0, (.9*PCA_loadings$PC2_scale), (.9*PCA_loadings$PC3_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
-text(PC3_scale ~ PC2_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
-```
-
-### Looking only at reproducing individuals - 
-* can now add in "prop_propagule","prop_accessory", but not "accessory_per_seed"
-* changes patterns quite a bit
-* PC1 is still WD vs lots of growth variables, but now absolute measures of reproductive investment (propagule_inv and accessory_inv) associate with absolute "big size" not high RA
-* PC2 is RA, seedset, and prop_propagule vs. RGR, shoot growth variables and prop_accessory; not surprising that prop_propagule and prop_accessory pulled to opposite ends
-* PC3 is somewhat similar. It is also prop_accessory and prop_maxH vs seed set and prop_propagule, but it now separates out all the shoot growth values
-* PC4 is now the axis that separates LMA and maxH vs. WD, with variables like maxH pulling toward all the "big size" arrows
-
-```{r, echo=FALSE,message=FALSE,fig.width=7, fig.height=7}
-par(mfrow=c(1,1), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
-SummaryIndPCA <- SummaryInd %>%
-  filter(shoot_leaf_count>0&accessory_inv>0&shoot_growth_leaf_area!=0) %>%
-  select(prop_maxH,height,maxH,WD,LMA,seed_size,growth_leaf,
-         RGR,leaf_area,growth_shoot_area,growth_stem_area,shoot_leaf_count,total_weight,
-         RA,seedset,repro_all_count,accessory_inv,propagule_inv,shoot_leaf_area,shoot_growth_leaf_area,
-         prop_propagule, prop_accessory)
-
-SummaryIndPCA$leaf_area <- log((SummaryIndPCA$leaf_area)+.001)
-SummaryIndPCA$total_weight <- log(SummaryIndPCA$total_weight)
-SummaryIndPCA$height <- log(SummaryIndPCA$height)
-SummaryIndPCA$maxH <- log(SummaryIndPCA$maxH)
-SummaryIndPCA$seed_size <- log(SummaryIndPCA$seed_size)
-SummaryIndPCA$accessory_inv <- log(SummaryIndPCA$accessory_inv+.001)
-SummaryIndPCA$propagule_inv <- log(SummaryIndPCA$propagule_inv+.001)
-SummaryIndPCA$growth_shoot_area <- log(SummaryIndPCA$growth_shoot_area)
-SummaryIndPCA$growth_leaf <- log(SummaryIndPCA$growth_leaf+10000)
-SummaryIndPCA$repro_all_count <- log(SummaryIndPCA$repro_all_count+1)
-SummaryIndPCA$shoot_leaf_count <- log(SummaryIndPCA$shoot_leaf_count)
-SummaryIndPCA$growth_stem_area <- log(SummaryIndPCA$growth_stem_area)
-SummaryIndPCA$shoot_leaf_area <- log(SummaryIndPCA$shoot_leaf_area)
-SummaryIndPCA$shoot_growth_leaf_area <- log(SummaryIndPCA$shoot_growth_leaf_area)
-
-PCA_mod <- prcomp(SummaryIndPCA, scale=TRUE)
-summary(PCA_mod)
-biplot(PCA_mod)
-
-PCA_loadings <- as.data.frame(PCA_mod$rotation)
-PCA_loadings$variables <- row.names(PCA_loadings)
-
-PCA_scaling <- as.data.frame(PCA_mod$scale)
-PCA_scaling$variables <- row.names(PCA_scaling)
-names(PCA_scaling) <- c("scale","variables")
-PCA_loadings <- merge(PCA_loadings,PCA_scaling,by="variables")
-
-PCA_lambda <- as.data.frame(PCA_mod$sdev)
-
-PCA_scores <- as.data.frame(PCA_mod$x)
-PCA_scores$individual <- subset(SummaryInd$individual, SummaryInd$shoot_leaf_count>0&SummaryInd$shoot_growth_leaf_area!=0&SummaryInd$accessory_inv>0)
-SummaryInd_PCA_results <- merge(SummaryInd,PCA_scores, by="individual", all.x=TRUE)
-
-n <- NROW(PCA_scores)
-scale =1
-
-PCA_lambda <- PCA_lambda*sqrt(n)
-PCA_lambda <- PCA_lambda^scale
-
-SummaryInd_PCA_results$PC1_scale <- SummaryInd_PCA_results$PC1/PCA_lambda[1]
-SummaryInd_PCA_results$PC2_scale <- SummaryInd_PCA_results$PC2/PCA_lambda[2]
-SummaryInd_PCA_results$PC3_scale <- SummaryInd_PCA_results$PC3/PCA_lambda[3]
-SummaryInd_PCA_results$PC4_scale <- SummaryInd_PCA_results$PC4/PCA_lambda[4]
-PCA_loadings$PC1_scale <- PCA_loadings$PC1 / 4.5
-PCA_loadings$PC2_scale <- PCA_loadings$PC2 / 4.5
-PCA_loadings$PC3_scale <- PCA_loadings$PC3 / 4.5
-PCA_loadings$PC4_scale <- PCA_loadings$PC4 / 4.5
-```
-
-```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
-par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
-
-plot(PC2_scale~(PC1_scale),SummaryInd_PCA_results,pch=16,col=col.spp(species))
-arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC2_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
-text(PC2_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
-legend("topright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
-
-plot(PC3_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.spp(species))
-arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC3_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
-text(PC3_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
-
-plot(PC4_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.spp(species),ylim=c(-.15,.12))
-arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC4_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
-text(PC4_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
-
-plot(PC3_scale~PC2_scale,SummaryInd_PCA_results,pch=16,col=col.spp(species))
-arrows(0, 0, (.9*PCA_loadings$PC2_scale), (.9*PCA_loadings$PC3_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
-text(PC3_scale ~ PC2_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
-```
-
-comparing
-```{r, echo=FALSE,message=FALSE}
-mod <- lm(RGR~species+asin(sqrt(RA))+prop_maxH+log(propagule_inv+1)+log(accessory_inv+1)+log(total_weight)+log(repro_all_count+1),SummaryInd)
-anova(mod)
-glance(mod)[1]
-
-
-mod <- lm(RGR~asin(sqrt(RA))+prop_maxH+log(propagule_inv+1)+log(accessory_inv+1)+log(total_weight)+log(repro_all_count+1)+WD+LMA+maxH,SummaryInd)
-anova(mod)
-glance(mod)[1]
-```
-
-* another of the interesting pattern is that the increase in shoot area of leaders is correlated with maxH and seed_size (and opposite WD) and somewhat offset from whole plant growth measures and whole plant size measures  
-* seed_size removed, because no additional explanatory power after WD and maxH included
-
-
-```{r, echo=FALSE,message=FALSE}
-mod <- lm(log(growth_shoot_area)~log(maxH)+WD+log(growth_stem_area)+log(total_weight)+RGR+asin(sqrt(RA))+LMA,SummaryInd)
-anova(mod)
-glance(mod)
-```
-
-plot(mod)
 ###Traits correlated
 - species maxH and wood density are highly correlated
 - the two species lying a bit outside are PUTU and PHPH which both often have multiple stems from the base - the second chart omits them
 -
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
 par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
-plot(WD~maxH,SummarySpp[["mean"]], log="x",col=col.spp(species),pch=16)
-mod <- lm(log(maxH)~WD,SummaryInd)
+plot(wood_density~maxH,SummarySpp[["mean"]], log="x",col=col.spp(),pch=16)
+mod <- lm(log(maxH)~wood_density,SummaryInd)
 words.bottom.left.logx(mod)
 
-plot(WD~maxH,data=subset(SummarySpp[["mean"]],species!="PUTU"&species!="PHPH"), log="x",col=col.spp(species),pch=16)
-mod <- lm(log(maxH)~WD,data=subset(SummarySpp[["mean"]],species!="PUTU"&species!="PHPH"))
+plot(wood_density~maxH,data=subset(SummarySpp[["mean"]],species!="PUTU"&species!="PHPH"), log="x",col=col.spp(),pch=16)
+mod <- lm(log(maxH)~wood_density,data=subset(SummarySpp[["mean"]],species!="PUTU"&species!="PHPH"))
 words.bottom.left.logx(mod)
 
-plot(seedset~total_weight,SummarySpp[["mean"]], log="x",col=col.spp(species),pch=16)
+plot(seedset~total_weight,SummarySpp[["mean"]], log="x",col=col.spp(),pch=16)
 mod <- lm(log(total_weight) ~ (seedset),SummarySpp[["mean"]])
 words.bottom.left.logx(mod)
 
-plot(seedset~maxH,SummarySpp[["mean"]], log="x",col=col.spp(species),pch=16)
+plot(seedset~maxH,SummarySpp[["mean"]], log="x",col=col.spp(),pch=16)
 mod <- lm(log(maxH) ~ (seedset),SummarySpp[["mean"]])
 words.bottom.left.logx(mod)
