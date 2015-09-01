@@ -140,12 +140,17 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
   #DANIEL TODO: For the various "per_seed" measures, need to include only individuals that have non-zero seed count, otherwise end up
   SummaryInd <- SummaryInd %>% mutate(
     total_inv = repro_inv + growth_inv,
+    total_weight_0 = total_weight - growth_inv,
+    height_0 = height - growth_height,
     RA = repro_inv/total_inv,
     RGR = log(total_weight)-log(total_weight - growth_inv),
     leaf_area = leaf_weight / (1000*LMA),
     growth_leaf_area = growth_leaf / (1000*LMA),
+    leaf_area_0 = leaf_area - growth_leaf_area,
+    growth_leaf_area_log = log10(leaf_area) - log10(leaf_area_0),
     shoot_leaf_area = shoot_leaf_count*leaf_size,
     shoot_growth_leaf_area = shoot_leaf_count_new*leaf_size,
+    shoot_leaf_area_0 = shoot_leaf_area - shoot_growth_leaf_area,
     reproducing = RA>0,
     prop_allocation = propagule_inv/(growth_inv + repro_inv),
     fruit_weight = propagule_inv + seedpod_weight + fruit_weight,
@@ -211,7 +216,7 @@ get_species_values <- function(SummaryInd, groups) {
       postpollen_aborted_inv, packaging_dispersal_inv, propagule_inv, prepollen_all_inv,
       height, growth_inv, repro_inv, total_weight, total_inv, RA, diameter, stem_area,
       leaf_weight, stem_weight, growth_stem_diameter, growth_stem_area, growth_leaf,
-      growth_stem, diameter)
+      growth_stem, diameter, LMA, wood_density)
   })
   names(out[[1]]) <- fs
 
