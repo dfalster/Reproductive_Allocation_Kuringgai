@@ -142,6 +142,7 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
     total_inv = repro_inv + growth_inv,
     total_weight_0 = total_weight - growth_inv,
     height_0 = height - growth_height,
+    growth_height_log = log10(height)-log10(height_0),
     RA = repro_inv/total_inv,
     RGR = log(total_weight)-log(total_weight - growth_inv),
     leaf_area = leaf_weight / (1000*LMA),
@@ -288,8 +289,8 @@ scale_individual_variable <- function(SummaryInd, SummarySpp) {
     
     mutate(SummaryInd,
       maxH =  get_species_value("max", "height"),
-      prop_maxH = height / maxH,
-      prop_max_weight = total_weight / get_species_value("max", "total_weight"),
+      prop_maxH = height_0 / maxH,
+      prop_max_weight = total_weight_0 / get_species_value("max", "total_weight"),
       prop_max_repro = repro_inv / get_species_value("max", "repro_inv"),
       scaled_growth_stem_diameter = growth_stem_diameter / get_species_value("mean", "growth_stem_diameter"),
       scaled_growth_shoot_diameter = growth_shoot_diameter / get_species_value("mean", "growth_shoot_diameter")
