@@ -1,0 +1,91 @@
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=14, fig.height=7.5}
+remake::make("export")
+
+SummaryInd <- readRDS("export/SummaryInd.rds")
+SummarySpp <- readRDS("export/SummarySpp.rds")
+SummarySppAge <- readRDS("export/SummarySppAge.rds")
+
+source("R/figures.R")
+```
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=18, fig.height=15}
+par(mfcol=c(4,3), cex=1, omi=c(.8,.3,.3,.1), mai=c(.5,1,.1,0.1)) 
+yvar <- "growth_inv"
+yvar2 <- "repro_inv"
+yvar3 <- "total_inv"
+yvar4 <- "RA"
+xvar <- "leaf_area_0"
+xvar2 <- "total_weight_0"
+xvar3 <- "prop_maxH"
+
+data <- subset(SummaryInd)
+data <- split(data, data$species)
+
+for(spp in names(data)) {
+  
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="veg investment",cex=1.3,
+                    col=col.age(data[[spp]]$age))
+  legend("bottomright",legend=labels.age(),col=col.age(),pch=16, cex=1,bty="n")
+  plot_yvar_vs_xvar(data[[spp]], yvar2, xvar,log="xy",xlab="",ylab="repro investment",cex=1.3,
+                    col=col.age(data[[spp]]$age))
+  plot_yvar_vs_xvar(data[[spp]], yvar3, xvar,log="xy",xlab="",ylab="total investment (mg)",cex=1.3,
+                    col=col.age(data[[spp]]$age))
+  arrows(data[[spp]]$leaf_area_0,data[[spp]]$growth_inv,data[[spp]]$leaf_area_0,data[[spp]]$total_inv,length = 0, angle = 30, code = 2, col = "black",lwd=1)
+  plot_yvar_vs_xvar(data[[spp]], yvar4, xvar,log="x",xlab="initial leaf area",ylab="RA",cex=1.3,
+                    col=col.age(data[[spp]]$age))
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar2,log="xy",xlab=spp,ylab="",cex=1.3,
+                    col=col.age(data[[spp]]$age))
+  plot_yvar_vs_xvar(data[[spp]], yvar2, xvar2,log="xy",xlab="",ylab="",cex=1.3,
+                    col=col.age(data[[spp]]$age))
+  plot_yvar_vs_xvar(data[[spp]], yvar3, xvar2,log="xy",xlab="",ylab="",cex=1.3,
+                    col=col.age(data[[spp]]$age))
+  arrows(data[[spp]]$total_weight_0,data[[spp]]$growth_inv,data[[spp]]$total_weight_0,data[[spp]]$total_inv,length = 0, angle = 30, code = 2, col = "black",lwd=1)
+  plot_yvar_vs_xvar(data[[spp]], yvar4, xvar2,log="x",xlab="initial plant weight",ylab="",cex=1.3,
+                    col=col.age(data[[spp]]$age))
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar3,log="y",xlab="",ylab="",cex=1.3,
+                    col=col.age(data[[spp]]$age))
+  plot_yvar_vs_xvar(data[[spp]], yvar2, xvar3,log="y",xlab="",ylab="",cex=1.3,
+                    col=col.age(data[[spp]]$age))
+  plot_yvar_vs_xvar(data[[spp]], yvar3, xvar3,log="y",xlab="",ylab="",cex=1.3,
+                   col=col.age(data[[spp]]$age))
+  plot_yvar_vs_xvar(data[[spp]], yvar4, xvar3,log="",xlab="prop maxH",ylab="",cex=1.3,
+                    col=col.age(data[[spp]]$age))
+  mtext("Initial leaf area                                                                            initial plant weight                                                                                    prop maxH", 1, line=1,outer=TRUE,cex=1.2)
+  mtext(spp, 3, outer=TRUE,cex=1.2)   
+}
+```
+                        
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=18, fig.height=15}
+par(mfcol=c(4,3), cex=1, omi=c(.8,.3,.3,.1), mai=c(.5,1,.1,0.1)) 
+SummaryInd$repro_inv_log <- SummaryInd$repro_inv + 10
+yvar <- "growth_height_log"
+yvar2 <- "growth_leaf_area_log"
+yvar3 <- "shoot_leaf_area"
+yvar4 <- "RA"
+xvar <- "repro_inv_log"
+xvar2 <- "total_weight_0"
+xvar3 <- "prop_maxH"
+
+data <- subset(SummaryInd)
+data <- split(data, data$species)
+
+for(spp in names(data)) {
+  
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="x",xlab="",ylab="height increase (log-log)",cex=1.3, col=col.age(data[[spp]]$age))
+  legend("topright",legend=labels.age(),col=col.age(),pch=16, cex=1,bty="n")
+  plot_yvar_vs_xvar(data[[spp]], yvar2, xvar,log="x",xlab="",ylab="total leaf area increase (log-log)",cex=1.3,col=col.age(data[[spp]]$age))
+  plot_yvar_vs_xvar(data[[spp]], yvar3, xvar,log="xy",xlab="",ylab="increase in shoot leaf area",cex=1.3, col=col.age(data[[spp]]$age))
+  plot_yvar_vs_xvar(data[[spp]], yvar4, xvar,log="x",xlab="reproductive investment",ylab="RA",cex=1.3,col=col.age(data[[spp]]$age))
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar2,log="x",xlab=spp,ylab="",cex=1.3, col=col.age(data[[spp]]$age))
+  plot_yvar_vs_xvar(data[[spp]], yvar2, xvar2,log="x",xlab="",ylab="",cex=1.3, col=col.age(data[[spp]]$age))
+  plot_yvar_vs_xvar(data[[spp]], yvar3, xvar2,log="xy",xlab="",ylab="",cex=1.3, col=col.age(data[[spp]]$age))
+  plot_yvar_vs_xvar(data[[spp]], yvar4, xvar2,log="x",xlab="initial plant weight",ylab="",cex=1.3,col=col.age(data[[spp]]$age))
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar3,log="",xlab="",ylab="",cex=1.3, col=col.age(data[[spp]]$age))
+  plot_yvar_vs_xvar(data[[spp]], yvar2, xvar3,log="",xlab="",ylab="",cex=1.3,col=col.age(data[[spp]]$age))
+  plot_yvar_vs_xvar(data[[spp]], yvar3, xvar3,log="y",xlab="",ylab="",cex=1.3,col=col.age(data[[spp]]$age))
+  plot_yvar_vs_xvar(data[[spp]], yvar4, xvar3,log="",xlab="prop maxH",ylab="",cex=1.3,col=col.age(data[[spp]]$age))
+  mtext("Initial leaf area                                                                            initial plant weight                                                                                    prop maxH", 1, line=1,outer=TRUE,cex=1.2)
+  mtext(spp, 3, outer=TRUE,cex=1.2)   
+}
+```

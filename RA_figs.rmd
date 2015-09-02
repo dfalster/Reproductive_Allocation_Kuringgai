@@ -173,7 +173,12 @@ results$r.squared <- round(results$r.squared,digits=3)
 results$p.value <- round(results$p.value,digits=3)
 results$a <- round(results$a,digits=2)
 results$b <- round(results$b,digits=2)
-results
+results$yvar <- "growth_inv"
+results$xvar <- "total_weight_0"
+results$data <- "SummaryInd"
+results$model <- "log10(yvar)~log10(xvar)"
+saved_results <- as.data.frame(results)
+results[1:6]
 
 for(spp in names(data)) {
   plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",cex=1.3,
@@ -199,6 +204,11 @@ results$r.squared <- round(results$r.squared,digits=3)
 results$p.value <- round(results$p.value,digits=3)
 results$a <- round(results$a,digits=2)
 results$b <- round(results$b,digits=2)
+results$yvar <- "growth_inv"
+results$xvar <- "leaf_area_0"
+results$data <- "SummaryInd"
+results$model <- "log10(yvar)~log10(xvar)"
+saved_results <- bind_rows(saved_results,results)
 results
 
 for(spp in names(data)) {
