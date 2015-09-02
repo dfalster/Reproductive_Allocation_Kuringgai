@@ -77,7 +77,7 @@ text(170,2.4,srt=45,"RA = 0.01")
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
 par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
 yvar <- "RA"
-xvar <- "prop_maxH"
+xvar <- "leaf_area_0"
 
 data <- subset(SummaryInd,RA>0)
 data <- split(data, data$species)
@@ -90,12 +90,12 @@ results$a <- round(results$a,digits=2)
 results$b <- round(results$b,digits=2)
 
 for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="",xlab="",ylab="",cex=1, xlim=c(0,1), 
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="x",xlab="",ylab="",cex=1, 
                     main=spp,col=col.age(data[[spp]]$age))
 }
 
 mtext("RA", 2, outer=TRUE,cex=1.2)
-mtext("proportion maximum H", 1, outer=TRUE,cex=1.2)
+mtext("initial leaf area", 1, outer=TRUE,cex=1.2)
 legend("bottomright",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
 ```
 

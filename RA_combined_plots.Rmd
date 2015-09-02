@@ -75,7 +75,7 @@ for(spp in names(data)) {
   plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="x",xlab="",ylab="height increase (log-log)",cex=1.3, col=col.age(data[[spp]]$age))
   legend("topright",legend=labels.age(),col=col.age(),pch=16, cex=1,bty="n")
   plot_yvar_vs_xvar(data[[spp]], yvar2, xvar,log="x",xlab="",ylab="total leaf area increase (log-log)",cex=1.3,col=col.age(data[[spp]]$age))
-  plot_yvar_vs_xvar(data[[spp]], yvar3, xvar,log="xy",xlab="",ylab="increase in shoot leaf area",cex=1.3, col=col.age(data[[spp]]$age))
+  plot_yvar_vs_xvar(data[[spp]], yvar3, xvar,log="xy",xlab="",ylab="total shoot leaf area",cex=1.3, col=col.age(data[[spp]]$age))
   plot_yvar_vs_xvar(data[[spp]], yvar4, xvar,log="x",xlab="reproductive investment",ylab="RA",cex=1.3,col=col.age(data[[spp]]$age))
   plot_yvar_vs_xvar(data[[spp]], yvar, xvar2,log="x",xlab=spp,ylab="",cex=1.3, col=col.age(data[[spp]]$age))
   plot_yvar_vs_xvar(data[[spp]], yvar2, xvar2,log="x",xlab="",ylab="",cex=1.3, col=col.age(data[[spp]]$age))
@@ -85,7 +85,7 @@ for(spp in names(data)) {
   plot_yvar_vs_xvar(data[[spp]], yvar2, xvar3,log="",xlab="",ylab="",cex=1.3,col=col.age(data[[spp]]$age))
   plot_yvar_vs_xvar(data[[spp]], yvar3, xvar3,log="y",xlab="",ylab="",cex=1.3,col=col.age(data[[spp]]$age))
   plot_yvar_vs_xvar(data[[spp]], yvar4, xvar3,log="",xlab="prop maxH",ylab="",cex=1.3,col=col.age(data[[spp]]$age))
-  mtext("Initial leaf area                                                                            initial plant weight                                                                                    prop maxH", 1, line=1,outer=TRUE,cex=1.2)
+  mtext("Reproductive investment (mg)                                                                            initial plant weight                                                                                    prop maxH", 1, line=1,outer=TRUE,cex=1.2)
   mtext(spp, 3, outer=TRUE,cex=1.2)   
 }
 ```
