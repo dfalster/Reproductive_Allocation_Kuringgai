@@ -38,7 +38,7 @@ labels.spp.full <- function(x=NULL){
 
 col.age <- function(x=NULL){
 
-  ret <- c("orchid1","gold1","darkolivegreen3","cyan2","dodgerblue","purple")
+  ret <- c("orchid1","gold1","darkolivegreen3","cyan2","dodgerblue3","purple")
   names(ret) <- c("1.4","2.4","5","7","9","32")
 
   if(!is.null(x)) {
