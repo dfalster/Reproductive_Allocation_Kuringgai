@@ -141,7 +141,10 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
   SummaryInd <- SummaryInd %>% mutate(
     total_inv = repro_inv + growth_inv,
     total_weight_0 = total_weight - growth_inv,
+    stem_weight_0 = stem_weight - growth_stem,
+    leaf_weight_0 = leaf_weight - growth_leaf,
     height_0 = height - growth_height,
+    diameter_0 = diameter - growth_stem_diameter,
     growth_height_log = log10(height)-log10(height_0),
     RA = repro_inv/total_inv,
     RGR = log(total_weight)-log(total_weight - growth_inv),
@@ -161,7 +164,8 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
     prepollen_aborted_per_seed = prepollen_aborted_inv/seed_count,
     prepollen_success_per_seed = prepollen_success_inv/seed_count,
     postpollen_aborted_per_seed = postpollen_aborted_inv/seed_count,
-    packaging_dispersal_per_seed = packaging_dispersal_inv/seed_count)
+    packaging_dispersal_per_seed = packaging_dispersal_inv/seed_count,
+    RA_leaf_area = repro_inv / (repro_inv + growth_leaf))
 
   
   for(v in c("packaging_dispersal_per_seed", "accessory_per_seed","propagule_per_seed",
@@ -215,7 +219,7 @@ get_species_values <- function(SummaryInd, groups) {
     group_by_(.dots=dots) %>%
     summarise_each(f, seed_size, accessory_inv, prepollen_aborted_inv, prepollen_success_inv,
       postpollen_aborted_inv, packaging_dispersal_inv, propagule_inv, prepollen_all_inv,
-      height, growth_inv, repro_inv, total_weight, total_inv, RA, diameter, stem_area,
+      height, growth_inv, repro_inv, total_weight, total_inv, RA, RA_leaf_area, diameter, stem_area,
       leaf_weight, stem_weight, growth_stem_diameter, growth_stem_area, growth_leaf,
       growth_stem, diameter, LMA, wood_density)
   })
