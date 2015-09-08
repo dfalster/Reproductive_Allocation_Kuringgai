@@ -21,19 +21,33 @@ source("R/figures.R")
     
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=15, fig.height=15}
 par(mfcol=c(2,2), cex=1, omi=c(.3,.2,.1,.1), mai=c(1.1,1.1,.4,0.2)) 
-data2 <- subset(HarvestData,start_end=="end")
+xvar <- "diameter"
+yvar <- "leaf_weight"
+
+data2 <- subset(HarvestData, start_end=="end"&segment==1 & !is.na(diameter) )
 data2 <- split(data2, data2$species)
 
-data1 <- subset(HarvestData,start_end=="end"&age>8)
-data1 <- split(data1, data1$species)
 
-for(spp in names(data)) {
+for(spp in names(data2)) {
+data3 <- data2[[spp]]
+x <- data3[[xvar]]
+plot(leaf_weight~diameter,data3,log="xy",pch=16,col=col.age(data2[[spp]]$age),main=spp,cex=1.2)
+points(leaf_weight~diameter,subset(data3,segment==1),cex=1.5)
+fit <- lm(log(data3[[yvar]]) ~  log(x))
+cs <- coef(fit)
+slope <- cs[2]
+curve(exp(cs[1])*x^slope, from=0.1, to=100, add=TRUE, lwd=2)
+intercept_indiv = log(data3[[yvar]]) - slope * log(x)
 
-plot(leaf_weight~diameter,data2[[spp]],log="xy",pch=16,col=col.age(data2[[spp]]$age),main=spp,cex=1.2)
-points(leaf_weight~diameter,subset(data2[[spp]],segment==1),cex=1.5)
-
-plot(leaf_weight~diameter,data1[[spp]],log="xy",pch=16,col=col.age(data1[[spp]]$age),main=spp,cex=1.2)
-points(leaf_weight~diameter,subset(data1[[spp]],segment==1),cex=1.5)
+for(i in seq_len(nrow(data3))) {
+  curve(exp(intercept_indiv[i])*x^slope, from= 0.9*x[i], to=1.1*x[i], add=TRUE, lwd=1)
+  }
 
 }
+
+
+#plot(leaf_weight~diameter,data1[[spp]],log="xy",pch=16,col=col.age(data1[[spp]]$age),main=spp,cex=1.2)
+#points(leaf_weight~diameter,subset(data1[[spp]],segment==1),cex=1.5)
+
+
 ```
