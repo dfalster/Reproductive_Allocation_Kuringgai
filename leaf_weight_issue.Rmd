@@ -29,12 +29,11 @@ data1 <- split(data1, data1$species)
 
 for(spp in names(data)) {
 
-plot(leaf_weight~diameter,data2[[spp]],log="xy",pch=16,col=col.age(data[[spp]]$age),main=spp,cex=1.2)
+plot(leaf_weight~diameter,data2[[spp]],log="xy",pch=16,col=col.age(data2[[spp]]$age),main=spp,cex=1.2)
 points(leaf_weight~diameter,subset(data2[[spp]],segment==1),cex=1.5)
 
-plot(leaf_weight~diameter,data1[[spp]],log="xy",pch=16,col=col.age(data[[spp]]$age),main=spp,cex=1.2)
+plot(leaf_weight~diameter,data1[[spp]],log="xy",pch=16,col=col.age(data1[[spp]]$age),main=spp,cex=1.2)
 points(leaf_weight~diameter,subset(data1[[spp]],segment==1),cex=1.5)
 
 }
 ```
-
