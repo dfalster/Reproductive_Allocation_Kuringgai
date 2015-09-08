@@ -1,0 +1,40 @@
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=14, fig.height=7.5}
+remake::make("export")
+
+SummaryInd <- readRDS("export/SummaryInd.rds")
+SummarySpp <- readRDS("export/SummarySpp.rds")
+SummarySppAge <- readRDS("export/SummarySppAge.rds")
+HarvestData <- readRDS("export/HarvestData.rds")
+InvestmentByPart <- readRDS("export/Investment_FD_all.rds")
+
+source("R/figures.R")
+```
+
+* Currently a slope isn't being calculated for "leaf vs diameter" only for whole plant and stem - leaves are then determined by subtraction. I think this is probably a mistake.  
+* It would be better to fit a line through "leaf weight vs diameter" for the subset of individuals/segments that are linear and then apply a correction to the older plants  
+* if helpful, I could create a lookup table that indicates which ageXsegment combinations to use for the linear regression for each species  
+* then, for leaves, the "offset" would be calculated as the offset based on the single-point value of (total weight of leave, basal diameter), instead of applying a slope correction  
+* In these plots  
+    * points are colored by age  
+    * basal segments (i.e. whole plant) values are larger and surrounded by a black ring
+    * the first plot for each species is all individuals, while the second plot it individuals from the two oldest sites  
+    
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=15, fig.height=15}
+par(mfcol=c(2,2), cex=1, omi=c(.3,.2,.1,.1), mai=c(1.1,1.1,.4,0.2)) 
+data2 <- subset(HarvestData,start_end=="end")
+data2 <- split(data2, data2$species)
+
+data1 <- subset(HarvestData,start_end=="end"&age>8)
+data1 <- split(data1, data1$species)
+
+for(spp in names(data)) {
+
+plot(leaf_weight~diameter,data2[[spp]],log="xy",pch=16,col=col.age(data[[spp]]$age),main=spp,cex=1.2)
+points(leaf_weight~diameter,subset(data2[[spp]],segment==1),cex=1.5)
+
+plot(leaf_weight~diameter,data1[[spp]],log="xy",pch=16,col=col.age(data[[spp]]$age),main=spp,cex=1.2)
+points(leaf_weight~diameter,subset(data1[[spp]],segment==1),cex=1.5)
+
+}
+```
+
