@@ -4,6 +4,8 @@ remake::make("export")
 SummaryInd <- readRDS("export/SummaryInd.rds")
 SummarySpp <- readRDS("export/SummarySpp.rds")
 SummarySppAge <- readRDS("export/SummarySppAge.rds")
+HarvestData <- readRDS("export/HarvestData.rds")
+InvestmentByPart <- readRDS("export/Investment_FD_all.rds")
 
 source("R/figures.R")
 ```
@@ -194,7 +196,7 @@ par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2))
 yvar <- "growth_inv"
 xvar <- "leaf_area_0"
 
-data <- subset(SummaryInd)
+data <- subset(SummaryInd, age>2)
 data <- split(data, data$species)
 lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
 results <- summarise_all_fits(lmfits)
@@ -251,7 +253,7 @@ par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2))
 yvar <- "total_inv"
 xvar <- "leaf_area_0"
 
-data <- subset(SummaryInd)
+data <- subset(SummaryInd,age>2)
 data <- split(data, data$species)
 lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
 results <- summarise_all_fits(lmfits)
