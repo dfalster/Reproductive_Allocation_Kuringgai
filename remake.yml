@@ -145,6 +145,8 @@ targets:
       - export/SummaryInd.rds
       - export/SummarySpp.rds
       - export/SummarySppAge.rds
+      - export/HarvestData.rds
+      - export/Investment_FD_all.rds
 
   export/SummaryInd.rds:
     command: saveRDS(SummaryInd, target_name)
@@ -154,3 +156,9 @@ targets:
 
   export/SummarySppAge.rds:
     command: saveRDS(SummarySppAge, target_name)
+
+  export/HarvestData.rds:
+    command: saveRDS(HarvestData, target_name)
+
+  export/Investment_FD_all.rds:
+    command: saveRDS(Investment_FD_all, target_name)

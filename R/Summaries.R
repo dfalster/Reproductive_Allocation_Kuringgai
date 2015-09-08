@@ -293,6 +293,7 @@ scale_individual_variable <- function(SummaryInd, SummarySpp) {
       prop_max_weight = total_weight_0 / get_species_value("max", "total_weight"),
       prop_max_repro = repro_inv / get_species_value("max", "repro_inv"),
       scaled_growth_stem_diameter = growth_stem_diameter / get_species_value("mean", "growth_stem_diameter"),
-      scaled_growth_shoot_diameter = growth_shoot_diameter / get_species_value("mean", "growth_shoot_diameter")
+      scaled_growth_shoot_diameter = growth_shoot_diameter / get_species_value("mean", "growth_shoot_diameter"),
+      leaf_area_midyear = (leaf_area_0 + leaf_area)/2
       )
 }
