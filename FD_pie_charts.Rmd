@@ -1,0 +1,143 @@
+``` {r}
+accessoryList <- read.csv("~/RA schedules - Kuringgai research/Reproductive_Allocation_Kuringgai/data/accessoryList.csv")
+accessoryListShort <- read.csv("~/RA schedules - Kuringgai research/Reproductive_Allocation_Kuringgai/data/accessoryListShort.csv")
+accessoryListShortest <- read.csv("~/RA schedules - Kuringgai research/Reproductive_Allocation_Kuringgai/data/accessoryListShortest.csv")
+
+col.barplot <- function(x=NULL){
+  ret <- c("cyan4","cyan1","darkslategray3","firebrick","firebrick1","firebrick2","firebrick3","gold","bisque","chartreuse2","chartreuse3","chartreuse4","chartreuse2","deepskyblue",
+           "dodgerblue2","deepskyblue","deepskyblue4","darkorange","darkorange1","darkorange2","darkorange3","darkorange4","darkorange3")
+  names(ret) <- c("seed","seed_pod","fruit_mature","bud","petals","stigma","style","finished_flower","calyx","fruit_immature","seed_immature","seed_aborted","fruit_seed_immature",
+                  "bract","pedicel","green_parts","inflorescence_stalk","cone_aborted","cone_base_brown","cone_base_green","cone_brown","cone_green","cone")
+
+  if(!is.null(x)) {
+    ret <- ret[as.character(x)]
+  }
+  ret
+}
+
+labels.barplot <- function(x=NULL){
+  names(col.barplot(x))
+}
+
+Invest2 <- merge(InvestmentByPart,select(accessoryList,-sort), by=c("species","part"))
+  
+for(v in c("weight")) {
+  i <- is.na(Invest2[[v]])
+  Invest2[[v]][i] <- 0
+}
+```
+
+by "parts fewer"
+```{r}
+SummaryInvest <- 
+  Invest2 %>%
+  group_by(parts_fewer,species) %>%
+  summarise_each(funs(sum),weight)
+
+SummaryInvest <- merge(SummaryInvest,select(accessoryListShort,-sort), by=c("species","parts_fewer"),all.x=TRUE)
+
+SummaryInvestSpp <- 
+  Invest2 %>%
+  group_by(species) %>%
+  summarise_each(funs(sum),weight)
+
+names(SummaryInvestSpp) <- c("species","weight_spp")
+
+SummaryInvest <- merge(SummaryInvest,SummaryInvestSpp,by=c("species"),all.x=TRUE)
+SummaryInvest$prop_weight <- round(SummaryInvest$weight / SummaryInvest$weight_spp,digits=3)
+SummaryInvest$labels <- paste(SummaryInvest$parts_fewer," (",SummaryInvest$prop_weight,")")
+SummaryInvest <- SummaryInvest[order(factor(SummaryInvest$parts_fewer,levels=c(c("seed","seed_pod","fruit_mature","bud","petals","stigma","style","finished_flower","calyx","fruit_immature","seed_immature","seed_aborted",
+                                                                                 "bract","pedicel","inflorescence_stalk","cone_aborted","cone_base_brown","cone_base_green","cone_brown","cone_green")))),]
+```
+
+by "parts fewer yet"
+```{r}
+SummaryInvest <- 
+  Invest2 %>%
+  group_by(parts_fewer_yet,species) %>%
+  summarise_each(funs(sum),weight)
+
+SummaryInvest <- merge(SummaryInvest,select(accessoryListShortest,-sort), by=c("species","parts_fewer_yet"),all.x=TRUE)
+
+SummaryInvestSpp <- 
+  Invest2 %>%
+  group_by(species) %>%
+  summarise_each(funs(sum),weight)
+
+names(SummaryInvestSpp) <- c("species","weight_spp")
+
+SummaryInvest <- merge(SummaryInvest,SummaryInvestSpp,by=c("species"),all.x=TRUE)
+SummaryInvest$prop_weight_spp <- round(SummaryInvest$weight / SummaryInvest$weight_spp,digits=3)
+SummaryInvest$labels <- paste(SummaryInvest$parts_fewer_yet," (",SummaryInvest$prop_weight,")")
+SummaryInvest <- SummaryInvest[order(factor(SummaryInvest$parts_fewer_yet,levels=c(c("bud","petals","calyx","finished_flower","fruit_seed_immature","seed","seed_pod","fruit_mature","bract","pedicel","inflorescence_stalk","green_parts","cone")))),]
+```
+
+by "parts"
+```{r}
+SummaryInvestParts <- 
+  Invest2 %>%
+  group_by(part,species) %>%
+  summarise_each(funs(sum),weight)
+
+SummaryInvestParts <- merge(SummaryInvestParts,select(accessoryList,-sort), by=c("species","part"),all.x=TRUE)
+
+SummaryInvestSppParts <- 
+  Invest2 %>%
+  group_by(species) %>%
+  summarise_each(funs(sum),weight)
+
+names(SummaryInvestSppParts) <- c("species","weight_spp")
+
+SummaryInvestParts <- merge(SummaryInvestParts,SummaryInvestSppParts,by=c("species"),all.x=TRUE)
+
+names(SummaryInvestParts) <- c("species","part","weight_by_part","accessory_part","parts_fewer","parts_fewer_yet","weight_spp")
+
+SummaryInvestParts <- merge(SummaryInvestParts,select(SummaryInvest,-accessory_part,-weight_spp),by=c("species","parts_fewer_yet"),all.x=TRUE)
+SummaryInvestParts$prop_weight_few_parts = round(SummaryInvestParts$weight_by_part / SummaryInvestParts$weight,digits=3)
+SummaryInvestParts$labels <- paste(SummaryInvestParts$part," (",SummaryInvestParts$prop_weight_few_parts,")")
+SummaryInvestParts$splitting <-paste(SummaryInvestParts$species,"_",SummaryInvestParts$parts_fewer_yet)
+```
+
+View(SummaryInvestParts)
+
+``` {r}
+pdf("figs2/Dividing_flower_parts2.pdf", height=11, width=8)
+plot
+par(mfcol=c(4,3), cex=1, omi=c(.01,.01,.01,.01), mai=c(.5,.9,.5,.9)) 
+data <- subset(SummaryInvestParts,weight>0)
+data <- split(data, data$splitting)
+
+for(spp in names(data)) {
+  pie(data[[spp]]$weight_by_part,labels=data[[spp]]$labels,main=spp,cex=0.3,cex.main=0.5,col=col.age())
+}
+dev.off()
+```
+
+```{r}
+barplot_data <- select(SummaryInvest,species, parts_fewer_yet, prop_weight)
+barplot_data <- spread(barplot_data,species,prop_weight,fill=0,drop=FALSE)
+barplot_data <- barplot_data[order(factor(barplot_data$parts_fewer_yet,levels=c(c(
+  "bud","petals","stigma","style","finished_flower","calyx","fruit_immature","seed_immature","seed_aborted","fruit_seed_immature","seed","seed_pod","fruit_mature",
+  "bract","pedicel","inflorescence_stalk","green_parts","cone_aborted","cone_base_brown","cone_base_green","cone_brown","cone_green","cone")))),]
+
+
+barplot_data_matrix <- as.matrix(barplot_data[2:15])
+
+#pdf("figs2/Flower_parts_barchart.pdf", height=8, width=11)
+#plot
+barplot(barplot_data_matrix,beside=FALSE,width=0.8,cex.axis=.8,cex.names=.8,xlim=c(.5,17.2),col=col.barplot(barplot_data$parts_fewer_yet),ylab="proportion repro investment")
+legend(13.5,1,legend=barplot_data$parts_fewer_yet,pch=16, cex=1.2,bty="n",col=col.barplot(barplot_data$parts_fewer_yet))
+#dev.off()
+##For pie charts
+
+data <- subset(SummaryInvest,weight>0)
+data <- split(data, data$species)
+
+pdf("figs2/Flower_parts_fewer.pdf", height=11, width=8)
+plot
+par(mfrow=c(2,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(.5,.5,.5,.5)) 
+for(spp in names(data)) {
+  pie(data[[spp]]$weight,labels=data[[spp]]$labels,main=spp,col=col.barplot(data[[spp]]$parts_fewer_yet),cex=0.8)
+}
+dev.off()
+```
