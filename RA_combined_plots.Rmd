@@ -13,7 +13,9 @@ source("R/figures.R")
 * plotting by age, shows that leaf investment and height growth are curtailed as plants age  
 * I think there still needs to be more of a link to connect this decreased "growth" with age directly to reproduction - maybe a "new" version of the plot showing individuals with more reproduction have less growth?
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=18, fig.height=15}
-pdf("figs2/RA_schedule_plots_2.pdf", height=11.3, width=8)
+SummaryInd <- SummaryInd[order(factor(SummaryInd$species,levels=c(c("HATE","PELA","BAER","PEPU","LEES","EPMI","COER","PUTU","PHPH","GRBU","GRSP","HEPU","PILI","BOLE")))),]
+
+pdf("figs2/RA_schedule_plots_3.pdf", height=11.3, width=8)
 plot
 par(mfcol=c(4,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1,1,.1,0.1)) 
 yvar <- "leaf_area"

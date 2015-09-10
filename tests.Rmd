@@ -132,3 +132,64 @@ text(170,2.4,srt=45,"RA = 0.01")
 
 plot(growth_leaf~growth_stem,SummaryInd, log="xy", col=col.age(age),pch=16,xlim=c(1,1000000),ylim=c(1,1000000))
 abline(0,1)
+
+
+```{r}
+#pdf("figs2/weight_diameter_segments_2.pdf", height=11.3, width=8)
+#plot
+par(mfcol=c(2,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1,1,.1,0.1)) 
+data <- subset(HarvestData)
+data <- split(data, data$species)
+
+for(spp in names(data)) {
+plot(stem_weight~diameter,data[[spp]],log="xy",cex=.7, main=spp,col=col.age(data[[spp]]$age),pch=16,ylab="stem (circle) + leaf (tri)"
+)
+points(leaf_weight~diameter,data[[spp]],cex=.7,pch=17,col=col.age(data[[spp]]$age))
+}
+#dev.off()
+
+```
+
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
+#pdf("figs2/tradeoff.pdf", height=11.3, width=8)
+#plot
+par(mfcol=c(4,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1,1,.1,0.1)) 
+yvar <- "RA_leaf_area"
+xvar <- "growth_stem_diameter"
+
+data <- subset(SummaryInd,RA_leaf_area>0&RA_leaf_area<1.5)
+data <- split(data, data$species)
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="x",cex=1.4, xlab="",ylab="",main=spp,col=col.age(data[[spp]]$age))
+}
+
+mtext("Stem diameter growth", 1, outer=TRUE,cex=1.2)
+mtext("RA (leaf area)", 2, outer=TRUE,cex=1.2)  
+legend("bottomleft",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
+#dev.off()
+```
+
+SummaryInd$leaf_turnover <- SummaryInd$leaf_weight_0/SummaryInd$LL_death
+plot(leaf_turnover~age,SummaryInd,log="xy", col=col.spp(species),pch=16)
+SummaryInd$leaf_net <- SummaryInd$growth_leaf + SummaryInd$leaf_turnover
+plot(leaf_net~age,SummaryInd,log="xy", col=col.spp(species),pch=16)
+plot(leaf_turnover~leaf_net,SummaryInd,log="xy", col=col.age(age),pch=16)
+abline(0,1)
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
+par(mfcol=c(4,4), cex=1, omi=c(.1,.1,.1,.1), mai=c(1,1,.3,0.1)) 
+yvar <- "leaf_turnover"
+xvar <- "leaf_net"
+
+data <- subset(SummaryInd)
+data <- split(data, data$species)
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",cex=1.4, xlab="",ylab="",main=spp,col=col.age(data[[spp]]$age))
+  abline(0,1)
+  abline(log10(.111),1)
+  abline(log10(.010101),1)
+}
+```
