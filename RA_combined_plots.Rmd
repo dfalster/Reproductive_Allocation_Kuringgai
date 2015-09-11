@@ -15,10 +15,10 @@ source("R/figures.R")
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=18, fig.height=15}
 SummaryInd <- SummaryInd[order(factor(SummaryInd$species,levels=c(c("HATE","PELA","BAER","PEPU","LEES","EPMI","COER","PUTU","PHPH","GRBU","GRSP","HEPU","PILI","BOLE")))),]
 
-pdf("figs2/RA_schedule_plots_3.pdf", height=11.3, width=8)
-plot
+#pdf("figs2/RA_schedule_plots_3.pdf", height=11.3, width=8)
+#plot
 par(mfcol=c(4,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1,1,.1,0.1)) 
-yvar <- "leaf_area"
+yvar <- "leaf_weight"
 yvar2 <- "height"
 yvar3 <- "total_inv"
 yvar4 <- "RA_leaf_area"
@@ -47,7 +47,7 @@ for(spp in names(data)) {
                     col=col.age(data[[spp]]$age))
   points(height~age,data2[[spp]],pch=16)
   }
-dev.off()
+#dev.off()
 ```
 SummaryInd$growth_ratio <- SummaryInd$growth_inv /SummaryInd$repro_inv
          
