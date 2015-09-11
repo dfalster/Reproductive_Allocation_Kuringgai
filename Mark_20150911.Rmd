@@ -1,5 +1,12 @@
+
+SummaryInd$leaf_turnover <- SummaryInd$leaf_weight_0/SummaryInd$LL_death
+SummaryInd$leaf_net <- SummaryInd$growth_leaf + SummaryInd$leaf_turnover
+SummaryInd$RA_leaf_turnover <- SummaryInd$repro_inv /(SummaryInd$repro_inv + SummaryInd$leaf_net)
+
+pdf("figs2/lab_meeting_followup.pdf", height=11.3, width=8)
+plot
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
-par(mfrow=c(4,4), cex=1, omi=c(.1,.1,.1,.1), mai=c(1,1,.3,0.1)) 
+par(mfrow=c(4,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1,1,.1,0.1)) 
 yvar <- "LMA"
 xvar <- "age"
 
@@ -7,12 +14,13 @@ data <- subset(SummaryInd)
 data <- split(data, data$species)
 
 for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="x",cex=1.4, xlab="",ylab="",main=spp,col=col.age(data[[spp]]$age))
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="x",cex=1, xlab="age",ylab="LMA",main=spp,col=col.age(data[[spp]]$age))
 }
 ```
 
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
-par(mfrow=c(4,4), cex=1, omi=c(.1,.1,.1,.1), mai=c(1,1,.3,0.1)) 
+
+par(mfcol=c(4,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1,1,.1,0.1)) 
 yvar <- "RA_leaf_turnover"
 xvar <- "age"
 
@@ -20,13 +28,14 @@ data <- subset(SummaryInd)
 data <- split(data, data$species)
 
 for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="x",cex=1.4, xlab="age",ylab="",main=spp,col=col.age(data[[spp]]$age))
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="x",cex=1, xlab="age",ylab="",main=spp,col=col.age(data[[spp]]$age))
 }
 mtext("RA, including leaf turnover", 2, outer=TRUE,cex=1.2,line=-.6)   
+
 ```
 
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
-par(mfcol=c(4,4), cex=1, omi=c(.1,.1,.1,.1), mai=c(1,1,.3,0.1)) 
+par(mfcol=c(4,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1,1,.1,0.1)) 
 yvar <- "leaf_turnover"
 xvar <- "leaf_net"
 
@@ -34,7 +43,7 @@ data <- subset(SummaryInd)
 data <- split(data, data$species)
 
 for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",cex=1.4, xlab="",ylab="",main=spp,col=col.age(data[[spp]]$age))
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",cex=1, xlab="",ylab="",main=spp,col=col.age(data[[spp]]$age))
   abline(0,1)
   abline(log10(.111),1)
   abline(log10(.010101),1)
@@ -42,3 +51,4 @@ for(spp in names(data)) {
   mtext("leaf tunover (mg)", 2, outer=TRUE,cex=1.2,line=-.6)   
 }
 ```
+dev.off()
