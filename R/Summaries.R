@@ -165,7 +165,9 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
     prepollen_success_per_seed = prepollen_success_inv/seed_count,
     postpollen_aborted_per_seed = postpollen_aborted_inv/seed_count,
     packaging_dispersal_per_seed = packaging_dispersal_inv/seed_count,
-    RA_leaf_area = repro_inv / (repro_inv + growth_leaf))
+    RA_leaf_area = repro_inv / (repro_inv + growth_leaf),
+    leaf_area_midyear = (leaf_area_0 + leaf_area)/2
+    )
 
   
   for(v in c("packaging_dispersal_per_seed", "accessory_per_seed","propagule_per_seed",
@@ -206,7 +208,7 @@ sort_by_variable <- function(data, variable_list){
 get_species_values <- function(SummaryInd, groups) {
 
   # function to apply
-  fs <- c("max", "mean", "sd", "length")
+  fs <- c("max", "min","mean", "sd", "length")
 
   # note use of `group_by_` below - allows for passing in of
   # character vectors
@@ -221,7 +223,7 @@ get_species_values <- function(SummaryInd, groups) {
       postpollen_aborted_inv, packaging_dispersal_inv, propagule_inv, prepollen_all_inv,
       height, growth_inv, repro_inv, total_weight, total_inv, RA, RA_leaf_area, diameter, stem_area,
       leaf_weight, stem_weight, growth_stem_diameter, growth_stem_area, growth_leaf,
-      growth_stem, diameter, LMA, wood_density)
+      growth_stem, diameter, LMA, wood_density,leaf_area,leaf_area_midyear)
   })
   names(out[[1]]) <- fs
 
@@ -248,7 +250,7 @@ get_species_values <- function(SummaryInd, groups) {
     SummaryInd %>%
     filter(repro_inv > 0) %>%
     group_by_(.dots=dots) %>%
-    summarise_each(f, seedset, seed_count, flower_count,fruit_weight,leaf_area)
+    summarise_each(f, seedset, seed_count, flower_count,fruit_weight)
   })
   names(out[[4]]) <- fs
 
@@ -290,14 +292,16 @@ scale_individual_variable <- function(SummaryInd, SummarySpp) {
       SummarySpp[[f]][[v]][i]
     }
 
-    
-    mutate(SummaryInd,
-      maxH =  get_species_value("max", "height"),
-      prop_maxH = height_0 / maxH,
-      prop_max_weight = total_weight_0 / get_species_value("max", "total_weight"),
-      prop_max_repro = repro_inv / get_species_value("max", "repro_inv"),
-      scaled_growth_stem_diameter = growth_stem_diameter / get_species_value("mean", "growth_stem_diameter"),
-      scaled_growth_shoot_diameter = growth_shoot_diameter / get_species_value("mean", "growth_shoot_diameter"),
-      leaf_area_midyear = (leaf_area_0 + leaf_area)/2
+      mutate(SummaryInd,
+        maxH =  get_species_value("max", "height"),
+        prop_maxH = height_0 / maxH,
+        prop_max_weight = total_weight_0 / get_species_value("max", "total_weight"),
+        prop_max_repro = repro_inv / get_species_value("max", "repro_inv"),
+        scaled_growth_stem_diameter = growth_stem_diameter / get_species_value("mean", "growth_stem_diameter"),
+        scaled_growth_shoot_diameter = growth_shoot_diameter / get_species_value("mean", "growth_shoot_diameter"),
+        growth_leaf_min = get_species_value("min","growth_leaf"),
+        ratio_leaf_growth = log10(leaf_area) - log10(leaf_area_0),
+        repro_inv_nonzero = repro_inv + 1
       )
+
 }
