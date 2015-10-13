@@ -192,6 +192,10 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
     mutate(years_repro = years_reproducing(RA, age)) %>%
     ungroup()
   
+  # These individuals excluded because were near death
+  SummaryInd <- subset(SummaryInd, 
+    !individual %in% c("GRBU_903", "PELA_902", "PELA_905", "COER_804", "PEPU_905", "GRSP_907", "LEES_907"))
+
   SummaryInd
 
 }
