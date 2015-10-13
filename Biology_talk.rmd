@@ -1,14 +1,57 @@
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=8, fig.height=8}
+win.metafile("figs2/RA_all_spp1.wmf", height=5, width=5)
+plot
+par(mfrow=c(1,1), cex=1, omi=c(.7,.7,.1,.1), mai=c(.1,.1,.1,0.1)) 
+mod <- lm(log(growth_inv)~log(repro_inv),data=subset(SummaryInd,repro_inv>0))
+plot((1+repro_inv)~growth_inv, SummaryInd, log="xy", col=col.spp(species),pch=16,xlim=c(1,1000000),ylim=c(1,1000000),xlab="",ylab="")
+words.top.left.logxy(mod)
+legend("bottomright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
+abline(0,1)
+text(2.1,3,srt=45,"RA = 0.5",cex=.7)
+abline(log10(3),1)
+text(2,9,srt=45,"RA = 0.75",cex=.7)
+abline(log10(9),1)
+text(2,25,srt=45,"RA = 0.9",cex=.7)
+abline(log10(19),1)
+text(2,60,srt=45,"RA = 0.95",cex=.7)
+abline(log10(.111),1)
+text(19,3,srt=45,"RA = 0.1",cex=.7)
+abline(log10(.010101),1)
+text(170,2.4,srt=45,"RA = 0.01",cex=.7)
+mtext("reproductive investment (mg)", 2, outer=TRUE,cex=1,line=2)
+mtext("growth investment (mg)", 1, outer=TRUE,cex=1,line=1.7)
+dev.off()
+```
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=8, fig.height=8}
+win.metafile("figs2/RA_all_spp2.wmf", height=5, width=5)
+plot
+par(mfrow=c(1,1), cex=1, omi=c(.7,.7,.1,.1), mai=c(.1,.1,.1,0.1))  
+plot((1+repro_inv)~growth_inv, SummaryInd, log="xy", col=col.age(age),pch=16,xlim=c(1,1000000),ylim=c(1,1000000))
+legend("bottomright",legend=labels.age(),col=col.age(),pch=16, cex=.8,bty="n")
+abline(0,1)
+text(2.1,3,srt=45,"RA = 0.5",cex=.7)
+abline(log10(3),1)
+text(2,9,srt=45,"RA = 0.75",cex=.7)
+abline(log10(9),1)
+text(2,25,srt=45,"RA = 0.9",cex=.7)
+abline(log10(19),1)
+text(2,60,srt=45,"RA = 0.95",cex=.7)
+abline(log10(.111),1)
+text(19,3,srt=45,"RA = 0.1",cex=.7)
+abline(log10(.010101),1)
+text(170,2.4,srt=45,"RA = 0.01",cex=.7)
+mtext("reproductive investment (mg)", 2, outer=TRUE,cex=1,line=2)
+mtext("growth investment (mg)", 1, outer=TRUE,cex=1,line=1.7)
+dev.off()
+```
+
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=18, fig.height=15}
-win.metafile("figs2/RA_talk_plot1.wmf", height=7, width=4)
+win.metafile("figs2/RA_talk_reproinv_by_age.wmf", height=7, width=4)
 plot
 par(mfcol=c(4,1), cex=1, omi=c(.3,.6,.01,.01), mai=c(.4,.15,.3,0.1)) 
-yvar <- "leaf_weight"
-yvar2 <- "RA"
-yvar3 <- "total_inv"
-yvar4 <- "RA_leaf_area"
-xvar <- "leaf_area_midyear"
-xvar2 <- "age"
-xvar3 <- "height"
+xvar <- "age"
+yvar <- "repro_inv"
 
 data <- subset(SummaryInd, species=="BOLE"|species=="GRBU"|species=="EPMI"|species=="HATE")
 data <- split(data, data$species)
@@ -18,7 +61,127 @@ data2 <- split(data2, data2$species)
 
 for(spp in names(data)) {
   
-  plot_yvar_vs_xvar(data[[spp]], yvar2, xvar2,log="x",xlab="",ylab="",xlim=c(1,33),ylim=c(0,1),cex=1,
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",xlim=c(1,33),cex=1,
+                    col=col.age(data[[spp]]$age),main=labels.spp.full(spp),cex.main=0.9)
+  points(repro_inv~age,data2[[spp]],pch=16,cex=0.8)
+}
+mtext("reproductive investment (mg)", 2, outer=TRUE,cex=1,line=2)
+mtext("age (years)", 1, outer=TRUE,cex=1,line=0.5)
+dev.off()
+```
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=18, fig.height=15}
+win.metafile("figs2/RA_talk_growthinv_by_age.wmf", height=7, width=4)
+plot
+par(mfcol=c(4,1), cex=1, omi=c(.3,.6,.01,.01), mai=c(.4,.15,.3,0.1)) 
+xvar <- "age"
+yvar <- "growth_inv"
+
+data <- subset(SummaryInd, species=="BOLE"|species=="GRBU"|species=="EPMI"|species=="HATE")
+data <- split(data, data$species)
+
+data2 <- subset(SummarySppAge[["mean"]])
+data2 <- split(data2, data2$species)
+
+for(spp in names(data)) {
+  
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",xlim=c(1,33),cex=1,
+                    col=col.age(data[[spp]]$age),main=labels.spp.full(spp),cex.main=0.9)
+  points(growth_inv~age,data2[[spp]],pch=16,cex=0.8)
+}
+mtext("vegetative investment (mg)", 2, outer=TRUE,cex=1,line=2.2)
+mtext("age (years)", 1, outer=TRUE,cex=1,line=0.5)
+dev.off()
+```
+
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=18, fig.height=15}
+win.metafile("figs2/RA_talk_leafinv_by_age.wmf", height=7, width=4)
+plot
+par(mfcol=c(4,1), cex=1, omi=c(.3,.6,.01,.01), mai=c(.4,.15,.3,0.1)) 
+xvar <- "age"
+yvar <- "growth_leaf"
+
+data <- subset(SummaryInd, species=="BOLE"|species=="GRBU"|species=="EPMI"|species=="HATE")
+data <- split(data, data$species)
+
+data2 <- subset(SummarySppAge[["mean"]])
+data2 <- split(data2, data2$species)
+
+for(spp in names(data)) {
+  
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",xlim=c(1,33),cex=1,
+                    col=col.age(data[[spp]]$age),main=labels.spp.full(spp),cex.main=0.9)
+  points(growth_leaf~age,data2[[spp]],pch=16,cex=0.8)
+}
+mtext("leaf investment (mg)", 2, outer=TRUE,cex=1,line=2.2)
+mtext("age (years)", 1, outer=TRUE,cex=1,line=0.5)
+dev.off()
+```
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=18, fig.height=15}
+win.metafile("figs2/RA_talk_H_by_age.wmf", height=7, width=4)
+plot
+par(mfcol=c(4,1), cex=1, omi=c(.3,.6,.01,.01), mai=c(.4,.15,.3,0.1)) 
+xvar <- "age"
+yvar <- "height"
+
+data <- subset(SummaryInd, species=="BOLE"|species=="GRBU"|species=="EPMI"|species=="HATE")
+data <- split(data, data$species)
+
+data2 <- subset(SummarySppAge[["mean"]])
+data2 <- split(data2, data2$species)
+
+for(spp in names(data)) {
+  
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",xlim=c(1,33),cex=1,
+                    col=col.age(data[[spp]]$age),main=labels.spp.full(spp),cex.main=0.9)
+  points(height~age,data2[[spp]],pch=16,cex=0.8)
+}
+mtext("height (mm)", 2, outer=TRUE,cex=1,line=2)
+mtext("age (years)", 1, outer=TRUE,cex=1,line=0.5)
+dev.off()
+```
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=18, fig.height=15}
+win.metafile("figs2/RA_talk_weight_by_age.wmf", height=7, width=4)
+plot
+par(mfcol=c(4,1), cex=1, omi=c(.3,.6,.01,.01), mai=c(.4,.15,.3,0.1)) 
+yvar <- "total_weight"
+xvar <- "age"
+
+data <- subset(SummaryInd, species=="BOLE"|species=="GRBU"|species=="EPMI"|species=="HATE")
+data <- split(data, data$species)
+
+data2 <- subset(SummarySppAge[["mean"]])
+data2 <- split(data2, data2$species)
+
+for(spp in names(data)) {
+  
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",xlim=c(1,33),cex=1,
+                    col=col.age(data[[spp]]$age),main=labels.spp.full(spp),cex.main=0.9)
+}
+mtext("plant weight (mg)", 2, outer=TRUE,cex=1,line=2.2)
+mtext("age (years)", 1, outer=TRUE,cex=1,line=0.5)
+dev.off()
+```
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=18, fig.height=15}
+win.metafile("figs2/RA_talk_plot1.wmf", height=7, width=4)
+plot
+par(mfcol=c(4,1), cex=1, omi=c(.3,.6,.01,.01), mai=c(.4,.15,.3,0.1)) 
+yvar <- "RA"
+xvar <- "age"
+
+data <- subset(SummaryInd, species=="BOLE"|species=="GRBU"|species=="EPMI"|species=="HATE")
+data <- split(data, data$species)
+
+data2 <- subset(SummarySppAge[["mean"]])
+data2 <- split(data2, data2$species)
+
+for(spp in names(data)) {
+  
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="x",xlab="",ylab="",xlim=c(1,33),ylim=c(0,1),cex=1,
                     col=col.age(data[[spp]]$age),main=labels.spp.full(spp),cex.main=0.9)
 }
 mtext("RA", 2, outer=TRUE,cex=1,line=1.8)
@@ -30,13 +193,8 @@ dev.off()
 win.metafile("figs2/RA_talk_plot2.wmf", height=7, width=4)
 plot
 par(mfcol=c(4,1), cex=1, omi=c(.3,.7,.01,.01), mai=c(.4,.15,.3,0.1)) 
-yvar <- "leaf_weight"
-yvar2 <- "RA"
-yvar3 <- "total_inv"
-yvar4 <- "RA_leaf_area"
+yvar <- "total_inv"
 xvar <- "leaf_area_midyear"
-xvar2 <- "age"
-xvar3 <- "height"
 
 data <- subset(SummaryInd, species=="BOLE"|species=="GRBU"|species=="EPMI"|species=="HATE")
 data <- split(data, data$species)
@@ -46,7 +204,7 @@ data2 <- split(data2, data2$species)
 
 for(spp in names(data)) {
   
-  plot_yvar_vs_xvar(data[[spp]], yvar3, xvar,log="xy",xlab="",ylab="",cex=1,
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",cex=1,
                     col=col.age(data[[spp]]$age),main=labels.spp.full(spp),cex.main=0.9)
   arrows(data[[spp]]$leaf_area_midyear,data[[spp]]$growth_inv,data[[spp]]$leaf_area_midyear,data[[spp]]$total_inv,length = 0, angle = 30, code = 2, col = "black",lwd=1)
 }
@@ -55,18 +213,12 @@ mtext("leaf area (mm^2)", 1, outer=TRUE,cex=1,line=0.5)
 dev.off()
 ```
 
-
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=18, fig.height=15}
 win.metafile("figs2/RA_talk_plot3.wmf", height=7, width=4)
 plot
 par(mfcol=c(4,1), cex=1, omi=c(.3,.6,.01,.01), mai=c(.4,.15,.3,0.1)) 
-yvar <- "leaf_weight"
-yvar2 <- "height"
-yvar3 <- "total_inv"
-yvar4 <- "RA_leaf_area"
-xvar <- "leaf_area_midyear"
-xvar2 <- "age"
-xvar3 <- "height"
+yvar <- "RA_leaf_area"
+xvar <- "age"
 
 data <- subset(SummaryInd, species=="BOLE"|species=="GRBU"|species=="EPMI"|species=="HATE")
 data <- split(data, data$species)
@@ -76,7 +228,7 @@ data2 <- split(data2, data2$species)
 
 for(spp in names(data)) {
   
-  plot_yvar_vs_xvar(data[[spp]], yvar4, xvar2,log="x",xlab="",ylab="",xlim=c(1,33),ylim=c(0,1.2),cex=1,
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="x",xlab="",ylab="",xlim=c(1,33),ylim=c(0,1.2),cex=1,
                     col=col.age(data[[spp]]$age),main=labels.spp.full(spp),cex.main=0.9)
 }
 mtext("RA (based on leaf weight only)", 2, outer=TRUE,cex=1,line=1.8)
@@ -85,16 +237,11 @@ dev.off()
 ```
 
 ```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=18, fig.height=15}
-win.metafile("figs2/RA_talk_plot4.wmf", height=7, width=4)
+win.metafile("figs2/RA_talk_leafweight_x_age.wmf", height=7, width=4)
 plot
 par(mfcol=c(4,1), cex=1, omi=c(.3,.7,.01,.01), mai=c(.4,.15,.3,0.1)) 
 yvar <- "leaf_weight"
-yvar2 <- "height"
-yvar3 <- "total_inv"
-yvar4 <- "RA_leaf_area"
-xvar <- "leaf_area_midyear"
-xvar2 <- "age"
-xvar3 <- "height"
+xvar <- "age"
 
 data <- subset(SummaryInd, species=="BOLE"|species=="GRBU"|species=="EPMI"|species=="HATE")
 data <- split(data, data$species)
@@ -104,7 +251,7 @@ data2 <- split(data2, data2$species)
 
 for(spp in names(data)) {
   
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar2,log="xy",xlab="",ylab="",xlim=c(1,33),cex=1,
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",xlim=c(1,33),cex=1,
                     col=col.age(data[[spp]]$age))
 }
 mtext("leaf weight (mg)", 2, outer=TRUE,cex=1,line=2.5)
@@ -501,4 +648,33 @@ for(spp in names(data)) {
     }
 #text("epacrids", 3, outer=TRUE,cex=1.2,line=.5)
 #dev.off()
+```
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=18, fig.height=15}
+win.metafile("figs2/RA_talk_LA_tradeoff.wmf", height=7, width=4)
+plot
+
+  for(v in c("growth_leaf_min")) {
+    i <- (SummaryInd[[v]]) > 0
+    SummaryInd[[v]][i] <- 0
+    }
+
+SummaryInd$growth_leaf_nonzero <- SummaryInd$growth_leaf - SummaryInd$growth_leaf_min
+
+par(mfcol=c(4,1), cex=1, omi=c(.3,.6,.01,.01), mai=c(.4,.15,.3,0.1)
+
+yvar <- "growth_leaf_nonzero"
+xvar <- "repro_inv"
+
+data <- subset(SummaryInd,individual!="GRBU_903"&individual!="PELA_905"&individual!="COER_804"&individual!="PEPU_905"&individual!="GRSP_907"&individual!="LEES_907"&(species=="BOLE"|species=="EPMI"|species=="GRBU"|species=="HATE"))
+data <- split(data, data$species)
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,xlab="",ylab="",cex=1,log="xy",yaxt="n",
+                    col=col.age(data[[spp]]$age),main=labels.spp.full(spp),cex.main=0.9)
+    }
+
+mtext("leaf investment (mg)", 2, outer=TRUE,cex=1,line=2)
+mtext("reproductive investment (mg)", 1, outer=TRUE,cex=1,line=1.7)
+dev.off()
 ```
