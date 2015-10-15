@@ -289,6 +289,9 @@ mtext("leaf area",1,outer=TRUE)
 mtext("yearly growth (mg)",2,outer=TRUE)
 ```
 
+
+
+
 ### Species with higher LMA have higher growth rates  
 - This pattern is true for adult plants  
 - But there is no relationship in seedlings (age=1.4) or saplings (age=2.4)  
@@ -296,25 +299,25 @@ mtext("yearly growth (mg)",2,outer=TRUE)
 - But relationship in adults disappears when HATE is removed...
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=14}
 par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(.5,1,.6,0.2)) 
-plot(growth_inv ~ LMA,data=subset(SummarySppAge,age==1.4),log="xy",col=col.age(),pch=16,cex=1,xlab="",ylab="",main="Seedlings")
-text(growth_inv ~ LMA, data=subset(SummarySppAge,age==1.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
-mod <- lm(growth_inv ~ LMA, data=subset(SummarySppAge,age==1.4))
+plot(growth_leaf ~ LMA,data=subset(SummarySppAge[["mean"]],age==1.4),log="xy",pch=16,cex=1,xlab="",ylab="",main="Seedlings")
+text(growth_leaf ~ LMA, data=subset(SummarySppAge[["mean"]],age==1.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
+mod <- lm(growth_leaf ~ LMA, data=subset(SummarySppAge[["mean"]],age==1.4))
 words.bottom.right.logxy(mod)
 
-plot(growth_inv ~ LMA,data=subset(SummarySppAge,age==2.4),log="xy",col="gold1",pch=16,cex=1,xlab="",ylab="",main="Saplings")
-text(growth_inv ~ LMA, data=subset(SummarySppAge,age==2.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
-mod <- lm(growth_inv ~ LMA, data=subset(SummarySppAge,age==2.4))
+plot(growth_leaf ~ LMA,data=subset(SummarySppAge[["mean"]],age==2.4),log="xy",col="gold1",pch=16,cex=1,xlab="",ylab="",main="Saplings")
+text(growth_leaf ~ LMA, data=subset(SummarySppAge[["mean"]],age==2.4), labels=species, pos=1, offset=-1.1, cex=0.7,col="blue")
+mod <- lm(growth_leaf ~ LMA, data=subset(SummarySppAge[["mean"]],age==2.4))
 words.bottom.right.logxy(mod)
 legend("topright",col=col.age,labels.age(),pch=16, bty="n")
 
-plot(growth_inv ~ LMA,data=subset(SummarySppAge,age>3),log="xy",col=col.age(),pch=16,cex=1,xlab="",ylab="",main="Adults")
-text(growth_inv ~ LMA, data=subset(SummarySppAge,age>3), labels=species, pos=1, offset=-1.1, cex=0.6,col="blue")
-mod <- lm(growth_inv ~ LMA, data=subset(SummarySppAge,age>3))
+plot(growth_leaf ~ LMA,data=subset(SummarySppAge[["mean"]],age>3),log="xy",col=col.age(),pch=16,cex=1,xlab="",ylab="",main="Adults")
+text(growth_leaf ~ LMA, data=subset(SummarySppAge[["mean"]],age>3), labels=species, pos=1, offset=-1.1, cex=0.6,col="blue")
+mod <- lm(growth_leaf ~ LMA, data=subset(SummarySppAge[["mean"]],age>3))
 words.bottom.right.logxy(mod)
 
-plot(growth_inv ~ LMA,data=subset(SummarySppAge,age>3&species!="HATE"),log="xy",col=col.age(),pch=16,cex=1,xlab="",ylab="",main="Adults")
-text(growth_inv ~ LMA, data=subset(SummarySppAge,age>3&species!="HATE"), labels=species, pos=1, offset=-1.1, cex=0.6,col="blue")
-mod <- lm(growth_inv ~ LMA, data=subset(SummarySppAge,age>3&species!="HATE"))
+plot(growth_leaf~ LMA,data=subset(SummarySppAge[["mean"]],age>3&species!="HATE"),log="xy",col=col.age(),pch=16,cex=1,xlab="",ylab="",main="Adults")
+text(growth_leaf ~ LMA, data=subset(SummarySppAge[["mean"]],age>3&species!="HATE"), labels=species, pos=1, offset=-1.1, cex=0.6,col="blue")
+mod <- lm(growth_leaf ~ LMA, data=subset(SummarySppAge[["mean"]],age>3&species!="HATE"))
 words.bottom.right.logxy(mod)
 
 mtext("LMA",1,outer=TRUE)

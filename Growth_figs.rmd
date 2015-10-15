@@ -307,3 +307,30 @@ plot(wood_density~growth_leaf_area,SummaryInd,log="y",pch=16,col=col.age())
 mod <- lm(log(growth_leaf_area)~age*wood_density,SummaryInd)
 summary(mod)
 ```
+
+
+```{r}
+#plot(LMA ~ age,data=subset(SummarySppAge[["mean"]]),col=col.spp(species),pch=16,log="x")
+
+par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
+yvar <- "shoot_leaf_area"
+xvar <- "growth_leaf"
+
+data <- subset(SummaryInd,age>2&growth_leaf>0)
+data <- split(data, data$species)
+
+lmfits <- lapply(data, function(x) lm(log((x[[yvar]])) ~  (log(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",cex=1.4,
+                    main=spp,col=col.age(data[[spp]]$age))
+}
+```

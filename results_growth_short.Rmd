@@ -164,10 +164,10 @@ mtext("basal diameter", 2, outer=TRUE,cex=1.2)
 ```{r, echo=FALSE,message=FALSE,fig.width=7, fig.height=7}
 par(mfrow=c(1,1), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
 SummaryIndPCA <- SummaryInd %>%
-  filter(shoot_leaf_count>0&shoot_leaf_area>0&shoot_growth_leaf_area!=0) %>%
-  select(prop_maxH,height,maxH,WD,LMA,seed_size,growth_leaf,
+  filter(shoot_leaf_count>0&shoot_leaf_area>0&shoot_growth_leaf_area!=0,RA_leaf_area>0) %>%
+  select(prop_maxH,height,maxH,wood_density,LMA,seed_size,growth_leaf,
          growth_stem_diameter,leaf_area,growth_shoot_area,growth_stem_area,shoot_leaf_count,total_weight,
-         RA,seedset,repro_all_count,accessory_inv,propagule_inv,shoot_leaf_area,shoot_growth_leaf_area,RGR)
+         RA_leaf_area,seedset,repro_all_count,accessory_inv,propagule_inv,shoot_leaf_area,shoot_growth_leaf_area,RGR)
 
 SummaryIndPCA$leaf_area <- log((SummaryIndPCA$leaf_area)+.001)
 SummaryIndPCA$total_weight <- log(SummaryIndPCA$total_weight)
@@ -200,7 +200,7 @@ PCA_loadings <- merge(PCA_loadings,PCA_scaling,by="variables")
 PCA_lambda <- as.data.frame(PCA_mod$sdev)
 
 PCA_scores <- as.data.frame(PCA_mod$x)
-PCA_scores$individual <- subset(SummaryInd$individual, SummaryInd$shoot_leaf_count>0&SummaryInd$shoot_growth_leaf_area!=0)
+PCA_scores$individual <- subset(SummaryInd$individual, SummaryInd$shoot_leaf_count>0&SummaryInd$shoot_leaf_area>0&SummaryInd$shoot_growth_leaf_area!=0&SummaryInd$RA_leaf_area>0)
 SummaryInd_PCA_results <- merge(SummaryInd,PCA_scores, by="individual", all.x=TRUE)
 
 n <- NROW(PCA_scores)
@@ -247,16 +247,16 @@ PCA related code to keep:
 par(mfrow=c(2,2), cex=1, omi=c(.5,0.3,.1,0.2), mai=c(1.1,1,.6,0.2))
 
 PCA_by_species <- SummaryInd_PCA_results %>%
-  filter(shoot_leaf_count>0) %>%
+  filter(SummaryInd$shoot_leaf_count>0&SummaryInd$shoot_leaf_area>0&SummaryInd$shoot_growth_leaf_area!=0&SummaryInd$RA_leaf_area>0) %>%
   group_by(species) %>%
   summarise_each(funs(mean, se), PC1_scale, PC2_scale, PC3_scale, PC4_scale)
 
-plot(PC1_scale~(PC2_scale),SummaryInd_PCA_results,pch=16,col=col.spp(species),xlim=c(-.1,.1))
-arrows(0, 0, (.9*PCA_loadings$PC2_scale), (.9*PCA_loadings$PC1_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
+plot(PC1_scale~(PC2_scale),SummaryInd_PCA_results,pch=16,col=col.spp(species))
+arrows(0, 0, (.1*PCA_loadings$PC2_scale), (.1*PCA_loadings$PC1_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
 text(PC1_scale ~ PC2_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
 legend("topright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 
-mean1 <- PCA_by_species$PC1_scale
+mean1 <- PCA_by_species$PC1_scale_mean
 se1 <- PCA_by_species$PC1_scale_se
 plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 1")
 se_function(mean1,se1)
@@ -279,7 +279,7 @@ se1 <- PCA_by_species$PC3_scale_se
 plot(mean1~species,PCA_by_species,cex.axis=.5,pch=16,ylab="PCA axis 3")
 se_function(mean1,se1)
 
-plot(PC4_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.spp(species),ylim=c(-.15,.15))
+plot(PC4_scale~PC1_scale,SummaryInd_PCA_results,pch=16,col=col.spp(species))
 arrows(0, 0, (.9*PCA_loadings$PC1_scale), (.9*PCA_loadings$PC4_scale), length = 0.25, angle = 30, code = 2, col = "red",lwd=2)
 text(PC4_scale ~ PC1_scale, PCA_loadings, labels=variables, pos=1, offset=0, cex=1,col="black")
 legend("topright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
