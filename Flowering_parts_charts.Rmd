@@ -1,13 +1,17 @@
+Always run
+Opening files
+
 ``` {r}
 accessoryList <- read.csv("~/RA schedules - Kuringgai research/Reproductive_Allocation_Kuringgai/data/accessoryList.csv")
 accessoryListShort <- read.csv("~/RA schedules - Kuringgai research/Reproductive_Allocation_Kuringgai/data/accessoryListShort.csv")
 accessoryListShortest <- read.csv("~/RA schedules - Kuringgai research/Reproductive_Allocation_Kuringgai/data/accessoryListShortest.csv")
+tissue_energy <- read.csv("~/RA schedules - Kuringgai research/Reproductive_Allocation_Kuringgai/data/tissue_energy.csv")
+nectar <- read.csv("~/RA schedules - Kuringgai research/Reproductive_Allocation_Kuringgai/data/nectar.csv")
 
 col.barplot <- function(x=NULL){
-  ret <- c("cyan4","cyan1","darkslategray3","firebrick","firebrick1","firebrick2","firebrick3","gold","bisque","chartreuse2","chartreuse3","chartreuse4","chartreuse2","deepskyblue",
+  ret <- c("black","cyan4","cyan1","darkslategray3","firebrick","firebrick1","firebrick2","firebrick3","gold","bisque","chartreuse2","chartreuse3","chartreuse4","chartreuse2","deepskyblue",
            "dodgerblue2","deepskyblue","deepskyblue4","darkorange","darkorange1","darkorange2","darkorange3","darkorange4","darkorange3")
-  names(ret) <- c("seed","seed_pod","fruit_mature","bud","petals","stigma","style","finished_flower","calyx","fruit_immature","seed_immature","seed_aborted","fruit_seed_immature",
-                  "bract","pedicel","green_parts","inflorescence_stalk","cone_aborted","cone_base_brown","cone_base_green","cone_brown","cone_green","cone")
+  names(ret) <- c("nectar","seed","seed_pod","fruit_mature","bud","petals","stigma","style","finished_flower","calyx","fruit_immature","seed_immature","seed_aborted","fruit_seed_immature","bract","pedicel","green_parts","inflorescence_stalk","cone_aborted","cone_base_brown","cone_base_green","cone_brown","cone_green","cone")
 
   if(!is.null(x)) {
     ret <- ret[as.character(x)]
@@ -25,6 +29,26 @@ for(v in c("weight")) {
   i <- is.na(Invest2[[v]])
   Invest2[[v]][i] <- 0
 }
+```
+
+Always run 
+process nectar
+```{r}
+Invest_nectar <-subset(Invest2,(species=="BAER"|species=="GRBU"|species=="GRSP"|species=="HATE")&part=="flower_stigma")
+Invest_nectar$part ="nectar"
+Invest_nectar$parts_fewer ="nectar"
+Invest_nectar$parts_fewer_yet ="nectar"
+Invest_nectar$weight = 0
+
+SummaryNectar <- 
+  Invest_nectar %>%
+  group_by(parts_fewer_yet,species) %>%
+  summarise_each(funs(sum),count)
+
+SummaryNectar<- merge(SummaryNectar,nectar, by=c("species"),all.x=TRUE)
+SummaryNectar$tissue_energy <- SummaryNectar$count*SummaryNectar$days*SummaryNectar$energy_daily/1000
+SummaryNectar <- select(SummaryNectar,-count,-days,-energy_daily, -part)
+SummaryNectar$accessory_part = "nectar"
 ```
 
 by "parts fewer"
@@ -49,6 +73,7 @@ SummaryInvest$labels <- paste(SummaryInvest$parts_fewer," (",SummaryInvest$prop_
 SummaryInvest <- SummaryInvest[order(factor(SummaryInvest$parts_fewer,levels=c(c("seed","seed_pod","fruit_mature","bud","petals","stigma","style","finished_flower","calyx","fruit_immature","seed_immature","seed_aborted",
                                                                                  "bract","pedicel","inflorescence_stalk","cone_aborted","cone_base_brown","cone_base_green","cone_brown","cone_green")))),]
 ```
+View(SummaryInvest)
 
 by "parts fewer yet"
 ```{r}
@@ -68,9 +93,27 @@ names(SummaryInvestSpp) <- c("species","weight_spp")
 
 SummaryInvest <- merge(SummaryInvest,SummaryInvestSpp,by=c("species"),all.x=TRUE)
 SummaryInvest$prop_weight <- round(SummaryInvest$weight / SummaryInvest$weight_spp,digits=3)
+
+SummaryInvest <- merge(SummaryInvest,tissue_energy,by=c("parts_fewer_yet"),all.x=TRUE)
+SummaryInvest$tissue_energy <- SummaryInvest$weight*SummaryInvest$energy/1000
+
+SummaryInvest <- bind_rows(SummaryInvest,SummaryNectar)
+
+SummaryEnergySpp <- 
+  SummaryInvest %>%
+  group_by(species) %>%
+  summarise_each(funs(sum),tissue_energy)
+
+names(SummaryEnergySpp) <- c("species","energy_spp")
+SummaryInvest <- merge(SummaryInvest,SummaryEnergySpp,by=c("species"),all.x=TRUE)
+SummaryInvest$prop_energy <- round(SummaryInvest$tissue_energy / SummaryInvest$energy_spp,digits=3)
+
 SummaryInvest$labels <- paste(SummaryInvest$parts_fewer_yet," (",SummaryInvest$prop_weight,")")
-SummaryInvest <- SummaryInvest[order(factor(SummaryInvest$parts_fewer_yet,levels=c(c("bud","petals","calyx","finished_flower","fruit_seed_immature","seed","seed_pod","fruit_mature","bract","pedicel","inflorescence_stalk","green_parts","cone")))),]
+SummaryInvest <- SummaryInvest[order(factor(SummaryInvest$parts_fewer_yet,levels=c(c("nectar","bud","petals","calyx","finished_flower","fruit_seed_immature","seed","seed_pod","fruit_mature","bract","pedicel","inflorescence_stalk","green_parts","cone")))),]
 ```
+
+View(SummaryInvest)
+View(Invest2)
 
 by "parts"
 ```{r}
@@ -98,7 +141,7 @@ SummaryInvestParts$labels <- paste(SummaryInvestParts$part," (",SummaryInvestPar
 SummaryInvestParts$splitting <-paste(SummaryInvestParts$species,"_",SummaryInvestParts$parts_fewer_yet)
 ```
 
-View(SummaryInvestParts)
+unique(SummaryInvestParts$parts_fewer)
 
 ``` {r}
 pdf("figs2/Dividing_flower_parts2.pdf", height=11, width=8)
@@ -113,6 +156,7 @@ for(spp in names(data)) {
 dev.off()
 ```
 
+#barplot by dry weight
 ```{r}
 barplot_data <- select(SummaryInvest,species, parts_fewer_yet, prop_weight)
 barplot_data <- spread(barplot_data,species,prop_weight,fill=0,drop=FALSE)
@@ -125,15 +169,40 @@ barplot_data_matrix <- as.matrix(barplot_data[2:15])
 
 #pdf("figs2/Flower_parts_barchart.pdf", height=8, width=11)
 #plot
-win.metafile("figs2/RA_talk_barplot.wmf", height=4, width=10)
+#win.metafile("figs2/RA_talk_barplot.wmf", height=4, width=10)
+#plot
+par(mfcol=c(1,1), cex=1, omi=c(.3,.6,.01,.01), mai=c(.4,.15,.3,0.1)) 
+barplot(barplot_data_matrix,beside=FALSE,width=0.8,cex.axis=.7,cex.names=.7,xlim=c(.5,17.2),col=col.barplot(barplot_data$parts_fewer_yet),ylab="proportion repro investment")
+legend(13.5,1,legend=barplot_data$parts_fewer_yet,pch=16, cex=1,bty="n",col=col.barplot(barplot_data$parts_fewer_yet))
+
+#dev.off()
+```
+
+#barchart by kJ
+```{r}
+barplot_data <- select(SummaryInvest,species, parts_fewer_yet, prop_energy)
+barplot_data <- spread(barplot_data,species,prop_energy,fill=0,drop=FALSE)
+barplot_data <- barplot_data[order(factor(barplot_data$parts_fewer_yet,levels=c(c("nectar",
+  "bud","petals","stigma","style","finished_flower","calyx","fruit_immature","seed_immature","seed_aborted","fruit_seed_immature","seed","seed_pod","fruit_mature",
+  "bract","pedicel","inflorescence_stalk","green_parts","cone_aborted","cone_base_brown","cone_base_green","cone_brown","cone_green","cone")))),]
+
+
+barplot_data_matrix <- as.matrix(barplot_data[2:15])
+
+pdf("figs2/Flower_parts_barchart_energy.pdf", height=8, width=11)
+
+#win.metafile("figs2/RA_talk_barplot_energy.wmf", height=4, width=10)
 plot
 par(mfcol=c(1,1), cex=1, omi=c(.3,.6,.01,.01), mai=c(.4,.15,.3,0.1)) 
 barplot(barplot_data_matrix,beside=FALSE,width=0.8,cex.axis=.7,cex.names=.7,xlim=c(.5,17.2),col=col.barplot(barplot_data$parts_fewer_yet),ylab="proportion repro investment")
 legend(13.5,1,legend=barplot_data$parts_fewer_yet,pch=16, cex=1,bty="n",col=col.barplot(barplot_data$parts_fewer_yet))
 
 dev.off()
-##For pie charts
+```
 
+
+##For pie charts
+```{r}
 data <- subset(SummaryInvest,weight>0)
 data <- split(data, data$species)
 

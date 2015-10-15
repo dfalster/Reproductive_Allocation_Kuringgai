@@ -240,3 +240,7 @@ PUTU,29,fruit_large_immature_01,postpollination_abort,fruit_immature,fruit_seed_
 PUTU,44,seed,propagule,seed,seed
 PUTU,43,seed_aborted,postpollination_abort,seed_aborted,fruit_seed_immature
 PUTU,41,seed_pod,packaging_dispersal,seed_pod,seed_pod
+BAER,100,nectar,prepollination_success,nectar,nectar
+GRBU,100,nectar,prepollination_success,nectar,nectar
+GRSP,100,nectar,prepollination_success,nectar,nectar
+HATE,100,nectar,prepollination_success,nectar,nectar

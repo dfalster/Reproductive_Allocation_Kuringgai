@@ -118,3 +118,7 @@ PUTU,44,propagule,seed
 PUTU,43,postpollination_abort,seed_aborted
 PUTU,41,packaging_dispersal,seed_pod
 PUTU,15,prepollination_success,stigma
+BAER,100,prepollination_success,nectar
+GRBU,100,prepollination_success,nectar
+GRSP,100,prepollination_success,nectar
+HATE,100,prepollination_success,nectar
