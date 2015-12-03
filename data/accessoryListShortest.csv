@@ -5,7 +5,7 @@ BAER,27,postpollination_abort,fruit_seed_immature
 BAER,13,prepollination_success,petals
 BAER,44,propagule,seed
 BAER,41,packaging_dispersal,seed_pod
-BOLE,16,prepollination_success,green_parts
+BOLE,16,prepollination_abort,bud
 BOLE,27,postpollination_abort,fruit_seed_immature
 BOLE,13,prepollination_success,petals
 BOLE,44,propagule,seed
