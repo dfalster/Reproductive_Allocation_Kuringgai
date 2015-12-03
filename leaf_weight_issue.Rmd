@@ -51,3 +51,8 @@ for(i in seq_len(nrow(data3))) {
 
 
 ```
+names(SummaryInd)
+plot(leaf_weight~diameter,data=subset(SummaryInd,species=="BAER"&age>9),pch=16,col=col.age(age),log="xy")
+text(leaf_weight~diameter,data=subset(SummaryInd,species=="BAER"&age>9),labels=individual,cex=.8)
+
+

@@ -30,6 +30,7 @@ for(v in c("weight")) {
   Invest2[[v]][i] <- 0
 }
 ```
+View(Invest2)
 
 Always run 
 process nectar
@@ -73,6 +74,30 @@ SummaryInvest$labels <- paste(SummaryInvest$parts_fewer," (",SummaryInvest$prop_
 SummaryInvest <- SummaryInvest[order(factor(SummaryInvest$parts_fewer,levels=c(c("seed","seed_pod","fruit_mature","bud","petals","stigma","style","finished_flower","calyx","fruit_immature","seed_immature","seed_aborted",
                                                                                  "bract","pedicel","inflorescence_stalk","cone_aborted","cone_base_brown","cone_base_green","cone_brown","cone_green")))),]
 ```
+
+
+by "part"
+```{r}
+SummaryInvest <- 
+  Invest2 %>%
+  group_by(part,species) %>%
+  summarise_each(funs(sum),weight)
+
+#SummaryInvest <- merge(SummaryInvest,select(accessoryListShort,-sort), by=c("species","parts_fewer"),all.x=TRUE)
+
+SummaryInvestSpp <- 
+  Invest2 %>%
+  group_by(species) %>%
+  summarise_each(funs(sum),weight)
+
+names(SummaryInvestSpp) <- c("species","weight_spp")
+
+SummaryInvest <- merge(SummaryInvest,SummaryInvestSpp,by=c("species"),all.x=TRUE)
+SummaryInvest$prop_weight <- round(SummaryInvest$weight / SummaryInvest$weight_spp,digits=3)
+#SummaryInvest$labels <- paste(SummaryInvest$parts_fewer," (",SummaryInvest$prop_weight,")")
+#SummaryInvest <- SummaryInvest[order(factor(SummaryInvest$parts_fewer,levels=c(c("seed","seed_pod","fruit_mature","bud","petals","stigma","style","finished_flower","calyx","fruit_immature","seed_immature","seed_aborted","bract","pedicel","inflorescence_stalk","cone_aborted","cone_base_brown","cone_base_green","cone_brown","cone_green")))),]
+```
+
 View(SummaryInvest)
 
 by "parts fewer yet"
@@ -201,6 +226,21 @@ dev.off()
 ```
 
 
+##For pie charts for overall species allocation
+```{r}
+data <- subset(SummaryInvest,weight>0)
+data <- split(data, data$species)
+
+pdf("figs2/Flower_parts_species_all.pdf", height=11, width=8)
+plot
+par(mfrow=c(3,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(.5,.5,.5,.5)) 
+for(spp in names(data)) {
+  pie(data[[spp]]$weight,labels=data[[spp]]$part,main=spp,col=col.barplot(data[[spp]]$parts_fewer_yet),cex=0.8)
+}
+dev.off()
+```
+
+
 ##For pie charts
 ```{r}
 data <- subset(SummaryInvest,weight>0)
@@ -212,5 +252,5 @@ par(mfrow=c(2,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(.5,.5,.5,.5))
 for(spp in names(data)) {
   pie(data[[spp]]$weight,labels=data[[spp]]$labels,main=spp,col=col.barplot(data[[spp]]$parts_fewer_yet),cex=0.8)
 }
-dev.off()
+#dev.off()
 ```
