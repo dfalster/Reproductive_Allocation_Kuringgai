@@ -19,10 +19,25 @@ col.barplot <- function(x=NULL){
   ret
 }
 
+col.accessory <- function(x=NULL){
+  ret <- c("firebrick1","firebrick","deepskyblue1","deepskyblue3","deepskyblue4")
+  names(ret) <- c("prepollination_abort","prepollination_success","postpollination_abort","packaging_dispersal","propagule")
+
+  if(!is.null(x)) {
+    ret <- ret[as.character(x)]
+  }
+  ret
+}
+
+
 labels.barplot <- function(x=NULL){
   names(col.barplot(x))
 }
+```
 
+
+Invest2 for accessory part
+``` {r}
 Invest2 <- merge(InvestmentByPart,select(accessoryList,-sort), by=c("species","part"))
   
 for(v in c("weight")) {
@@ -30,7 +45,8 @@ for(v in c("weight")) {
   Invest2[[v]][i] <- 0
 }
 ```
-View(Invest2)
+
+names(Invest2)
 
 Always run 
 process nectar
@@ -81,6 +97,28 @@ by "part"
 SummaryInvest <- 
   Invest2 %>%
   group_by(part,species) %>%
+  summarise_each(funs(sum),weight)
+
+#SummaryInvest <- merge(SummaryInvest,select(accessoryListShort,-sort), by=c("species","parts_fewer"),all.x=TRUE)
+
+SummaryInvestSpp <- 
+  Invest2 %>%
+  group_by(species) %>%
+  summarise_each(funs(sum),weight)
+
+names(SummaryInvestSpp) <- c("species","weight_spp")
+
+SummaryInvest <- merge(SummaryInvest,SummaryInvestSpp,by=c("species"),all.x=TRUE)
+SummaryInvest$prop_weight <- round(SummaryInvest$weight / SummaryInvest$weight_spp,digits=3)
+#SummaryInvest$labels <- paste(SummaryInvest$parts_fewer," (",SummaryInvest$prop_weight,")")
+#SummaryInvest <- SummaryInvest[order(factor(SummaryInvest$parts_fewer,levels=c(c("seed","seed_pod","fruit_mature","bud","petals","stigma","style","finished_flower","calyx","fruit_immature","seed_immature","seed_aborted","bract","pedicel","inflorescence_stalk","cone_aborted","cone_base_brown","cone_base_green","cone_brown","cone_green")))),]
+```
+
+by "accessory_part"
+```{r}
+SummaryInvest <- 
+  Invest2 %>%
+  group_by(accessory_part,species) %>%
   summarise_each(funs(sum),weight)
 
 #SummaryInvest <- merge(SummaryInvest,select(accessoryListShort,-sort), by=c("species","parts_fewer"),all.x=TRUE)
@@ -203,6 +241,28 @@ legend(13.5,1,legend=barplot_data$parts_fewer_yet,pch=16, cex=1,bty="n",col=col.
 #dev.off()
 ```
 
+#barplot by accessory grouping
+```{r}
+barplot_data <- select(SummaryInvest,species, accessory_part, prop_weight)
+barplot_data <- spread(barplot_data,species,prop_weight,fill=0,drop=FALSE)
+barplot_data <- barplot_data[order(factor(barplot_data$accessory_part,levels=c(c(
+  "prepollination_abort","prepollination_success","postpollination_abort","packaging_dispersal","propagule")))),]
+
+barplot_data_matrix <- as.matrix(barplot_data[2:15])
+
+
+#pdf("figs2/Flower_parts_barchart.pdf", height=8, width=11)
+#plot
+#win.metafile("figs2/RA_talk_barplot.wmf", height=4, width=10)
+#plot
+par(mfcol=c(1,1), cex=1, omi=c(.3,.6,.01,.01), mai=c(.4,.15,.3,0.1)) 
+midpoints <- barplot(barplot_data_matrix,beside=FALSE,width=0.8,cex.axis=.7,cex.names=.7,xlim=c(.5,17.2),col=col.accessory(barplot_data$accessory_part),ylab="proportion repro investment")
+legend(13.5,1,legend=barplot_data$accessory_part,pch=16, cex=1,bty="n",col=col.accessory(barplot_data$accessory_part))
+
+#text(midpoints,(barplot_data_matrix), labels=barplot_data_matrix)
+#dev.off()
+```
+
 #barchart by kJ
 ```{r}
 barplot_data <- select(SummaryInvest,species, parts_fewer_yet, prop_energy)
@@ -246,11 +306,11 @@ dev.off()
 data <- subset(SummaryInvest,weight>0)
 data <- split(data, data$species)
 
-pdf("figs2/Flower_parts_fewer.pdf", height=11, width=8)
+#pdf("figs2/Flower_parts_fewer.pdf", height=11, width=8)
 plot
-par(mfrow=c(2,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(.5,.5,.5,.5)) 
+par(mfrow=c(4,4), cex=1, omi=c(.1,.1,.1,.1), mai=c(.5,.5,.5,.5)) 
 for(spp in names(data)) {
-  pie(data[[spp]]$weight,labels=data[[spp]]$labels,main=spp,col=col.barplot(data[[spp]]$parts_fewer_yet),cex=0.8)
+  pie(data[[spp]]$weight,labels=data[[spp]]$accessory_part,main=spp,col=col.accessory(data[[spp]]$accessory_part),cex=0.8)
 }
 #dev.off()
 ```

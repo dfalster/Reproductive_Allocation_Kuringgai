@@ -1,0 +1,268 @@
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(2,2), cex=1, omi=c(.4,0.3,.3,0.3), mai=c(1.1,1,.3,0.3))
+plot(seedset~prepollen_all_count,data=subset(SummaryInd,seedset>0),col=col.spp(species),pch=16,log="xy")
+
+plot(total_weight~prepollen_all_count,data=subset(SummaryInd,prepollen_all_count>0),col=col.spp(species),pch=16,log="xy")
+plot(seed_size~prepollen_all_count,data=subset(SummaryInd,prepollen_all_count>0),col=col.spp(species),pch=16,log="xy")
+#points(seed_size~prepollen_all_count,data=subset(SummarySpp[["mean"]],prepollen_all_count>0),col=col.spp(species),pch=16,cex=2)
+
+plot(seed_size~seed_count,data=subset(SummaryInd,seed_count>0),col=col.spp(species),pch=16,log="xy")
+points(seed_size~seed_count,data=subset(SummarySpp[["mean"]],seed_count>0),col=col.spp(species),pch=16,cex=2)
+
+plot(seed_size~seedset,data=subset(SummaryInd,seed_count>0),col=col.spp(species),pch=16,log="xy")
+points(seed_size~seedset,data=subset(SummarySpp[["mean"]],seed_count>0),col=col.spp(species),pch=16,cex=2)
+mod<-lm(log(seedset)~log(seed_size),data=subset(SummaryInd,seed_count>0))
+words.bottom.left.logxy(mod)
+```
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(2,2), cex=1, omi=c(.4,0.3,.3,0.3), mai=c(1.1,1,.3,0.3))
+plot(seedset~prop_propagule,SummaryInd,col=col.spp(species),pch=16,log="xy")
+abline(0,1)
+
+plot(seedset~propagule_per_seed,SummaryInd,col=col.spp(species),pch=16,log="xy")
+points(seedset~propagule_per_seed,SummarySpp[["mean"]],col=col.spp(species),pch=16,cex=2)
+mod <- lm(log(propagule_per_seed)~log(seedset),data=subset(SummaryInd,seedset>0))
+words.bottom.left.logxy(mod)
+
+plot(seedset~prop_propagule,SummaryInd,col=col.spp(species),pch=16,log="xy")
+points(seedset~prop_propagule,SummarySpp[["mean"]],col=col.spp(species),pch=16,cex=2)
+mod <- lm(log(prop_propagule)~log(seedset),data=subset(SummaryInd,seedset>0))
+words.bottom.left.logxy(mod)
+#text(seedset~propagule_per_seed,data=subset(SummaryInd,species=="PELA"),labels=individual,offset=1)
+
+par(mfrow=c(4,4), cex=1, omi=c(.1,.1,.1,.1), mai=c(.5,.5,.5,.5)) 
+xvar <- "seedset"
+yvar <- "prop_propagule"
+
+data <- subset(SummaryInd,seedset>0&prop_propagule>0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (log(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",cex=1, 
+                    main=spp,col=col.age(data[[spp]]$age),xlim=c(0.0005,.6),ylim=c(0.0005,.6))
+}
+```
+
+```{r}
+data <- subset(SummaryInd)
+data <- split(data, data$species)
+
+#pdf("figs2/Flower_parts_fewer.pdf", height=11, width=8)
+#plot
+par(mfrow=c(4,4), cex=1, omi=c(.1,.1,.1,.1), mai=c(.5,.5,.5,.5)) 
+for(spp in names(data)) {
+  pie(data[[spp]]$weight,labels=data[[spp]]$labels,main=spp,col=col.barplot(data[[spp]]$parts_fewer_yet),cex=0.8)
+}
+#dev.off()
+```
+
+```{r}
+par(mfrow=c(2,2), cex=1, omi=c(.4,0.3,.3,0.3), mai=c(1.1,1,.3,0.3))
+plot(accessory_per_seed~accessory_inv,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy")
+plot(accessory_inv~seedcosts,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy")
+plot(seedset~seedcosts,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy")
+plot(seedset~costs_per_seed,data=subset(SummaryInd),col=col.spp(species),pch=16,log="y")
+```
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
+xvar <- "total_weight"
+yvar <- "prepollen_all_count"
+
+data <- subset(SummaryInd,prepollen_all_count>0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (log(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",cex=1, 
+                    main=spp,col=col.age(data[[spp]]$age))
+}
+```
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.width=14, fig.height=14}
+par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
+xvar <- "growth_leaf"
+yvar <- "seedset"
+
+data <- subset(SummaryInd,seedset>0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (log(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",cex=1, 
+                    main=spp,col=col.age(data[[spp]]$age))
+}
+```
+
+
+
+mod <- lm(log(seedset)~log(prepollen_all_count)*log(growth_leaf)*log(total_weight),data=subset(SummaryInd,seedset>0&growth_leaf>0))
+summary(mod)
+plot(mod)
+
+mod <- lm(log(prepollen_all_count)~log(growth_leaf)*log(total_weight)*log(maxH),data=subset(SummaryInd,seedset>0&growth_leaf>0))
+summary(mod)
+plot(mod)
+
+
+plot(seedset~total_weight,SummarySpp[["mean"]],col=col.spp(species),pch=16,log="xy")
+mod <- lm(log(total_weight)~log(seedset),SummarySpp[["mean"]])
+words.top.right.logxy(mod)
+
+plot(seedset~total_weight,data=subset(SummaryInd,seedset>0),col=col.spp(species),pch=16,log="xy")
+mod <- lm(log(seedset)~log(total_weight)*species,data=subset(SummaryInd,seedset>0))
+words.top.right.logxy(mod)
+summary(mod)
+
+plot(seedset~seed_size,SummarySpp[["mean"]],col=col.spp(species),pch=16,log="x")
+mod <- lm(log(seed_size)~seedset,SummarySpp[["mean"]])
+words.top.right.logx(mod)
+
+plot(seedset~seed_size,SummarySpp[["mean"]],col=col.spp(species),pch=16,log="x")
+mod <- lm(log(seed_size)~seedset,SummarySpp[["mean"]])
+words.top.right.logx(mod)
+
+plot(seedset~total_weight,data=subset(SummaryInd,seedset>0),col=col.spp(species),pch=16,log="xy")
+mod <- lm(log(total_weight)~log(seedset),data=subset(SummaryInd,seedset>0))
+words.top.right.logxy(mod)
+
+par(mfrow=c(2,2), cex=1, omi=c(.4,0.3,.3,0.3), mai=c(1.1,1,.3,0.3))
+
+plot(accessory_inv~seed_size,SummaryInd,col=col.spp(species),pch=16,log="xy")
+points(accessory_inv~seed_size,SummarySpp[["mean"]],col=col.spp(species),pch=16,cex=2)
+
+plot(accessory_per_seed~seed_size,SummaryInd,col=col.spp(species),pch=16,log="xy")
+points(accessory_per_seed~seed_size,SummarySpp[["mean"]],col=col.spp(species),pch=16,cex=2)
+
+plot(prop_propagule~seed_size,SummaryInd,col=col.spp(species),pch=16,log="xy")
+points(prop_propagule~seed_size,SummarySpp[["mean"]],col=col.spp(species),pch=16,cex=2)
+mod <- lm (log(seed_size)~log(prop_propagule), data=subset(SummaryInd,prop_propagule>0&species!="EPMI"))
+words.bottom.right.logxy(mod)
+
+plot(prop_propagule~total_inv,SummaryInd,col=col.spp(species),pch=16,log="xy")
+points(prop_propagule~total_inv,SummarySpp[["mean"]],col=col.spp(species),pch=16,cex=2)
+
+names(Table1) <- c("Variable","r2","intercept","slope")
+Table1[1] <- c("Total reproductive investment",summary(mod)[8]
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.width=14, fig.height=14}
+options(scipen=10)
+par(mfrow=c(2,2), cex=1, omi=c(.6,0.3,.3,0.3), mai=c(.8,1,.3,0.3))
+mod <- lm (log(total_weight)~log(repro_inv), data=subset(SummaryInd,repro_inv>0))
+plot(repro_inv~total_weight,data=subset(SummaryInd,repro_inv>0), log="xy",xlab="", col=col.spp(species), pch=16, ylab="Total reproductive investment (mg)",xlim=c(100,2000000))
+words.bottom.right.logxy(mod)
+                  
+mod <- lm (log(total_weight)~log(fruit_weight), data=subset(SummaryInd,fruit_weight>0))
+plot(fruit_weight~total_weight,data=subset(SummaryInd,fruit_weight>0), log="xy",col=col.spp(species), pch=16, ylab="Fruit investment (mg)",xlim=c(100,2000000),xlab="")
+words.bottom.right.logxy(mod)
+
+mod <- lm (log(total_weight)~log(propagule_inv), data=subset(SummaryInd,propagule_inv>0))
+plot(propagule_inv~total_weight,data=subset(SummaryInd,propagule_inv>0), log="xy",col=col.spp(species), pch=16, xlab="", ylab="Propagule investment (mg)", xlim=c(100,2000000))
+legend("topleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
+words.bottom.right.logxy(mod)
+
+mod <- lm (log(total_weight)~log(prepollen_all_inv), data=subset(SummaryInd,prepollen_all_inv>0))
+plot(prepollen_all_inv~total_weight,data=subset(SummaryInd,prepollen_all_inv>0), log="xy",col=col.spp(species), pch=16, xlab="", ylab="Prepollen investment (mg)", xlim=c(100,2000000))
+legend("topleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
+words.bottom.right.logxy(mod)
+
+mtext("Total plant size (mg)",1, outer=TRUE,cex=1.2)
+```
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.width=14, fig.height=14}
+options(scipen=10)
+par(mfrow=c(2,2), cex=1, omi=c(.6,0.3,.3,0.3), mai=c(.8,1,.3,0.3))
+mod <- lm (log(total_inv)~log(repro_inv), data=subset(SummaryInd,repro_inv>0))
+plot(repro_inv~total_inv,data=subset(SummaryInd,repro_inv>0), log="xy",xlab="", col=col.spp(species), pch=16, ylab="Total reproductive investment (mg)",xlim=c(100,2000000))
+words.bottom.right.logxy(mod)
+
+mod <- lm (log(total_inv)~log(fruit_weight), data=subset(SummaryInd,fruit_weight>0))
+plot(fruit_weight~total_inv,data=subset(SummaryInd,fruit_weight>0), log="xy",col=col.spp(species), pch=16, ylab="Fruit investment (mg)",xlim=c(100,2000000),xlab="")
+words.bottom.right.logxy(mod)
+
+mod <- lm (log(total_inv)~log(propagule_inv), data=subset(SummaryInd,propagule_inv>0))
+plot(propagule_inv~total_inv,data=subset(SummaryInd,propagule_inv>0), log="xy",col=col.spp(species), pch=16, xlab="", ylab="Propagule investment (mg)", xlim=c(100,2000000))
+legend("topleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
+words.bottom.right.logxy(mod)
+
+mod <- lm (log(total_inv)~log(prepollen_all_inv), data=subset(SummaryInd,prepollen_all_inv>0))
+plot(prepollen_all_inv~total_inv,data=subset(SummaryInd,prepollen_all_inv>0), log="xy",col=col.spp(species), pch=16, xlab="", ylab="Prepollen investment (mg)", xlim=c(100,2000000))
+legend("topleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
+words.bottom.right.logxy(mod)
+
+mtext("Total invesment (mg)",1, outer=TRUE,cex=1.2)
+```
+
+mod <- lm (log(total_inv)~(prop_prepollen_all), data=subset(SummaryInd,prepollen_all_inv>0))
+plot(prop_prepollen_all~total_inv,data=subset(SummaryInd,prepollen_all_inv>0), log="x",col=col.spp(species), pch=16, xlab="", ylab="Prepollen investment (mg)", xlim=c(100,2000000))
+legend("topright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
+words.bottom.right.logx(mod)
+
+
+
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.width=7.5,fig.height=7.5}
+par(mfrow=c(1,1), cex=1, omi=c(.6,0.3,.3,0.3), mai=c(1.1,1,.3,0.3))
+plot(prop_fruit~RA,data=subset(SummaryInd,prop_propagule>0),log="y",pch=16,col=col.age(age))
+mod <- lm(log(prop_fruit)~(RA)*(age),data=subset(SummaryInd,prop_propagule>0&age>3))
+  summary(mod)
+
+abline(0,1)
+abline(-0.30103,1)
+abline(-1,1)
+text(120,350,"all RE to accessory tissues",srt=45)
+text(12000,720,"10% RE to accessory tissues",srt=45)
+text(5,1.5,"50%",srt=45)
+```
+
+```
+par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
+xvar <- "RA"
+yvar <- "prop_propagule"
+
+data <- subset(SummaryInd,prop_propagule>0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm((x[[yvar]]) ~  ((x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="x",xlab="",ylab="",cex=1, 
+                    main=spp,col=col.age(data[[spp]]$age))
+}
+```
+
+InvestPetal <- subset(SummaryInvest,parts_fewer=="petals")
+View(InvestPetal)
+plot(prop_weight,SummaryInvest,color=col.spp(parts_fewer))
+
+
+SummaryInd$prop_fruit <- SummaryInd$fruit_weight / SummaryInd$repro_inv

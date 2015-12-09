@@ -1,0 +1,52 @@
+InvestInd <- 
+  InvestmentByPart %>%
+  group_by(individual) %>%
+  summarise_each(funs(sum),weight)
+InvestInd$species <- substr(InvestInd$species,1,nchar(InvestInd$species)-4)
+
+```{r}
+InvestIndPart <- 
+  InvestmentByPart %>%
+  group_by(individual,part) %>%
+  summarise_each(funs(sum),weight)
+InvestIndPart$species <- InvestIndPart$individual
+InvestIndPart$species <- substr(InvestIndPart$species,1,nchar(InvestIndPart$species)-4)
+InvestIndPart <- merge(InvestIndPart,accessoryList,by=c("species","part"),all.x=TRUE)
+```
+
+```{r}
+InvestIndAcc <-
+  InvestIndPart %>%
+  group_by(individual,accessory_part) %>%
+  summarise_each(funs(sum),weight)
+
+  for(v in c("weight")) {
+    i <- is.na(InvestIndAcc[[v]])
+    InvestIndAcc[[v]][i] <- 0
+   }
+
+InvestIndAcc1 <- tidyr::spread(InvestIndAcc,accessory_part,weight,fill=0,drop=FALSE)
+View(InvestIndAcc)
+```  
+
+InvestPetal <- subset(InvestmentByPart,part=="flower_petals")
+InvestPetal <- 
+  InvestPetal %>%
+  group_by(individual) %>%
+  summarise_each(funs(sum),weight)
+
+names(InvestPetal) <- c("individual","weight_petal")
+
+
+InvestInd <- dplyr::left_join(InvestInd,InvestPetal, by = "individual")
+InvestInd$prop_petal <- InvestInd$weight_petal / InvestInd$weight
+InvestInd$species <-InvestInd$individual
+InvestInd$species <- substr(InvestInd$species,1,nchar(InvestInd$species)-4)
+
+plot(prop_petal~weight,InvestInd,pch=16,log="x",col=col.spp(species))
+mod <- lm(log(weight)~prop_petal,InvestInd)
+summary(mod)
+
+InvestIndPart <- tidyr::spread(InvestIndPart,part,weight)
+
+
