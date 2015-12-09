@@ -120,7 +120,7 @@ HATE,35,fruit_aborted,postpollination_abort,fruit_immature,fruit_seed_immature
 HATE,27,fruit_just_starting,postpollination_abort,fruit_immature,fruit_seed_immature
 HATE,29,fruit_large_immature_01,postpollination_abort,fruit_immature,fruit_seed_immature
 HATE,28,fruit_young,postpollination_abort,fruit_immature,fruit_seed_immature
-HATE,5,inflorescence_bud_big_bracts,prepollination_abort,bract,bract
+HATE,5,inflorescence_bud_big_bracts,prepollination_success,bract,bract
 HATE,6,inflorescence_bud_big_flowers,prepollination_abort,bud,petals
 HATE,4,inflorescence_bud_mid,prepollination_abort,bud,bud
 HATE,3,inflorescence_bud_small,prepollination_abort,bud,bud
