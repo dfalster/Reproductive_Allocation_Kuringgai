@@ -176,20 +176,21 @@ make_EPMI_GraphMaps <- function(PartsSummary, MultiplierTable){
 
   AvWeightPerUnit <-  PartsSummary$AvWeightPerUnit
 
-  EPMI.graph <- graph.formula("bud_tiny" - "bud_mid" - "bud_big" - "flower_calyx" - "finished_flower" - "fruit_young" - "fruit_large_immature_01" - "fruit_mature",
-                              "bud_big" - "flower_petals")
+  EPMI.graph <- graph.formula("bud_tiny" - "bud_mid" - "bud_big" - "flower_calyx" - "finished_flower" - "fruit_young" - "fruit_large_immature_01" - "seed",
+                              "bud_big" - "flower_petals","fruit_large_immature_01" - "seed_pod")
   from <- "bud_tiny"
-  to <- "fruit_mature"
+  to <- "seed"
   Paths <- data.frame(from = from, to = to)
   # Set vertex color
   EPMI.graph <- set.vertex.attribute(EPMI.graph, name = "col", index = c(1:8), value = 3)
-  EPMI.graph <- set.vertex.attribute(EPMI.graph, name = "col", index = 9, value = 4)
+  EPMI.graph <- set.vertex.attribute(EPMI.graph, name = "col", index = c(9:10), value = 4)
   # Set edge color
   EPMI.graph <- set.edge.attribute(EPMI.graph, name = "weight", value = 1)
   AM <- get.adjacency(EPMI.graph, edges = T)
   ## Flower_petals, flower_calyx which edges
   E1 <- AM["bud_big", "flower_calyx"]
   E2 <- AM["bud_big", "flower_petals"]
+  
   # av. weights of the parts
   W1 <- AV_W("EPMI", "flower_calyx", AvWeightPerUnit)
   W2 <- AV_W("EPMI", "flower_petals", AvWeightPerUnit)
@@ -198,6 +199,17 @@ make_EPMI_GraphMaps <- function(PartsSummary, MultiplierTable){
   w2 <- W2/sum(W1, W2)
   EPMI.graph <- set.edge.attribute(EPMI.graph, name = "weight", index = c(E1, E2), value = c(w1, w2))
 
+  ## seed_pod,seed from fruit_large_immature_01 which edges
+  E1 <- AM["fruit_large_immature_01", "seed_pod"]
+  E2 <- AM["fruit_large_immature_01", "seed"]
+  # av. weights of the parts
+  W1 <- AV_W("EPMI", "seed_pod", AvWeightPerUnit)
+  
+  #
+  w1 <- W1/sum(W1, 2 * W2)
+
+  EPMI.graph <- set.edge.attribute(EPMI.graph, name = "weight", index = c(E1, E2), value = c(w1, w2))
+  
   list(graph = EPMI.graph, Paths = Paths)
   }
 

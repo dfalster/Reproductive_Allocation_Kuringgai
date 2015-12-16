@@ -67,7 +67,8 @@ EPMI,8,bud_tiny,prepollination_abort,bud,bud
 EPMI,20,finished_flower,prepollination_success,finished_flower,finished_flower
 EPMI,13,flower_petals,prepollination_success,petals,petals
 EPMI,29,fruit_large_immature_01,postpollination_abort,fruit_immature,fruit_seed_immature
-EPMI,37,fruit_mature,propagule,fruit_mature,fruit_mature
+EPMI,37,seed,propagule,seed,seed
+EPMI,37,seed_pod,packaging_dispersal,seed_pod,seed_pod
 EPMI,28,fruit_young,postpollination_abort,fruit_immature,fruit_seed_immature
 GRBU,11,bud_big,prepollination_abort,bud,bud
 GRBU,10,bud_mid,prepollination_abort,bud,bud

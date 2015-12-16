@@ -40,14 +40,14 @@ fruit_large_immature_06,34,,,,,regress_by_dim,regress_by_dim,,,,regress_by_dim,,
 fruit_large_immature_aborting,34.5,,,,,,,,count,,,,,,
 fruit_aborted,35,,,,,,,count,count,count; count_by_length,,count,count,count,count
 fruit_empty,36,,,,,,,,,,,count,,,
-fruit_mature,37,,,count,count; count_by_length,,,,count,count; count_by_length,,count,,,
+fruit_mature,37,,,count,,,,,count,count; count_by_length,,count,,,
 calyx_fruit,38,,,,,,,,count,count; count_by_length,,,,,
 bract_fruit,39,,,count,,,,,,,,,,,count
 pedicel,40,,count,,,count,count,,,,count,,,,
-seed_pod,41,count,count,,,regress_by_dim,regress_by_dim,count,,,regress_by_dim,,count,count,count
+seed_pod,41,count,count,,count; count_by_length,regress_by_dim,regress_by_dim,count,,,regress_by_dim,,count,count,count
 seed_immature,42,,,,,,,count,,,,,,,
 seed_aborted,43,count,count,,,count,count,count,,,,,count,,count
-seed,44,count,count,,,count,count,count,,,regress_by_dim,,count,count,count
+seed,44,count,count,,count; count_by_length,count,count,count,,,regress_by_dim,,count,count,count
 cone_just_starting_01,45,,,,,,,,,,,regress_by_dim,,,
 cone_just_starting_02,46,,,,,,,,,,,regress_by_dim,,,
 cone_just_starting_03,47,,,,,,,,,,,regress_by_dim,,,

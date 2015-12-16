@@ -34,7 +34,8 @@ EPMI,8,prepollination_abort,bud
 EPMI,16,prepollination_success,calyx
 EPMI,20,prepollination_success,finished_flower
 EPMI,28,postpollination_abort,fruit_immature
-EPMI,37,propagule,fruit_mature
+EPMI,37,propagule,seed
+EPMI,37,packaging_dispersal,seed_pod
 EPMI,13,prepollination_success,petals
 GRBU,3,prepollination_abort,bud
 GRBU,28,postpollination_abort,fruit_immature

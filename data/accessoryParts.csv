@@ -43,11 +43,11 @@ fruit_large_immature_06,34,,,,,postpollination_abort,postpollination_abort,,,,po
 fruit_large_immature_aborting,34.5,,,,,,,,postpollination_abort,,,,,,
 fruit_aborted,35,,,,,,,postpollination_abort,postpollination_abort,postpollination_abort,,postpollination_abort,postpollination_abort,postpollination_abort,postpollination_abort
 fruit_empty,36,,,,,,,,,,,postpollination_abort,,,
-fruit_mature,37,,,propagule,propagule,,,,propagule,propagule,,propagule,,,
-seed_pod,41,packaging_dispersal,packaging_dispersal,,,packaging_dispersal,packaging_dispersal,packaging_dispersal,,,packaging_dispersal,,packaging_dispersal,packaging_dispersal,packaging_dispersal
+fruit_mature,37,,,propagule,,,,,propagule,propagule,,propagule,,,
+seed_pod,41,packaging_dispersal,packaging_dispersal,,packaging_dispersal,packaging_dispersal,packaging_dispersal,packaging_dispersal,,,packaging_dispersal,,packaging_dispersal,packaging_dispersal,packaging_dispersal
 seed_immature,42,,,,,,,propagule,,,,,,,
 seed_aborted,43,postpollination_abort,postpollination_abort,,,postpollination_abort,postpollination_abort,postpollination_abort,,,,,postpollination_abort,,postpollination_abort
-seed,44,propagule,propagule,,,propagule,propagule,propagule,,,propagule,,propagule,propagule,propagule
+seed,44,propagule,propagule,,propagule,propagule,propagule,propagule,,,propagule,,propagule,propagule,propagule
 cone_just_starting_01,45,,,,,,,,,,,packaging_dispersal,,,
 cone_just_starting_02,46,,,,,,,,,,,packaging_dispersal,,,
 cone_young_01,47,packaging_dispersal,,,,,,,,,,packaging_dispersal,,,
