@@ -253,14 +253,16 @@ barplot_data_matrix <- as.matrix(barplot_data[2:15])
 
 #pdf("figs2/Flower_parts_barchart.pdf", height=8, width=11)
 #plot
-#win.metafile("figs2/RA_talk_barplot.wmf", height=4, width=10)
-#plot
+
+
+win.metafile("figs2/accessory_cost_barplot.wmf", height=4, width=10)
+plot
 par(mfcol=c(1,1), cex=1, omi=c(.3,.6,.01,.01), mai=c(.4,.15,.3,0.1)) 
 midpoints <- barplot(barplot_data_matrix,beside=FALSE,width=0.8,cex.axis=.7,cex.names=.7,xlim=c(.5,17.2),col=col.accessory(barplot_data$accessory_part),ylab="proportion repro investment")
 legend(13.5,1,legend=barplot_data$accessory_part,pch=16, cex=1,bty="n",col=col.accessory(barplot_data$accessory_part))
 
 #text(midpoints,(barplot_data_matrix), labels=barplot_data_matrix)
-#dev.off()
+dev.off()
 ```
 
 #barchart by kJ
