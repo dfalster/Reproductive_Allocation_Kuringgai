@@ -1,36 +1,61 @@
 ```{r}
-par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(.5,.5,.5,.5)) 
-SummaryInd$costs_for_seed <- SummaryInd$seed_count * SummaryInd$seedcosts
-SummaryInd$costs_for_aborted <- SummaryInd$repro_inv - SummaryInd$costs_for_seed
+par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1,1,.5,.5)) 
+plot(costs_for_seed ~ seed_size,data=subset(SummaryInd,repro_inv>0),col=col.spp(species),pch=16,log="xy")
+points(costs_for_seed ~ seed_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,cex=2)
+mod <- lm(log(seed_size) ~ log(costs_for_seed),data=subset(SummarySpp[["mean"]])) 
+words.top.left.logxy(mod)
+
+plot(costs_for_aborted ~ seed_size,data=subset(SummaryInd,repro_inv>0),col=col.spp(species),pch=16,log="xy")
+points(costs_for_aborted ~ seed_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,cex=2)
+mod <- lm(log(seed_size) ~ log(costs_for_aborted),data=subset(SummarySpp[["mean"]])) 
+words.top.left.logxy(mod)
+
+plot(accessory_inv ~ seed_size,data=subset(SummaryInd,repro_inv>0),col=col.spp(species),pch=16,log="xy")
+points(accessory_inv ~ seed_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,cex=2)
+mod <- lm(log(seed_size) ~ log(accessory_inv),data=subset(SummarySpp[["mean"]])) 
+words.top.left.logxy(mod)
+abline(mod)
+
+
 plot(costs_for_seed ~ costs_for_aborted,data=subset(SummaryInd,repro_inv>0),col=col.spp(species),pch=16,log="xy")
-SummaryInd$prop_aborted <- SummaryInd$costs_for_aborted / SummaryInd$repro_inv
-plot(prop_aborted ~ age, data=subset(SummaryInd,repro_inv>0),col=col.spp(species),pch=16,log="x")
+points(costs_for_seed ~ costs_for_aborted,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,cex=2)
+mod <- lm(log(costs_for_seed) ~ log(costs_for_aborted),data=subset(SummarySpp[["mean"]]))
+words.top.left.logxy(mod)
 
 
 plot(costs_for_seed ~ repro_inv,data=subset(SummaryInd,repro_inv>0),col=col.spp(species),pch=16,log="xy")
 abline(0,1)
-
-  
-par(mfrow=c(4,4), cex=1, omi=c(.1,.1,.1,.1), mai=c(.5,.5,.5,.5)) 
-xvar <- "costs_for_aborted"
-yvar <- "costs_for_seed"
-
-data <- subset(SummaryInd,seedset>0&prop_propagule>0)
-data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm(log(x[[yvar]]) ~  (log(x[[xvar]]))))
-results <- summarise_all_fits(lmfits)
-
-results$r.squared <- round(results$r.squared,digits=3)
-results$p.value <- round(results$p.value,digits=3)
-results$a <- round(results$a,digits=2)
-results$b <- round(results$b,digits=2)
-results
-
-for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",cex=1, 
-                    main=spp,col=col.age(data[[spp]]$age))
-}
 ```
+
+
+SummaryInd$prop_costs_seed <- SummaryInd$costs_for_seed / SummaryInd$repro_inv
+SummaryInd$prop_costs_aborted <- SummaryInd$costs_for_aborted / SummaryInd$repro_inv
+
+
+```{r}
+win.metafile("figs2/acc_cost_seed_size.wmf", height=6, width=6)
+
+plot
+plot(prepollencosts~seed_size,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy",cex=1.3)
+mod <- lm(log(seed_size)~log(accessory_costs),data=subset(SummaryInd))
+words.top.left.logxy(mod)
+abline((log(10)^coef(mod)[1]),coef(mod)[2])
+abline((log(10)^coef(mod)[1]),1,col="red")
+
+summary(mod)
+dev.off()
+```
+
+plot(seedset~seedcosts,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy",cex=1)
+points(seedset~accessory_costs,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,cex=2)
+mod <- lm(log(accessory_costs)~log(seedset),data=subset(SummaryInd,seedset>0))
+words.bottom.left.logxy(mod)
+abline((log(10)^coef(mod)[1]),(coef(mod)[2]))
+abline((log(10)^coef(mod)[1]),-1,col="red")
+
+summary(mod)
+
+
 
 ```{r}
 par(mfrow=c(2,3), cex=1, omi=c(.4,0.3,.3,0.3), mai=c(1.1,1,.3,0.3))
@@ -39,7 +64,7 @@ win.metafile("figs2/best_correlate2.wmf", height=6, width=12)
 plot
 
 par(mfrow=c(1,3), cex=1, omi=c(.4,0.3,.3,0.3), mai=c(1.1,1,.3,0.3))
-plot(propagule_inv~total_weight_0,data=subset(SummaryInd,propagule_inv>0),col=col.spp(species),pch=16,log="xy",xlim=c(10,10000000),ylim=c(1,1000000))
+plot(propagule_inv~total_weight_0,data=subset(SummaryInd,propagule_inv>0),col=col.spp(species),pch=16,log="xy")
 mod <- lm(log(total_weight_0)~log(propagule_inv),data=subset(SummaryInd,propagule_inv>0))
 words.top.left.logxy(mod)
 
@@ -70,14 +95,17 @@ words.top.left.logxy(mod)
 
 #shift in accessory costs per seed with seed size
 par(mfrow=c(2,2), cex=1, omi=c(.4,0.3,.3,0.3), mai=c(1.1,1,.3,0.3))
-win.metafile("figs2/accessory_per_seed_vs_seed_size.wmf", height=6, width=6)
+win.metafile("figs2/accessory_per_seed_vs_seed_size.wmf", height=6, width=12)
 plot
-plot(accessory_per_seed~seed_size,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy")
-points(accessory_per_seed~seed_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,cex=2)
-mod <- lm(log(seed_size)~log(accessory_per_seed),data=subset(SummarySpp[["mean"]]))
+plot(costs_per_seed~seed_size,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy")
+points(costs_per_seed~seed_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,cex=2)
+mod <- lm(log(seed_size)~log(costs_per_seed),data=subset(SummarySpp[["mean"]]))
 words.top.left.logxy(mod)
 summary(mod)
-abline(log(5),1)
+
+plot(seedcosts~seed_size,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy",cex=1.3)
+mod <- lm(log(seed_size)~log(seedcosts),data=subset(SummaryInd))
+words.top.left.logxy(mod)
 dev.off()
 
 #each species follows its own linear trajectory, but species lines are offset from one another
@@ -210,13 +238,17 @@ for(spp in names(data)) {
 ```
 
 ```{r}
-par(mfrow=c(2,2), cex=1, omi=c(.4,0.3,.3,0.3), mai=c(1.1,1,.3,0.3))
-plot(accessory_per_seed~accessory_inv,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy")
+#par(mfrow=c(2,2), cex=1, omi=c(.4,0.3,.3,0.3), mai=c(1.1,1,.3,0.3))
+
+```
+
+
+
+```{r}
 plot(accessory_inv~seedcosts,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy")
-plot(seedset~seedcosts,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy")
-plot(seedset~costs_per_seed,data=subset(SummaryInd),col=col.spp(species),pch=16,log="y")
-plot(accessory_per_seed~costs_per_seed,data=subset(SummaryInd),col=col.spp(species),pch=16,log="y")
-plot(propagule_inv~accessory_inv,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy")
+plot(seedset~seedcosts,data=subset(SummaryInd,seedset>0),col=col.spp(species),pch=16,log="x")
+plot(seedset~costs_per_seed,data=subset(SummaryInd),col=col.spp(species),pch=16,log="x")
+plot(packaging_dispersal_inv~accessory_inv,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy")
 plot(propagule_inv~repro_inv,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy")
 plot(propagule_inv~total_weight,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy")
 plot(repro_inv~total_weight,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy")
