@@ -16,7 +16,7 @@ make_OrderedListsOfParts_GRSP <- function() {
 }
 
 make_OrderedListsOfParts_EPMI <- function() {
-  c("bud_tiny", "bud_mid", "bud_big", "flower_petals", "flower_calyx", "finished_flower", "fruit_young", "fruit_large_immature", "fruit_mature")
+  c("bud_tiny", "bud_mid", "bud_big", "flower_petals", "flower_calyx", "finished_flower", "fruit_young", "fruit_large_immature", "seed_pod","seed")
 }
 
 make_OrderedListsOfParts_COER <- function() {
