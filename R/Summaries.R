@@ -70,7 +70,7 @@ process_prepollination_costs <- function(seedsize, PartsSummary_all) {
 process_dispersal_costs <- function(seedsize, PartsSummary_all) {
 dispersalcosts <- list()
 dispersalcosts[["BAER"]] <- list(parts=c("cone_brown","seed_pod"), scale=c(1/60,1/2))
-dispersalcosts[["BOLE"]] <- list(parts=c("finished_flower","seed_pod"), scale=c(1/4,1))
+dispersalcosts[["BOLE"]] <- list(parts=c("late_finished_flower","seed_pod","late_flower_petals"), scale=c(1/4,1,1/4))
 dispersalcosts[["COER"]] <- list(parts=c("inflorescence_stalk_in_fruit","bract_fruit"), scale=c(1/6,1))
 dispersalcosts[["EPMI"]] <- list(parts=c("seed_pod"), scale=c(1/15))
 dispersalcosts[["GRBU"]] <- list(parts=c("inflorescence_stalk","pedicel","seed_pod"), scale=c(1/20,1/2,1/2))
@@ -94,7 +94,7 @@ dispersalcosts[["PUTU"]] <- list(parts=c("seed_pod"), scale=c(1/2))
 
 dispersal_at_pollination <- list()
 dispersal_at_pollination[["BAER"]] <- list(parts=c("cone_green","flower_stigma"), scale=c(1/60,1/2))
-dispersal_at_pollination[["BOLE"]] <- list(parts=c("flower_calyx"), scale=c(1/4))
+dispersal_at_pollination[["BOLE"]] <- list(parts=c("flower_calyx","flower_petals"), scale=c(1/4,1/4))
 dispersal_at_pollination[["COER"]] <- list(parts=c("inflorescence_stalk","flower_stigma"), scale=c(1/6,1))
 dispersal_at_pollination[["EPMI"]] <- list(parts=c("flower_calyx"), scale=c(1/15))
 dispersal_at_pollination[["GRBU"]] <- list(parts=c("inflorescence_stalk","flower_stigma"), scale=c(1/20,1/2))
