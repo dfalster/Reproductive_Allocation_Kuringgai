@@ -31,6 +31,85 @@ abline(0,1)
 SummaryInd$prop_costs_seed <- SummaryInd$costs_for_seed / SummaryInd$repro_inv
 SummaryInd$prop_costs_aborted <- SummaryInd$costs_for_aborted / SummaryInd$repro_inv
 
+SummaryInd$check <- SummaryInd$prepollen_all_inv / (SummaryInd$count_aborted + SummaryInd$seed_count)
+
+
+plot(check ~ prepollencosts,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy")
+abline(0,1)
+
+```{r}
+par(mfrow=c(2,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1,1,.5,.5)) 
+options(scipen = 999)
+
+plot(seedcosts ~ seed_size,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy")
+mod <- lm(log(seed_size) ~ log(seedcosts),data=subset(SummaryInd, seedcosts>0))
+words.bottom.right.logxy(mod)
+
+plot(prepollencosts ~ seed_size,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy")
+mod <- lm(log(seed_size) ~ log(prepollencosts),data=subset(SummaryInd,prepollencosts>0))
+words.bottom.right.logxy(mod)
+
+
+
+plot(abortedcosts ~ seed_size,data=subset(SummaryInd, abortedcosts>.001),col=col.spp(species),pch=16,log="xy")
+mod <- lm(log(seed_size) ~ log(abortedcosts),data=subset(SummaryInd, abortedcosts>0.001))
+words.bottom.right.logxy(mod)
+
+
+plot(b_div_p ~ seed_size,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy",ylab="per seed cost to procur pollen")
+mod <- lm(log(seed_size) ~ log(b_div_p),data=subset(SummaryInd,b_div_p>0))
+words.bottom.right.logxy(mod)
+
+plot(c_div_p ~ seed_size,data=subset(SummaryInd,c_div_p>0&species!="COER"),col=col.spp(species),pch=16,log="xy",ylab="per seed cost of aborted fruits and seeds")
+mod <- lm(log(seed_size) ~ log(c_div_p),data=subset(SummaryInd,c_div_p>0&species!="COER"))
+words.bottom.right.logxy(mod)
+
+plot(dispersalcosts_increment ~ seed_size,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy",ylab="cost of dispersal tissues")
+mod <- lm(log(seed_size) ~ log(dispersalcosts_increment),data=subset(SummaryInd))
+words.bottom.right.logxy(mod)
+
+plot(total_accessory_Lord ~ seed_size,data=subset(SummarySppAge[["mean"]]),col=col.age(age),pch=16,log="xy", ylab="total per seed accessory costs")
+mod <- lm(log(total_accessory_Lord) ~ log(seed_size)*age,data=subset(SummaryInd,total_accessory_Lord>0))
+words.bottom.right.logxy(mod)
+summary(mod)
+
+plot(b_div_p ~ seed_size,data=subset(SummarySppAge[["mean"]]),col=col.age(age),pch=16,log="xy", ylab="per seed cost to procur pollen")
+mod <- lm(log(b_div_p) ~ log(seed_size)*age,data=subset(SummaryInd,b_div_p>0))
+words.bottom.right.logxy(mod)
+summary(mod)
+
+plot(c_div_p ~ seed_size,data=subset(SummarySppAge[["mean"]],c_div_p>0.00001),col=col.age(age),pch=16,log="xy", ylab="per seed cost of aborted fruits and seeds")
+mod <- lm(log(c_div_p) ~ log(seed_size)*age,data=subset(SummaryInd,c_div_p>0.00001))
+words.bottom.right.logxy(mod)
+summary(mod)
+
+plot(dispersalcosts_increment ~ seed_size,data=subset(SummarySppAge[["mean"]]),col=col.age(age),pch=16,log="xy", ylab="per seed cost of packaging and disp")
+mod <- lm(log(dispersalcosts_increment) ~ log(seed_size)*age,data=subset(SummaryInd,dispersalcosts_increment>0))
+words.bottom.right.logxy(mod)
+summary(mod)
+confint(mod)
+
+slopes <- sma(log(dispersalcosts_increment) ~ log(seed_size),data=subset(SummaryInd,dispersalcosts_increment>0),slope.test=1)
+summary(slopes)
+
+slopes <- sma(log(c_div_p) ~ log(seed_size),data=subset(SummaryInd,c_div_p>0),slope.test=1)
+summary(slopes)
+
+slopes <- sma(log(b_div_p) ~ log(seed_size),data=subset(SummaryInd,b_div_p>0),slope.test=1)
+summary(slopes)
+
+
+
+plot(seed_to_ovule_ratio ~ total_accessory_Lord,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy")
+mod <- lm(log(seed_size) ~ total_accessory_Lord,data=subset(SummarySpp[["mean"]]))
+words.bottom.left.logx(mod)
+
+
+
+plot(seed_to_ovule_ratio ~ seed_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="x")
+mod <- lm(log(seed_size) ~ seed_to_ovule_ratio,data=subset(SummarySpp[["mean"]]))
+words.bottom.left.logx(mod)
+```
 
 ```{r}
 win.metafile("figs2/acc_cost_seed_size.wmf", height=6, width=6)
