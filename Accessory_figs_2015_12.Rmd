@@ -72,43 +72,55 @@ plot(total_accessory_Lord ~ seed_size,data=subset(SummarySppAge[["mean"]]),col=c
 mod <- lm(log(total_accessory_Lord) ~ log(seed_size)*age,data=subset(SummaryInd,total_accessory_Lord>0))
 words.bottom.right.logxy(mod)
 summary(mod)
+```
 
+
+```{r}
 plot(b_div_p ~ seed_size,data=subset(SummarySppAge[["mean"]]),col=col.age(age),pch=16,log="xy", ylab="per seed cost to procur pollen")
 mod <- lm(log(b_div_p) ~ log(seed_size)*age,data=subset(SummaryInd,b_div_p>0))
 words.bottom.right.logxy(mod)
 summary(mod)
+slopes <- sma(log(b_div_p) ~ log(seed_size)*age,data=subset(SummaryInd,b_div_p>0),slope.test=1)
+summary(slopes)
 
 plot(c_div_p ~ seed_size,data=subset(SummarySppAge[["mean"]],c_div_p>0.00001),col=col.age(age),pch=16,log="xy", ylab="per seed cost of aborted fruits and seeds")
 mod <- lm(log(c_div_p) ~ log(seed_size)*age,data=subset(SummaryInd,c_div_p>0.00001))
 words.bottom.right.logxy(mod)
 summary(mod)
-
-plot(dispersalcosts_increment ~ seed_size,data=subset(SummarySppAge[["mean"]]),col=col.age(age),pch=16,log="xy", ylab="per seed cost of packaging and disp")
-mod <- lm(log(dispersalcosts_increment) ~ log(seed_size)*age,data=subset(SummaryInd,dispersalcosts_increment>0))
-words.bottom.right.logxy(mod)
-summary(mod)
-confint(mod)
-
-slopes <- sma(log(dispersalcosts_increment) ~ log(seed_size),data=subset(SummaryInd,dispersalcosts_increment>0),slope.test=1)
-summary(slopes)
-
 slopes <- sma(log(c_div_p) ~ log(seed_size),data=subset(SummaryInd,c_div_p>0),slope.test=1)
 summary(slopes)
 
-slopes <- sma(log(b_div_p) ~ log(seed_size),data=subset(SummaryInd,b_div_p>0),slope.test=1)
+
+plot(dispersalcosts_increment ~ seed_size,data=subset(SummaryInd),col=col.age(age),pch=16,log="xy", ylab="per seed cost of packaging and disp")
+mod <- lm(log(dispersalcosts_increment) ~ log(seed_size)*age,data=subset(SummaryInd,dispersalcosts_increment>0))
+words.bottom.right.logxy(mod)
+slopes <- sma(log(dispersalcosts_increment) ~ log(seed_size),data=subset(SummaryInd,dispersalcosts_increment>0),slope.test=1)
 summary(slopes)
 
+plot(total_accessory_Lord  ~ seed_size,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy")
+mod <- lm(log(total_accessory_Lord) ~ log(seed_size)*age,data=subset(SummaryInd,total_accessory_Lord>0))
+words.bottom.right.logxy(mod)
+slopes <- sma(log(total_accessory_Lord) ~ log(seed_size),data=subset(SummaryInd,total_accessory_Lord>0),slope.test=1)
+summary(slopes)
 
+#calculation of total accessory investment divided by seed count (accessory_per_seed) very closely correlated with accessory costs per seed using the equations in Lord
+plot(total_accessory_Lord  ~ accessory_per_seed,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy")
+mod <- lm(log(total_accessory_Lord) ~ log(accessory_per_seed),data=subset(SummaryInd,total_accessory_Lord>0))
+words.bottom.right.logxy(mod)
+slopes <- sma(log(total_accessory_Lord) ~ log(accessory_per_seed),data=subset(SummaryInd,total_accessory_Lord>0),slope.test=1)
+summary(slopes)
+summary(mod)
 
-plot(seed_to_ovule_ratio ~ total_accessory_Lord,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy")
-mod <- lm(log(seed_size) ~ total_accessory_Lord,data=subset(SummarySpp[["mean"]]))
-words.bottom.left.logx(mod)
+plot(seed_to_ovule_ratio ~ seed_size,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy")
+mod <- lm(log(seed_size) ~ log(seed_to_ovule_ratio),data=subset(SummaryInd,seed_to_ovule_ratio>0))
+words.bottom.left.logxy(mod)
 
-
-
-plot(seed_to_ovule_ratio ~ seed_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="x")
-mod <- lm(log(seed_size) ~ seed_to_ovule_ratio,data=subset(SummarySpp[["mean"]]))
-words.bottom.left.logx(mod)
+#on an energy basis, propagule inv and accessory inv increase 1 to 1; implies seed size is sufficient information, but need to account of additional component
+plot(accessory_inv ~ propagule_inv,data=subset(SummaryInd,propagule_inv>0),col=col.spp(species),pch=16,log="xy")
+mod <- lm(log(propagule_inv) ~ log(accessory_inv)*age,data=subset(SummaryInd,propagule_inv>0))
+words.bottom.right.logxy(mod)
+slopes <- sma(log(propagule_inv) ~ log(accessory_inv),data=subset(SummaryInd,propagule_inv>0),slope.test=1)
+summary(slopes)
 ```
 
 ```{r}
