@@ -26,7 +26,7 @@ CalculateInvestmentForSpecies <- function(species, Reproduction, FloweringCatego
   parts_counts <- list(
       flower_count= c("flower_petals","flower_petals_small"),
       bud_count = c("bud_tiny","bud_small","bud_mid","bud_large","flower_aborted_without_petals"),
-      seed_count= c("seed","fruit_mature"),
+      seed_count= c("seed","fruit_mature","seed_immature"),
       aborted_fruit_count = c("fruit_just_starting","fruit_young","fruit_large_immature_01","fruit_large_immature_02","fruit_large_immature_03","fruit_large_immature_04"," fruit_large_immature_05"," fruit_large_immature_06","fruit_empty")
       )
 

@@ -263,6 +263,7 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
     abortedcosts = (((count_aborted*prepollencosts) + postpollen_aborted_inv)/count_aborted)-prepollencosts,
     b_div_p = prepollencosts / seed_to_ovule_ratio,
     c_div_p = ((abortedcosts)*(1-seed_to_ovule_ratio))/seed_to_ovule_ratio,
+    dispersalcosts_increment2 = accessory_per_seed - b_div_p - c_div_p,
     total_accessory_Lord = dispersalcosts_increment + b_div_p + c_div_p
     )
 
@@ -275,7 +276,7 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
              "prepollen_all_per_seed","prepollen_aborted_per_seed","prepollen_success_per_seed","postpollen_aborted_per_seed",
              "prop_prepollen_aborted", "prop_prepollen_success",
              "prop_postpollen_aborted", "prop_packaging_dispersal", "prop_propagule",
-             "prop_prepollen_all", "prop_accessory","costs_per_seed","costs_for_seed","costs_for_aborted","seed_to_ovule_ratio","b_div_p","c_div_p","total_accessory_Lord","abortedcosts","dispersalcosts_increment")) {
+             "prop_prepollen_all", "prop_accessory","costs_per_seed","costs_for_seed","costs_for_aborted","seed_to_ovule_ratio","b_div_p","c_div_p","total_accessory_Lord","abortedcosts","dispersalcosts_increment","dispersalcosts_increment2")) {
     i <- is.na(SummaryInd[[v]])
     SummaryInd[[v]][i] <- 0
     i <- is.infinite(SummaryInd[[v]])
@@ -296,8 +297,8 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
     ungroup()
   
   # These individuals excluded because were near death
-  SummaryInd <- subset(SummaryInd, 
-    !individual %in% c("GRBU_903", "PELA_902", "PELA_905", "COER_804", "PEPU_905", "GRSP_907", "LEES_907"))
+#   SummaryInd <- subset(SummaryInd, 
+#     !individual %in% c("GRBU_903", "PELA_902", "PELA_905", "COER_804", "PEPU_905", "GRSP_907", "LEES_907"))
 
   SummaryInd
 
@@ -331,7 +332,7 @@ get_species_values <- function(SummaryInd, groups) {
       height, growth_inv, repro_inv, total_weight, total_inv, RA, RA_leaf_area, diameter, stem_area,
       leaf_weight, stem_weight, growth_stem_diameter, growth_stem_area, growth_leaf,
       growth_stem, diameter, LMA, wood_density,leaf_area,leaf_area_midyear,costs_for_seed,costs_for_aborted,seedcosts,prepollencosts,dispersalcosts, 
-      accessory_costs,seed_to_ovule_ratio,b_div_p,c_div_p,total_accessory_Lord,abortedcosts,dispersalcosts_increment)
+      accessory_costs,seed_to_ovule_ratio,b_div_p,c_div_p,total_accessory_Lord,abortedcosts,dispersalcosts_increment,dispersalcosts_increment2)
   })
   names(out[[1]]) <- fs
 
