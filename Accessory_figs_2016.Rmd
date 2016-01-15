@@ -176,8 +176,8 @@ results$b <- round(results$b,digits=2)
 results
 write.csv(results, file="figs2/seedset_vs_accessory.csv",row.names=FALSE)
 
-win.metafile("figs2/seedset_vs_accessory.wmf", height=6, width=6)
-plot
+#win.metafile("figs2/seedset_vs_accessory.wmf", height=6, width=6)
+#plot
 
 par(mfrow=c(1,1), cex=1, omi=c(1,1,.1,.1), mai=c(1,1,.5,.5)) 
 
@@ -191,7 +191,7 @@ abline((results[i,5]),(results[i,6]),col=col.spp(results$species[i]))
 }
 abline(coef(mod)[1],coef(mod)[2],lwd=3)
 legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
-dev.off()
+#dev.off()
 ```
 
 ```{r}
@@ -288,3 +288,288 @@ mod <- lm(r.squared~log10(ovules),results)
 words.bottom.right.logy(mod)
 dev.off()
 ```
+
+###RA not correlated with accessory costs
+```{r}
+xvar <- "RA"
+yvar <- "accessory_per_seed"
+
+data <- subset(SummaryInd,accessory_per_seed>0&RA>0&age>2)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  ((x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+
+
+par(mfrow=c(1,1), cex=1, omi=c(1,1,.1,.1), mai=c(1,1,.5,.5)) 
+
+plot(accessory_per_seed~RA,data=subset(SummaryInd,accessory_per_seed>0&RA>0&age>2),col=col.spp(species),pch=16,log="y")
+points(accessory_per_seed~RA,data=subset(SummarySpp[["mean"]],accessory_per_seed>0&RA>0),col="black",pch=16,cex=3)
+points(accessory_per_seed~RA,data=subset(SummarySpp[["mean"]],accessory_per_seed>0&RA>0),col=col.spp(species),pch=16,cex=2)
+mod <- lm(log10(accessory_per_seed)~(RA),data=subset(SummarySpp[["mean"]]))
+words.top.right.logx(mod)
+for(i in 1:14) {
+abline((results[i,5]),(results[i,6]),col=col.spp(results$species[i]))
+}
+abline(coef(mod)[1],coef(mod)[2],lwd=3)
+legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
+```
+
+```{r}
+xvar <- "repro_inv"
+yvar <- "accessory_per_seed"
+
+data <- subset(SummaryInd,accessory_per_seed>0&repro_inv>0&age>2)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+
+par(mfrow=c(1,1), cex=1, omi=c(1,1,.1,.1), mai=c(1,1,.5,.5)) 
+
+plot(accessory_per_seed~repro_inv,data=subset(SummaryInd,accessory_per_seed>0&repro_inv>0&age>2),col=col.spp(species),pch=16,log="xy")
+points(accessory_per_seed~repro_inv,data=subset(SummarySpp[["mean"]],accessory_per_seed>0&repro_inv>0),col="black",pch=16,cex=3)
+points(accessory_per_seed~repro_inv,data=subset(SummarySpp[["mean"]],accessory_per_seed>0&repro_inv>0),col=col.spp(species),pch=16,cex=2)
+mod <- lm(log10(accessory_per_seed)~log10(repro_inv),data=subset(SummarySpp[["mean"]]))
+words.top.right.logxy(mod)
+for(i in 1:14) {
+abline((results[i,5]),(results[i,6]),col=col.spp(results$species[i]))
+}
+abline(coef(mod)[1],coef(mod)[2],lwd=3)
+legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
+```
+
+```{r}
+xvar <- "age"
+yvar <- "accessory_per_seed"
+
+data <- subset(SummaryInd,accessory_per_seed>0&age>2)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+write.csv(results, file="figs2/age_vs_accessory.csv",row.names=FALSE)
+
+par(mfrow=c(1,2), cex=1, omi=c(1,1,.1,.1), mai=c(1,1,.5,.5)) 
+
+plot(accessory_per_seed~age,data=subset(SummaryInd,accessory_per_seed>0&age>0&age>2&species!="COER"),col=col.spp(species),pch=16,log="xy")
+
+for(i in 1:14) {
+abline((results[i,5]),(results[i,6]),col=col.spp(results$species[i]))
+}
+legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
+```
+
+```{r}
+xvar <- "age"
+yvar <- "seedset"
+
+data <- subset(SummaryInd,seedset>0&age>2)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+#write.csv(results, file="figs2/age_vs_accessory.csv",row.names=FALSE)
+
+#par(mfrow=c(1,1), cex=1, omi=c(1,1,.1,.1), mai=c(1,1,.5,.5)) 
+
+plot(seedset~age,data=subset(SummaryInd,seedset>0&age>2),col=col.spp(species),pch=16,log="xy")
+
+for(i in 1:14) {
+abline((results[i,5]),(results[i,6]),col=col.spp(results$species[i]))
+}
+legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
+```
+
+```{r}
+xvar <- "age"
+yvar <- "seed_count"
+
+data <- subset(SummaryInd,seedset>0&age>2)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+#write.csv(results, file="figs2/age_vs_accessory.csv",row.names=FALSE)
+
+#par(mfrow=c(1,1), cex=1, omi=c(1,1,.1,.1), mai=c(1,1,.5,.5)) 
+
+plot(seed_count~age,data=subset(SummaryInd,seedset>0&age>2),col=col.spp(species),pch=16,log="xy")
+
+for(i in 1:14) {
+abline((results[i,5]),(results[i,6]),col=col.spp(results$species[i]))
+}
+legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
+```
+
+```{r}
+xvar <- "age"
+yvar <- "c_div_p"
+
+data <- subset(SummaryInd,c_div_p>0&age>2&species!="COER")
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+```
+
+```{r}
+xvar <- "seedset"
+yvar <- "b_div_p"
+
+data <- subset(SummaryInd,b_div_p>0&seedset>0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+# extra1 <- select(SummarySpp[["max"]],species,seedset)
+# names(extra1) <- c("species","seedset_max")
+# extra2 <- select(SummarySpp[["min"]],species,seedset)
+# names(extra2) <- c("species","seedset_min")
+# 
+# results <- merge(results, extra1, by="species", all=TRUE)
+# results <- merge(results, extra2, by="species", all=TRUE)
+# results$seedset_min <- 0.0001
+# 
+# results$max_y <- (10^(results$seedset_max*results$b))*10^(results$a)
+# results$min_y <- (10^(results$seedset_min*results$b))*10^(results$a)
+
+
+#write.csv(results, file="figs2/age_vs_accessory.csv",row.names=FALSE)
+
+par(mfrow=c(1,1), cex=1, omi=c(1,1,.1,.1), mai=c(1,1,.5,.5)) 
+
+plot(b_div_p~seedset,data=subset(SummaryInd,b_div_p>0&seedset>0),col=col.spp(species),pch=16,log="xy")
+
+#View(results)
+
+for(i in 1:14) {
+#arrows(results[i,8],results[i,10],results[i,7],results[i,9],col=col.spp(results$species[i]),code=0,lwd=2)  
+abline((results[i,5]),(results[i,6]),col=col.spp(results$species[i]))
+}
+legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
+```
+
+```{r}
+xvar <- "total_weight"
+yvar <- "repro_all_count"
+
+data <- subset(SummaryInd,repro_all_count>0&age>2)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+
+par(mfrow=c(1,1), cex=1, omi=c(1,1,.1,.1), mai=c(1,1,.5,.5)) 
+
+plot(repro_all_count~total_weight,data=subset(SummaryInd,repro_all_count>0&age>2&total_weight>0),col=col.spp(species),pch=16,log="xy")
+points(repro_all_count~total_weight,data=subset(SummarySpp[["mean"]],repro_all_count>0&total_weight>0),col="black",pch=16,cex=3)
+points(repro_all_count~total_weight,data=subset(SummarySpp[["mean"]],repro_all_count>0&total_weight>0),col=col.spp(species),pch=16,cex=2)
+mod <- lm(log10(total_weight)~log10(repro_all_count),data=subset(SummarySpp[["mean"]]))
+words.top.right.logxy(mod)
+for(i in 1:14) {
+  abline((results[i,5]),(results[i,6]),col=col.spp(results$species[i]))
+}
+abline(coef(mod)[1],coef(mod)[2],lwd=3)
+legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
+```
+
+```{r}
+xvar <- "total_weight"
+yvar <- "repro_inv"
+
+data <- subset(SummaryInd,repro_inv>0&age>2)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+
+par(mfrow=c(1,1), cex=1, omi=c(1,1,.1,.1), mai=c(1,1,.5,.5)) 
+
+plot(repro_inv~total_weight,data=subset(SummaryInd,repro_inv>0&age>2&total_weight>0),col=col.spp(species),pch=16,log="xy")
+points(repro_inv~total_weight,data=subset(SummarySpp[["mean"]],repro_inv>0&total_weight>0),col="black",pch=16,cex=3)
+points(repro_inv~total_weight,data=subset(SummarySpp[["mean"]],repro_inv>0&total_weight>0),col=col.spp(species),pch=16,cex=2)
+mod <- lm(log10(total_weight)~log10(repro_inv),data=subset(SummarySpp[["mean"]]))
+words.top.right.logxy(mod)
+for(i in 1:14) {
+  abline((results[i,5]),(results[i,6]),col=col.spp(results$species[i]))
+}
+abline(coef(mod)[1],coef(mod)[2],lwd=3)
+legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
+```
+
+```{r}
+xvar <- "total_weight_0"
+yvar <- "propagule_inv"
+
+data <- subset(SummaryInd,propagule_inv>0&age>2)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+
+par(mfrow=c(1,1), cex=1, omi=c(1,1,.1,.1), mai=c(1,1,.5,.5)) 
+
+plot(propagule_inv~total_weight_0,data=subset(SummaryInd,propagule_inv>0&age>2&total_weight_0>0),col=col.spp(species),pch=16,log="xy")
+points(propagule_inv~total_weight_0,data=subset(SummarySpp[["mean"]],propagule_inv>0&total_weight_0>0),col="black",pch=16,cex=3)
+points(propagule_inv~total_weight_0,data=subset(SummarySpp[["mean"]],propagule_inv>0&total_weight_0>0),col=col.spp(species),pch=16,cex=2)
+mod <- lm(log10(total_weight_0)~log10(propagule_inv),data=subset(SummaryInd,propagule_inv>0&age>2&total_weight_0>0))
+words.top.right.logxy(mod)
+for(i in 1:14) {
+  abline((results[i,5]),(results[i,6]),col=col.spp(results$species[i]))
+}
+#abline(coef(mod)[1],coef(mod)[2],lwd=3)
+legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
+```
+
+
