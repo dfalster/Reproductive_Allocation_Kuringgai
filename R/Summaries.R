@@ -4,6 +4,7 @@ process_seed_costs <- function(seedSize_raw, PartsSummary_all) {
   seedsize <- seedSize_raw %>%
       select(species, seed_size)
 
+  #all of these calculations should really be done on the individual level, since different scaling per individual and different parts weights
   # adding info on all costs to produce 1 seed
   seedcosts <- list()
   seedcosts[["BAER"]] <- list(parts=c("cone_brown","cone_base_brown","flower_petals","seed_pod","seed","flower_style"), scale=c(1/60,1/60,1/2,1/2,1,1/2))
@@ -91,17 +92,19 @@ dispersalcosts[["PUTU"]] <- list(parts=c("seed_pod"), scale=c(1/2))
                             * dispersalcosts[[sp]][["scale"]])
                       }))
 
+#note, for some species a decimal fraction is given, reflecting that the part turns both into a dispersal component and the actual propagule. 
+#I'm not sure how to figure out the correct value to use
 
 dispersal_at_pollination <- list()
 dispersal_at_pollination[["BAER"]] <- list(parts=c("cone_green","flower_stigma"), scale=c(1/60,1/2))
 dispersal_at_pollination[["BOLE"]] <- list(parts=c("flower_calyx","flower_petals"), scale=c(1/4,1/4))
-dispersal_at_pollination[["COER"]] <- list(parts=c("inflorescence_stalk","flower_stigma"), scale=c(1/6,1))
+dispersal_at_pollination[["COER"]] <- list(parts=c("inflorescence_stalk","flower_stigma"), scale=c(1/6,.5))
 dispersal_at_pollination[["EPMI"]] <- list(parts=c("flower_calyx"), scale=c(1/15))
 dispersal_at_pollination[["GRBU"]] <- list(parts=c("inflorescence_stalk","flower_stigma"), scale=c(1/20,1/2))
 dispersal_at_pollination[["GRSP"]] <- list(parts=c("inflorescence_stalk","flower_stigma"), scale=c(1/20,1/2))
 dispersal_at_pollination[["HATE"]] <- list(parts=c("flower_stigma"), scale=c(1/2))
 dispersal_at_pollination[["HEPU"]] <- list(parts=c("flower_calyx"), scale=c(1/4))
-dispersal_at_pollination[["LEES"]] <- list(parts=c("flower_calyx"), scale=c(1))
+dispersal_at_pollination[["LEES"]] <- list(parts=c("flower_calyx"), scale=c(0.25))
 dispersal_at_pollination[["PELA"]] <- list(parts=c("flower_stigma"), scale=c(1))
 dispersal_at_pollination[["PEPU"]] <- list(parts=c("cone_green","flower_stigma"), scale=c(1/40,1))
 dispersal_at_pollination[["PHPH"]] <- list(parts=c("flower_stigma"), scale=c(1/2))
@@ -223,7 +226,7 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
     SummaryInd[[v]][i] <- 0
     }
   
-  #DANIEL TODO: For the various "per_seed" measures, need to include only individuals that have non-zero seed count, otherwise end up
+  #DANIEL TODO: For the various "per_seed" measures and other accessory costs, need to include only individuals that have non-zero seed count, otherwise combining lots of zeros with real numbers and mean is "meaningless"
   SummaryInd <- SummaryInd %>% mutate(
     total_inv = repro_inv + growth_inv,
     total_weight_0 = total_weight - growth_inv,
@@ -264,7 +267,8 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
     b_div_p = prepollencosts / seed_to_ovule_ratio,
     c_div_p = ((abortedcosts)*(1-seed_to_ovule_ratio))/seed_to_ovule_ratio,
     dispersalcosts_increment2 = accessory_per_seed - b_div_p - c_div_p,
-    total_accessory_Lord = dispersalcosts_increment + b_div_p + c_div_p
+    total_accessory_Lord = dispersalcosts_increment + b_div_p + c_div_p,
+    prepollen_all_inv = prepollen_aborted_inv + prepollen_success_inv
     )
 
   #if seedset is low, prepollen costs increase, because the cost of producing pollen across the whole plant is higher per seed matured  
@@ -332,7 +336,7 @@ get_species_values <- function(SummaryInd, groups) {
       height, growth_inv, repro_inv, total_weight, total_inv, RA, RA_leaf_area, diameter, stem_area,
       leaf_weight, stem_weight, growth_stem_diameter, growth_stem_area, growth_leaf,
       growth_stem, diameter, LMA, wood_density,leaf_area,leaf_area_midyear,costs_for_seed,costs_for_aborted,seedcosts,prepollencosts,dispersalcosts, 
-      accessory_costs,seed_to_ovule_ratio,b_div_p,c_div_p,total_accessory_Lord,abortedcosts,dispersalcosts_increment,dispersalcosts_increment2)
+      accessory_costs,b_div_p,c_div_p,total_accessory_Lord,abortedcosts,dispersalcosts_increment,dispersalcosts_increment2)
   })
   names(out[[1]]) <- fs
 
