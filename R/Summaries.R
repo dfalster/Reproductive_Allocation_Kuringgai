@@ -268,7 +268,16 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
     c_div_p = ((abortedcosts)*(1-seed_to_ovule_ratio))/seed_to_ovule_ratio,
     dispersalcosts_increment2 = accessory_per_seed - b_div_p - c_div_p,
     total_accessory_Lord = dispersalcosts_increment + b_div_p + c_div_p,
-    prepollen_all_inv = prepollen_aborted_inv + prepollen_success_inv
+    prepollen_all_inv = prepollen_aborted_inv + prepollen_success_inv,
+    costs_for_success = seedcosts*seed_count,
+    costs_for_failure = repro_inv - costs_for_success,
+    percent_for_success = costs_for_success/ repro_inv,
+    percent_for_failure = costs_for_failure/ repro_inv,
+    prop_propagule_nonzero = prop_propagule,
+    prop_accessory_nonzero = prop_accessory,
+    percent_prepollencosts = prepollencosts/seedcosts,
+    percent_seedcosts = seed_size/seedcosts,
+    percent_dispersalcosts = 1-percent_prepollencosts-percent_seedcosts
     )
 
   #if seedset is low, prepollen costs increase, because the cost of producing pollen across the whole plant is higher per seed matured  
@@ -355,7 +364,7 @@ get_species_values <- function(SummaryInd, groups) {
     group_by_(.dots=dots) %>%
     summarise_each(f, prop_prepollen_aborted, prop_prepollen_success,
       prop_postpollen_aborted, prop_packaging_dispersal, prop_propagule,
-      prop_prepollen_all, prop_accessory)
+      prop_prepollen_all, prop_accessory, percent_prepollencosts,percent_dispersalcosts,percent_seedcosts)
   })
   names(out[[3]]) <- fs
 
@@ -363,7 +372,7 @@ get_species_values <- function(SummaryInd, groups) {
     SummaryInd %>%
     filter(repro_inv > 0) %>%
     group_by_(.dots=dots) %>%
-    summarise_each(f, seedset, seed_count, flower_count,fruit_weight)
+    summarise_each(f, flower_count,fruit_weight)
   })
   names(out[[4]]) <- fs
 
@@ -374,7 +383,7 @@ get_species_values <- function(SummaryInd, groups) {
     group_by_(.dots=dots) %>%
     summarise_each(f, accessory_per_seed, propagule_per_seed, prepollen_all_per_seed,
       prepollen_aborted_per_seed, prepollen_success_per_seed, postpollen_aborted_per_seed,
-      packaging_dispersal_per_seed,costs_per_seed,seed_to_ovule_ratio)
+      packaging_dispersal_per_seed,costs_per_seed,seed_to_ovule_ratio,seedset, seed_count,prop_propagule_nonzero,prop_accessory_nonzero)
   })
   names(out[[5]]) <- fs
 

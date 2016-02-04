@@ -1,6 +1,6 @@
 #Figure 1. Correlations of various reproductive investment categories against plant weight
 ```{r}
-win.metafile("figs2/Figure01_correlations_with_plant_weight.wmf", height=9, width=13)
+win.metafile("figs2/Accessory_Costs/Figure01_correlations_with_plant_weight.wmf", height=9, width=13)
 plot
 
 par(mfrow=c(2,3), cex=1, omi=c(1,0.1,.1,0.05), mai=c(.2,.55,.1,0.1))
@@ -43,11 +43,80 @@ mtext(text="total plant weight (mg)",side=1,line=1.5,outer=TRUE)
 dev.off()
 ```
 
+#In other words, for many species, seed counts do not provide an accurate estimate of reproductive investment
+```{r}
+data <- subset(SummaryInd,seed_count>0)
+data <- split(data, data$species)
+
+xvar <- "repro_inv"
+yvar <- "seed_count"
+
+lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
+
+data <- subset(SummaryInd,seed_count>0)
+data <- split(data, data$species)
+
+
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+write.csv(results, file="figs2/Accessory_Costs/Table01a_seed_count_vs_repro_inv.csv",row.names=FALSE)
+```
+
+```{r}
+data <- subset(SummaryInd,seed_count>0)
+data <- split(data, data$species)
+
+xvar <- "repro_inv"
+yvar <- "diameter"
+
+lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
+
+data <- subset(SummaryInd,seed_count>0)
+data <- split(data, data$species)
+
+
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+write.csv(results, file="figs2/Accessory_Costs/Table01b_diameter_vs_repro_inv.csv",row.names=FALSE)
+```
+
+```{r}
+data <- subset(SummaryInd,seed_count>0)
+data <- split(data, data$species)
+
+xvar <- "repro_inv"
+yvar <- "repro_all_count"
+
+lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
+
+data <- subset(SummaryInd,seed_count>0)
+data <- split(data, data$species)
+
+
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+write.csv(results, file="figs2/Accessory_Costs/Table01c_repro_all_count_vs_repro_inv.csv",row.names=FALSE)
+```
 
 #Appendix Fig 1. Correlations with leaf investment  
 * if you change conditions to "growth_leaf>50" to remove those old individuals that are no longer replacing leaves, the correlations become ~2x as strong
 ```{r}
-win.metafile("figs2/Appendix01_correlations_with_leaf_investment.wmf", height=9, width=9)
+win.metafile("figs2/Accessory_Costs/Appendix01_correlations_with_leaf_investment.wmf", height=9, width=9)
 plot
 
 par(mfrow=c(2,2), cex=1, omi=c(.4,0.3,.3,0.1), mai=c(1.1,1,.3,0.1))
@@ -82,12 +151,12 @@ acc_costs_spp$c_div_p <- round(acc_costs_spp$c_div_p,digits=2)
 acc_costs_spp$dispersalcosts_increment <- round(acc_costs_spp$dispersalcosts_increment,digits=2)
 acc_costs_spp$dispersalcosts_increment2 <- round(acc_costs_spp$dispersalcosts_increment2,digits=2)
 
-write.csv(acc_costs_spp, file="figs2/Table01_AccCosts_by_Species.csv",row.names=FALSE)
+write.csv(acc_costs_spp, file="figs2/Accessory_Costs/Table02_AccCosts_by_Species.csv",row.names=FALSE)
 ```
 
-#Figure 2 and Table 2. Scaling of accessory costs versus seed size, by species
+#Figure 2 and Table 3. Scaling of accessory costs versus seed size, by species
 ```{r}
-win.metafile("figs2/Figure02_acc_cost_seed_size_4panel.wmf", height=9, width=9)
+win.metafile("figs2/Accessory_Costs/Figure02_acc_cost_seed_size_4panel.wmf", height=9, width=9)
 plot
 
 par(mfrow=c(2,2), cex=1, omi=c(.5,.1,.1,.1), mai=c(.1,1,.3,.1)) 
@@ -131,10 +200,10 @@ slopes5 <- as.matrix(coef(slopes))
 abline((slopes5[1]),(slopes2[2]))
 abline((slopes5[1]),1,col="red")
 
-Table2 <- data.frame(component=c("total accessory costs","b div p","c div p","dispersal"))
-Table2$intercept = c(slopes2[1],slopes3[1],slopes4[1],slopes5[1])
-Table2$slope = c(slopes2[2],slopes3[2],slopes4[2],slopes5[2])
-write.csv(Table2, file="figs2/Table02_AccCosts_coeff.csv",row.names=FALSE)
+Table3 <- data.frame(component=c("total accessory costs","b div p","c div p","dispersal"))
+Table3$intercept = c(slopes2[1],slopes3[1],slopes4[1],slopes5[1])
+Table3$slope = c(slopes2[2],slopes3[2],slopes4[2],slopes5[2])
+write.csv(Table3, file="figs2/Accessory_Costs/Table03_AccCosts_coeff.csv",row.names=FALSE)
 
 mtext(text="seed size (mg)",side=1,line=1.5,outer=TRUE)
 
@@ -152,10 +221,10 @@ words.top.left.logxy(mod)
 ```
 
 
-#Table 3 and Figure 3.Per seed accessory costs are lower in individuals with higher seed count. 
+#Table 4 and Figure 3.Per seed accessory costs are lower in individuals with higher seed count. 
 ###This effect is true across species, since larger-seeded species produce fewer seeds and have higher per seed accessory costs and true within species, since absolute accessory investment is a function of plant size not seedset
 ```{r}
-win.metafile("figs2/Figure_EXTRA_acc_cost_by_seed_count.wmf", height=5, width=5)
+win.metafile("figs2/Accessory_Costs/Figure_EXTRA_acc_cost_by_seed_count.wmf", height=5, width=5)
 plot
 
 xvar <- "seed_count"
@@ -187,15 +256,15 @@ legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 results$species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia","Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile puchella", "Phyllota phyllicoides", "Pimelea linifolia", "Pultanaea tuberculata") 
 names(results)=c("species","r2","p-value","n","intercept","slope")
 results
-write.csv(results, file="figs2/Table03_seedcount_vs_accessory.csv",row.names=FALSE)
+write.csv(results, file="figs2/Accessory_Costs/Table04a_seedcount_vs_accessory.csv",row.names=FALSE)
 
 
 dev.off()
 ```
 
-#Table 3 extra - showing propagule investment instead of seed_count. Could also replace with seedset
+#Table 4 extra - showing propagule investment instead of seed_count. Could also replace with seedset
 ```{r}
-win.metafile("figs2/Figure_EXTRA_acc_cost_by_seedset.wmf", height=5, width=5)
+win.metafile("figs2/Accessory_Costs/Figure_EXTRA_acc_cost_by_seedset.wmf", height=5, width=5)
 plot
 
 xvar <- "seedset"
@@ -228,7 +297,7 @@ legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 results$species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia","Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile puchella", "Phyllota phyllicoides", "Pimelea linifolia", "Pultanaea tuberculata") 
 names(results)=c("species","r2","p-value","n","intercept","slope")
 results
-write.csv(results, file="figs2/Table03a_seedset_vs_accessory.csv",row.names=FALSE)
+write.csv(results, file="figs2/Accessory_Costs/Table04b_seedset_vs_accessory.csv",row.names=FALSE)
 
 dev.off()
 ```
@@ -260,7 +329,7 @@ legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 results$species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia","Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile puchella", "Phyllota phyllicoides", "Pimelea linifolia", "Pultanaea tuberculata") 
 names(results)=c("species","r2","p-value","n","intercept","slope")
 results
-write.csv(results, file="figs2/Table04_accessory_vs_RE.csv",row.names=FALSE)
+write.csv(results, file="figs2/Accessory_Costs/Table05a_accessory_vs_RE.csv",row.names=FALSE)
 ```
 
 #Higher RA does not lead to lower accessory costs
@@ -290,7 +359,7 @@ legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 results$species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia","Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile puchella", "Phyllota phyllicoides", "Pimelea linifolia", "Pultanaea tuberculata") 
 names(results)=c("species","r2","p-value","n","intercept","slope")
 results
-write.csv(results, file="figs2/Table05_accessory_vs_RA.csv",row.names=FALSE)
+write.csv(results, file="figs2/Accessory_Costs/Table05b_accessory_vs_RA.csv",row.names=FALSE)
 ```
 
 #Not a single species shows a reduction in per seed accessory costs with increased plant size.Indeed, EPMI has higher pre-pollination accessory costs    (slope = 0.38, r2=0.19, p=0.019) and accessory costs due to aborted fruit and seeds (slope = 0.83, r2=0.268, p=0.019) in larger individuals, as larger individuals of this species have lower seedset (slope = -0.31, r2=0.198, p=0.018). GRSP also has a nearly significant decline in seedset in larger individuals (slope = -0.78, r2=0.298, p=0.067).
@@ -320,7 +389,7 @@ legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 results$species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia","Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile puchella", "Phyllota phyllicoides", "Pimelea linifolia", "Pultanaea tuberculata") 
 names(results)=c("species","r2","p-value","n","intercept","slope")
 results
-write.csv(results, file="figs2/Table04c_accessory_vs_total_weight.csv",row.names=FALSE)
+write.csv(results, file="figs2/Accessory_Costs/Table05c_accessory_vs_total_weight.csv",row.names=FALSE)
 ```
 
 ```{r}
@@ -349,7 +418,7 @@ legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 results$species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia","Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile puchella", "Phyllota phyllicoides", "Pimelea linifolia", "Pultanaea tuberculata") 
 names(results)=c("species","r2","p-value","n","intercept","slope")
 results
-write.csv(results, file="figs2/Table04d_accessory_vs_age.csv",row.names=FALSE)
+write.csv(results, file="figs2/Accessory_Costs/Table05d_accessory_vs_age.csv",row.names=FALSE)
 ```
 
 ```{r}
@@ -378,7 +447,7 @@ legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 results$species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia","Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile puchella", "Phyllota phyllicoides", "Pimelea linifolia", "Pultanaea tuberculata") 
 names(results)=c("species","r2","p-value","n","intercept","slope")
 results
-write.csv(results, file="figs2/Table06b_total_size_by_seedset.csv",row.names=FALSE)
+write.csv(results, file="figs2/Accessory_Costs/Table0xx_total_size_by_seedset.csv",row.names=FALSE)
 ```
 
 #Considering the individual components of accessory costs vs. seedset - since seedset best predictor of accessory costs
@@ -408,7 +477,7 @@ legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 results$species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia","Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile puchella", "Phyllota phyllicoides", "Pimelea linifolia", "Pultanaea tuberculata") 
 names(results)=c("species","r2","p-value","n","intercept","slope")
 results
-write.csv(results, file="figs2/Table08a_b_div_p_vs_seedset.csv",row.names=FALSE)
+write.csv(results, file="figs2/Accessory_Costs/Table06a_b_div_p_vs_seedset.csv",row.names=FALSE)
 ```
 
 ```{r}
@@ -437,14 +506,14 @@ legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 results$species <- c("Boronia ledifolia","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia","Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile puchella", "Phyllota phyllicoides", "Pimelea linifolia", "Pultanaea tuberculata") 
 names(results)=c("species","r2","p-value","n","intercept","slope")
 results
-write.csv(results, file="figs2/Table08b_c_div_p_vs_seedset.csv",row.names=FALSE)
+write.csv(results, file="figs2/Accessory_Costs/Table06b_c_div_p_vs_seedset.csv",row.names=FALSE)
 ```
 
 ```{r}
 xvar <- "seedset"
 yvar <- "packaging_dispersal_per_seed"
 
-data <- subset(SummaryInd,packaging_dispersal_per_seed>0&seedset>0&species!="LEES")
+data <- subset(SummaryInd,packaging_dispersal_per_seed>0&seedset>0)
 data <- split(data, data$species)
 lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
 results <- summarise_all_fits(lmfits)
@@ -456,28 +525,38 @@ results$b <- round(results$b,digits=2)
 
 par(mfrow=c(1,1), cex=1, omi=c(.2,.2,.1,.1), mai=c(1,1,.1,.1)) 
 
-plot(packaging_dispersal_per_seed~seedset,data=subset(SummaryInd,packaging_dispersal_per_seed>0&seedset>0&species!="LEES"),col=col.spp(species),pch=16,log="xy")
+plot(packaging_dispersal_per_seed~seedset,data=subset(SummaryInd,packaging_dispersal_per_seed>0&seedset>0),col=col.spp(species),pch=16,log="xy")
 
 for(i in 1:13) {
 abline((results[i,5]),(results[i,6]),col=col.spp(results$species[i]))
 }
 legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 
-results$species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia","Hemigenia purpurea","Persoonia lanceolata", "Petrophile puchella", "Phyllota phyllicoides", "Pimelea linifolia", "Pultanaea tuberculata") 
-names(results)=c("species","r2","p-value","n","intercept","slope")
-results
-write.csv(results, file="figs2/Table08c_dispersal_vs_seedset.csv",row.names=FALSE)
-```
+results$ovules_per_fruit <- c(60,4,1,1,2,2,2,4,1,40,2,20,2)
+max_seedset <- select(SummarySpp[["max"]],species,seedset) 
+min_seedset <- select(SummarySpp[["min"]],species,seedset) 
+results <- merge(results, max_seedset, by=c("species"), all=TRUE)
+results <- merge(results, min_seedset, by=c("species"), all=TRUE)
+names(results)=c("species","r2","p-value","n","intercept","slope","ovules_per_fruit","max_seedset","min_seedset")
 
-#need to redo this, deleted code that created dataframe
-```{r}
-win.metafile("figs2/dispcosts_vs_ovules.wmf", height=6, width=6)
+#results$min_pack <- (10^results$intercept) + (results$slope*results$max_seedset)
+#results$max_pack <- (10^results$intercept) + (results$slope*results$min_seedset)
+results
+
+win.metafile("figs2/Accessory_Costs/Table07_dispcosts_vs_ovules.wmf", height=6, width=6)
 plot
+
 par(mfrow=c(1,1), cex=1, omi=c(.4,.4,.1,.1), mai=c(.8,.8,.2,.2)) 
-plot(ovules~r.squared,results,log="y",col=col.spp(species),pch=16,cex=2,las=.1)
-mod <- lm(r.squared~log10(ovules),results)
+plot(ovules_per_fruit~r2,data=subset(results,species!="PELA"),log="y",col=col.spp(species),pch=16,cex=2)
+mod <- lm(r2~log10(ovules_per_fruit),data=subset(results,species!="PELA"))
 words.bottom.right.logy(mod)
 dev.off()
+
+results$species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia","Hemigenia purpurea","Persoonia lanceolata", "Petrophile puchella", "Phyllota phyllicoides", "Pimelea linifolia", "Pultanaea tuberculata") 
+
+results
+
+write.csv(results, file="figs2/Accessory_Costs/Table06c_dispersal_vs_seedset.csv",row.names=FALSE)
 ```
 
 #For each species the accessory cost components that cause shifts in total accessory costs is different and reflects both which components are largest and whichvary most with some factor - seedset, age, etc.
@@ -512,34 +591,141 @@ species_effects <- dplyr::left_join(species_effects, species_effects2, by = "eff
 
 mod <- lm(log10(accessory_per_seed)~log10(packaging_dispersal_per_seed)+log10(b_div_p)+log10(c_div_p),data=subset(SummaryInd,packaging_dispersal_per_seed>0&age>2&b_div_p>0&c_div_p>0&species=="GRBU"))
 summary(mod)
+species_effects2 <- as.data.frame(coef(mod))
+names(species_effects2) = c("GRBU")
+species_effects2$effects <- c("intercept","packaging&dispersal","b_div_p","c_div_p")
+species_effects <- dplyr::left_join(species_effects, species_effects2, by = "effects")
 
 mod <- lm(log10(accessory_per_seed)~log10(packaging_dispersal_per_seed)+log10(b_div_p)+log10(c_div_p),data=subset(SummaryInd,packaging_dispersal_per_seed>0&age>2&b_div_p>0&c_div_p>0&species=="GRSP"))
 summary(mod)
+species_effects2 <- as.data.frame(coef(mod))
+names(species_effects2) = c("GRSP")
+species_effects2$effects <- c("intercept","packaging&dispersal","b_div_p","c_div_p")
+species_effects <- dplyr::left_join(species_effects, species_effects2, by = "effects")
 
 mod <- lm(log10(accessory_per_seed)~log10(packaging_dispersal_per_seed)+log10(b_div_p)+log10(c_div_p),data=subset(SummaryInd,packaging_dispersal_per_seed>0&age>2&b_div_p>0&c_div_p>0&species=="HATE"))
 summary(mod)
+species_effects2 <- as.data.frame(coef(mod))
+names(species_effects2) = c("HATE")
+species_effects2$effects <- c("intercept","packaging&dispersal","b_div_p","c_div_p")
+species_effects <- dplyr::left_join(species_effects, species_effects2, by = "effects")
 
 mod <- lm(log10(accessory_per_seed)~log10(packaging_dispersal_per_seed)+log10(b_div_p)+log10(c_div_p),data=subset(SummaryInd,packaging_dispersal_per_seed>0&age>2&b_div_p>0&c_div_p>0&species=="HEPU"))
 summary(mod)
+species_effects2 <- as.data.frame(coef(mod))
+names(species_effects2) = c("HEPU")
+species_effects2$effects <- c("intercept","packaging&dispersal","b_div_p","c_div_p")
+species_effects <- dplyr::left_join(species_effects, species_effects2, by = "effects")
 
 mod <- lm(log10(accessory_per_seed)~log10(b_div_p)+log10(c_div_p),data=subset(SummaryInd,age>2&b_div_p>0&c_div_p>0&species=="LEES"))
 summary(mod)
+species_effects2 <- as.data.frame(coef(mod))
+names(species_effects2) = c("LEES")
+species_effects2$effects <- c("intercept","b_div_p","c_div_p")
+species_effects <- dplyr::left_join(species_effects, species_effects2, by = "effects")
 
 mod <- lm(log10(accessory_per_seed)~log10(packaging_dispersal_per_seed)+log10(b_div_p)+log10(c_div_p),data=subset(SummaryInd,packaging_dispersal_per_seed>0&age>2&b_div_p>0&c_div_p>0&species=="PELA"))
 summary(mod)
+species_effects2 <- as.data.frame(coef(mod))
+names(species_effects2) = c("PELA")
+species_effects2$effects <- c("intercept","packaging&dispersal","b_div_p","c_div_p")
+species_effects <- dplyr::left_join(species_effects, species_effects2, by = "effects")
+
 
 mod <- lm(log10(accessory_per_seed)~log10(packaging_dispersal_per_seed)+log10(b_div_p)+log10(c_div_p),data=subset(SummaryInd,packaging_dispersal_per_seed>0&age>2&b_div_p>0&c_div_p>0&species=="PEPU"))
 summary(mod)
+species_effects2 <- as.data.frame(coef(mod))
+names(species_effects2) = c("PEPU")
+species_effects2$effects <- c("intercept","packaging&dispersal","b_div_p","c_div_p")
+species_effects <- dplyr::left_join(species_effects, species_effects2, by = "effects")
+
 
 mod <- lm(log10(accessory_per_seed)~log10(packaging_dispersal_per_seed)+log10(b_div_p)+log10(c_div_p),data=subset(SummaryInd,packaging_dispersal_per_seed>0&age>2&b_div_p>0&c_div_p>0&species=="PHPH"))
 summary(mod)
+species_effects2 <- as.data.frame(coef(mod))
+names(species_effects2) = c("PHPH")
+species_effects2$effects <- c("intercept","packaging&dispersal","b_div_p","c_div_p")
+species_effects <- dplyr::left_join(species_effects, species_effects2, by = "effects")
 
 mod <- lm(log10(accessory_per_seed)~log10(packaging_dispersal_per_seed)+log10(b_div_p)+log10(c_div_p),data=subset(SummaryInd,packaging_dispersal_per_seed>0&age>2&b_div_p>0&c_div_p>0&species=="PILI"))
 summary(mod)
+species_effects2 <- as.data.frame(coef(mod))
+names(species_effects2) = c("PILI")
+species_effects2$effects <- c("intercept","packaging&dispersal","b_div_p","c_div_p")
+species_effects <- dplyr::left_join(species_effects, species_effects2, by = "effects")
 
 mod <- lm(log10(accessory_per_seed)~log10(packaging_dispersal_per_seed)+log10(b_div_p)+log10(c_div_p),data=subset(SummaryInd,packaging_dispersal_per_seed>0&age>2&b_div_p>0&c_div_p>0&species=="PUTU"))
 summary(mod)
+species_effects2 <- as.data.frame(coef(mod))
+names(species_effects2) = c("PUTU")
+species_effects2$effects <- c("intercept","packaging&dispersal","b_div_p","c_div_p")
+species_effects <- dplyr::left_join(species_effects, species_effects2, by = "effects")
+
+write.csv(species_effects, file="figs2/Accessory_Costs/Table08_breaking_down_accessory_costs_spp.csv",row.names=FALSE)
 ```
+
+#looking at how the slopes of the relationship between accessory investment and propagule investment shift across species 
+##slopes only statistically different from 1 in 2 species
+##intercepts quite variable - means that the "baseline" accessory investment, before you get any propagules varies
+```{r}
+par(mfrow=c(1,1), cex=1, omi=c(.2,.2,.1,.1), mai=c(1,1,.1,.1)) 
+plot(propagule_inv~accessory_inv,data=subset(SummaryInd,accessory_inv>0&propagule_inv>0),col=col.spp(species),pch=16,log="xy",xlab="total accessory investment (mg)",ylab="total propagule investment (mg)")
+slope_check <- sma(log10(propagule_inv)~ log10(accessory_inv),data=subset(SummaryInd,propagule_inv>0))
+summary(slope_check)
+
+data <- select(SummaryInd,species,propagule_inv,accessory_inv)
+data <- subset(data,propagule_inv>0)
+data <- split(data, data$species)
+
+for(i in 1:14) {
+slope_check <- sma(log10(propagule_inv)~ log10(accessory_inv),data[[i]],slope.test=1)
+summary(slope_check)
+}
+
+xvar <- "accessory_inv"
+yvar <- "propagule_inv"
+
+lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
+
+data <- subset(SummaryInd,propagule_inv>0)
+data <- split(data, data$species)
+
+
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+for(i in 1:14) {
+abline((results[i,5]),(results[i,6]),col=col.spp(results$species[i]))
+}
+```
+
+species with bigger seeds, lower seedset spend less per flower. Here taking the percent of the cost to make a single flower that goes into pre-pollination parts
+
+```{r}
+par(mfrow=c(2,2), cex=1, omi=c(1,0.1,.1,0.05), mai=c(.2,.55,.1,0.1))
+
+plot(percent_prepollencosts~seed_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy",cex=1.5)
+mod <- lm(log10(seed_size)~log10(percent_prepollencosts),data=subset(SummarySpp[["mean"]]))
+words.bottom.left.logxy(mod)
+
+plot(percent_prepollencosts~seedset,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy",cex=1.5)
+mod <- lm(log10(seedset)~log10(percent_prepollencosts),data=subset(SummarySpp[["mean"]]))
+words.top.left.logxy(mod)
+
+plot(percent_dispersalcosts~seed_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy",cex=1.5)
+mod <- lm(log10(seed_size)~log10(percent_dispersalcosts),data=subset(SummarySpp[["mean"]]))
+words.bottom.left.logxy(mod)
+
+plot(percent_dispersalcosts~seedset,data=subset(SummarySpp[["mean"]],percent_dispersalcosts>0),col=col.spp(species),pch=16,log="xy",cex=1.5)
+mod <- lm(log10(seedset)~log10(percent_dispersalcosts),data=subset(SummarySpp[["mean"]],percent_dispersalcosts>0))
+words.top.left.logxy(mod)
+```
+
+SummarySpp[["mean"]]$percent_dispersalcosts
 #*******************************
 #below this line: results probably not used in manuscript
 #*******************************
@@ -570,7 +756,7 @@ legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 results$species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia","Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile puchella", "Phyllota phyllicoides", "Pimelea linifolia", "Pultanaea tuberculata") 
 names(results)=c("species","r2","p-value","n","intercept","slope")
 results
-write.csv(results, file="figs2/Table07a_b_div_p_vs_seed_count.csv",row.names=FALSE)
+write.csv(results, file="figs2/Accessory_Costs/Table0xx_b_div_p_vs_seed_count.csv",row.names=FALSE)
 ```
 
 ```{r}
@@ -599,7 +785,7 @@ legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 results$species <- c("Boronia ledifolia","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia","Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile puchella", "Phyllota phyllicoides", "Pimelea linifolia", "Pultanaea tuberculata") 
 names(results)=c("species","r2","p-value","n","intercept","slope")
 results
-write.csv(results, file="figs2/Table07b_c_div_p_vs_seed_count.csv",row.names=FALSE)
+write.csv(results, file="figs2/Accessory_Costs/Table0xx_c_div_p_vs_seed_count.csv",row.names=FALSE)
 ```
 
 ```{r}
@@ -628,6 +814,66 @@ legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
 results$species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia","Hemigenia purpurea","Persoonia lanceolata", "Petrophile puchella", "Phyllota phyllicoides", "Pimelea linifolia", "Pultanaea tuberculata") 
 names(results)=c("species","r2","p-value","n","intercept","slope")
 results
-write.csv(results, file="figs2/Table07c_dispersal_vs_seed_count.csv",row.names=FALSE)
+write.csv(results, file="figs2/Accessory_Costs/Table0xx_dispersal_vs_seed_count.csv",row.names=FALSE)
 ```
 
+
+
+par(mfrow=c(2,3), cex=1, omi=c(1,0.1,.1,0.05), mai=c(.2,.55,.1,0.1))
+options(scipen = 2)
+
+plot(propagule_inv~repro_inv,data=subset(SummaryInd,propagule_inv>0),col=col.spp(species),pch=16,log="xy",xlim=c(10,1000000),ylim=c(1,50000),xaxt="n")
+mod <- lm(log10(repro_inv)~log10(propagule_inv),data=subset(SummaryInd,propagule_inv>0))
+words.top.left.logxy(mod)
+#mtext(text="investment in propagules (mg)",side=2,line=2.3,outer=FALSE)
+
+plot(total_weight_0~repro_inv,data=subset(SummaryInd,propagule_inv>0),col=col.spp(species),pch=16,log="xy",xlim=c(10,1000000),ylim=c(1,1000000),xaxt="n")
+mod <- lm(log10(repro_inv)~log10(total_weight_0),data=subset(SummaryInd,repro_inv>0))
+words.top.left.logxy(mod)
+#mtext(text="investment in propagules (mg)",side=2,line=2.3,outer=FALSE)
+
+plot(repro_all_count~repro_inv,data=subset(SummaryInd,propagule_inv>0),col=col.spp(species),pch=16,log="xy",xlim=c(10,1000000),xaxt="n")
+mod <- lm(log10(repro_inv)~log10(repro_all_count),data=subset(SummaryInd,repro_all_count>0))
+words.top.left.logxy(mod)
+
+
+plot(costs_for_success~costs_for_failure,data=subset(SummaryInd),col=col.spp(species),pch=16,log="xy")
+abline(0,1)
+
+par(mfrow=c(1,1), cex=1, omi=c(.2,.2,.1,.1), mai=c(1,1,.1,.1)) 
+xvar <- "repro_inv"
+yvar <- "percent_for_success"
+
+data <- subset(SummaryInd,percent_for_success>0)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+results
+
+plot(percent_for_success~repro_inv,data=subset(SummaryInd,percent_for_success>0),col=col.spp(species),pch=16,log="xy")
+points(prop_propagule~repro_inv,data=subset(SummaryInd,prop_propagule>0),pch=1,col=col.spp(species))
+abline(-1,0)
+abline(.0001,0)
+
+plot(prop_propagule~repro_inv,data=subset(SummaryInd,prop_propagule>0),col=col.spp(species),pch=16,log="xy")
+mod <- lm(log10(repro_inv)~log10(repro_all_count),data=subset(SummaryInd,prop_propagule>0))
+summary(mod)
+
+points(prop_propagule_nonzero~repro_inv,data=subset(SummarySpp[["mean"]],prop_propagule>0),col="black",pch=16,cex=2.5)
+points(prop_propagule_nonzero~repro_inv,data=subset(SummarySpp[["mean"]],prop_propagule>0),col=col.spp(species),pch=16,cex=1.5)
+1-mean(SummarySpp[["mean"]]$prop_propagule_nonzero)
+
+for(i in 1:13) {
+abline((results[i,5]),(results[i,6]),col=col.spp(results$species[i]))
+}
+legend("bottomleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
+
+
+points(prop_propagule~repro_inv,data=subset(SummaryInd,prop_propagule>0),pch=1,col=col.spp(species))
+abline(-1,0)
+abline(.0001,0)
