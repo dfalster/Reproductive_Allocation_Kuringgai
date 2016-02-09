@@ -126,7 +126,7 @@ col.spp <- function(x=NULL){
     PEPU="light blue", PHPH= "brown", PILI="deep pink", PUTU="orchid1")
 
   if(!is.null(x)) {
-    ret <- ret[x]
+    ret <- ret[as.character(x)]
   }
   ret
 }
@@ -289,11 +289,15 @@ plot_yvar3_vs_xvar3 <- function(data, yvar3 = "y", xvar3 = "x", ...) {
 }
 
 summarise_fit <- function(x) {
+  
+  xr <- range(x[["model"]][2])
   data.frame(
     select(glance(x), r.squared, p.value),
     n= length(resid(x)),
     a = coef(x)[1],
-    b = coef(x)[2]
+    b = coef(x)[2],
+    x_low = xr[1],
+    x_high = xr[2]
   )
 }
 
@@ -437,4 +441,29 @@ words.top.left.logxy <- function (x) {
   text(10^((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.93*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("r squared = ",output[1]),adj=0,cex=.9)
   text(10^((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.88*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("p-value = ",output[2]),adj=0,cex=.9)
   text(10^((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.98*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),summary(mod)[1],cex=.7,adj=0)
+}
+
+lines <- function(results) {
+  results$linetype <- 1
+  results$linewidth <- 2
+  
+  results[as.numeric(results[["pval"]]) > 0.05,"linetype"] <- 2
+  results[as.numeric(results[["pval"]]) > 0.10,"linetype"] <- 3
+  results[as.numeric(results[["pval"]]) > 0.05,"linewidth"] <- 1.5
+  results[as.numeric(results[["pval"]]) > 0.10,"linewidth"] <- 1
+  results
+}
+
+legend_with_r2_bottomright <- function(results) {
+  for_legend <- dplyr::select(results,group,r2)
+  for_legend$r2 <-round(as.numeric(for_legend$r2),digits=3)
+  for_legend$text <- paste(for_legend$group,for_legend$r2,sep="  ")
+  legend("bottomright",legend=for_legend$text,col=col.spp(),pch=16, cex=.6,bty="n",xjust=1)
+}
+
+legend_with_r2_topleft <- function(results) {
+  for_legend <- dplyr::select(results,group,r2)
+  for_legend$r2 <-round(as.numeric(for_legend$r2),digits=3)
+  for_legend$text <- paste(for_legend$group,for_legend$r2,sep="  ")
+  legend("topleft",legend=for_legend$text,col=col.spp(),pch=16, cex=.6,bty="n",xjust=0)
 }
