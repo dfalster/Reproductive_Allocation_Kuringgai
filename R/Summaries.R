@@ -277,7 +277,8 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
     prop_accessory_nonzero = prop_accessory,
     percent_prepollencosts = prepollencosts/seedcosts,
     percent_seedcosts = seed_size/seedcosts,
-    percent_dispersalcosts = 1-percent_prepollencosts-percent_seedcosts
+    percent_dispersalcosts = 1-percent_prepollencosts-percent_seedcosts,
+    prepollen_failure_per_seed = (prepollen_all_inv - (seed_count*prepollencosts))/seed_count
     )
 
   #if seedset is low, prepollen costs increase, because the cost of producing pollen across the whole plant is higher per seed matured  
@@ -289,7 +290,9 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
              "prepollen_all_per_seed","prepollen_aborted_per_seed","prepollen_success_per_seed","postpollen_aborted_per_seed",
              "prop_prepollen_aborted", "prop_prepollen_success",
              "prop_postpollen_aborted", "prop_packaging_dispersal", "prop_propagule",
-             "prop_prepollen_all", "prop_accessory","costs_per_seed","costs_for_seed","costs_for_aborted","seed_to_ovule_ratio","b_div_p","c_div_p","total_accessory_Lord","abortedcosts","dispersalcosts_increment","dispersalcosts_increment2")) {
+             "prop_prepollen_all", "prop_accessory","costs_per_seed","costs_for_seed","costs_for_aborted","seed_to_ovule_ratio",
+             "b_div_p","c_div_p","total_accessory_Lord","abortedcosts","dispersalcosts_increment","dispersalcosts_increment2",
+             "prepollen_failure_per_seed")) {
     i <- is.na(SummaryInd[[v]])
     SummaryInd[[v]][i] <- 0
     i <- is.infinite(SummaryInd[[v]])
@@ -372,7 +375,7 @@ get_species_values <- function(SummaryInd, groups) {
     SummaryInd %>%
     filter(repro_inv > 0) %>%
     group_by_(.dots=dots) %>%
-    summarise_each(f, flower_count,fruit_weight)
+    summarise_each(f, flower_count,fruit_weight,prepollen_failure_per_seed)
   })
   names(out[[4]]) <- fs
 

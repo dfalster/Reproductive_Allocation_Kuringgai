@@ -333,6 +333,10 @@ xy.error.bars <- function (x,y,xbar,ybar) {
   arrows(x-xbar,y,x+xbar,y,code=3,angle=90, length=0.1)
 }
 
+y.error.bars <- function (x,y,ybar) {
+  arrows(x,y-ybar,x,y+ybar,code=3,angle=90, length=0.1,col=col.spp())
+  }
+
 se_function <- function(mean1,se1) {
   for(i in 1:14) {
     arrows(i,mean1[i]+se1[i],i,mean1[i]-se1[i],code=3,angle=90, length=0.1)
@@ -443,6 +447,10 @@ words.top.left.logxy <- function (x) {
   text(10^((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.98*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),summary(mod)[1],cex=.7,adj=0)
 }
 
+extra.topleft.logxy <- function (words) {
+  text(10^((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.93*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,cex=.6)
+}
+
 lines <- function(results) {
   results$linetype <- 1
   results$linewidth <- 2
@@ -454,16 +462,9 @@ lines <- function(results) {
   results
 }
 
-legend_with_r2_bottomright <- function(results) {
+legend_with_r2 <- function(results,location) {
   for_legend <- dplyr::select(results,group,r2)
   for_legend$r2 <-round(as.numeric(for_legend$r2),digits=3)
   for_legend$text <- paste(for_legend$group,for_legend$r2,sep="  ")
-  legend("bottomright",legend=for_legend$text,col=col.spp(),pch=16, cex=.6,bty="n",xjust=1)
-}
-
-legend_with_r2_topleft <- function(results) {
-  for_legend <- dplyr::select(results,group,r2)
-  for_legend$r2 <-round(as.numeric(for_legend$r2),digits=3)
-  for_legend$text <- paste(for_legend$group,for_legend$r2,sep="  ")
-  legend("topleft",legend=for_legend$text,col=col.spp(),pch=16, cex=.6,bty="n",xjust=0)
+  legend(location,legend=for_legend$text,col=col.spp(),pch=16, cex=.6,bty="n",xjust=1,title="spp     r2")
 }
