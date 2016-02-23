@@ -337,6 +337,10 @@ y.error.bars <- function (x,y,ybar) {
   arrows(x,y-ybar,x,y+ybar,code=3,angle=90, length=0.1,col=col.spp())
   }
 
+y.error.bars.black <- function (x,y,ybar) {
+  arrows(x,y-ybar,x,y+ybar,code=3,angle=90, length=0.1,col="black")
+}
+
 se_function <- function(mean1,se1) {
   for(i in 1:14) {
     arrows(i,mean1[i]+se1[i],i,mean1[i]-se1[i],code=3,angle=90, length=0.1)

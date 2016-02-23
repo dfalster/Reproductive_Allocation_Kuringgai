@@ -123,6 +123,12 @@ dispersal_at_pollination[["PUTU"]] <- list(parts=c("flower_stigma"), scale=c(1/2
   seedsize
 }
 
+process_parts_summary <- function(PartsSummary_all) {
+  i <- is.na(weight[[v]])
+  weight[[v]][i] <- 0
+}
+
+                       
 process_LMA <- function(LMA_raw) {
   LMA <- filter(LMA_raw, species!="" & species!=" ") %>%
     select(species, age, LMA, branch_age, leaf_number, leaf_area)
