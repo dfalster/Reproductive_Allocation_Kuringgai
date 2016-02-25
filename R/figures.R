@@ -451,6 +451,14 @@ words.top.left.logxy <- function (x) {
   text(10^((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.98*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),summary(mod)[1],cex=.7,adj=0)
 }
 
+words.top.left.logy <- function (x) {
+  output <- data.frame(select(glance(x), r.squared, p.value))
+  output <- round(output,4)
+  text(((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.93*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("r squared = ",output[1]),adj=0,cex=.9)
+  text(((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.88*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),paste("p-value = ",output[2]),adj=0,cex=.9)
+  text(((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.98*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),summary(mod)[1],cex=.7,adj=0)
+}
+
 extra.topleft.logxy <- function (words) {
   text(10^((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.93*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,cex=.6)
 }
