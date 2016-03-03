@@ -13,6 +13,60 @@ SummaryInd$flower_inv <-SummaryInd$prepollencosts*SummaryInd$repro_all_count
 SummaryInd$budprop <- SummaryInd$bud_inv + SummaryInd$propagule_inv
 
 dev.off()
+
+
+```{r}
+SummaryInd$scaled_seed <- SummaryInd$seed_count / SummaryInd$total_weight
+SummaryInd$scaled_bud <- SummaryInd$repro_all_count / SummaryInd$total_weight
+SummaryInd$scaled_failure <- SummaryInd$costs_for_failure / SummaryInd$bud_failed_count
+plot(scaled_seed~seed_size,SummaryInd,pch=16,log="xy",col=col.spp(species),ylim=c(1e-6,10),xlim=c(1e-3,1e3))
+points(scaled_bud~seed_size,SummaryInd,pch=21,col=col.spp(species))
+mod1 <- sma(scaled_seed~seed_size,data=subset(SummaryInd,scaled_seed!=0),log="xy",slope=1)
+mod2 <- sma(scaled_bud~seed_size,data=subset(SummaryInd,scaled_bud!=0),log="xy",slope=1)
+abline(mod1$coef[[1]][1,1],mod1$coef[[1]][2,1])
+abline(mod2$coef[[1]][1,1],mod2$coef[[1]][2,1],col="blue")
+
+summary(mod2)
+summary(mod1)
+```
+
+plot(bud_failed_count~costs_for_failure,SummaryInd,pch=16,log="xy",col=col.spp(species))
+points(costs_for_failure~seed_size,SummaryInd,pch=21,col=col.spp(species))
+mod1 <- sma(costs_for_success~seed_size,data=subset(SummaryInd,costs_for_success>0),log="xy",slope=1)
+mod2 <- sma(costs_for_failure~seed_size,data=subset(SummaryInd,costs_for_failure>0),log="xy",slope=1)
+abline(mod1$coef[[1]][1,1],mod1$coef[[1]][2,1])
+abline(mod2$coef[[1]][1,1],mod2$coef[[1]][2,1],col="blue")
+
+plot(prepollen_failure_per_seed~seedcosts,SummarySpp[["mean"]],pch=16,log="xy",col=col.spp(species),xlim=c(1e-2,1e5),ylim=c(1e-2,1e5))
+mod1 <- sma(prepollen_failure_per_seed~seedcosts,data=subset(SummarySpp[["mean"]]),log="xy")
+abline(0,1,col="red")
+summary(mod1)
+
+plot(bud_failed_count~seedcosts,SummarySpp[["mean"]],pch=16,log="xy",col=col.spp(species),xlim=c(1e-2,1e5),ylim=c(1e-2,1e5))
+mod1 <- sma(prepollen_failure_per_seed~seedcosts,data=subset(SummarySpp[["mean"]]),log="xy")
+abline(0,1,col="red")
+summary(mod1)
+
+plot(scaled_failure~seedcosts,SummarySpp[["mean"]],pch=16,log="xy",col=col.spp(species))
+mod1 <- sma(scaled_failure~seed_size,data=subset(SummarySpp[["mean"]],scaled_failure>0),log="xy",slope=1)
+abline(mod1$coef[[1]][1,1],mod1$coef[[1]][2,1])
+summary(mod1)
+
+mod1 <- sma(costs_for_failure~seedcosts,data=subset(SummaryInd,scaled_failure>0),log="xy",slope=1)
+
+points()
+
+
+points(costs_for_failure~seed_size,SummarySpp[["mean"]],pch=21,col=col.spp(species))
+mod1 <- sma(costs_for_success~seed_size,data=subset(SummaryInd,costs_for_success>0),log="xy",slope=1)
+mod2 <- sma(costs_for_failure~seed_size,data=subset(SummaryInd,costs_for_failure>0),log="xy",slope=1)
+abline(mod1$coef[[1]][1,1],mod1$coef[[1]][2,1])
+abline(mod2$coef[[1]][1,1],mod2$coef[[1]][2,1],col="blue")
+
+
+mod1$coef
+unique(SummaryInd$scaled_seed)
+
 #Figure 1. Correlations of various reproductive investment categories against plant weight
 ```{r}
 win.metafile("figs2/Accessory_Costs/Figure01_correlations_with_plant_weight.wmf", height=10, width=10)
