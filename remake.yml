@@ -8,6 +8,7 @@ packages:
   - igraph
   - rmarkdown
   - broom
+  - ggtern
 
 sources:
   - R

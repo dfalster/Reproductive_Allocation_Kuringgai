@@ -480,3 +480,11 @@ legend_with_r2 <- function(results,location) {
   for_legend$text <- paste(for_legend$group,for_legend$r2,sep="  ")
   legend(location,legend=for_legend$text,col=col.spp(),pch=16, cex=.6,bty="n",xjust=1,title="spp     r2")
 }
+
+sma_sum <- function (x) {
+  select(x$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Slope_test_p)
+}
+
+sma_abline <- function (x, ...) {
+  abline(x$coef[[1]][1,1],x$coef[[1]][2,1])
+}

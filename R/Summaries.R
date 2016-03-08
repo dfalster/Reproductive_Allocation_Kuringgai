@@ -31,7 +31,7 @@ process_seed_costs <- function(seedSize_raw, PartsSummary_all) {
                           * seedcosts[[sp]][["scale"]])
                     }))
   seedsize <- merge(seedsize, costs, by="species", all.x=TRUE)
-  #seedsize$costs_per_seed <- (seedsize$seedcosts - seedsize$seed_size)/(seedsize$seedcosts)
+  #seedsize$repro_inv_per_seed <- (seedsize$seedcosts - seedsize$seed_size)/(seedsize$seedcosts)
   seedsize
 }
 
@@ -252,20 +252,20 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
     shoot_leaf_area_0 = shoot_leaf_area - shoot_growth_leaf_area,
     reproducing = RA>0,
     prop_allocation = propagule_inv/(growth_inv + repro_inv),
-    fruit_weight = propagule_inv + seedpod_weight + fruit_weight,
+    fruit_inv = propagule_inv + seedpod_weight,
     accessory_per_seed = accessory_inv/seed_count,
     propagule_per_seed = propagule_inv/seed_count,
     prepollen_all_per_seed = prepollen_all_inv/seed_count,
+    prepollen_success_inv = seed_count*prepollencosts,
+    prepollen_failure_inv = prepollen_all_inv - prepollen_success_inv,
     prepollen_aborted_per_seed = prepollen_aborted_inv/seed_count,
     prepollen_success_per_seed = prepollen_success_inv/seed_count,
     postpollen_aborted_per_seed = postpollen_aborted_inv/seed_count,
     packaging_dispersal_per_seed = packaging_dispersal_inv/seed_count,
     RA_leaf_area = repro_inv / (repro_inv + growth_leaf),
     leaf_area_midyear = (leaf_area_0 + leaf_area)/2,
-    costs_per_seed = repro_inv / seed_count,
-    accessory_costs = seedcosts - seed_size,
-    costs_for_seed = seed_count * seedcosts,
-    costs_for_aborted = repro_inv - costs_for_seed,
+    repro_inv_per_seed = repro_inv / seed_count,
+    accessorycosts_required = seedcosts - seed_size,
     seed_to_ovule_ratio = seed_count / prepollen_all_count,
     dispersalcosts_increment = dispersalcosts - dispersal_at_pollination,
     count_aborted = repro_all_count - seed_count,
@@ -275,22 +275,24 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
     dispersalcosts_increment2 = accessory_per_seed - b_div_p - c_div_p,
     total_accessory_Lord = dispersalcosts_increment + b_div_p + c_div_p,
     prepollen_all_inv = prepollen_aborted_inv + prepollen_success_inv,
-    costs_for_success = seedcosts*seed_count,
-    costs_for_failure = repro_inv - costs_for_success,
-    percent_for_success = costs_for_success/ repro_inv,
-    percent_for_failure = costs_for_failure/ repro_inv,
+    success_inv = seedcosts*seed_count,
+    failure_inv = repro_inv - success_inv,
+    success_inv_prepollen = prepollencosts*seed_count,
+    prop_success = success_inv/ repro_inv,
+    prop_failure = failure_inv/ repro_inv,
     prop_propagule_nonzero = prop_propagule,
     prop_accessory_nonzero = prop_accessory,
-    percent_prepollencosts = prepollencosts/seedcosts,
-    percent_seedcosts = seed_size/seedcosts,
-    percent_dispersalcosts = 1-percent_prepollencosts-percent_seedcosts,
+    prop_prepollencosts = prepollencosts/seedcosts,
+    prop_seedcosts = seed_size/seedcosts,
+    prop_dispersalcosts = 1-prop_prepollencosts-prop_seedcosts,
     prepollen_failure_per_seed = (prepollen_all_inv - (seed_count*prepollencosts))/seed_count,
     bud_failed_count = repro_all_count - seed_count,
-    scaled_failure = costs_for_failure / bud_failed_count,
-    scaled_seed = seed_count / total_weight,
-    scaled_bud = repro_all_count / total_weight,
-    prepollen_required_inv = seed_count*prepollencosts,
-    flower_inv <-prepollencosts*repro_all_count
+    scaled_failure_count = bud_failed_count / total_weight,
+    scaled_seed_count = seed_count / total_weight,
+    scaled_bud_count = repro_all_count / total_weight,
+    flower_inv = prepollencosts*repro_all_count,
+    scaled_repro_inv = repro_inv/ total_weight,
+    prop_prepollen_success = prepollen_success_inv/repro_inv
     )
 
   #if seedset is low, prepollen costs increase, because the cost of producing pollen across the whole plant is higher per seed matured  
@@ -302,9 +304,9 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
              "prepollen_all_per_seed","prepollen_aborted_per_seed","prepollen_success_per_seed","postpollen_aborted_per_seed",
              "prop_prepollen_aborted", "prop_prepollen_success",
              "prop_postpollen_aborted", "prop_packaging_dispersal", "prop_propagule",
-             "prop_prepollen_all", "prop_accessory","costs_per_seed","costs_for_seed","costs_for_aborted","seed_to_ovule_ratio",
+             "prop_prepollen_all", "prop_accessory","repro_inv_per_seed","seed_to_ovule_ratio",
              "b_div_p","c_div_p","total_accessory_Lord","abortedcosts","dispersalcosts_increment","dispersalcosts_increment2",
-             "prepollen_failure_per_seed","scaled_failure","scaled_bud","scaled_seed","bud_failed_count")) {
+             "prepollen_failure_per_seed","scaled_failure_count","scaled_bud_count","scaled_seed_count","bud_failed_count","prop_failure","prop_success","scaled_repro_inv","repro_all_count")) {
     i <- is.na(SummaryInd[[v]])
     SummaryInd[[v]][i] <- 0
     i <- is.infinite(SummaryInd[[v]])
@@ -359,8 +361,8 @@ get_species_values <- function(SummaryInd, groups) {
       postpollen_aborted_inv, packaging_dispersal_inv, propagule_inv, prepollen_all_inv,
       height, growth_inv, repro_inv, total_weight, total_inv, RA, RA_leaf_area, diameter, stem_area,
       leaf_weight, stem_weight, growth_stem_diameter, growth_stem_area, growth_leaf,
-      growth_stem, diameter, LMA, wood_density,leaf_area,leaf_area_midyear,costs_for_seed,costs_for_aborted,seedcosts,prepollencosts,dispersalcosts, 
-      accessory_costs,b_div_p,c_div_p,total_accessory_Lord,abortedcosts,dispersalcosts_increment,dispersalcosts_increment2)
+      growth_stem, diameter, LMA, wood_density,leaf_area,leaf_area_midyear,seedcosts,prepollencosts,dispersalcosts, 
+      b_div_p,c_div_p,total_accessory_Lord,abortedcosts,dispersalcosts_increment,dispersalcosts_increment2,repro_all_count)
   })
   names(out[[1]]) <- fs
 
@@ -379,7 +381,7 @@ get_species_values <- function(SummaryInd, groups) {
     group_by_(.dots=dots) %>%
     summarise_each(f, prop_prepollen_aborted, prop_prepollen_success,
       prop_postpollen_aborted, prop_packaging_dispersal, prop_propagule,
-      prop_prepollen_all, prop_accessory, percent_prepollencosts,percent_dispersalcosts,percent_seedcosts,bud_failed_count)
+      prop_prepollen_all, prop_accessory, prop_prepollencosts,prop_dispersalcosts,prop_seedcosts,bud_failed_count,prop_failure,prop_success,scaled_repro_inv)
   })
   names(out[[3]]) <- fs
 
@@ -398,8 +400,8 @@ get_species_values <- function(SummaryInd, groups) {
     group_by_(.dots=dots) %>%
     summarise_each(f, accessory_per_seed, propagule_per_seed, prepollen_all_per_seed,
       prepollen_aborted_per_seed, prepollen_success_per_seed, postpollen_aborted_per_seed,
-      packaging_dispersal_per_seed,costs_per_seed,seed_to_ovule_ratio,seedset, seed_count,
-      prop_propagule_nonzero,prop_accessory_nonzero,costs_for_success,costs_for_failure,scaled_failure,scaled_bud,scaled_seed)
+      packaging_dispersal_per_seed,repro_inv_per_seed,seed_to_ovule_ratio,seedset, seed_count,
+      prop_propagule_nonzero,prop_accessory_nonzero,success_inv,failure_inv,scaled_failure_count,scaled_bud_count,scaled_seed_count)
   })
   names(out[[5]]) <- fs
 
