@@ -38,7 +38,7 @@ CalculateInvestmentForSpecies <- function(species, Reproduction, FloweringCatego
     seedset = divide_zero(seed_count, bud_count + flower_count + seed_count + aborted_fruit_count),
     prepollen_all_count = bud_count + flower_count,
     prop_prepollen_count = divide_zero(bud_count + flower_count, bud_count + flower_count + seed_count + aborted_fruit_count),
-    repro_all_count = bud_count + flower_count + seed_count
+    repro_all_count = bud_count + flower_count + seed_count + aborted_fruit_count
     )
 
   parts_weights <- list(
