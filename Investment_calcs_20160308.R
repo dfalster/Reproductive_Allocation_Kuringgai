@@ -11,7 +11,7 @@ SummaryInd$flower_inv <-SummaryInd$prepollencosts*SummaryInd$repro_all_count
 SummaryInd$budprop <- SummaryInd$bud_inv + SummaryInd$propagule_inv
 
 
-
+View(InvestmentByPart)
 
 #dispersalcosts_increment = dispersalcosts - dispersal_at_pollination,
 #abortedcosts = ((prepollen_failure_inv + postpollen_aborted_inv)/seed_count),
