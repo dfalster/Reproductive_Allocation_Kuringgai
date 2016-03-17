@@ -52,7 +52,8 @@ process_prepollination_costs <- function(seedsize, PartsSummary_all) {
   prepollencosts_spp[["PELA"]] <- list(parts=c("flower_petals","pedicel","flower_stigma"), scale=c(1,1,1))
   prepollencosts_spp[["PEPU"]] <- list(parts=c("cone_green","flower_petals","flower_calyx","flower_stigma"), scale=c(1/40,1,1,1))
   prepollencosts_spp[["PHPH"]] <- list(parts=c("flower_petals","flower_calyx","bract_flower_or_finished_flower","flower_stigma"), scale=c(1/2,1/2,1/2,1/2))
-  prepollencosts_spp[["PILI"]] <- list(parts=c("inflorescence_stalk","bract_flower_or_finished_flower","flower_petals","flower_calyx","flower_stigma"), scale=c(1/10,1/10,1/10,1/10,1))
+  prepollencosts_spp[["PILI"]] <- list(parts=c("inflorescence_stalk","bract_flower_or_finished_flower","flower_petals","flower_calyx","flower_stigma"), 
+                                       scale=c(1/10,1/10,1,1,1))
   prepollencosts_spp[["PUTU"]] <- list(parts=c("flower_petals","flower_calyx","bract_flower_or_finished_flower","flower_stigma"), scale=c(1/2,1/2,1/2,1/2))
   
   species <- names(prepollencosts_spp)
@@ -274,6 +275,7 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
     success_inv = seedcosts*seed_count,
     failure_inv = repro_inv - success_inv,
     failure_to_ovule_ratio = 1 - seedset,
+    failure_per_seed = prepollen_failure_per_seed + postpollen_aborted_per_seed,
     prop_success = success_inv/ repro_inv,
     prop_failure = failure_inv/ repro_inv,
     prop_propagule = propagule_inv/repro_inv,
@@ -307,7 +309,7 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
               "prop_propagule","prop_postpollen_aborted","prop_prepollen_success","prop_prepollen_aborted","prop_prepollen_all",
               "prop_accessory","prop_propagule_nonzero","prop_accessory_nonzero","prop_prepollencosts","prop_seedcosts",
               "prop_dispersalcosts","prop_dispersalcosts2","scaled_failure_count","scaled_seed_count","scaled_bud_count",
-             "scaled_repro_inv","prop_postpollencosts")) {
+             "scaled_repro_inv","prop_postpollencosts","failure_per_seed")) {
     i <- is.na(SummaryInd[[v]])
     SummaryInd[[v]][i] <- 0
     i <- is.infinite(SummaryInd[[v]])
@@ -400,7 +402,7 @@ get_species_values <- function(SummaryInd, groups) {
       prepollen_aborted_per_seed, prepollen_success_per_seed, postpollen_aborted_per_seed,repro_inv_per_seed,failure_inv,
       scaled_failure_count,scaled_bud_count,prop_prepollencosts,prepollencosts,
       accessory_inv, prepollen_aborted_inv, prepollen_success_inv,prepollen_all_inv,prop_prepollen_aborted, prop_prepollen_success,
-      prop_prepollen_all, prop_accessory,prop_failure,prop_success,scaled_repro_inv,failure_to_ovule_ratio)
+      prop_prepollen_all, prop_accessory,prop_failure,prop_success,scaled_repro_inv,failure_to_ovule_ratio,failure_per_seed)
   })
   names(out[[5]]) <- fs
 
