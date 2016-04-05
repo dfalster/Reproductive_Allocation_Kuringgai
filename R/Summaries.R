@@ -294,7 +294,10 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
     scaled_failure_count = count_aborted / total_weight,
     scaled_seed_count = seed_count / total_weight,
     scaled_bud_count = repro_all_count / total_weight,
-    scaled_repro_inv = repro_inv/ total_weight
+    scaled_repro_inv = repro_inv/ total_weight,
+    repro_inv_mature = repro_inv,
+    repro_all_count_mature = repro_all_count,
+    leaf_area_0_mature = leaf_area_0
     )
 
   #if seedset is low, prepollen costs increase, because the cost of producing pollen across the whole plant is higher per seed matured  
@@ -309,7 +312,7 @@ combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, A
               "prop_propagule","prop_postpollen_aborted","prop_prepollen_success","prop_prepollen_aborted","prop_prepollen_all",
               "prop_accessory","prop_propagule_nonzero","prop_accessory_nonzero","prop_prepollencosts","prop_seedcosts",
               "prop_dispersalcosts","prop_dispersalcosts2","scaled_failure_count","scaled_seed_count","scaled_bud_count",
-             "scaled_repro_inv","prop_postpollencosts","failure_per_seed")) {
+             "scaled_repro_inv","prop_postpollencosts","failure_per_seed","leaf_area_0","leaf_area_0_mature","total_weight_0")) {
     i <- is.na(SummaryInd[[v]])
     SummaryInd[[v]][i] <- 0
     i <- is.infinite(SummaryInd[[v]])
@@ -357,10 +360,10 @@ get_species_values <- function(SummaryInd, groups) {
   out[[1]] <-lapply(fs, function(f) {
     SummaryInd %>%
     group_by_(.dots=dots) %>%
-    summarise_each(f, seed_size,height, growth_inv, repro_inv, total_weight, total_inv, RA, RA_leaf_area, diameter, stem_area,
+    summarise_each(f, seed_size,height, growth_inv, total_weight, total_weight_0,total_inv, RA, RA_leaf_area, diameter, stem_area,
       leaf_weight, stem_weight, growth_stem_diameter, growth_stem_area, growth_leaf,
-      growth_stem, diameter, LMA, wood_density,leaf_area,leaf_area_midyear,
-      repro_all_count)
+      growth_stem, diameter, diameter_0,LMA, wood_density,leaf_area,leaf_area_0,leaf_area_midyear,
+      repro_all_count,repro_inv)
   })
   names(out[[1]]) <- fs
 
@@ -385,7 +388,7 @@ get_species_values <- function(SummaryInd, groups) {
     SummaryInd %>%
     filter(repro_inv > 0) %>%
     group_by_(.dots=dots) %>%
-    summarise_each(f, fruit_weight)
+    summarise_each(f, fruit_weight,repro_inv_mature,repro_all_count_mature,leaf_area_0_mature)
   })
   names(out[[4]]) <- fs
 
