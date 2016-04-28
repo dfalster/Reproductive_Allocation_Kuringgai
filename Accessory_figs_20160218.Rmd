@@ -30,8 +30,8 @@ summary(mod)
 
 plot(propagule_inv~leaf_area_0,SummaryInd,pch=16,log="xy",col=col.spp(species))
 
-plot(prepollen_failure_per_seed~seed_size,SummarySpp[["mean"]],pch=16,log="xy",col=col.spp(species))
-mod <- lm(log(propagule_inv)~log(seed_size),data=subset(SummarySpp[["mean"]],species!="EPMI"))
+plot(prop_failure~seedset,data=subset(SummarySpp[["mean"]],species!="BAER"&species!="PEPU"),pch=16,log="",col=col.spp(species))
+mod <- lm(prop_failure~seedset,data=subset(SummarySpp[["mean"]],species!="BAER"&species!="PEPU"))
 summary(mod)
 
 #Discussion or Appendix: proportion energy to prepollen tissues decreases with plant age
@@ -67,6 +67,30 @@ summary(mod)
 mod <- lm(log10(seedcosts) ~prop_dispersalcosts,SummarySpp[["mean"]])
 summary(mod)
 
+#seed size by propagule investment - all species
+mod <- sma(propagule_inv ~ seed_size, SummarySpp[["mean"]],method="OLS", log="xy",slope.test=1)
+summary(mod)
+plot(propagule_inv ~ seed_size, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
+
+#seed size by propagule investment - without EPMI
+mod <- sma(propagule_inv ~ seed_size, data=subset(SummarySpp[["mean"]],species!="EPMI"),method="OLS", log="xy",slope.test=1)
+summary(mod)
+plot(propagule_inv ~ seed_size, data=subset(SummarySpp[["mean"]],species!="EPMI"),log="xy",pch=16,col=col.spp(species))
+
+#seed size by reproductive investment - all species
+mod <- sma(repro_inv ~ seed_size, SummarySpp[["mean"]],method="OLS", log="xy",slope.test=1)
+summary(mod)
+plot(repro_inv ~ seed_size, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
+
+#seed size by reproductive investment - without EPMI
+mod <- sma(repro_inv ~ seed_size, data=subset(SummarySpp[["mean"]],species!="EPMI"),method="OLS", log="xy",slope.test=1)
+summary(mod)
+plot(repro_inv ~ seed_size, data=subset(SummarySpp[["mean"]],species!="EPMI"),log="xy",pch=16,col=col.spp(species))
+
+#seed size by reproductive investment - all species
+mod <- sma(total_weight_0 ~ seed_size, SummarySpp[["mean"]],method="OLS", log="xy",slope.test=1)
+summary(mod)
+plot(total_weight_0 ~ seed_size, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
 
 yvar <- "repro_all_count"
 xvar <- "repro_inv"
@@ -145,7 +169,7 @@ acc_costs_spp <- dplyr::select(SummarySpp[["mean"]],species,seed_size,accessory_
 acc_costs_spp$species <- labels.spp.full()
 acc_costs_spp <- format(acc_costs_spp, digit=2)
 
-write.csv(acc_costs_spp, file="figs2/Accessory_Costs/Table03_AccCosts_by_Species.csv",row.names=FALSE)
+write.csv(acc_costs_spp, file="figs2/Accessory_Costs/Table01_AccCosts_by_Species.csv",row.names=FALSE)
 ```
 
 #Figure 2. Ternary diagram showing seedcosts
@@ -321,10 +345,15 @@ abline(slopes$groupsummary["Int"][[1]],1,col="red")
 acc_by_species <- dplyr::bind_rows(acc_by_species, select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
 mtext(text="seed size (mg)",side=1,line=1.5,outer=TRUE)
 
-acc_by_species$variable = c("total accessory costs","prepollen_success","prepollen_failure","total prepollen","c div p","dispersal")
+slopes <- sma(postpollen_all_per_seed ~ seed_size,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="OLS")
+acc_by_species <- dplyr::bind_rows(acc_by_species, select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
+
+acc_by_species$variable = c("total accessory costs","prepollen_success","prepollen_failure","total prepollen","c div p","dispersal","total postpollen")
 
 write.csv(acc_by_species, file="figs2/Accessory_Costs/Table03_acc_cost_seed_size_slopes.csv",row.names=FALSE)
 ```
+plot(prop_prepollen_all~seed_size,SummarySpp[["mean"]],pch=16,col=col.spp(species),log="x")
+
 
 #Figure 4 seed count, scaled to plant size, decreases 1:1 with seed size, while bud count decreases less steeply; indication that seed count is what is actually "programmed in"
 ```{r}
