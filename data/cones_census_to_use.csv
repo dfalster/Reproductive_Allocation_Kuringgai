@@ -1,0 +1,48 @@
+species,site,individual,census,cone_green_01,part_weight_needed,flowering_stage
+BAER,Basin2007,BAER_404,17,54x10,cone_green_01,buds_just_opening
+BAER,Basin2005,BAER_001,16,126x14.3,cone_green_02,in flower
+BAER,Basin2005,BAER_001,17,95x13,cone_green_01,buds_just_opening
+BAER,Basin2005,BAER_002,17,93x10,cone_green_02,buds_just_opening
+BAER,Basin2005,BAER_004,17,64x14.9,cone_green_02,in flower
+BAER,Basin2005,BAER_005,2,105x12,cone_green_01,in flower
+BAER,Basin2005,BAER_005,16,112x13,cone_green_02,in flower
+BAER,Basin2005,BAER_005,17,110x14.6;110x14.9,cone_green_03,in flower
+BAER,Basin2005,BAER_006,16,101x14.3,cone_green_03,buds_just_opening
+BAER,Basin2005,BAER_007,1,95x14.5,cone_green_01,in flower
+BAER,Basin2005,BAER_007,16,138x15.9,cone_green_03,in flower
+BAER,Basin2005,BAER_007,16,95x14.5,cone_green_02,buds_just_opening
+BAER,Waratah2003,BAER_801,16,187x16.7,cone_green_01,buds_big
+BAER,Waratah2003,BAER_803,2,100x14;88x8,cone_green_01,in flower
+BAER,Waratah2003,BAER_803,17,112x14.5;115x14.5,cone_green_04,in flower
+BAER,Waratah2003,BAER_806,2,109x12.8,cone_green_01,in flower
+BAER,Waratah2003,BAER_806,17,118x13.7;119x14;120x14,cone_green_04,in flower
+BAER,Waratah2003,BAER_807,2,58x14,cone_green_01,in flower
+BAER,Basin1981,BAER_901,3,130x14;132x14;172x26.5;89x10,cone_green_01,in flower
+BAER,Basin1981,BAER_901,18,81x11,cone_green_02,buds_just_opening
+BAER,Basin1981,BAER_902,3,40x14,cone_green_01,in flower
+BAER,Basin1981,BAER_902,18,87x14.8,cone_green_03,buds_just_opening
+BAER,Basin1981,BAER_903,3,190x19,cone_green_01,in flower
+BAER,Basin1981,BAER_905,3,125x10.5;140x12.9,cone_green_01,in flower
+BAER,Basin1981,BAER_906,3,165x15,cone_green_01,in flower
+BAER,Basin1981,BAER_907,3,114x10.1;119x10.7;122x9.1;124x9.9;130x11.3,cone_green_01,in flower
+BAER,Basin1981,BAER_907,18,128x14;132x15,cone_green_03,buds_just_opening
+BAER,Basin2005,BAER_007,16,145x14.6,cone_green_04,in flower
+BAER,Basin2005,BAER_007,16,165x14.7,cone_green_04,in bud
+BAER,Basin2005,BAER_005,17,92x13.7;97x15.5,cone_green_03,buds_just_opening
+BAER,Basin2005,BAER_005,17,98x15.1,cone_green_03,buds_big
+BAER,Basin1981,BAER_901,18,106x13.8;121x15.2,cone_green_03,buds_just_opening
+BAER,Basin1981,BAER_901,18,166x16.9,cone_green_03,buds_large
+BAER,Basin1981,BAER_901,18,195x14,cone_green_03,buds_small
+PEPU,Basin2007,PEPU_401,12,27,cone_just_starting_03,in_flower
+PEPU,Basin2007,PEPU_405,12,21,cone_just_starting_03,in_flower
+PEPU,Basin2005,PEPU_001,12,43,cone_just_starting_03,in_flower
+PEPU,Basin2005,PEPU_002,12,37,cone_just_starting_03,in_flower
+PEPU,Basin2005,PEPU_003,12,32,cone_just_starting_03,in_flower
+PEPU,Basin2005,PEPU_006,13,36,cone_just_starting_03,in_flower
+PEPU,Waratah2003,PEPU_801,15,10,cone_aborted,in_flower
+PEPU,Waratah2003,PEPU_802,14,35,cone_aborted,in_flower
+PEPU,Waratah2003,PEPU_803,14,16;23;30,cone_just_starting_03,in_flower
+PEPU,Waratah2003,PEPU_805,14,22,cone_young_01,in_flower
+PEPU,Waratah2003,PEPU_807,15,15;15,cone_aborted,in_flower
+PEPU,Basin1981,PEPU_901,13,21,cone_just_starting_03,in_flower
+PEPU,Basin1981,PEPU_905,13,29,cone_just_starting_03,in_flower
