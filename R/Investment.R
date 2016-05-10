@@ -38,7 +38,10 @@ CalculateInvestmentForSpecies <- function(species, Reproduction, FloweringCatego
     seedset = divide_zero(seed_count, bud_count + flower_count + seed_count + aborted_fruit_count),
     prepollen_all_count = bud_count + flower_count,
     prop_prepollen_count = divide_zero(bud_count + flower_count, bud_count + flower_count + seed_count + aborted_fruit_count),
-    repro_all_count = bud_count + flower_count + seed_count + aborted_fruit_count
+    repro_all_count = bud_count + flower_count + seed_count + aborted_fruit_count,
+    inflorescence_count = inflorescence_stalk + inflorescence_bud_tiny + inflorescence_bud_small + inflorescence_bud_mid + inflorescence_bud_big_flowers + 
+      inflorescence_stalk_in_fruit + inflorescence_stalk_in_fruit_large + inflorescence_stalk_in_fruit_very_large,
+    cone_count = cone_green_01, cone_green_02, cone_green_03, cone_green_04, cone_brown_no_expanded_follicles, cone_brown, cone_aborted
     )
 
   parts_weights <- list(
