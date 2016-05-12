@@ -18,7 +18,7 @@ CalculateInvestmentForSpecies <- function(species, Reproduction, FloweringCatego
                   FloweringCategories, MultiplierTable, GraphMaps, PartsSummary))
   
   FD <- combine("FD", R)
-
+  
   accessory_count <- FD %>%
       group_by(individual, part) %>%
       summarise_each(funs(sum), count, weight)
