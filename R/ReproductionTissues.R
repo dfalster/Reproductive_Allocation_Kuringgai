@@ -1,25 +1,45 @@
 ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, species_Investment) {
 
-  groups <- c("prepollen_aborted_inv", "prepollen_success_inv", "postpollen_aborted_inv",
-    "packaging_dispersal_inv", "propagule_inv")
-
   # Read and restrict the data to the subset of interest
+  FD <- species_Investment$FD
+  InvCat <- InvestmentCategories[[species]]
+
   AgeData <- IndividualsList %>%
     filter(use_for_allocation_calculations & alive) %>%
     select(species,individual, age)
-  FD <- species_Investment$FD
-  InvCat <- InvestmentCategories[[species]]
 
   # For each individual, sum investment by categories
   # Each category includes a list of parts for that species
   # Individual lists are drawn from AgeData so that even individuals with no FD data are included and return 0
-  InvDist <- ddply(AgeData, "individual",   function(z) {
+  # This function returns a dataframe with multiple columns
+  f1 <- function(data) {
     # subset investment data by individual
-    df <- FD[FD$individual==z$individual,]
-    sapply(groups, function(x) sum(df$weight[df$part %in% InvCat[[x]]]))
-  })
+    df <- FD[FD$individual==data$individual,]
+    sapply(c("prepollen_aborted_inv", "prepollen_success_inv", "postpollen_aborted_inv",
+    "packaging_dispersal_inv", "propagule_inv"), function(x) sum(df$weight[df$part %in% InvCat[[x]]]))
+  }
 
-  ret <- merge(AgeData, InvDist, by="individual", all=TRUE) %>%
+  Costs <- ddply(AgeData, "individual",  f1)
+
+  # Similar to f1, but returns a single column for seedcosts. The total weight is standardised against the counts of
+  # a parts specified by the variable "seed_costs_scale"
+  # Takes as argument the individual
+  f2 <- function(i) {
+    # subset investment data by individual
+    df <- FD[FD$individual== i,]
+    # return 0 if there are 0 seeds or mature fruits produced
+    if(sum(df$count[df$part %in% c("seed", "fruit_mature")], na.rm=TRUE) ==0) {
+      return(0)
+    }
+    weights <- df$weight[match(InvCat[["seed_costs"]], df$part)]
+    counts <- df$count[match(InvCat[["seed_costs_scale"]], df$part)]
+    sum(weights / counts,  na.rm = TRUE)
+  }
+
+  Costs <- group_by(Costs, individual) %>%
+    mutate(seedcosts = f2(individual))
+
+  ret <- merge(AgeData, Costs, by="individual", all=TRUE) %>%
     mutate(
         repro_inv = prepollen_aborted_inv + prepollen_success_inv + postpollen_aborted_inv + packaging_dispersal_inv + propagule_inv,
         accessory_inv = repro_inv - propagule_inv,
@@ -32,7 +52,4 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
         prop_accessory = 1 - prop_propagule,
         prop_prepollen_all = prop_prepollen_aborted + prop_prepollen_success
         )
-
- ret
 }
-

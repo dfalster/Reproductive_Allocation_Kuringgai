@@ -1,43 +1,10 @@
 
-process_seed_costs <- function(seedSize_raw, PartsSummary_all) {
+process_prepollination_costs <- function(seedSize_raw, PartsSummary_all) {
+
 
   seedsize <- seedSize_raw %>%
       select(species, seed_size)
-
-  #all of these calculations should really be done on the individual level, since different scaling per individual and different parts weights
-  # adding info on all costs to produce 1 seed
-  seedcosts <- list()
-  seedcosts[["BAER"]] <- list(parts=c("cone_brown","cone_base_brown","flower_petals","seed_pod","seed","flower_style"), scale=c(1/60,1/60,1/2,1/2,1,1/2))
-  seedcosts[["BOLE"]] <- list(parts=c("late_flower_petals","seed_pod","seed","late_finished_flower","pedicel"), scale=c(1/4,1,1,1/4, 1/4))
-  seedcosts[["COER"]] <- list(parts=c("inflorescence_stalk_in_fruit","flower_petals", "bract_fruit","fruit_mature"), scale=c(1/6,1,1,1))
-  seedcosts[["EPMI"]] <- list(parts=c("flower_petals", "seed_pod","seed"), scale=c(1/15,1/15,1))
-  seedcosts[["GRBU"]] <- list(parts=c("inflorescence_stalk","flower_petals","pedicel","seed_pod","seed"), scale=c(1/20,1/2,1/2,1/2,1))
-  seedcosts[["GRSP"]] <- list(parts=c("inflorescence_stalk_in_fruit","flower_petals","pedicel","seed_pod","seed"), scale=c(1/20,1/2,1/2,1/2,1))
-  seedcosts[["HATE"]] <- list(parts=c("inflorescence_bud_big_bracts","flower_petals","seed_pod","seed"), scale=c(1/2,1/2,1/2,1))
-  seedcosts[["HEPU"]] <- list(parts=c("flower_petals","calyx_fruit","fruit_mature"), scale=c(1/4,1/4,1/4))
-  seedcosts[["LEES"]] <- list(parts=c("flower_petals","calyx_fruit","fruit_mature"), scale=c(1,1,1))
-  seedcosts[["PELA"]] <- list(parts=c("flower_petals","pedicel","seed_pod","seed"), scale=1)
-  seedcosts[["PEPU"]] <- list(parts=c("cone_brown","flower_petals","flower_calyx","fruit_mature"), scale=c(1/40,1,1,1))
-  seedcosts[["PHPH"]] <- list(parts=c("flower_petals","flower_calyx","bract_flower_or_finished_flower","seed_pod","seed"), scale=c(1/2,1/2,1/2,1/2,1))
-  seedcosts[["PILI"]] <- list(parts=c("inflorescence_stalk","bract_flower_or_finished_flower","flower_petals","flower_calyx","seed_pod","seed"), scale=c(1/10,1/10,1/10,1/10,1,1))
-  seedcosts[["PUTU"]] <- list(parts=c("flower_petals","flower_calyx","bract_flower_or_finished_flower","seed_pod","seed"), scale=c(1/2,1/2,1/2,1/2,1))
-
-  species <- names(seedcosts)
-
-  costs <- data.frame(species = species,
-    seedcosts = sapply(names(seedcosts), function(sp) {
-                      x <- filterBySpecies(sp, PartsSummary_all)
-                      sum(x$weight[x$part %in% seedcosts[[sp]][["parts"]]]
-                          * seedcosts[[sp]][["scale"]])
-                    }))
-  seedsize <- merge(seedsize, costs, by="species", all.x=TRUE)
-  #seedsize$repro_inv_per_seed <- (seedsize$seedcosts - seedsize$seed_size)/(seedsize$seedcosts)
-  seedsize
-}
-
-process_prepollination_costs <- function(seedsize, PartsSummary_all) {
  
-
 # adding info on all costs to produce flower at time of pollination
   prepollencosts_spp <- list()
   prepollencosts_spp[["BAER"]] <- list(parts=c("cone_green","flower_petals","flower_stigma","flower_style"), scale=c(1/60,1/2,1/2,1/2))
