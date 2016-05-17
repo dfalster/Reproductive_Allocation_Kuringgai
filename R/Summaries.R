@@ -8,7 +8,7 @@ process_seed_costs <- function(seedSize_raw, PartsSummary_all) {
   # adding info on all costs to produce 1 seed
   seedcosts <- list()
   seedcosts[["BAER"]] <- list(parts=c("cone_brown","cone_base_brown","flower_petals","seed_pod","seed","flower_style"), scale=c(1/60,1/60,1/2,1/2,1,1/2))
-  seedcosts[["BOLE"]] <- list(parts=c("late_flower_petals","seed_pod","seed","late_finished_flower","pedicel"), scale=c(1/4,1,1,1/4))
+  seedcosts[["BOLE"]] <- list(parts=c("late_flower_petals","seed_pod","seed","late_finished_flower","pedicel"), scale=c(1/4,1,1,1/4, 1/4))
   seedcosts[["COER"]] <- list(parts=c("inflorescence_stalk_in_fruit","flower_petals", "bract_fruit","fruit_mature"), scale=c(1/6,1,1,1))
   seedcosts[["EPMI"]] <- list(parts=c("flower_petals", "seed_pod","seed"), scale=c(1/15,1/15,1))
   seedcosts[["GRBU"]] <- list(parts=c("inflorescence_stalk","flower_petals","pedicel","seed_pod","seed"), scale=c(1/20,1/2,1/2,1/2,1))
