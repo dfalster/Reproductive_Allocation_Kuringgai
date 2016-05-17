@@ -44,7 +44,7 @@ targets:
 {{#allspecies}}
         {{species}}_Growth,
 {{/allspecies}}
-        IndividualsList=IndividualsList)
+        NULL)
 
   ReproductiveCosts_all:
     command: >

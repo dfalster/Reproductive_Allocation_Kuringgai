@@ -176,10 +176,7 @@ make_IndividualBasedWeights <- function(FPSummary) {
 }
 
 
-combine_Growth <- function(..., d=list(...), IndividualsList) {
-    ret <- ldply(d, function(x) x)
-    if(!all(ret$individual %in% IndividualsList$individual[IndividualsList$use_for_allocation_calculations]))
-      stop("problem with individuals list")
-    ret
+combine_Growth <- function(..., d=list(...)) {
+    ldply(d, function(x) x)
  }
 
