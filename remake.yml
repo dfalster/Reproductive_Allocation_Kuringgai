@@ -9,6 +9,7 @@ packages:
   - rmarkdown
   - broom
   - ggtern
+  - yaml
 
 sources:
   - R
@@ -67,7 +68,7 @@ targets:
     command: read_csv("data/multiplierTable.csv")
 
   InvestmentCategories:
-    command: read_csv("data/accessoryParts.csv")
+    command: yaml.load_file("data/accessoryParts.yml")
 
   LMA:
     command:
