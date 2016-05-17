@@ -41,12 +41,6 @@ targets:
     depends:
       - export
 
-  CarbonInvestments.pdf:
-    depends:
-      - "CarbonInvestments.Rnw"
-      - figures
-    command: tex_2_pdf("CarbonInvestments.tex")
-
   # Data --------------------------------------
   IndividualsList:
     command: read_csv("data/individuals.csv")
@@ -102,21 +96,6 @@ targets:
       - read_csv("data/leaderGrowthLL.csv")
       - process_leaf_lifespan(., leavesPerLength)
 
-  figures:
-    depends:
-      - figure/RA_comparison_age.pdf
-      - figure/RA_comparison_diam.pdf
-      - figure/RA_comparison_weight.pdf
-
-  figure/RA_comparison_age.pdf:
-    command: plot_ReproductionAllocation_comparison_age(ReproductionAllocation_all)
-    plot: wide
-  figure/RA_comparison_diam.pdf:
-    command: plot_ReproductionAllocation_comparison_diam(ReproductionAllocation_all)
-    plot: wide
-  figure/RA_comparison_weight.pdf:
-    command: plot_ReproductionAllocation_comparison_weight(ReproductionAllocation_all)
-    plot: wide
 
   variable_list:
     command:

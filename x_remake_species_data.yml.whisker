@@ -2,29 +2,6 @@
 # edit the file there (or the files that it includes).
 
 targets:
-  CarbonInvestments.tex:
-    depends:
-      - ReproductionAllocation_all
-      - AccessoryCosts_all
-      - LMA
-      - wood_density_spp
-      - seedsize
-      - HarvestData
-      - leafLifespan
-{{#allspecies}}
-      - {{species}}_IndividualsList
-      - {{species}}_FlowerPartsData
-      - {{species}}_ReproductionData
-      - {{species}}_HarvestData
-      - {{species}}_GraphMaps
-      - {{species}}_PartsList
-      - {{species}}_PartsSummary
-      - {{species}}_Investment
-      - {{species}}_AccessoryCosts
-      - {{species}}_ReproductionAllocation
-{{/allspecies}}
-    knitr: TRUE
-
 {{#allspecies}}
   {{species}}_IndividualsList:
     command: filterTo{{species}}(IndividualsList)
