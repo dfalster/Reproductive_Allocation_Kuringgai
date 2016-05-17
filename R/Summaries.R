@@ -63,7 +63,6 @@ process_prepollination_costs <- function(seedsize, PartsSummary_all) {
                        sum(x$weight[x$part %in% prepollencosts_spp[[sp]][["parts"]]]
                             * prepollencosts_spp[[sp]][["scale"]])
                       }))
-  View(PartsSummary_all)
   seedsize <- merge(seedsize, costs, by="species", all.x=TRUE)
   seedsize
 }
