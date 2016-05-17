@@ -25,7 +25,7 @@ make("all")
 
 You can also build parts of the dataset by specifying the objects to build, e.g.
 ```
-x <- make("AccessoryCosts_all")
+x <- make("ReprodcutiveCosts_all")
 ```
 
 The different targets that can be built are described within the files `remake.yml`, `remake_species_data.yml`.

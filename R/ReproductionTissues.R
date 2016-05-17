@@ -1,13 +1,13 @@
-AccessoryCosts <- function(species, IndividualsList, InvestmentCategories, species_INV) {
+ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, species_INV) {
   # Read and restrict the data to the subset of interest.
 
   AgeData <- IndividualsList %>%
     filter(use_for_allocation_calculations & alive) %>%
     select(species,individual, age)
 
-  InvDist <- lapply(unique(AgeData$individual), InvestmentInAccessoryTissues,
+  InvDist <- lapply(unique(AgeData$individual), InvestmentInReproductiveTissues,
                 species=species, InvestmentCategories=InvestmentCategories[, c("flower_part", species)],
-                species_INV= species_INV) %>% rbind_all
+                FD=species_INV$FD) %>% rbind_all
 
   # TODO: This is temp fix to remove some NAs in prepollen_success_inv. 
   # Figure out why these are needed
@@ -39,15 +39,14 @@ AccessoryCosts <- function(species, IndividualsList, InvestmentCategories, speci
 }
 
 
-InvestmentInAccessoryTissues <- function(individual, species, InvestmentCategories, species_INV) {
+InvestmentInReproductiveTissues <- function(individual, species, InvestmentCategories, FD) {
   # Read tree data
 
   # Transform counts to weights and adjust for multiplicity TreeListOrig=WeightCalculationsForTree(Tree) TreeListAdj=AdjustForMultiplicity(TreeList=TreeListOrig)
   # TreeFrame=TreeListToTotalDataFrame(TreeListAdj)
 
   # Read in the information about lost elements
-  SpeciesLoss <- species_INV$FD
-  Lost <- SpeciesLoss[SpeciesLoss$individual == individual, ]
+  Lost <- FD[FD$individual == individual, ]
 
   # Find the list of investment categories partition for the species
   IC <- InvestmentCategories[, c("flower_part", species)]

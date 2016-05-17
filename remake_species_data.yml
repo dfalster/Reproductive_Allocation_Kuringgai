@@ -27,13 +27,13 @@ targets:
     command: >
       CalculateInvestmentForBAER(BAER_ReproductionData, FloweringCategories, MultiplierTable, BAER_GraphMaps, BAER_PartsSummary)
 
-  BAER_AccessoryCosts:
+  BAER_ReproductiveCosts:
     command: >
-      CalculateAccesoryCostsForBAER(BAER_IndividualsList, InvestmentCategories, BAER_Investment)
+      CalculateReproductiveCostsForBAER(BAER_IndividualsList, InvestmentCategories, BAER_Investment)
 
-  BAER_ReproductionAllocation:
+  BAER_Growth:
     command: >
-      CalculateRAForBAER(BAER_Investment,  BAER_HarvestData, BAER_GraphMaps, BAER_IndividualsList)
+      CalculateGrowthForBAER(BAER_HarvestData, BAER_IndividualsList)
 
   BOLE_IndividualsList:
     command: filterToBOLE(IndividualsList)
@@ -60,13 +60,13 @@ targets:
     command: >
       CalculateInvestmentForBOLE(BOLE_ReproductionData, FloweringCategories, MultiplierTable, BOLE_GraphMaps, BOLE_PartsSummary)
 
-  BOLE_AccessoryCosts:
+  BOLE_ReproductiveCosts:
     command: >
-      CalculateAccesoryCostsForBOLE(BOLE_IndividualsList, InvestmentCategories, BOLE_Investment)
+      CalculateReproductiveCostsForBOLE(BOLE_IndividualsList, InvestmentCategories, BOLE_Investment)
 
-  BOLE_ReproductionAllocation:
+  BOLE_Growth:
     command: >
-      CalculateRAForBOLE(BOLE_Investment,  BOLE_HarvestData, BOLE_GraphMaps, BOLE_IndividualsList)
+      CalculateGrowthForBOLE(BOLE_HarvestData, BOLE_IndividualsList)
 
   COER_IndividualsList:
     command: filterToCOER(IndividualsList)
@@ -93,13 +93,13 @@ targets:
     command: >
       CalculateInvestmentForCOER(COER_ReproductionData, FloweringCategories, MultiplierTable, COER_GraphMaps, COER_PartsSummary)
 
-  COER_AccessoryCosts:
+  COER_ReproductiveCosts:
     command: >
-      CalculateAccesoryCostsForCOER(COER_IndividualsList, InvestmentCategories, COER_Investment)
+      CalculateReproductiveCostsForCOER(COER_IndividualsList, InvestmentCategories, COER_Investment)
 
-  COER_ReproductionAllocation:
+  COER_Growth:
     command: >
-      CalculateRAForCOER(COER_Investment,  COER_HarvestData, COER_GraphMaps, COER_IndividualsList)
+      CalculateGrowthForCOER(COER_HarvestData, COER_IndividualsList)
 
   EPMI_IndividualsList:
     command: filterToEPMI(IndividualsList)
@@ -126,13 +126,13 @@ targets:
     command: >
       CalculateInvestmentForEPMI(EPMI_ReproductionData, FloweringCategories, MultiplierTable, EPMI_GraphMaps, EPMI_PartsSummary)
 
-  EPMI_AccessoryCosts:
+  EPMI_ReproductiveCosts:
     command: >
-      CalculateAccesoryCostsForEPMI(EPMI_IndividualsList, InvestmentCategories, EPMI_Investment)
+      CalculateReproductiveCostsForEPMI(EPMI_IndividualsList, InvestmentCategories, EPMI_Investment)
 
-  EPMI_ReproductionAllocation:
+  EPMI_Growth:
     command: >
-      CalculateRAForEPMI(EPMI_Investment,  EPMI_HarvestData, EPMI_GraphMaps, EPMI_IndividualsList)
+      CalculateGrowthForEPMI(EPMI_HarvestData, EPMI_IndividualsList)
 
   GRBU_IndividualsList:
     command: filterToGRBU(IndividualsList)
@@ -159,13 +159,13 @@ targets:
     command: >
       CalculateInvestmentForGRBU(GRBU_ReproductionData, FloweringCategories, MultiplierTable, GRBU_GraphMaps, GRBU_PartsSummary)
 
-  GRBU_AccessoryCosts:
+  GRBU_ReproductiveCosts:
     command: >
-      CalculateAccesoryCostsForGRBU(GRBU_IndividualsList, InvestmentCategories, GRBU_Investment)
+      CalculateReproductiveCostsForGRBU(GRBU_IndividualsList, InvestmentCategories, GRBU_Investment)
 
-  GRBU_ReproductionAllocation:
+  GRBU_Growth:
     command: >
-      CalculateRAForGRBU(GRBU_Investment,  GRBU_HarvestData, GRBU_GraphMaps, GRBU_IndividualsList)
+      CalculateGrowthForGRBU(GRBU_HarvestData, GRBU_IndividualsList)
 
   GRSP_IndividualsList:
     command: filterToGRSP(IndividualsList)
@@ -192,13 +192,13 @@ targets:
     command: >
       CalculateInvestmentForGRSP(GRSP_ReproductionData, FloweringCategories, MultiplierTable, GRSP_GraphMaps, GRSP_PartsSummary)
 
-  GRSP_AccessoryCosts:
+  GRSP_ReproductiveCosts:
     command: >
-      CalculateAccesoryCostsForGRSP(GRSP_IndividualsList, InvestmentCategories, GRSP_Investment)
+      CalculateReproductiveCostsForGRSP(GRSP_IndividualsList, InvestmentCategories, GRSP_Investment)
 
-  GRSP_ReproductionAllocation:
+  GRSP_Growth:
     command: >
-      CalculateRAForGRSP(GRSP_Investment,  GRSP_HarvestData, GRSP_GraphMaps, GRSP_IndividualsList)
+      CalculateGrowthForGRSP(GRSP_HarvestData, GRSP_IndividualsList)
 
   HATE_IndividualsList:
     command: filterToHATE(IndividualsList)
@@ -225,13 +225,13 @@ targets:
     command: >
       CalculateInvestmentForHATE(HATE_ReproductionData, FloweringCategories, MultiplierTable, HATE_GraphMaps, HATE_PartsSummary)
 
-  HATE_AccessoryCosts:
+  HATE_ReproductiveCosts:
     command: >
-      CalculateAccesoryCostsForHATE(HATE_IndividualsList, InvestmentCategories, HATE_Investment)
+      CalculateReproductiveCostsForHATE(HATE_IndividualsList, InvestmentCategories, HATE_Investment)
 
-  HATE_ReproductionAllocation:
+  HATE_Growth:
     command: >
-      CalculateRAForHATE(HATE_Investment,  HATE_HarvestData, HATE_GraphMaps, HATE_IndividualsList)
+      CalculateGrowthForHATE(HATE_HarvestData, HATE_IndividualsList)
 
   HEPU_IndividualsList:
     command: filterToHEPU(IndividualsList)
@@ -258,13 +258,13 @@ targets:
     command: >
       CalculateInvestmentForHEPU(HEPU_ReproductionData, FloweringCategories, MultiplierTable, HEPU_GraphMaps, HEPU_PartsSummary)
 
-  HEPU_AccessoryCosts:
+  HEPU_ReproductiveCosts:
     command: >
-      CalculateAccesoryCostsForHEPU(HEPU_IndividualsList, InvestmentCategories, HEPU_Investment)
+      CalculateReproductiveCostsForHEPU(HEPU_IndividualsList, InvestmentCategories, HEPU_Investment)
 
-  HEPU_ReproductionAllocation:
+  HEPU_Growth:
     command: >
-      CalculateRAForHEPU(HEPU_Investment,  HEPU_HarvestData, HEPU_GraphMaps, HEPU_IndividualsList)
+      CalculateGrowthForHEPU(HEPU_HarvestData, HEPU_IndividualsList)
 
   LEES_IndividualsList:
     command: filterToLEES(IndividualsList)
@@ -291,13 +291,13 @@ targets:
     command: >
       CalculateInvestmentForLEES(LEES_ReproductionData, FloweringCategories, MultiplierTable, LEES_GraphMaps, LEES_PartsSummary)
 
-  LEES_AccessoryCosts:
+  LEES_ReproductiveCosts:
     command: >
-      CalculateAccesoryCostsForLEES(LEES_IndividualsList, InvestmentCategories, LEES_Investment)
+      CalculateReproductiveCostsForLEES(LEES_IndividualsList, InvestmentCategories, LEES_Investment)
 
-  LEES_ReproductionAllocation:
+  LEES_Growth:
     command: >
-      CalculateRAForLEES(LEES_Investment,  LEES_HarvestData, LEES_GraphMaps, LEES_IndividualsList)
+      CalculateGrowthForLEES(LEES_HarvestData, LEES_IndividualsList)
 
   PELA_IndividualsList:
     command: filterToPELA(IndividualsList)
@@ -324,13 +324,13 @@ targets:
     command: >
       CalculateInvestmentForPELA(PELA_ReproductionData, FloweringCategories, MultiplierTable, PELA_GraphMaps, PELA_PartsSummary)
 
-  PELA_AccessoryCosts:
+  PELA_ReproductiveCosts:
     command: >
-      CalculateAccesoryCostsForPELA(PELA_IndividualsList, InvestmentCategories, PELA_Investment)
+      CalculateReproductiveCostsForPELA(PELA_IndividualsList, InvestmentCategories, PELA_Investment)
 
-  PELA_ReproductionAllocation:
+  PELA_Growth:
     command: >
-      CalculateRAForPELA(PELA_Investment,  PELA_HarvestData, PELA_GraphMaps, PELA_IndividualsList)
+      CalculateGrowthForPELA(PELA_HarvestData, PELA_IndividualsList)
 
   PEPU_IndividualsList:
     command: filterToPEPU(IndividualsList)
@@ -357,13 +357,13 @@ targets:
     command: >
       CalculateInvestmentForPEPU(PEPU_ReproductionData, FloweringCategories, MultiplierTable, PEPU_GraphMaps, PEPU_PartsSummary)
 
-  PEPU_AccessoryCosts:
+  PEPU_ReproductiveCosts:
     command: >
-      CalculateAccesoryCostsForPEPU(PEPU_IndividualsList, InvestmentCategories, PEPU_Investment)
+      CalculateReproductiveCostsForPEPU(PEPU_IndividualsList, InvestmentCategories, PEPU_Investment)
 
-  PEPU_ReproductionAllocation:
+  PEPU_Growth:
     command: >
-      CalculateRAForPEPU(PEPU_Investment,  PEPU_HarvestData, PEPU_GraphMaps, PEPU_IndividualsList)
+      CalculateGrowthForPEPU(PEPU_HarvestData, PEPU_IndividualsList)
 
   PHPH_IndividualsList:
     command: filterToPHPH(IndividualsList)
@@ -390,13 +390,13 @@ targets:
     command: >
       CalculateInvestmentForPHPH(PHPH_ReproductionData, FloweringCategories, MultiplierTable, PHPH_GraphMaps, PHPH_PartsSummary)
 
-  PHPH_AccessoryCosts:
+  PHPH_ReproductiveCosts:
     command: >
-      CalculateAccesoryCostsForPHPH(PHPH_IndividualsList, InvestmentCategories, PHPH_Investment)
+      CalculateReproductiveCostsForPHPH(PHPH_IndividualsList, InvestmentCategories, PHPH_Investment)
 
-  PHPH_ReproductionAllocation:
+  PHPH_Growth:
     command: >
-      CalculateRAForPHPH(PHPH_Investment,  PHPH_HarvestData, PHPH_GraphMaps, PHPH_IndividualsList)
+      CalculateGrowthForPHPH(PHPH_HarvestData, PHPH_IndividualsList)
 
   PILI_IndividualsList:
     command: filterToPILI(IndividualsList)
@@ -423,13 +423,13 @@ targets:
     command: >
       CalculateInvestmentForPILI(PILI_ReproductionData, FloweringCategories, MultiplierTable, PILI_GraphMaps, PILI_PartsSummary)
 
-  PILI_AccessoryCosts:
+  PILI_ReproductiveCosts:
     command: >
-      CalculateAccesoryCostsForPILI(PILI_IndividualsList, InvestmentCategories, PILI_Investment)
+      CalculateReproductiveCostsForPILI(PILI_IndividualsList, InvestmentCategories, PILI_Investment)
 
-  PILI_ReproductionAllocation:
+  PILI_Growth:
     command: >
-      CalculateRAForPILI(PILI_Investment,  PILI_HarvestData, PILI_GraphMaps, PILI_IndividualsList)
+      CalculateGrowthForPILI(PILI_HarvestData, PILI_IndividualsList)
 
   PUTU_IndividualsList:
     command: filterToPUTU(IndividualsList)
@@ -456,50 +456,50 @@ targets:
     command: >
       CalculateInvestmentForPUTU(PUTU_ReproductionData, FloweringCategories, MultiplierTable, PUTU_GraphMaps, PUTU_PartsSummary)
 
-  PUTU_AccessoryCosts:
+  PUTU_ReproductiveCosts:
     command: >
-      CalculateAccesoryCostsForPUTU(PUTU_IndividualsList, InvestmentCategories, PUTU_Investment)
+      CalculateReproductiveCostsForPUTU(PUTU_IndividualsList, InvestmentCategories, PUTU_Investment)
 
-  PUTU_ReproductionAllocation:
+  PUTU_Growth:
     command: >
-      CalculateRAForPUTU(PUTU_Investment,  PUTU_HarvestData, PUTU_GraphMaps, PUTU_IndividualsList)
+      CalculateGrowthForPUTU(PUTU_HarvestData, PUTU_IndividualsList)
 
-  ReproductionAllocation_all:
+  Growth_all:
     command: >
-      combine_ReproductionAllocation(
-        BAER_ReproductionAllocation,
-        BOLE_ReproductionAllocation,
-        COER_ReproductionAllocation,
-        EPMI_ReproductionAllocation,
-        GRBU_ReproductionAllocation,
-        GRSP_ReproductionAllocation,
-        HATE_ReproductionAllocation,
-        HEPU_ReproductionAllocation,
-        LEES_ReproductionAllocation,
-        PELA_ReproductionAllocation,
-        PEPU_ReproductionAllocation,
-        PHPH_ReproductionAllocation,
-        PILI_ReproductionAllocation,
-        PUTU_ReproductionAllocation,
+      combine_Growth(
+        BAER_Growth,
+        BOLE_Growth,
+        COER_Growth,
+        EPMI_Growth,
+        GRBU_Growth,
+        GRSP_Growth,
+        HATE_Growth,
+        HEPU_Growth,
+        LEES_Growth,
+        PELA_Growth,
+        PEPU_Growth,
+        PHPH_Growth,
+        PILI_Growth,
+        PUTU_Growth,
         IndividualsList=IndividualsList)
 
-  AccessoryCosts_all:
+  ReproductiveCosts_all:
     command: >
       combine_data_frames(
-        BAER_AccessoryCosts,
-        BOLE_AccessoryCosts,
-        COER_AccessoryCosts,
-        EPMI_AccessoryCosts,
-        GRBU_AccessoryCosts,
-        GRSP_AccessoryCosts,
-        HATE_AccessoryCosts,
-        HEPU_AccessoryCosts,
-        LEES_AccessoryCosts,
-        PELA_AccessoryCosts,
-        PEPU_AccessoryCosts,
-        PHPH_AccessoryCosts,
-        PILI_AccessoryCosts,
-        PUTU_AccessoryCosts,
+        BAER_ReproductiveCosts,
+        BOLE_ReproductiveCosts,
+        COER_ReproductiveCosts,
+        EPMI_ReproductiveCosts,
+        GRBU_ReproductiveCosts,
+        GRSP_ReproductiveCosts,
+        HATE_ReproductiveCosts,
+        HEPU_ReproductiveCosts,
+        LEES_ReproductiveCosts,
+        PELA_ReproductiveCosts,
+        PEPU_ReproductiveCosts,
+        PHPH_ReproductiveCosts,
+        PILI_ReproductiveCosts,
+        PUTU_ReproductiveCosts,
         NULL)
 
   PartsSummary_all:

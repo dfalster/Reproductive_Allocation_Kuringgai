@@ -1,4 +1,4 @@
-growth_calculations <- function(thisSpecies, Species_Investment, HarvestData, Maps, IndividualsList) {
+growth_calculations <- function(thisSpecies, HarvestData, IndividualsList) {
 
   individuals <- filter(IndividualsList, use_for_allocation_calculations & alive)$individual
   HarvestData_basal <- filter(HarvestData,  individual %in% individuals & segment == 1)

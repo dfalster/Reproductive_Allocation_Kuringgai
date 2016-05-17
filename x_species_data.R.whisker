@@ -11,11 +11,11 @@ CalculateInvestmentFor{{species}} <- function(...) {
 	CalculateInvestmentForSpecies("{{species}}", ...)
 }
 
-CalculateAccesoryCostsFor{{species}} <- function(...) {
-	AccessoryCosts("{{species}}", ...)
+CalculateReproductiveCostsFor{{species}} <- function(...) {
+	ReproductiveCosts("{{species}}", ...)
 }
 
-CalculateRAFor{{species}} <- function(...) {
+CalculateGrowthFor{{species}} <- function(...) {
 	growth_calculations("{{species}}", ...)
 }
 

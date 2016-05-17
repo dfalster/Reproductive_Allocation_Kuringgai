@@ -28,29 +28,29 @@ targets:
     command: >
       CalculateInvestmentFor{{species}}({{species}}_ReproductionData, FloweringCategories, MultiplierTable, {{species}}_GraphMaps, {{species}}_PartsSummary)
 
-  {{species}}_AccessoryCosts:
+  {{species}}_ReproductiveCosts:
     command: >
-      CalculateAccesoryCostsFor{{species}}({{species}}_IndividualsList, InvestmentCategories, {{species}}_Investment)
+      CalculateReproductiveCostsFor{{species}}({{species}}_IndividualsList, InvestmentCategories, {{species}}_Investment)
 
-  {{species}}_ReproductionAllocation:
+  {{species}}_Growth:
     command: >
-      CalculateRAFor{{species}}({{species}}_Investment,  {{species}}_HarvestData, {{species}}_GraphMaps, {{species}}_IndividualsList)
+      CalculateGrowthFor{{species}}({{species}}_HarvestData, {{species}}_IndividualsList)
 
 {{/allspecies}}
 
-  ReproductionAllocation_all:
+  Growth_all:
     command: >
-      combine_ReproductionAllocation(
+      combine_Growth(
 {{#allspecies}}
-        {{species}}_ReproductionAllocation,
+        {{species}}_Growth,
 {{/allspecies}}
         IndividualsList=IndividualsList)
 
-  AccessoryCosts_all:
+  ReproductiveCosts_all:
     command: >
       combine_data_frames(
 {{#allspecies}}
-        {{species}}_AccessoryCosts,
+        {{species}}_ReproductiveCosts,
 {{/allspecies}}
         NULL)
 

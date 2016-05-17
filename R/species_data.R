@@ -9,11 +9,11 @@ CalculateInvestmentForBAER <- function(...) {
 	CalculateInvestmentForSpecies("BAER", ...)
 }
 
-CalculateAccesoryCostsForBAER <- function(...) {
-	AccessoryCosts("BAER", ...)
+CalculateReproductiveCostsForBAER <- function(...) {
+	ReproductiveCosts("BAER", ...)
 }
 
-CalculateRAForBAER <- function(...) {
+CalculateGrowthForBAER <- function(...) {
 	growth_calculations("BAER", ...)
 }
 
@@ -29,11 +29,11 @@ CalculateInvestmentForBOLE <- function(...) {
 	CalculateInvestmentForSpecies("BOLE", ...)
 }
 
-CalculateAccesoryCostsForBOLE <- function(...) {
-	AccessoryCosts("BOLE", ...)
+CalculateReproductiveCostsForBOLE <- function(...) {
+	ReproductiveCosts("BOLE", ...)
 }
 
-CalculateRAForBOLE <- function(...) {
+CalculateGrowthForBOLE <- function(...) {
 	growth_calculations("BOLE", ...)
 }
 
@@ -49,11 +49,11 @@ CalculateInvestmentForCOER <- function(...) {
 	CalculateInvestmentForSpecies("COER", ...)
 }
 
-CalculateAccesoryCostsForCOER <- function(...) {
-	AccessoryCosts("COER", ...)
+CalculateReproductiveCostsForCOER <- function(...) {
+	ReproductiveCosts("COER", ...)
 }
 
-CalculateRAForCOER <- function(...) {
+CalculateGrowthForCOER <- function(...) {
 	growth_calculations("COER", ...)
 }
 
@@ -69,11 +69,11 @@ CalculateInvestmentForEPMI <- function(...) {
 	CalculateInvestmentForSpecies("EPMI", ...)
 }
 
-CalculateAccesoryCostsForEPMI <- function(...) {
-	AccessoryCosts("EPMI", ...)
+CalculateReproductiveCostsForEPMI <- function(...) {
+	ReproductiveCosts("EPMI", ...)
 }
 
-CalculateRAForEPMI <- function(...) {
+CalculateGrowthForEPMI <- function(...) {
 	growth_calculations("EPMI", ...)
 }
 
@@ -89,11 +89,11 @@ CalculateInvestmentForGRBU <- function(...) {
 	CalculateInvestmentForSpecies("GRBU", ...)
 }
 
-CalculateAccesoryCostsForGRBU <- function(...) {
-	AccessoryCosts("GRBU", ...)
+CalculateReproductiveCostsForGRBU <- function(...) {
+	ReproductiveCosts("GRBU", ...)
 }
 
-CalculateRAForGRBU <- function(...) {
+CalculateGrowthForGRBU <- function(...) {
 	growth_calculations("GRBU", ...)
 }
 
@@ -109,11 +109,11 @@ CalculateInvestmentForGRSP <- function(...) {
 	CalculateInvestmentForSpecies("GRSP", ...)
 }
 
-CalculateAccesoryCostsForGRSP <- function(...) {
-	AccessoryCosts("GRSP", ...)
+CalculateReproductiveCostsForGRSP <- function(...) {
+	ReproductiveCosts("GRSP", ...)
 }
 
-CalculateRAForGRSP <- function(...) {
+CalculateGrowthForGRSP <- function(...) {
 	growth_calculations("GRSP", ...)
 }
 
@@ -129,11 +129,11 @@ CalculateInvestmentForHATE <- function(...) {
 	CalculateInvestmentForSpecies("HATE", ...)
 }
 
-CalculateAccesoryCostsForHATE <- function(...) {
-	AccessoryCosts("HATE", ...)
+CalculateReproductiveCostsForHATE <- function(...) {
+	ReproductiveCosts("HATE", ...)
 }
 
-CalculateRAForHATE <- function(...) {
+CalculateGrowthForHATE <- function(...) {
 	growth_calculations("HATE", ...)
 }
 
@@ -149,11 +149,11 @@ CalculateInvestmentForHEPU <- function(...) {
 	CalculateInvestmentForSpecies("HEPU", ...)
 }
 
-CalculateAccesoryCostsForHEPU <- function(...) {
-	AccessoryCosts("HEPU", ...)
+CalculateReproductiveCostsForHEPU <- function(...) {
+	ReproductiveCosts("HEPU", ...)
 }
 
-CalculateRAForHEPU <- function(...) {
+CalculateGrowthForHEPU <- function(...) {
 	growth_calculations("HEPU", ...)
 }
 
@@ -169,11 +169,11 @@ CalculateInvestmentForLEES <- function(...) {
 	CalculateInvestmentForSpecies("LEES", ...)
 }
 
-CalculateAccesoryCostsForLEES <- function(...) {
-	AccessoryCosts("LEES", ...)
+CalculateReproductiveCostsForLEES <- function(...) {
+	ReproductiveCosts("LEES", ...)
 }
 
-CalculateRAForLEES <- function(...) {
+CalculateGrowthForLEES <- function(...) {
 	growth_calculations("LEES", ...)
 }
 
@@ -189,11 +189,11 @@ CalculateInvestmentForPELA <- function(...) {
 	CalculateInvestmentForSpecies("PELA", ...)
 }
 
-CalculateAccesoryCostsForPELA <- function(...) {
-	AccessoryCosts("PELA", ...)
+CalculateReproductiveCostsForPELA <- function(...) {
+	ReproductiveCosts("PELA", ...)
 }
 
-CalculateRAForPELA <- function(...) {
+CalculateGrowthForPELA <- function(...) {
 	growth_calculations("PELA", ...)
 }
 
@@ -209,11 +209,11 @@ CalculateInvestmentForPEPU <- function(...) {
 	CalculateInvestmentForSpecies("PEPU", ...)
 }
 
-CalculateAccesoryCostsForPEPU <- function(...) {
-	AccessoryCosts("PEPU", ...)
+CalculateReproductiveCostsForPEPU <- function(...) {
+	ReproductiveCosts("PEPU", ...)
 }
 
-CalculateRAForPEPU <- function(...) {
+CalculateGrowthForPEPU <- function(...) {
 	growth_calculations("PEPU", ...)
 }
 
@@ -229,11 +229,11 @@ CalculateInvestmentForPHPH <- function(...) {
 	CalculateInvestmentForSpecies("PHPH", ...)
 }
 
-CalculateAccesoryCostsForPHPH <- function(...) {
-	AccessoryCosts("PHPH", ...)
+CalculateReproductiveCostsForPHPH <- function(...) {
+	ReproductiveCosts("PHPH", ...)
 }
 
-CalculateRAForPHPH <- function(...) {
+CalculateGrowthForPHPH <- function(...) {
 	growth_calculations("PHPH", ...)
 }
 
@@ -249,11 +249,11 @@ CalculateInvestmentForPILI <- function(...) {
 	CalculateInvestmentForSpecies("PILI", ...)
 }
 
-CalculateAccesoryCostsForPILI <- function(...) {
-	AccessoryCosts("PILI", ...)
+CalculateReproductiveCostsForPILI <- function(...) {
+	ReproductiveCosts("PILI", ...)
 }
 
-CalculateRAForPILI <- function(...) {
+CalculateGrowthForPILI <- function(...) {
 	growth_calculations("PILI", ...)
 }
 
@@ -269,11 +269,11 @@ CalculateInvestmentForPUTU <- function(...) {
 	CalculateInvestmentForSpecies("PUTU", ...)
 }
 
-CalculateAccesoryCostsForPUTU <- function(...) {
-	AccessoryCosts("PUTU", ...)
+CalculateReproductiveCostsForPUTU <- function(...) {
+	ReproductiveCosts("PUTU", ...)
 }
 
-CalculateRAForPUTU <- function(...) {
+CalculateGrowthForPUTU <- function(...) {
 	growth_calculations("PUTU", ...)
 }
 

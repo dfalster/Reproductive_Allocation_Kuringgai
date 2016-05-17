@@ -212,11 +212,11 @@ process_wood_density <- function(wood_density_spp) {
   wood
 }
 
-combine_by_individual <- function(IndividualsList, ReproductionAllocation_all, Accessory_counts_all, AccessoryCosts_all, LMA, leafLifespan, wood_density_spp, seedsize) {
+combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_all, ReproductiveCosts_all, LMA, leafLifespan, wood_density_spp, seedsize) {
 
   #adding investment and accessory costs data to leafLifespan dataframe to create a dataframe with all individual level data
-  SummaryInd <- merge(ReproductionAllocation_all, select(leafLifespan, -species, -age), by="individual", all=TRUE)
-  SummaryInd <- merge(SummaryInd, select(AccessoryCosts_all, -species, -age), by="individual", all=TRUE)
+  SummaryInd <- merge(Growth_all, select(leafLifespan, -species, -age), by="individual", all=TRUE)
+  SummaryInd <- merge(SummaryInd, select(ReproductiveCosts_all, -species, -age), by="individual", all=TRUE)
   SummaryInd <- merge(SummaryInd, select(IndividualsList, individual, mature), by="individual", all=TRUE)
   SummaryInd <- merge(SummaryInd, Accessory_counts_all, by="individual", all=TRUE)
   SummaryInd <- merge(SummaryInd, LMA, by=c("species","age"), all=TRUE)
