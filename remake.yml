@@ -83,9 +83,7 @@ targets:
   seedsize:
     command:
       - read_csv("data/seedsize.csv")
-      - process_prepollination_costs(., PartsSummary_all)
-      - process_dispersal_costs(., PartsSummary_all)
-
+    
   leavesPerLength:
     command:
       - read_csv("data/leaves_per_length.csv")

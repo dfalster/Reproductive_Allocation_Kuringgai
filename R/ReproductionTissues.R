@@ -36,8 +36,66 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
     sum(weights / counts,  na.rm = TRUE)
   }
 
+  # Identical format to f2, but returns a single column for prepollencosts. The total weight is standardised against the counts of
+  # a parts specified by the variable "prepollen_costs_scale"
+  # Takes as argument the individual
+  f3 <- function(i) {
+    # subset investment data by individual
+    df <- FD[FD$individual== i,]
+    # return 0 if there are 0 flowers produced
+    if(sum(df$count[df$part %in% c("flower_petals")], na.rm=TRUE) ==0) {
+      return(0)
+    }
+    weights <- df$weight[match(InvCat[["prepollen_costs"]], df$part)]
+    counts <- df$count[match(InvCat[["prepollen_costs_scale"]], df$part)]
+    sum(weights / counts,  na.rm = TRUE)
+  }
+  
+  f4 <- function(i) {
+    # subset investment data by individual
+    df <- FD[FD$individual== i,]
+    # return 0 if there are 0 seeds produced
+    if(sum(df$count[df$part %in% c("seed", "fruit_mature")], na.rm=TRUE) ==0) {
+      return(0)
+    }
+    weights <- df$weight[match(InvCat[["dispersal_costs"]], df$part)]
+    counts <- df$count[match(InvCat[["dispersal_costs_scale"]], df$part)]
+    sum(weights / counts,  na.rm = TRUE)
+  }
+  
+  f5 <- function(i) {
+    # subset investment data by individual
+    df <- FD[FD$individual== i,]
+    # return 0 if there are 0 flowers produced
+    if(sum(df$count[df$part %in% c("flower_petals")], na.rm=TRUE) ==0) {
+      return(0)
+    }
+    weights <- df$weight[match(InvCat[["dispersal_before_pollen_costs"]], df$part)]
+    counts <- df$count[match(InvCat[["dispersal_before_pollen_costs_scale"]], df$part)]
+    sum(weights / counts,  na.rm = TRUE)
+  }
+  
+
+  f6 <- function(i) {
+    # subset investment data by individual
+    df <- FD[FD$individual== i,]
+    # return 0 if there are 0 flowers produced
+    if(sum(df$count[df$part %in% c("flower_petals")], na.rm=TRUE) ==0) {
+      return(0)
+    }
+    weights <- df$weight[match(InvCat[["seed_before_pollen_costs"]], df$part)]
+    counts <- df$count[match(InvCat[["seed_before_pollen_costs_scale"]], df$part)]
+    sum(weights / counts,  na.rm = TRUE)
+  }  
+  
   Costs <- group_by(Costs, individual) %>%
-    mutate(seedcosts = f2(individual))
+    mutate(
+      seed_costs = f2(individual),
+      prepollen_costs = f3(individual),
+      pack_disp_costs = f4(individual),
+      pack_disp_early_costs = f5(individual),
+      seed_early_costs = f6(individual)
+      )
 
   ret <- merge(AgeData, Costs, by="individual", all=TRUE) %>%
     mutate(
@@ -53,3 +111,17 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
         prop_prepollen_all = prop_prepollen_aborted + prop_prepollen_success
         )
 }
+
+#problems
+
+#1
+#for some species, notably EPMI, a listed part sometimes exists and sometimes doesn't in the reproduction spreadsheet, 
+#because some individuals skipped that stage
+#if the part doesn't exist, it also won't exist in FD or even INV (I think) - then the average part weight for the species should 
+#be added in later
+
+#2
+#still need to add in weights of transition parts (i.e. cone green), that will never be in FD; this is hard, because cone green has
+#many different names, weights in INV, for different stages, particular cone dimensions.
+#will need to match with specific cone dimension - I have a spreadsheet of individual, cone dimension, actual name (ie cone_green_O3), and census to use
+#need to sum all teh incremental investments along path to that point

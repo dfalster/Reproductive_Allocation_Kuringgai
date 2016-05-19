@@ -1,95 +1,3 @@
-
-process_prepollination_costs <- function(seedSize_raw, PartsSummary_all) {
-
-
-  seedsize <- seedSize_raw %>%
-      select(species, seed_size)
- 
-# adding info on all costs to produce flower at time of pollination
-  prepollencosts_spp <- list()
-  prepollencosts_spp[["BAER"]] <- list(parts=c("cone_green","flower_petals","flower_stigma","flower_style"), scale=c(1/60,1/2,1/2,1/2))
-  prepollencosts_spp[["BOLE"]] <- list(parts=c("flower_petals","flower_calyx","pedicel"), scale=c(1/4,1/4,1/4))
-  prepollencosts_spp[["COER"]] <- list(parts=c("inflorescence_stalk","flower_petals", "flower_stigma"), scale=c(1/6,1,1))
-  prepollencosts_spp[["EPMI"]] <- list(parts=c("flower_petals", "flower_calyx"), scale=c(1/15,1/15))
-  prepollencosts_spp[["GRBU"]] <- list(parts=c("inflorescence_stalk","flower_petals","flower_stigma"), scale=c(1/20,1/2,1/2))
-  prepollencosts_spp[["GRSP"]] <- list(parts=c("inflorescence_stalk","flower_petals","flower_stigma"), scale=c(1/20,1/2,1/2))
-  prepollencosts_spp[["HATE"]] <- list(parts=c("inflorescence_bud_big_bracts","flower_petals","flower_stigma"), scale=c(1/2,1/2,1/2))
-  prepollencosts_spp[["HEPU"]] <- list(parts=c("flower_petals","flower_calyx"), scale=c(1/4,1/4))
-  prepollencosts_spp[["LEES"]] <- list(parts=c("flower_petals","flower_calyx"), scale=c(1,1))
-  prepollencosts_spp[["PELA"]] <- list(parts=c("flower_petals","pedicel","flower_stigma"), scale=c(1,1,1))
-  prepollencosts_spp[["PEPU"]] <- list(parts=c("cone_green","flower_petals","flower_calyx","flower_stigma"), scale=c(1/200,1,1,1))
-  prepollencosts_spp[["PHPH"]] <- list(parts=c("flower_petals","flower_calyx","bract_flower_or_finished_flower","flower_stigma"), scale=c(1/2,1/2,1/2,1/2))
-  prepollencosts_spp[["PILI"]] <- list(parts=c("inflorescence_stalk","bract_flower_or_finished_flower","flower_petals","flower_calyx","flower_stigma"), 
-                                       scale=c(1/10,1/10,1,1,1))
-  prepollencosts_spp[["PUTU"]] <- list(parts=c("flower_petals","flower_calyx","bract_flower_or_finished_flower","flower_stigma"), scale=c(1/2,1/2,1/2,1/2))
-  
-  species <- names(prepollencosts_spp)
-  costs <- data.frame(species = species,
-                      prepollencosts_spp = sapply(names(prepollencosts_spp), function(sp) {
-                        x <- filterBySpecies(sp, PartsSummary_all)
-                       sum(x$weight[x$part %in% prepollencosts_spp[[sp]][["parts"]]]
-                            * prepollencosts_spp[[sp]][["scale"]])
-                      }))
-  seedsize <- merge(seedsize, costs, by="species", all.x=TRUE)
-  seedsize
-}
-
-
-process_dispersal_costs <- function(seedsize, PartsSummary_all) {
-dispersalcosts <- list()
-dispersalcosts[["BAER"]] <- list(parts=c("cone_brown","seed_pod"), scale=c(1/60,1/2))
-dispersalcosts[["BOLE"]] <- list(parts=c("late_finished_flower","seed_pod","late_flower_petals"), scale=c(1/4,1,1/4))
-dispersalcosts[["COER"]] <- list(parts=c("inflorescence_stalk_in_fruit","bract_fruit"), scale=c(1/6,1))
-dispersalcosts[["EPMI"]] <- list(parts=c("seed_pod"), scale=c(1/15))
-dispersalcosts[["GRBU"]] <- list(parts=c("inflorescence_stalk","pedicel","seed_pod"), scale=c(1/20,1/2,1/2))
-dispersalcosts[["GRSP"]] <- list(parts=c("inflorescence_stalk_in_fruit","pedicel","seed_pod"), scale=c(1/20,1/2,1/2))
-dispersalcosts[["HATE"]] <- list(parts=c("seed_pod"), scale=c(1/2))
-dispersalcosts[["HEPU"]] <- list(parts=c("calyx_fruit"), scale=c(1/4))
-dispersalcosts[["LEES"]] <- list(parts=c("calyx_fruit"), scale=c(1))
-dispersalcosts[["PELA"]] <- list(parts=c("seed_pod"), scale=c(1))
-dispersalcosts[["PEPU"]] <- list(parts=c("cone_brown"), scale=c(1/40))
-dispersalcosts[["PHPH"]] <- list(parts=c("seed_pod"), scale=c(1/2))
-dispersalcosts[["PILI"]] <- list(parts=c("seed_pod"), scale=c(1))
-dispersalcosts[["PUTU"]] <- list(parts=c("seed_pod"), scale=c(1/2))
-  species <- names(dispersalcosts)
-  costs <- data.frame(species = species,
-                      dispersalcosts = sapply(names(dispersalcosts), function(sp) {
-                        x <- filterBySpecies(sp, PartsSummary_all)
-                        sum(x$weight[x$part %in% dispersalcosts[[sp]][["parts"]]]
-                            * dispersalcosts[[sp]][["scale"]])
-                      }))
-
-#note, for some species a decimal fraction is given, reflecting that the part turns both into a dispersal component and the actual propagule. 
-#I'm not sure how to figure out the correct value to use
-
-dispersal_at_pollination <- list()
-dispersal_at_pollination[["BAER"]] <- list(parts=c("cone_green","flower_stigma"), scale=c(1/60,1/2))
-dispersal_at_pollination[["BOLE"]] <- list(parts=c("flower_calyx","flower_petals"), scale=c(1/4,1/4))
-dispersal_at_pollination[["COER"]] <- list(parts=c("inflorescence_stalk","flower_stigma"), scale=c(1/6,1/2))
-dispersal_at_pollination[["EPMI"]] <- list(parts=c("flower_calyx"), scale=c(1/15))
-dispersal_at_pollination[["GRBU"]] <- list(parts=c("inflorescence_stalk","flower_stigma"), scale=c(1/20,1/2))
-dispersal_at_pollination[["GRSP"]] <- list(parts=c("inflorescence_stalk","flower_stigma"), scale=c(1/20,1/2))
-dispersal_at_pollination[["HATE"]] <- list(parts=c("flower_stigma"), scale=c(1/2))
-dispersal_at_pollination[["HEPU"]] <- list(parts=c("flower_calyx"), scale=c(1/4))
-dispersal_at_pollination[["LEES"]] <- list(parts=c("flower_calyx"), scale=c(1))
-dispersal_at_pollination[["PELA"]] <- list(parts=c("flower_stigma"), scale=c(1))
-dispersal_at_pollination[["PEPU"]] <- list(parts=c("cone_green","flower_stigma"), scale=c(1/40,1))
-dispersal_at_pollination[["PHPH"]] <- list(parts=c("flower_stigma"), scale=c(1/2))
-dispersal_at_pollination[["PILI"]] <- list(parts=c("flower_stigma"), scale=c(1))
-dispersal_at_pollination[["PUTU"]] <- list(parts=c("flower_stigma"), scale=c(1/2))
-  species <- names(dispersal_at_pollination)
-  costs2 <- data.frame(species = species,
-                     dispersal_at_pollination = sapply(names(dispersal_at_pollination), function(sp) {
-                      x <- filterBySpecies(sp, PartsSummary_all)
-                      sum(x$weight[x$part %in% dispersal_at_pollination[[sp]][["parts"]]]
-                          * dispersal_at_pollination[[sp]][["scale"]])
-                    }))
-
-  seedsize <- merge(seedsize, costs, by="species", all.x=TRUE)
-  seedsize <- merge(seedsize, costs2, by="species", all.x=TRUE)
-  seedsize
-}
-
 process_parts_summary <- function(PartsSummary_all) {
   i <- is.na(weight[[v]])
   weight[[v]][i] <- 0
@@ -192,8 +100,6 @@ combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_
   #TODO: Why do we need these, where are NAs coming from?
   SummaryInd <- filter(SummaryInd, !is.na(species) & !is.na(individual))
 
-  SummaryInd$repro_inv = SummaryInd$prepollen_aborted_inv + SummaryInd$prepollen_success_inv + SummaryInd$postpollen_aborted_inv + SummaryInd$packaging_dispersal_inv + SummaryInd$propagule_inv
-  
   for(v in c("seed_count","seedset","propagule_inv" , "seedpod_weight" , "fruit_weight","accessory_inv")) {
     i <- is.na(SummaryInd[[v]])
     SummaryInd[[v]][i] <- 0
@@ -221,24 +127,25 @@ combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_
     prop_allocation = propagule_inv/(growth_inv + repro_inv),
     RA_leaf_area = repro_inv / (repro_inv + growth_leaf),
     leaf_area_midyear = (leaf_area_0 + leaf_area)/2,
-    prepollencosts = prepollencosts_spp,
     count_aborted = repro_all_count - seed_count,
-    flower_inv = prepollencosts*repro_all_count,    
+    flower_inv = prepollen_costs*repro_all_count,    
     fruit_inv = propagule_inv + (seed_count*seedpod_weight),
+    pack_disp_costs = pack_disp_costs - pack_disp_early_costs,
     prepollen_all_inv = prepollen_aborted_inv + prepollen_success_inv,
-    prepollen_success_inv = seed_count*prepollencosts,  
-    prepollen_failure_inv = prepollen_all_inv - prepollen_success_inv,
+    prepollen_failure_inv = prepollen_all_inv - (seed_count*prepollen_costs),
+    postpollen_all_inv = postpollen_aborted_inv + packaging_dispersal_inv,
+    postpollen_aborted_inv = postpollen_all_inv - (seed_count*pack_disp_costs),
+    packaging_dispersal_inv = seed_count*pack_disp_costs,
     repro_inv_per_seed = repro_inv / seed_count,
     accessory_per_seed = accessory_inv/seed_count,
     propagule_per_seed = propagule_inv/seed_count,
     prepollen_all_per_seed = prepollen_all_inv/seed_count,
     prepollen_aborted_per_seed = prepollen_aborted_inv/seed_count,
     prepollen_failure_per_seed = prepollen_failure_inv/seed_count,
-    prepollen_success_per_seed = prepollencosts,
+    prepollen_success_per_seed = prepollen_costs,
     postpollen_aborted_per_seed = postpollen_aborted_inv/seed_count,
-    packaging_dispersal_per_seed = (packaging_dispersal_inv - (seed_count*dispersal_at_pollination))/seed_count,
-    seedcosts = seed_size + packaging_dispersal_per_seed + prepollencosts,
-    success_inv = seedcosts*seed_count,
+    packaging_dispersal_per_seed = (packaging_dispersal_inv - (seed_count*pack_disp_early_costs))/seed_count,
+    success_inv = seed_costs*seed_count,
     failure_inv = repro_inv - success_inv,
     failure_to_ovule_ratio = 1 - seedset,
     failure_per_seed = prepollen_failure_per_seed + postpollen_aborted_per_seed,
@@ -252,11 +159,10 @@ combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_
     prop_accessory = 1 - prop_propagule,
     prop_propagule_nonzero = prop_propagule,
     prop_accessory_nonzero = prop_accessory,
-    prop_prepollencosts = prepollencosts/seedcosts,
-    prop_postpollencosts = 1 - prop_prepollencosts,
-    prop_seedcosts = seed_size/seedcosts,
-    prop_dispersalcosts = 1-prop_prepollencosts-prop_seedcosts,
-    prop_dispersalcosts2 = packaging_dispersal_per_seed / seedcosts,
+    prop_prepollen_costs = prepollen_costs/seed_costs,
+    prop_postpollencosts = 1 - prop_prepollen_costs,
+    prop_seed_costs = seed_size/seed_costs,
+    prop_dispersalcosts = pack_disp_costs / seed_costs,
     scaled_failure_count = count_aborted / total_weight,
     scaled_seed_count = seed_count / total_weight,
     scaled_bud_count = repro_all_count / total_weight,
@@ -264,6 +170,8 @@ combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_
     repro_inv_mature = repro_inv,
     repro_all_count_mature = repro_all_count,
     leaf_area_0_mature = leaf_area_0,
+    provisioning = ((seed_size - embryo_endo_size)*seed_count) + packaging_dispersal_inv,
+    provisioning_per_seed = pack_disp_costs - embryo_endo_size,
     postpollen_all_per_seed = postpollen_aborted_per_seed + seed_size + packaging_dispersal_per_seed
     )
 
@@ -272,13 +180,14 @@ combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_
   
    
   
-  for(v in c("seedcosts","prepollencosts","count_aborted","flower_inv","fruit_inv","prepollen_all_inv","prepollen_success_inv",
+  for(v in c("seed_costs","prepollen_costs","count_aborted","flower_inv","fruit_inv","prepollen_all_inv","prepollen_success_inv",
               "prepollen_failure_inv","repro_inv_per_seed","accessory_per_seed","propagule_per_seed","prepollen_all_per_seed",
-              "prepollen_aborted_per_seed","prepollen_failure_per_seed","prepollen_success_per_seed","postpollen_aborted_per_seed",
+              "prepollen_aborted_per_seed","prepollen_failure_per_seed", "pack_disp_costs",
+              "prepollen_success_per_seed","postpollen_aborted_per_seed",
               "packaging_dispersal_per_seed","success_inv","failure_inv","failure_to_ovule_ratio","prop_success","prop_failure",
               "prop_propagule","prop_postpollen_aborted","prop_prepollen_success","prop_prepollen_aborted","prop_prepollen_all",
-              "prop_accessory","prop_propagule_nonzero","prop_accessory_nonzero","prop_prepollencosts","prop_seedcosts",
-              "prop_dispersalcosts","prop_dispersalcosts2","scaled_failure_count","scaled_seed_count","scaled_bud_count",
+              "prop_accessory","prop_propagule_nonzero","prop_accessory_nonzero","prop_prepollen_costs","prop_seed_costs",
+              "prop_dispersalcosts","scaled_failure_count","scaled_seed_count","scaled_bud_count","embryo_endo_size",
              "scaled_repro_inv","prop_postpollencosts","failure_per_seed","leaf_area_0","leaf_area_0_mature","total_weight_0","postpollen_all_per_seed")) {
     i <- is.na(SummaryInd[[v]])
     SummaryInd[[v]][i] <- 0
@@ -364,13 +273,12 @@ get_species_values <- function(SummaryInd, groups) {
     filter(seed_count > 0) %>%
     filter(repro_inv >0 ) %>%
     group_by_(.dots=dots) %>%
-    summarise_each(f, propagule_per_seed, packaging_dispersal_per_seed,seedset,seed_count,
-      prop_propagule_nonzero,prop_accessory_nonzero,success_inv,seedcosts,scaled_seed_count,prop_postpollencosts,
+    summarise_each(f, propagule_per_seed, packaging_dispersal_per_seed,seedset,seed_count, pack_disp_costs,
+      prop_propagule_nonzero,prop_accessory_nonzero,success_inv,seed_costs,scaled_seed_count,prop_postpollencosts,
       postpollen_aborted_inv, packaging_dispersal_inv, propagule_inv, prop_postpollen_aborted, prop_propagule,
-      prop_dispersalcosts,prop_seedcosts,
-      prepollen_failure_per_seed,prepollen_all_per_seed,accessory_per_seed,
+      prop_dispersalcosts,prop_seed_costs, prepollen_failure_per_seed,prepollen_all_per_seed,accessory_per_seed,
       prepollen_aborted_per_seed, prepollen_success_per_seed, postpollen_aborted_per_seed,repro_inv_per_seed,failure_inv,
-      scaled_failure_count,scaled_bud_count,prop_prepollencosts,prepollencosts,
+      scaled_failure_count,scaled_bud_count,prop_prepollen_costs,prepollen_costs,embryo_endo_size,
       accessory_inv, prepollen_aborted_inv, prepollen_success_inv,prepollen_all_inv,prop_prepollen_aborted, prop_prepollen_success,
       prop_prepollen_all, prop_accessory,prop_failure,prop_success,scaled_repro_inv,failure_to_ovule_ratio,failure_per_seed,postpollen_all_per_seed)
   })
