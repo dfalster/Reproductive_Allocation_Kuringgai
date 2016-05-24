@@ -1,0 +1,127 @@
+nutrient <- read.csv("~/RA schedules - Kuringgai research/Reproductive_Allocation_Kuringgai/data/nutrient_data.csv")
+
+names(nutrient)
+unique(nutrient$tissue_simple)
+
+
+plot(P~N,nutrient,col=col.spp(species),pch=16,log="xy")
+
+par(mfrow=c(1,1), cex=1, omi=c(.6,.1,.05,.05), mai=c(.1,.8,.05,.05)) 
+plot(P~K,data=subset(nutrient,tissue_complete=="leaves"),col=col.spp(species),pch=16,ylim=c(0,500),log="x",xlim=c(.02,1))
+points(P~K,data=subset(nutrient,tissue_complete=="senescent_leaves"),col=col.spp(species),pch=1,cex=1.5)
+points(P~K,data=subset(nutrient,tissue_complete=="senescent_leaves"),col=col.spp(species),pch=1,cex=1)
+
+plot(P~K,data=subset(nutrient,tissue_complete=="wood_from_tip"),col=col.spp(species),pch=16,ylim=c(0,500),log="x",xlim=c(.01,1))
+points(P~K,data=subset(nutrient,tissue_complete=="shed_sapwood"),col=col.spp(species),pch=1,cex=1.5)
+points(P~K,data=subset(nutrient,tissue_complete=="shed_sapwood"),col=col.spp(species),pch=1,cex=1)
+
+plot(P~N,data=subset(nutrient,tissue_complete=="leaves"),col=col.spp(species),pch=16,ylim=c(0,500),log="x",xlim=c(.4,2.5))
+points(P~N,data=subset(nutrient,tissue_complete=="senescent_leaves"),col=col.spp(species),pch=1,cex=1.5)
+points(P~N,data=subset(nutrient,tissue_complete=="senescent_leaves"),col=col.spp(species),pch=1,cex=1)
+
+plot(P~N,data=subset(nutrient,tissue_complete=="wood_from_tip"),col=col.spp(species),pch=16,ylim=c(0,500),log="x",xlim=c(.02,1))
+points(P~N,data=subset(nutrient,tissue_complete=="shed_sapwood"),col=col.spp(species),pch=1,cex=1.5)
+points(P~N,data=subset(nutrient,tissue_complete=="shed_sapwood"),col=col.spp(species),pch=1,cex=1)
+
+pch.tissue <- function(x=NULL){
+  ret <- c(wood_from_tip=16, wood_from_middle=10,wood_from_base=7,shed_sapwood=1,bark=15,shed_bark=0,leaves=17,senescent_leaves=2,seed=8,reproductive=4)
+  names(ret) <- c("wood_from_tip","wood_from_middle","wood_from_base","shed_sapwood","bark","shed_bark","leaves","senescent_leaves","seed","reproductive")
+  if(!is.null(x)) {
+    ret <- ret[as.character(x)]
+  }
+  ret
+}
+
+plot(P~N,data=subset(nutrient,tissue_simple=="leaves"),col=col.spp(species),pch=pch.tissue(tissue_simple))
+
+
+pdf("figs2/Nutrients/N_vs_P.pdf", height=7.5, width=11)
+plot
+plot(P~N,data=subset(nutrient),col=col.spp(species),pch=pch.tissue(tissue_simple),log="xy")
+legend("topleft",legend=c("sapwood","wood from mid","wood from base","shed sapwood","bark","shed bark","leaves","shed leaves", "seed", "other reproductive"),pch=c(16,10,7,1,15,0,17,2,8,4),bty="n")
+legend("bottomright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
+dev.off()
+
+pdf("figs2/Nutrients/K_vs_P.pdf", height=7.5, width=11)
+plot
+plot(P~K,data=subset(nutrient),col=col.spp(species),pch=pch.tissue(tissue_simple),log="xy")
+legend("topleft",legend=c("sapwood","wood from mid","wood from base","shed sapwood","bark","shed bark","leaves","shed leaves", "seed", "other reproductive"),pch=c(16,10,7,1,15,0,17,2,8,4),bty="n")
+legend("bottomright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
+dev.off()
+
+pdf("figs2/Nutrients/C_vs_N.pdf", height=7.5, width=11)
+plot
+plot(C~N,data=subset(nutrient,C>25),col=col.spp(species),pch=pch.tissue(tissue_simple),log="xy")
+legend("topleft",legend=c("sapwood","wood from mid","wood from base","shed sapwood","bark","shed bark","leaves","shed leaves", "seed", "other reproductive"),pch=c(16,10,7,1,15,0,17,2,8,4),bty="n")
+legend("bottomright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
+dev.off()
+
+
+library(dplyr)
+
+pdf("figs2/Nutrients/age_by_species_NP.pdf", height=7.5, width=11)
+plot
+for (i in c("BAER","BOLE","COER","EPMI","GRBU","GRSP","HATE","HEPU","LEES","PELA","PEPU","PHPH","PILI","PUTU")) {
+data <- subset(nutrient,species==i)
+plot(P~N,data,col=col.age(age),pch=pch.tissue(tissue_simple),log="xy")
+text(1,200,i)
+data2 <- subset(data,tissue_simple=="reproductive")
+text(P~N,data2,label=data2$tissue_complete,col="red")
+legend("bottomright",legend=labels.age(),col=col.age(),pch=16, cex=.8,bty="n")
+legend("topleft",legend=c("sapwood","wood from mid","wood from base","shed sapwood","bark","shed bark","leaves","shed leaves", "seed", "other reproductive"),pch=c(16,10,7,1,15,0,17,2,8,4),bty="n")
+}
+dev.off()
+
+pdf("figs2/Nutrients/age_by_species_PK.pdf", height=7.5, width=11)
+plot
+for (i in c("BAER","BOLE","COER","EPMI","GRBU","GRSP","HATE","HEPU","LEES","PELA","PEPU","PHPH","PILI","PUTU")) {
+data <- subset(nutrient,species==i)
+plot(P~K,data,col=col.age(age),pch=pch.tissue(tissue_simple),log="xy")
+text(.4,200,i)
+data2 <- subset(data,tissue_simple=="reproductive")
+text(P~K,data2,label=data2$tissue_complete,col="red")
+legend("bottomright",legend=labels.age(),col=col.age(),pch=16, cex=.8,bty="n")
+legend("topleft",legend=c("sapwood","wood from mid","wood from base","shed sapwood","bark","shed bark","leaves","shed leaves", "seed", "other reproductive"),pch=c(16,10,7,1,15,0,17,2,8,4),bty="n")
+}
+dev.off()
+
+
+
+View(data)
+
+get_species_nutrient_values <- function(SummaryInd, groups) {
+
+  # function to apply
+  fs <- c("max", "min","mean", "sd", "length")
+
+  # note use of `group_by_` below - allows for passing in of
+  # character vectors
+  dots <-  lapply(groups, as.symbol)
+
+  # summarizing data by species, age
+  out <- list()
+  out[[1]] <-lapply(fs, function(f) {
+    SummaryInd %>%
+    group_by_(.dots=dots) %>%
+    summarise_each(f, Al,B, Ca, Cu, Fe, K, Mg, Mn, Na, P, S, Zn, C, N)
+  })
+  names(out[[1]]) <- fs
+
+ 
+ ret <- list()
+  for(f in fs){
+    ret[[f]] <- out[[1]][[f]]
+
+    # reorder to be same as input
+    order <- names(SummaryInd)[names(SummaryInd) %in% names(ret[[f]])]
+    ret[[f]] <- ret[[f]][, order]
+  }
+  ret[["se"]] <- ret[["sd"]]
+  ii <- sapply(ret[["se"]], is.numeric) & names(ret[["se"]]) != "age"
+  ret[["se"]][,ii] <- ret[["se"]][,ii]/sqrt(ret[["length"]][,ii])
+  ret
+}
+
+nutrient_sum <- get_species_nutrient_values(nutrient, groups=I(c("species", "age", "tissue_complete")))
+
+View(nutrient_sum)
