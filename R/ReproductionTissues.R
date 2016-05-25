@@ -92,7 +92,7 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
     mutate(
       seed_costs = f2(individual),
       prepollen_costs = f3(individual),
-      pack_disp_costs = f4(individual),
+      pack_disp_gross_costs = f4(individual),
       pack_disp_early_costs = f5(individual),
       seed_early_costs = f6(individual)
       )

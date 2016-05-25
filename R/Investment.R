@@ -66,6 +66,9 @@ CalculateInvestmentForIndiviualPlant <- function(individual, Reproduction, Flowe
   print(individual)
 
   # Transform counts to weights and adjust for multiplicity
+  # Returns a list, one per census
+  # Each element of the list is also a list, with possible elements "pre.ex" "new" "total",
+  # Each element in those lists is the weight and number of a particular part
   TreeListOrig <- WeightCalculationsForTree(Reproduction, FloweringCategories, PartsSummary)
   TreeListAdj <- AdjustForMultiplicity(TreeListOrig, MultiplierTable)
 
@@ -131,7 +134,7 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
         weight = sapply(TreeListOrig[[last.census]]$total, function(x) sum(x$weight))))
   }
 
-  Investments <- data.frame(FromCensus = c(), ToCensus = c(), From = c(), To = c(), Inv = c(), Count = c())
+  Investments <- data.frame(FromCensus = c(), ToCensus = c(), From = c(), To = c(), Inv = c(), Count = c(), type=c())
   Err <- c()
   # If tree had no reproduction at all return list of empty data frames
   if (is.null(unlist(TreeListOrig[2:last.census]))) {
@@ -306,8 +309,10 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
   Inv <- NULL
   Investments <- Investments[complete.cases(Investments), ]
   if (nrow(Investments) > 0) {
+    # Count number of unique combinations of  FromCensus, ToCensus, From, To, Inv
     Inv <- aggregate(Count ~ FromCensus + ToCensus + From + To + Inv, FUN = "sum", data = Investments)
     Inv <- Inv[order(Inv$ToCensus), ]
+    # Total cost is product of number and per unit cost
     Inv["Total"] <- Inv$Inv * Inv$Count
     Inv["individual"] <- rep(TreeListOrig[[1]], nrow(Inv))
   }
@@ -335,9 +340,8 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
 InvestmentInAPartType <- function(TreeList, TreeList_Pred, Element, Progression, GraphMaps) {
   # Initialize data frames
   Inv <- From <- To <- FromCensus <- ToCensus <- Count <- c()
-  Inv_new <- data.frame(FromCensus = FromCensus, ToCensus = ToCensus, From = From, To = To, Inv = Inv, Count = Count)
-  Inv_pre.ex <- data.frame(FromCensus = FromCensus, ToCensus = ToCensus, From = From, To = To, Inv = Inv, Count = Count)
-  Inv_total <- data.frame(FromCensus = FromCensus, ToCensus = ToCensus, From = From, To = To, Inv = Inv, Count = Count)
+  Inv_new <- data.frame(FromCensus = FromCensus, ToCensus = ToCensus, From = From, To = To, Inv = Inv, Count = Count, type = c())
+  Inv_pre.ex <- data.frame(FromCensus = FromCensus, ToCensus = ToCensus, From = From, To = To, Inv = Inv, Count = Count, type = c())
 
   N <- length(TreeList)
   # Are there any new parts of that type? If yes, calculate investment
@@ -349,7 +353,7 @@ InvestmentInAPartType <- function(TreeList, TreeList_Pred, Element, Progression,
     ToCensus <- rep(N - 1, length(Inv))
     FromCensus <- rep(N - 2, length(Inv))
     Count <- rep(1, length(Inv))
-    Inv_new <- data.frame(FromCensus = FromCensus, ToCensus = ToCensus, From = From, To = To, Inv = Inv, Count = Count)
+    Inv_new <- data.frame(FromCensus = FromCensus, ToCensus = ToCensus, From = From, To = To, Inv = Inv, Count = Count, type="new")
   }
 
   # Are there any pre-existing parts of that type.
@@ -375,7 +379,7 @@ InvestmentInAPartType <- function(TreeList, TreeList_Pred, Element, Progression,
       TreeList_Pred <- R[["TreeList_Pred"]]
       ErrList <- rbind(ErrList, R[["ErrList"]])
     }
-    Inv_pre.ex <- data.frame(FromCensus = FromCensus, ToCensus = ToCensus, From = From, To = To, Inv = Inv, Count = Count)
+    Inv_pre.ex <- data.frame(FromCensus = FromCensus, ToCensus = ToCensus, From = From, To = To, Inv = Inv, Count = Count, type = "preexisting")
   }
 
   # Errors in the beginning

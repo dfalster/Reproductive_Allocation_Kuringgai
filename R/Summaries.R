@@ -130,7 +130,7 @@ combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_
     count_aborted = repro_all_count - seed_count,
     flower_inv = prepollen_costs*repro_all_count,    
     fruit_inv = propagule_inv + (seed_count*seedpod_weight),
-    pack_disp_costs = pack_disp_costs - pack_disp_early_costs,
+    pack_disp_costs = pack_disp_gross_costs - pack_disp_early_costs,  #subtract early
     prepollen_all_inv = prepollen_aborted_inv + prepollen_success_inv,
     prepollen_failure_inv = prepollen_all_inv - (seed_count*prepollen_costs),
     postpollen_all_inv = postpollen_aborted_inv + packaging_dispersal_inv,
