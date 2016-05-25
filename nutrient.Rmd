@@ -1,5 +1,9 @@
 nutrient <- read.csv("~/RA schedules - Kuringgai research/Reproductive_Allocation_Kuringgai/data/nutrient_data.csv")
+soil <- read.csv("~/RA schedules - Kuringgai research/Reproductive_Allocation_Kuringgai/data/nutrient_soil.csv")
 
+plot(N~P,soil,col=col.age(age),pch=16,cex=replicate)
+
+names(soil)
 names(nutrient)
 unique(nutrient$tissue_simple)
 
