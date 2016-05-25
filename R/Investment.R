@@ -73,24 +73,23 @@ CalculateInvestmentForIndiviualPlant <- function(individual, Reproduction, Flowe
   Res <- InvestmentCalculations(TreeListAdj, GraphMaps)
 
   # Extract and reorder the results
-  # TODO : Why?
   Inv <- Res[["Inv"]]
   if (!is.null(Inv)) {
     Inv["age"] <- as.numeric(unique(Reproduction$age))
-    Inv <- Inv[, c(8, 9, 1:7)] # TODO: what are there. Use name not numbers to select columns
+    Inv <- Inv[, c("individual","age","FromCensus","ToCensus","From","To","Inv","Count","Total")]
   }
 
   Err <- Res[["Err"]]
   if (!is.null(Err)) {
     Err["individual"] <- individual
-    Err <- Err[, c(4, (1:3))] # TODO: what are there. Use name not numbers to select columns
+    Err <- Err[, c("individual","Element","Census","Count")]
   }
   Lost <- Res[["Lost"]]
   if (!is.null(Lost)) {
     if (nrow(Lost) > 0) {
       Lost["individual"] <- individual
       Lost["age"] <- as.numeric(unique(Reproduction$age))
-      Lost <- Lost[, c(5, 6, 1:4)] # TODO: what are there. Use name not numbers to select columns
+      Lost <- Lost[, c("individual","age","part","Census","count","weight")]
     }
     if (nrow(Lost) == 0) {
       Lost <- NULL
@@ -103,7 +102,7 @@ CalculateInvestmentForIndiviualPlant <- function(individual, Reproduction, Flowe
     if (nrow(FD) > 0) {
       FD["individual"] <- individual
       FD["age"] <- as.numeric(unique(Reproduction$age))
-      FD <- FD[, c(5, 6, 1:4)]
+      FD <- FD[, c("weight","individual","species","part","Census","count")]
     }
     if (nrow(FD) == 0) {
       FD <- NULL
