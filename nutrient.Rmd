@@ -1,7 +1,10 @@
 nutrient <- read.csv("~/RA schedules - Kuringgai research/Reproductive_Allocation_Kuringgai/data/nutrient_data.csv")
 soil <- read.csv("~/RA schedules - Kuringgai research/Reproductive_Allocation_Kuringgai/data/nutrient_soil.csv")
 
+pdf("figs2/Nutrients/soil.pdf", height=6, width=6)
+plot
 plot(N~P,soil,col=col.age(age),pch=16,cex=replicate)
+dev.off()
 
 names(soil)
 names(nutrient)
@@ -65,14 +68,22 @@ library(dplyr)
 
 pdf("figs2/Nutrients/age_by_species_NP.pdf", height=7.5, width=11)
 plot
+par(mfrow=c(1,2), cex=1, omi=c(.1,.1,.05,.05), mai=c(.8,.8,.05,.05)) 
 for (i in c("BAER","BOLE","COER","EPMI","GRBU","GRSP","HATE","HEPU","LEES","PELA","PEPU","PHPH","PILI","PUTU")) {
 data <- subset(nutrient,species==i)
 plot(P~N,data,col=col.age(age),pch=pch.tissue(tissue_simple),log="xy")
 text(1,200,i)
 data2 <- subset(data,tissue_simple=="reproductive")
-text(P~N,data2,label=data2$tissue_complete,col="red")
+text(P~N,data2,label=data2$tissue_complete,col="red",cex=0.7)
 legend("bottomright",legend=labels.age(),col=col.age(),pch=16, cex=.8,bty="n")
 legend("topleft",legend=c("sapwood","wood from mid","wood from base","shed sapwood","bark","shed bark","leaves","shed leaves", "seed", "other reproductive"),pch=c(16,10,7,1,15,0,17,2,8,4),bty="n")
+
+plot(P~K,data,col=col.age(age),pch=pch.tissue(tissue_simple),log="xy")
+text(.4,200,i)
+data2 <- subset(data,tissue_simple=="reproductive")
+text(P~K,data2,label=data2$tissue_complete,col="red",cex=0.7)
+#legend("bottomright",legend=labels.age(),col=col.age(),pch=16, cex=.8,bty="n")
+#legend("topleft",legend=c("sapwood","wood from mid","wood from base","shed sapwood","bark","shed bark","leaves","shed leaves", "seed", "other reproductive"),pch=c(16,10,7,1,15,0,17,2,8,4),bty="n")
 }
 dev.off()
 
