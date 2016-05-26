@@ -1,3 +1,6 @@
+plot(pack_disp_gross_costs ~pack_disp_early_costs, SummaryInd,log="xy",col=col.spp(species),pch=16)
+
+
 #ideas in progress
 ``` {r}
 plot(prop_prepollen_all~seed_size,SummarySpp[["mean"]],pch=16,log="x",col=col.spp(species))
@@ -287,7 +290,7 @@ abline(coef(mod)[1],1,col="red")
 axis(2, at=c(0.1,10,1000), labels=c(0.1,10,1000),cex.axis=1)
 axis(1, at=c(0.1,10,1000), labels=c(0.1,10,1000),cex.axis=1)
 
-plot(postpollen_all_per_seed~seed_size,SummarySpp[["mean"]],col=col.spp(species),pch=16,log="xy", yaxt="n",xaxt="n", ylim=c(.02,20000), xlim=c(.02,20000), ylab="required provisioning costs per seed (mg/seed)",xlab="",cex=1.5)
+plot(pack_disp_costs~seed_size,SummarySpp[["mean"]],col=col.spp(species),pch=16,log="xy", yaxt="n",xaxt="n", ylim=c(.02,20000), xlim=c(.02,20000), ylab="required provisioning costs per seed (mg/seed)",xlab="",cex=1.5)
 #y.error.bars(SummarySpp[["mean"]]$seed_size,SummarySpp[["mean"]]$packaging_dispersal_per_seed,SummarySpp[["se"]]$prepollen_costs)
 mod <- lm(log10(postpollen_all_per_seed)~log10(seed_size),SummarySpp[["mean"]])
 abline(coef(mod)[1],coef(mod)[2])
@@ -391,7 +394,7 @@ acc_by_species <- dplyr::bind_rows(acc_by_species, select(slopes$groupsummary,r2
 plot(pack_disp_costs ~ seed_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy", ylim=c(.02,10000), ylab="dispersal & packaging accessory costs (mg/seed)",xlab="",cex=1.5)
 mod <- lm(log10(pack_disp_costs) ~ log10(seed_size),data=subset(SummarySpp[["mean"]]))
 words.top.left.logxy(mod)
-slopes <- sma(packaging_dispersal_per_seed ~ seed_size,data=subset(SummarySpp[["mean"]],species!="LEES"),slope.test=1, log="xy",method="OLS")
+slopes <- sma(packaging_dispersal_per_seed ~ seed_size,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="OLS")
 abline(slopes$groupsummary["Int"][[1]],slopes$groupsummary["Slope"][[1]])
 abline(slopes$groupsummary["Int"][[1]],1,col="red")
 y.error.bars(SummarySpp[["mean"]]$seed_size,SummarySpp[["mean"]]$pack_disp_costs,SummarySpp[["se"]]$pack_disp_costs)
@@ -448,10 +451,10 @@ abline(slopes$groupsummary["Int"][[1]],1,col="red")
 y.error.bars(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$prepollen_all_per_seed,SummarySpp[["se"]]$prepollen_all_per_seed)
 acc_by_species <- dplyr::bind_rows(acc_by_species, select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
 
-plot(pack_disp_costs ~ embryo_endo_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy", ylim=c(.02,10000), ylab="dispersal & packaging accessory costs (mg/seed)",xlab="",cex=1.5)
+plot(pack_disp_costs ~ embryo_endo_size,data=subset(SummarySpp[["mean"]],species!="EPMI"),col=col.spp(species),pch=16,log="xy", ylim=c(.02,10000), ylab="dispersal & packaging accessory costs (mg/seed)",xlab="",cex=1.5)
 mod <- lm(log10(pack_disp_costs) ~ log10(embryo_endo_size),data=subset(SummarySpp[["mean"]]))
 words.top.left.logxy(mod)
-slopes <- sma(packaging_dispersal_per_seed ~ embryo_endo_size,data=subset(SummarySpp[["mean"]],species!="LEES"),slope.test=1, log="xy",method="OLS")
+slopes <- sma(packaging_dispersal_per_seed ~ embryo_endo_size,data=subset(SummarySpp[["mean"]],species!="EPMI"),slope.test=1, log="xy",method="OLS")
 abline(slopes$groupsummary["Int"][[1]],slopes$groupsummary["Slope"][[1]])
 abline(slopes$groupsummary["Int"][[1]],1,col="red")
 y.error.bars(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$pack_disp_costs,SummarySpp[["se"]]$pack_disp_costs)

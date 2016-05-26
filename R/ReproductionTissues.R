@@ -35,6 +35,8 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
     counts <- df$count[match(InvCat[["seed_costs_scale"]], df$part)]
     sum(weights / counts,  na.rm = TRUE)
   }
+  
+  Costs$seed_costs = sapply(Costs$individual, f2)
 
   # Identical format to f2, but returns a single column for prepollencosts. The total weight is standardised against the counts of
   # a parts specified by the variable "prepollen_costs_scale"
@@ -51,6 +53,8 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
     sum(weights / counts,  na.rm = TRUE)
   }
   
+  Costs$prepollen_costs = sapply(Costs$individual, f3)
+  
   f4 <- function(i) {
     # subset investment data by individual
     df <- FD[FD$individual== i,]
@@ -63,6 +67,8 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
     sum(weights / counts,  na.rm = TRUE)
   }
   
+  Costs$pack_disp_gross_costs = sapply(Costs$individual, f4)
+  
   f5 <- function(i) {
     # subset investment data by individual
     df <- FD[FD$individual== i,]
@@ -70,11 +76,19 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
     if(sum(df$count[df$part %in% c("flower_petals")], na.rm=TRUE) ==0) {
       return(0)
     }
-    weights <- df$weight[match(InvCat[["dispersal_before_pollen_costs"]], df$part)]
+    weights <- 1*df$weight[match(InvCat[["dispersal_before_pollen_costs"]], df$part)]
     counts <- df$count[match(InvCat[["dispersal_before_pollen_costs_scale"]], df$part)]
-    sum(weights / counts,  na.rm = TRUE)
+    if(length(counts >0))
+      adjust <- InvCat[["dispersal_before_pollen_costs_adjust"]]
+    else 
+      adjust <- numeric(0)
+    if(length(adjust)!= length(counts))  {
+      stop(paste("problem with length of dispersal_before_pollen_costs_adjust for ", df$species[1]))
+    }
+    sum(adjust*weights / counts,  na.rm = TRUE)
   }
   
+  Costs$pack_disp_early_costs = sapply(Costs$individual, f5)
 
   f6 <- function(i) {
     # subset investment data by individual
@@ -88,15 +102,8 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
     sum(weights / counts,  na.rm = TRUE)
   }  
   
-  Costs <- group_by(Costs, individual) %>%
-    mutate(
-      seed_costs = f2(individual),
-      prepollen_costs = f3(individual),
-      pack_disp_gross_costs = f4(individual),
-      pack_disp_early_costs = f5(individual),
-      seed_early_costs = f6(individual)
-      )
-
+  Costs$seed_early_costs = sapply(Costs$individual, f6)
+  
   ret <- merge(AgeData, Costs, by="individual", all=TRUE) %>%
     mutate(
         repro_inv = prepollen_aborted_inv + prepollen_success_inv + postpollen_aborted_inv + packaging_dispersal_inv + propagule_inv,
