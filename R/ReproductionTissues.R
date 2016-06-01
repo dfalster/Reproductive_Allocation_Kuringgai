@@ -53,7 +53,7 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
     sum(weights / counts,  na.rm = TRUE)
   }
   
-  Costs$prepollen_costs = sapply(Costs$individual, f3)
+  Costs$prepollen_partial_costs = sapply(Costs$individual, f3)
   
   f4 <- function(i) {
     # subset investment data by individual
@@ -126,9 +126,3 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
 #because some individuals skipped that stage
 #if the part doesn't exist, it also won't exist in FD or even INV (I think) - then the average part weight for the species should 
 #be added in later
-
-#2
-#still need to add in weights of transition parts (i.e. cone green), that will never be in FD; this is hard, because cone green has
-#many different names, weights in INV, for different stages, particular cone dimensions.
-#will need to match with specific cone dimension - I have a spreadsheet of individual, cone dimension, actual name (ie cone_green_O3), and census to use
-#need to sum all teh incremental investments along path to that point

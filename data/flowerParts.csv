@@ -3167,7 +3167,7 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 1558,HEPU,,,71,,,,calyx_aborted_fruit,1,,,,,category_not_used,1.7,,1.7,,,,,,
 1559,HEPU,,,72,,,,calyx_aborted_fruit,1,,,,,category_not_used,1.7,,1.7,,,,,,
 1744,HEPU,,,195,,,,calyx_aborted_fruit,1,,,,,category_not_used,1.5,,1.5,,,,,,
-1739,HEPU,Basin2007,21-Feb-13,187,HEPU_402,13,not_used,calyx_fruit,1,,,,,used,,,0,"number missing, ###",,,,,
+1739,HEPU,Basin2007,21-Feb-13,187,HEPU_402,13,not_used,calyx_fruit,1,,,,,,,,0,"number missing, ###",,,,,
 4180,HEPU,Basin2007,11-Apr-13,203,HEPU_407,16,not_used,calyx_fruit,1,,,,,mean_used,1.92,,1.92,,,,,,
 4033,HEPU,Basin2007,7-May-13,201,HEPU_407,16,not_used,calyx_fruit,2,,,,,mean_used,5.6,,2.8,,,,,,
 4971,HEPU,Waratah2003,23-May-13,219,HEPU_803,17,not_used,calyx_fruit,1,,,,,mean_used,2.3,,2.3,,,,,,
