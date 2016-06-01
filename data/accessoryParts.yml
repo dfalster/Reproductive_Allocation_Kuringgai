@@ -147,7 +147,7 @@ LEES:
   dispersal_costs_scale: [calyx_fruit]
   dispersal_before_pollen_costs: [flower_calyx]
   dispersal_before_pollen_costs_scale: [flower_calyx]
-  dispersal_before_pollen_costs_adjust: [1]
+  dispersal_before_pollen_costs_adjust: [.8]
   seed_before_pollen_costs: []
   seed_before_pollen_costs_scale: []
 PELA:

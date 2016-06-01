@@ -467,6 +467,21 @@ acc_by_species$variable = c("total accessory costs","prepollen_success","failed_
 write.csv(acc_by_species, file="figs2/Accessory_Costs/Table03_acc_cost_embryo_endo_size_slopes.csv",row.names=FALSE)
 ```
 
+check <- subset(SummarySpp[["mean"]],species=="HEPU")
+check$seed_size
+check$embryo_endo_size
+check$seed_costs
+check$prepollen_costs
+check$pack_disp_costs
+check$pack_disp_costs_plus
+check$pack_disp_early_costs
+check$seed_early_costs
+
+parts <- subset(PartsSummary,species=="HEPU")
+parts
+
+invest <- subset(InvestmentByPart,species=="HEPU"&part=="flower_calyx")
+
 #Figure 5 seed count, scaled to plant size, decreases 1:1 with seed size, while bud count decreases less steeply; indication that seed count is what is actually "programmed in"
 ```{r}
 win.metafile("figs2/Accessory_Costs/Figure05_cost_of_flowers_vs_seed_size.wmf", height=5, width=15)
