@@ -45,7 +45,7 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
     # subset investment data by individual
     df <- FD[FD$individual== i,]
     # return 0 if there are 0 flowers produced
-    if(sum(df$count[df$part %in% c("flower_petals")], na.rm=TRUE) ==0) {
+    if(sum(df$count[df$part %in% c("flower_petals","flower_petals_small")], na.rm=TRUE) ==0) {
       return(0)
     }
     weights <- df$weight[match(InvCat[["prepollen_costs"]], df$part)]
@@ -73,7 +73,7 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
     # subset investment data by individual
     df <- FD[FD$individual== i,]
     # return 0 if there are 0 flowers produced
-    if(sum(df$count[df$part %in% c("flower_petals")], na.rm=TRUE) ==0) {
+    if(sum(df$count[df$part %in% c("flower_petals","fruit_mature","seed")], na.rm=TRUE) ==0) {
       return(0)
     }
     weights <- 1*df$weight[match(InvCat[["dispersal_before_pollen_costs"]], df$part)]
@@ -94,7 +94,7 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
     # subset investment data by individual
     df <- FD[FD$individual== i,]
     # return 0 if there are 0 flowers produced
-    if(sum(df$count[df$part %in% c("flower_petals")], na.rm=TRUE) ==0) {
+    if(sum(df$count[df$part %in% c("flower_petals","fruit_mature","seed")], na.rm=TRUE) ==0) {
       return(0)
     }
     weights <- df$weight[match(InvCat[["seed_before_pollen_costs"]], df$part)]
