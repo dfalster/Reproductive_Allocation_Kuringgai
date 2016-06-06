@@ -46,7 +46,7 @@ COER:
   dispersal_costs_scale: [fruit_mature, fruit_mature, fruit_mature, bract_fruit]
   dispersal_before_pollen_costs: [inflorescence_stalk,inflorescence_stalk_in_fruit,inflorescence_stalk_in_fruit_large, inflorescence_stalk_in_fruit_very_large]
   dispersal_before_pollen_costs_scale: [flower_petals,flower_petals,flower_petals,flower_petals]
-  dispersal_before_pollen_costs_adjust: [1,1,1,0.5]
+  dispersal_before_pollen_costs_adjust: [1,1,1,1]
   seed_before_pollen_costs: [flower_stigma]
   seed_before_pollen_costs_scale: [flower_stigma]
 EPMI:
