@@ -172,7 +172,7 @@ acc_costs_spp <- format(acc_costs_spp, digit=2)
 write.csv(acc_costs_spp, file="figs2/Accessory_Costs/Table01_AccCosts_by_Species.csv",row.names=FALSE)
 ```
 
-#Figure 2. Ternary diagram showing seed_costs
+#Figure 3. Ternary diagram showing seed_costs
 ```{r}
 ternary <- select(SummarySpp[["mean"]],species,seed_size,prepollen_costs,pack_disp_costs,seed_costs)
 ternary$seed_costs = ternary$seed_size + ternary$prepollen_costs + ternary$pack_disp_costs
@@ -232,7 +232,7 @@ legend("topleft",legend=c("seed","prepollen","pack&disp"),col=c("black","red","b
 dev.off()
 ```
 
-#Figure 2 continued
+#Figure 3 continued
 ```{r}
 win.metafile("figs2/Accessory_Costs/Figure03_ternary_diagram_seed_costs.wmf", height=5, width=5)
 plot
@@ -289,7 +289,7 @@ axis(2, at=c(0.1,10,1000), labels=c(0.1,10,1000),cex.axis=1)
 axis(1, at=c(0.1,10,1000), labels=c(0.1,10,1000),cex.axis=1)
 
 plot(pack_disp_costs~seed_size,SummarySpp[["mean"]],col=col.spp(species),pch=16,log="xy", yaxt="n",xaxt="n", ylim=c(.02,20000), xlim=c(.02,20000), ylab="required provisioning costs per seed (mg/seed)",xlab="",cex=1.5)
-#y.error.bars(SummarySpp[["mean"]]$seed_size,SummarySpp[["mean"]]$pack_disp_costs,SummarySpp[["se"]]$prepollen_costs)
+y.error.bars(SummarySpp[["mean"]]$seed_size,SummarySpp[["mean"]]$pack_disp_costs,SummarySpp[["se"]]$pack_disp_costs)
 mod <- lm(log10(postpollen_all_per_seed)~log10(seed_size),SummarySpp[["mean"]])
 abline(coef(mod)[1],coef(mod)[2])
 abline(coef(mod)[1],1,col="red")
@@ -467,9 +467,9 @@ acc_by_species$variable = c("total accessory costs","prepollen_success","failed_
 write.csv(acc_by_species, file="figs2/Accessory_Costs/Table03_acc_cost_embryo_endo_size_slopes.csv",row.names=FALSE)
 ```
 
-#fixed = BOLE, GRBU, PUTU,
+#fixed = BAER, BOLE, EPMI, GRBU, GRSP, HATE, HEPU, LEES, PEPU, PELA, PHPH, PUTU
 
-#nearly fixed = EPMI, PELA, LEES
+#nearly fixed = PILI
 check <- subset(SummarySpp[["mean"]],species=="BOLE")
 check$seed_size
 check$embryo_endo_size
@@ -486,14 +486,26 @@ parts
 invest <- subset(InvestmentByPart,species=="PUTU"&part=="flower_petals")
 invest
 
-invest_ind <- subset(InvestmentByPart,individual=="PUTU_152")
+invest_ind <- subset(InvestmentByPart,individual=="GRSP_802" & (part=="inflorescence_stalk"| part=="inflorescence_stalk_in_fruit"))
+invest_ind
+weight_total <- sum(invest_ind$weight)
+weight_total
+count2 <- sum(invest_ind$count)
 
-ind <- subset(SummaryInd, species=="GRBU"&seed_count>0)
-check3 <- select(ind,individual,prepollen_costs,seed_early_costs,prepollen_costs,pack_disp_costs,pack_disp_early_costs,propagule_per_seed,seed_costs)
+
+invest_ind2 <- subset(InvestmentByPart,individual=="COER_807")
+invest_ind2
+count_total <- sum(invest_ind2$count)
+count_total
+
+0.7*weight_total/count_total
+
+ind <- subset(SummaryInd, species=="PUTU"&seed_costs>0)
+check3 <- select(ind,individual,prepollen_costs,seed_early_costs,prepollen_costs,pack_disp_costs,pack_disp_gross_costs,pack_disp_early_costs,propagule_per_seed,seed_costs,seed_count,propagule_inv)
 
 View(check3)
 
-plot(seed_costs ~pack_disp_costs,check3)
+  plot(seed_costs ~pack_disp_costs,check3)
 points(seed_costs ~ propagule_per_seed,check3,col="red",pch=16)
 text(seed_costs ~pack_disp_costs,check3,label=individual)
 
