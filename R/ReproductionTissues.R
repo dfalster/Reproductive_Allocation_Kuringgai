@@ -72,7 +72,7 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
   f5 <- function(i) {
     # subset investment data by individual
     df <- FD[FD$individual== i,]
-    # return 0 if there are 0 flowers produced
+     # return 0 if there are 0 flowers produced
     if(sum(df$count[df$part %in% c("flower_petals","fruit_mature","seed")], na.rm=TRUE) ==0) {
       return(0)
     }
@@ -82,9 +82,9 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
       adjust <- InvCat[["dispersal_before_pollen_costs_adjust"]]
     else 
       adjust <- numeric(0)
-    if(length(adjust)!= length(counts))  {
-      stop(paste("problem with length of dispersal_before_pollen_costs_adjust for ", df$species[1]))
-    }
+  #  if(length(adjust)!= length(counts))  {
+  #    stop(paste("problem with length of dispersal_before_pollen_costs_adjust for ", df$species[1]))
+  #  }
     sum(adjust*weights / counts,  na.rm = TRUE)
   }
   

@@ -130,11 +130,12 @@ combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_
     count_aborted = repro_all_count - seed_count,
     seed_minus_embryo_endo = seed_size - embryo_endo_size,
     prepollen_costs = prepollen_partial_costs + pack_disp_early_costs,
-    pack_disp_costs = pack_disp_gross_costs - pack_disp_early_costs - seed_early_costs,  #subtract early
+    pack_disp_costs = pack_disp_gross_costs - pack_disp_early_costs,#subtract early
+    propagule_costs = seed_size - seed_early_costs,
     pack_disp_costs_plus = pack_disp_costs + seed_minus_embryo_endo,
     prepollen_all_inv = prepollen_aborted_inv + prepollen_success_inv, #prepollen_success_inv is also flowers, so much bigger than investment in flowers that become seeds
     prepollen_failure_inv = prepollen_all_inv - (seed_count*prepollen_costs), #failure is all parts that don't progress to seeds; aborted is parts that don't reach flowering
-    postpollen_all_inv = postpollen_aborted_inv + packaging_dispersal_inv,
+    postpollen_all_inv = postpollen_aborted_inv + packaging_dispersal_inv + propagule_inv,
     postpollen_aborted_inv = postpollen_all_inv - (seed_count*pack_disp_costs), #so energy of empty seedpods becomes part of aborted
     repro_inv_per_seed = repro_inv / seed_count,
     accessory_per_seed = accessory_inv/seed_count,
