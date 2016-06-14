@@ -33,7 +33,7 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
     }
     weights <- df$weight[match(InvCat[["seed_costs"]], df$part)]
     counts <- df$count[match(InvCat[["seed_costs_scale"]], df$part)]
-    sum(weights / counts,  na.rm = TRUE)
+    sum(weights, na.rm = TRUE) / sum(counts, na.rm = TRUE)
   }
   
   Costs$seed_costs = sapply(Costs$individual, f2)
@@ -50,7 +50,7 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
     }
     weights <- df$weight[match(InvCat[["prepollen_costs"]], df$part)]
     counts <- df$count[match(InvCat[["prepollen_costs_scale"]], df$part)]
-    sum(weights / counts,  na.rm = TRUE)
+    sum(weights, na.rm = TRUE) / sum(counts, na.rm = TRUE)
   }
   
   Costs$prepollen_partial_costs = sapply(Costs$individual, f3)
@@ -64,7 +64,7 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
     }
     weights <- df$weight[match(InvCat[["dispersal_costs"]], df$part)]
     counts <- df$count[match(InvCat[["dispersal_costs_scale"]], df$part)]
-    sum(weights / counts,  na.rm = TRUE)
+    sum(weights, na.rm = TRUE) / sum(counts, na.rm = TRUE)
   }
   
   Costs$pack_disp_gross_costs = sapply(Costs$individual, f4)
@@ -78,14 +78,15 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
     }
     weights <- 1*df$weight[match(InvCat[["dispersal_before_pollen_costs"]], df$part)]
     counts <- df$count[match(InvCat[["dispersal_before_pollen_costs_scale"]], df$part)]
-    if(length(counts >0))
-      adjust <- InvCat[["dispersal_before_pollen_costs_adjust"]]
+    if(length(counts >0)){
+      adjust <- unlist(InvCat[["dispersal_before_pollen_costs_adjust"]])
+    }
     else 
       adjust <- numeric(0)
-  #  if(length(adjust)!= length(counts))  {
-  #    stop(paste("problem with length of dispersal_before_pollen_costs_adjust for ", df$species[1]))
-  #  }
-    sum(adjust*weights / counts,  na.rm = TRUE)
+    if(length(adjust)!= length(weights))  {
+      stop(paste("problem with length of dispersal_before_pollen_costs_adjust for ", df$species[1]))
+    }
+    sum(adjust*weights,  na.rm = TRUE) / sum(counts,  na.rm = TRUE)
   }
   
   Costs$pack_disp_early_costs = sapply(Costs$individual, f5)
@@ -99,7 +100,7 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
     }
     weights <- df$weight[match(InvCat[["seed_before_pollen_costs"]], df$part)]
     counts <- df$count[match(InvCat[["seed_before_pollen_costs_scale"]], df$part)]
-    sum(weights / counts,  na.rm = TRUE)
+    sum(weights, na.rm = TRUE) / sum(counts, na.rm = TRUE)
   }  
   
   Costs$seed_early_costs = sapply(Costs$individual, f6)
