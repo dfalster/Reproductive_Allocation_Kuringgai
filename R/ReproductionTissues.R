@@ -68,7 +68,12 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
     }
     weights <- df$weight[match(InvCat[["dispersal_costs"]], df$part)]
     counts <- df$count[match(InvCat[["dispersal_costs_scale"]], df$part)]
-    sum(weights/counts, na.rm = TRUE)
+    if(length(counts >0)){
+      adjust <- unlist(InvCat[["dispersal_costs_adjust"]])
+    }
+    else 
+      adjust <- numeric(0)
+    sum(adjust*weights/counts,  na.rm = TRUE)
   }
   
   Costs$pack_disp_gross_costs = sapply(Costs$individual, f4)
@@ -76,9 +81,6 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
   f5 <- function(i) {
     # subset investment data by individual
     df <- FD[FD$individual== i,]
-    if(i=="HATE_902") {
-      browser()
-    }
      # return 0 if there are 0 flowers produced
     if(sum(df$count[df$part %in% c("flower_petals","fruit_mature","seed")], na.rm=TRUE) ==0) {
       return(0)
