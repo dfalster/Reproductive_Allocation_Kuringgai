@@ -113,7 +113,6 @@ combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_
     leaf_weight_0 = leaf_weight - growth_leaf,
     height_0 = height - growth_height,
     diameter_0 = diameter - growth_stem_diameter,
-    growth_height_log = log10(height)-log10(height_0),
     RA = repro_inv/total_inv,
     RGR = log(total_weight)-log(total_weight - growth_inv),
     leaf_area = leaf_weight / (1000*LMA),
@@ -124,22 +123,23 @@ combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_
     shoot_growth_leaf_area = shoot_leaf_count_new*leaf_size,
     shoot_leaf_area_0 = shoot_leaf_area - shoot_growth_leaf_area,
     reproducing = RA>0,
-    prop_allocation = propagule_inv/(growth_inv + repro_inv),
+    propagule_allocation = (seed_count*seed_size)/(growth_inv + repro_inv),
+    embryo_allocation = (seed_count*embryo_endo_size)/(growth_inv + repro_inv),
     RA_leaf_area = repro_inv / (repro_inv + growth_leaf),
     leaf_area_midyear = (leaf_area_0 + leaf_area)/2,
-    count_aborted = repro_all_count - seed_count,
+    leaf_area_0_mature = leaf_area_0, #included, because when summarizing by species, this averages leaf area only for individuals that are reproducing
     seed_minus_embryo_endo = seed_size - embryo_endo_size,
-    prepollen_costs = prepollen_partial_costs + pack_disp_early_costs,
-    pack_disp_costs = pack_disp_gross_costs - pack_disp_early_costs,#subtract early
-    propagule_costs = seed_size - seed_early_costs,
-    pack_disp_costs_plus = pack_disp_costs + seed_minus_embryo_endo,
+    prepollen_costs = prepollen_partial_costs + pack_disp_early_costs, #all costs, ON A PER SEED BASIS, up to the point of pollination
+    pack_disp_costs = pack_disp_gross_costs + seed_minus_embryo_endo, #add in non-embryo-endo seed weight
+    seed_costs = embryo_endo_size + pack_disp_costs + prepollen_costs,
+    embryo_endo_costs = embryo_endo_size - seed_early_costs, #ON A PER SEED BASIS, cost of making a single propagule - now defined as an embryo + endosperm
     prepollen_all_inv = prepollen_aborted_inv + prepollen_success_inv, #prepollen_success_inv is also flowers, so much bigger than investment in flowers that become seeds
     prepollen_failure_inv = prepollen_all_inv - (seed_count*prepollen_costs), #failure is all parts that don't progress to seeds; aborted is parts that don't reach flowering
     postpollen_all_inv = postpollen_aborted_inv + packaging_dispersal_inv + propagule_inv,
-    postpollen_aborted_inv = postpollen_all_inv - (seed_count*pack_disp_costs), #so energy of empty seedpods becomes part of aborted
+    postpollen_aborted_inv = postpollen_all_inv - (seed_count*pack_disp_costs) - (seed_count*embryo_endo_size), #so energy of empty seedpods becomes part of aborted
     repro_inv_per_seed = repro_inv / seed_count,
+    accessory_per_seed_using_ee = (accessory_inv+(seed_minus_embryo_endo*seed_count))/seed_count,
     accessory_per_seed = accessory_inv/seed_count,
-    propagule_per_seed = propagule_inv/seed_count,
     prepollen_all_per_seed = prepollen_all_inv/seed_count,
     prepollen_aborted_per_seed = prepollen_aborted_inv/seed_count, #aborted is parts that don't reach open flower stage
     prepollen_failure_per_seed = prepollen_failure_inv/seed_count, #failure is parts that don't progress to seeds
@@ -154,24 +154,24 @@ combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_
     failure_per_seed = prepollen_failure_per_seed + postpollen_aborted_per_seed,
     prop_success = success_inv/ repro_inv,
     prop_failure = failure_inv/ repro_inv,
-    prop_propagule = propagule_inv/repro_inv,
+    prop_propagule = (embryo_endo_size*seed_count)/repro_inv,
     prop_prepollen_success = prepollen_success_inv/repro_inv,
     prop_prepollen_all = prepollen_all_inv/repro_inv,
     prop_accessory = 1 - prop_propagule,
     prop_propagule_nonzero = prop_propagule, #for taking species means on non-zero numbers only
     prop_accessory_nonzero = prop_accessory, #for taking species means on non-zero numbers only
     prop_prepollen_costs = prepollen_costs/seed_costs,
-    prop_postpollencosts = 1 - prop_prepollen_costs,
+    prop_postpollen_costs = 1 - prop_prepollen_costs,
     prop_seed_costs = seed_size/seed_costs,
-    prop_dispersalcosts = pack_disp_costs / seed_costs,
-    scaled_failure_count = count_aborted / total_weight,
+    prop_embryo_endo_costs = embryo_endo_size/seed_costs,
+    prop_dispersal_costs = pack_disp_costs / seed_costs,
+    aborted_ovule_count = repro_all_count - seed_count, #the number of ovules that are aborted 
+    scaled_failure_count = aborted_ovule_count / total_weight,
     scaled_seed_count = seed_count / total_weight,
     scaled_bud_count = repro_all_count / total_weight,
     scaled_repro_inv = repro_inv/ total_weight,
-    repro_inv_mature = repro_inv,
-    repro_all_count_mature = repro_all_count,
-    leaf_area_0_mature = leaf_area_0,
-    provisioning = ((seed_size - embryo_endo_size)*seed_count) + packaging_dispersal_inv,
+    
+    provisioning = ((seed_size - embryo_endo_size)*seed_count) + packaging_dispersal_inv, #all costs others than embryo-endosperm weight that occur after pollination
     provisioning_per_seed = pack_disp_costs - embryo_endo_size,
     postpollen_all_per_seed = postpollen_aborted_per_seed + seed_size + packaging_dispersal_per_seed
     )
@@ -181,15 +181,15 @@ combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_
   
    
   
-  for(v in c("seed_costs","prepollen_costs","count_aborted","flower_inv","fruit_inv","prepollen_all_inv","prepollen_success_inv",
-              "prepollen_failure_inv","repro_inv_per_seed","accessory_per_seed","propagule_per_seed","prepollen_all_per_seed",
-              "prepollen_aborted_per_seed","prepollen_failure_per_seed", "pack_disp_costs",
+  for(v in c("seed_costs","prepollen_costs","aborted_ovule_count","flower_inv","fruit_inv","prepollen_all_inv","prepollen_success_inv",
+              "prepollen_failure_inv","repro_inv_per_seed","accessory_per_seed","prepollen_all_per_seed",
+              "prepollen_aborted_per_seed","prepollen_failure_per_seed", "pack_disp_costs","accessory_per_seed_using_ee",
               "prepollen_success_per_seed","postpollen_aborted_per_seed","pack_disp_early_costs", "seed_early_costs",
               "packaging_dispersal_per_seed","success_inv","failure_inv","failure_to_ovule_ratio","prop_success","prop_failure",
               "prop_propagule","prop_postpollen_aborted","prop_prepollen_success","prop_prepollen_aborted","prop_prepollen_all",
               "prop_accessory","prop_propagule_nonzero","prop_accessory_nonzero","prop_prepollen_costs","prop_seed_costs",
-              "prop_dispersalcosts","scaled_failure_count","scaled_seed_count","scaled_bud_count","embryo_endo_size", "pack_disp_costs_plus",
-             "scaled_repro_inv","prop_postpollencosts","failure_per_seed","leaf_area_0","leaf_area_0_mature","total_weight_0","postpollen_all_per_seed")) {
+              "prop_dispersal_costs","scaled_failure_count","scaled_seed_count","scaled_bud_count","embryo_endo_size",
+             "scaled_repro_inv","prop_postpollen_costs","failure_per_seed","leaf_area_0","leaf_area_0_mature","total_weight_0","postpollen_all_per_seed")) {
     i <- is.na(SummaryInd[[v]])
     SummaryInd[[v]][i] <- 0
     i <- is.infinite(SummaryInd[[v]])
@@ -237,10 +237,9 @@ get_species_values <- function(SummaryInd, groups) {
   out[[1]] <-lapply(fs, function(f) {
     SummaryInd %>%
     group_by_(.dots=dots) %>%
-    summarise_each(f, seed_size,height, growth_inv, total_weight, total_weight_0,total_inv, RA, RA_leaf_area, diameter, stem_area,
+    summarise_each(f, height, growth_inv, total_weight, total_weight_0,total_inv, RA, RA_leaf_area, diameter, stem_area,
       leaf_weight, stem_weight, growth_stem_diameter, growth_stem_area, growth_leaf,
-      growth_stem, diameter, diameter_0,LMA, wood_density,leaf_area,leaf_area_0,leaf_area_midyear,
-      repro_all_count,repro_inv)
+      growth_stem, diameter, diameter_0,LMA, wood_density,leaf_area,leaf_area_0,leaf_area_midyear)
   })
   names(out[[1]]) <- fs
 
@@ -265,7 +264,7 @@ get_species_values <- function(SummaryInd, groups) {
     SummaryInd %>%
     filter(repro_inv > 0) %>%
     group_by_(.dots=dots) %>%
-    summarise_each(f, fruit_weight,repro_inv_mature,repro_all_count_mature,leaf_area_0_mature)
+    summarise_each(f,repro_inv,repro_all_count,leaf_area_0_mature)
   })
   names(out[[4]]) <- fs
 
@@ -274,10 +273,10 @@ get_species_values <- function(SummaryInd, groups) {
     filter(seed_count > 0) %>%
     filter(repro_inv >0 ) %>%
     group_by_(.dots=dots) %>%
-    summarise_each(f, propagule_per_seed, packaging_dispersal_per_seed,seedset,seed_count, pack_disp_costs,pack_disp_costs_plus,
-      prop_propagule_nonzero,prop_accessory_nonzero,success_inv,seed_costs,scaled_seed_count,prop_postpollencosts,
+    summarise_each(f, seed_size,packaging_dispersal_per_seed,seedset,seed_count, pack_disp_costs,accessory_per_seed_using_ee,
+      prop_propagule_nonzero,prop_accessory_nonzero,success_inv,seed_costs,scaled_seed_count,prop_postpollen_costs,fruit_weight,
       postpollen_aborted_inv, packaging_dispersal_inv, propagule_inv, prop_postpollen_aborted, prop_propagule,
-      prop_dispersalcosts,prop_seed_costs, prepollen_failure_per_seed,prepollen_all_per_seed,accessory_per_seed,
+      prop_dispersal_costs,prop_seed_costs, prepollen_failure_per_seed,prepollen_all_per_seed,accessory_per_seed,
       prepollen_aborted_per_seed, prepollen_success_per_seed, postpollen_aborted_per_seed,repro_inv_per_seed,failure_inv,
       scaled_failure_count,scaled_bud_count,prop_prepollen_costs,prepollen_costs,embryo_endo_size, pack_disp_early_costs, seed_early_costs,
       accessory_inv, prepollen_aborted_inv, prepollen_success_inv,prepollen_all_inv,prop_prepollen_aborted, prop_prepollen_success,
