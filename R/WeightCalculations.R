@@ -144,10 +144,11 @@ WeightCalculationsAtCensus <- function(C, TreeID, census, FloweringCategories, P
 
         # specific for inflorescence in HATE(Lizzy made calculations on scale of inflorescent hence adjustments. Possibly we can move it to Multiplier table, althought
         # it is slightly different reasoning)
-        if ((species == "HATE") * (grepl("inflorescence", type))) {
-          count <- round(count * 5.8696)
-          weight <- rep(weight[1]/5.8696, count)
-        }
+        #15June2016 Lizzy moved to multiplier table, because current method also increasing weight of buds by multiplier, so investment off
+        #if ((species == "HATE") * (grepl("inflorescence", type))) {
+        #  count <- round(count * 5.8696)
+        #  weight <- rep(weight[1]/5.8696, count)
+        #}
         Element <- list(type = type, m.type = m.type, count = length(weight), weight = weight)
         C_list[[k]] <- Element
       }
