@@ -170,7 +170,7 @@ combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_
     scaled_seed_count = seed_count / total_weight,
     scaled_bud_count = repro_all_count / total_weight,
     scaled_repro_inv = repro_inv/ total_weight,
-    
+    embryo_endo_inv = embryo_endo_costs*seed_count,
     provisioning = ((seed_size - embryo_endo_size)*seed_count) + packaging_dispersal_inv, #all costs others than embryo-endosperm weight that occur after pollination
     provisioning_per_seed = pack_disp_costs - embryo_endo_size,
     postpollen_all_per_seed = postpollen_aborted_per_seed + seed_size + packaging_dispersal_per_seed
@@ -182,7 +182,7 @@ combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_
    
   
   for(v in c("seed_costs","prepollen_costs","aborted_ovule_count","flower_inv","fruit_inv","prepollen_all_inv","prepollen_success_inv",
-              "prepollen_failure_inv","repro_inv_per_seed","accessory_per_seed","prepollen_all_per_seed",
+              "prepollen_failure_inv","repro_inv_per_seed","accessory_per_seed","prepollen_all_per_seed","embryo_endo_inv",
               "prepollen_aborted_per_seed","prepollen_failure_per_seed", "pack_disp_costs","accessory_per_seed_using_ee",
               "prepollen_success_per_seed","postpollen_aborted_per_seed","pack_disp_early_costs", "seed_early_costs",
               "packaging_dispersal_per_seed","success_inv","failure_inv","failure_to_ovule_ratio","prop_success","prop_failure",
@@ -275,7 +275,7 @@ get_species_values <- function(SummaryInd, groups) {
     group_by_(.dots=dots) %>%
     summarise_each(f, seed_size,packaging_dispersal_per_seed,seedset,seed_count, pack_disp_costs,accessory_per_seed_using_ee,
       prop_propagule_nonzero,prop_accessory_nonzero,success_inv,seed_costs,scaled_seed_count,prop_postpollen_costs,fruit_weight,
-      postpollen_aborted_inv, packaging_dispersal_inv, propagule_inv, prop_postpollen_aborted, prop_propagule,
+      postpollen_aborted_inv, packaging_dispersal_inv, propagule_inv, prop_postpollen_aborted, prop_propagule,embryo_endo_inv,
       prop_dispersal_costs,prop_seed_costs, prepollen_failure_per_seed,prepollen_all_per_seed,accessory_per_seed,
       prepollen_aborted_per_seed, prepollen_success_per_seed, postpollen_aborted_per_seed,repro_inv_per_seed,failure_inv,
       scaled_failure_count,scaled_bud_count,prop_prepollen_costs,prepollen_costs,embryo_endo_size, pack_disp_early_costs, seed_early_costs,

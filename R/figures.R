@@ -146,6 +146,17 @@ labels.spp.full <- function(x=NULL){
   ret
 }
 
+labels.spp.genus <- function(x=NULL){
+  
+  ret <- c("B. ericifolia","B. ledifolia","C. ericifolium","E. microphylla", "G. buxifolia","G. speciosa","H. teretifolia","H. purpurea","L. esquamatus","P. lanceolata", "P. puchella", "P. phyllicoides", "P. linifolia", "P. tuberculata")
+  names(ret) <- c("BAER","BOLE","COER","EPMI","GRBU","GRSP","HATE","HEPU","LEES","PELA","PEPU","PHPH","PILI","PUTU")
+  
+  if(!is.null(x)) {
+    ret <- ret[as.character(x)]
+  }
+  ret
+}
+
 col.age <- function(x=NULL){
 
   ret <- c("red","orchid1","gold1","darkolivegreen3","cyan2","dodgerblue3","purple")
@@ -220,7 +231,7 @@ summarise_fit <- function(x) {
   
   xr <- range(x[["model"]][2])
   data.frame(
-    select(glance(x), r.squared, p.value),
+    dplyr::select(glance(x), r.squared, p.value),
     n= length(resid(x)),
     a = coef(x)[1],
     b = coef(x)[2],
@@ -237,7 +248,7 @@ summarise_all_fits <- function(x) {
 
 summarise_fit_2var <- function(x) {
   data.frame(
-    select(glance(x), r.squared, p.value),
+    dplyr::select(glance(x), r.squared, p.value),
     n= length(resid(x)),
     intercept = coef(x)[1],
     coef_var1 = coef(x)[2],
@@ -410,7 +421,7 @@ legend_with_r2 <- function(results,location) {
 }
 
 sma_sum <- function (x) {
-  select(x$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Slope_test_p)
+  dplyr::select(x$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Slope_test_p)
 }
 
 sma_abline <- function (x, ...) {
