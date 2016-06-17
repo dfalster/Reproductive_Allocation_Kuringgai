@@ -10,6 +10,7 @@ packages:
   - broom
   - ggtern
   - yaml
+  - mgcv
 
 sources:
   - R
