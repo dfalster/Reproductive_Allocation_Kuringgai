@@ -9,7 +9,7 @@ output
 *.html
 talk.md
 talk.pdf
-figure*
+figure/*
 export
 CarbonInvestments.pdf
 CarbonInvestments.tex
