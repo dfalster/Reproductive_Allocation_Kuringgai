@@ -435,7 +435,7 @@ y.error.bars(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$prepolle
 
 acc_by_species$variable = c("total accessory costs","pre-pollination costs","provisioning costs", "failed_tissues")
 
-acc_by_species$slope2 <- paste(format(acc_by_species$Slope,digits=3)," (",format(acc_by_species$Slope_lowCI,digits=3)," - ",format(acc_by_species$Slope_highCI,digits=3),")",sep="")
+acc_by_species$slope2 <- paste(format(acc_by_species$Slope,digits=3)," (",format(acc_by_species$Slope_lowCI,digits=3)," ̶ ",format(acc_by_species$Slope_highCI,digits=3),")",sep="")
 
 acc_by_species$r2 <- format(acc_by_species$r2,digits=2)
 acc_by_species$pval <- format(acc_by_species$pval,digits=2)
@@ -545,7 +545,14 @@ results <- fit$groupsummary
 
 plot(fit,col=col.spp(fit$groupsummary$group),pch=16,xlab="seedset (seeds:ovule)",ylab="total accessory costs (mg/seed)",lty=results$linetype,xlim=c(.0005,.5),ylim=c(.01,200000))
 
-write.csv(results, file="figs2/Accessory_Costs/Table06_eacc_cost_vs_seedset_by_spp.csv",row.names=FALSE)
+results$slope2 <- paste(format(results$Slope,digits=3)," (",format(results$Slope_lowCI,digits=3)," ̶ ",format(results$Slope_highCI,digits=3),")",sep="")
+
+results$r2 <- format(results$r2,digits=2)
+results$pval <- format(results$pval,digits=2)
+results$Slope_test_p <- format(results$Slope_test_p,digits=3)
+acc_slopes <- dplyr::select(results,variable,r2,pval,slope2,Slope_test_p)
+
+write.csv(results, file="figs2/Accessory_Costs/Table04_eacc_cost_vs_seedset_by_spp.csv",row.names=FALSE)
 ```
 
 #Table 5. Higher RE, RA, plant size do not lead to lower accessory costs; age shows mixed results
@@ -566,7 +573,7 @@ plot(fit,col=col.spp(fit$groupsummary$group),pch=16,xlab="",ylab=yvar,lty=result
 mtext(text="reproductive investment (mg) (RE)",side=1,line=2,outer=FALSE)
 legend_with_r2(results,"bottomright")
 
-write.csv(results, file="figs2/Accessory_Costs/Table07a_accessory_vs_RE.csv",row.names=FALSE)
+write.csv(results, file="figs2/Accessory_Costs/Table05a_accessory_vs_RE.csv",row.names=FALSE)
  
 xvar <- "total_weight_0"
 yvar <- "accessory_per_seed"
@@ -578,7 +585,7 @@ plot(fit,col=col.spp(fit$groupsummary$group),pch=16,xlab="",ylab=yvar,lty=result
 mtext(text="total plant size (mg)",side=1,line=2,outer=FALSE)
 legend_with_r2(results,"bottomright")
 
-write.csv(results, file="figs2/Accessory_Costs/Table07b_accessory_vs_total_weight.csv",row.names=FALSE)
+write.csv(results, file="figs2/Accessory_Costs/Table05b_accessory_vs_total_weight.csv",row.names=FALSE)
 
 xvar <- "age"
 yvar <- "accessory_per_seed"
@@ -591,7 +598,7 @@ mtext(text="age (years)",side=1,line=2,outer=FALSE)
 mtext(text="per seed accessory costs (mg/seed)",side=2,line=1,outer=TRUE)
 legend_with_r2(results,"topleft")
 
-write.csv(results, file="figs2/Accessory_Costs/Table07c_accessory_vs_age.csv",row.names=FALSE)
+write.csv(results, file="figs2/Accessory_Costs/Table05c_accessory_vs_age.csv",row.names=FALSE)
 dev.off()
 ```
 
