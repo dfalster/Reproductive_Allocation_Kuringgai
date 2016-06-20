@@ -550,7 +550,7 @@ results$slope2 <- paste(format(results$Slope,digits=3)," (",format(results$Slope
 results$r2 <- format(results$r2,digits=2)
 results$pval <- format(results$pval,digits=2)
 results$Slope_test_p <- format(results$Slope_test_p,digits=3)
-acc_slopes <- dplyr::select(results,variable,r2,pval,slope2,Slope_test_p)
+results <- dplyr::select(results,variable,r2,pval,slope2,Slope_test_p)
 
 write.csv(results, file="figs2/Accessory_Costs/Table04_eacc_cost_vs_seedset_by_spp.csv",row.names=FALSE)
 ```
@@ -610,11 +610,14 @@ data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
 
 fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="OLS", log="xy")
 results <- fit$groupsummary
+results$r2 <- format(results$r2,digits=2)
+results$pval <- format(results$pval,digits=3)
+acc_slopes <- dplyr::select(results,variable,n,r2,pval)
 
-write.csv(results, file="figs2/Accessory_Costs/Table01_extra_propagule_invest_vs_repro_inv.csv",row.names=FALSE)
+write.csv(results, file="figs2/Accessory_Costs/Table06_propagule_invest_vs_repro_inv.csv",row.names=FALSE)
 ```
 
-#Table 7. correlations with total repro inv
+#Table 7 extra. correlations with total repro inv
 ```{r}
 results <- as.data.frame(matrix(vector(), 0, 9,
                 dimnames=list(c(), c("xvar","variable","r2","pval","Slope","Slope_lowCI","Slope_highCI","Int","Slope_test_p"))),
@@ -633,8 +636,38 @@ results <- bind_rows(results, temp)
   }
 }
 
+write.csv(results, file="figs2/Accessory_Costs/Table07_EXTRA_correlations_with_repro_inv.csv",row.names=FALSE)
+```
+
+#Table 7. correlations with total repro inv
+```{r}
+results <- as.data.frame(matrix(vector(), 0, 9,
+                dimnames=list(c(), c("xvar","variable","r2","pval","Slope","Slope_lowCI","Slope_highCI","Int","Slope_test_p"))),
+                stringsAsFactors=F)
+
+for (i in c("total_weight","failure_inv","success_inv","propagule_inv","packaging_dispersal_inv","prepollen_success_inv","fruit_inv","flower_inv")) {
+  for (j in c("repro_inv")) {
+yvar <- i
+xvar <- j
+data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+fit <- sma(data[[yvar]] ~ data[[xvar]], method="OLS", log="xy",slope.test=1)
+temp <- as.data.frame(c(xvar, yvar,dplyr::select(fit$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Slope_test_p,n)))
+colnames(temp)[2]<- "variable"
+colnames(temp)[1]<- "xvar"
+results <- bind_rows(results, temp)
+  }
+}
+
+results$slope2 <- paste(format(results$Slope,digits=3)," (",format(results$Slope_lowCI,digits=3)," - ",format(results$Slope_highCI,digits=3),")",sep="")
+
+results$r2 <- format(results$r2,digits=3)
+results$pval <- format(results$pval,digits=3)
+results$Slope_test_p <- format(results$Slope_test_p,digits=3)
+results  <- dplyr::select(results,variable,n,r2,pval,slope2,Slope_test_p)
+
 write.csv(results, file="figs2/Accessory_Costs/Table07_correlations_with_repro_inv.csv",row.names=FALSE)
 ```
+
 
 #Figure 6. Correlations of various reproductive investment categories against plant weight
 ```{r}
