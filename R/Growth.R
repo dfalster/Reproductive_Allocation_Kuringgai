@@ -46,7 +46,7 @@ preprocessHarvest <- function(HarvestData_raw, IndividualsList) {
         segment = level,
         diameter = mean(c(diameter_1, diameter_2, diameter_3), na.rm = TRUE),
         stem_area = diameter^2 * pi/4,
-        height = height)
+        height = ifelse(segment==1, height, NaN))
   }
 
   get.diam.node.above.by.segment <- function(data) {
