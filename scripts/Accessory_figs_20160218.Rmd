@@ -1,7 +1,7 @@
 #Data 0. means, counts to include in manuscript
 ```{r}
 #number of plants in study
-count(SummaryInd)
+count(subset(SummaryInd,age>1))
 
 #number of reproducing individuals in study
 count(subset(SummaryInd,repro_inv>0))
