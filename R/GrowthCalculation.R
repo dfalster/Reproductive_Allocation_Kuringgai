@@ -6,11 +6,11 @@ growth_calculations <- function(thisSpecies, HarvestData, IndividualsList) {
                             age=ifelse( start_end == "start", age-1, age))
   HarvestData_basal_end  <- filter(HarvestData_basal, start_end=="end")
 
-  #individuals_2 <- filter(IndividualsList_2, use_for_allocation_calculations & alive)$individual
- # HarvestData_basal <- filter(HarvestData,  individual %in% individuals & segment == 1) %>%
- #                      mutate(start_end=ifelse( site == "baby", "end", start_end),
- #                      age=ifelse( start_end == "start", age-1, age))
- # HarvestData_basal_end  <- filter(HarvestData_basal, start_end=="end")
+individuals_2 <- filter(IndividualsList, use_for_allocation_calculations & alive)$individual
+HarvestData_basal_2 <- filter(HarvestData,  individual %in% individuals_2 & segment == 1) %>%
+                       mutate(start_end=ifelse( site == "baby", "end", start_end),
+                       age=ifelse( start_end == "start", age-1, age))
+HarvestData_basal_end_2  <- filter(HarvestData_basal_2, start_end=="end")
   
   ### Calculate Regression coefficients based on common slope and intercept by the basal diameter at year 2013
   ## allow intercept to vary by individual
@@ -45,13 +45,13 @@ growth_calculations <- function(thisSpecies, HarvestData, IndividualsList) {
 
   ## Estimate weight at beginning and end  (year 2012 and 2013) using fitted regression
   suppressWarnings(
-    out <- HarvestData_basal %>%
+    out <- HarvestData_basal_2 %>%
     group_by(individual) %>%
     mutate(
-        diameter.end = getend(individual, HarvestData_basal_end, "diameter"),
-        age.end = getend(individual, HarvestData_basal_end, "age"),
-        stem.end = getend(individual, HarvestData_basal_end, "stem_weight"),
-        leaf.end = getend(individual, HarvestData_basal_end, "leaf_weight"),
+        diameter.end = getend(individual, HarvestData_basal_end_2, "diameter"),
+        age.end = getend(individual, HarvestData_basal_end_2, "age"),
+        stem.end = getend(individual, HarvestData_basal_end_2, "stem_weight"),
+        leaf.end = getend(individual, HarvestData_basal_end_2, "leaf_weight"),
         leaf_weight_est = predict_start_Y(fit.l, leaf.end, age, age.end),
         stem_weight_est = predict_start_Y(fit.s, stem.end, diameter, diameter.end),
         growth_stem = c(NA, diff(stem_weight_est)),
@@ -76,18 +76,18 @@ growth_calculations <- function(thisSpecies, HarvestData, IndividualsList) {
 
    suppressWarnings({
   par(mfrow=c(1,2), cex=1, oma=c(1,1,2,1), mar = c(4,4,0,1))
-  plot(stem_weight~diameter,data=HarvestData_basal, pch=16,log="xy",col=col.age(age))
+  plot(stem_weight~diameter,data=HarvestData_basal_2, pch=16,log="xy",col=col.age(age))
   dia.r <- seq_log_range(c(0.1, 50), 50)
   points(dia.r, y_hat(fit.s, dia.r), type="l")
   out %>% group_by(individual) %>% do(add_line(., "diameter", "stem_weight_est"))
-  text(stem_weight~diameter,data=HarvestData_basal,labels=gsub(paste0(thisSpecies, "_"), "", individual),cex=.2)
+  text(stem_weight~diameter,data=HarvestData_basal_2,labels=gsub(paste0(thisSpecies, "_"), "", individual),cex=.2)
 
-  plot(leaf_weight~age,data=HarvestData_basal, pch=16,log="xy",col=col.age(age))
+  plot(leaf_weight~age,data=HarvestData_basal_2, pch=16,log="xy",col=col.age(age))
   age.r <- seq_log_range(c(0.08, 35), 50)
   points(age.r, y_hat(fit.l,  age.r), type="l")
   out %>% group_by(individual) %>% do(add_line(., "age", "leaf_weight_est"))
   mtext(thisSpecies, line = 1, outer = TRUE)
-  text(leaf_weight~age,data=HarvestData_basal,labels=gsub(paste0(thisSpecies, "_"), "", individual),cex=.2)
+  text(leaf_weight~age,data=HarvestData_basal_2,labels=gsub(paste0(thisSpecies, "_"), "", individual),cex=.2)
 })
   
   out %>%
