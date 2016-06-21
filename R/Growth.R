@@ -1,6 +1,6 @@
 preprocessHarvest <- function(HarvestData_raw, IndividualsList) {
 
-  keep <- filter(IndividualsList, use_for_allometric_equations)$individual
+  keep <- filter(IndividualsList, use_for_allocation_calculations)$individual
 
   data <- filter(HarvestData_raw, individual %in% keep) %>%
           group_by(species, individual, site, age, start_end)
