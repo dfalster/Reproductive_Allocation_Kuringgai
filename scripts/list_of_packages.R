@@ -28,3 +28,5 @@ library(devtools)
 
 igraph_old <- "https://mran.revolutionanalytics.com/snapshot/2015-05-01/bin/windows/contrib/3.3/igraph_0.7.1.zip"
 install.packages(igraph_old, type = "win.binary", repos = NULL)
+
+library(dplyr)
