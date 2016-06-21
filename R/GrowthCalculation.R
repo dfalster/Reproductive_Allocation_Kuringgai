@@ -1,11 +1,17 @@
 growth_calculations <- function(thisSpecies, HarvestData, IndividualsList) {
 
-  individuals <- filter(IndividualsList, use_for_allocation_calculations & alive)$individual
+  individuals <- filter(IndividualsList, use_for_fit & alive)$individual
   HarvestData_basal <- filter(HarvestData,  individual %in% individuals & segment == 1) %>%
                       mutate(start_end=ifelse( site == "baby", "end", start_end),
                             age=ifelse( start_end == "start", age-1, age))
   HarvestData_basal_end  <- filter(HarvestData_basal, start_end=="end")
 
+  #individuals_2 <- filter(IndividualsList_2, use_for_allocation_calculations & alive)$individual
+ # HarvestData_basal <- filter(HarvestData,  individual %in% individuals & segment == 1) %>%
+ #                      mutate(start_end=ifelse( site == "baby", "end", start_end),
+ #                      age=ifelse( start_end == "start", age-1, age))
+ # HarvestData_basal_end  <- filter(HarvestData_basal, start_end=="end")
+  
   ### Calculate Regression coefficients based on common slope and intercept by the basal diameter at year 2013
   ## allow intercept to vary by individual
   getend <- function(thisindividual, df, v) {
@@ -68,6 +74,7 @@ growth_calculations <- function(thisSpecies, HarvestData, IndividualsList) {
   pdf(sprintf("%s/%s.pdf", path, thisSpecies), width=6, height =3)
   on.exit(dev.off())
 
+   suppressWarnings({
   par(mfrow=c(1,2), cex=1, oma=c(1,1,2,1), mar = c(4,4,0,1))
   plot(stem_weight~diameter,data=HarvestData_basal, pch=16,log="xy",col=col.age(age))
   dia.r <- seq_log_range(c(0.1, 50), 50)
@@ -81,7 +88,8 @@ growth_calculations <- function(thisSpecies, HarvestData, IndividualsList) {
   out %>% group_by(individual) %>% do(add_line(., "age", "leaf_weight_est"))
   mtext(thisSpecies, line = 1, outer = TRUE)
   text(leaf_weight~age,data=HarvestData_basal,labels=gsub(paste0(thisSpecies, "_"), "", individual),cex=.2)
-
+})
+  
   out %>%
     filter(start_end == "end")%>%
     select(species, start_end, site, individual, age, height, diameter, stem_area, leaf_weight, stem_weight, total_weight, growth_inv, growth_stem, growth_leaf, growth_height, growth_stem_diameter, growth_stem_area)
