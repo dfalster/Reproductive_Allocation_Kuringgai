@@ -98,7 +98,7 @@ combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_
   SummaryInd <- merge(SummaryInd, seedsize, by=c("species"), all=TRUE)
 
   #TODO: Why do we need these, where are NAs coming from?
-  SummaryInd <- filter(SummaryInd, !is.na(species) & !is.na(individual))
+  SummaryInd <- filter(SummaryInd, !is.na(species) & !is.na(individual) &age >1)
 
   for(v in c("seed_count","seedset","propagule_inv" , "seedpod_weight" , "fruit_weight","accessory_inv")) {
     i <- is.na(SummaryInd[[v]])
