@@ -10,10 +10,10 @@ BAER:
   prepollen_costs_scale: [flower_petals, flower_stigma, flower_style]
   dispersal_costs: [cone_brown, cone_base_brown, seed_pod]
   dispersal_costs_scale: [seed, seed, seed_pod]
-  dispersal_costs_adjust: [0.82,0.82,1]
+  dispersal_costs_adjust: [0.875,0.875,1]
   dispersal_before_pollen_costs: [cone_brown]
   dispersal_before_pollen_costs_scale: [flower_petals]
-  dispersal_before_pollen_costs_adjust: [0.18]
+  dispersal_before_pollen_costs_adjust: [0.125]
   seed_before_pollen_costs: [flower_stigma]
   seed_before_pollen_costs_scale: [flower_stigma]
 BOLE:
