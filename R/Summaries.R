@@ -109,6 +109,7 @@ combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_
   SummaryInd <- SummaryInd %>% mutate(
     growth_inv = growth_stem + growth_leaf,
     total_inv = repro_inv + growth_inv,
+    leaf_repro_inv = repro_inv + growth_leaf,
     total_weight_0 = total_weight - growth_inv,
     stem_weight_0 = stem_weight - growth_stem,
     leaf_weight_0 = leaf_weight - growth_leaf,
