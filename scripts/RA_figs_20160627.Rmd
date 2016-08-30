@@ -1,0 +1,471 @@
+#Figure 1 Different species have different RA values. But biggest shift in RA is with age
+```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=7.5}
+if (min(SummaryInd$growth_leaf) <= 0) {
+  SummaryInd$growth_leaf_positive = SummaryInd$growth_leaf - SummaryInd$growth_leaf_min + 1
+} else {
+  SummaryInd$growth_leaf_positive = SummaryInd$growth_leaf
+}
+
+SummaryInd$repro_inv_log <- 0
+for (i in 1:length(SummaryInd$individual)) {
+  if (SummaryInd$repro_inv[i] > 0) {
+    SummaryInd$repro_inv_log[i] <- log10(SummaryInd$repro_inv[i])
+  }else{
+    SummaryInd$repro_inv_log[i] <- 0  
+  }
+}
+
+SummaryInd$leaf_inv_log <- 0
+for (i in 1:length(SummaryInd$individual)) {
+  if (SummaryInd$growth_leaf[i] > 0) {
+    SummaryInd$leaf_inv_log[i] <- log10(SummaryInd$growth_leaf[i])
+  }else{
+    SummaryInd$leaf_inv_log[i] <- -(log10(-SummaryInd$growth_leaf[i]))  
+  }
+}
+
+SummaryInd$leaf_repro_inv_log <- 0
+for (i in 1:length(SummaryInd$individual)) {
+  if (SummaryInd$leaf_repro_inv[i] > 0) {
+    SummaryInd$leaf_repro_inv_log[i] <- log10(SummaryInd$leaf_repro_inv[i])
+  }else{
+    SummaryInd$leaf_repro_inv_log[i] <- -(log10(-SummaryInd$leaf_repro_inv[i]))  
+  }
+}
+
+#pdf("figs2/RA/Figure_1_leaf_vs_repro.pdf", height=4.3, width=8)
+win.metafile("figs2/RA/Figure_1_leaf_vs_repro.wmf", height=4.3, width=8)
+plot
+par(mfrow=c(1,2), cex=1, omi=c(1.1,0.8,.1,.1), mai=c(0.3,.4,.1,0.2)) 
+plot(repro_inv~growth_leaf_positive, subset(SummaryInd,growth_leaf_positive>1), log="xy", col=col.spp(species),pch=16,xlim=c(1,1000000),ylim=c(1,1000000),
+     xlab="",ylab="",yaxt="n",xaxt="n",cex=0.8)
+axis(1, at=c(1,100,10000,1000000), labels=c(1,100,10000,"1000000"),cex.axis=0.9)
+axis(2, at=c(1,100,10000,1000000), labels=c(1,100,10000,"1000000"),cex.axis=0.9)
+legend("topleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.6,bty="n")
+abline(0,1)
+text(10^5.6,10^5.8,srt=45,"RA = 0.5",cex=.6)
+abline(log10(3),1)
+text(10^5.13,10^5.8,srt=45,"RA = 0.75",cex=.6)
+abline(log10(9),1)
+text(10^4.67,10^5.8,srt=45,"RA = 0.9",cex=.6)
+abline(log10(19),1)
+text(10^4.33,10^5.8,srt=45,"RA = 0.95",cex=.6)
+abline(log10(.111),1)
+text(10^5.6,10^4.85,srt=45,"RA = 0.1",cex=.6)
+abline(log10(.010101),1)
+text(10^5.6,10^3.8,srt=45,"RA = 0.01",cex=.6)
+mtext("reproductive investment (mg)",2,line=1,outer=TRUE)
+
+plot(repro_inv~growth_leaf_positive, subset(SummaryInd,growth_leaf_positive>1), log="xy", col=col.age(age),pch=16,xlim=c(1,1000000),ylim=c(1,1000000),
+     xlab="",ylab="",yaxt="n",xaxt="n",cex=0.8)
+axis(1, at=c(1,100,10000,1000000), labels=c(1,100,10000,"1000000"),cex.axis=0.9)
+axis(2, at=c(1,100,10000,1000000), labels=c(1,100,10000,"1000000"),cex.axis=0.9)
+legend("bottomright",legend=labels.age(),col=col.age(),pch=16, cex=.6,bty="n")
+abline(0,1)
+text(10^5.6,10^5.8,srt=45,"RA = 0.5",cex=.6)
+abline(log10(3),1)
+text(10^5.13,10^5.8,srt=45,"RA = 0.75",cex=.6)
+abline(log10(9),1)
+text(10^4.67,10^5.8,srt=45,"RA = 0.9",cex=.6)
+abline(log10(19),1)
+text(10^4.33,10^5.8,srt=45,"RA = 0.95",cex=.6)
+abline(log10(.111),1)
+text(10^5.6,10^4.85,srt=45,"RA = 0.1",cex=.6)
+abline(log10(.010101),1)
+text(10^5.6,10^3.8,srt=45,"RA = 0.01",cex=.6)
+mtext("leaf investment, scaled to be positive (mg)",1,line=2,outer=TRUE)
+dev.off()
+```
+
+#Figure 1 - shed leaves, gross leaf production
+```{r}
+par(mfrow=c(1,2), cex=1, omi=c(.1,0.1,.1,.1), mai=c(0.8,.8,.1,0.2)) 
+plot(leaf_shed ~ leaf_inv_gross,SummaryInd,log="xy",pch=16, col=col.spp(species),xlim=c(1,10^7),ylim=c(1,10^7))
+abline(0,1)
+plot(leaf_shed ~ leaf_inv_gross,SummaryInd,log="xy",pch=16, col=col.age(age),xlim=c(1,10^7),ylim=c(1,10^7))
+
+abline(0,1)
+
+library(scatterplot3d)
+
+scatterplot3d(SummaryInd$leaf_shed,SummaryInd$leaf_inv_gross,SummaryInd$repro_inv,log="xyz",color=col.spp(SummaryInd$species),pch=16)
+```
+
+
+#Figure 1 - alternate rendition, not scaling leaf investment to be positive
+```{r}
+pdf("figs2/RA/Figure_1_alt_leaf_vs_repro.pdf", height=4.3, width=8)
+plot
+par(mfrow=c(1,2), cex=1, omi=c(1.1,0.8,.1,.1), mai=c(0.3,.4,.1,0.2)) 
+plot(repro_inv_log~leaf_inv_log, subset(SummaryInd), log="", col=col.spp(species),pch=16,xlim=c(-4,6),ylim=c(-1,6),
+     xlab="",ylab="",cex=0.8,xaxt="n",yaxt="n")
+axis(1, at=c(-4,-2,0,2,4,6), labels=c(-10000,-100,0,100,10000,"1000000"),cex.axis=0.9)
+axis(2, at=c(0,2,4,6), labels=c(0,100,10000,"1000000"),cex.axis=0.9)
+legend("topleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.6,bty="n")
+abline(0,1)
+text(5.6,5.8,srt=45,"RA = 0.5",cex=.6)
+abline(log10(3),1)
+text(5.13,5.8,srt=45,"RA = 0.75",cex=.6)
+abline(log10(9),1)
+text(4.67,5.8,srt=45,"RA = 0.9",cex=.6)
+abline(log10(19),1)
+text(4.33,5.8,srt=45,"RA = 0.95",cex=.6)
+abline(log10(.111),1)
+text(5.6,4.85,srt=45,"RA = 0.1",cex=.6)
+abline(log10(.010101),1)
+text(5.6,3.8,srt=45,"RA = 0.01",cex=.6)
+mtext("reproductive investment (mg)",2,line=1,outer=TRUE)
+
+plot(repro_inv_log~leaf_inv_log, subset(SummaryInd), log="", col=col.age(age),pch=16,xlim=c(-4,6),ylim=c(-1,6),
+     xlab="",ylab="",cex=0.8,xaxt="n",yaxt="n")
+axis(1, at=c(-4,-2,0,2,4,6), labels=c(-10000,-100,0,100,10000,"1000000"),cex.axis=0.9)
+axis(2, at=c(0,2,4,6), labels=c(0,100,10000,"1000000"),cex.axis=0.9)
+legend("topleft",legend=labels.age(),col=col.age,pch=16, cex=.6,bty="n")
+abline(0,1)
+text(5.6,5.8,srt=45,"RA = 0.5",cex=.6)
+abline(log10(3),1)
+text(5.13,5.8,srt=45,"RA = 0.75",cex=.6)
+abline(log10(9),1)
+text(4.67,5.8,srt=45,"RA = 0.9",cex=.6)
+abline(log10(19),1)
+text(4.33,5.8,srt=45,"RA = 0.95",cex=.6)
+abline(log10(.111),1)
+text(5.6,4.85,srt=45,"RA = 0.1",cex=.6)
+abline(log10(.010101),1)
+text(5.6,3.8,srt=45,"RA = 0.01",cex=.6)
+mtext("leaf investment (mg)",1,line=2,outer=TRUE)
+dev.off()
+```
+
+#Figure 2 - RA schedules for species, including indication of schedule-type
+```{r}
+win.metafile("figs2/RA/Figure_2_RA_schedules.wmf", height=11, width=8)
+plot
+#pdf("figs2/RA/Figure_2_RA_schedules.pdf", height=11, width=8)
+par(mfcol=c(5,3), cex=1, omi=c(.7,.7,.1,.1), mai=c(0.15,.15,0.05,0.05)) 
+
+yvar <- "leaf_inv_log"
+xvar <- "total_weight_0"
+
+data <- subset(SummarySppAge[["mean"]])
+data <- split(data, data$species)
+
+data2 <- subset(SummaryInd,RA_leaf_area>-2&RA_leaf_area<3)
+data2 <- split(data2, data2$species)
+
+curves <- as.data.frame(c("determinate: gradual","determinate: gradual","indeterminate: asymptotic","indeterminate: asymptotic","determinate: bang-bang","determinate: bang-bang","indeterminate: gradual","determinate: bang-bang","determinate: gradual","determinate: gradual","indeterminate: declining","determinate: gradual","determinate: bang-bang","determinate: gradual"))
+
+curves <- cbind(curves, SummarySpp[["mean"]]$species)
+names(curves) <- c("RA_type","species")
+
+data3 <- curves
+data3 <- split(data3, data3$species)
+
+for(spp in names(data)) {
+  plot(RA_leaf_area~age,data2[[spp]],col=col.age(data2[[spp]]$age),pch=16,xlab="",ylab="",log="x",xlim=c(1,40),ylim=c(-0.25,1.75),yaxt="n",xaxt="n")
+  points(RA_leaf_area~age,data[[spp]],pch=151,col=col.age(data[[spp]]$age),cex=1.5)
+   if(spp=="BOLE"|spp=="COER") {
+    rect(14,par("usr")[3],10^par("usr")[2],par("usr")[4],col="light grey",density=NA)
+    rect(10^par("usr")[1],par("usr")[3],10^par("usr")[2],par("usr")[4],col="black",density=0)
+  }
+    if(spp=="GRSP"|spp=="HEPU") {
+    rect(20,par("usr")[3],10^par("usr")[2],par("usr")[4],col="light grey",density=NA)
+    rect(10^par("usr")[1],par("usr")[3],10^par("usr")[2],par("usr")[4],col="black",density=0)
+  }
+  if(spp=="PILI") {
+    rect(10,par("usr")[3],10^par("usr")[2],par("usr")[4],col="light grey",density=NA)
+    rect(10^par("usr")[1],par("usr")[3],10^par("usr")[2],par("usr")[4],col="black",density=0)
+  }
+  abline(0,0)
+  abline(1,0,lty=3)
+  axis(1, at=c(1,2,5,10,20,30), labels=c("","","","","",""),cex.axis=.8,las=1,tck=-.03) 
+  axis(2, at=c(-0,0.5,1,1.5), labels=c("","","",""),cex.axis=.8,las=1,tck=-.03)
+  
+  if(spp=="GRBU"|spp=="PELA"|spp=="PUTU"){
+    axis(1, at=c(1,2,5,10,20,30), labels=c(1,2,5,10,20,30),cex.axis=.8,las=1) 
+      } else{}
+  if(spp=="BAER"|spp=="BOLE"|spp=="COER"|spp=="EPMI"|spp=="GRBU"){
+    axis(2, at=c(-0,0.5,1,1.5), labels=c(-0,0.5,1,1.5),cex.axis=.8,las=1)
+  } else{}
+  extra.top.left.logx(labels.spp.full(spp),3)
+  extra.bottom.left.logx(data3[[spp]]$RA_type,1)
+}
+
+mtext("RA", 2, outer=TRUE,cex=1,line=2)
+mtext("age",1, outer=TRUE,cex=1,line=1.8)
+
+dev.off()
+```
+
+#Figure 3, Table 1 - comparing max RA to various functional traits and life history traits
+```{r}
+RA_test <- as.data.frame(c("BAER","BOLE","COER","EPMI","GRBU","GRSP","HATE","HEPU","LEES","PELA","PEPU","PHPH","PILI","PUTU"))
+names(RA_test) <- c("species")
+RA_test$min_age <- c(8,6,6,8,8,6,8,6,8,8,6,8,4,8)
+test <- SummaryInd
+test <- dplyr::left_join(SummaryInd, RA_test, by = "species")
+test <- subset(test,age>min_age)
+test2 <- test %>% 
+          group_by(species) %>% 
+          summarise_each(funs(mean), maxH,RA_leaf_area)
+names(test2) <- c("species","maxH","maxRA_leaf_area")
+test2$mature <- c(7,1.4,2.4,2.4,5,2.4,7,1.4,2.4,9,7,2.4,1.4,2.4)
+test2$lifespan <- c(40,9,12,40,30,20,40,20,40,40,40,30,7,30)
+
+Table_01 <- as.data.frame(select(SummarySpp[["mean"]],species,RA_leaf_area,embryo_endo_size,LMA,wood_density,growth_shoot_length,seed_count))
+Table_01 <- dplyr::right_join(Table_01,test2,by="species")
+Table_01$RA_per_year <- Table_01$RA_leaf_area/Table_01$lifespan
+
+win.metafile("figs2/RA/Figure_3_maxRA_correlates.wmf", height=11, width=8)
+plot
+par(mfcol=c(3,2), cex=1, omi=c(.1,.7,.1,.1), mai=c(.8,.3,.1,0.2)) 
+
+plot(maxRA_leaf_area~lifespan,Table_01,col=col.spp(species),pch=16,cex=1.5,log="x",xlab="",yaxt="n")
+mtext("lifespan (years)",1,outer=FALSE,line=2)
+axis(2, at=c(.4,.6,.8,1,1.2,1.4), labels=c(0.4,0.6,0.8,1.0,1.2,1.4),cex.axis=.9,las=1)
+mod <- lm(log10(lifespan)~maxRA_leaf_area,Table_01)
+extra.bottom.left.logx(paste("r2=",round(glance(mod)[1],2),"; p-value:",round(glance(mod)[5],4)))
+mtext("maximum RA",2,outer=TRUE,line=1)
+
+plot(maxRA_leaf_area~mature,Table_01,col=col.spp(species),pch=16,cex=1.5,log="x",xlab="",yaxt="n")
+mtext("age at maturity (years)",1,outer=FALSE,line=2)
+axis(2, at=c(.4,.6,.8,1,1.2,1.4), labels=c(0.4,0.6,0.8,1.0,1.2,1.4),cex.axis=.9,las=1)
+mod <- lm(mature~log10(maxRA_leaf_area),Table_01)
+extra.bottom.left.logx(paste("r2=",round(glance(mod)[1],2),"; p-value:",round(glance(mod)[5],4)))
+
+plot(maxRA_leaf_area~embryo_endo_size,Table_01,col=col.spp(species),pch=16,cex=1.5,log="x",xlab="",yaxt="n",xlim=c(.005,30),xaxt="n")
+mtext("embryo + endosperm weight (mg)",1,outer=FALSE,line=2)
+axis(2, at=c(.4,.6,.8,1,1.2,1.4), labels=c(0.4,0.6,0.8,1.0,1.2,1.4),cex.axis=.9,las=1)
+axis(1, at=c(.01,.1,1,10), labels=c(.01,.1,1,10),las=1)
+mod <- lm(log10(embryo_endo_size)~maxRA_leaf_area,Table_01)
+extra.bottom.left.logx(paste("r2=",round(glance(mod)[1],2),"; p-value:",round(glance(mod)[5],4)))
+legend("topleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.6,bty="n")
+
+plot(maxRA_leaf_area~maxH,Table_01,col=col.spp(species),pch=16,cex=1.5,log="x",xlab="",yaxt="n")
+mtext("maximum height (mm)",1,outer=FALSE,line=2)
+mod <- lm(log10(maxH)~maxRA_leaf_area,Table_01)
+axis(2, at=c(.4,.6,.8,1,1.2,1.4), labels=c("","","","","",""),cex.axis=.8,las=1)
+extra.bottom.left.logx(paste("r2=",round(glance(mod)[1],2),"; p-value:",round(glance(mod)[5],4)))
+
+plot(maxRA_leaf_area~LMA,Table_01,col=col.spp(species),pch=16,cex=1.5,xlab="",yaxt="n")
+mtext("LMA",1,outer=FALSE,line=2)
+axis(2, at=c(.4,.6,.8,1,1.2,1.4), labels=c("","","","","",""),cex.axis=.8,las=1)
+mod <- lm(LMA~RA_leaf_area,Table_01)
+extra.bottom.left(paste("r2=",round(glance(mod)[1],2),"; p-value:",round(glance(mod)[5],4)))
+
+plot(maxRA_leaf_area~wood_density,Table_01,col=col.spp(species),pch=16,cex=1.5,xlab="",yaxt="n")
+mtext("wood density",1,outer=FALSE,line=2)
+axis(2, at=c(.4,.6,.8,1,1.2,1.4), labels=c("","","","","",""),cex.axis=.8,las=1)
+mod <- lm(wood_density~maxRA_leaf_area,Table_01)
+extra.top.left(paste("r2=",round(glance(mod)[1],2),"; p-value:",round(glance(mod)[5],4)))
+dev.off()
+
+write.csv(Table_01, file="figs2/RA/Table01_maxRA_correlates.csv",row.names=FALSE)
+
+plot(RA_per_year ~ maxRA_leaf_area,Table_01,col=col.spp(species),pch=16,cex=2,log="y")
+mod <- lm(maxRA_leaf_area~log10(RA_per_year),Table_01)
+summary(mod)
+
+plot(seed_count ~ maxRA_leaf_area,Table_01,col=col.spp(species),pch=16,cex=2,log="y")
+```
+
+
+#Figure 4a - reproductive vs leaf investment across plant weights
+#Shows clearly how there is a crossover in leaf vs reproductive investment for all species, but magnitude of effect is very different
+```{r}
+win.metafile("figs2/RA/Figure_4a_investment.wmf", height=11, width=8)
+plot
+#pdf("figs2/RA/Figure_4a_investment.pdf", height=11, width=8)
+par(mfcol=c(5,3), cex=1, omi=c(.3,.7,.1,.1), mai=c(0.5,.15,0.05,0.05))
+
+yvar <- "leaf_inv_log"
+xvar <- "total_weight_0"
+
+data <- subset(SummaryInd)
+data <- split(data, data$species)
+
+data2 <- subset(SummaryInd,RA_leaf_area>-2&RA_leaf_area<3)
+data2 <- split(data2, data2$species)
+
+for(spp in names(data)) {
+  
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="x",xlab="",ylab="",cex=.8,ylim=c(-4,6),
+                    col=col.age(data[[spp]]$age),cex.main=0.9, yaxt="n")
+  
+  points(repro_inv_log~total_weight_0,data[[spp]],pch=1,cex=1.2,col=col.age(data[[spp]]$age))
+  points(leaf_repro_inv_log~total_weight_0,data[[spp]],pch=151,cex=1,col=col.age(data[[spp]]$age))
+  extra.top.left.logx(labels.spp.full(spp),3)
+  #arrows(data[[spp]]$total_weight_0,data[[spp]]$leaf_inv_log,data[[spp]]$total_weight_0,data[[spp]]$repro_inv_log,lwd=1,length=.08,
+  #col=col.age(data[[spp]]$age))
+  abline(0,0)
+  axis(2, at=c(-4,-2,0,2,4), labels=c("","","","",""),cex.axis=.8,las=1,tck=-.03)
+  
+  if(spp=="BAER"|spp=="BOLE"|spp=="COER"|spp=="EPMI"|spp=="GRBU"){
+    axis(2, at=c(-4,-2,0,2,4), labels=c(-10000,-100,0,100,10000),cex.axis=.8,las=1)
+      } else {}
+}
+
+mtext("investment (mg)", 2, outer=TRUE,cex=1,line=2.5)
+mtext("plant weight (mg)",1,outer=TRUE,cex=1,line=-.3)
+
+dev.off()
+```
+
+
+#Figure 4b leaf area declines with age in some species, plateaus in others, and in a few continues to increase
+```{r}
+win.metafile("figs2/RA/Figure_4b_leaf_area_vs_age.wmf", height=11, width=8)
+plot
+par(mfcol=c(5,3), cex=1, omi=c(.5,.4,.1,.1), mai=c(0.15,.5,0.05,0.05))
+xvar <- "age"
+yvar <- "leaf_area"
+
+data <- subset(SummaryInd)
+data <- split(data, data$species)
+data2 <- subset(SummarySppAge[["mean"]])
+data2 <- split(data2, data2$species)
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab=xvar,ylab=yvar,cex=1,col=col.age(data[[spp]]$age),xlim=c(1,40),yaxt="n",xaxt="n")
+  points(leaf_area~age,data2[[spp]],cex=1.5,col=col.age(data2[[spp]]$age),pch=151)
+  extra.top.left.logxy(labels.spp.full(spp),3)
+   if(spp=="BOLE"|spp=="COER") {
+    rect(14,10^par("usr")[3],10^par("usr")[2],10^par("usr")[4],col="light grey",density=NA)
+    rect(10^par("usr")[1],10^par("usr")[3],10^par("usr")[2],10^par("usr")[4],col="black",density=0)
+  }
+    if(spp=="GRSP"|spp=="HEPU") {
+    rect(20,10^par("usr")[3],10^par("usr")[2],10^par("usr")[4],col="light grey",density=NA)
+    rect(10^par("usr")[1],10^par("usr")[3],10^par("usr")[2],10^par("usr")[4],col="black",density=0)
+  }
+  if(spp=="PILI") {
+    rect(10,10^par("usr")[3],10^par("usr")[2],10^par("usr")[4],col="light grey",density=NA)
+    rect(10^par("usr")[1],10^par("usr")[3],10^par("usr")[2],10^par("usr")[4],col="black",density=0)
+  }
+  axis(1, at=c(1,2,5,10,20,30), labels=c("","","","","",""),cex.axis=.8,las=1,tck=-.03) 
+  axis(2, at=c(5,10,50,100,500,1000,5000,10000,50000,100000,500000,1000000),labels=c("",10,"",100,"",1000,"","10000","","100000","","1000000"),
+    cex.axis=0.8,las=2,hadj=.8,)
+  if(spp=="GRBU"|spp=="PELA"|spp=="PUTU"){
+    axis(1, at=c(1,2,5,10,20,30), labels=c(1,2,5,10,20,30),cex.axis=.8,las=1) 
+  } else{}
+}
+mtext("leaf area (mm^2)",outer=TRUE,2,line=0.2)
+mtext("age (years)",outer=TRUE,1,line=1.2)
+dev.off()
+```
+
+#RV curves
+```{r}
+win.metafile("figs2/RA/Figure_EXTRA_RV_curves.wmf", height=11, width=8)
+plot
+par(mfcol=c(5,3), cex=1, omi=c(.3,.3,.1,.1), mai=c(0.4,.7,0.05,0.05))
+
+yvar <- "repro_inv_log"
+xvar <- "total_weight_0"
+
+data <- subset(SummaryInd)
+data <- split(data, data$species)
+
+for(spp in names(data)) {
+    plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="x",xlab="",ylab="",cex=.8,yaxt="n",col=col.age(data[[spp]]$age),cex.main=0.9)
+  extra.top.left.logx(labels.spp.full(spp),3)
+  axis(2, at=c(0,1,2,3,4,5), labels=c(0,10,100,1000,10000,"100000"),cex.axis=0.9,las=1)
+}
+mtext("reproductive investment (mg)", 2, outer=TRUE,cex=1,line=0)
+mtext("weight", 1, outer=TRUE,cex=1,line=0)
+dev.off()
+```
+
+#predicting growth from leaf area versus plant weight
+#using leaf area at the start of the year is a better predictor of total investment than is total plant weight
+```{r}
+par(mfrow=c(7,2), cex=1, omi=c(.7,.8,.1,.1), mai=c(.3,.4,.4,0.2)) 
+xvar <- "leaf_area_0"
+xvar2 <- "total_weight_0"
+yvar <- "leaf_repro_inv"
+
+data <- subset(SummaryInd)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm((x[[yvar]]) ~  ((x[[xvar]]))))
+results <- summarise_all_fits(lmfits)
+
+results$r.squared <- round(results$r.squared,digits=3)
+results$p.value <- round(results$p.value,digits=3)
+results$a <- round(results$a,digits=2)
+results$b <- round(results$b,digits=2)
+
+data <- subset(SummaryInd)
+data <- split(data, data$species)
+lmfits <- lapply(data, function(x) lm((x[[yvar]]) ~  ((x[[xvar2]]))))
+results2 <- summarise_all_fits(lmfits)
+
+results2$r.squared <- round(results2$r.squared,digits=3)
+results2$p.value <- round(results2$p.value,digits=3)
+results2$a <- round(results2$a,digits=2)
+results2$b <- round(results2$b,digits=2)
+
+for(spp in names(data)) {
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab=xvar,ylab=yvar,cex=1,col=col.age(data[[spp]]$age))
+  plot_yvar_vs_xvar(data[[spp]], yvar, xvar2,log="xy",xlab=xvar2,ylab="",cex=1,main=spp,col=col.age(data[[spp]]$age),yaxt="n")
+}
+```
+
+#Extra - leaf area is a better predictor of subsequent investment than is total plant weight. In particular, the age effect basically disappears
+```{r}
+#Leaf area is a better predictor of the subsequent years growth than is total weight. 
+#result could be quite different if stem weight, even part of it were included
+win.metafile("figs2/RA/Figure_EXTRA_leaf_area_better.wmf", height=11, width=8)
+plot
+
+par(mfrow=c(2,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(.9,.9,.4,0.2)) 
+compare <- select(results, species, r.squared)
+compare2 <- select(results2, r.squared)
+compare <- cbind(compare, compare2)
+names(compare) <- c("species","leaf_area","total_weight")
+
+plot(leaf_repro_inv~leaf_area_0,SummaryInd,col=col.age(age),pch=16,log="xy",xlab="leaf area at time=0",ylab="investment in reproduction and leaves")
+abline(0,1)
+
+plot(leaf_repro_inv~total_weight_0,SummaryInd,col=col.age(age),pch=16,log="xy",xlab="total plant weight at time=0",ylab="investment in reproduction and leaves")
+abline(0,1)
+
+plot(leaf_area~total_weight,compare,col=col.spp(species),pch=16,xlab="r2 of total weight vs. investment",ylab="r2 of leaf area vs. investment")
+abline(0,1)
+
+dev.off()
+```
+
+#Extra - shoot extenstion and increase in shoot leaf area also decline with age in most species
+#the first plot is of increase in shoot leaf area on the leader - only for PEPU does the leader's leaf area continue to increase until the end. Some species, such as EPMI plateau and show limited decline, but most continue to decline steeply
+```{r}
+win.metafile("figs2/RA/Figure_EXTRA_shoot_growth.wmf", height=11, width=8)
+plot
+par(mfcol=c(5,3), cex=1, omi=c(.5,.4,.1,.1), mai=c(0.15,.5,0.05,0.05))
+
+data <- subset(SummaryInd)
+data <- split(data, data$species)
+
+for(spp in names(data)) {
+  plot(shoot_growth_leaf_area~age,data[[spp]],log="xy",pch=16,col=col.age(age),cex.main=0.9,xlim=c(1,40),xaxt="n",cex.axis=0.9)
+  axis(1, at=c(1,2,5,10,20,30), labels=c("","","","","",""),cex.axis=.8,las=1,tck=-.03) 
+  if(spp=="BOLE"|spp=="COER") {
+    rect(14,10^par("usr")[3],10^par("usr")[2],10^par("usr")[4],col="light grey",density=NA)
+    rect(10^par("usr")[1],10^par("usr")[3],10^par("usr")[2],10^par("usr")[4],col="black",density=0)
+  }
+  if(spp=="GRSP"|spp=="HEPU") {
+    rect(20,10^par("usr")[3],10^par("usr")[2],10^par("usr")[4],col="light grey",density=NA)
+    rect(10^par("usr")[1],10^par("usr")[3],10^par("usr")[2],10^par("usr")[4],col="black",density=0)
+  }
+  if(spp=="PILI") {
+    rect(10,10^par("usr")[3],10^par("usr")[2],10^par("usr")[4],col="light grey",density=NA)
+    rect(10^par("usr")[1],10^par("usr")[3],10^par("usr")[2],10^par("usr")[4],col="black",density=0)
+  }
+  if(spp=="GRBU"|spp=="PELA"|spp=="PUTU"){
+    axis(1, at=c(1,2,5,10,20,30), labels=c(1,2,5,10,20,30),cex.axis=0.9,las=1) 
+  } else{}
+  extra.top.left.logxy(labels.spp.full(spp),3)
+}
+
+mtext("increase in leaf area on leader shoot (mm^2/year)",outer=TRUE,2,line=0.4)
+mtext("age (years)",outer=TRUE,1,line=1)
+dev.off()
+```

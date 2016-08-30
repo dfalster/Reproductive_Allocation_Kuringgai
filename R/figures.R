@@ -276,6 +276,10 @@ y.error.bars <- function (x,y,ybar) {
   arrows(x,y-ybar,x,y+ybar,code=3,angle=90, length=0.1,col=col.spp())
   }
 
+y.error.bars.2 <- function (x,y,ybar) {
+  arrows(x,y-ybar,x,y+ybar,code=3,angle=90, length=0,col=col.spp())
+}
+
 y.error.bars.black <- function (x,y,ybar) {
   arrows(x,y-ybar,x,y+ybar,code=3,angle=90, length=0.1,col="black")
 }
@@ -398,8 +402,32 @@ words.top.left.logy <- function (x) {
   text(((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.98*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),summary(mod)[1],cex=.7,adj=0)
 }
 
-extra.topleft.logxy <- function (words) {
-  text(10^((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.93*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,cex=.6)
+extra.top.left.logxy <- function (words,fontx) {
+  text(10^((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.96*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,cex=.75,font=fontx)
+}
+
+extra.top.left.logx <- function (words,fontx) {
+  text(10^((0.01*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.96*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,cex=.75,font=fontx)
+}
+
+extra.top.left <- function (words) {
+  text(((0.01*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.96*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,cex=.75)
+}
+
+extra.bottom.left.logx <- function (words,fontx) {
+  text(10^((0.01*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.04*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,cex=.75,font=fontx)
+}
+
+extra.bottom.left <- function (words) {
+  text(((0.01*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.04*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,cex=.75)
+}
+
+extra.bottom.right.logx <- function (words,fontx) {
+  text(10^((0.99*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.04*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,cex=.75,adj=1,,font=fontx)
+}
+
+extra.top.right.logx <- function (words,fontx) {
+  text(10^((0.99*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.96*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,cex=.75,adj=1,,font=fontx)
 }
 
 lines <- function(results) {
