@@ -290,6 +290,28 @@ se_function <- function(mean1,se1) {
   }
 }
 
+line_function_log_xy <- function(x_axis,mod,type) {
+  intercept <- mod$coef[[1]][1,1]
+  slope <- mod$coef[[1]][2,1]
+  x_min <- min(x_axis)
+  x_max <- max(x_axis)
+  y_min <- (x_min^slope)*(10^intercept)
+  y_max <- (x_max^slope)*(10^intercept)
+  segments(x_min,y_min,x_max,y_max,lty=type)
+}
+
+line_function_log_xy_zero <- function(x_axis,mod,slope) {
+  intercept <- mod$coef[[1]][1,1]
+  slope <- slope
+  x_min <- min(x_axis)
+  x_max <- max(x_axis)
+  y_min <- (x_min^slope)*(10^intercept)
+  y_max <- (x_max^slope)*(10^intercept)
+  segments(x_min,y_min,x_max,y_max,lty=2)
+}
+
+
+
 words.top.right.logxy <- function (x) {
   output <- data.frame(select(glance(x), r.squared, p.value))
   output <- round(output,4)

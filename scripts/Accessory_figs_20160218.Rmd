@@ -111,6 +111,18 @@ results
 
 #Table 1 showing accessory cost values for the species
 ```{r}
+acc_costs_spp <- dplyr::select(SummarySpp[["mean"]],species,embryo_endo_size,repro_inv_per_seed,prop_failure,prop_prepollen_vs_RE, prop_dispersal_vs_RE,prop_embryo_endo_vs_RE,seed_costs,prop_prepollen_costs,prop_postpollen_costs)
+acc_costs_spp$species <- labels.spp.full()
+acc_costs_spp_format <- acc_costs_spp
+for (i in c("embryo_endo_size","repro_inv_per_seed","prop_failure","prop_prepollen_vs_RE","prop_dispersal_vs_RE","prop_embryo_endo_vs_RE","seed_costs","prop_prepollen_costs","prop_postpollen_costs")) {
+  acc_costs_spp_format[[i]] <- round(acc_costs_spp_format[[i]],digits=3)
+}
+
+write.csv(acc_costs_spp_format, file="figs2/Accessory_Costs/Table01_AccCosts_by_Species.csv",row.names=FALSE)
+```
+
+#Table 1 OLD showing accessory cost values for the species
+```{r}
 acc_costs_spp <- dplyr::select(SummarySpp[["mean"]],species,seed_size,embryo_endo_size,accessory_per_seed,prop_accessory_nonzero,seed_costs,prop_success, prepollen_costs,pack_disp_costs,failure_per_seed,prop_failure,prepollen_failure_per_seed,postpollen_aborted_per_seed, seedset)
 acc_costs_spp$species <- labels.spp.full()
 acc_costs_spp_format <- acc_costs_spp
@@ -130,7 +142,7 @@ acc_costs_spp_format$seedset <- round(acc_costs_spp_format$seedset,digits=3)
 acc_costs_spp_format <- dplyr::select(acc_costs_spp_format,species,seed_size,embryo_endo_size,accessory_per_seed2,seed_costs2,prepollen_costs,pack_disp_costs ,failure_per_seed,prepollen_failure_per_seed,postpollen_aborted_per_seed,seedset,accessory_per_seed,seedcosts)
 acc_costs_spp_format
 
-write.csv(acc_costs_spp_format, file="figs2/Accessory_Costs/Table01_AccCosts_by_Species.csv",row.names=FALSE)
+write.csv(acc_costs_spp_format, file="figs2/Accessory_Costs/Table01_OLD_AccCosts_by_Species.csv",row.names=FALSE)
 ```
 
 #Figure 3. Ternary diagram showing seed_costs
@@ -277,42 +289,61 @@ dev.off()
 win.metafile("figs2/Accessory_Costs/Figure04_embryo_size_acc_cost_correlations.wmf", height=15, width=5)
 plot
 
-par(mfcol=c(3,1), cex=1, omi=c(.6,.1,.05,.05), mai=c(.1,.8,.05,.05)) 
+par(mfrow=c(2,2), cex=1, omi=c(.6,.1,.05,.05), mai=c(.1,.8,.05,.05)) 
 options(scipen = 5)
 
-plot(accessory_per_seed ~ embryo_endo_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy", yaxt="n",xaxt="n", ylim=c(.02,20000), xlim=c(.02,20000), ylab="total accessory costs per seed (mg/seed)",xlab="",cex=1.5)
-mod <- sma(accessory_per_seed ~ embryo_endo_size,data=subset(SummarySpp[["mean"]],accessory_per_seed>0),log="xy",method="OLS")
-#words.top.left.logxy(mod)
-y.error.bars.2(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$accessory_per_seed,SummarySpp[["se"]]$accessory_per_seed)
-sma_abline(mod)
-abline(mod$groupsummary["Int"][[1]],1,lty=2)
-axis(2, at=c(0.1,10,1000), labels=c(0.1,10,1000),cex.axis=1)
-axis(1, at=c(0.1,10,1000), labels=c("","",""),cex.axis=1)
-legend("bottomright",legend=labels.spp.genus(),col=col.spp(),pch=16, cex=0.9,bty="n",text.font=3)
+# plot(accessory_per_seed ~ embryo_endo_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy", yaxt="n",xaxt="n", ylim=c(.02,20000), xlim=c(.02,20000), ylab="total accessory costs per seed (mg/seed)",xlab="",cex=1.5)
+# mod <- sma(accessory_per_seed ~ embryo_endo_size,data=subset(SummarySpp[["mean"]],accessory_per_seed>0),log="xy",method="OLS")
+# plot(mod,pch=16,log="xy", yaxt="n",xaxt="n", ylim=c(.02,20000), xlim=c(.02,20000), ylab="total accessory costs per seed (mg/seed)",xlab="",cex=1.5,col="black")
+# points(accessory_per_seed ~ embryo_endo_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,cex=1.5)
+# y.error.bars.2(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$accessory_per_seed,SummarySpp[["se"]]$accessory_per_seed)
+# #sma_abline(mod)
+# abline(mod$groupsummary["Int"][[1]],1,lty=2)
+# axis(2, at=c(0.1,10,1000), labels=c(0.1,10,1000),cex.axis=1)
+# axis(1, at=c(0.1,10,1000), labels=c("","",""),cex.axis=1)
 
-plot(prepollen_costs~embryo_endo_size,SummarySpp[["mean"]],col=col.spp(species),pch=16,log="xy", yaxt="n",xaxt="n", ylim=c(.02,20000), xlim=c(.02,20000), ylab="required pollinator attraction costs per seed (mg/seed)",xlab="",cex=1.5)
+plot(seedset~embryo_endo_size,SummarySpp[["mean"]],log="xy",col=col.spp(species),pch=16, xlim=c(.015,60),ylim=c(.01,.6),cex=1.5,xaxt="n",xlab="seed size (mg)",ylab="seed set")
+mod <- sma(seedset~embryo_endo_size,SummarySpp[["mean"]],log="xy", method="OLS")
+y.error.bars.2(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$seedset,SummarySpp[["se"]]$seedset)
+text((10^(0.99*(par("usr")[2]-par("usr")[1])+par("usr")[1])),(10^(0.97*(par("usr")[4]-par("usr")[3])+par("usr")[3])),paste("r2 = ",round(sma_sum(mod)[1],2)),adj=1)
+line_function_log_xy(SummarySpp[["mean"]]$embryo_endo_size,mod,1)
+axis(1, at=c(0.1,1,10), labels=c("","",""),cex.axis=1)
+
+plot((scaled_seed_count)~(embryo_endo_size),SummaryInd,pch=16,log="xy",col=col.spp(species),xlim=c(.015,60),ylim=c(1e-4,1000),yaxt="n",xaxt="n",xlab="embryo + endosperm size (mg)",ylab="count, scaled to plant size")
+points(scaled_bud_count~embryo_endo_size,SummaryInd,pch=21,col=col.spp(species))
+#points(scaled_failure_count~embryo_endo_size,SummaryInd,pch=2,col=col.spp(species))
+axis(2, at=c(0.0001,0.01,1,100), labels=c(0.0001,0.01,1,100),cex.axis=1)
+axis(1, at=c(0.1,1,10), labels=c("","",""),cex.axis=1)
+
+mod1 <- sma(scaled_seed_count~embryo_endo_size,data=subset(SummaryInd,scaled_seed_count!=0),log="xy",slope=-1,method="OLS")
+mod2 <- sma(scaled_bud_count~embryo_endo_size,data=subset(SummaryInd,scaled_bud_count!=0),log="xy",slope=-1,method="OLS")
+mod3 <- sma(scaled_failure_count~embryo_endo_size,data=subset(SummaryInd,scaled_failure_count!=0),log="xy",slope=-1,method="OLS")
+
+line_function_log_xy(SummarySpp[["mean"]]$embryo_endo_size,mod1,1)
+line_function_log_xy(SummarySpp[["mean"]]$embryo_endo_size,mod2,2)
+legend("topright",legend=c("seed count","initiated ovules count"),col=c("black","black"),pch=c(16,21),bty="n")
+
+plot(prepollen_costs~embryo_endo_size,SummarySpp[["mean"]],col=col.spp(species),pch=16,log="xy", yaxt="n",xaxt="n", ylim=c(.02,20000), xlim=c(.015,60), ylab="pollen attraction costs (mg/seed)",xlab="",cex=1.5)
 y.error.bars.2(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$prepollen_costs,SummarySpp[["se"]]$prepollen_costs)
 mod <- sma(prepollen_costs~embryo_endo_size,SummarySpp[["mean"]],log="xy",method="OLS")
-#words.top.left.logxy(mod)
-sma_abline(mod)
-abline(mod$groupsummary["Int"][[1]],1,lty=2)
+#abline(mod$groupsummary["Int"][[1]],1,lty=2)
 axis(2, at=c(0.1,10,1000), labels=c(0.1,10,1000),cex.axis=1)
-axis(1, at=c(0.1,10,1000), labels=c("","",""),cex.axis=1)
+axis(1, at=c(0.1,1,10), labels=c(0.1,1,10),cex.axis=1)
+line_function_log_xy(SummarySpp[["mean"]]$embryo_endo_size,mod,1)
+line_function_log_xy_zero(SummarySpp[["mean"]]$embryo_endo_size,mod,1)
 
-plot(postpollen_all_per_seed~embryo_endo_size,SummarySpp[["mean"]],col=col.spp(species),pch=16,log="xy", yaxt="n",xaxt="n", ylim=c(.02,20000), xlim=c(.02,20000), ylab="required provisioning costs per seed (mg/seed)",xlab="",cex=1.5)
+plot(postpollen_all_per_seed~embryo_endo_size,SummarySpp[["mean"]],col=col.spp(species),pch=16,log="xy", yaxt="n",xaxt="n", ylim=c(.02,20000), xlim=c(.015,60), ylab="provisioning costs (mg/seed)",xlab="",cex=1.5)
 y.error.bars.2(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$postpollen_all_per_seed,SummarySpp[["se"]]$prepollen_costs)
 mod <- sma(postpollen_all_per_seed~embryo_endo_size,SummarySpp[["mean"]],log="xy",method="OLS")
-#words.top.left.logxy(mod)
-sma_abline(mod)
-abline(mod$groupsummary["Int"][[1]],1,lty=2)
+line_function_log_xy(SummarySpp[["mean"]]$embryo_endo_size,mod,1)
+line_function_log_xy_zero(SummarySpp[["mean"]]$embryo_endo_size,mod,1)
 axis(2, at=c(0.1,10,1000), labels=c(0.1,10,1000),cex.axis=1)
-axis(1, at=c(0.1,10,1000), labels=c(0.1,10,1000),cex.axis=1)
-mtext(text="     embryo + endosperm (mg)",side=1,line=1.5,outer=TRUE,adj=0.5)
+axis(1, at=c(0.1,1,10), labels=c(0.1,1,10),cex.axis=1)
+mtext(text="     seed size (mg)",side=1,line=1.5,outer=TRUE,adj=0.5)
 
 dev.off()
 ```
 
-glance(mod)
 #Table 3. Slopes for various seed size by acc cost regressions
 #NO LONGER AN EXACT PARALLEL TO To TABLE 3 embryo version - redo if using
 ```{r}
@@ -697,6 +728,7 @@ write.csv(results, file="figs2/Accessory_Costs/Table07_correlations_with_repro_i
 
 #Figure 6. Correlations of various reproductive investment categories against plant weight
 ```{r}
+library(smatr)
 win.metafile("figs2/Accessory_Costs/Figure06_correlations_with_plant_weight.wmf", height=5, width=10)
 plot
 
@@ -711,7 +743,7 @@ fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="OLS", log="xy"
 results <- lines(fit$groupsummary)
 #plot(fit,col=col.spp(fit$groupsummary$group),log="xy",ylim=c(1,300000),xlim=c(1,10000000),xlab="",ylab="",lty=results$linetype,pch=16)
 mod <- sma(total_weight_0~repro_inv,data=subset(SummaryInd,repro_inv>0),log="xy",method="OLS")
-abline(0,1)
+#abline(0,1)
 #words.top.left.logxy(mod)
 #mtext(text="total reproductive investment (mg)",side=2,line=2,outer=TRUE)
 #mtext(text="total plant weight (mg)",side=1,line=2,outer=FALSE)
@@ -727,7 +759,7 @@ abline(0,1)
 mod <- sma(propagule_inv~repro_inv,data=subset(SummaryInd,propagule_inv>0),log="xy",method="OLS")
 mtext(text="investment in propagules (mg)",side=1,line=2,outer=FALSE)
 mtext(text="total reproductive investment (mg)",side=2,line=2,outer=TRUE)
-legend("bottomright",legend=labels.spp.genus(),col=col.spp(),pch=16, cex=0.9,bty="n",text.font=3)
+#legend("bottomright",legend=labels.spp.genus(),col=col.spp(),pch=16, cex=0.9,bty="n",text.font=3)
 
 xvar <- "repro_all_count"
 yvar <- "repro_inv"
@@ -745,6 +777,7 @@ data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
 fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="OLS", log="xy",slope.test=1)
 results <- lines(fit$groupsummary)
 plot(fit,xlab="",ylab="",pch=16, col=col.spp(fit$groupsummary$group),lty=results$linetype,ylim=c(1,300000),xlim=c(1,300000),yaxt="n")
+axis(2, at=c(1,100,10000),labels=c("","",""))
 abline(0,1)
 mtext(text="flower weight * bud count (mg)",side=1,line=2,outer=FALSE)
 

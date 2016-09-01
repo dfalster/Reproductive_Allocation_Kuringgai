@@ -33,6 +33,15 @@ for (i in 1:length(SummaryInd$individual)) {
   }
 }
 
+SummaryInd$growth_leaf_no_neg_values = SummaryInd$growth_leaf
+for (i in 1:length(SummaryInd$individual)) {
+  if (SummaryInd$growth_leaf_no_neg_values[i] < 0) {
+  SummaryInd$growth_leaf_no_neg_values[i] = SummaryInd$repro_inv[i]*.01
+  }
+}
+
+
+
 #pdf("figs2/RA/Figure_1_leaf_vs_repro.pdf", height=4.3, width=8)
 win.metafile("figs2/RA/Figure_1_leaf_vs_repro.wmf", height=4.3, width=8)
 plot
@@ -79,6 +88,8 @@ dev.off()
 
 #Figure 1 - shed leaves, gross leaf production
 ```{r}
+pdf("figs2/RA/Figure_0_gross_leaf_inv.pdf", height=4.3, width=8)
+plot
 par(mfrow=c(1,2), cex=1, omi=c(.1,0.1,.1,.1), mai=c(0.8,.8,.1,0.2)) 
 plot(leaf_shed ~ leaf_inv_gross,SummaryInd,log="xy",pch=16, col=col.spp(species),xlim=c(1,10^7),ylim=c(1,10^7))
 abline(0,1)
@@ -86,7 +97,7 @@ plot(leaf_shed ~ leaf_inv_gross,SummaryInd,log="xy",pch=16, col=col.age(age),xli
 
 abline(0,1)
 
-library(scatterplot3d)
+dev.off()
 
 scatterplot3d(SummaryInd$leaf_shed,SummaryInd$leaf_inv_gross,SummaryInd$repro_inv,log="xyz",color=col.spp(SummaryInd$species),pch=16)
 ```
@@ -96,43 +107,46 @@ scatterplot3d(SummaryInd$leaf_shed,SummaryInd$leaf_inv_gross,SummaryInd$repro_in
 ```{r}
 pdf("figs2/RA/Figure_1_alt_leaf_vs_repro.pdf", height=4.3, width=8)
 plot
+
 par(mfrow=c(1,2), cex=1, omi=c(1.1,0.8,.1,.1), mai=c(0.3,.4,.1,0.2)) 
-plot(repro_inv_log~leaf_inv_log, subset(SummaryInd), log="", col=col.spp(species),pch=16,xlim=c(-4,6),ylim=c(-1,6),
+
+plot(repro_inv~jitter(growth_leaf_no_neg_values), subset(SummaryInd), log="xy", col=col.spp(species),pch=16,xlim=c(1,1000000),ylim=c(1,1000000),
      xlab="",ylab="",cex=0.8,xaxt="n",yaxt="n")
-axis(1, at=c(-4,-2,0,2,4,6), labels=c(-10000,-100,0,100,10000,"1000000"),cex.axis=0.9)
-axis(2, at=c(0,2,4,6), labels=c(0,100,10000,"1000000"),cex.axis=0.9)
-legend("topleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.6,bty="n")
+axis(1, at=c(1,100,10000,1000000), labels=c(1,100,10000,"1000000"),cex.axis=0.9)
+axis(2, at=c(1,100,10000,1000000), labels=c(1,100,10000,"1000000"),cex.axis=0.9)
+#legend("topleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.6,bty="n")
 abline(0,1)
-text(5.6,5.8,srt=45,"RA = 0.5",cex=.6)
+text(10^5.6,10^5.8,srt=45,"RA = 0.5",cex=.6)
 abline(log10(3),1)
-text(5.13,5.8,srt=45,"RA = 0.75",cex=.6)
+text(10^5.13,10^5.8,srt=45,"RA = 0.75",cex=.6)
 abline(log10(9),1)
-text(4.67,5.8,srt=45,"RA = 0.9",cex=.6)
+text(10^4.67,10^5.8,srt=45,"RA = 0.9",cex=.6)
 abline(log10(19),1)
-text(4.33,5.8,srt=45,"RA = 0.95",cex=.6)
+text(10^4.33,10^5.8,srt=45,"RA = 0.95",cex=.6)
 abline(log10(.111),1)
-text(5.6,4.85,srt=45,"RA = 0.1",cex=.6)
+text(10^5.6,10^4.85,srt=45,"RA = 0.1",cex=.6)
 abline(log10(.010101),1)
-text(5.6,3.8,srt=45,"RA = 0.01",cex=.6)
+text(10^5.6,10^3.8,srt=45,"RA = 0.01",cex=.6)
 mtext("reproductive investment (mg)",2,line=1,outer=TRUE)
 
-plot(repro_inv_log~leaf_inv_log, subset(SummaryInd), log="", col=col.age(age),pch=16,xlim=c(-4,6),ylim=c(-1,6),
+plot(repro_inv~growth_leaf_no_neg_values, subset(SummaryInd), log="xy", col=col.age(age),pch=16,xlim=c(1,1000000),ylim=c(1,1000000),
      xlab="",ylab="",cex=0.8,xaxt="n",yaxt="n")
-axis(1, at=c(-4,-2,0,2,4,6), labels=c(-10000,-100,0,100,10000,"1000000"),cex.axis=0.9)
-axis(2, at=c(0,2,4,6), labels=c(0,100,10000,"1000000"),cex.axis=0.9)
-legend("topleft",legend=labels.age(),col=col.age,pch=16, cex=.6,bty="n")
+axis(1, at=c(1,100,10000,1000000), labels=c(1,100,10000,"1000000"),cex.axis=0.9)
+axis(2, at=c(1,100,10000,1000000), labels=c(1,100,10000,"1000000"),cex.axis=0.9)
+#legend("topleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.6,bty="n")
 abline(0,1)
-text(5.6,5.8,srt=45,"RA = 0.5",cex=.6)
+text(10^5.6,10^5.8,srt=45,"RA = 0.5",cex=.6)
 abline(log10(3),1)
-text(5.13,5.8,srt=45,"RA = 0.75",cex=.6)
+text(10^5.13,10^5.8,srt=45,"RA = 0.75",cex=.6)
 abline(log10(9),1)
-text(4.67,5.8,srt=45,"RA = 0.9",cex=.6)
+text(10^4.67,10^5.8,srt=45,"RA = 0.9",cex=.6)
 abline(log10(19),1)
-text(4.33,5.8,srt=45,"RA = 0.95",cex=.6)
+text(10^4.33,10^5.8,srt=45,"RA = 0.95",cex=.6)
 abline(log10(.111),1)
-text(5.6,4.85,srt=45,"RA = 0.1",cex=.6)
+text(10^5.6,10^4.85,srt=45,"RA = 0.1",cex=.6)
 abline(log10(.010101),1)
-text(5.6,3.8,srt=45,"RA = 0.01",cex=.6)
+text(10^5.6,10^3.8,srt=45,"RA = 0.01",cex=.6)
+
 mtext("leaf investment (mg)",1,line=2,outer=TRUE)
 dev.off()
 ```
