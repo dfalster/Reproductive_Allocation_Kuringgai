@@ -111,10 +111,10 @@ results
 
 #Table 1 showing accessory cost values for the species
 ```{r}
-acc_costs_spp <- dplyr::select(SummarySpp[["mean"]],species,embryo_endo_size,repro_inv_per_seed,prop_failure,prop_prepollen_vs_RE, prop_dispersal_vs_RE,prop_embryo_endo_vs_RE,seed_costs,prop_prepollen_costs,prop_postpollen_costs)
+acc_costs_spp <- dplyr::select(SummarySpp[["mean"]],species,embryo_endo_size,repro_inv_per_seed,seedset,prop_failure,prop_prepollen_vs_RE, prop_dispersal_vs_RE,prop_embryo_endo_vs_RE,seed_costs,prop_prepollen_costs,prop_postpollen_costs)
 acc_costs_spp$species <- labels.spp.full()
 acc_costs_spp_format <- acc_costs_spp
-for (i in c("embryo_endo_size","repro_inv_per_seed","prop_failure","prop_prepollen_vs_RE","prop_dispersal_vs_RE","prop_embryo_endo_vs_RE","seed_costs","prop_prepollen_costs","prop_postpollen_costs")) {
+for (i in c("embryo_endo_size","repro_inv_per_seed","seedset","prop_failure","prop_prepollen_vs_RE","prop_dispersal_vs_RE","prop_embryo_endo_vs_RE","seed_costs","prop_prepollen_costs","prop_postpollen_costs")) {
   acc_costs_spp_format[[i]] <- round(acc_costs_spp_format[[i]],digits=3)
 }
 
@@ -222,6 +222,70 @@ ggtern(data=ternary,aes(y=per_seed,x=per_poll,z=per_disp)) +
 dev.off()
 ```
 
+#Table 3 - possible replacement
+```{r}
+ternary <- dplyr::select(SummarySpp[["mean"]],species,embryo_endo_size,prepollen_costs,provisioning_costs,failure_per_seed,repro_inv_per_seed)
+ternary$per_pollen <-100*ternary$prepollen_costs/ternary$repro_inv_per_seed
+ternary$per_provision <-100*ternary$provisioning_costs/ternary$repro_inv_per_seed
+ternary$per_failure <-100*ternary$failure_per_seed/ternary$repro_inv_per_seed
+
+mod_pollen <- sma(per_pollen~repro_inv_per_seed,ternary,slope.test=0,method="OLS",log="x")
+mod_provision <- sma(per_provision~repro_inv_per_seed,ternary,slope.test=0,method="OLS",log="x")
+mod_failure <- sma(per_failure~repro_inv_per_seed,ternary,slope.test=0,method="OLS",log="x")
+
+
+costs_per_seed <- as.data.frame("costs for pollen attraction (%)")
+costs_per_seed <- cbind(costs_per_seed,dplyr::select(mod_pollen$groupsummary,r2,pval,Int,Slope,Slope_lowCI,Slope_highCI,Slope_test,Slope_test_p))
+names(costs_per_seed) <- c("investment category (mg)","r squared","p value","intercept","slope","slope_lowCI","slope_highCI","slope test","slope test p")
+
+costs_per_seed2 <- as.data.frame("costs for provisioning (%)")
+costs_per_seed2 <- cbind(costs_per_seed2,dplyr::select(mod_provision$groupsummary,r2,pval,Int,Slope,Slope_lowCI,Slope_highCI,Slope_test,Slope_test_p))
+names(costs_per_seed2) <- c("investment category (mg)","r squared","p value","intercept","slope","slope_lowCI","slope_highCI","slope test","slope test p")
+costs_per_seed <- rbind(costs_per_seed,costs_per_seed2)
+
+costs_per_seed2 <- as.data.frame("costs for failure (%)")
+costs_per_seed2 <- cbind(costs_per_seed2,dplyr::select(mod_failure$groupsummary,r2,pval,Int,Slope,Slope_lowCI,Slope_highCI,Slope_test,Slope_test_p))
+names(costs_per_seed2) <- c("investment category (mg)","r squared","p value","intercept","slope","slope_lowCI","slope_highCI","slope test","slope test p")
+costs_per_seed <- rbind(costs_per_seed,costs_per_seed2)
+
+write.csv(costs_per_seed, file="figs2/Accessory_Costs/Table00_in_text_costs_per_seed.csv",row.names=FALSE)
+
+v <- sqrt(ternary$embryo_endo_size/500)
+ternary$horz <- c(1.8,1.3,1.2,-0.3,0.6,0.6,0.5,-0.2,1.3,1.7,1.4,-0.2,-0.3,-0.3)
+ternary$vert <- c(v[1]*-1.7,v[2]*1.1,v[3]*1.2,v[4],v[5]*-2.3,v[6]*4.5,v[7],v[8]*1.6,v[9],v[10]*0.2,v[11],v[12],v[13],v[14])
+ternary = ternary[with(ternary, order(-repro_inv_per_seed)), ]
+label <- 20
+
+library(ggtern)
+#win.metafile("figs2/Accessory_Costs/Figure03_ternary_diagram_seed_costs.wmf", height=5, width=5)
+#plot
+
+par(mfrow=c(1,1), cex=1, omi=c(2,2,2,2), mai=c(2,2,2,2)) 
+
+
+ggtern(data=ternary,aes(x=per_pollen,z=per_provision,y=per_failure)) +
+      geom_point(size=sqrt(ternary$repro_inv_per_seed/2),shape=20,color=col.spp(ternary$species)) +
+      theme_bw() + 
+      theme_showarrows() +
+      geom_text(label=ternary$species, color="black", hjust=ternary$horz, 
+                 vjust=ternary$vert,size=2) +
+      ggtitle("")+
+      labs(L="pollen-attraction",R="provisioning",T="failure")+
+      Tarrowlab("failure costs (%)")+
+      Larrowlab("pollen attraction costs (%)")+
+      Rarrowlab("provisioning costs (%)")+
+      theme(plot.title = element_text(size=11,face="bold"))+
+      theme(tern.axis.title.T = element_text(size=9,face="plain"))+
+      theme(tern.axis.title.L = element_text(size=9,face="plain",hjust=0,vjust=1.7))+
+      theme(tern.axis.title.R = element_text(size=9,face="plain",hjust=1,vjust=1.7))+
+      theme(tern.axis.arrow.text = element_text(size=9,face="plain"))+
+      theme(tern.axis.arrow.start= 0.2)+ 
+      theme(tern.axis.arrow.finish=0.8)
+
+
+dev.off()
+```
+
 #Table 2 showing seedcost breakdown into components, by species
 ```{r}
 prop_seed_costs_spp <- dplyr::select(SummarySpp[["mean"]],species,seed_costs,prop_prepollen_costs,prop_dispersal_costs,prop_embryo_endo_costs)
@@ -273,8 +337,8 @@ abline(mod$groupsummary["Int"][[1]],1,lty=2)
 axis(2, at=c(0.1,10,1000), labels=c(0.1,10,1000),cex.axis=1)
 axis(1, at=c(0.1,10,1000), labels=c("","",""),cex.axis=1)
 
-plot(pack_disp_costs~seed_size,SummarySpp[["mean"]],col=col.spp(species),pch=16,log="xy", yaxt="n",xaxt="n", ylim=c(.02,20000), xlim=c(.02,20000), ylab="required provisioning costs per seed (mg/seed)",xlab="",cex=1.5)
-y.error.bars(SummarySpp[["mean"]]$seed_size,SummarySpp[["mean"]]$pack_disp_costs,SummarySpp[["se"]]$pack_disp_costs)
+plot(provisioning_costs~seed_size,SummarySpp[["mean"]],col=col.spp(species),pch=16,log="xy", yaxt="n",xaxt="n", ylim=c(.02,20000), xlim=c(.02,20000), ylab="required provisioning costs per seed (mg/seed)",xlab="",cex=1.5)
+y.error.bars(SummarySpp[["mean"]]$seed_size,SummarySpp[["mean"]]$provisioning_costs,SummarySpp[["se"]]$pack_disp_costs)
 mod <- sma(postpollen_all_per_seed~seed_size,SummarySpp[["mean"]],log="xy",method="OLS")
 sma_abline(mod)
 abline(mod$groupsummary["Int"][[1]],1,lty=2)
@@ -369,13 +433,13 @@ abline(slopes$groupsummary["Int"][[1]],slopes$groupsummary["Slope"][[1]])
 abline(slopes$groupsummary["Int"][[1]],1,lty=2)
 acc_by_species <- dplyr::bind_rows(acc_by_species, dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
 
-plot(pack_disp_costs ~ seed_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy", ylim=c(.02,10000), ylab="dispersal & packaging accessory costs (mg/seed)",xlab="",cex=1.5)
-mod <- lm(log10(pack_disp_costs) ~ log10(seed_size),data=subset(SummarySpp[["mean"]]))
+plot(provisioning_costs ~ seed_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy", ylim=c(.02,10000), ylab="dispersal & packaging accessory costs (mg/seed)",xlab="",cex=1.5)
+mod <- lm(log10(provisioning_costs) ~ log10(seed_size),data=subset(SummarySpp[["mean"]]))
 words.top.left.logxy(mod)
-slopes <- sma(pack_disp_costs ~ seed_size,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="OLS")
+slopes <- sma(provisioning_costs ~ seed_size,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="OLS")
 abline(slopes$groupsummary["Int"][[1]],slopes$groupsummary["Slope"][[1]])
 abline(slopes$groupsummary["Int"][[1]],1,lty=2)
-y.error.bars(SummarySpp[["mean"]]$seed_size,SummarySpp[["mean"]]$pack_disp_costs,SummarySpp[["se"]]$pack_disp_costs)
+y.error.bars(SummarySpp[["mean"]]$seed_size,SummarySpp[["mean"]]$provisioning_costs,SummarySpp[["se"]]$provisioning_costs)
 acc_by_species <- dplyr::bind_rows(acc_by_species, dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
 mtext(text="seed size (mg)",side=1,line=1.5,outer=TRUE)
 
@@ -417,6 +481,8 @@ write.csv(acc_by_species, file="figs2/Accessory_Costs/Table03_acc_cost_seed_size
 
 #Table 3 v2. Slopes for various embryo size by acc cost regressions
 ```{r}
+library(smatr)
+
 par(mfrow=c(2,3), cex=1, omi=c(.6,.1,.05,.05), mai=c(.1,.8,.05,.05)) 
 options(scipen = 5)
 
@@ -436,11 +502,11 @@ abline(slopes$groupsummary["Int"][[1]],slopes$groupsummary["Slope"][[1]])
 abline(slopes$groupsummary["Int"][[1]],1,lty=2)
 acc_by_species <- dplyr::bind_rows(acc_by_species, dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
 
-plot(pack_disp_costs ~ embryo_endo_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy", ylim=c(.02,10000), ylab="dispersal & packaging accessory costs (mg/seed)",xlab="",cex=1.5)
-slopes <- sma(pack_disp_costs ~ embryo_endo_size,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="OLS")
+plot(provisioning_costs ~ embryo_endo_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy", ylim=c(.02,10000), ylab="dispersal & packaging accessory costs (mg/seed)",xlab="",cex=1.5)
+slopes <- sma(provisioning_costs ~ embryo_endo_size,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="OLS")
 abline(slopes$groupsummary["Int"][[1]],slopes$groupsummary["Slope"][[1]])
 abline(slopes$groupsummary["Int"][[1]],1,lty=2)
-y.error.bars(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$pack_disp_costs,SummarySpp[["se"]]$pack_disp_costs)
+y.error.bars(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$provisioning_costs,SummarySpp[["se"]]$provisioning_costs)
 acc_by_species <- dplyr::bind_rows(acc_by_species, dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
 mtext(text="seed size (mg)",side=1,line=1.5,outer=TRUE)
 

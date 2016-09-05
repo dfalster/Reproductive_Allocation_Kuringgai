@@ -424,32 +424,37 @@ words.top.left.logy <- function (x) {
   text(((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.98*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),summary(mod)[1],cex=.7,adj=0)
 }
 
-extra.top.left.logxy <- function (words,fontx) {
-  text(10^((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.96*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,cex=.75,font=fontx)
+extra.top.left.logxy <- function (words,fontx,cexx) {
+  text(10^((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.96*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,font=fontx,cex=cexx)
 }
 
 extra.top.left.logx <- function (words,fontx) {
-  text(10^((0.01*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.96*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,cex=.75,font=fontx)
+  text(10^((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.96*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,cex=.75,font=fontx)
 }
 
 extra.top.left <- function (words) {
-  text(((0.01*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.96*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,cex=.75)
+  text(((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.96*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,cex=.75)
 }
 
-extra.bottom.left.logx <- function (words,fontx) {
-  text(10^((0.01*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.04*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,cex=.75,font=fontx)
+extra.bottom.left.logxy <- function (words,fontx,cexx) {
+  text(10^((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.04*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,cex=cexx,font=fontx)
 }
+
+extra.bottom.left.logx <- function (words,fontx,cexx) {
+  text(10^((0.012*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.04*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,cex=cexx,font=fontx)
+}
+
 
 extra.bottom.left <- function (words) {
-  text(((0.01*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.04*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,cex=.75)
+  text(((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.04*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,cex=.75)
 }
 
 extra.bottom.right.logx <- function (words,fontx) {
-  text(10^((0.99*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.04*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,cex=.75,adj=1,,font=fontx)
+  text(10^((0.98*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.04*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,cex=.75,adj=1,,font=fontx)
 }
 
 extra.top.right.logx <- function (words,fontx) {
-  text(10^((0.99*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.96*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,cex=.75,adj=1,,font=fontx)
+  text(10^((0.98*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.96*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,cex=.75,adj=1,,font=fontx)
 }
 
 lines <- function(results) {

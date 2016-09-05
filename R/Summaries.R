@@ -183,7 +183,7 @@ combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_
     scaled_repro_inv = repro_inv/ leaf_area_0,
     embryo_endo_inv = embryo_endo_costs*seed_count,
     provisioning = ((seed_size - embryo_endo_size)*seed_count) + packaging_dispersal_inv, #all costs others than embryo-endosperm weight that occur after pollination
-    provisioning_per_seed = pack_disp_costs - embryo_endo_size,
+    provisioning_costs = pack_disp_costs + embryo_endo_size,
     postpollen_all_per_seed = postpollen_aborted_per_seed + seed_size + packaging_dispersal_per_seed
     )
 
@@ -201,7 +201,7 @@ combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_
               "prop_accessory_ee","prop_accessory_seed","prop_propagule_nonzero","prop_accessory_nonzero","prop_prepollen_costs","prop_seed_costs",
               "prop_dispersal_costs","scaled_failure_count","scaled_seed_count","scaled_bud_count","embryo_endo_size",
               "scaled_repro_inv","prop_postpollen_costs","failure_per_seed","leaf_area_0","leaf_area_0_mature","total_weight_0","postpollen_all_per_seed",
-               "prop_prepollen_vs_RE", "prop_dispersal_vs_RE","prop_embryo_endo_vs_RE")) {
+               "prop_prepollen_vs_RE", "prop_dispersal_vs_RE","prop_embryo_endo_vs_RE","provisioning_costs")) {
     i <- is.na(SummaryInd[[v]])
     SummaryInd[[v]][i] <- 0
     i <- is.infinite(SummaryInd[[v]])
@@ -292,7 +292,7 @@ get_species_values <- function(SummaryInd, groups) {
       prepollen_aborted_per_seed, prepollen_success_per_seed, postpollen_aborted_per_seed,repro_inv_per_seed,failure_inv,
       scaled_failure_count,scaled_bud_count,prop_prepollen_costs,prepollen_costs,embryo_endo_size, pack_disp_early_costs, seed_early_costs,
       accessory_inv, prepollen_aborted_inv, prepollen_success_inv,prepollen_all_inv,prop_prepollen_aborted, prop_prepollen_success,
-      prop_prepollen_vs_RE, prop_dispersal_vs_RE,prop_embryo_endo_vs_RE,
+      prop_prepollen_vs_RE, prop_dispersal_vs_RE,prop_embryo_endo_vs_RE,provisioning_costs,
       prop_prepollen_all, prop_accessory_ee,prop_accessory_seed,prop_failure,prop_success,scaled_repro_inv,failure_to_ovule_ratio,failure_per_seed,postpollen_all_per_seed)
   })
   names(out[[5]]) <- fs
