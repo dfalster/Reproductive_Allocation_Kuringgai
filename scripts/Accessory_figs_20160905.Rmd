@@ -1,10 +1,37 @@
-plot(scaled_seed_count ~ scaled_bud_count, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species),xlim=c(.1,5000),ylim=c(0.001,50))
-mod <- sma(scaled_seed_count ~ scaled_bud_count, SummarySpp[["mean"]],log="xy",slope=1,method="OLS")
-summary(mod)
-line_function_log_xy(SummarySpp[["mean"]]$scaled_bud_count,mod,1)
-line_function_log_xy_zero(SummarySpp[["mean"]]$scaled_bud_count,mod,1)
+pdf("figs2/Accessory_Costs/scaled_ovule count.pdf", height=6, width=6)
+plot
 
-plot(scaled_bud_count ~ seedset, SummarySpp[["mean"]],log="y",pch=16,col=col.spp(species))
+par(mfrow=c(1,2), cex=1, omi=c(.1,.1,.05,.05), mai=c(.8,.8,.1,.05)) 
+options(scipen = 5)
+
+mod1 <- sma(scaled_ovule_count ~ prepollen_costs, data=subset(SummarySpp[["mean"]],species!="PEPU"),method="OLS", log="xy",slope.test=-1)
+mod2 <- sma(scaled_seed_count ~ embryo_endo_size, data=subset(SummarySpp[["mean"]]),method="OLS", log="xy",slope.test=-1)
+plot(scaled_ovule_count ~ prepollen_costs, SummarySpp[["mean"]],log="xy",pch=1,col=col.spp(species),xlab="cost to make a unit: dashed =ovule; solid=seed",ylim=c(.001,200),ylab="scaled count",xlim=c(.01,100),cex=1.5)
+points(scaled_seed_count ~ embryo_endo_size, SummarySpp[["mean"]],cex=1.5,pch=16,col=col.spp(species))
+line_function_log_xy(SummarySpp[["mean"]]$prepollen_costs,mod1,3)
+line_function_log_xy(SummarySpp[["mean"]]$embryo_endo_size,mod2,1)
+#points(scaled_seed_count ~ seed_costs, SummarySpp[["mean"]],pch=12,col=col.spp(species))
+arrows(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$scaled_seed_count,SummarySpp[["mean"]]$prepollen_costs,SummarySpp[["mean"]]$scaled_ovule_count,col=col.spp(SummarySpp[["mean"]]$species),code=0)
+
+#mod <- sma(scaled_seed_count ~ embryo_endo_size, data=subset(SummarySpp[["mean"]]),method="OLS", log="xy",slope.test=-1)
+summary(mod1)
+plot(success_inv ~ prepollen_success_inv, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species),xlim=c(10,100000),ylim=c(10,100000))
+mod <- sma(success_inv ~ prepollen_success_inv, data=subset(SummarySpp[["mean"]]),method="OLS", log="xy",slope.test=1)
+line_function_log_xy(SummarySpp[["mean"]]$prepollen_success_inv,mod,1)
+line_function_log_xy_zero(SummarySpp[["mean"]]$prepollen_success_inv,mod,1)
+
+SummaryInd$ovule_ratio <- SummaryInd$prepollen_costs/SummaryInd$embryo_endo_size
+
+SummarySpp[["mean"]]$pre_pollen_all_inv_scaled <- SummarySpp[["mean"]]$prepollen_all_inv /SummarySpp[["mean"]]$leaf_area
+
+plot(leaf_area~prepollen_all_inv,SummarySpp[["mean"]],log="xy",col=col.spp(species),pch=16)
+mod <- sma(leaf_area~prepollen_all_inv,SummarySpp[["mean"]],log="xy",slope=1, method="OLS")
+summary(mod)
+
+plot(pre_pollen_all_inv_scaled~embryo_endo_size,SummarySpp[["mean"]],log="xy",col=col.spp(species),pch=16)
+mod <- sma(pre_pollen_all_inv_scaled~embryo_endo_size,SummarySpp[["mean"]],log="xy",slope=1, method="OLS")
+
+dev.off()
 
 #Data 0. means, counts to include in manuscript
 ```{r}
@@ -41,10 +68,60 @@ summary(mod)
 mod <- sma(seed_costs~prop_seed_costs,SummarySpp[["mean"]],method="OLS",log="y")
 summary(mod)
 
-#proportion energy invested in accessory tissues unrelated to seedsize
-mod <- sma(seed_size ~ prop_accessory_ee, data=subset(SummarySpp[["mean"]],species!="BAER"),method="OLS", log="y",slope.test=1)
+
+
+#RE per seed unrelated to seedsize
+mod <- sma(repro_inv_per_seed ~ embryo_endo_size, SummarySpp[["mean"]],method="OLS", log="xy",slope.test=1)
 summary(mod)
-plot(seed_size ~ prop_accessory_ee, SummarySpp[["mean"]],log="y",pch=16,col=col.spp(species))
+plot(repro_inv_per_seed ~ embryo_endo_size, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
+
+#energy invested in accessory tissues unrelated to seedsize
+mod <- sma(accessory_per_seed_using_ee ~ embryo_endo_size, data=subset(SummarySpp[["mean"]]),method="OLS", log="xy",slope.test=1)
+summary(mod)
+plot(accessory_per_seed_using_ee ~ embryo_endo_size, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
+
+#total seed costs unrelated to seedsize
+mod <- sma(seed_costs ~ embryo_endo_size, SummarySpp[["mean"]],method="OLS", log="xy",slope.test=1)
+summary(mod)
+plot(seed_costs ~ embryo_endo_size, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
+
+#failure per seed unrelated to seedsize
+mod <- sma(failure_per_seed ~ embryo_endo_size, data=subset(SummarySpp[["mean"]]),method="OLS", log="xy",slope.test=1)
+summary(mod)
+plot(failure_per_seed ~ embryo_endo_size, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
+
+
+
+mod <- sma(prop_prepollen_costs ~ seedset, data=subset(SummarySpp[["mean"]]),method="OLS", log="x",slope.test=1)
+summary(mod)
+plot(prop_prepollen_costs ~ seedset, SummarySpp[["mean"]],log="",pch=16,col=col.spp(species))
+
+
+
+mod <- sma(scaled_ovule_count ~ prepollen_costs, data=subset(SummarySpp[["mean"]]),method="OLS", log="xy",slope.test=-1)
+summary(mod)
+plot(scaled_ovule_count ~ prepollen_costs, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
+
+
+mod <- sma(scaled_seed_count ~ embryo_endo_size, data=subset(SummarySpp[["mean"]]),method="OLS", log="xy",slope.test=-1)
+summary(mod)
+plot(scaled_seed_count ~ embryo_endo_size, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
+
+
+
+mod <- sma(scaled_seed_count ~ provisioning_costs, data=subset(SummarySpp[["mean"]]),method="OLS", log="xy",slope.test=-1)
+summary(mod)
+plot(scaled_seed_count ~ provisioning_costs, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
+
+mod <- sma(scaled_seed_count ~ seed_costs, data=subset(SummarySpp[["mean"]]),method="OLS", log="xy",slope.test=-1)
+summary(mod)
+plot(scaled_seed_count ~ seed_costs, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
+
+
+mod <- sma(prepollen_all_per_seed ~ embryo_endo_size, data=subset(SummarySpp[["mean"]]),method="OLS", log="xy",slope.test=1)
+summary(mod)
+plot(prepollen_failure_per_seed ~ embryo_endo_size, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species),ylim=c(.02,10000))
+points(prepollen_costs~ embryo_endo_size, SummarySpp[["mean"]],log="xy",pch=1,col=col.spp(species))
 
 #more failure = lower seedset across species - in discussion
 mod <- sma(seedset ~ prop_failure, data=subset(SummarySpp[["mean"]],species!="BAER"),method="OLS", log="",slope.test=1)
@@ -81,6 +158,11 @@ mod <- sma(total_weight_0 ~ embryo_endo_size, SummarySpp[["mean"]],method="OLS",
 summary(mod)
 plot(total_weight_0 ~ embryo_endo_size, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
 
+
+#scaled ovule production vs prop pollen attraction  - all species
+mod <- sma(prop_prepollen_costs~scaled_ovule_count,data=subset(SummarySpp[["mean"]]),log="x",slope=1,method="OLS")
+summary(mod)
+plot(prop_prepollen_costs ~ scaled_ovule_count, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
 
 
 yvar <- "repro_all_count"
@@ -297,13 +379,13 @@ write.csv(results, file="figs2/Accessory_Costs/Table03_correlations_with_repro_i
 
 
 plot(scaled_seed_count~prop_prepollen_costs,SummarySpp[["mean"]],pch=16,log="y",col=col.spp(species))
-points(scaled_bud_count~prop_prepollen_costs,SummarySpp[["mean"]],pch=21,col=col.spp(species))
+points(scaled_ovule_count~prop_prepollen_costs,SummarySpp[["mean"]],pch=21,col=col.spp(species))
 #points(scaled_failure_count~embryo_endo_size,SummaryInd,pch=2,col=col.spp(species))
 axis(2, at=c(0.0001,0.01,1,100), labels=c(0.0001,0.01,1,100),cex.axis=1)
 axis(1, at=c(0.01,1,100), labels=c("","",""),cex.axis=1)
 mtext("count, scaled to plant size",2,line=2.3)
 mod1 <- sma(scaled_seed_count~prop_prepollen_costs,data=subset(SummarySpp[["mean"]],scaled_seed_count!=0),log="y",slope=-1,method="OLS")
-mod2 <- sma(scaled_bud_count~prepollen_costs,data=subset(SummarySpp[["mean"]],scaled_bud_count!=0),log="xy",slope=3.23,method="OLS")
+mod2 <- sma(scaled_ovule_count~prepollen_costs,data=subset(SummarySpp[["mean"]],scaled_ovule_count!=0),log="xy",slope=3.23,method="OLS")
 mod3 <- sma(scaled_failure_count~embryo_endo_size,data=subset(SummaryInd,scaled_failure_count!=0),log="xy",slope=-1,method="OLS")
 
 line_function_log_xy(SummarySpp[["mean"]]$embryo_endo_size,mod1,1)
@@ -323,13 +405,13 @@ par(mfrow=c(2,2), cex=1, omi=c(1,.1,.05,.05), mai=c(.2,.8,.1,.05))
 options(scipen = 5)
 
 plot((scaled_seed_count)~(embryo_endo_size),SummaryInd,pch=16,log="xy",col=col.spp(species),xlim=c(.002,500),ylim=c(1e-4,1000),yaxt="n",xaxt="n",ylab="")
-points(scaled_bud_count~embryo_endo_size,SummaryInd,pch=21,col=col.spp(species))
+points(scaled_ovule_count~embryo_endo_size,SummaryInd,pch=21,col=col.spp(species))
 #points(scaled_failure_count~embryo_endo_size,SummaryInd,pch=2,col=col.spp(species))
 axis(2, at=c(0.0001,0.01,1,100), labels=c(0.0001,0.01,1,100),cex.axis=1)
 axis(1, at=c(0.01,1,100), labels=c("","",""),cex.axis=1)
 mtext("count, scaled to plant size",2,line=2.3)
 mod1 <- sma(scaled_seed_count~embryo_endo_size,data=subset(SummaryInd,scaled_seed_count!=0),log="xy",slope=-1,method="OLS")
-mod2 <- sma(scaled_bud_count~embryo_endo_size,data=subset(SummaryInd,scaled_bud_count!=0),log="xy",slope=-1,method="OLS")
+mod2 <- sma(scaled_ovule_count~embryo_endo_size,data=subset(SummaryInd,scaled_ovule_count!=0),log="xy",slope=-1,method="OLS")
 mod3 <- sma(scaled_failure_count~embryo_endo_size,data=subset(SummaryInd,scaled_failure_count!=0),log="xy",slope=-1,method="OLS")
 
 line_function_log_xy(SummarySpp[["mean"]]$embryo_endo_size,mod1,1)
