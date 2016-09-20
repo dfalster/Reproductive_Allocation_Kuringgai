@@ -317,11 +317,15 @@ make_BAER_GraphMaps <- function(PartsSummary, MultiplierTable){
 
   AvWeightPerUnit <-  PartsSummary$AvWeightPerUnit
 
-  BAER.graph <- graph.formula("cone_base_green_01" - "cone_base_green_02" - "cone_base_green_03" - "cone_base_green_04" - "cone_base_brown", "cone_young_01" - "cone_young_02" -
-    "cone_young_03" - "cone_young_04" - "cone_green_01" - "cone_green_02" - "cone_green_03" - "cone_green_04" - "cone_brown", "cone_green_04" - "cone_brown_no_expanded_follicles",
-    "cone_young_04" - "cone_aborted", "bud_tiny" - "bud_small" - "bud_mid" - "bud_big" - "bud_just_opening" - "flower_stigma" - "finished_flower_stigma" - "fruit_just_starting" -
-      "fruit_young" - "fruit_large_immature_01" - "seed", "bud_just_opening" - "flower_petals", "bud_just_opening" - "flower_style", "fruit_large_immature_01" -
-      "seed_pod", "fruit_large_immature_01" - "seed_aborted")
+  BAER.graph <- graph.formula("cone_base_green_01" - "cone_base_green_02" - "cone_base_green_03" - "cone_base_green_04" - "cone_base_brown", 
+                              "cone_young_01" - "cone_young_02" - "cone_young_03" - "cone_young_04" - "cone_green_01" - "cone_green_02" - "cone_green_03" - "cone_green_04" - "cone_brown", 
+                              "cone_green_04" - "cone_brown_no_expanded_follicles",
+                              "cone_young_04" - "cone_aborted", "bud_tiny" - "bud_small" - "bud_mid" - "bud_big" - "bud_just_opening" - "flower_stigma" - 
+                                    "finished_flower_stigma" - "fruit_just_starting" - "fruit_young" - "fruit_large_immature_01" - "seed", 
+                              "bud_just_opening" - "flower_petals", 
+                              "bud_just_opening" - "flower_style", 
+                              "fruit_large_immature_01" - "seed_pod",
+                              "fruit_large_immature_01" - "seed_aborted")
   from <- c("bud_tiny", "cone_young_01", "cone_base_green_01")
   to <- c("seed", "cone_brown", "cone_base_brown")
   Paths <- data.frame(from = from, to = to)
@@ -368,9 +372,12 @@ make_BOLE_GraphMaps <- function(PartsSummary, MultiplierTable){
 
   AvWeightPerUnit <-  PartsSummary$AvWeightPerUnit
 
-  BOLE.graph <- graph.formula("bud_tiny" - "bud_small" - "bud_mid" - "bud_big" - "flower_calyx" - "finished_flower_stigma" - "fruit_just_starting" - "fruit_young" -
-    "fruit_large_immature_01" - "seed", "bud_big" - "pedicel", "bud_big" - "flower_petals", "flower_calyx" - "finished_flower" - "late_finished_flower", "fruit_large_immature_01" -
-    "seed_pod", "flower_petals" - "late_flower_petals")
+  BOLE.graph <- graph.formula("bud_tiny" - "bud_small" - "bud_mid" - "bud_big" - "flower_calyx" - "finished_flower_stigma" - "fruit_just_starting" - "fruit_young" - "fruit_large_immature_01" - "seed", 
+                              "bud_big" - "pedicel", 
+                              "bud_big" - "flower_petals", 
+                              "flower_calyx" - "finished_flower" - "late_finished_flower", 
+                              "fruit_large_immature_01" - "seed_pod", 
+                              "flower_petals" - "late_flower_petals")
   from <- c("bud_tiny")
   to <- c("seed")
   Paths <- data.frame(from = from, to = to)
@@ -427,7 +434,13 @@ make_HEPU_GraphMaps <- function(PartsSummary, MultiplierTable){
 
   AvWeightPerUnit <-  PartsSummary$AvWeightPerUnit
 
-  HEPU.graph <- graph.formula("bud_small" - "bud_big" - "flower_calyx" - "finished_flower" - "fruit_young" - "fruit_large_immature_01" - "fruit_mature", "bud_big" - "flower_petals", "flower_calyx" - "fruit_aborted", "finished_flower" - "calyx_fruit", "bud_big" - "flower_calyx_aborting", "flower_calyx" - "finished_flower_aborting", "finished_flower" - "fruit_young_aborting", "fruit_young" - "fruit_large_immature_aborting")
+  HEPU.graph <- graph.formula("bud_small" - "bud_big" - "flower_calyx" - "finished_flower" - "fruit_young" - "fruit_large_immature_01" - "fruit_mature", 
+                              "bud_big" - "flower_petals", "flower_calyx" - "fruit_aborted", 
+                              "finished_flower" - "calyx_fruit", 
+                              "bud_big" - "flower_calyx_aborting", 
+                              "flower_calyx" - "finished_flower_aborting", 
+                              "finished_flower" - "fruit_young_aborting", 
+                              "fruit_young" - "fruit_large_immature_aborting")
   from <- c("bud_small")
   to <- c("fruit_mature")
   Paths <- data.frame(from=from,to=to)
@@ -507,8 +520,12 @@ make_PILI_GraphMaps <- function(PartsSummary, MultiplierTable){
 
   AvWeightPerUnit <-  PartsSummary$AvWeightPerUnit
 
-  PILI.graph <- graph.formula("bud_big" - "flower_stigma" - "fruit_young" - "fruit_large_immature_01" - "seed", "inflorescence_bud_mid" - "inflorescence_stalk", "inflorescence_bud_mid" -
-    "bract_flower_or_finished_flower", "bud_big" - "flower_calyx", "bud_big" - "flower_petals", "fruit_young" - "fruit_aborted", "fruit_large_immature_01" - "seed_pod")
+  PILI.graph <- graph.formula("bud_big" - "flower_stigma" - "fruit_young" - "fruit_large_immature_01" - "seed", "inflorescence_bud_mid" - "inflorescence_stalk", 
+                              "inflorescence_bud_mid" - "bract_flower_or_finished_flower", 
+                              "bud_big" - "flower_calyx", 
+                              "bud_big" - "flower_petals", 
+                              "fruit_young" - "fruit_aborted", 
+                              "fruit_large_immature_01" - "seed_pod")
   from <- c("bud_big", "inflorescence_bud_mid")
   to <- c("seed", "inflorescence_stalk")
   Paths <- data.frame(from = from, to = to)

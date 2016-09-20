@@ -184,7 +184,7 @@ combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_
     embryo_endo_inv = embryo_endo_costs*seed_count,
     provisioning = ((seed_size - embryo_endo_size)*seed_count) + packaging_dispersal_inv, #all costs others than embryo-endosperm weight that occur after pollination
     provisioning_costs = pack_disp_costs + embryo_endo_size,
-    postpollen_all_per_seed = postpollen_aborted_per_seed + seed_size + packaging_dispersal_per_seed,
+    postpollen_all_per_seed = postpollen_aborted_per_seed + seed_size + packaging_dispersal_per_seed
         )
 
   #if seedset is low, prepollen costs increase, because the cost of producing pollen across the whole plant is higher per seed matured  
