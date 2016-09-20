@@ -22,16 +22,16 @@ flower_calyx_aborting,20,,,,,,,,count,,,,,,
 flower_aborted,21,,,,,,,,,,,,count,,count
 flower_aborted_without_petals,22,,,,,,,,,,,,count,,
 flower_style,23,count_by_length,,,,,,,,,,,,,
-finished_flower,24,,count,count,count; count_by_length,,,,count,count; count_by_length,,,,,
+finished_flower,24,,count,count,count; count_by_length,,,,count,count; count_by_length,,,count,,
 finished_flower_aborting,25,,,,,,,,count,,,,,,
 finished_flower_stigma,26,count_by_length,count,,,count,count,count,,,count,,count,,count
-late_finished_flower,27,,count,,,,,,,,,,,,
+late_finished_flower,27,,count,,,,,,,,,,count,,
 late_flower_petals,28,,count,,,,,,,,,,,,
 bract_flower_or_finished_flower,29,,,,,,,,,,,,count,count,count
 fruit_just_starting,30,count,count,count,,count,count,count,,count; count_by_length,count,count,count,,
 fruit_young,31,count,count,count,count; count_by_length,count,count,count,count,count; count_by_length,count,count,count,count,
 fruit_young_aborting,32,,,,,,,,count,,,,,,
-fruit_large_immature_01,33,count,count,count,count; count_by_length,regress_by_dim,regress_by_dim,count,count,count; count_by_length,regress_by_dim,count,count,count,count
+fruit_large_immature_01,33,,count,count,count; count_by_length,regress_by_dim,regress_by_dim,count,count,count; count_by_length,regress_by_dim,count,count,count,count
 fruit_large_immature_02,34,,,,,regress_by_dim,regress_by_dim,,,,regress_by_dim,,,,
 fruit_large_immature_03,35,,,,,regress_by_dim,regress_by_dim,,,,regress_by_dim,,,,
 fruit_large_immature_04,36,,,,,regress_by_dim,regress_by_dim,,,,regress_by_dim,,,,
@@ -42,7 +42,7 @@ fruit_aborted,40,,,,,,,count,count,count; count_by_length,,count,count,count,cou
 fruit_empty,41,,,,,,,,,,,count,,,
 fruit_mature,42,,,count,,,,,count,count; count_by_length,,count,,,
 calyx_fruit,43,,,,,,,,count,count; count_by_length,,,,,
-bract_fruit,44,,,count,,,,,,,,,,,
+bract_fruit,44,,,count,,,,,,,,,,,count
 pedicel,45,,count,,,count,count,,,,count,,,,
 seed_pod,46,count,count,,count; count_by_length,regress_by_dim,regress_by_dim,count,,,regress_by_dim,,count,count,count
 seed_immature,47,,,,,,,count,,,,,,,
