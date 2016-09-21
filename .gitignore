@@ -13,6 +13,9 @@ figure/*
 export
 CarbonInvestments.pdf
 CarbonInvestments.tex
+ms/Accessory/ms-supp.tex
+ms/Accessory/ms-supp.pdf
+ms/Accessory/figure/
 results.md
 *.whisker
 ./bootstrap

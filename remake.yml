@@ -11,6 +11,7 @@ packages:
   - ggtern
   - yaml
   - mgcv
+  - knitr
 
 sources:
   - R
@@ -42,6 +43,40 @@ targets:
   all:
     depends:
       - export
+
+  # Papers --------------------------------------
+
+
+  ms/Accessory/ms-supp.pdf:
+    command: latex_build("ms/Accessory/ms-supp.tex", bibliography="ms/Accessory/references.bib", clean=TRUE)
+
+  ms/Accessory/ms-supp.tex:
+    knitr:
+      auto_figure_prefix: true
+      chdir: true
+
+    depends:
+      - SummaryInd
+      - SummarySpp
+      - SummarySppAge
+      - HarvestData
+      - Investment_FD_all
+      - PartsSummary_all
+      - ms/Accessory/Sup_Table_flowering_parts.csv
+      - BAER_GraphMaps
+      - BOLE_GraphMaps
+      - COER_GraphMaps
+      - EPMI_GraphMaps
+      - GRBU_GraphMaps
+      - GRSP_GraphMaps
+      - HATE_GraphMaps
+      - HEPU_GraphMaps
+      - LEES_GraphMaps
+      - PELA_GraphMaps
+      - PEPU_GraphMaps
+      - PHPH_GraphMaps
+      - PILI_GraphMaps
+      - PUTU_GraphMaps
 
   # Data --------------------------------------
   IndividualsList:
@@ -134,7 +169,7 @@ targets:
     command: saveRDS(SummaryInd, target_name)
 
   export/SummarySpp.rds:
-    command: saveRDS(SummarySpp, target_name)
+    command: saveRDS(SummaryInd, target_name)
 
   export/SummarySppAge.rds:
     command: saveRDS(SummarySppAge, target_name)

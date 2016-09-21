@@ -1,0 +1,126 @@
+\documentclass[10pt,twoside]{article}
+
+\usepackage{suppmat}
+\usepackage{listings}
+\usepackage[T1]{fontenc} % Better underscores
+\usepackage{longtable}
+
+\usepackage[rgb,dvipsnames]{xcolor}
+\definecolor{grey}{rgb}{0.5, 0.5, 0.5}
+
+\newcommand{\smurl}[1]{\url{#1}}
+\newcommand{\email}[1]{\href{mailto:#1}{\texttt{#1}}}
+
+\title{Accessories dominate the costs of producing seed}
+\runninghead{C\lowercase{osts of producing seed}}
+
+\author{E. H. Wenk\textsuperscript{1,\textasteriskcentered}, K. Abramowicz\textsuperscript{2}, M. Westoby\textsuperscript{1}, D.S. Falster\textsuperscript{1} }
+\affiliation{\textsuperscript{1} Biological Sciences, Macquarie University NSW 2109, Australia \\
+\textsuperscript{2} Department of Mathematics and Mathematical Statistics, Ume{\aa} University, 90187 Ume{\aa}, Sweden \\
+\textsuperscript{\textasteriskcentered} Correspondence author. E-mail: \email{ehwenk@gmail.com}
+}
+
+\usepackage[authoryear,sectionbib,sort]{natbib}
+\bibliographystyle{amnat2}
+
+\pdfminorversion=4 % tell pdflatex to generate PDF in version 1.4
+% Needed for problem-free conversion on manuscript central (arrgh)
+% http://timotheepoisot.fr/2013/06/24/manuscript-central-pdf-fix/
+
+\titleprefix{Supporting Materials for:}
+
+\date{}
+
+<<preload, echo=FALSE>>=
+library(xtable)
+library(knitr)
+opts_chunk$set(echo=FALSE, fig.pos = "!h", fig.align="center", comment = NA)
+
+flowering_parts <- read.csv("Sup_Table_flowering_parts.csv",
+  stringsAsFactors=FALSE, check.names=FALSE)
+
+print_table_species <- function(species, data) {
+  data <- data[data$species == species, -c(1)]
+  print(xtable(data,
+            hline.after=c(1),
+            align='p{0.1cm}p{4cm}p{6cm}p{3cm}p{1cm}p{1cm}',
+            label=sprintf("tab:parts_%s", species),
+            caption=sprintf("Table of parts for %s.", species)),
+      sanitize.text.function=I,
+      , table.placement = "H"
+      , caption.placement = "top"
+      , include.rownames = FALSE
+      , include.colnames = TRUE
+      , size = "small"
+      , tabular.environment = 'longtable'
+      , floating = FALSE)
+}
+
+@
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thetable}{S\arabic{table}}
+\setcounter{secnumdepth}{0}
+
+\clearpage
+
+\section{A -- Methods for estimating Reproductive allocation}
+
+All computations implemented in \textsc{r} \citep{R-2015}.
+
+\subsection{Banksia ericifolia}
+
+Details on parts for \emph{Banksia ericifolia} found in Table \ref{tab:parts_Banksia ericifolia}. See Fig \ref{fig:map Banksia ericifolia} for a plot.
+
+
+<<echo=FALSE,results='asis'>>=
+print_table_species("Banksia ericifolia", flowering_parts)
+@
+
+\begin{figure}
+\centering
+<<echo=FALSE,results='asis'>>=
+plot(BAER_GraphMaps$graph)
+@
+\caption{Map of parts for \emph{Banksia ericifolia}}
+\label{fig:map Banksia ericifolia}
+\end{figure}
+
+
+\clearpage
+
+
+\subsection{Conospermum ericifolium}
+
+Details on parts for \emph{Conospermum ericifolium} found in Table \ref{tab:parts_Conospermum ericifolium}.  See Fig \ref{fig:map Conospermum ericifolium} for a plot.
+
+
+<<echo=FALSE,results='asis'>>=
+print_table_species("Conospermum ericifolium", flowering_parts)
+@
+
+
+\begin{figure}
+\centering
+<<echo=FALSE,results='asis'>>=
+plot(BAER_GraphMaps$graph)
+@
+\caption{Map of parts for \emph{Conospermum ericifolium}}
+\label{fig:map Conospermum ericifolium}
+\end{figure}
+
+
+\clearpage
+
+\clearpage
+
+\addcontentsline{toc}{section}{References}
+\bibliography{references}
+
+\end{document}
