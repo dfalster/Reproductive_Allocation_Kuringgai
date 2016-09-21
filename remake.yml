@@ -12,6 +12,7 @@ packages:
   - yaml
   - mgcv
   - knitr
+  - callr
 
 sources:
   - R
