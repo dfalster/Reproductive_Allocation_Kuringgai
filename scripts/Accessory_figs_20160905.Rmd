@@ -12,7 +12,7 @@ points(scaled_seed_count ~ embryo_endo_size, SummarySpp[["mean"]],cex=1.5,pch=16
 line_function_log_xy(SummarySpp[["mean"]]$prepollen_costs,mod1,3)
 line_function_log_xy(SummarySpp[["mean"]]$embryo_endo_size,mod2,1)
 #points(scaled_seed_count ~ seed_costs, SummarySpp[["mean"]],pch=12,col=col.spp(species))
-arrows(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$scaled_seed_count,SummarySpp[["mean"]]$prepollen_costs,SummarySpp[["mean"]]$scaled_ovule_count,col=col.spp(SummarySpp[["mean"]]$species),code=1,length=.15)
+arrows(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$scaled_seed_count,SummarySpp[["mean"]]$prepollen_costs,SummarySpp[["mean"]]$scaled_ovule_count,col=col.spp(SummarySpp[["mean"]]$species),code=0,length=.15)
 
 dev.off()
 
