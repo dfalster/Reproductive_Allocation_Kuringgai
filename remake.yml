@@ -170,7 +170,7 @@ targets:
     command: saveRDS(SummaryInd, target_name)
 
   export/SummarySpp.rds:
-    command: saveRDS(SummaryInd, target_name)
+    command: saveRDS(SummarySpp, target_name)
 
   export/SummarySppAge.rds:
     command: saveRDS(SummarySppAge, target_name)
