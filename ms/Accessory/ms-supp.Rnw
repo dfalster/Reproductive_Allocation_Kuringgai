@@ -38,6 +38,7 @@ opts_chunk$set(echo=FALSE, fig.pos = "!h", fig.align="center", comment = NA)
 
 flowering_parts <- read.csv("Sup_Table_flowering_parts.csv",
   stringsAsFactors=FALSE, check.names=FALSE)
+flowering_parts$method <- gsub("_", " ", flowering_parts$method, fixed=TRUE)
 
 print_table_species <- function(species, data) {
   data <- data[data$species == species, -c(1)]
@@ -56,6 +57,12 @@ print_table_species <- function(species, data) {
       , floating = FALSE)
 }
 
+
+plot_graph <- function(graph) {
+
+  #plot(graph)
+  plot(NA, type="n", xlim=c(0,1), ylim=c(0,1), ann=FALSE, axes=FALSE)
+}
 @
 
 \begin{document}
@@ -86,7 +93,7 @@ print_table_species("Banksia ericifolia", flowering_parts)
 \begin{figure}
 \centering
 <<echo=FALSE,results='asis'>>=
-plot(BAER_GraphMaps$graph)
+plot_graph(BAER_GraphMaps$graph)
 @
 \caption{Map of parts for \emph{Banksia ericifolia}}
 \label{fig:map Banksia ericifolia}
@@ -109,7 +116,7 @@ print_table_species("Conospermum ericifolium", flowering_parts)
 \begin{figure}
 \centering
 <<echo=FALSE,results='asis'>>=
-plot(BAER_GraphMaps$graph)
+plot_graph(COER_GraphMaps$graph)
 @
 \caption{Map of parts for \emph{Conospermum ericifolium}}
 \label{fig:map Conospermum ericifolium}
