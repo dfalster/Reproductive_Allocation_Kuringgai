@@ -102,6 +102,26 @@ plot_graph(BAER_GraphMaps$graph)
 
 \clearpage
 
+\subsection{Boronia ledifolia}
+
+Details on parts for \emph{Boronia ledifolia} found in Table \ref{tab:parts_Boronia ledifolia}. See Fig \ref{fig:map Boronia ledifolia} for a plot.
+
+
+<<echo=FALSE,results='asis'>>=
+  print_table_species("Boronia ledifolia", flowering_parts)
+@
+  
+  \begin{figure}
+\centering
+<<echo=FALSE,results='asis'>>=
+  plot_graph(BOLE_GraphMaps$graph)
+@
+  \caption{Map of parts for \emph{Boronia ledifolia}}
+\label{fig:map Boronia ledifolia}
+\end{figure}
+
+
+\clearpage
 
 \subsection{Conospermum ericifolium}
 
@@ -109,21 +129,247 @@ Details on parts for \emph{Conospermum ericifolium} found in Table \ref{tab:part
 
 
 <<echo=FALSE,results='asis'>>=
-print_table_species("Conospermum ericifolium", flowering_parts)
+  print_table_species("Conospermum ericifolium", flowering_parts)
 @
-
-
-\begin{figure}
+  
+  
+  \begin{figure}
 \centering
 <<echo=FALSE,results='asis'>>=
-plot_graph(COER_GraphMaps$graph)
+  plot_graph(COER_GraphMaps$graph)
 @
-\caption{Map of parts for \emph{Conospermum ericifolium}}
+  \caption{Map of parts for \emph{Conospermum ericifolium}}
 \label{fig:map Conospermum ericifolium}
 \end{figure}
 
 
 \clearpage
+
+\subsection{Epacris microphylla}
+
+Details on parts for \emph{Epacris microphylla} found in Table \ref{tab:parts_Epacris microphylla}. See Fig \ref{fig:map Epacris microphylla} for a plot.
+
+
+<<echo=FALSE,results='asis'>>=
+  print_table_species("Epacris microphylla", flowering_parts)
+@
+  
+  \begin{figure}
+\centering
+<<echo=FALSE,results='asis'>>=
+  plot_graph(EPMI_GraphMaps$graph)
+@
+  \caption{Map of parts for \emph{Epacris microphylla}}
+\label{fig:map Epacris microphylla}
+\end{figure}
+
+
+\clearpage
+
+\subsection{Grevillea buxifolia}
+
+Details on parts for \emph{Grevillea buxifolia} found in Table \ref{tab:parts_Grevillea buxifolia}. See Fig \ref{fig:map Grevillea buxifolia} for a plot.
+
+
+<<echo=FALSE,results='asis'>>=
+  print_table_species("Grevillea buxifolia", flowering_parts)
+@
+  
+  \begin{figure}
+\centering
+<<echo=FALSE,results='asis'>>=
+  plot_graph(GRBU_GraphMaps$graph)
+@
+  \caption{Map of parts for \emph{Grevillea buxifolia}}
+\label{fig:map Grevillea buxifolia}
+\end{figure}
+
+
+\clearpage
+
+\subsection{Grevillea speciosa}
+
+Details on parts for \emph{Grevillea speciosa} found in Table \ref{tab:parts_Grevillea speciosa}. See Fig \ref{fig:map Grevillea speciosa} for a plot.
+
+
+<<echo=FALSE,results='asis'>>=
+  print_table_species("Grevillea speciosa", flowering_parts)
+@
+  
+  \begin{figure}
+\centering
+<<echo=FALSE,results='asis'>>=
+  plot_graph(GRSP_GraphMaps$graph)
+@
+  \caption{Map of parts for \emph{Grevillea speciosa}}
+\label{fig:map Grevillea speciosa}
+\end{figure}
+
+
+\clearpage
+
+\subsection{Hakea teretifolia}
+
+Details on parts for \emph{Hakea teretifolia} found in Table \ref{tab:parts_Hakea teretifolia}. See Fig \ref{fig:map Hakea teretifolia} for a plot.
+
+
+<<echo=FALSE,results='asis'>>=
+  print_table_species("Hakea teretifolia", flowering_parts)
+@
+  
+  \begin{figure}
+\centering
+<<echo=FALSE,results='asis'>>=
+  plot_graph(HATE_GraphMaps$graph)
+@
+  \caption{Map of parts for \emph{Hakea teretifolia}}
+\label{fig:map Hakea teretifolia}
+\end{figure}
+
+\clearpage
+
+
+\subsection{Hemigenia purpurea}
+
+Details on parts for \emph{Hemigenia purpurea} found in Table \ref{tab:parts_Hemigenia purpurea}. See Fig \ref{fig:map Hemigenia purpurea} for a plot.
+
+
+<<echo=FALSE,results='asis'>>=
+  print_table_species("Hemigenia purpurea", flowering_parts)
+@
+  
+  \begin{figure}
+\centering
+<<echo=FALSE,results='asis'>>=
+  plot_graph(HEPU_GraphMaps$graph)
+@
+  \caption{Map of parts for \emph{Hemigenia purpurea}}
+\label{fig:map Hemigenia purpurea}
+\end{figure}
+
+\clearpage
+
+
+\subsection{Leucopogon esquamatus}
+
+Details on parts for \emph{Leucopogon esquamatus} found in Table \ref{tab:parts_Leucopogon esquamatus}. See Fig \ref{fig:map Leucopogon esquamatus} for a plot.
+
+
+<<echo=FALSE,results='asis'>>=
+  print_table_species("Leucopogon esquamatus", flowering_parts)
+@
+  
+  \begin{figure}
+\centering
+<<echo=FALSE,results='asis'>>=
+  plot_graph(LEES_GraphMaps$graph)
+@
+  \caption{Map of parts for \emph{Leucopogon esquamatus}}
+\label{fig:map Leucopogon esquamatus}
+\end{figure}
+
+\clearpage
+
+\subsection{Persoonia lanceolata}
+
+Details on parts for \emph{Persoonia lanceolata} found in Table \ref{tab:parts_Persoonia lanceolata}. See Fig \ref{fig:map Persoonia lanceolata} for a plot.
+
+
+<<echo=FALSE,results='asis'>>=
+  print_table_species("Persoonia lanceolata", flowering_parts)
+@
+  
+  \begin{figure}
+\centering
+<<echo=FALSE,results='asis'>>=
+  plot_graph(PELA_GraphMaps$graph)
+@
+  \caption{Map of parts for \emph{Persoonia lanceolata}}
+\label{fig:map Persoonia lanceolata}
+\end{figure}
+
+\clearpage
+
+\subsection{Petrophile puchella}
+
+Details on parts for \emph{Petrophile puchella} found in Table \ref{tab:parts_Petrophile puchella}. See Fig \ref{fig:map Petrophile puchella} for a plot.
+
+
+<<echo=FALSE,results='asis'>>=
+  print_table_species("Petrophile puchella", flowering_parts)
+@
+  
+  \begin{figure}
+\centering
+<<echo=FALSE,results='asis'>>=
+  plot_graph(PEPU_GraphMaps$graph)
+@
+  \caption{Map of parts for \emph{Petrophile puchella}}
+\label{fig:map Petrophile puchella}
+\end{figure}
+
+\clearpage
+
+\subsection{Phyllota phyllicoides}
+
+Details on parts for \emph{Phyllota phyllicoides} found in Table \ref{tab:parts_Phyllota phyllicoides}. See Fig \ref{fig:map Phyllota phyllicoides} for a plot.
+
+
+<<echo=FALSE,results='asis'>>=
+  print_table_species("Phyllota phyllicoides", flowering_parts)
+@
+  
+  \begin{figure}
+\centering
+<<echo=FALSE,results='asis'>>=
+  plot_graph(PHPH_GraphMaps$graph)
+@
+  \caption{Map of parts for \emph{Phyllota phyllicoides}}
+\label{fig:map Phyllota phyllicoides}
+\end{figure}
+
+\clearpage
+
+\subsection{Pimelea linifolia}
+
+Details on parts for \emph{Pimelea linifolia} found in Table \ref{tab:parts_Pimelea linifolia}. See Fig \ref{fig:map Pimelea linifolia} for a plot.
+
+
+<<echo=FALSE,results='asis'>>=
+  print_table_species("Pimelea linifolia", flowering_parts)
+@
+  
+  \begin{figure}
+\centering
+<<echo=FALSE,results='asis'>>=
+  plot_graph(PILI_GraphMaps$graph)
+@
+  \caption{Map of parts for \emph{Pimelea linifolia}}
+\label{fig:map Pimelea linifolia}
+\end{figure}
+
+\clearpage
+
+\subsection{Pultanaea tuberculata}
+
+Details on parts for \emph{Pultanaea tuberculata} found in Table \ref{tab:parts_Pultanaea tuberculata}. See Fig \ref{fig:map Pultanaea tuberculata} for a plot.
+
+
+<<echo=FALSE,results='asis'>>=
+  print_table_species("Pultanaea tuberculata", flowering_parts)
+@
+  
+  \begin{figure}
+\centering
+<<echo=FALSE,results='asis'>>=
+  plot_graph(PUTU_GraphMaps$graph)
+@
+  \caption{Map of parts for \emph{Pultanaea tuberculata}}
+\label{fig:map Pultanaea tuberculata}
+\end{figure}
+
+\clearpage
+
 
 \clearpage
 
