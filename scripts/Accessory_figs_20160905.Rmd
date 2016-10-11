@@ -251,7 +251,7 @@ for (i in c("prop_failure","prop_prepollen_vs_RE","prop_dispersal_vs_RE","prop_e
   acc_costs_spp_format[[i]] <- round(100*acc_costs_spp_format[[i]],digits=1)
 }
 
-write.csv(acc_costs_spp_format, file="figs2/Accessory_Costs/Table01_AccCosts_by_Species.csv",row.names=FALSE)
+write.csv(acc_costs_spp_format, file="ms/Accessory/Table01_AccCosts_by_Species.csv",row.names=FALSE)
 ```
 
 #Table 1. color dots
@@ -281,7 +281,6 @@ y.error.bars(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$repro_in
 slopes <- sma(repro_inv_per_seed ~ embryo_endo_size,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
 abline(slopes$groupsummary["Int"][[1]],slopes$groupsummary["Slope"][[1]])
 abline(slopes$groupsummary["Int"][[1]],1,lty=2)
-words.bottom.left.logxy(mod)
 
 acc_by_species <- dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p)
 
@@ -337,14 +336,18 @@ acc_by_species <- dplyr::bind_rows(acc_by_species, dplyr::select(slopes$groupsum
 
 acc_by_species$variable = c("total accessory costs","seed costs","pollen attraction costs","provisioning costs", "failed tissues costs","all pre-pollen costs per seed","failed pre-pollination costs","failed provisioning costs")
 
-acc_by_species$slope2 <- paste(format(acc_by_species$Slope,digits=3)," (",format(acc_by_species$Slope_lowCI,digits=3)," - ",format(acc_by_species$Slope_highCI,digits=3),")",sep="")
+acc_by_species$Slope <- format(acc_by_species$Slope,nsmall=2,digits=2)
+acc_by_species$Slope_lowCI <- format(acc_by_species$Slope_lowCI,nsmall=2,digits=2)
+acc_by_species$Slope_highCI <- format(acc_by_species$Slope_highCI,nsmall=2,digits=2)
+
+acc_by_species$slope2 <- paste(acc_by_species$Slope," (",acc_by_species$Slope_lowCI," - ",acc_by_species$Slope_highCI,")",sep="")
 
 acc_by_species$r2 <- format(acc_by_species$r2,digits=2)
-acc_by_species$pval <- format(acc_by_species$pval,digits=2)
-acc_by_species$Slope_test_p <- format(acc_by_species$Slope_test_p,digits=3)
+acc_by_species$pval <- format_p(acc_by_species$pval)
+acc_by_species$Slope_test_p <- format(acc_by_species$Slope_test_p,digits=2)
 acc_slopes <- dplyr::select(acc_by_species,variable,r2,slope2,Slope_test_p)
 
-write.csv(acc_slopes, file="figs2/Accessory_Costs/Table02_acc_cost_embryo_size_slopes.csv",row.names=FALSE)
+write.csv(acc_slopes, file="ms/Accessory/Table02_acc_cost_embryo_size_slopes.csv",row.names=FALSE)
 ```
 
 #Table Supplementary.correlations between repro inv and propagule inv by species
@@ -371,8 +374,9 @@ results$pval <- format(results$pval,digits=3)
 acc_slopes2 <- dplyr::select(results,group,n,r2,pval)
 names(acc_slopes2) <- c("species","n_flower","r2_flower","p_flower")
 acc_slopes <- dplyr::left_join(acc_slopes, acc_slopes2, by ="species")
+acc_slopes$species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia", "Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile pulchella", "Phyllota phylicoides", "Pimelea linifolia", "Pultenaea tuberculata")
 
-write.csv(acc_slopes, file="figs2/Accessory_Costs/Table_S3_propagule_invest_vs_repro_inv.csv",row.names=FALSE)
+write.csv(acc_slopes, file="ms/Accessory/Table_SXX_propagule_invest_vs_repro_inv.csv",row.names=FALSE)
 ```
 
 #Table 3. correlations with total repro inv
@@ -390,7 +394,7 @@ fit <- sma(data[[yvar]] ~ data[[xvar]], method="OLS", log="xy",slope.test=1)
 temp <- as.data.frame(c(xvar, yvar,dplyr::select(fit$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Slope_test_p,n)))
 colnames(temp)[2]<- "variable"
 colnames(temp)[1]<- "xvar"
-results <- bind_rows(results, temp)
+results <- dplyr::bind_rows(results, temp)
   }
 }
 
@@ -402,7 +406,7 @@ results$Slope_test_p <- format(results$Slope_test_p,digits=3)
 #results  <- dplyr::select(results,variable,n,r2,pval,slope2,Slope_test_p)
 results  <- dplyr::select(results,variable,n,r2,pval)
 
-write.csv(results, file="figs2/Accessory_Costs/Table03_correlations_with_repro_inv.csv",row.names=FALSE)
+write.csv(results, file="ms/Accessory/Table03_correlations_with_repro_inv.csv",row.names=FALSE)
 ```
 
 

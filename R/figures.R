@@ -137,7 +137,8 @@ labels.spp <- function(x=NULL){
 
 labels.spp.full <- function(x=NULL){
 
-  ret <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia","Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile puchella", "Phyllota phyllicoides", "Pimelea linifolia", "Pultanaea tuberculata")
+  ret <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia",
+           "Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile pulchella", "Phyllota phylicoides", "Pimelea linifolia", "Pultenaea tuberculata")
   names(ret) <- c("BAER","BOLE","COER","EPMI","GRBU","GRSP","HATE","HEPU","LEES","PELA","PEPU","PHPH","PILI","PUTU")
 
   if(!is.null(x)) {
@@ -148,7 +149,8 @@ labels.spp.full <- function(x=NULL){
 
 labels.spp.genus <- function(x=NULL){
   
-  ret <- c("B. ericifolia","B. ledifolia","C. ericifolium","E. microphylla", "G. buxifolia","G. speciosa","H. teretifolia","H. purpurea","L. esquamatus","P. lanceolata", "P. puchella", "P. phyllicoides", "P. linifolia", "P. tuberculata")
+  ret <- c("B. ericifolia","B. ledifolia","C. ericifolium","E. microphylla", "G. buxifolia","G. speciosa","H. teretifolia","H. purpurea","L. esquamatus","P. lanceolata", 
+           "P. pulchella", "P. phylicoides", "P. linifolia", "P. tuberculata")
   names(ret) <- c("BAER","BOLE","COER","EPMI","GRBU","GRSP","HATE","HEPU","LEES","PELA","PEPU","PHPH","PILI","PUTU")
   
   if(!is.null(x)) {
@@ -195,6 +197,14 @@ col.lots <- function(x) {
             ceiling(n/80))
   cols[as.factor(x)]
 }
+
+format_p <- function(p, digits = 4) {
+  x <- as.character(round(p, digits = digits))
+  pc <- 10^-digits
+  x[p < pc] <- paste("<", pc)
+  x
+}
+
 
 print_xtable_for_species <- function(thisSpecies, data, file){
   print_xtable(filter(data, species==thisSpecies),file=file)

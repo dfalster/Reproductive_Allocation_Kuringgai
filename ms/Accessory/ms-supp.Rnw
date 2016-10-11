@@ -38,13 +38,14 @@ opts_chunk$set(echo=FALSE, fig.pos = "!h", fig.align="center", comment = NA)
 
 flowering_parts <- read.csv("Sup_Table_flowering_parts.csv",
   stringsAsFactors=FALSE, check.names=FALSE)
+
 flowering_parts$method <- gsub("_", " ", flowering_parts$method, fixed=TRUE)
 
 print_table_species <- function(species, data) {
   data <- data[data$species == species, -c(1)]
   print(xtable(data,
             hline.after=c(1),
-            align='p{0.1cm}p{4cm}p{6cm}p{3cm}p{1cm}p{1cm}',
+            align='p{0.1cm}p{4cm}p{6cm}p{2.5cm}p{1cm}p{1cm}',
             label=sprintf("tab:parts_%s", species),
             caption=sprintf("Table of parts for %s.", species)),
       sanitize.text.function=I,
@@ -62,12 +63,14 @@ plot_graph <- function(graph) {
 
   #plot(graph)
   plot(NA, type="n", xlim=c(0,1), ylim=c(0,1), ann=FALSE, axes=FALSE)
+  box()
 }
 @
 
+
 \begin{document}
 
-\maketitle
+%\maketitle
 
 \tableofcontents
 
@@ -290,13 +293,13 @@ Details on parts for \emph{Persoonia lanceolata} found in Table \ref{tab:parts_P
 
 \clearpage
 
-\subsection{Petrophile puchella}
+\subsection{Petrophile pulchella}
 
-Details on parts for \emph{Petrophile puchella} found in Table \ref{tab:parts_Petrophile puchella}. See Fig \ref{fig:map Petrophile puchella} for a plot.
+Details on parts for \emph{Petrophile pulchella} found in Table \ref{tab:parts_Petrophile pulchella}. See Fig \ref{fig:map Petrophile pulchella} for a plot.
 
 
 <<echo=FALSE,results='asis'>>=
-  print_table_species("Petrophile puchella", flowering_parts)
+  print_table_species("Petrophile pulchella", flowering_parts)
 @
   
   \begin{figure}
@@ -304,19 +307,19 @@ Details on parts for \emph{Petrophile puchella} found in Table \ref{tab:parts_Pe
 <<echo=FALSE,results='asis'>>=
   plot_graph(PEPU_GraphMaps$graph)
 @
-  \caption{Map of parts for \emph{Petrophile puchella}}
-\label{fig:map Petrophile puchella}
+  \caption{Map of parts for \emph{Petrophile pulchella}}
+\label{fig:map Petrophile pulchella}
 \end{figure}
 
 \clearpage
 
-\subsection{Phyllota phyllicoides}
+\subsection{Phyllota phylicoides}
 
-Details on parts for \emph{Phyllota phyllicoides} found in Table \ref{tab:parts_Phyllota phyllicoides}. See Fig \ref{fig:map Phyllota phyllicoides} for a plot.
+Details on parts for \emph{Phyllota phylicoides} found in Table \ref{tab:parts_Phyllota phylicoides}. See Fig \ref{fig:map Phyllota phylicoides} for a plot.
 
 
 <<echo=FALSE,results='asis'>>=
-  print_table_species("Phyllota phyllicoides", flowering_parts)
+  print_table_species("Phyllota phylicoides", flowering_parts)
 @
   
   \begin{figure}
@@ -324,8 +327,8 @@ Details on parts for \emph{Phyllota phyllicoides} found in Table \ref{tab:parts_
 <<echo=FALSE,results='asis'>>=
   plot_graph(PHPH_GraphMaps$graph)
 @
-  \caption{Map of parts for \emph{Phyllota phyllicoides}}
-\label{fig:map Phyllota phyllicoides}
+  \caption{Map of parts for \emph{Phyllota phylicoides}}
+\label{fig:map Phyllota phylicoides}
 \end{figure}
 
 \clearpage
@@ -350,13 +353,13 @@ Details on parts for \emph{Pimelea linifolia} found in Table \ref{tab:parts_Pime
 
 \clearpage
 
-\subsection{Pultanaea tuberculata}
+\subsection{Pultenaea tuberculata}
 
-Details on parts for \emph{Pultanaea tuberculata} found in Table \ref{tab:parts_Pultanaea tuberculata}. See Fig \ref{fig:map Pultanaea tuberculata} for a plot.
+Details on parts for \emph{Pultenaea tuberculata} found in Table \ref{tab:parts_Pultenaea tuberculata}. See Fig \ref{fig:map Pultenaea tuberculata} for a plot.
 
 
 <<echo=FALSE,results='asis'>>=
-  print_table_species("Pultanaea tuberculata", flowering_parts)
+  print_table_species("Pultenaea tuberculata", flowering_parts)
 @
   
   \begin{figure}
@@ -364,9 +367,146 @@ Details on parts for \emph{Pultanaea tuberculata} found in Table \ref{tab:parts_
 <<echo=FALSE,results='asis'>>=
   plot_graph(PUTU_GraphMaps$graph)
 @
-  \caption{Map of parts for \emph{Pultanaea tuberculata}}
-\label{fig:map Pultanaea tuberculata}
+  \caption{Map of parts for \emph{Pultenaea tuberculata}}
+\label{fig:map Pultenaea tuberculata}
 \end{figure}
+
+\clearpage
+  
+<<echo=FALSE,results='asis'>>=
+headers <- as.data.frame(matrix(vector(), 3, 3,
+                dimnames=list(c(), c("A","B","C"))),
+                stringsAsFactors=F)
+headers[1,] <- c("","Total reproductive investment","Total reproductive investment")
+headers[2,] <- c("","vs","vs")
+headers[3,] <- c("","propagule investment","flower investment")
+
+print(xtable(headers,
+             hline.after=c(-1),
+             align='p{0.1cm}p{4cm}|c|c'),
+        sanitize.text.function=I,
+        , table.placement = "H"
+        , caption.placement = "top"
+        , include.rownames = FALSE
+        , include.colnames = FALSE
+        , size = "small"
+        , floating = FALSE)             
+@    
+   
+       
+<<echo=FALSE,results='asis'>>=
+TableSXX <- read.csv("Table_SXX_propagule_invest_vs_repro_inv.csv",
+                    stringsAsFactors=FALSE, check.names=FALSE)
+
+names(TableSXX) <- c("species","n","r$^2$","p", "n","r$^2$","p")
+TableSXX[,2] <- format(TableSXX[,2],digits=2,nsmall=2)
+TableSXX[,5] <- format(TableSXX[,5],digits=2,nsmall=2)
+TableSXX[,4] <- format_p(TableSXX[,4])
+TableSXX[,7] <- format_p(TableSXX[,7])
+
+TableSXX$species  <- paste("\\textit{",unique(TableSXX$species),"}", sep="")
+
+print(xtable(TableSXX,
+               hline.after=c(1),
+               align='p{0.1cm}p{4cm}|p{.94cm}p{1cm}p{1.5cm}|p{.75cm}p{1cm}p{1.5cm}',
+               caption="Intraspecific correlations between reproductive investment and (a) propagule investment and (b) flower investment"),
+               sanitize.text.function=I,
+        , table.placement = "H"
+        , caption.placement = "top"
+        , include.rownames = FALSE
+        , include.colnames = TRUE
+        , size = "small"
+        , floating = FALSE)
+@
+
+Table SXX.Intraspecific correlations between total reproductive investment and (a) propagule investment and (b) flower investment, where flower investment is defined as "flower weight (mg) * bud count".
+
+\clearpage
+
+<<echo=FALSE,results='asis'>>=
+TableSXX <- read.csv("Table_SXX_propagule_invest_vs_repro_inv.csv",
+                    stringsAsFactors=FALSE, check.names=FALSE)
+
+names(TableSXX) <- c("species","n","r$^2$","p", "n","r$^2$","p")
+TableSXX[,2] <- format(TableSXX[,2],digits=2,nsmall=2)
+TableSXX[,5] <- format(TableSXX[,5],digits=2,nsmall=2)
+TableSXX[,4] <- format_p(TableSXX[,4])
+TableSXX[,7] <- format_p(TableSXX[,7])
+
+TableSXX$species  <- paste("\\textit{",unique(TableSXX$species),"}", sep="")
+
+print(xtable(TableSXX,
+               hline.after=c(1),
+               align='p{0.1cm}p{4cm}|p{.94cm}p{1cm}p{1.5cm}|p{.75cm}p{1cm}p{1.5cm}',
+               caption="Intraspecific correlations between reproductive investment and (a) propagule investment and (b) flower investment"),
+               sanitize.text.function=I,
+        , table.placement = "H"
+        , caption.placement = "top"
+        , include.rownames = FALSE
+        , include.colnames = TRUE
+        , size = "small"
+        , floating = FALSE)
+@
+
+Table SXX.Intraspecific correlations between total reproductive investment and (a) propagule investment and (b) flower investment, where flower investment is defined as "flower weight (mg) * bud count".
+
+\clearpage
+
+<<echo=FALSE,results='asis'>>=
+Table02 <- read.csv("Table02_acc_cost_embryo_size_slopes.csv",
+                    stringsAsFactors=FALSE, check.names=FALSE)
+
+names(Table02) <- c("Variable", "r$^2$", "slope (95 CI)","p$_{slope<>1}$")
+Table02[,2] <- format(Table02[,2],digits=2,nsmall=2)
+Table02[,4] <- format(Table02[,4],digits=4,nsmall=4)
+
+print(xtable(Table02,
+               hline.after=c(1),
+               align='p{0.1cm}p{4cm}p{1cm}p{3cm}p{1cm}',
+               caption="Correlations with total reproductive investment"),
+               sanitize.text.function=I,
+        , table.placement = "H"
+        , caption.placement = "top"
+        , include.rownames = FALSE
+        , include.colnames = TRUE
+        , size = "small"
+        , floating = FALSE)
+@
+
+Table 2. Scaling of reproductive tissue costs with seed size. All variables were showed a strong correlation with seed size (p < 0.0001). Tables show properties of SMA line fits, between different variables and seed size. 
+\clearpage
+
+
+<<echo=FALSE,results='asis'>>=
+Table03 <- read.csv("Table03_correlations_with_repro_inv.csv",
+                    stringsAsFactors=FALSE, check.names=FALSE)
+format_p <- function(p, digits = 4) {
+  x <- as.character(round(p, digits = digits))
+  pc <- 10^-digits
+  x[p < pc] <- paste("<", pc)
+  x
+}
+
+Table03$pval <- format_p(Table03$pval)
+Table03$variable <- c("Total plant weight (mg)","Propagule investment (mg)","Fruit investment (mg)","Flower investment (mg)",
+                      "Successful investment (mg)", "Successful pre-pollination investment (mg)","Provisioning investment (mg)",
+                      "Failed tissues (mg)")
+names(Table03) <- c("Variable", "n", "r$^2$", "p")
+print(xtable(Table03,
+               hline.after=c(1),
+               align='p{0.1cm}p{6.5cm}p{1cm}p{1cm}p{1.5cm}',
+               caption="Correlations with total reproductive investment",
+             digits = 2),
+               sanitize.text.function=I,
+        , table.placement = "H"
+        , caption.placement = "top"
+        , include.rownames = FALSE
+        , include.colnames = TRUE
+        , size = "small"
+        , floating = FALSE)
+@
+
+Table 3. Correlation of different estimates of reproductive investment (and total plant weight) against total reproductive investment (mg). Regressions are done across all individuals of all 14 study species for which both reproductive investment and the estimate variable are greater than zero. The total cost of failed tissues or simply the energy expenditure into flowers provides the best approximation of total reproductive investment. Flower investment is a composite variable calculated as flower weight (mg)*bud count. Successful investment is a composite variable calculated as seed costs (mg)*seed count.
 
 \clearpage
 
@@ -377,3 +517,7 @@ Details on parts for \emph{Pultanaea tuberculata} found in Table \ref{tab:parts_
 \bibliography{references}
 
 \end{document}
+
+
+
+
