@@ -2,11 +2,11 @@ Always run
 Opening files
 
 ``` {r}
-accessoryList <- read.csv("~/RA schedules - Kuringgai research/Reproductive_Allocation_Kuringgai/data/accessoryList.csv")
-accessoryListShort <- read.csv("~/RA schedules - Kuringgai research/Reproductive_Allocation_Kuringgai/data/accessoryListShort.csv")
-accessoryListShortest <- read.csv("~/RA schedules - Kuringgai research/Reproductive_Allocation_Kuringgai/data/accessoryListShortest.csv")
-tissue_energy <- read.csv("~/RA schedules - Kuringgai research/Reproductive_Allocation_Kuringgai/data/tissue_energy.csv")
-nectar <- read.csv("~/RA schedules - Kuringgai research/Reproductive_Allocation_Kuringgai/data/nectar.csv")
+accessoryList <- read.csv("~/Reproductive_Allocation_Kuringgai/data/accessoryList.csv")
+accessoryListShort <- read.csv("~/Reproductive_Allocation_Kuringgai/data/accessoryListShort.csv")
+accessoryListShortest <- read.csv("~/Reproductive_Allocation_Kuringgai/data/accessoryListShortest.csv")
+tissue_energy <- read.csv("~/Reproductive_Allocation_Kuringgai/data/tissue_energy.csv")
+nectar <- read.csv("~/Reproductive_Allocation_Kuringgai/data/nectar.csv")
 
 col.barplot <- function(x=NULL){
   ret <- c("black","cyan4","cyan1","darkslategray3","firebrick","firebrick1","firebrick2","firebrick3","gold","bisque","chartreuse2","chartreuse3","chartreuse4","chartreuse2","deepskyblue",
@@ -137,6 +137,7 @@ SummaryInvest$prop_weight <- round(SummaryInvest$weight / SummaryInvest$weight_s
 ```
 
 View(SummaryInvest)
+names(Invest2)
 
 by "parts fewer yet"
 ```{r}
