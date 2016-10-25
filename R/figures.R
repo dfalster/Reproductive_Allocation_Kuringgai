@@ -300,14 +300,14 @@ se_function <- function(mean1,se1) {
   }
 }
 
-line_function_log_xy <- function(x_axis,mod,type) {
+line_function_log_xy <- function(x_axis,mod,type,colx) {
   intercept <- mod$coef[[1]][1,1]
   slope <- mod$coef[[1]][2,1]
   x_min <- min(x_axis)
   x_max <- max(x_axis)
   y_min <- (x_min^slope)*(10^intercept)
   y_max <- (x_max^slope)*(10^intercept)
-  segments(x_min,y_min,x_max,y_max,lty=type)
+  segments(x_min,y_min,x_max,y_max,lty=type,col=colx)
 }
 
 line_function_log_xy_zero <- function(x_axis,mod,slope) {
@@ -317,7 +317,27 @@ line_function_log_xy_zero <- function(x_axis,mod,slope) {
   x_max <- max(x_axis)
   y_min <- (x_min^slope)*(10^intercept)
   y_max <- (x_max^slope)*(10^intercept)
-  segments(x_min,y_min,x_max,y_max,lty=2)
+  segments(x_min,y_min,x_max,y_max,lty=2,col=colx)
+}
+
+line_function_log_x <- function(x_axis,mod,type,colx) {
+  intercept <- mod$coef[[1]][1,1]
+  slope <- mod$coef[[1]][2,1]
+  x_min <- min(x_axis)
+  x_max <- max(x_axis)
+  y_min <- (slope*(log10(x_min)))+(intercept)
+  y_max <- (log10(x_max)*slope)+intercept
+  segments(x_min,y_min,x_max,y_max,lty=type,col=colx)
+}
+
+line_function_log_y <- function(x_axis,mod,type,colx) {
+  intercept <- mod$coef[[1]][1,1]
+  slope <- mod$coef[[1]][2,1]
+  x_min <- min(x_axis)
+  x_max <- max(x_axis)
+  y_min <- (10^(x_min*slope))*(10^intercept)
+  y_max <- (10^(x_max*slope))*(10^intercept)
+  segments(x_min,y_min,x_max,y_max,lty=type,col=colx)
 }
 
 
@@ -438,8 +458,8 @@ extra.top.left.logxy <- function (words,fontx,cexx) {
   text(10^((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.96*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,font=fontx,cex=cexx)
 }
 
-extra.top.left.logx <- function (words,fontx) {
-  text(10^((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.96*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,cex=.75,font=fontx)
+extra.top.left.logx <- function (words,fontx,cexx) {
+  text(10^((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.96*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,cex=cexx,font=fontx)
 }
 
 extra.top.left <- function (words) {
@@ -460,12 +480,17 @@ extra.bottom.left <- function (words) {
 }
 
 extra.bottom.right.logx <- function (words,fontx) {
-  text(10^((0.98*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.04*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,cex=.75,adj=1,,font=fontx)
+  text(10^((0.98*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.04*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,cex=.75,adj=1,font=fontx)
 }
 
-extra.top.right.logx <- function (words,fontx) {
-  text(10^((0.98*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.96*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,cex=.75,adj=1,,font=fontx)
+extra.top.right.logx <- function (words,fontx,cexx) {
+  text(10^((0.98*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.96*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=1,font=fontx,cex=cexx)
 }
+
+extra.top.right.logxy <- function (words,fontx,cexx) {
+  text(10^((0.98*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),10^((0.96*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=1,font=fontx,cex=cexx)
+}
+
 
 lines <- function(results) {
   results$linetype <- 1
