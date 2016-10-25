@@ -93,8 +93,109 @@ planes3d(0, x.coef = 1, y.coef = 1, lty = "dashed",)
 
 par(mfrow=c(1,1), cex=1, omi=c(1.1,0.8,.1,.1), mai=c(0.3,.4,.1,0.2)) 
 ```
+  data <- data %>% mutate(
+    total_inv = repro_inv + growth_leaf + leaf_replacement + growth_stem,
+    prop_repro = repro_inv / total_inv,
+    prop_leaf_expand = (repro_inv + growth_leaf)/total_inv,
+    prop_leaf_replacement = (leaf_replacement+repro_inv + growth_leaf)/ total_inv,
+    prop_stem = total_inv/total_inv
+  )
 
-#Figure 1 Different species have different RA values. But biggest shift in RA is with age
+View(data)
+
+```{r}
+data <- dplyr::select(SummarySppAge[["mean"]],species,age,repro_inv,growth_leaf,leaf_replacement,growth_stem,leaf_shed)
+
+  for(v in c("repro_inv","growth_leaf","leaf_replacement","growth_stem","leaf_shed")) {
+    i <- is.na(data[[v]])
+    data[[v]][i] <- 0
+  }
+
+  for(v in c("growth_leaf")) {
+    i <- (data[[v]] < 0)
+    data[[v]][i] <- 0
+  }
+
+#data <- subset(data,species=="BOLE")
+data <- split(data, data$species)
+
+
+for(spp in names(data)) {
+
+  
+  data[[spp]] <- data[[spp]] %>% mutate(
+    total_inv = repro_inv + growth_leaf + leaf_replacement + growth_stem,
+    prop_repro = repro_inv / total_inv,
+    prop_leaf_expand = (repro_inv + growth_leaf)/total_inv,
+    prop_leaf_replacement = (leaf_replacement+repro_inv + growth_leaf)/ total_inv,
+    prop_stem = total_inv/total_inv
+  )
+
+  plot(prop_repro~age,data[[spp]],pch=16,log="x",ylim=c(0.04,0.96),xlim=c(1.06*1.4,0.94*32),col="white")
+  
+  
+  if(spp=="PILI") {
+  polygon(x=c(1.4,7,7,1.4),y=c(1,1,0,0),col="burlywood4",density=NA)
+  polygon(x=c(1.4,2.4,5,7,7,1.4),y=c(data[[spp]]$prop_leaf_replacement[1],data[[spp]]$prop_leaf_replacement[2],data[[spp]]$prop_leaf_replacement[3],data[[spp]]$prop_leaf_replacement[4],
+                                           0,0),col="darkseagreen4",density=NA)
+  polygon(x=c(1.4,2.4,5,7,7,1.4),y=c(data[[spp]]$prop_leaf_expand[1],data[[spp]]$prop_leaf_expand[2],data[[spp]]$prop_leaf_expand[3],data[[spp]]$prop_leaf_expand[4],
+                                         0,0),col="darkseagreen2",density=NA)
+  polygon(x=c(1.4,2.4,5,7,7,1.4),y=c(data[[spp]]$prop_repro[1],data[[spp]]$prop_repro[2],data[[spp]]$prop_repro[3],data[[spp]]$prop_repro[4],
+                                         0,0),col="coral3",density=NA)
+  text(5,0.1,"reproductive")
+  text(1.4,0.18,"additional leaves",adj=0)
+  text(3,0.4,"replacement leaves",adj=0)
+  text(2,0.7,"additional stems",adj=0)
+  }
+
+  if(spp=="PHPH") {
+  polygon(x=c(2.4,32,32,2.4),y=c(1,1,0,0),col="burlywood4",density=NA)
+  polygon(x=c(2.4,5,7,9,32,32,2.4),y=c(data[[spp]]$prop_leaf_replacement[1],data[[spp]]$prop_leaf_replacement[2],data[[spp]]$prop_leaf_replacement[3],data[[spp]]$prop_leaf_replacement[4],
+                                           data[[spp]]$prop_leaf_replacement[5],0,0),col="darkseagreen4",density=NA)
+  polygon(x=c(2.4,5,7,9,32,32,2.4),y=c(data[[spp]]$prop_leaf_expand[1],data[[spp]]$prop_leaf_expand[2],data[[spp]]$prop_leaf_expand[3],data[[spp]]$prop_leaf_expand[4],
+                                         data[[spp]]$prop_leaf_expand[5],0,0),col="darkseagreen2",density=NA)
+  polygon(x=c(2.4,5,7,9,32,32,2.4),y=c(data[[spp]]$prop_repro[1],data[[spp]]$prop_repro[2],data[[spp]]$prop_repro[3],data[[spp]]$prop_repro[4],
+                                          data[[spp]]$prop_repro[5],0,0),col="coral3",density=NA)
+  text(20,data[[spp]]$prop_repro[5]*.7,"reproductive")
+  text(2.5,data[[spp]]$prop_leaf_expand[1]*.3,"additional leaves",adj=0)
+  text(5,data[[spp]]$prop_leaf_replacement[4]*.6,"replacement leaves",adj=0)
+  text(15,0.9,"additional stems",adj=0)
+    }
+  
+ if(spp=="BOLE"|spp=="COER"|spp=="HEPU"|spp=="GRSP") {
+  polygon(x=c(1.4,9,9,1.4),y=c(1,1,0,0),col="burlywood4",density=NA) 
+  polygon(x=c(1.4,2.4,5,7,9,9,1.4),y=c(data[[spp]]$prop_leaf_replacement[1],data[[spp]]$prop_leaf_replacement[2],data[[spp]]$prop_leaf_replacement[3],data[[spp]]$prop_leaf_replacement[4],
+                                           data[[spp]]$prop_leaf_replacement[5],0,0),col="darkseagreen4",density=NA)
+  polygon(x=c(1.4,2.4,5,7,9,9,1.4),y=c(data[[spp]]$prop_leaf_expand[1],data[[spp]]$prop_leaf_expand[2],data[[spp]]$prop_leaf_expand[3],data[[spp]]$prop_leaf_expand[4],
+                                         data[[spp]]$prop_leaf_expand[5],0,0),col="darkseagreen2",density=NA)
+  polygon(x=c(1.4,2.4,5,7,9,9,1.4),y=c(data[[spp]]$prop_repro[1],data[[spp]]$prop_repro[2],data[[spp]]$prop_repro[3],data[[spp]]$prop_repro[4],
+                                          data[[spp]]$prop_repro[5],0,0),col="coral3",density=NA)
+  text(8,data[[spp]]$prop_repro[5]*.4,"reproductive",adj=1)
+  text(1.5,data[[spp]]$prop_leaf_expand[1]*.5,"additional leaves",adj=0)
+  text(4,data[[spp]]$prop_leaf_replacement[3]*.6,"replacement leaves",adj=0)
+  text(6,0.9,"additional stems",adj=1)
+  }
+
+  if(spp=="BAER"|spp=="EPMI"|spp=="GRBU"|spp=="HATE"|spp=="PELA"|spp=="PUTU"|spp=="LEES"|spp=="PEPU") {
+  polygon(x=c(1.4,32,32,1.4),y=c(1,1,0,0),col="burlywood4",density=NA)
+  polygon(x=c(1.4,2.4,5,7,9,32,32,1.4),y=c(data[[spp]]$prop_leaf_replacement[1],data[[spp]]$prop_leaf_replacement[2],data[[spp]]$prop_leaf_replacement[3],data[[spp]]$prop_leaf_replacement[4],
+                                           data[[spp]]$prop_leaf_replacement[5],data[[spp]]$prop_leaf_replacement[6],0,0),col="darkseagreen4",density=NA)
+  polygon(x=c(1.4,2.4,5,7,9,32,32,1.4),y=c(data[[spp]]$prop_leaf_expand[1],data[[spp]]$prop_leaf_expand[2],data[[spp]]$prop_leaf_expand[3],data[[spp]]$prop_leaf_expand[4],
+                                         data[[spp]]$prop_leaf_expand[5],data[[spp]]$prop_leaf_expand[6],0,0),col="darkseagreen2",density=NA)
+  polygon(x=c(1.4,2.4,5,7,9,32,32,1.4),y=c(data[[spp]]$prop_repro[1],data[[spp]]$prop_repro[2],data[[spp]]$prop_repro[3],data[[spp]]$prop_repro[4],
+                                          data[[spp]]$prop_repro[5],data[[spp]]$prop_repro[6],0,0),col="coral3",density=NA)
+  text(20,data[[spp]]$prop_repro[6]*.4,"reproductive")
+  text(1.5,data[[spp]]$prop_leaf_expand[1]*.3,"additional leaves",adj=0)
+  text(5,data[[spp]]$prop_leaf_replacement[4]*.6,"replacement leaves",adj=0)
+  text(15,0.9,"additional stems",adj=0)
+  }
+  extra.top.left.logx(labels.spp.full(spp),3,1)
+}
+```
+
+
+
+-#Figure 1 Different species have different RA values. But biggest shift in RA is with age
 ```{r, echo=FALSE,message=FALSE,fig.width=14, fig.height=7.5}
 #pdf("figs2/RA/Figure_1_leaf_vs_repro.pdf", height=4.3, width=8)
 win.metafile("figs2/RA/Figure_1_leaf_vs_repro.wmf", height=4.3, width=8)
