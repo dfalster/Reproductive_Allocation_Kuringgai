@@ -32,6 +32,10 @@ targets:
     command: >
       CalculateReproductiveCostsFor{{species}}({{species}}_IndividualsList, InvestmentCategories, {{species}}_Investment)
 
+  {{species}}_ReproductiveCounts:
+    command: >
+      CalculateReproductiveCountsFor{{species}}({{species}}_IndividualsList, InvestmentCategories, {{species}}_Investment)
+
   {{species}}_Growth:
     command: >
       CalculateGrowthFor{{species}}({{species}}_HarvestData, {{species}}_IndividualsList)
@@ -72,8 +76,8 @@ targets:
 
   Accessory_counts_all:
     command: >
-      combine_list_elements(
+      combine_data_frames(
 {{#allspecies}}
-        {{species}}_Investment,
+        {{species}}_ReproductiveCounts,
 {{/allspecies}}
-      element=I("accessory_counts"))
+        NULL)

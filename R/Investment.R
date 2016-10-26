@@ -19,61 +19,9 @@ CalculateInvestmentForSpecies <- function(species, Reproduction, FloweringCatego
   
   FD <- combine("FD", R)
   
-  accessory_count <- FD %>%
-      group_by(individual, part) %>%
-      summarise_each(funs(sum), count, weight)
-  
-
-  if (species %in% c("BAER", "COER", "GRBU", "GRSP", "HATE", "PELA", "PEPU", "PHPH", "PILI", "PUTU")) {
-    parts_counts <- list(
-      flower_count= c("flower_stigma","finished_flower","finished_flower_stigma"),
-      bud_count = c("bud_tiny","bud_small","bud_mid","bud_big","flower_aborted_without_petals","bud_just_opening","inflorescence_bud_big_flowers",
-                    "inflorescence_bud_mid","flower_aborted"),
-      seed_count= c("seed","fruit_mature"),
-      aborted_fruit_count = c("fruit_just_starting","fruit_young","fruit_large_immature_01","fruit_large_immature_02","fruit_large_immature_03","fruit_large_immature_04",
-                              " fruit_large_immature_05"," fruit_large_immature_06","fruit_empty","fruit_aborted","seed_aborted","seed_immature"),
-      cone_count = c("cone_green_01","cone_green_02","cone_green_03","cone_green_04","cone_brown_no_expanded_follicles","cone_brown","cone_aborted"),
-      inflorescence_count = c("inflorescence_stalk","inflorescence_bud_tiny","inflorescence_bud_small","inflorescence_bud_mid",
-                              "inflorescence_stalk_in_fruit","inflorescence_stalk_in_fruit_large","inflorescence_stalk_in_fruit_very_large")
-      )
-  } else {
-    parts_counts <- list(
-      flower_count= c("flower_calyx","finished_flower","finished_flower_aborting","finished_flower_stigma"),
-      bud_count = c("bud_tiny","bud_small","bud_mid","bud_big","flower_aborted_without_petals","bud_just_opening","inflorescence_bud_big_flowers",
-                  "inflorescence_bud_mid","flower_aborted","flower_calyx_aborting"),
-      seed_count= c("seed","fruit_mature"),
-      aborted_fruit_count = c("fruit_just_starting","fruit_young","fruit_large_immature_01","fruit_large_immature_02","fruit_large_immature_03","fruit_large_immature_04",
-                            "fruit_large_immature_05"," fruit_large_immature_06","fruit_empty","fruit_aborted","seed_aborted","fruit_large_immature_aborting","fruit_young_aborting"),
-      cone_count = c("cone_green_01","cone_green_02","cone_green_03","cone_green_04","cone_brown_no_expanded_follicles","cone_brown","cone_aborted"),
-      inflorescence_count = c("inflorescence_stalk","inflorescence_bud_tiny","inflorescence_bud_small","inflorescence_bud_mid",
-                            "inflorescence_stalk_in_fruit","inflorescence_stalk_in_fruit_large","inflorescence_stalk_in_fruit_very_large")
-    )
-  }
-  
-  counts <- ddply(accessory_count, "individual", function(x) {
-      sapply(names(parts_counts), function(n)
-      sum(filter(x, part %in% parts_counts[[n]])$count))
-    }) 
-  
-  counts <- mutate(counts,
-    seedset = divide_zero(seed_count, bud_count + flower_count + seed_count + aborted_fruit_count),
-    prepollen_all_count = bud_count + flower_count,
-    prop_prepollen_count = divide_zero(bud_count + flower_count, bud_count + flower_count + seed_count + aborted_fruit_count),
-    repro_all_count = bud_count + flower_count + seed_count + aborted_fruit_count
-        )
-
-  parts_weights <- list(
-      seedpod_weight = "seed_pod",
-      fruit_weight   = "fruit_mature")
-  
-  weights <- ddply(accessory_count, "individual", function(x) {
-      sapply(names(parts_weights), function(n)
-         sum(filter(x, part %in% parts_weights[[n]])$weight))}) 
-
   list(Investment=combine("Investment", R),
       Lost=combine("Lost", R),
       FD=FD,
-      accessory_counts = merge(counts, weights, by="individual", all=TRUE),
       Error=combine("Error", R))
 }
 

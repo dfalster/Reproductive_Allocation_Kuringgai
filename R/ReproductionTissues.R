@@ -1,8 +1,43 @@
+ReproductiveCounts <- function(species, IndividualsList, InvestmentCategories, species_Investment) {
+
+  FD <- species_Investment$FD
+
+  # Counts of parts
+  categories_counts <- InvestmentCategories[[species]][["categories_counts"]]
+
+  accessory_count <- FD %>%
+      group_by(individual, part) %>%
+      summarise_each(funs(sum), count, weight)
+
+  counts <- ddply(accessory_count, "individual", function(x) {
+      sapply(names(categories_counts), function(n)
+         sum(filter(x, part %in% categories_counts[[n]])$count))})
+
+  counts <- mutate(counts,
+    seedset = divide_zero(seed_count, bud_count + flower_count + seed_count + aborted_fruit_count),
+    prepollen_all_count = bud_count + flower_count,
+    prop_prepollen_count = divide_zero(bud_count + flower_count, bud_count + flower_count + seed_count + aborted_fruit_count),
+    repro_all_count = bud_count + flower_count + seed_count + aborted_fruit_count
+        )
+
+  parts_weights <- list(
+      seedpod_weight = "seed_pod",
+      fruit_weight   = "fruit_mature")
+
+  weights <- ddply(accessory_count, "individual", function(x) {
+      sapply(names(parts_weights), function(n)
+         sum(filter(x, part %in% parts_weights[[n]])$weight))})
+
+  merge(counts, weights, by="individual", all=TRUE)
+}
+
+
 ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, species_Investment) {
 
-  # Read and restrict the data to the subset of interest
   FD <- species_Investment$FD
-  InvCat <- InvestmentCategories[[species]]
+
+  # Read and restrict the data to the subset of interest
+  InvCat <- InvestmentCategories[[species]][["categories_costs"]]
 
   FD <- FD %>%
         group_by(individual,part) %>%

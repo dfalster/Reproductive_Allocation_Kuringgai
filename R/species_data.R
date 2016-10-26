@@ -13,6 +13,10 @@ CalculateReproductiveCostsForBAER <- function(...) {
 	ReproductiveCosts("BAER", ...)
 }
 
+CalculateReproductiveCountsForBAER <- function(...) {
+  ReproductiveCounts("BAER", ...)
+}
+
 CalculateGrowthForBAER <- function(...) {
 	growth_calculations("BAER", ...)
 }
@@ -31,6 +35,10 @@ CalculateInvestmentForBOLE <- function(...) {
 
 CalculateReproductiveCostsForBOLE <- function(...) {
 	ReproductiveCosts("BOLE", ...)
+}
+
+CalculateReproductiveCountsForBOLE <- function(...) {
+  ReproductiveCounts("BOLE", ...)
 }
 
 CalculateGrowthForBOLE <- function(...) {
@@ -53,6 +61,10 @@ CalculateReproductiveCostsForCOER <- function(...) {
 	ReproductiveCosts("COER", ...)
 }
 
+CalculateReproductiveCountsForCOER <- function(...) {
+  ReproductiveCounts("COER", ...)
+}
+
 CalculateGrowthForCOER <- function(...) {
 	growth_calculations("COER", ...)
 }
@@ -71,6 +83,10 @@ CalculateInvestmentForEPMI <- function(...) {
 
 CalculateReproductiveCostsForEPMI <- function(...) {
 	ReproductiveCosts("EPMI", ...)
+}
+
+CalculateReproductiveCountsForEPMI <- function(...) {
+  ReproductiveCounts("EPMI", ...)
 }
 
 CalculateGrowthForEPMI <- function(...) {
@@ -93,6 +109,10 @@ CalculateReproductiveCostsForGRBU <- function(...) {
 	ReproductiveCosts("GRBU", ...)
 }
 
+CalculateReproductiveCountsForGRBU <- function(...) {
+  ReproductiveCounts("GRBU", ...)
+}
+
 CalculateGrowthForGRBU <- function(...) {
 	growth_calculations("GRBU", ...)
 }
@@ -111,6 +131,10 @@ CalculateInvestmentForGRSP <- function(...) {
 
 CalculateReproductiveCostsForGRSP <- function(...) {
 	ReproductiveCosts("GRSP", ...)
+}
+
+CalculateReproductiveCountsForGRSP <- function(...) {
+  ReproductiveCounts("GRSP", ...)
 }
 
 CalculateGrowthForGRSP <- function(...) {
@@ -133,6 +157,10 @@ CalculateReproductiveCostsForHATE <- function(...) {
 	ReproductiveCosts("HATE", ...)
 }
 
+CalculateReproductiveCountsForHATE <- function(...) {
+  ReproductiveCounts("HATE", ...)
+}
+
 CalculateGrowthForHATE <- function(...) {
 	growth_calculations("HATE", ...)
 }
@@ -151,6 +179,10 @@ CalculateInvestmentForHEPU <- function(...) {
 
 CalculateReproductiveCostsForHEPU <- function(...) {
 	ReproductiveCosts("HEPU", ...)
+}
+
+CalculateReproductiveCountsForHEPU <- function(...) {
+  ReproductiveCounts("HEPU", ...)
 }
 
 CalculateGrowthForHEPU <- function(...) {
@@ -173,6 +205,10 @@ CalculateReproductiveCostsForLEES <- function(...) {
 	ReproductiveCosts("LEES", ...)
 }
 
+CalculateReproductiveCountsForLEES <- function(...) {
+  ReproductiveCounts("LEES", ...)
+}
+
 CalculateGrowthForLEES <- function(...) {
 	growth_calculations("LEES", ...)
 }
@@ -191,6 +227,10 @@ CalculateInvestmentForPELA <- function(...) {
 
 CalculateReproductiveCostsForPELA <- function(...) {
 	ReproductiveCosts("PELA", ...)
+}
+
+CalculateReproductiveCountsForPELA <- function(...) {
+  ReproductiveCounts("PELA", ...)
 }
 
 CalculateGrowthForPELA <- function(...) {
@@ -213,6 +253,10 @@ CalculateReproductiveCostsForPEPU <- function(...) {
 	ReproductiveCosts("PEPU", ...)
 }
 
+CalculateReproductiveCountsForPEPU <- function(...) {
+  ReproductiveCounts("PEPU", ...)
+}
+
 CalculateGrowthForPEPU <- function(...) {
 	growth_calculations("PEPU", ...)
 }
@@ -231,6 +275,10 @@ CalculateInvestmentForPHPH <- function(...) {
 
 CalculateReproductiveCostsForPHPH <- function(...) {
 	ReproductiveCosts("PHPH", ...)
+}
+
+CalculateReproductiveCountsForPHPH <- function(...) {
+  ReproductiveCounts("PHPH", ...)
 }
 
 CalculateGrowthForPHPH <- function(...) {
@@ -253,6 +301,10 @@ CalculateReproductiveCostsForPILI <- function(...) {
 	ReproductiveCosts("PILI", ...)
 }
 
+CalculateReproductiveCountsForPILI <- function(...) {
+  ReproductiveCounts("PILI", ...)
+}
+
 CalculateGrowthForPILI <- function(...) {
 	growth_calculations("PILI", ...)
 }
@@ -271,6 +323,10 @@ CalculateInvestmentForPUTU <- function(...) {
 
 CalculateReproductiveCostsForPUTU <- function(...) {
 	ReproductiveCosts("PUTU", ...)
+}
+
+CalculateReproductiveCountsForPUTU <- function(...) {
+  ReproductiveCounts("PUTU", ...)
 }
 
 CalculateGrowthForPUTU <- function(...) {
