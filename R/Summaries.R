@@ -137,10 +137,22 @@ combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_
     leaf_area_0_mature = leaf_area_0, #included, because when summarizing by species, this averages leaf area only for individuals that are reproducing
     seed_minus_embryo_endo = seed_size - embryo_endo_size,
     prepollen_costs = prepollen_partial_costs + pack_disp_early_costs, #all costs, ON A PER SEED BASIS, up to the point of pollination
+    prepollen_success_to_flower_inv = prepollen_success_inv, #redefining, such that prepollen_success_to_flower is all parts that DO reach open flower stage, and prepollen_success is below defined to just be flowers that progress to seeds
     pack_disp_costs = pack_disp_gross_costs + seed_minus_embryo_endo, #add in non-embryo-endo seed weight
     seed_costs = embryo_endo_size + pack_disp_costs + prepollen_costs,
     embryo_endo_costs = embryo_endo_size - seed_early_costs, #ON A PER SEED BASIS, cost of making a single propagule - now defined as an embryo + endosperm
-    prepollen_all_inv = prepollen_aborted_inv + prepollen_success_inv, #prepollen_success_inv is also flowers, so much bigger than investment in flowers that become seeds
+    aborted_seed_count = repro_all_count - seed_count - prepollen_all_count,
+    zygote_set = seed_count / (seed_count + aborted_fruit_count),
+    pollen_set = (seed_count + aborted_fruit_count) / flower_count,
+    prepollen_all_inv = prepollen_aborted_inv + prepollen_success_to_flower_inv, #prepollen_success_to_flower_inv is also flowers that don't progress, so much bigger than investment in flowers that become seeds
+    prepollen_success_inv = prepollen_costs*seed_count #prepollen_success_inv is redefined as investment to parts that develop into seeds
+  )
+    
+    
+
+    
+    
+  SummaryInd <- SummaryInd %>% mutate(  
     prepollen_failure_inv = prepollen_all_inv - (seed_count*prepollen_costs), #failure is all parts that don't progress to seeds; aborted is parts that don't reach flowering
     postpollen_all_inv = postpollen_aborted_inv + packaging_dispersal_inv + propagule_inv,
     postpollen_aborted_inv = postpollen_all_inv - (seed_count*pack_disp_costs) - (seed_count*embryo_endo_size), #so energy of empty seedpods becomes part of aborted
@@ -150,7 +162,7 @@ combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_
     prepollen_all_per_seed = prepollen_all_inv/seed_count,
     prepollen_aborted_per_seed = prepollen_aborted_inv/seed_count, #aborted is parts that don't reach open flower stage
     prepollen_failure_per_seed = prepollen_failure_inv/seed_count, #failure is parts that don't progress to seeds
-    prepollen_success_per_seed = prepollen_success_inv/seed_count, #success is parts that DO reach open flower stage
+    prepollen_success_per_seed = prepollen_success_to_flower_inv/seed_count, #success is parts that DO reach open flower stage
     postpollen_aborted_per_seed = postpollen_aborted_inv/seed_count, #all parts that aren't pack & dispersal for successful seeds
     packaging_dispersal_per_seed = packaging_dispersal_inv/seed_count,
     flower_inv = prepollen_costs*repro_all_count, #a proxy measure showing good way to estimate total repro inv; doesn't have exact meaning since "repro all count" includes aborted buds 
@@ -192,7 +204,7 @@ combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_
     prop_prepollen_costs_all_repro = prepollen_costs / repro_inv_per_seed,
     postpollen_all_per_seed = postpollen_aborted_per_seed + seed_size + packaging_dispersal_per_seed,
     choosiness = 1/seedset
-        )
+            )
 
     for (i in 1:length(SummaryInd$individual)) {
     if (SummaryInd$growth_leaf_neg[i] < 0) {
