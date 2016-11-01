@@ -215,6 +215,8 @@ print_xtable <- function(data, file){
     file=file)
 }
 
+"cerulean" <- "#0571b0"
+"venetian_red" <- "#CA0020" 
 
 #plotting and stats
 #creating lists of information for plotting symbols, colors, labels

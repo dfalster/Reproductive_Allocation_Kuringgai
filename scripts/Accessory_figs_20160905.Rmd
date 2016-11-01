@@ -6,27 +6,27 @@ par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.05,.05), mai=c(.8,.8,.1,.05))
 options(scipen = 5)
 
 mod2 <- sma(scaled_seed_count ~ seed_costs, data=subset(SummarySpp[["mean"]]),method="SMA", log="xy",slope.test=-1)
-mod1 <- sma(scaled_ovule_count ~ prepollen_costs, data=subset(SummarySpp[["mean"]]),method="SMA", log="xy",slope.test=mod2$groupsummary["Slope"][[1]],elev.test=mod2$coef[[1]][1,1])
+mod1 <- sma(scaled_ovule_count ~ pollen_attract_costs, data=subset(SummarySpp[["mean"]]),method="SMA", log="xy",slope.test=mod2$groupsummary["Slope"][[1]],elev.test=mod2$coef[[1]][1,1])
 
-plot(scaled_ovule_count ~ prepollen_costs, SummarySpp[["mean"]],log="xy",pch=1,col=col.spp(species),xlab="cost to make a unit: dashed =ovule; solid=seed",ylim=c(.001,500),ylab="scaled count",xlim=c(.01,5000),cex=1.5)
+plot(scaled_ovule_count ~ pollen_attract_costs, SummarySpp[["mean"]],log="xy",pch=1,col=col.spp(species),xlab="cost to make a unit: dashed =ovule; solid=seed",ylim=c(.001,500),ylab="scaled count",xlim=c(.01,5000),cex=1.5)
 points(scaled_seed_count ~ seed_costs, SummarySpp[["mean"]],cex=1.5,pch=16,col=col.spp(species))
-line_function_log_xy(SummarySpp[["mean"]]$prepollen_costs,mod1,3)
+line_function_log_xy(SummarySpp[["mean"]]$pollen_attract_costs,mod1,3)
 line_function_log_xy(SummarySpp[["mean"]]$seed_costs,mod2,1)
 #points(scaled_seed_count ~ embryo_endo_size, SummarySpp[["mean"]],pch=12,col=col.spp(species))
-#arrows(SummarySpp[["mean"]]$seed_costs,SummarySpp[["mean"]]$scaled_seed_count,SummarySpp[["mean"]]$prepollen_costs,SummarySpp[["mean"]]$scaled_ovule_count,col=col.spp(SummarySpp[["mean"]]$species),code=0,length=.15)
+#arrows(SummarySpp[["mean"]]$seed_costs,SummarySpp[["mean"]]$scaled_seed_count,SummarySpp[["mean"]]$pollen_attract_costs,SummarySpp[["mean"]]$scaled_ovule_count,col=col.spp(SummarySpp[["mean"]]$species),code=0,length=.15)
 
 dev.off()
 ```
 
 mod_seed <- sma(scaled_seed_count ~ seed_costs, data=subset(SummaryInd),method="SMA", log="xy",slope.test=-1)
-mod_ovule <- sma(scaled_ovule_count ~ prepollen_costs, data=subset(SummaryInd),method="SMA", log="xy",slope.test=mod2$groupsummary["Slope"][[1]],elev.test=mod2$coef[[1]][1,1])
+mod_ovule <- sma(scaled_ovule_count ~ pollen_attract_costs, data=subset(SummaryInd),method="SMA", log="xy",slope.test=mod2$groupsummary["Slope"][[1]],elev.test=mod2$coef[[1]][1,1])
 
-plot(scaled_ovule_count ~ prepollen_costs, SummaryInd,log="xy",pch=1,col=col.spp(species),xlab="cost to make a unit: dashed =ovule; solid=seed",ylim=c(.0001,1000),ylab="scaled count",xlim=c(.001,10000),cex=1.5)
+plot(scaled_ovule_count ~ pollen_attract_costs, SummaryInd,log="xy",pch=1,col=col.spp(species),xlab="cost to make a unit: dashed =ovule; solid=seed",ylim=c(.0001,1000),ylab="scaled count",xlim=c(.001,10000),cex=1.5)
 points(scaled_seed_count ~ seed_costs, SummaryInd,cex=1.5,pch=16,col=col.spp(species))
 
 
 line_function_log_xy(SummaryInd$seed_costs,mod_seed,1)
-line_function_log_xy(SummarySpp[["mean"]]$prepollen_costs,mod_ovule,3)
+line_function_log_xy(SummarySpp[["mean"]]$pollen_attract_costs,mod_ovule,3)
 
 
 par(mfrow=c(1,2), cex=1, omi=c(.1,.1,.05,.05), mai=c(.8,.8,.1,.05)) 
@@ -40,16 +40,16 @@ line_function_log_xy(SummarySpp[["mean"]]$seed_costs,mod_fixed_costs,1)
 summary(mod_repro_costs)
 summary(mod_fixed_costs)
 
-plot(prepollen_costs ~ embryo_endo_size, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species),ylim=c(.005,5000))
+plot(pollen_attract_costs ~ embryo_endo_size, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species),ylim=c(.005,5000))
 points(prepollen_all_per_seed ~ embryo_endo_size, SummarySpp[["mean"]],pch=1,col=col.spp(species))
-#points(prepollen_failure_per_seed ~ embryo_endo_size, SummarySpp[["mean"]],log="xy",pch="-",col=col.spp(species))
+#points(prepollen_failure_costs ~ embryo_endo_size, SummarySpp[["mean"]],log="xy",pch="-",col=col.spp(species))
 mod_prepollen_all <- sma(prepollen_all_per_seed ~ embryo_endo_size, SummarySpp[["mean"]],log="xy",method="SMA",slope.test=mod_repro_costs$coef[[1]][2,1])
-mod_prepollen_costs <- sma(prepollen_costs ~ embryo_endo_size, SummarySpp[["mean"]],log="xy",method="SMA",slope.test=mod_repro_costs$coef[[1]][2,1])
+mod_pollen_attract_costs <- sma(pollen_attract_costs ~ embryo_endo_size, SummarySpp[["mean"]],log="xy",method="SMA",slope.test=mod_repro_costs$coef[[1]][2,1])
 line_function_log_xy(SummarySpp[["mean"]]$prepollen_all_per_seed,mod_prepollen_all,3)
-line_function_log_xy(SummarySpp[["mean"]]$prepollen_costs,mod_prepollen_costs,1)
+line_function_log_xy(SummarySpp[["mean"]]$pollen_attract_costs,mod_pollen_attract_costs,1)
 
 summary(mod_prepollen_all)
-summary(mod_prepollen_costs)
+summary(mod_pollen_attract_costs)
 
 
 
@@ -82,7 +82,7 @@ check <- dplyr::select(check,individual,prop_propagule_ee)
 max(check$prop_propagule_ee)
 
 #relationship between plant weight and number of ovules initiated - bigger plants produce proportionally fewer buds
-mod <- sma(repro_all_count~total_weight,SummaryInd,method="SMA",log="xy",slope=1)
+mod <- sma(ovule_count~total_weight,SummaryInd,method="SMA",log="xy",slope=1)
 summary(mod)
 
 #there is no relationship between the proportion of energy going to seeds and the total energy for seedcosts
@@ -97,9 +97,9 @@ summary(mod)
 plot(repro_inv_per_seed ~ embryo_endo_size, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
 
 #energy invested in accessory tissues unrelated to seedsize
-mod <- sma(accessory_per_seed_using_ee ~ embryo_endo_size, data=subset(SummarySpp[["mean"]]),method="SMA", log="xy",slope.test=1)
+mod <- sma(accessory_costs_using_ee ~ embryo_endo_size, data=subset(SummarySpp[["mean"]]),method="SMA", log="xy",slope.test=1)
 summary(mod)
-plot(accessory_per_seed_using_ee ~ embryo_endo_size, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
+plot(accessory_costs_using_ee ~ embryo_endo_size, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
 
 #total seed costs unrelated to seedsize
 mod <- sma(seed_costs ~ embryo_endo_size, SummarySpp[["mean"]],method="SMA", log="xy",slope.test=1)
@@ -113,15 +113,15 @@ plot(failure_per_seed ~ embryo_endo_size, SummarySpp[["mean"]],log="xy",pch=16,c
 
 
 
-mod <- sma(prop_prepollen_costs ~ seedset, data=subset(SummarySpp[["mean"]]),method="SMA", log="x",slope.test=1)
+mod <- sma(prop_pollen_attract_costs ~ seedset, data=subset(SummarySpp[["mean"]]),method="SMA", log="x",slope.test=1)
 summary(mod)
-plot(prop_prepollen_costs ~ seedset, SummarySpp[["mean"]],log="",pch=16,col=col.spp(species))
+plot(prop_pollen_attract_costs ~ seedset, SummarySpp[["mean"]],log="",pch=16,col=col.spp(species))
 
 
 
-mod <- sma(scaled_ovule_count ~ prepollen_costs, data=subset(SummarySpp[["mean"]]),method="SMA", log="xy",slope.test=-1)
+mod <- sma(scaled_ovule_count ~ pollen_attract_costs, data=subset(SummarySpp[["mean"]]),method="SMA", log="xy",slope.test=-1)
 summary(mod)
-plot(scaled_ovule_count ~ prepollen_costs, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
+plot(scaled_ovule_count ~ pollen_attract_costs, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
 
 
 mod <- sma(scaled_seed_count ~ embryo_endo_size, data=subset(SummarySpp[["mean"]]),method="SMA", log="xy",slope.test=-1)
@@ -141,8 +141,8 @@ plot(scaled_seed_count ~ seed_costs, SummarySpp[["mean"]],log="xy",pch=16,col=co
 
 mod <- sma(prepollen_all_per_seed ~ embryo_endo_size, data=subset(SummarySpp[["mean"]]),method="SMA", log="xy",slope.test=1)
 summary(mod)
-plot(prepollen_failure_per_seed ~ embryo_endo_size, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species),ylim=c(.02,10000))
-points(prepollen_costs~ embryo_endo_size, SummarySpp[["mean"]],log="xy",pch=1,col=col.spp(species))
+plot(prepollen_failure_costs ~ embryo_endo_size, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species),ylim=c(.02,10000))
+points(pollen_attract_costs~ embryo_endo_size, SummarySpp[["mean"]],log="xy",pch=1,col=col.spp(species))
 
 #more failure = lower seedset across species - in discussion
 mod <- sma(seedset ~ prop_failure, data=subset(SummarySpp[["mean"]],species!="BAER"),method="SMA", log="",slope.test=1)
@@ -170,7 +170,7 @@ summary(mod)
 plot(repro_inv ~ embryo_endo_size, data=subset(SummarySpp[["mean"]],species!="EPMI"),log="xy",pch=16,col=col.spp(species))
 
 #seedset by pollen attraction
-mod <- sma(prop_prepollen_costs~seedset,data=subset(SummarySpp[["mean"]]),log="x",slope=1,method="SMA")
+mod <- sma(prop_pollen_attract_costs~seedset,data=subset(SummarySpp[["mean"]]),log="x",slope=1,method="SMA")
 summary(mod)
 
 
@@ -181,12 +181,12 @@ plot(total_weight_0 ~ embryo_endo_size, SummarySpp[["mean"]],log="xy",pch=16,col
 
 
 #scaled ovule production vs prop pollen attraction  - all species
-mod <- sma(prop_prepollen_costs~scaled_ovule_count,data=subset(SummarySpp[["mean"]]),log="x",slope=1,method="SMA")
+mod <- sma(prop_pollen_attract_costs~scaled_ovule_count,data=subset(SummarySpp[["mean"]]),log="x",slope=1,method="SMA")
 summary(mod)
-plot(prop_prepollen_costs ~ scaled_ovule_count, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
+plot(prop_pollen_attract_costs ~ scaled_ovule_count, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
 
 
-yvar <- "repro_all_count"
+yvar <- "ovule_count"
 xvar <- "repro_inv"
 data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
 
@@ -195,7 +195,7 @@ results <- lines(fit$groupsummary)
 plot(fit,xlab=xvar,ylab=yvar,pch=16, col=col.spp(fit$groupsummary$group),lty=results$linetype,ylim=c(1,300000),xlim=c(1,30000))
 results
 
-yvar <- "repro_all_count"
+yvar <- "ovule_count"
 xvar <- "leaf_area_0"
 data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
 
@@ -235,21 +235,21 @@ results
 
 plot(prop_prepollen_all~seedset,SummarySpp[["mean"]],col=col.spp(species),pch=16,log="x")
 
-plot(prop_prepollen_costs~seedset,SummarySpp[["mean"]],col=col.spp(species),pch=16,log="")
+plot(prop_pollen_attract_costs~seedset,SummarySpp[["mean"]],col=col.spp(species),pch=16,log="")
 
 mod <- sma(prop_prepollen_all~embryo_endo_size,SummaryInd,log="x",method="SMA")
 summary(mod)
 
 #Table 1 showing accessory cost values for the species
 ```{r}
-acc_costs_spp <- dplyr::select(SummarySpp[["mean"]],species,embryo_endo_size,seedset,repro_inv_per_seed,prop_failure,prop_prepollen_vs_RE, prop_dispersal_vs_RE,prop_embryo_endo_vs_RE,seed_costs,prop_prepollen_costs,prop_postpollen_costs,embryo_endo_size,pack_disp_costs,prepollen_costs,failure_inv,repro_inv,seed_count)
+acc_costs_spp <- dplyr::select(SummarySpp[["mean"]],species,embryo_endo_size,seedset,repro_inv_per_seed,prop_failure,prop_prepollen_vs_RE, prop_pack_disp_vs_RE,prop_embryo_endo_vs_RE,seed_costs,prop_pollen_attract_costs,prop_postpollen_costs,embryo_endo_size,pack_disp_costs,pollen_attract_costs,failure_inv,repro_inv,seed_count)
 acc_costs_spp$species <- labels.spp.full()
 acc_costs_spp_format <- acc_costs_spp
-for (i in c("embryo_endo_size","seedset","repro_inv_per_seed","prop_failure","prop_prepollen_vs_RE","prop_dispersal_vs_RE","prop_embryo_endo_vs_RE","seed_costs","prop_prepollen_costs","prop_postpollen_costs")) {
+for (i in c("embryo_endo_size","seedset","repro_inv_per_seed","prop_failure","prop_prepollen_vs_RE","prop_pack_disp_vs_RE","prop_embryo_endo_vs_RE","seed_costs","prop_pollen_attract_costs","prop_postpollen_costs")) {
   acc_costs_spp_format[[i]] <- round(acc_costs_spp_format[[i]],digits=3)
 }
 
-for (i in c("prop_failure","prop_prepollen_vs_RE","prop_dispersal_vs_RE","prop_embryo_endo_vs_RE","prop_prepollen_costs","prop_postpollen_costs")) {
+for (i in c("prop_failure","prop_prepollen_vs_RE","prop_pack_disp_vs_RE","prop_embryo_endo_vs_RE","prop_pollen_attract_costs","prop_postpollen_costs")) {
   acc_costs_spp_format[[i]] <- round(100*acc_costs_spp_format[[i]],digits=1)
 }
 
@@ -279,13 +279,13 @@ options(scipen = 5)
 library(smatr)
 
 plot(repro_inv_per_seed ~ embryo_endo_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy", ylim=c(.02,10000), xlim=c(.02,10000), ylab="total per seed accessory costs (mg/seed)",xlab="",cex=1.5)
-y.error.bars(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$repro_inv_per_seed,SummarySpp[["se"]]$accessory_per_seed)
+y.error.bars(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$repro_inv_per_seed,SummarySpp[["se"]]$accessory_costs)
 slopes <- sma(repro_inv_per_seed ~ embryo_endo_size,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
 abline(slopes$groupsummary["Int"][[1]],slopes$groupsummary["Slope"][[1]])
 abline(slopes$groupsummary["Int"][[1]],1,lty=2)
 summary(slopes)
 
-plot(prop_prepollen_costs_all_repro~ seedset,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy",cex=1.5)
+plot(prop_pollen_attract_costs_all_repro~ seedset,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy",cex=1.5)
 
 
 
@@ -299,9 +299,9 @@ abline(slopes$groupsummary["Int"][[1]],slopes$groupsummary["Slope"][[1]])
 abline(slopes$groupsummary["Int"][[1]],1,lty=2)
 acc_by_species <- dplyr::bind_rows(acc_by_species, dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
 
-plot(prepollen_costs ~ embryo_endo_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy", ylim=c(.02,10000), ylab="prepollen success costs (mg/seed)",xlab="",cex=1.5)
-y.error.bars(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$prepollen_costs,SummarySpp[["se"]]$prepollen_costs)
-slopes <- sma(prepollen_costs ~ embryo_endo_size,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
+plot(pollen_attract_costs ~ embryo_endo_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy", ylim=c(.02,10000), ylab="prepollen success costs (mg/seed)",xlab="",cex=1.5)
+y.error.bars(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$pollen_attract_costs,SummarySpp[["se"]]$pollen_attract_costs)
+slopes <- sma(pollen_attract_costs ~ embryo_endo_size,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
 abline(slopes$groupsummary["Int"][[1]],slopes$groupsummary["Slope"][[1]])
 abline(slopes$groupsummary["Int"][[1]],1,lty=2)
 acc_by_species <- dplyr::bind_rows(acc_by_species, dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
@@ -328,16 +328,16 @@ abline(slopes$groupsummary["Int"][[1]],slopes$groupsummary["Slope"][[1]])
 abline(slopes$groupsummary["Int"][[1]],1,lty=2)
 acc_by_species <- dplyr::bind_rows(acc_by_species, dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
 
-plot(prepollen_failure_per_seed ~ embryo_endo_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy", ylim=c(.02,10000), ylab="aborted pre-pollination costs (mg/seed)",xlab="",cex=1.5,xaxt="n")
-y.error.bars(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$prepollen_failure_per_seed,SummarySpp[["se"]]$prepollen_failure_per_seed)
-slopes <- sma(prepollen_failure_per_seed ~ embryo_endo_size,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="SMA")
+plot(prepollen_failure_costs ~ embryo_endo_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy", ylim=c(.02,10000), ylab="aborted pre-pollination costs (mg/seed)",xlab="",cex=1.5,xaxt="n")
+y.error.bars(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$prepollen_failure_costs,SummarySpp[["se"]]$prepollen_failure_costs)
+slopes <- sma(prepollen_failure_costs ~ embryo_endo_size,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="SMA")
 abline(slopes$groupsummary["Int"][[1]],slopes$groupsummary["Slope"][[1]])
 abline(slopes$groupsummary["Int"][[1]],1,lty=2)
 acc_by_species <- dplyr::bind_rows(acc_by_species, dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
 
-plot(postpollen_aborted_per_seed ~ embryo_endo_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy", ylim=c(.02,10000), ylab="aborted during provisioning costs (mg/seed)",xlab="",cex=1.5,xaxt="n")
-y.error.bars(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$postpollen_aborted_per_seed,SummarySpp[["se"]]$postpollen_aborted_per_seed)
-slopes <- sma(postpollen_aborted_per_seed ~ embryo_endo_size,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="SMA")
+plot(postpollen_aborted_costs ~ embryo_endo_size,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy", ylim=c(.02,10000), ylab="aborted during provisioning costs (mg/seed)",xlab="",cex=1.5,xaxt="n")
+y.error.bars(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$postpollen_aborted_costs,SummarySpp[["se"]]$postpollen_aborted_costs)
+slopes <- sma(postpollen_aborted_costs ~ embryo_endo_size,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="SMA")
 abline(slopes$groupsummary["Int"][[1]],slopes$groupsummary["Slope"][[1]])
 abline(slopes$groupsummary["Int"][[1]],1,lty=2)
 acc_by_species <- dplyr::bind_rows(acc_by_species, dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
@@ -428,14 +428,14 @@ par(mfrow=c(3,1), cex=1, omi=c(1,.1,.05,.05), mai=c(.2,.8,.1,.05))
 options(scipen = 5)
 
 plot((scaled_seed_count)~(embryo_endo_size),SummaryInd,pch=16,log="xy",col=col.spp(species),xlim=c(.002,500),ylim=c(1e-4,5000),yaxt="n",xaxt="n",ylab="")
-points(scaled_ovule_count~prepollen_costs,SummaryInd,pch=21,col=col.spp(species))
+points(scaled_ovule_count~pollen_attract_costs,SummaryInd,pch=21,col=col.spp(species))
 
 axis(2, at=c(0.0001,0.01,1,100), labels=c(0.0001,0.01,1,100),cex.axis=1)
 axis(1, at=c(0.01,1,100), labels=c("","",""),cex.axis=1)
 mtext("count, scaled to plant size",2,line=2.3)
 
 mod_seed <- sma(scaled_seed_count~embryo_endo_size,data=subset(SummaryInd,scaled_seed_count!=0),log="xy",slope=-1,method="SMA")
-mod_ovule <- sma(scaled_ovule_count~prepollen_costs,data=subset(SummaryInd,scaled_ovule_count!=0),log="xy",method="SMA",slope.test=mod_seed$groupsummary["Slope"][[1]],elev.test=mod_seed$coef[[1]][1,1])
+mod_ovule <- sma(scaled_ovule_count~pollen_attract_costs,data=subset(SummaryInd,scaled_ovule_count!=0),log="xy",method="SMA",slope.test=mod_seed$groupsummary["Slope"][[1]],elev.test=mod_seed$coef[[1]][1,1])
 
 line_function_log_xy(SummarySpp[["mean"]]$embryo_endo_size,mod_seed,1)
 line_function_log_xy(SummarySpp[["mean"]]$embryo_endo_size,mod_ovule,2)
@@ -456,9 +456,9 @@ mtext("seed set",2,line=2.3)
 extra.top.left.logxy("b",2,1.2)
 summary(mod)
 
-plot(prepollen_costs~embryo_endo_size,SummarySpp[["mean"]],col=col.spp(species),pch=16,log="xy", yaxt="n",xaxt="n", ylim=c(.02,5000), xlim=c(.002,500), ylab="",xlab="",cex=1.5)
-y.error.bars.2(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$prepollen_costs,SummarySpp[["se"]]$prepollen_costs)
-mod <- sma(prepollen_costs~embryo_endo_size,SummarySpp[["mean"]],log="xy",method="SMA")
+plot(pollen_attract_costs~embryo_endo_size,SummarySpp[["mean"]],col=col.spp(species),pch=16,log="xy", yaxt="n",xaxt="n", ylim=c(.02,5000), xlim=c(.002,500), ylab="",xlab="",cex=1.5)
+y.error.bars.2(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$pollen_attract_costs,SummarySpp[["se"]]$pollen_attract_costs)
+mod <- sma(pollen_attract_costs~embryo_endo_size,SummarySpp[["mean"]],log="xy",method="SMA")
 #abline(mod$groupsummary["Int"][[1]],1,lty=2)
 axis(2, at=c(0.1,10,1000), labels=c(0.1,10,1000),cex.axis=1)
 axis(1, at=c(0.01,1,100), labels=c(0.01,1,100),cex.axis=1)
@@ -469,7 +469,7 @@ extra.top.left.logxy("c",2,1.2)
 
 
 plot(postpollen_all_per_seed~embryo_endo_size,SummarySpp[["mean"]],col=col.spp(species),pch=16,log="xy", yaxt="n",xaxt="n", ylim=c(.02,5000), xlim=c(.002,500), ylab="",xlab="",cex=1.5)
-y.error.bars.2(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$postpollen_all_per_seed,SummarySpp[["se"]]$prepollen_costs)
+y.error.bars.2(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$postpollen_all_per_seed,SummarySpp[["se"]]$pollen_attract_costs)
 mod <- sma(postpollen_all_per_seed~embryo_endo_size,SummarySpp[["mean"]],log="xy",method="SMA")
 line_function_log_xy(SummarySpp[["mean"]]$embryo_endo_size,mod,1)
 line_function_log_xy_zero(SummarySpp[["mean"]]$embryo_endo_size,mod,1)
@@ -498,7 +498,7 @@ axis(1, at=c(0,1),labels=c("lower","higher"),cex.axis=1)
 axis(2, at=c(0,1),labels=c("lower","higher"),cex.axis=1,las=2)
 mtext(text="count, scaled to leaf area",side=2,line=1.3,outer=FALSE,cex=0.8)
 mtext(text="costs (mg/seed)",side=1,line=1.3,outer=FALSE,cex=0.8)
-legend("bottomleft",legend=c("seed count by success costs","initiated ovules count by pollen-attraction costs"),col=c("black","black"),pch=c(16,21),bty="n",cex=0.5)
+legend("bottomleft",legend=c("seed count by success costs","initiated ovules count by pollen_attraction costs"),col=c("black","black"),pch=c(16,21),bty="n",cex=0.5)
 
 
 plot(0,0,ylim=c(0,1),yaxt="n",xaxt="n",xlim=c(0,1),col="white",xlab="",ylab="")
@@ -506,7 +506,7 @@ segments(x0=.1,x1=.9,y0=.9,y1=.1,lty=1)
 axis(1, at=c(0,1),labels=c(0,1),cex.axis=1)
 axis(2, at=c(0,1),labels=c("lower","higher"),cex.axis=1,las=2)
 mtext(text="choosiness (ovule:seed)",side=2,line=1.3,outer=FALSE,cex=0.8)
-mtext(text="proportion reproductive costs to pollen-attraction costs for 1 ovule",side=1,line=1.3,outer=FALSE,cex=0.8)
+mtext(text="proportion reproductive costs to pollen_attraction costs for 1 ovule",side=1,line=1.3,outer=FALSE,cex=0.8)
 
 plot(0,0,ylim=c(0,1),yaxt="n",xaxt="n",xlim=c(0,1),col="white",xlab="",ylab="")
 segments(x0=.1,x1=.9,y0=.9,y1=.1,lty=1)
@@ -515,14 +515,14 @@ axis(2, at=c(0,1),labels=c(0,1),cex.axis=1,las=2)
 axis(1, at=c(0,1),labels=c("smaller","larger"),cex.axis=1)
 mtext(text="proportion total success costs",side=2,line=1.8,outer=FALSE,cex=0.8)
 mtext(text="seed size (mg)",side=1,line=1.3,outer=FALSE,cex=0.8)
-legend("bottomleft",legend=c("pollen-attraction costs","provisioning costs"),col=c("black","black"),pch=c(16,21),bty="n",cex=0.5)
+legend("bottomleft",legend=c("pollen_attraction costs","provisioning costs"),col=c("black","black"),pch=c(16,21),bty="n",cex=0.5)
 
 plot(0,0,ylim=c(0,1),yaxt="n",xaxt="n",xlim=c(0,1),col="white",xlab="",ylab="")
 segments(x0=.1,x1=.9,y0=.9,y1=.1,lty=1)
 segments(x0=.15,x1=.85,y0=.15,y1=.85,lty=2)
 axis(2, at=c(0,1),labels=c(0,1),cex.axis=1,las=2)
 axis(1, at=c(0,1),labels=c("smaller","larger"),cex.axis=1)
-mtext(text="proportion all pollen-attraction investment",side=2,line=1.8,outer=FALSE,cex=0.8)
+mtext(text="proportion all pollen_attraction investment",side=2,line=1.8,outer=FALSE,cex=0.8)
 mtext(text="seed size (mg)",side=1,line=1.3,outer=FALSE,cex=0.8)
 legend("bottomleft",legend=c("become seeds","are aborted before provisioning"),title="into ovules that:",col=c("black","black"),pch=c(16,21),bty="n",cex=0.5,xjust=0)
 
@@ -546,97 +546,98 @@ plot
 par(mfrow=c(3,2), cex=1, omi=c(.1,.1,.05,.05), mai=c(.7,.8,.05,.05)) 
 options(scipen = 5)
 
-plot(scaled_seed_count~seed_costs,SummarySpp[["mean"]],pch=16,log="xy",col="#ca0020",xlim=c(.01,5000),ylim=c(5e-4,500),yaxt="n",xaxt="n",ylab="",xlab="",cex=1)
-points(scaled_ovule_count~prepollen_costs,SummarySpp[["mean"]],pch=16,col="#0571b0",cex=1)
+#panel a
+plot(scaled_seed_count~seed_costs,SummarySpp[["mean"]],pch=16,log="xy",col=venetian_red,xlim=c(.01,5000),ylim=c(5e-4,500),yaxt="n",xaxt="n",ylab="",xlab="",cex=1)
+points(scaled_ovule_count~pollen_attract_costs,SummarySpp[["mean"]],pch=16,col=cerulean,cex=1)
 
 axis(2, at=c(0.01,1,100), labels=c(0.01,1,100),cex.axis=0.8,las=2)
 axis(1, at=c(0.1,10,1000), labels=c(0.1,10,1000),cex.axis=0.8)
 mtext("costs to make a successful unit",1,line=1.8,cex=0.7)
-mtext("count, scaled to plant size",2,line=2.3,cex=0.7)
+mtext("count, scaled to leaf area",2,line=2.3,cex=0.7)
 
 mod_seed <- sma(scaled_seed_count~seed_costs,data=SummarySpp[["mean"]],log="xy",slope=-1,method="SMA")
-mod_ovule <- sma(scaled_ovule_count~prepollen_costs,data=SummarySpp[["mean"]],log="xy",method="SMA",slope.test=mod_seed$groupsummary["Slope"][[1]],elev.test=mod_seed$coef[[1]][1,1])
+mod_ovule <- sma(scaled_ovule_count~pollen_attract_costs,data=SummarySpp[["mean"]],log="xy",method="SMA",slope.test=mod_seed$groupsummary["Slope"][[1]],elev.test=mod_seed$coef[[1]][1,1])
 
-line_function_log_xy(SummarySpp[["mean"]]$seed_costs,mod_seed,1,col="#ca0020")
-line_function_log_xy(SummarySpp[["mean"]]$prepollen_costs,mod_ovule,1,col="#0571b0")
-legend("bottomleft",legend=c("seed count by success costs","initiated ovules count by","pollen-attraction costs"),col=c("#ca0020","#0571b0","white"),pch=c(16,16,16),bty="n",cex=0.7)
+line_function_log_xy(SummarySpp[["mean"]]$seed_costs,mod_seed,1,col=venetian_red)
+line_function_log_xy(SummarySpp[["mean"]]$pollen_attract_costs,mod_ovule,1,col=cerulean)
+legend("bottomleft",legend=c("seed count by success costs","initiated ovules count by","pollen_attraction costs"),col=c(venetian_red,cerulean,"white"),pch=c(16,16,16),bty="n",cex=0.7)
 extra.top.left.logxy("a",2,1)
 
-plot(choosiness~prop_prepollen_costs_all_repro,SummarySpp[["mean"]],log="xy",col="#0571b0",pch=16,xlim=c(0.002,.5),ylim=c(3,800),xaxt="n",yaxt="n",cex=1,ylab="",xlab="")
+#panel b
+#plot(choosiness~prop_pollen_attract_costs_all_repro,SummarySpp[["mean"]],log="xy",col=cerulean,pch=16,xlim=c(0.002,.5),ylim=c(3,800),xaxt="n",yaxt="n",cex=1,ylab="",xlab="")
+plot(choosiness~scaled_pollen_attract_costs,SummarySpp[["mean"]],log="xy",col=cerulean,pch=16,xlim=c(.002,.3),ylim=c(3,800),yaxt="n",cex=1,ylab="",xlab="",xaxt="n")
 axis(2, at=c(10,100,1000), labels=c(10,100,1000),cex.axis=0.8,las=2)
 axis(1, at=c(0.01,0.1), labels=c(0.01,0.1),cex.axis=0.8)
-mtext("prop reproductive investment to",1,line=1.7,cex=0.7)
-mtext("successful pollen-attraction costs",1,line=2.3,cex=0.7)
+mtext("pollen-attractions costs, scaled to leaf area",1,line=1.7,cex=0.7)
 mtext("choosiness (ovules:seed)",2,line=2.3,cex=0.7)
-
-mod_choosy <- sma(choosiness~prop_prepollen_costs_all_repro,data=SummarySpp[["mean"]],log="xy",slope=-1,method="SMA")
-line_function_log_xy(SummarySpp[["mean"]]$prop_prepollen_costs_all_repro,mod_choosy,1,col="#0571b0")
-
+mod_choosy2 <- sma(choosiness~scaled_pollen_attract_costs,data=subset(SummarySpp[["mean"]],species!="EPMI"),log="xy",slope=-1,method="SMA")
+line_function_log_xy(SummarySpp[["mean"]]$scaled_pollen_attract_costs,mod_choosy2,1,col=cerulean)
 extra.top.left.logxy("b",2,1)
 
-plot(prop_prepollen_costs~embryo_endo_size,SummarySpp[["mean"]],pch=16,log="x",col="#0571b0",
+#panel c - success proportions
+plot(prop_pollen_attract_costs~embryo_endo_size,SummarySpp[["mean"]],pch=16,log="x",col=cerulean,
      ylim=c(-0.1,1.1),xlim=c(.01,100),xlab="",ylab="",xaxt="n",yaxt="n")
-points(prop_postpollen_costs~embryo_endo_size,SummarySpp[["mean"]],pch=16,col="#ca0020")
+points(prop_postpollen_costs~embryo_endo_size,SummarySpp[["mean"]],pch=16,col=venetian_red)
 extra.top.left.logx("c",2,1)
 axis(2, at=c(0,.2,.4,.6,.8,1), labels=c(0,0.2,0.4,0.6,0.8,1),cex.axis=0.8,las=2)
 axis(1, at=c(0.01,1,100), labels=c(0.01,1,100),cex.axis=0.8)
 mtext("seed size (mg)",1,line=1.8,cex=0.7)
-mtext("prop successful investment",2,line=2.3,cex=0.7)
-legend("bottomleft",legend=c("pollen-attraction costs","provisioning costs"),col=c("#0571b0","#ca0020"),pch=c(16,16),bty="n",cex=0.7)
+mtext("prop. successful investment",2,line=2.3,cex=0.7)
+legend("bottomleft",legend=c("pollen_attraction costs","provisioning costs"),col=c(cerulean,venetian_red),pch=c(16,16),bty="n",cex=0.7)
 
-mod_prop_prepollen_costs <- sma(prop_prepollen_costs~embryo_endo_size,SummarySpp[["mean"]],log="x",method="OLS")
+mod_prop_pollen_attract_costs <- sma(prop_pollen_attract_costs~embryo_endo_size,SummarySpp[["mean"]],log="x",method="OLS")
 mod_prop_postpollen_costs <- sma(prop_postpollen_costs~embryo_endo_size,SummarySpp[["mean"]],log="x",method="OLS")
 
-line_function_log_x(SummarySpp[["mean"]]$embryo_endo_size,mod_prop_prepollen_costs,1,col="#0571b0")
-line_function_log_x(SummarySpp[["mean"]]$embryo_endo_size,mod_prop_postpollen_costs,1,col="#ca0020")
+line_function_log_x(SummarySpp[["mean"]]$embryo_endo_size,mod_prop_pollen_attract_costs,1,col=cerulean)
+line_function_log_x(SummarySpp[["mean"]]$embryo_endo_size,mod_prop_postpollen_costs,1,col=venetian_red)
 
-
-plot(prop_prepollen_success~embryo_endo_size,SummarySpp[["mean"]],pch=16,log="x",col="#0571b0",ylim=c(-.1,1.1),xlim=c(.01,100),xlab="",ylab="",xaxt="n",yaxt="n")
-points(prop_prepollen_failure~embryo_endo_size,SummarySpp[["mean"]],pch=16,col="#ca0020")
+#panel d - pollen-attraction proportions
+plot(prop_prepollen_success~embryo_endo_size,SummarySpp[["mean"]],pch=16,log="x",col=cerulean,ylim=c(-.1,1.1),xlim=c(.01,100),xlab="",ylab="",xaxt="n",yaxt="n")
+points(prop_prepollen_failure~embryo_endo_size,SummarySpp[["mean"]],pch=16,col=venetian_red)
 extra.top.left.logx("d",2,1)
 axis(2, at=c(0,.2,.4,.6,.8,1), labels=c(0,0.2,0.4,0.6,0.8,1),cex.axis=0.8,las=2)
 axis(1, at=c(0.01,1,100), labels=c(0.01,1,100),cex.axis=0.8)
 mtext("seed size (mg)",1,line=1.8,cex=0.7)
-mtext("prop total pollen-attraction investment",2,line=2.3,cex=0.7)
-legend("bottomleft",legend=c("successful ovules","aborted ovules"),col=c("#0571b0","#ca0020"),pch=c(16,16),bty="n",cex=0.7)
-
+mtext("prop. total pollen-attraction investment",2,line=2.3,cex=0.7)
+legend("bottomleft",legend=c("successful ovules","discarded ovules"),col=c(cerulean,venetian_red),pch=c(16,16),bty="n",cex=0.7)
 
 mod_prop_prepollen_success <- sma(prop_prepollen_success~embryo_endo_size,SummarySpp[["mean"]],log="x",method="OLS")
 mod_prop_prepollen_failure <- sma(prop_prepollen_failure~embryo_endo_size,SummarySpp[["mean"]],log="x",method="OLS")
 
-line_function_log_x(SummarySpp[["mean"]]$embryo_endo_size,mod_prop_prepollen_success,1,col="#0571b0")
-line_function_log_x(SummarySpp[["mean"]]$embryo_endo_size,mod_prop_prepollen_failure,1,col="#ca0020")
+line_function_log_x(SummarySpp[["mean"]]$embryo_endo_size,mod_prop_prepollen_success,1,col=cerulean)
+line_function_log_x(SummarySpp[["mean"]]$embryo_endo_size,mod_prop_prepollen_failure,1,col=venetian_red)
 
-plot(prop_postpollen_success~embryo_endo_size,SummarySpp[["mean"]],pch=16,log="x",col="#0571b0",ylim=c(-0.1,1.1),xlim=c(.01,100),xlab="",ylab="",xaxt="n",yaxt="n")
-points(prop_postpollen_failure~embryo_endo_size,SummarySpp[["mean"]],pch=16,col="#ca0020")
+#panel e - provisioning proportions
+plot(prop_postpollen_success~embryo_endo_size,SummarySpp[["mean"]],pch=16,log="x",col=cerulean,ylim=c(-0.1,1.1),xlim=c(.01,100),xlab="",ylab="",xaxt="n",yaxt="n")
+points(prop_postpollen_failure~embryo_endo_size,SummarySpp[["mean"]],pch=16,col=venetian_red)
 extra.top.left.logx("e",2,1)
 axis(2, at=c(0,.2,.4,.6,.8,1), labels=c(0,0.2,0.4,0.6,0.8,1),cex.axis=0.8,las=2)
 axis(1, at=c(0.01,1,100), labels=c(0.01,1,100),cex.axis=0.8)
 mtext("seed size (mg)",1,line=1.8,cex=0.7)
-mtext("prop total provisioning investment",2,line=2.3,cex=0.7)
-legend("bottomleft",legend=c("successful zygotes","aborted zygotes"),col=c("#0571b0","#ca0020"),pch=c(16,16),bty="n",cex=0.7)
-
+mtext("prop. total provisioning investment",2,line=2.3,cex=0.7)
+legend("bottomleft",legend=c("successful zygotes","aborted zygotes"),col=c(cerulean,venetian_red),pch=c(16,16),bty="n",cex=0.7)
 
 mod_prop_postpollen_success <- sma(prop_postpollen_success~embryo_endo_size,SummarySpp[["mean"]],log="x",method="OLS")
 mod_prop_postpollen_failure <- sma(prop_postpollen_failure~embryo_endo_size,SummarySpp[["mean"]],log="x",method="OLS")
 
-line_function_log_x(SummarySpp[["mean"]]$embryo_endo_size,mod_prop_postpollen_success,1,col="#0571b0")
-line_function_log_x(SummarySpp[["mean"]]$embryo_endo_size,mod_prop_postpollen_failure,1,col="#ca0020")
+line_function_log_x(SummarySpp[["mean"]]$embryo_endo_size,mod_prop_postpollen_success,1,col=cerulean)
+line_function_log_x(SummarySpp[["mean"]]$embryo_endo_size,mod_prop_postpollen_failure,1,col=venetian_red)
 
-plot(prepollen_costs~embryo_endo_size,SummarySpp[["mean"]],pch=16,log="xy",col="#0571b0",xlim=c(.002,100),ylim=c(.01,20000),xlab="",ylab="",xaxt="n",yaxt="n")
-points(provisioning_costs~embryo_endo_size,SummarySpp[["mean"]],pch=16,col="#ca0020")
+#panel f - change in slope of "success costs"
+plot(pollen_attract_costs~embryo_endo_size,SummarySpp[["mean"]],pch=16,log="xy",col=cerulean,xlim=c(.002,100),ylim=c(.01,20000),xlab="",ylab="",xaxt="n",yaxt="n")
+points(provisioning_costs~embryo_endo_size,SummarySpp[["mean"]],pch=16,col=venetian_red)
 extra.top.left.logxy("f",2,1)
 axis(2, at=c(0.01,1,100,10000), labels=c(0.01,1,100,10000),cex.axis=0.8,las=2)
 axis(1, at=c(0.01,1,100), labels=c(0.01,1,100),cex.axis=0.8)
 mtext("seed size (mg)",1,line=1.8,cex=0.7)
 mtext("success cost (mg/seed)",2,line=2.3,cex=0.7)
-legend("bottomright",legend=c("pollen-attraction","provisioning"),col=c("#0571b0","#ca0020"),pch=c(16,16),bty="n",cex=0.7)
+legend("bottomright",legend=c("pollen_attraction","provisioning"),col=c(cerulean,venetian_red),pch=c(16,16),bty="n",cex=0.7)
 
 
-mod_prepollen_costs <- sma(prepollen_costs~embryo_endo_size,SummarySpp[["mean"]],log="xy",method="SMA")
-mod_provisioning_costs <- sma(provisioning_costs~embryo_endo_size,SummarySpp[["mean"]],log="xy",method="SMA",slope.test = mod_prepollen_costs$groupsummary$Slope_highCI)
-line_function_log_xy(SummarySpp[["mean"]]$embryo_endo_size,mod_prepollen_costs,1,col="#0571b0")
-line_function_log_xy(SummarySpp[["mean"]]$embryo_endo_size,mod_provisioning_costs,1,col="#ca0020")
+mod_pollen_attract_costs <- sma(pollen_attract_costs~embryo_endo_size,SummarySpp[["mean"]],log="xy",method="SMA")
+mod_provisioning_costs <- sma(provisioning_costs~embryo_endo_size,SummarySpp[["mean"]],log="xy",method="SMA",slope.test = mod_pollen_attract_costs$groupsummary$Slope_highCI)
+line_function_log_xy(SummarySpp[["mean"]]$embryo_endo_size,mod_pollen_attract_costs,1,col=cerulean)
+line_function_log_xy(SummarySpp[["mean"]]$embryo_endo_size,mod_provisioning_costs,1,col=venetian_red)
 
 dev.off()
 ```
@@ -644,7 +645,7 @@ dev.off()
 
 #Table with above model results
 ```{r}
-mod_prop_prepollen_costs <- sma(prop_prepollen_costs~embryo_endo_size,SummarySpp[["mean"]],log="x",method="OLS")
+mod_prop_pollen_attract_costs <- sma(prop_pollen_attract_costs~embryo_endo_size,SummarySpp[["mean"]],log="x",method="OLS")
 mod_prop_postpollen_costs <- sma(prop_postpollen_costs~embryo_endo_size,SummarySpp[["mean"]],log="x",method="OLS")
 mod_prop_prepollen_success <- sma(prop_prepollen_success~embryo_endo_size,SummarySpp[["mean"]],log="x",method="OLS")
 mod_prop_prepollen_success_SMA <- sma(prop_prepollen_success~embryo_endo_size,SummarySpp[["mean"]],log="x",method="SMA")
@@ -652,8 +653,8 @@ mod_prop_prepollen_failure <- sma(prop_prepollen_failure~embryo_endo_size,Summar
 mod_prop_postpollen_success <- sma(prop_postpollen_success~embryo_endo_size,SummarySpp[["mean"]],log="x",method="OLS")
 mod_prop_postpollen_failure <- sma(prop_postpollen_failure~embryo_endo_size,SummarySpp[["mean"]],log="x",method="OLS")
 
-energy_prop <- dplyr::select(mod_prop_prepollen_costs$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI)
-energy_prop$test[1] <- "Proportion prepollen costs"
+energy_prop <- dplyr::select(mod_prop_pollen_attract_costs$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI)
+energy_prop$test[1] <- "Proportion sucess costs to prepollen"
 
 temp <- dplyr::select(mod_prop_prepollen_success$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI)
 temp$test[1] <- "Proportion prepollen costs to success"
@@ -690,15 +691,15 @@ par(mfrow=c(2,2), cex=1, omi=c(1,.1,.05,.05), mai=c(.2,.8,.1,.05))
 options(scipen = 5)
 
 
-plot((repro_all_count/seed_count)~prop_prepollen_costs_all_repro,SummarySpp[["mean"]],pch=16,log="xy",col=col.spp(species),ylab="",ylim=c(.8,500),yaxt="n",xlim=c(.0015,.5),xaxt="n")
+plot((ovule_count/seed_count)~prop_pollen_attract_costs_all_repro,SummarySpp[["mean"]],pch=16,log="xy",col=col.spp(species),ylab="",ylim=c(.8,500),yaxt="n",xlim=c(.0015,.5),xaxt="n")
 axis(2, at=c(1,10,100), labels=c(1,10,100),cex.axis=1)
 axis(1, at=c(0.001,0.005,0.01,0.05,0.1,0.5), labels=c(0.001,0.005,0.01,0.05,0.1,0.5),cex.axis=1)
 mtext("choosiness (ovules initiated per seed matured)",2,line=2.3)
-mtext("proportion reproductive investment for successful pollen-attraction costs",1,line=2.3)
+mtext("proportion reproductive investment for successful pollen_attraction costs",1,line=2.3)
 
-mod_choosy <- sma((repro_all_count/seed_count)~prop_prepollen_costs_all_repro,data=SummarySpp[["mean"]],log="xy",slope=-1,method="SMA")
+mod_choosy <- sma((ovule_count/seed_count)~prop_pollen_attract_costs_all_repro,data=SummarySpp[["mean"]],log="xy",slope=-1,method="SMA")
 
-line_function_log_xy(SummarySpp[["mean"]]$prop_prepollen_costs_all_repro,mod_choosy,1)
+line_function_log_xy(SummarySpp[["mean"]]$prop_pollen_attract_costs_all_repro,mod_choosy,1)
 summary(mod_choosy)
 
 plot(seedset~embryo_endo_size,SummarySpp[["mean"]],log="xy",col=col.spp(species),pch=16, xlim=c(.002,500),ylim=c(.004,.6),cex=1.5,xaxt="n",xlab="",ylab="")
@@ -711,8 +712,8 @@ mtext("seed set",2,line=2.3)
 extra.top.left.logxy("b",2,1.2)
 summary(mod)
 
-plot(prepollen_costs~embryo_endo_size,SummarySpp[["mean"]],col=col.spp(species),pch=16,log="xy", yaxt="n",xaxt="n", ylim=c(.02,5000), xlim=c(.002,500), ylab="",xlab="",cex=1.5)
-y.error.bars.2(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$prepollen_costs,SummarySpp[["se"]]$prepollen_costs)
+plot(pollen_attract_costs~embryo_endo_size,SummarySpp[["mean"]],col=col.spp(species),pch=16,log="xy", yaxt="n",xaxt="n", ylim=c(.02,5000), xlim=c(.002,500), ylab="",xlab="",cex=1.5)
+y.error.bars.2(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$pollen_attract_costs,SummarySpp[["se"]]$pollen_attract_costs)
 
 points(provisioning_costs~embryo_endo_size,SummarySpp[["mean"]],col=col.spp(species),pch=21,cex=1.5)
 y.error.bars.2(SummarySpp[["mean"]]$embryo_endo_size,SummarySpp[["mean"]]$provisioning_costs,SummarySpp[["se"]]$provisioning_costs)
@@ -721,28 +722,28 @@ axis(2, at=c(0.1,10,1000), labels=c(0.1,10,1000),cex.axis=1)
 axis(1, at=c(0.01,1,100), labels=c(0.01,1,100),cex.axis=1)
 mtext("costs (mg/ovule)",2,line=2.3)
 
-mod_prepollen <- sma(prepollen_costs~embryo_endo_size,SummarySpp[["mean"]],log="xy",method="SMA")
+mod_prepollen <- sma(pollen_attract_costs~embryo_endo_size,SummarySpp[["mean"]],log="xy",method="SMA")
 mod_provision <- sma(postpollen_all_per_seed~embryo_endo_size,SummarySpp[["mean"]],log="xy",method="SMA",slope.test=mod_prepollen$groupsummary["Slope"][[1]])
 
 
 line_function_log_xy(SummarySpp[["mean"]]$embryo_endo_size,mod_prepollen,1)
 line_function_log_xy(SummarySpp[["mean"]]$embryo_endo_size,mod_provision,2)
 
-legend("topright",legend=c("pollen-attraction","provisioning"),col=c("black","black"),pch=c(16,21),bty="n")
+legend("topright",legend=c("pollen_attraction","provisioning"),col=c("black","black"),pch=c(16,21),bty="n")
 extra.top.left.logxy("c",2,1.2)
 
-plot(prop_prepollen_costs~embryo_endo_size,SummarySpp[["mean"]],col=col.spp(species),pch=16,log="x", yaxt="n",xaxt="n", ylim=c(0,1), xlim=c(.002,500), ylab="",xlab="",cex=1.5)
+plot(prop_pollen_attract_costs~embryo_endo_size,SummarySpp[["mean"]],col=col.spp(species),pch=16,log="x", yaxt="n",xaxt="n", ylim=c(0,1), xlim=c(.002,500), ylab="",xlab="",cex=1.5)
 points(prop_prepollen_all~embryo_endo_size,SummarySpp[["mean"]],col=col.spp(species),pch=1,cex=1.5)
 axis(2, at=c(0,.5,1), labels=c(0,0.5,1.0),cex.axis=1)
 axis(1, at=c(0.01,1,100), labels=c(0.01,1,100),cex.axis=1)
 extra.top.left.logx("d",2,1.2)
 
-mod_prop_prepollen_costs <- sma(prop_prepollen_costs~embryo_endo_size,SummarySpp[["mean"]],log="x",method="SMA",slope.test=0)
+mod_prop_pollen_attract_costs <- sma(prop_pollen_attract_costs~embryo_endo_size,SummarySpp[["mean"]],log="x",method="SMA",slope.test=0)
 mod_prop_prepollen_all <- sma(prop_prepollen_all~embryo_endo_size,SummarySpp[["mean"]],log="x",method="SMA",slope.test=0)
 
-line_function_log_x(SummarySpp[["mean"]]$embryo_endo_size,mod_prop_prepollen_costs,1)
+line_function_log_x(SummarySpp[["mean"]]$embryo_endo_size,mod_prop_pollen_attract_costs,1)
 
-summary(mod_prop_prepollen_costs)
+summary(mod_prop_pollen_attract_costs)
 summary(mod_prop_prepollen_all)
 
 
@@ -818,7 +819,7 @@ par(mfrow=c(2,2), cex=1, omi=c(.1,.4,.1,.05), mai=c(.6,.3,.1,.1))
 options(scipen = 2)
 
 xvar <- "repro_inv"
-yvar <- "accessory_per_seed"
+yvar <- "accessory_costs"
 data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
 
 fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
@@ -830,7 +831,7 @@ legend_with_r2(results,"bottomright")
 write.csv(results, file="figs2/Accessory_Costs/Table05a_accessory_vs_RE.csv",row.names=FALSE)
  
 xvar <- "total_weight_0"
-yvar <- "accessory_per_seed"
+yvar <- "accessory_costs"
 data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
 
 fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
@@ -842,7 +843,7 @@ legend_with_r2(results,"bottomright")
 write.csv(results, file="figs2/Accessory_Costs/Table05b_accessory_vs_total_weight.csv",row.names=FALSE)
 
 xvar <- "age"
-yvar <- "accessory_per_seed"
+yvar <- "accessory_costs"
 data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
 
 fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
@@ -923,7 +924,7 @@ plot
 par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,0.05), mai=c(.8,.8,.1,0.1))
 options(scipen = 2)
 
-xvar <- "repro_all_count"
+xvar <- "ovule_count"
 yvar <- "seed_count"
 data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
 
@@ -1002,16 +1003,16 @@ plot
 par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.1,.1), mai=c(1,1,.5,.5)) 
 
 xvar <- "seed_count"
-yvar <- "accessory_per_seed"
+yvar <- "accessory_costs"
 data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
 
 fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
 results <- lines(fit$groupsummary)
 plot(fit,col=col.spp(fit$groupsummary$group),pch=16,xlab=xvar,ylab=yvar,lty=results$linetype)
 
-points(accessory_per_seed~seed_count,data=subset(SummarySpp[["mean"]],accessory_per_seed>0&seed_count>0),col="black",pch=16,cex=2.5)
-points(accessory_per_seed~seed_count,data=subset(SummarySpp[["mean"]],accessory_per_seed>0&seed_count>0),col=col.spp(species),pch=16,cex=2)
-mod <- sma(accessory_per_seed~seed_count,data=subset(SummarySpp[["mean"]]),method="SMA", log="xy")
+points(accessory_costs~seed_count,data=subset(SummarySpp[["mean"]],accessory_costs>0&seed_count>0),col="black",pch=16,cex=2.5)
+points(accessory_costs~seed_count,data=subset(SummarySpp[["mean"]],accessory_costs>0&seed_count>0),col=col.spp(species),pch=16,cex=2)
+mod <- sma(accessory_costs~seed_count,data=subset(SummarySpp[["mean"]]),method="SMA", log="xy")
 #words.top.right.logxy(mod)
 legend_with_r2(results,"bottomleft")
 
