@@ -7,46 +7,50 @@ ReproductiveCounts <- function(species, IndividualsList, InvestmentCategories, s
 
   accessory_count <- FD %>%
       group_by(individual, part) %>%
-      summarise_each(funs(sum), count, weight)
+      summarise_each(funs(sum), count)
 
   counts <- ddply(accessory_count, "individual", function(x) {
       sapply(names(categories_counts), function(n)
          sum(filter(x, part %in% categories_counts[[n]])$count))})
 
   counts <- mutate(counts,
-    seedset = divide_zero(seed_count, bud_count + flower_count + seed_count + aborted_fruit_count),
-    prepollen_all_count = bud_count + flower_count,
-    prop_prepollen_count = divide_zero(bud_count + flower_count, bud_count + flower_count + seed_count + aborted_fruit_count),
-    repro_all_count = bud_count + flower_count + seed_count + aborted_fruit_count
-        )
-
+    postpollen_count = postpollen_aborted_count + seed_count,
+    prepollen_count = prepollen_count_aborted_preflowering + prepollen_count_reach_flowering,
+    ovule_count = postpollen_count + prepollen_count,
+    aborted_ovule_count = ovule_count - seed_count,
+    seedset = divide_zero(seed_count, ovule_count),
+    choosiness = divide_zero(ovule_count, seed_count),
+    zygote_set = divide_zero(seed_count,postpollen_count),
+    pollen_set = divide_zero(postpollen_count,prepollen_count_reach_flowering)
+  )
+  
   parts_weights <- list(
-      seedpod_weight = "seed_pod",
-      fruit_weight   = "fruit_mature")
-
+    seedpod_weight = "seed_pod",
+    fruit_weight   = "fruit_mature")
+  
   weights <- ddply(accessory_count, "individual", function(x) {
-      sapply(names(parts_weights), function(n)
-         sum(filter(x, part %in% parts_weights[[n]])$weight))})
-
+    sapply(names(parts_weights), function(n)
+      sum(filter(x, part %in% parts_weights[[n]])$weight))})
+  
   merge(counts, weights, by="individual", all=TRUE)
 }
 
 
 ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, species_Investment) {
-
+  
   FD <- species_Investment$FD
-
+  
   # Read and restrict the data to the subset of interest
   InvCat <- InvestmentCategories[[species]][["categories_costs"]]
-
+  
   FD <- FD %>%
-        group_by(individual,part) %>%
-        summarise_each(funs(sum), count,weight)
-                         
+    group_by(individual,part) %>%
+    summarise_each(funs(sum), count,weight)
+  
   AgeData <- IndividualsList %>%
     filter(use_for_allocation_calculations & alive) %>%
     select(species,individual, age)
-
+  
   # For each individual, sum investment by categories
   # Each category includes a list of parts for that species
   # Individual lists are drawn from AgeData so that even individuals with no FD data are included and return 0
@@ -54,11 +58,57 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
   f1 <- function(data) {
     # subset investment data by individual
     df <- FD[FD$individual==data$individual,]
-    sapply(c("prepollen_aborted_inv", "prepollen_success_inv", "postpollen_aborted_inv",
-    "packaging_dispersal_inv", "propagule_inv"), function(x) sum(df$weight[df$part %in% InvCat[[x]]]))
+    sapply(c("prepollen_inv_aborted_preflowering", "prepollen_inv_reach_flowering", "postpollen_aborted_inv",
+             "packaging_dispersal_inv", "propagule_inv"), function(x) sum(df$weight[df$part %in% InvCat[[x]]]))
+  }
+  
+  Costs <- ddply(AgeData, "individual",  f1)
+  
+  #for f7,f8 currently just matching to generic part. Want to add if,else to say, "First look at FD dataframe to see if there is a parts match - if not, 
+  #use the generic species value from PartsSummary. This is necessary, because for some parts there may no longer be any of a "part" in FD
+  
+  f7 <- function(i) {
+    df <- FD[FD$individual== i,]
+    ps <- PartsSummary[PartsSummary$species == species,]
+    weight_at_pollination <- df$weight[match(InvCat[["prepollen_inv_from_dispersal_weight"]], df$part)]
+    weight_at_pollination[is.na(weight_at_pollination)] <- 0
+    counts_to_divide_by <- df$count[match(InvCat[["prepollen_inv_from_dispersal_weight"]], df$part)]
+    counts_to_divide_by[is.na(counts_to_divide_by)] <- 0
+    FD_count <- df$count[match(InvCat[["prepollen_inv_from_dispersal_count"]], df$part)]
+    FD_count[is.na(FD_count)] <- 0
+    scale <- unlist(InvCat[["prepollen_inv_from_dispersal_scale"]])
+    sum(scale*FD_count*weight_at_pollination/counts_to_divide_by, na.rm = TRUE)
   }
 
-  Costs <- ddply(AgeData, "individual",  f1)
+  Costs$prepollen_inv_from_dispersal = sapply(Costs$individual, f7)
+
+  f8 <- function(i) {
+    df <- FD[FD$individual== i,]
+    weight_at_pollination <- df$weight[match(InvCat[["prepollen_inv_from_postpollen_aborted_weight"]], df$part)]
+    weight_at_pollination[is.na(weight_at_pollination)] <- 0
+    counts_to_divide_by <- df$count[match(InvCat[["prepollen_inv_from_postpollen_aborted_weight"]], df$part)]
+    counts_to_divide_by[is.na(counts_to_divide_by)] <- 0
+    FD_count <- df$count[match(InvCat[["prepollen_inv_from_postpollen_aborted_count"]], df$part)]
+    FD_count[is.na(FD_count)] <- 0
+    scale <- unlist(InvCat[["prepollen_inv_from_postpollen_aborted_scale"]])
+    sum(scale*FD_count*weight_at_pollination/counts_to_divide_by, na.rm = TRUE)
+  }
+  
+  Costs$prepollen_inv_from_postpollen_aborted = sapply(Costs$individual, f8)
+  
+
+  f9 <- function(i) {
+    df <- FD[FD$individual== i,]
+    weight_at_pollination <- df$weight[match(InvCat[["prepollen_inv_from propagule_weight"]], df$part)]
+    weight_at_pollination[is.na(weight_at_pollination)] <- 0
+    counts_to_divide_by <- df$count[match(InvCat[["prepollen_inv_from_propagule_weight"]], df$part)]
+    counts_to_divide_by[is.na(counts_to_divide_by)] <- 0
+    FD_count <- df$count[match(InvCat[["prepollen_inv_from propagule_count"]], df$part)]
+    FD_count[is.na(FD_count)] <- 0
+    sum(FD_count*weight_at_pollination/counts_to_divide_by, na.rm = TRUE)
+  }
+  
+  Costs$prepollen_inv_from_propagule = sapply(Costs$individual, f9)
 
   # Similar to f1, but returns a single column for seedcosts. The total weight is standardised against the counts of
   # a parts specified by the variable "seed_costs_scale"
@@ -76,7 +126,7 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
   }
   
   Costs$seed_costs = sapply(Costs$individual, f2)
-
+  
   # Identical format to f2, but returns a single column for prepollencosts. The total weight is standardised against the counts of
   # a parts specified by the variable "prepollen_costs_scale"
   # Takes as argument the individual
@@ -93,7 +143,7 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
   }
   
   Costs$prepollen_partial_costs = sapply(Costs$individual, f3)
-  
+
   f4 <- function(i) {
     # subset investment data by individual
     df <- FD[FD$individual== i,]
@@ -111,16 +161,17 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
     sum(adjust*weights/counts,  na.rm = TRUE)
   }
   
-  Costs$pack_disp_gross_costs = sapply(Costs$individual, f4)
+  Costs$pack_disp_net_costs = sapply(Costs$individual, f4)
   
   f5 <- function(i) {
     # subset investment data by individual
     df <- FD[FD$individual== i,]
-     # return 0 if there are 0 flowers produced
+    # return 0 if there are 0 flowers produced
     if(sum(df$count[df$part %in% c("flower_petals","fruit_mature","seed")], na.rm=TRUE) ==0) {
       return(0)
     }
     weights <- 1*df$weight[match(InvCat[["dispersal_before_pollen_costs"]], df$part)]
+    
     counts <- df$count[match(InvCat[["dispersal_before_pollen_costs_scale"]], df$part)]
     if(length(counts >0)){
       adjust <- unlist(InvCat[["dispersal_before_pollen_costs_adjust"]])
@@ -134,7 +185,7 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
   }
   
   Costs$pack_disp_early_costs = sapply(Costs$individual, f5)
-
+  
   f6 <- function(i) {
     # subset investment data by individual
     df <- FD[FD$individual== i,]
@@ -151,16 +202,12 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
   
   ret <- merge(AgeData, Costs, by="individual", all=TRUE) %>%
     mutate(
-        repro_inv = prepollen_aborted_inv + prepollen_success_inv + postpollen_aborted_inv + packaging_dispersal_inv + propagule_inv,
+        repro_inv = prepollen_inv_aborted_preflowering + prepollen_inv_reach_flowering + postpollen_aborted_inv + packaging_dispersal_inv + propagule_inv,
         accessory_inv = repro_inv - propagule_inv,
-        prepollen_all_inv = prepollen_aborted_inv + prepollen_success_inv,
-        prop_prepollen_aborted = divide_zero(prepollen_aborted_inv, repro_inv),
-        prop_prepollen_success = divide_zero(prepollen_success_inv, repro_inv),
-        prop_postpollen_aborted = divide_zero(postpollen_aborted_inv, repro_inv),
-        prop_packaging_dispersal = divide_zero(packaging_dispersal_inv, repro_inv),
+        prepollen_all_inv = prepollen_inv_aborted_preflowering + prepollen_inv_reach_flowering,
         prop_propagule = divide_zero(propagule_inv, repro_inv),
         prop_accessory = 1 - prop_propagule,
-        prop_prepollen_all = prop_prepollen_aborted + prop_prepollen_success
+        prop_prepollen_all = divide_zero(prepollen_all_inv, repro_inv)
         )
 }
 
