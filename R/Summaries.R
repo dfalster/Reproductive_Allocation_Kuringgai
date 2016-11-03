@@ -163,7 +163,8 @@ combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_
     postpollen_aborted_costs = postpollen_aborted_inv/seed_count, #all parts that aren't pack & dispersal for successful seeds
     packaging_dispersal_per_seed = packaging_dispersal_inv/seed_count,
     postpollen_all_per_seed = postpollen_all_inv / seed_count,   
-    postpollen_all_per_seed = postpollen_aborted_costs + seed_size + packaging_dispersal_per_seed,
+    postpollen_all_per_seed2 = postpollen_aborted_costs + seed_size + packaging_dispersal_per_seed,
+    repro_cost2 = postpollen_all_per_seed2 +prepollen_all_per_seed,
     prop_success = success_inv/ repro_inv,
     prop_propagule_ee = (embryo_endo_size*seed_count)/repro_inv,
     prop_propagule_seed = (seed_size*seed_count)/repro_inv,

@@ -1,6 +1,7 @@
 ReproductiveCounts <- function(species, IndividualsList, InvestmentCategories, species_Investment) {
 
   FD <- species_Investment$FD
+  
 
   # Counts of parts
   categories_counts <- InvestmentCategories[[species]][["categories_counts"]]
@@ -47,6 +48,8 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
     group_by(individual,part) %>%
     summarise_each(funs(sum), count,weight)
   
+  FD$unit_weight <- FD$weight/FD$count
+  
   AgeData <- IndividualsList %>%
     filter(use_for_allocation_calculations & alive) %>%
     select(species,individual, age)
@@ -70,42 +73,37 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
   f7 <- function(i) {
     df <- FD[FD$individual== i,]
     ps <- PartsSummary[PartsSummary$species == species,]
-    weight_at_pollination <- df$weight[match(InvCat[["prepollen_inv_from_dispersal_weight"]], df$part)]
-    weight_at_pollination[is.na(weight_at_pollination)] <- 0
-    counts_to_divide_by <- df$count[match(InvCat[["prepollen_inv_from_dispersal_weight"]], df$part)]
-    counts_to_divide_by[is.na(counts_to_divide_by)] <- 0
-    FD_count <- df$count[match(InvCat[["prepollen_inv_from_dispersal_count"]], df$part)]
-    FD_count[is.na(FD_count)] <- 0
-    scale <- unlist(InvCat[["prepollen_inv_from_dispersal_scale"]])
-    sum(scale*FD_count*weight_at_pollination/counts_to_divide_by, na.rm = TRUE)
+    unit_weight <- df$unit_weight[match(InvCat[["prepollen_inv_from_dispersal_unit_weight"]], df$part)]
+    unit_weight[is.na(unit_weight)] <- 0
+    counts <- df$count[match(InvCat[["prepollen_inv_from_dispersal_count"]], df$part)]
+    counts[is.na(counts)] <- 0
+    scale <- unlist(InvCat[["prepollen_inv_from_dispersal_prop_to_use"]])
+    sum(scale*counts*unit_weight, na.rm = TRUE)
   }
 
   Costs$prepollen_inv_from_dispersal = sapply(Costs$individual, f7)
 
   f8 <- function(i) {
     df <- FD[FD$individual== i,]
-    weight_at_pollination <- df$weight[match(InvCat[["prepollen_inv_from_postpollen_aborted_weight"]], df$part)]
-    weight_at_pollination[is.na(weight_at_pollination)] <- 0
-    counts_to_divide_by <- df$count[match(InvCat[["prepollen_inv_from_postpollen_aborted_weight"]], df$part)]
-    counts_to_divide_by[is.na(counts_to_divide_by)] <- 0
+    unit_weight <- df$unit_weight[match(InvCat[["prepollen_inv_from_postpollen_aborted_unit_weight"]], df$part)]
+    unit_weight[is.na(unit_weight)] <- 0
+    counts <- df$count[match(InvCat[["prepollen_inv_from_postpollen_aborted_unit_weight"]], df$part)]
+    counts[is.na(counts)] <- 0
     FD_count <- df$count[match(InvCat[["prepollen_inv_from_postpollen_aborted_count"]], df$part)]
     FD_count[is.na(FD_count)] <- 0
-    scale <- unlist(InvCat[["prepollen_inv_from_postpollen_aborted_scale"]])
-    sum(scale*FD_count*weight_at_pollination/counts_to_divide_by, na.rm = TRUE)
+    scale <- unlist(InvCat[["prepollen_inv_from_postpollen_aborted_prop_to_use"]])
+    sum(counts*FD_count*unit_weight*scale, na.rm = TRUE)
   }
   
   Costs$prepollen_inv_from_postpollen_aborted = sapply(Costs$individual, f8)
   
-
   f9 <- function(i) {
     df <- FD[FD$individual== i,]
-    weight_at_pollination <- df$weight[match(InvCat[["prepollen_inv_from propagule_weight"]], df$part)]
-    weight_at_pollination[is.na(weight_at_pollination)] <- 0
-    counts_to_divide_by <- df$count[match(InvCat[["prepollen_inv_from_propagule_weight"]], df$part)]
-    counts_to_divide_by[is.na(counts_to_divide_by)] <- 0
-    FD_count <- df$count[match(InvCat[["prepollen_inv_from propagule_count"]], df$part)]
-    FD_count[is.na(FD_count)] <- 0
-    sum(FD_count*weight_at_pollination/counts_to_divide_by, na.rm = TRUE)
+    unit_weight <- df$unit_weight[match(InvCat[["prepollen_inv_from propagule_inv"]], df$part)]
+    unit_weight[is.na(unit_weight)] <- 0
+    counts <- df$count[match(InvCat[["seed_count2"]], df$part)]
+    counts[is.na(counts)] <- 0
+    sum(counts*unit_weight, na.rm = TRUE)
   }
   
   Costs$prepollen_inv_from_propagule = sapply(Costs$individual, f9)
@@ -127,7 +125,7 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
   
   Costs$seed_costs = sapply(Costs$individual, f2)
   
-  # Identical format to f2, but returns a single column for prepollencosts. The total weight is standardised against the counts of
+    # Identical format to f2, but returns a single column for prepollencosts. The total weight is standardised against the counts of
   # a parts specified by the variable "prepollen_costs_scale"
   # Takes as argument the individual
   f3 <- function(i) {
@@ -151,10 +149,10 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
     if(sum(df$count[df$part %in% c("seed", "fruit_mature")], na.rm=TRUE) ==0) {
       return(0)
     }
-    weights <- df$weight[match(InvCat[["dispersal_costs"]], df$part)]
-    counts <- df$count[match(InvCat[["dispersal_costs_scale"]], df$part)]
+    weights <- df$weight[match(InvCat[["pack_disp_net_costs"]], df$part)]
+    counts <- df$count[match(InvCat[["pack_disp_net_costs_count"]], df$part)]
     if(length(counts >0)){
-      adjust <- unlist(InvCat[["dispersal_costs_adjust"]])
+      adjust <- unlist(InvCat[["pack_disp_net_costs_prop_to_use"]])
     }
     else 
       adjust <- numeric(0)
@@ -190,12 +188,11 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
     # subset investment data by individual
     df <- FD[FD$individual== i,]
     # return 0 if there are 0 flowers produced
-    if(sum(df$count[df$part %in% c("flower_petals","fruit_mature","seed")], na.rm=TRUE) ==0) {
+    if(sum(df$count[df$part %in% c("fruit_mature","seed")], na.rm=TRUE) ==0) {
       return(0)
     }
-    weights <- df$weight[match(InvCat[["seed_before_pollen_costs"]], df$part)]
-    counts <- df$count[match(InvCat[["seed_before_pollen_costs_scale"]], df$part)]
-    sum(weights/counts, na.rm = TRUE)
+    unit_weight <- df$unit_weight[match(InvCat[["seed_before_pollen_costs"]], df$part)]
+    sum(unit_weight, na.rm = TRUE)
   }  
   
   Costs$seed_early_costs = sapply(Costs$individual, f6)
