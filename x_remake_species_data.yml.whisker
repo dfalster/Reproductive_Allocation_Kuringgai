@@ -32,10 +32,6 @@ targets:
     command: >
       CalculateReproductiveCostsFor{{species}}({{species}}_IndividualsList, InvestmentCategories, {{species}}_Investment)
 
-  {{species}}_ReproductiveCounts:
-    command: >
-      CalculateReproductiveCountsFor{{species}}({{species}}_IndividualsList, InvestmentCategories, {{species}}_Investment)
-
   {{species}}_Growth:
     command: >
       CalculateGrowthFor{{species}}({{species}}_HarvestData, {{species}}_IndividualsList)

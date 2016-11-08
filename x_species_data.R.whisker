@@ -15,10 +15,6 @@ CalculateReproductiveCostsFor{{species}} <- function(...) {
 	ReproductiveCosts("{{species}}", ...)
 }
 
-CalculateReproductiveCountsFor{{species}} <- function(...) {
-  ReproductiveCounts("{{species}}", ...)
-}
-
 CalculateGrowthFor{{species}} <- function(...) {
 	growth_calculations("{{species}}", ...)
 }

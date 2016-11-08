@@ -31,10 +31,6 @@ targets:
     command: >
       CalculateReproductiveCostsForBAER(BAER_IndividualsList, InvestmentCategories, BAER_Investment)
 
-  BAER_ReproductiveCounts:
-    command: >
-      CalculateReproductiveCountsForBAER(BAER_IndividualsList, InvestmentCategories, BAER_Investment)
-
   BAER_Growth:
     command: >
       CalculateGrowthForBAER(BAER_HarvestData, BAER_IndividualsList)
@@ -67,10 +63,6 @@ targets:
   BOLE_ReproductiveCosts:
     command: >
       CalculateReproductiveCostsForBOLE(BOLE_IndividualsList, InvestmentCategories, BOLE_Investment)
-
-  BOLE_ReproductiveCounts:
-    command: >
-      CalculateReproductiveCountsForBOLE(BOLE_IndividualsList, InvestmentCategories, BOLE_Investment)
 
   BOLE_Growth:
     command: >
@@ -105,10 +97,6 @@ targets:
     command: >
       CalculateReproductiveCostsForCOER(COER_IndividualsList, InvestmentCategories, COER_Investment)
 
-  COER_ReproductiveCounts:
-    command: >
-      CalculateReproductiveCountsForCOER(COER_IndividualsList, InvestmentCategories, COER_Investment)
-
   COER_Growth:
     command: >
       CalculateGrowthForCOER(COER_HarvestData, COER_IndividualsList)
@@ -141,10 +129,6 @@ targets:
   EPMI_ReproductiveCosts:
     command: >
       CalculateReproductiveCostsForEPMI(EPMI_IndividualsList, InvestmentCategories, EPMI_Investment)
-
-  EPMI_ReproductiveCounts:
-    command: >
-      CalculateReproductiveCountsForEPMI(EPMI_IndividualsList, InvestmentCategories, EPMI_Investment)
 
   EPMI_Growth:
     command: >
@@ -179,10 +163,6 @@ targets:
     command: >
       CalculateReproductiveCostsForGRBU(GRBU_IndividualsList, InvestmentCategories, GRBU_Investment)
 
-  GRBU_ReproductiveCounts:
-    command: >
-      CalculateReproductiveCountsForGRBU(GRBU_IndividualsList, InvestmentCategories, GRBU_Investment)
-
   GRBU_Growth:
     command: >
       CalculateGrowthForGRBU(GRBU_HarvestData, GRBU_IndividualsList)
@@ -215,10 +195,6 @@ targets:
   GRSP_ReproductiveCosts:
     command: >
       CalculateReproductiveCostsForGRSP(GRSP_IndividualsList, InvestmentCategories, GRSP_Investment)
-
-  GRSP_ReproductiveCounts:
-    command: >
-      CalculateReproductiveCountsForGRSP(GRSP_IndividualsList, InvestmentCategories, GRSP_Investment)
 
   GRSP_Growth:
     command: >
@@ -253,10 +229,6 @@ targets:
     command: >
       CalculateReproductiveCostsForHATE(HATE_IndividualsList, InvestmentCategories, HATE_Investment)
 
-  HATE_ReproductiveCounts:
-    command: >
-      CalculateReproductiveCountsForHATE(HATE_IndividualsList, InvestmentCategories, HATE_Investment)
-
   HATE_Growth:
     command: >
       CalculateGrowthForHATE(HATE_HarvestData, HATE_IndividualsList)
@@ -289,10 +261,6 @@ targets:
   HEPU_ReproductiveCosts:
     command: >
       CalculateReproductiveCostsForHEPU(HEPU_IndividualsList, InvestmentCategories, HEPU_Investment)
-
-  HEPU_ReproductiveCounts:
-    command: >
-      CalculateReproductiveCountsForHEPU(HEPU_IndividualsList, InvestmentCategories, HEPU_Investment)
 
   HEPU_Growth:
     command: >
@@ -327,10 +295,6 @@ targets:
     command: >
       CalculateReproductiveCostsForLEES(LEES_IndividualsList, InvestmentCategories, LEES_Investment)
 
-  LEES_ReproductiveCounts:
-    command: >
-      CalculateReproductiveCountsForLEES(LEES_IndividualsList, InvestmentCategories, LEES_Investment)
-
   LEES_Growth:
     command: >
       CalculateGrowthForLEES(LEES_HarvestData, LEES_IndividualsList)
@@ -363,10 +327,6 @@ targets:
   PELA_ReproductiveCosts:
     command: >
       CalculateReproductiveCostsForPELA(PELA_IndividualsList, InvestmentCategories, PELA_Investment)
-
-  PELA_ReproductiveCounts:
-    command: >
-      CalculateReproductiveCountsForPELA(PELA_IndividualsList, InvestmentCategories, PELA_Investment)
 
   PELA_Growth:
     command: >
@@ -401,10 +361,6 @@ targets:
     command: >
       CalculateReproductiveCostsForPEPU(PEPU_IndividualsList, InvestmentCategories, PEPU_Investment)
 
-  PEPU_ReproductiveCounts:
-    command: >
-      CalculateReproductiveCountsForPEPU(PEPU_IndividualsList, InvestmentCategories, PEPU_Investment)
-
   PEPU_Growth:
     command: >
       CalculateGrowthForPEPU(PEPU_HarvestData, PEPU_IndividualsList)
@@ -437,10 +393,6 @@ targets:
   PHPH_ReproductiveCosts:
     command: >
       CalculateReproductiveCostsForPHPH(PHPH_IndividualsList, InvestmentCategories, PHPH_Investment)
-
-  PHPH_ReproductiveCounts:
-    command: >
-      CalculateReproductiveCountsForPHPH(PHPH_IndividualsList, InvestmentCategories, PHPH_Investment)
 
   PHPH_Growth:
     command: >
@@ -475,10 +427,6 @@ targets:
     command: >
       CalculateReproductiveCostsForPILI(PILI_IndividualsList, InvestmentCategories, PILI_Investment)
 
-  PILI_ReproductiveCounts:
-    command: >
-      CalculateReproductiveCountsForPILI(PILI_IndividualsList, InvestmentCategories, PILI_Investment)
-
   PILI_Growth:
     command: >
       CalculateGrowthForPILI(PILI_HarvestData, PILI_IndividualsList)
@@ -511,10 +459,6 @@ targets:
   PUTU_ReproductiveCosts:
     command: >
       CalculateReproductiveCostsForPUTU(PUTU_IndividualsList, InvestmentCategories, PUTU_Investment)
-
-  PUTU_ReproductiveCounts:
-    command: >
-      CalculateReproductiveCountsForPUTU(PUTU_IndividualsList, InvestmentCategories, PUTU_Investment)
 
   PUTU_Growth:
     command: >
@@ -595,22 +539,3 @@ targets:
         PILI_Investment,
         PUTU_Investment,
       element=I("FD"))
-
-  Accessory_counts_all:
-    command: >
-      combine_data_frames(
-        BAER_ReproductiveCounts,
-        BOLE_ReproductiveCounts,
-        COER_ReproductiveCounts,
-        EPMI_ReproductiveCounts,
-        GRBU_ReproductiveCounts,
-        GRSP_ReproductiveCounts,
-        HATE_ReproductiveCounts,
-        HEPU_ReproductiveCounts,
-        LEES_ReproductiveCounts,
-        PELA_ReproductiveCounts,
-        PEPU_ReproductiveCounts,
-        PHPH_ReproductiveCounts,
-        PILI_ReproductiveCounts,
-        PUTU_ReproductiveCounts,
-        NULL)

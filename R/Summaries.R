@@ -86,13 +86,13 @@ process_wood_density <- function(wood_density_spp) {
   wood
 }
 
-combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_all, ReproductiveCosts_all, LMA, leafLifespan, wood_density_spp, seedsize) {
+combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts_all, LMA, leafLifespan, wood_density_spp, seedsize) {
   
   #adding investment and accessory costs data to leafLifespan dataframe to create a dataframe with all individual level data
   SummaryInd <- merge(Growth_all, select(leafLifespan, -species, -age), by="individual", all=TRUE)
   SummaryInd <- merge(SummaryInd, select(ReproductiveCosts_all, -species, -age), by="individual", all=TRUE)
   SummaryInd <- merge(SummaryInd, select(IndividualsList, individual, mature), by="individual", all=TRUE)
-  SummaryInd <- merge(SummaryInd, Accessory_counts_all, by="individual", all=TRUE)
+  #SummaryInd <- merge(SummaryInd, Accessory_counts_all, by="individual", all=TRUE)
   SummaryInd <- merge(SummaryInd, LMA, by=c("species","age"), all=TRUE)
   SummaryInd <- merge(SummaryInd, wood_density_spp, by=c("species"), all=TRUE)
   SummaryInd <- merge(SummaryInd, seedsize, by=c("species"), all=TRUE)
@@ -134,23 +134,22 @@ combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_
     leaf_area_0_mature = leaf_area_0 #included, because when summarizing by species, this averages leaf area only for individuals that are reproducing
   )
   
-  SummaryInd <- SummaryInd %>% mutate( 
+   SummaryInd <- SummaryInd %>% mutate( 
     reproducing = RA>0,
     seed_minus_embryo_endo = seed_size - embryo_endo_size,
     propagule_allocation = (seed_count*seed_size)/(growth_inv + repro_inv),
     embryo_allocation = (seed_count*embryo_endo_size)/(growth_inv + repro_inv),
-    pollen_attract_costs = prepollen_partial_costs + pack_disp_early_costs, #all costs, ON A PER SEED BASIS, up to the point of pollination
-    pack_disp_costs = pack_disp_net_costs + seed_minus_embryo_endo, #add in non-embryo-endo seed weight; don't need to subtract pack_disp_early_costs because already removed
+    pollen_attract_costs = prepollen_partial_costs + prepollen_costs_from_pack_disp_tissues + prepollen_costs_from_seed_tissues, #all costs, ON A PER SEED BASIS, up to the point of pollination
+    pack_disp_costs = pack_disp_net_costs + seed_minus_embryo_endo, #add in non-embryo-endo seed weight; don't need to subtract prepollen_costs_from_pack_disp_tissues because already removed
     #seed_costs = embryo_endo_size + pack_disp_costs + pollen_attract_costs,
-    embryo_endo_costs = embryo_endo_size - seed_early_costs, #ON A PER SEED BASIS, cost of making a single propagule - now defined as an embryo + endosperm    
+    embryo_endo_costs = embryo_endo_size - prepollen_costs_from_seed_tissues, #ON A PER SEED BASIS, cost of making a single propagule - now defined as an embryo + endosperm    
     repro_costs = repro_inv / seed_count,
     accessory_costs = (accessory_inv+(seed_minus_embryo_endo*seed_count))/seed_count,
     accessory_costs_using_seedweight = accessory_inv/seed_count,
     provisioning_costs = pack_disp_costs + embryo_endo_costs,
-    prepollen_all_inv = prepollen_inv_aborted_preflowering + prepollen_inv_reach_flowering + prepollen_inv_from_dispersal + prepollen_inv_from_postpollen_aborted + prepollen_inv_from_propagule, #prepollen_success_to_flower_inv is also flowers that don't progress, so much bigger than investment in flowers that become seeds
     prepollen_success_inv = pollen_attract_costs*seed_count, #prepollen_success_inv is defined as investment to parts that develop into seeds
     prepollen_failure_inv = prepollen_all_inv - prepollen_success_inv, #failure is all parts that don't progress to seeds; aborted is parts that don't reach flowering
-    postpollen_all_inv = postpollen_aborted_inv + packaging_dispersal_inv + propagule_inv - prepollen_inv_from_dispersal - prepollen_inv_from_postpollen_aborted - prepollen_inv_from_propagule,
+    postpollen_all_inv = postpollen_aborted_inv + packaging_dispersal_inv + propagule_inv,
     postpollen_aborted_inv = postpollen_all_inv - (seed_count*pack_disp_costs) - (seed_count*embryo_endo_costs), #so energy of empty seedpods becomes part of aborted
     flower_inv = pollen_attract_costs*ovule_count, #a proxy measure showing good way to estimate total repro inv; doesn't have exact meaning since "repro all count" includes aborted buds 
     fruit_inv = propagule_inv + (seed_count*seedpod_weight),
@@ -165,6 +164,7 @@ combine_by_individual <- function(IndividualsList, Growth_all, Accessory_counts_
     postpollen_all_per_seed = postpollen_all_inv / seed_count,   
     postpollen_all_per_seed2 = postpollen_aborted_costs + seed_size + packaging_dispersal_per_seed,
     repro_cost2 = postpollen_all_per_seed2 +prepollen_all_per_seed,
+    seed_costs2 = prepollen_costs_from_pack_disp_tissues + prepollen_costs_from_seed_tissues + prepollen_partial_costs + pack_disp_net_costs + seed_size,
     prop_success = success_inv/ repro_inv,
     prop_propagule_ee = (embryo_endo_size*seed_count)/repro_inv,
     prop_propagule_seed = (seed_size*seed_count)/repro_inv,
@@ -314,8 +314,8 @@ get_species_values <- function(SummaryInd, groups) {
       postpollen_aborted_inv, packaging_dispersal_inv, propagule_inv, prop_propagule,embryo_endo_inv,prop_pollen_attract_costs_all_repro,
       prop_pack_disp_costs,prop_seed_costs, prepollen_failure_costs,prepollen_all_per_seed,accessory_costs,prop_embryo_endo_costs,
       prepollen_aborted_per_seed, postpollen_aborted_costs,repro_costs,failure_inv, prop_postpollen_success,
-      scaled_failure_count,scaled_ovule_count,prop_pollen_attract_costs,pollen_attract_costs,embryo_endo_size, pack_disp_early_costs, seed_early_costs,
-      accessory_inv, prepollen_inv_aborted_preflowering, prepollen_inv_reach_flowering,prepollen_all_inv,prop_prepollen_success,
+      scaled_failure_count,scaled_ovule_count,prop_pollen_attract_costs,pollen_attract_costs,embryo_endo_size, prepollen_costs_from_pack_disp_tissues, prepollen_costs_from_seed_tissues,
+      accessory_inv, prepollen_inv_aborted_preflowering, prepollen_all_inv,prop_prepollen_success,
       prop_prepollen_vs_RE, prop_pack_disp_vs_RE,prop_embryo_endo_vs_RE,provisioning_costs,embryo_endo_costs,postpollen_all_inv,
       prop_prepollen_all, prop_accessory_ee,prop_accessory_seed,prop_failure,prop_success,scaled_repro_inv,failure_to_ovule_ratio,
       postpollen_all_per_seed,prop_prepollen_failure,prop_postpollen_failure,choosiness,prepollen_success_inv,scaled_pollen_attract_costs)
