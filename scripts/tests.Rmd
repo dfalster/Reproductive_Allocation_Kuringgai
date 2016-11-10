@@ -1,195 +1,142 @@
-```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
-par(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(.7,.9,.4,0.2)) 
-yvar <- "shoot_leaf_area"
-xvar <- "initial_leaf_area"
+check <- SummaryInd
+check$repro_inv2 <- check$packaging_dispersal_inv + check$postpollen_aborted_inv + check$prepollen_inv_aborted_preflowering + prepollen_inv_reach_flowering + check$propagule_inv
 
-data <- subset(SummaryInd)
-data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
-results <- summarise_all_fits(lmfits)
+repro_check <- InvestmentByPart %>%
+  group_by(individual) %>%
+  summarise_each(funs(sum), weight)
 
-results$r.squared <- round(results$r.squared,digits=3)
-results$p.value <- round(results$p.value,digits=3)
-results$a <- round(results$a,digits=2)
-results$b <- round(results$b,digits=2)
-results
+library(dplyr)
 
-for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",cex=1.3,
-                    main=spp,col=col.age(data[[spp]]$age))
-}
+check <- join(check,repro_check,by="individual")
+plot(repro_inv~weight,check,col=col.spp(species),log="xy",pch=16)
+check$diff <-check$repro_inv-check$weight
 
-mtext("Shoot leaf area", 2, outer=TRUE,cex=1.2)
-mtext("Leaf area", 1, outer=TRUE,cex=1.2)
-legend("topleft",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
+
+plot(diff~leaf_area_0,check,col=col.spp(species),log="x",pch=16)
+
+
+
+check <- select(SummaryInd,individual,species, prepollen_inv_from_dispersal, seed_count,pack_disp_early_costs)
+check$costs2 <- check$prepollen_inv_from_dispersal/check$seed_count
+plot(costs2~pack_disp_early_costs,check,col=col.spp(species),pch=16,log="xy")
+abline(0,1)
+
+check <- subset(InvestmentByPart,species=="BAER")
+unique(check$part)
+
+part_check <- check %>%
+  group_by(part) %>%
+  summarise_each(funs(sum), weight)
+
+View(part_check)
+
+unique(part_check$part)
+  
+check <-subset(SummaryInd,species=="BAER")
+check<-select(check,seed_count,individual)
+names(SummaryInd)
+
+
+SummaryInd$seed_count
 ```
+check2 <- select(SummaryInd,individual,species,seed_count,seed_early_costs,prepollen_inv_from_propagule)
+check2 <- subset(check2,seed_count>0)
 
+check2$costs2 <- check2$prepollen_inv_from_propagule/check2$seed_count
+plot(costs2~seed_early_costs,check2,col=col.spp(species),pch=16,log="xy")
 
-plot(repro_inv~growth_leaf,data=subset(SummaryInd,RA>0),log="xy",col=col.spp(species), pch=16)
-mod <- lm(log(growth_stem_diameter)~RA_leaf_area,data=subset(SummaryInd,RA_leaf_area>0&RA_leaf_area<1.5))
-words.top.right.logx(mod)
+check <- subset(InvestmentByPart,part=="seed"|part=="fruit_mature")
 
+part_check <- check %>%
+  group_by(part,individual) %>%
+  summarise_each(funs(sum), weight,count)
 
-```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
-savpar(mfrow=c(4,4), cex=1, omi=c(.7,.7,.1,.1), mai=c(1.1,.7,.6,0.2)) 
-yvar <- "total_inv"
-xvar <- "leaf_area_0"
+part_check$unit_weight <-part_check$weight/part_check$count
 
-data <- subset(SummaryInd,age>2)
+check3 <- join(part_check,check2,by="individual")
 
-data <- split(data, data$species)
-lmfits <- lapply(data, function(x) lm(log10(x[[yvar]]) ~  (log10(x[[xvar]]))))
-results <- summarise_all_fits(lmfits)
-
-results$r.squared <- round(results$r.squared,digits=3)
-results$p.value <- round(results$p.value,digits=3)
-results$a <- round(results$a,digits=2)
-results$b <- round(results$b,digits=2)
-results
-saved <- results[,1:2]
-
-for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",xlab="",ylab="",cex=1.3, main=spp,col=col.age(data[[spp]]$age))
- }
-
-mtext("Height growth (log-log)", 2, outer=TRUE,cex=1.2)
-mtext("Reproductive investment", 1, outer=TRUE,cex=1.2)
-legend("topleft",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
 ```
+names(check2)
+
+check_COER <- subset(InvestmentByPart,species=="PUTU"&(part=="seed"|part=="")
+
+part_check <- check_COER %>%
+  group_by(individual) %>%
+  summarise_each(funs(sum), weight,count)
+
+check4 <- subset(SummaryInd,species=="COER"&seed_count>0)
+check4 <- select(check4,individual,seed_count)
+
+check <- subset(PartsSummary,species=="GRSP"&(part=="flower_stigma"|part=="finished_flower_stigma"))
 
 
-SummaryInd$leaf_inv_ratio = SummaryInd$growth_stem / SummaryInd$growth_leaf
-
-
+plot(prepollen_inv_from_propagule_all ~ prepollen_prop_v2,SummaryInd,col=col.spp(species),pch=16,log="xy")
+SummaryInd$prepollen_inv_from_propagule_all
 
 
 
 ```{r}
-par(mfrow=c(2,2), cex=1, omi=c(.7,.7,.1,.1), mai=c(.3,.3,.6,0.2)) 
-data <- subset(SummaryInd)
-data <- split(data, data$species)
+par(mfrow=c(1,1), cex=1, omi=c(.1,.1,.05,.05), mai=c(.8,.8,.1,.05)) 
+repro3 <- InvestmentByPart %>%
+    group_by(individual) %>%
+    summarise_each(funs(sum), weight)
 
-for(spp in names(data)) {
-plot(leaf_weight~diameter,data[[spp]],log="xy",cex=1.3, main=spp,col=col.age(data[[spp]]$age),pch=16)
-points(leaf_weight_0~diameter_0,data[[spp]],cex=1.3,pch=1,col=col.age(data[[spp]]$age))
-arrows(data[[spp]]$diameter, data[[spp]]$leaf_weight, data[[spp]]$diameter_0,data[[spp]]$leaf_weight_0, length = 0,angle = 30, code = 2, col = col.age(data[[spp]]$age),lwd=.3)
-}
-```
-
-```{r}
-par(mfrow=c(2,2), cex=1, omi=c(.7,.7,.1,.1), mai=c(1.1,1.1,.6,0.2)) 
-data <- subset(SummaryInd)
-data <- split(data, data$species)
-
-for(spp in names(data)) {
-plot(stem_weight~diameter,data[[spp]],log="xy",cex=1.3, main=spp,col=col.age(data[[spp]]$age),pch=16)
-points(stem_weight_0~diameter_0,data[[spp]],cex=1.3,pch=1,col=col.age(data[[spp]]$age))
-arrows(data[[spp]]$diameter, data[[spp]]$stem_weight, data[[spp]]$diameter_0,data[[spp]]$stem_weight_0, length = 0,angle = 30, code = 2, col = col.age(data[[spp]]$age),lwd=.3)
-points(leaf_weight~diameter,data[[spp]],cex=1.3,pch=17,col=col.age(data[[spp]]$age))
-points(leaf_weight_0~diameter_0,data[[spp]],cex=1.3,pch=2,col=col.age(data[[spp]]$age))
-arrows(data[[spp]]$diameter, data[[spp]]$leaf_weight, data[[spp]]$diameter_0,data[[spp]]$leaf_weight_0, length = 0,angle = 30, code = 1, col = col.age(data[[spp]]$age),lwd=.3,lty=3)
-}
-```
-
-
-
-```{r}
-par(mfrow=c(1,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1.1,1.1,.1,0.2)) 
-mod <- lm(log(growth_inv)~log(repro_inv),data=subset(SummaryInd,repro_inv>0))
-plot((1+repro_inv)~growth_inv, SummaryInd, log="xy", col=col.spp(species),pch=16,xlim=c(1,1000000),ylim=c(1,1000000))
-words.top.left.logxy(mod)
-legend("bottomright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
+repro4 <- select(SummaryInd,individual,seed_count,repro_inv,species)
+repro4 <- merge(repro4,repro3,by="individual")
+plot(weight ~ repro_inv,repro4,col=col.spp(species),pch=16,log="xy")
 abline(0,1)
-text(2.1,3,srt=45,"RA = 0.5")
-abline(log10(3),1)
-text(2,9,srt=45,"RA = 0.75")
-abline(log10(9),1)
-text(2,25,srt=45,"RA = 0.9")
-abline(log10(19),1)
-text(2,60,srt=45,"RA = 0.95")
-abline(log10(.111),1)
-text(19,3,srt=45,"RA = 0.1")
-abline(log10(.010101),1)
-text(170,2.4,srt=45,"RA = 0.01")
 
-#mod <- lm(log(growth_leaf)~log(repro_inv),data=subset(SummaryInd,repro_inv>0))
-plot((1+repro_inv)~growth_leaf, SummaryInd, log="xy", col=col.spp(species),pch=16,xlim=c(1,1000000),ylim=c(1,1000000))
-#words.top.left.logxy(mod)
-legend("bottomright",legend=labels.spp(),col=col.spp(),pch=16, cex=.8,bty="n")
-abline(0,1)
-text(2.1,3,srt=45,"RA = 0.5")
-abline(log10(3),1)
-text(2,9,srt=45,"RA = 0.75")
-abline(log10(9),1)
-text(2,25,srt=45,"RA = 0.9")
-abline(log10(19),1)
-text(2,60,srt=45,"RA = 0.95")
-abline(log10(.111),1)
-text(19,3,srt=45,"RA = 0.1")
-abline(log10(.010101),1)
-text(170,2.4,srt=45,"RA = 0.01")
+repro5 <- subset(repro4,repro_inv!=weight)
+plot(weight ~ repro_inv,repro5,col=col.spp(species),pch=16,log="xy")
 ```
 
-plot(growth_leaf~growth_stem,SummaryInd, log="xy", col=col.age(age),pch=16,xlim=c(1,1000000),ylim=c(1,1000000))
+plot(required_inv2 ~ required_inv,SummaryInd,col=col.spp(species),pch=16,log="xy")
 abline(0,1)
 
 
-```{r}
-#pdf("figs2/weight_diameter_segments_2.pdf", height=11.3, width=8)
-#plot
-par(mfcol=c(2,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1,1,.1,0.1)) 
-data <- subset(HarvestData)
-data <- split(data, data$species)
-
-for(spp in names(data)) {
-plot(stem_weight~diameter,data[[spp]],log="xy",cex=.7, main=spp,col=col.age(data[[spp]]$age),pch=16,ylab="stem (circle) + leaf (tri)"
-)
-points(leaf_weight~diameter,data[[spp]],cex=.7,pch=17,col=col.age(data[[spp]]$age))
-}
-#dev.off()
-
-```
-
-
-```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
-#pdf("figs2/tradeoff.pdf", height=11.3, width=8)
-#plot
-par(mfcol=c(4,2), cex=1, omi=c(.1,.1,.1,.1), mai=c(1,1,.1,0.1)) 
-yvar <- "RA_leaf_area"
-xvar <- "growth_stem_diameter"
-
-data <- subset(SummaryInd,RA_leaf_area>0&RA_leaf_area<1.5)
-data <- split(data, data$species)
-
-for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="x",cex=1.4, xlab="",ylab="",main=spp,col=col.age(data[[spp]]$age))
-}
-
-mtext("Stem diameter growth", 1, outer=TRUE,cex=1.2)
-mtext("RA (leaf area)", 2, outer=TRUE,cex=1.2)  
-legend("bottomleft",legend=labels.age(),col=col.age(),pch=16, cex=1.1,bty="n")
-#dev.off()
-```
-
-SummaryInd$leaf_turnover <- SummaryInd$leaf_weight_0/SummaryInd$LL_death
-plot(leaf_turnover~age,SummaryInd,log="xy", col=col.spp(species),pch=16)
-SummaryInd$leaf_net <- SummaryInd$growth_leaf + SummaryInd$leaf_turnover
-plot(leaf_net~age,SummaryInd,log="xy", col=col.spp(species),pch=16)
-plot(leaf_turnover~leaf_net,SummaryInd,log="xy", col=col.age(age),pch=16)
+plot(seed_costs ~ seed_costs2,SummaryInd,col=col.spp(species),pch=16,log="xy")
 abline(0,1)
 
-```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.width=20, fig.height=20}
-par(mfcol=c(4,4), cex=1, omi=c(.1,.1,.1,.1), mai=c(1,1,.3,0.1)) 
-yvar <- "leaf_turnover"
-xvar <- "leaf_net"
+#works
+SummaryInd$success <- SummaryInd$pollen_attract_costs*SummaryInd$seed_count
+plot(prepollen_success_inv ~ success,SummaryInd,col=col.spp(species),pch=16,log="xy")
+abline(0,1)
 
-data <- subset(SummaryInd)
-data <- split(data, data$species)
+#works
+SummaryInd$propagule <- SummaryInd$propagule_costs*SummaryInd$seed_count
+plot(propagule_inv ~ propagule,SummaryInd,col=col.spp(species),pch=16,log="xy")
+abline(0,1)
 
-for(spp in names(data)) {
-  plot_yvar_vs_xvar(data[[spp]], yvar, xvar,log="xy",cex=1.4, xlab="",ylab="",main=spp,col=col.age(data[[spp]]$age))
-  abline(0,1)
-  abline(log10(.111),1)
-  abline(log10(.010101),1)
-}
-```
+SummaryInd$propagule <- SummaryInd$propagule_costs*SummaryInd$seed_count
+plot(propagule_inv ~ propagule,SummaryInd,col=col.spp(species),pch=16,log="xy")
+abline(0,1)
+
+
+
+part=="flower_petals"|part=="late_flower_petals"|
+
+check <- subset(InvestmentByPart,species=="BOLE"&(part=="finished_flower"|part=="flower_petals"))
+check
+
+check <- subset(InvestmentByPart,species=="BAER"&(part=="seed"|part=="seed_pod"))
+check2 <- subset(PartsSummary,part=="flower_stigma"|part=="finished_flower_stigma")
+check1 <- subset(PartsSummary,part=="seed"|part=="fruit_mature")
+check1 <- merge(check1,check2,by="species")
+check1$ratio <- check1$weight.y/check1$weight.x
+check1$complement <- 1 - check1$ratio
+check1 <- check1[]
+
+
+InvCat <- InvestmentCategories[["BOLE"]]
+InvCat <- InvestmentCategories[["COER"]]
+InvCat <- InvestmentCategories[["EPMI"]]
+InvCat <- InvestmentCategories[["GRBU"]]
+InvCat <- InvestmentCategories[["GRSP"]]
+InvCat <- InvestmentCategories[["HATE"]]
+InvCat <- InvestmentCategories[["HEPU"]]
+InvCat <- InvestmentCategories[["LEES"]]
+InvCat <- InvestmentCategories[["PELA"]]
+InvCat <- InvestmentCategories[["PEPU"]]
+InvCat <- InvestmentCategories[["PHPH"]]
+InvCat <- InvestmentCategories[["PILI"]]
+InvCat <- InvestmentCategories[["PUTU"]]

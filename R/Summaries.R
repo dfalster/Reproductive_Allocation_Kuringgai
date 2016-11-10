@@ -136,6 +136,7 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
   
    SummaryInd <- SummaryInd %>% mutate( 
     reproducing = RA>0,
+    seed_size = propagule_costs,
     seed_minus_embryo_endo = seed_size - embryo_endo_size,
     propagule_allocation = (seed_count*seed_size)/(growth_inv + repro_inv),
     embryo_allocation = (seed_count*embryo_endo_size)/(growth_inv + repro_inv),
@@ -165,6 +166,7 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
     postpollen_all_per_seed2 = postpollen_aborted_costs + seed_size + packaging_dispersal_per_seed,
     repro_cost2 = postpollen_all_per_seed2 +prepollen_all_per_seed,
     seed_costs2 = prepollen_costs_from_pack_disp_tissues + prepollen_costs_from_seed_tissues + prepollen_partial_costs + pack_disp_net_costs + seed_size,
+    required_inv2 = seed_costs * seed_count,
     prop_success = success_inv/ repro_inv,
     prop_propagule_ee = (embryo_endo_size*seed_count)/repro_inv,
     prop_propagule_seed = (seed_size*seed_count)/repro_inv,

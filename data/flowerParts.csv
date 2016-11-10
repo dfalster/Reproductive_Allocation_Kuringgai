@@ -7322,3 +7322,6 @@ sort,species,site,date,sample,individual,census_to_use,census_notes_use,part,cou
 6665,BAER,Basin1981,21-Jun-13,,BAER_901,9,used,seed_pod,162,,,,,used,8032.923514,,118.16,,,,,,
 4674,BAER,Basin1981,11-Jun-13,110,BAER_903,10,used,seed_pod,14,,,,,used,968.434698,,164.84,fruit_mature,,,,,
 4012,BAER,Basin1981,21-Jun-13,92,BAER_906,8,used,seed_pod,84,,,,,used,6149.29931,,174.45,"14 more seeds are lost; 1049.8 from 60 seed sheath, rest from seeds",,,,,
+7325,PHPH,Waratah2003,,200,PHPH_804,6;7,,flower_petals,1,,,,,used,2.4635,,,substituting in mean for small petals to simplify parts used,,,,,
+7326,PHPH,Waratah2003,,201,PHPH_801,6,,flower_petals,1,,,,,used,2.4635,,,substituting in mean for small petals to simplify parts used,,,,,
+7327,PHPH,Waratah2003,,202,PHPH_007,7;8,,flower_petals,1,,,,,used,2.4635,,,substituting in mean for small petals to simplify parts used,,,,,

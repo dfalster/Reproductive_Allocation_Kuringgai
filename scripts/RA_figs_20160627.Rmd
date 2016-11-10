@@ -104,6 +104,10 @@ par(mfrow=c(1,1), cex=1, omi=c(1.1,0.8,.1,.1), mai=c(0.3,.4,.1,0.2))
 View(data)
 
 ```{r}
+pdf("figs2/RA/Figure_1_stacked_lines.pdf", height=11.5, width=8)
+plot
+par(mfrow=c(4,2), cex=1, omi=c(.1,0.1,.1,.1), mai=c(0.8,.8,.1,0.2)) 
+
 data <- dplyr::select(SummarySppAge[["mean"]],species,age,repro_inv,growth_leaf,leaf_replacement,growth_stem,leaf_shed)
 
   for(v in c("repro_inv","growth_leaf","leaf_replacement","growth_stem","leaf_shed")) {
@@ -116,7 +120,6 @@ data <- dplyr::select(SummarySppAge[["mean"]],species,age,repro_inv,growth_leaf,
     data[[v]][i] <- 0
   }
 
-#data <- subset(data,species=="BOLE")
 data <- split(data, data$species)
 
 
@@ -191,6 +194,8 @@ for(spp in names(data)) {
   }
   extra.top.left.logx(labels.spp.full(spp),3,1)
 }
+
+dev.off()
 ```
 
 
