@@ -2,7 +2,7 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
   FD <- species_Investment$FD
   # Read and restrict the data to the subset of interest
   InvCat <- InvestmentCategories[[species]]
-  
+
   FD <- FD %>%
     group_by(individual,part) %>%
     summarise_each(funs(sum), count,weight)
@@ -22,23 +22,14 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
     # subset investment data by individual
     df <- FD[FD$individual==data$individual,]
     sapply(c("prepollen_parts_aborted_preflowering", "postpollen_parts_aborted",
-             "prepollen_FD_success_parts","propagule_parts","prepollen_parts_all","postpollen_parts_all"), 
+             "propagule_parts","prepollen_parts_all","postpollen_parts_all"), 
            function(x) sum(df$weight[df$part %in% InvCat[[x]]]))
   }
   
   Costs <- ddply(AgeData, "individual",  f1)
   
   names(Costs) <- c("individual","prepollen_inv_aborted_preflowering", "postpollen_aborted_inv",
-                    "prepollen_FD_success_inv","propagule_inv","prepollen2_all_inv","postpollen2_all_inv")
-  
-  f11 <- function(i) {
-    df <- FD[FD$individual== i,]
-    weight <- df$weight[match(InvCat[["prepollen_FD_success_parts"]], df$part)]
-    weight[is.na(weight)] <- 0
-    sum(weight, na.rm = TRUE)
-  }
-  
-  Costs$prepollen_FD_success_inv = sapply(Costs$individual, f11)
+                    "propagule_inv","prepollen2_all_inv","postpollen2_all_inv")
   
   # Counts of parts
   f_count <- function(data) {
@@ -134,7 +125,6 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
       return(0)
     }
     weight <- df$weight[match(InvCat[["prepollen_parts_continue_developing_into_pack_disp"]], df$part)]
-    weight[is.na(weight)] <- 0
     if(length(weight > 0)){
       scale <- unlist(InvCat[["prepollen_parts_continue_developing_into_pack_disp_prepollen_prop_to_use"]])
     }
@@ -195,13 +185,11 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
   Costs$propagule_costs = sapply(Costs$individual, f10)
   
   
-  for(v in c("prepollen_inv_aborted_preflowering","postpollen_aborted_inv","propagule_inv","prepollen_FD_success_inv",
-             "prepollen_count_reach_flowering","prepollen_count_aborted_preflowering",
+  for(v in c("prepollen_count_reach_flowering","prepollen_count_aborted_preflowering",
              "postpollen_aborted_count","seed_count","cone_count","inflorescence_count","postpollen_count",
              "stop_at_flower_count","prepollen_count","ovule_count","aborted_ovule_count","seedset","choosiness",
-             "zygote_set","pollen_set","seedpod_weight","fruit_weight","prepollen_inv_from_pack_disp_tissues",
-             "packaging_dispersal_inv","prepollen_costs_from_seed_tissues","seed_costs","prepollen_partial_costs",
-             "pack_disp_net_costs","propagule_costs")) {
+             "zygote_set","pollen_set","seedpod_weight","fruit_weight","prepollen_costs_from_pack_disp_tissues",
+             "prepollen_costs_from_seed_tissues","seed_costs","prepollen_partial_costs","pack_disp_net_costs","propagule_costs")) {
     i <- is.na(Costs[[v]])
     Costs[[v]][i] <- 0
     i <- is.infinite(Costs[[v]])
