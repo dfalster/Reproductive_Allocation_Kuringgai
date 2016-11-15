@@ -81,9 +81,10 @@ repro3 <- InvestmentByPart %>%
     group_by(individual) %>%
     summarise_each(funs(sum), weight)
 
-repro4 <- select(SummaryInd,individual,seed_count,repro_inv,species)
+SummaryInd$repro_new <- SummaryInd$prepollen2_all_inv + SummaryInd$postpollen2_all_inv
+repro4 <- select(SummaryInd,individual,seed_count,repro_inv,repro_new, species)
 repro4 <- merge(repro4,repro3,by="individual")
-plot(weight ~ repro_inv,repro4,col=col.spp(species),pch=16,log="xy")
+plot(weight ~ repro_new,repro4,col=col.spp(species),pch=16,log="xy")
 abline(0,1)
 
 repro5 <- subset(repro4,repro_inv!=weight)
@@ -126,6 +127,16 @@ check1$ratio <- check1$weight.y/check1$weight.x
 check1$complement <- 1 - check1$ratio
 check1 <- check1[]
 
+
+check2 <- subset(InvestmentByPart,species=="BOLE"&(part=="late_flower_petals"|part=="flower_petals"))
+
+repro3 <- check2 %>%
+    group_by(individual) %>%
+    summarise_each(funs(sum), count)
+
+check <- subset(SummaryInd,species=="BOLE")
+check <- select(check,individual, postpollen_count,prepollen_count_reach_flowering,seed_count)
+check3 <- merge(check,repro3,by="individual")
 
 InvCat <- InvestmentCategories[["BOLE"]]
 InvCat <- InvestmentCategories[["COER"]]
