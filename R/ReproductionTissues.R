@@ -213,10 +213,6 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
       repro_inv = prepollen_all_inv + postpollen_all_inv,
       failure_inv = repro_inv - success_inv,
       failure_costs = divide_zero(failure_inv,seed_count),
-      accessory_inv = repro_inv - propagule_inv,
-      prop_propagule = divide_zero(propagule_inv, repro_inv),
-      prop_accessory = 1 - prop_propagule,
-      prop_prepollen_all = divide_zero(prepollen_all_inv, repro_inv),
-      seed_costs = divide_zero(success_inv,seed_count)
+      success_costs = divide_zero(success_inv,seed_count)
       )
 }
