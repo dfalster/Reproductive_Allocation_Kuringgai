@@ -1,5 +1,4 @@
 ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, species_Investment) {
-
   FD <- species_Investment$FD
   # Read and restrict the data to the subset of interest
   InvCat <- InvestmentCategories[[species]]
@@ -56,16 +55,16 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
   
   Costs <- ddply(AgeData, "individual",  f1)
   
-  names(Costs) <- c("individual","prepollen_inv_aborted_preflowering", "postpollen_aborted_inv", "prepollen_all_inv","postpollen_temp_inv")
+  names(Costs) <- c("individual","prepollen_inv_aborted_preflowering", "postpollen_aborted_inv", "prepollen_temp_inv","postpollen_temp_inv")
   Costs <- merge(Costs, Counts, by="individual", all=TRUE)
   
   #for f7,f8 currently just matching to generic part. Want to add if,else to say, "First look at FD dataframe to see if there is a parts match - if not, 
   #use the generic species value from PartsSummary. This is necessary, because for some parts there may no longer be any of a "part" in FD
   
-  # Identical format to f2, but returns a single column for prepollencosts. The total weight is standardised against the counts of
+  # The total weight is standardised against the counts of
   # a parts specified by the variable "prepollen_costs_count"
   # Takes as argument the individual
-  f3 <- function(i) {
+  f2 <- function(i) {
     # subset investment data by individual
     df <- FD[FD$individual== i,]
     # return 0 if there are 0 flowers produced
@@ -77,10 +76,14 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
     sum(weights/denominator, na.rm = TRUE)
   }
   
-  Costs$prepollen_partial_costs = sapply(Costs$individual, f3)
+  Costs$prepollen_partial_costs = sapply(Costs$individual, f2)
   
 #Calculate investment in packaging and dispersal structures that should be re-allocated to pre-pollination investment pools
-  f4 <- function(i) {
+#For BAER and PEPU there are individuals that have no green cones left, so you can't use a pre-pollen part as the weight basis. 
+#Therefore determined a fixed percentage of brown cone weight to attribute to pre-pollen construction costs 
+#in combination with the weight of any cones that do not develop post-pollination
+
+  f3 <- function(i) {
      df <- FD[FD$individual== i,]
      if(sum(df$count[df$part %in% c("seed", "fruit_mature")], na.rm=TRUE) ==0) {
        return(0)
@@ -90,17 +93,49 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
        prop_to_use <- unlist(InvCat[["prepollen_parts_continue_developing_into_pack_disp_prepollen_prop_to_use"]])
        sum(prop_to_use*weights, na.rm = TRUE)
      } else {
-       unit_weight <- df$unit_weight[match(InvCat[["prepollen_parts_continue_developing_into_pack_disp"]], df$part)]
-       sum(unit_weight, na.rm = TRUE)
-     }
+       unit_weights <- df$unit_weight[match(InvCat[["prepollen_parts_continue_developing_into_pack_disp"]], df$part)]
+       sum(unit_weights, na.rm = TRUE)
+      }
   }
 
-  Costs$prepollen_inv_from_pack_disp_tissues = sapply(Costs$individual, f4)
-  if(species=="BOLE"|species=="COER"|species=="EPMI"|species=="GRSP"|species=="HEPU"|species=="LEES") {
+  Costs$prepollen_inv_from_pack_disp_tissues = sapply(Costs$individual, f3)
+
+#For some individuals of COER, GRSP, HEPU no longer an FD parts of relevent part - all continued to post-pollination part types
+#For these individuals use the species mean value for the pre-pollination part weight
+#For HEPU need to divide by 4, since part weight divided among 4 ovules and PartsSummary has not yet been adjusted by multiplier table
+  for (i in 1:length(Costs$individual)) {
+      if((Costs$prepollen_inv_from_pack_disp_tissues[i]==0)&(Costs$seed_count[i]>0)&(species=="COER"|species=="GRSP")) {
+        ps <- PartsSummary[PartsSummary$species == species,]
+        unit_weights <- ps$weight[match(InvCat[["prepollen_parts_continue_developing_into_pack_disp"]], ps$part)]
+        Costs$prepollen_inv_from_pack_disp_tissues[i] <- sum(unit_weights, na.rm=TRUE) 
+      }
+  }
+  
+
+  for (i in 1:length(Costs$individual)) {
+    if((Costs$prepollen_inv_from_pack_disp_tissues[i]==0)&(Costs$seed_count[i]>0)&(species=="HEPU")) {
+      ps <- PartsSummary[PartsSummary$species == species,]
+      unit_weights <- ps$weight[match(InvCat[["prepollen_parts_continue_developing_into_pack_disp"]], ps$part)]
+      Costs$prepollen_inv_from_pack_disp_tissues[i] <- sum(unit_weights, na.rm=TRUE)/4
+    }
+  }
+  
+ 
+  #For species where pack&disp parts in question are on a flower-level, multiply by flower count for total INVESTMENT numbers 
+  if(species=="BOLE"|species=="EPMI"|species=="HEPU"|species=="LEES") {
     Costs$prepollen_inv_from_pack_disp_tissues <- Costs$prepollen_inv_from_pack_disp_tissues*Costs$prepollen_count_reach_flowering
   } 
-    
-   f5 <- function(i) {
+  
+  #For species where pack&disp parts in question are on a inflorscence-level, multiply by inflorscence count for total INVESTMENT numbers 
+  if(species=="COER"|species=="GRSP") {
+    Costs$prepollen_inv_from_pack_disp_tissues <- Costs$prepollen_inv_from_pack_disp_tissues*Costs$inflorescence_count
+  } 
+  
+  #Take total investment - calculated many different ways - and divide by number of flowers that reach pollination
+  Costs$prepollen_costs_from_pack_disp_tissues <-  divide_zero(Costs$prepollen_inv_from_pack_disp_tissues, Costs$prepollen_count_reach_flowering)
+
+
+   f4 <- function(i) {
     # subset investment data by individual
     df <- FD[FD$individual==i,]
     # return 0 if there are 0 seeds produced
@@ -120,95 +155,59 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
       
   }
   
-  Costs$packaging_dispersal_costs = sapply(Costs$individual, f5)
+  Costs$packaging_dispersal_costs_temp = sapply(Costs$individual, f4)
   
-  
-  f6 <- function(i) {
-    # subset investment data by individual
-    df <- FD[FD$individual== i,]
-    # return 0 if there are 0 seeds produced
-    if(sum(df$count[df$part %in% c("seed", "fruit_mature")], na.rm=TRUE) ==0) {
-      return(0)
-    }
-    weights <- df$weight[match(InvCat[["packaging_dispersal_parts"]], df$part)]
-    
-    if(species=="BAER"|species=="PEPU") {
-      prop_to_use <- unlist(InvCat[["packaging_dispersal_parts_prop_to_use"]])
-      sum(prop_to_use*weights,  na.rm = TRUE)
-    } else {
-      denominator <- df$unit_weight[match(InvCat[["packaging_dispersal_parts"]], df$part)]
-      numerator <- df$unit_weight[match(InvCat[["packaging_dispersal_parts_numerator"]], df$part)]
-      sum((numerator/denominator)*(weights),  na.rm = TRUE)
-    }
-  }
-  
-  Costs$pack_disp_inv = sapply(Costs$individual, f6)
   
   #Calculate investment in propagule structures that should be re-allocated to pre-pollination investment pools
-  f7 <- function(i) {
+  f5 <- function(i) {
     df <- FD[FD$individual== i,]
     weights <- df$unit_weight[match(InvCat[["prepollen_parts_continue_developing_into_propagule"]], df$part)]
     sum(weights, na.rm = TRUE)
   }
   
-  Costs$prepollen_costs_from_seed_tissues = sapply(Costs$individual, f7)
+  Costs$prepollen_costs_from_seed_tissues = sapply(Costs$individual, f5)
   
-  f8 <- function(i) {
-    # subset investment data by individual
+  
+  f6 <- function(i) {
     df <- FD[FD$individual== i,]
     weights <- df$unit_weight[match(InvCat[["propagule_parts"]], df$part)]
-    weights2 <- df$unit_weight[match(InvCat[["prepollen_parts_continue_developing_into_propagule"]], df$part)]
-    sum(weights,  na.rm = TRUE) - sum(weights2,  na.rm = TRUE)
+    sum(weights,  na.rm = TRUE)
   }
   
-  Costs$propagule_costs = sapply(Costs$individual, f8)
+  Costs$propagule_costs_temp = sapply(Costs$individual, f6)
   
-  f9 <- function(i) {
-    # subset investment data by individual
+  
+  f7 <- function(i) {
     df <- FD[FD$individual== i,]
     weights <- df$unit_weight[match(InvCat[["fruit_parts"]], df$part)]
     sum(weights,  na.rm = TRUE)
   }
   
-  Costs$fruit_costs = sapply(Costs$individual, f9)
+  Costs$fruit_costs = sapply(Costs$individual, f7)
   
-  
-  # for(v in c("seedset","choosiness","zygote_set","pollen_set", "prepollen_costs_from_seed_tissues",
-  #            "prepollen_partial_costs","packaging_dispersal_costs","propagule_costs")) {
-  #   i <- is.na(Costs[[v]])
-  #   Costs[[v]][i] <- 0
-  #   i <- is.infinite(Costs[[v]])
-  #   Costs[[v]][i] <- 0
-  # }  
   
   ret <- merge(AgeData, Costs, by="individual", all=TRUE) %>%
     mutate(
-      prepollen_costs_from_pack_disp_tissues = divide_zero(prepollen_inv_from_pack_disp_tissues, prepollen_count_reach_flowering),
+      prepollen_all_inv = prepollen_temp_inv + (postpollen_count*(prepollen_costs_from_pack_disp_tissues + prepollen_costs_from_seed_tissues)),
+      postpollen_all_inv = postpollen_temp_inv - (postpollen_count*(prepollen_costs_from_pack_disp_tissues + prepollen_costs_from_seed_tissues)),
       prepollen_inv_from_aborted_dispersal = prepollen_costs_from_pack_disp_tissues*postpollen_aborted_count,
       pollen_attract_costs = prepollen_partial_costs + prepollen_costs_from_pack_disp_tissues + prepollen_costs_from_seed_tissues,
       prepollen_success_inv = seed_count*pollen_attract_costs,
       prepollen_discarded_inv = prepollen_all_inv - prepollen_success_inv,
+      packaging_dispersal_costs = packaging_dispersal_costs_temp - prepollen_costs_from_pack_disp_tissues,
+      propagule_costs = propagule_costs_temp - prepollen_costs_from_seed_tissues,
       pack_disp_success_inv = seed_count*packaging_dispersal_costs,
       propagule_inv = seed_count*propagule_costs,
       success_inv = pack_disp_success_inv + propagule_inv + prepollen_success_inv,
-      postpollen_aborted_inv = postpollen_temp_inv - propagule_inv - pack_disp_success_inv - (postpollen_aborted_count*prepollen_costs_from_pack_disp_tissues) - (postpollen_aborted_count*prepollen_costs_from_seed_tissues),
+      postpollen_aborted_inv = postpollen_all_inv - propagule_inv - pack_disp_success_inv,
       fruit_inv = fruit_costs*seed_count,
-      postpollen_all_inv = postpollen_aborted_inv + pack_disp_success_inv + propagule_inv,
-      repro_inv = prepollen_all_inv + postpollen_aborted_inv + pack_disp_success_inv + propagule_inv,
+      repro_inv = prepollen_all_inv + postpollen_all_inv,
       failure_inv = repro_inv - success_inv,
+      failure_costs = failure_inv/seed_count,
       accessory_inv = repro_inv - propagule_inv,
       prop_propagule = divide_zero(propagule_inv, repro_inv),
       prop_accessory = 1 - prop_propagule,
       prop_prepollen_all = divide_zero(prepollen_all_inv, repro_inv),
       seed_costs = success_inv/seed_count
-    )
+      )
 }
-
-
-#problems
-
-#1
-#for some species, notably EPMI, a listed part sometimes exists and sometimes doesn't in the reproduction spreadsheet, 
-#because some individuals skipped that stage
-#if the part doesn't exist, it also won't exist in FD or even INV (I think) - then the average part weight for the species should 
-#be added in later

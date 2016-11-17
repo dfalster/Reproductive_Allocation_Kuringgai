@@ -131,6 +131,7 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
    SummaryInd <- SummaryInd %>% mutate( 
     reproducing = RA>0,
     seed_size = propagule_costs,
+    embryo_endo_size = seed_size*prop_endo,
     seed_minus_embryo_endo = seed_size - embryo_endo_size,
     propagule_allocation = (seed_count*seed_size)/(growth_inv + repro_inv),
     embryo_allocation = (seed_count*embryo_endo_size)/(growth_inv + repro_inv),
