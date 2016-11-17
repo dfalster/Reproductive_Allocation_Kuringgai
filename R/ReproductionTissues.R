@@ -67,8 +67,8 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
   f2 <- function(i) {
     # subset investment data by individual
     df <- FD[FD$individual== i,]
-    # return 0 if there are 0 flowers produced
-    if(sum(df$count[df$part %in% c("flower_petals","flower_petals_small")], na.rm=TRUE) ==0) {
+    # return 0 if there are 0 seeds produced
+    if(sum(df$count[df$part %in% c("seed", "fruit_mature")], na.rm=TRUE) ==0) {
       return(0)
     }
     weights <- df$weight[match(InvCat[["prepollen_FD_success_parts"]], df$part)]
@@ -161,6 +161,9 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
   #Calculate investment in propagule structures that should be re-allocated to pre-pollination investment pools
   f5 <- function(i) {
     df <- FD[FD$individual== i,]
+    if(sum(df$count[df$part %in% c("seed", "fruit_mature")], na.rm=TRUE) ==0) {
+      return(0)
+    }
     weights <- df$unit_weight[match(InvCat[["prepollen_parts_continue_developing_into_propagule"]], df$part)]
     sum(weights, na.rm = TRUE)
   }
@@ -170,6 +173,9 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
   
   f6 <- function(i) {
     df <- FD[FD$individual== i,]
+    if(sum(df$count[df$part %in% c("seed", "fruit_mature")], na.rm=TRUE) ==0) {
+      return(0)
+    }
     weights <- df$unit_weight[match(InvCat[["propagule_parts"]], df$part)]
     sum(weights,  na.rm = TRUE)
   }
@@ -179,6 +185,9 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
   
   f7 <- function(i) {
     df <- FD[FD$individual== i,]
+    if(sum(df$count[df$part %in% c("seed", "fruit_mature")], na.rm=TRUE) ==0) {
+      return(0)
+    }
     weights <- df$unit_weight[match(InvCat[["fruit_parts"]], df$part)]
     sum(weights,  na.rm = TRUE)
   }
@@ -203,11 +212,11 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
       fruit_inv = fruit_costs*seed_count,
       repro_inv = prepollen_all_inv + postpollen_all_inv,
       failure_inv = repro_inv - success_inv,
-      failure_costs = failure_inv/seed_count,
+      failure_costs = divide_zero(failure_inv,seed_count),
       accessory_inv = repro_inv - propagule_inv,
       prop_propagule = divide_zero(propagule_inv, repro_inv),
       prop_accessory = 1 - prop_propagule,
       prop_prepollen_all = divide_zero(prepollen_all_inv, repro_inv),
-      seed_costs = success_inv/seed_count
+      seed_costs = divide_zero(success_inv,seed_count)
       )
 }
