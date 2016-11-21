@@ -464,8 +464,8 @@ extra.top.left.logx <- function (words,fontx,cexx) {
   text(10^((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.96*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,cex=cexx,font=fontx)
 }
 
-extra.top.left <- function (words) {
-  text(((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.96*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,cex=.75)
+extra.top.left <- function (words,fontx,cexx) {
+  text(((0.02*(par("usr")[2]-par("usr")[1]))+par("usr")[1]),((0.96*(par("usr")[4]-par("usr")[3]))+par("usr")[3]),words,adj=0,font=fontx,cex=cexx)
 }
 
 extra.bottom.left.logxy <- function (words,fontx,cexx) {

@@ -42,6 +42,7 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
                    aborted_ovule_count = ovule_count - seed_count,
                    seedset = divide_zero(seed_count, ovule_count),
                    choosiness = divide_zero(ovule_count, seed_count),
+                   choosiness2 = divide_zero(prepollen_count_reach_flowering, seed_count),
                    zygote_set = divide_zero(seed_count,postpollen_count),
                    pollen_set = divide_zero(postpollen_count,prepollen_count_reach_flowering)
   )
@@ -211,8 +212,8 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
       postpollen_aborted_inv = postpollen_all_inv - propagule_inv - pack_disp_success_inv,
       fruit_inv = fruit_costs*seed_count,
       repro_inv = prepollen_all_inv + postpollen_all_inv,
-      failure_inv = repro_inv - success_inv,
-      failure_costs = divide_zero(failure_inv,seed_count),
+      discarded_inv = repro_inv - success_inv,
+      discarded_costs = divide_zero(discarded_inv,seed_count),
       success_costs = divide_zero(success_inv,seed_count)
       )
 }

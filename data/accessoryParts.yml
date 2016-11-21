@@ -34,7 +34,7 @@ BOLE:
   postpollen_parts_all: [fruit_just_starting, fruit_young, fruit_large_immature_01, seed_pod, late_flower_petals, late_finished_flower, seed]
   count_prepollen_reach_flowering: [pedicel]
   count_prepollen_aborted_preflowering: [bud_tiny, bud_small, bud_mid, bud_big, flower_calyx]
-  count_postpollen_aborted: [finished_flower_stigma, fruit_just_starting, fruit_young, fruit_large_immature_01]
+  count_postpollen_aborted: [fruit_just_starting, fruit_young, fruit_large_immature_01]
   cone_count : []
   inflorescence_count : []
 COER:
