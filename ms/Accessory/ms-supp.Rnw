@@ -36,8 +36,7 @@ library(xtable)
 library(knitr)
 opts_chunk$set(echo=FALSE, fig.pos = "!h", fig.align="center", comment = NA)
 
-flowering_parts <- read.csv("Sup_Table_flowering_parts.csv",
-  stringsAsFactors=FALSE, check.names=FALSE)
+flowering_parts <- read.csv("ms/Accessory/Sup_Table_flowering_parts.csv", stringsAsFactors=FALSE, check.names=FALSE)
 
 flowering_parts$method <- gsub("_", " ", flowering_parts$method, fixed=TRUE)
 
