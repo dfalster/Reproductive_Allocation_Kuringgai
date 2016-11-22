@@ -30,7 +30,7 @@ targets:
 
   {{species}}_ReproductiveCosts:
     command: >
-      CalculateReproductiveCostsFor{{species}}({{species}}_IndividualsList, InvestmentCategories, {{species}}_Investment)
+      CalculateReproductiveCostsFor{{species}}({{species}}_IndividualsList, InvestmentCategories, {{species}}_Investment, {{species}}_PartsSummary)
 
   {{species}}_Growth:
     command: >

@@ -29,7 +29,7 @@ targets:
 
   BAER_ReproductiveCosts:
     command: >
-      CalculateReproductiveCostsForBAER(BAER_IndividualsList, InvestmentCategories, BAER_Investment)
+      CalculateReproductiveCostsForBAER(BAER_IndividualsList, InvestmentCategories, BAER_Investment, BAER_PartsSummary)
 
   BAER_Growth:
     command: >
@@ -62,7 +62,7 @@ targets:
 
   BOLE_ReproductiveCosts:
     command: >
-      CalculateReproductiveCostsForBOLE(BOLE_IndividualsList, InvestmentCategories, BOLE_Investment)
+      CalculateReproductiveCostsForBOLE(BOLE_IndividualsList, InvestmentCategories, BOLE_Investment, BOLE_PartsSummary)
 
   BOLE_Growth:
     command: >
@@ -95,7 +95,7 @@ targets:
 
   COER_ReproductiveCosts:
     command: >
-      CalculateReproductiveCostsForCOER(COER_IndividualsList, InvestmentCategories, COER_Investment)
+      CalculateReproductiveCostsForCOER(COER_IndividualsList, InvestmentCategories, COER_Investment, COER_PartsSummary)
 
   COER_Growth:
     command: >
@@ -128,7 +128,7 @@ targets:
 
   EPMI_ReproductiveCosts:
     command: >
-      CalculateReproductiveCostsForEPMI(EPMI_IndividualsList, InvestmentCategories, EPMI_Investment)
+      CalculateReproductiveCostsForEPMI(EPMI_IndividualsList, InvestmentCategories, EPMI_Investment, EPMI_PartsSummary)
 
   EPMI_Growth:
     command: >
@@ -161,7 +161,7 @@ targets:
 
   GRBU_ReproductiveCosts:
     command: >
-      CalculateReproductiveCostsForGRBU(GRBU_IndividualsList, InvestmentCategories, GRBU_Investment)
+      CalculateReproductiveCostsForGRBU(GRBU_IndividualsList, InvestmentCategories, GRBU_Investment, GRBU_PartsSummary)
 
   GRBU_Growth:
     command: >
@@ -194,7 +194,7 @@ targets:
 
   GRSP_ReproductiveCosts:
     command: >
-      CalculateReproductiveCostsForGRSP(GRSP_IndividualsList, InvestmentCategories, GRSP_Investment)
+      CalculateReproductiveCostsForGRSP(GRSP_IndividualsList, InvestmentCategories, GRSP_Investment, GRSP_PartsSummary)
 
   GRSP_Growth:
     command: >
@@ -227,7 +227,7 @@ targets:
 
   HATE_ReproductiveCosts:
     command: >
-      CalculateReproductiveCostsForHATE(HATE_IndividualsList, InvestmentCategories, HATE_Investment)
+      CalculateReproductiveCostsForHATE(HATE_IndividualsList, InvestmentCategories, HATE_Investment, HATE_PartsSummary)
 
   HATE_Growth:
     command: >
@@ -260,7 +260,7 @@ targets:
 
   HEPU_ReproductiveCosts:
     command: >
-      CalculateReproductiveCostsForHEPU(HEPU_IndividualsList, InvestmentCategories, HEPU_Investment)
+      CalculateReproductiveCostsForHEPU(HEPU_IndividualsList, InvestmentCategories, HEPU_Investment, HEPU_PartsSummary)
 
   HEPU_Growth:
     command: >
@@ -293,7 +293,7 @@ targets:
 
   LEES_ReproductiveCosts:
     command: >
-      CalculateReproductiveCostsForLEES(LEES_IndividualsList, InvestmentCategories, LEES_Investment)
+      CalculateReproductiveCostsForLEES(LEES_IndividualsList, InvestmentCategories, LEES_Investment, LEES_PartsSummary)
 
   LEES_Growth:
     command: >
@@ -326,7 +326,7 @@ targets:
 
   PELA_ReproductiveCosts:
     command: >
-      CalculateReproductiveCostsForPELA(PELA_IndividualsList, InvestmentCategories, PELA_Investment)
+      CalculateReproductiveCostsForPELA(PELA_IndividualsList, InvestmentCategories, PELA_Investment, PELA_PartsSummary)
 
   PELA_Growth:
     command: >
@@ -359,7 +359,7 @@ targets:
 
   PEPU_ReproductiveCosts:
     command: >
-      CalculateReproductiveCostsForPEPU(PEPU_IndividualsList, InvestmentCategories, PEPU_Investment)
+      CalculateReproductiveCostsForPEPU(PEPU_IndividualsList, InvestmentCategories, PEPU_Investment, PEPU_PartsSummary)
 
   PEPU_Growth:
     command: >
@@ -392,7 +392,7 @@ targets:
 
   PHPH_ReproductiveCosts:
     command: >
-      CalculateReproductiveCostsForPHPH(PHPH_IndividualsList, InvestmentCategories, PHPH_Investment)
+      CalculateReproductiveCostsForPHPH(PHPH_IndividualsList, InvestmentCategories, PHPH_Investment, PHPH_PartsSummary)
 
   PHPH_Growth:
     command: >
@@ -425,7 +425,7 @@ targets:
 
   PILI_ReproductiveCosts:
     command: >
-      CalculateReproductiveCostsForPILI(PILI_IndividualsList, InvestmentCategories, PILI_Investment)
+      CalculateReproductiveCostsForPILI(PILI_IndividualsList, InvestmentCategories, PILI_Investment, PILI_PartsSummary)
 
   PILI_Growth:
     command: >
@@ -458,7 +458,7 @@ targets:
 
   PUTU_ReproductiveCosts:
     command: >
-      CalculateReproductiveCostsForPUTU(PUTU_IndividualsList, InvestmentCategories, PUTU_Investment)
+      CalculateReproductiveCostsForPUTU(PUTU_IndividualsList, InvestmentCategories, PUTU_Investment, PUTU_PartsSummary)
 
   PUTU_Growth:
     command: >

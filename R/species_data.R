@@ -153,7 +153,6 @@ CalculateReproductiveCostsForHEPU <- function(...) {
 	ReproductiveCosts("HEPU", ...)
 }
 
-
 CalculateGrowthForHEPU <- function(...) {
 	growth_calculations("HEPU", ...)
 }

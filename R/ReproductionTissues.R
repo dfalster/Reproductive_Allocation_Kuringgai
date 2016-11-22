@@ -1,4 +1,4 @@
-ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, species_Investment) {
+ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, species_Investment,  species_PartsSummary) {
   FD <- species_Investment$FD
   # Read and restrict the data to the subset of interest
   InvCat <- InvestmentCategories[[species]]
@@ -14,7 +14,7 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
   #add in embryo_endo_size from seed size spreadsheet
   
   AgeData <- IndividualsList %>%
-    filter(use_for_allocation_calculations=="TRUE" & alive=="TRUE"&site!="baby") %>%
+    filter(use_for_allocation_calculations=="TRUE" & alive=="TRUE" & site!="baby") %>%
     select(species,individual, age)
   
   # For each individual, sum investment by categories
@@ -104,31 +104,25 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
 #For some individuals of COER, GRSP, HEPU no longer an FD parts of relevent part - all continued to post-pollination part types
 #For these individuals use the species mean value for the pre-pollination part weight
 #For HEPU need to divide by 4, since part weight divided among 4 ovules and PartsSummary has not yet been adjusted by multiplier table
-  for (i in 1:length(Costs$individual)) {
-      if((Costs$prepollen_inv_from_pack_disp_tissues[i]==0)&(Costs$seed_count[i]>0)&(species=="COER"|species=="GRSP")) {
-        ps <- PartsSummary[PartsSummary$species == species,]
-        unit_weights <- ps$weight[match(InvCat[["prepollen_parts_continue_developing_into_pack_disp"]], ps$part)]
-        Costs$prepollen_inv_from_pack_disp_tissues[i] <- sum(unit_weights, na.rm=TRUE) 
-      }
-  }
-  
 
   for (i in 1:length(Costs$individual)) {
-    if((Costs$prepollen_inv_from_pack_disp_tissues[i]==0)&(Costs$seed_count[i]>0)&(species=="HEPU")) {
-      ps <- PartsSummary[PartsSummary$species == species,]
-      unit_weights <- ps$weight[match(InvCat[["prepollen_parts_continue_developing_into_pack_disp"]], ps$part)]
-      Costs$prepollen_inv_from_pack_disp_tissues[i] <- sum(unit_weights, na.rm=TRUE)/4
-    }
+      if((Costs$prepollen_inv_from_pack_disp_tissues[i]==0)&(Costs$seed_count[i]>0)&(species %in% c("COER", "GRSP", "HEPU"))) {
+        unit_weights <- species_PartsSummary$weight[match(InvCat[["prepollen_parts_continue_developing_into_pack_disp"]], species_PartsSummary$part)]
+        Costs$prepollen_inv_from_pack_disp_tissues[i] <- sum(unit_weights, na.rm=TRUE) 
+        if(species=="HEPU"){
+          Costs$prepollen_inv_from_pack_disp_tissues[i] <- Costs$prepollen_inv_from_pack_disp_tissues[i]/4
+        }
+      }
   }
-  
+
  
   #For species where pack&disp parts in question are on a flower-level, multiply by flower count for total INVESTMENT numbers 
-  if(species=="BOLE"|species=="EPMI"|species=="HEPU"|species=="LEES") {
+  if(species %in% c("BOLE", "EPMI", "HEPU", "LEES")) {
     Costs$prepollen_inv_from_pack_disp_tissues <- Costs$prepollen_inv_from_pack_disp_tissues*Costs$prepollen_count_reach_flowering
   } 
   
   #For species where pack&disp parts in question are on a inflorscence-level, multiply by inflorscence count for total INVESTMENT numbers 
-  if(species=="COER"|species=="GRSP") {
+  if(species %in% c("COER", "GRSP")) {
     Costs$prepollen_inv_from_pack_disp_tissues <- Costs$prepollen_inv_from_pack_disp_tissues*Costs$inflorescence_count
   } 
   
@@ -145,7 +139,7 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
     }
     weights <- df$weight[match(InvCat[["packaging_dispersal_parts"]], df$part)]
     weights_denominator <- df$count[match(InvCat[["packaging_dispersal_parts_denominator"]], df$part)]
-    if(species=="BAER"|species=="PEPU") {
+    if(species %in% c("BAER", "PEPU")) {
       prop_to_use <- unlist(InvCat[["packaging_dispersal_parts_prop_to_use"]])
       sum((prop_to_use)*(weights/weights_denominator),  na.rm = TRUE)
     } else {
