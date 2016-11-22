@@ -147,6 +147,7 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
     postpollen_aborted_costs = divide_zero(postpollen_aborted_inv,seed_count), #all parts that aren't pack & dispersal for successful seeds
     postpollen_all_costs = divide_zero(postpollen_all_inv,seed_count),   
     prop_success = divide_zero(success_inv, repro_inv),
+    prop_discarded_vs_all_repro = 1 - prop_success,
     prop_pollen_attract_vs_all_repro = divide_zero(pollen_attract_costs,repro_costs),
     prop_prepollen_discarded_vs_all_repro = divide_zero(prepollen_discarded_costs,repro_costs),
     prop_prepollen_all_vs_all_repro = divide_zero(prepollen_all_inv, repro_inv),
@@ -155,10 +156,8 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
     prop_postpollen_discarded_vs_all_repro = divide_zero(postpollen_aborted_costs,repro_costs),
     prop_embryo_endo_vs_all_repro = divide_zero(embryo_endo_costs,repro_costs),
     prop_propagule_vs_all_repro = divide_zero(propagule_inv,repro_inv),
-    prop_accessory_using_embryo_endo = 1 - prop_embryo_endo_vs_all_repro,
-    prop_accessory_using_propagule = 1 - prop_propagule_vs_all_repro,
-    prop_propagule_nonzero = prop_embryo_endo_vs_all_repro, #for taking species means on non-zero numbers only
-    prop_accessory_nonzero = prop_accessory_using_embryo_endo, #for taking species means on non-zero numbers only
+    prop_accessory_vs_embryo_endo = 1 - prop_embryo_endo_vs_all_repro,
+    prop_accessory_vs_propagule = 1 - prop_propagule_vs_all_repro,
     prop_pollen_attract_vs_success = divide_zero(pollen_attract_costs,success_costs),
     prop_provisioning_vs_success = 1 - prop_pollen_attract_vs_success,
     prop_embryo_endo_vs_success = divide_zero(embryo_endo_costs,success_costs),
@@ -200,8 +199,8 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
              "accessory_costs_using_seedweight","provisioning_costs","prepollen_all_inv","prepollen_success_inv","prepollen_discarded_inv","postpollen_all_inv",
              "postpollen_aborted_inv","flower_inv","fruit_inv","success_inv","embryo_endo_inv","prepollen_all_costs","discarded_inv","choosiness2",
              "prepollen_discarded_costs","postpollen_aborted_costs","postpollen_all_costs","prop_success","prop_propagule_vs_all_repro",
-             "prop_prepollen_all_vs_all_repro","prop_accessory_using_embryo_endo","prop_accessory_using_propagule","prop_prepollen_discarded_vs_all_repro","prop_postpollen_discarded_vs_all_repro",
-             "prop_propagule_nonzero","prop_accessory_nonzero","prop_pollen_attract_vs_success","prop_provisioning_vs_success","prop_embryo_endo_vs_success",
+             "prop_prepollen_all_vs_all_repro","prop_accessory_vs_embryo_endo","prop_accessory_vs_propagule","prop_prepollen_discarded_vs_all_repro","prop_postpollen_discarded_vs_all_repro",
+             "prop_pollen_attract_vs_success","prop_provisioning_vs_success","prop_embryo_endo_vs_success","prop_discarded_vs_all_repro",
              "prop_pack_disp_vs_success","prop_pollen_attract_vs_all_repro","prop_pack_disp_vs_all_repro","prop_embryo_endo_vs_all_repro","prop_postpollen_success","discarded_costs",
              "prop_postpollen_discarded","prop_prepollen_success","prop_prepollen_discarded","scaled_discarded_count","scaled_reach_flowering_count",
              "scaled_seed_count","scaled_ovule_count","scaled_repro_inv","discarded_to_ovule_ratio","leaf_replacement","scaled_pollen_attract_costs")) {
@@ -290,14 +289,14 @@ get_species_values <- function(SummaryInd, groups) {
     filter(repro_inv >0 ) %>%
     group_by_(.dots=dots) %>%
     summarise_each(f, seed_size, seedset,seed_count, packaging_dispersal_costs,accessory_costs_using_seedweight,
-      prop_propagule_nonzero,prop_accessory_nonzero,success_inv,success_costs,scaled_seed_count,prop_provisioning_vs_success,fruit_costs,
+      success_inv,success_costs,scaled_seed_count,prop_provisioning_vs_success,fruit_costs,prop_discarded_vs_all_repro,
       postpollen_aborted_inv, propagule_inv, embryo_endo_inv,discarded_costs,scaled_reach_flowering_count,choosiness2,
       prop_pack_disp_vs_success, prepollen_discarded_costs,prepollen_all_costs,accessory_costs,prop_embryo_endo_vs_success,
       postpollen_aborted_costs,repro_costs,prop_postpollen_success,discarded_inv,prop_propagule_vs_all_repro,prop_postpollen_all_vs_all_repro,
       scaled_discarded_count,scaled_ovule_count,prop_pollen_attract_vs_success,pollen_attract_costs,prepollen_costs_from_pack_disp_tissues, prepollen_costs_from_seed_tissues,
       prepollen_inv_aborted_preflowering, prepollen_all_inv,prop_prepollen_success,prop_prepollen_discarded_vs_all_repro,prop_postpollen_discarded_vs_all_repro,
       prop_pollen_attract_vs_all_repro, prop_pack_disp_vs_all_repro,prop_embryo_endo_vs_all_repro,provisioning_costs,embryo_endo_costs,
-      prop_prepollen_all_vs_all_repro, prop_accessory_using_embryo_endo,prop_accessory_using_propagule,prop_success,scaled_repro_inv,discarded_to_ovule_ratio,
+      prop_prepollen_all_vs_all_repro, prop_accessory_vs_embryo_endo,prop_accessory_vs_propagule,prop_success,scaled_repro_inv,discarded_to_ovule_ratio,
       postpollen_all_costs,prop_prepollen_discarded,prop_postpollen_discarded,choosiness,prepollen_success_inv,scaled_pollen_attract_costs)
   })
   names(out[[5]]) <- fs
