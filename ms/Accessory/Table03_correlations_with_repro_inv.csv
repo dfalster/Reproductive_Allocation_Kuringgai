@@ -1,5 +1,6 @@
 "variable","n","r2","pval"
 "total_weight",357,"0.620"," 1.73e-76"
+"embryo_endo_inv",223,"0.660"," 1.25e-53"
 "propagule_inv",223,"0.525"," 1.55e-37"
 "fruit_inv",223,"0.675"," 7.51e-56"
 "flower_inv",223,"0.922","1.79e-124"

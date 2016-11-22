@@ -30,20 +30,27 @@ count(subset(SummaryInd,repro_inv>0))
 count(subset(SummaryInd,seed_count>0))
 
 #average proportion energy going to failed tissues (among reproducing individuals)
-mean(subset(SummaryInd$prop_discarded,SummaryInd$prop_discarded>0))
+1- mean(subset(SummaryInd$prop_success,SummaryInd$seed_count>0))
+mean(subset(SummaryInd$seedset,SummaryInd$seed_count>0))
 
 #average proportion of energy going to accessory costs (based on propagules, not seeds) (among individuals that produce seed)
-mean(subset(SummaryInd$prop_accessory_using_propagule,SummaryInd$seed_count>0))
-mean(subset(SummaryInd$prop_accessory_using_embryo_endo,SummaryInd$seed_count>0))
-SummarySpp[["mean"]]$prop_accessory_using_propagule
+mean(subset(SummaryInd$prop_accessory_vs_embryo_endo,SummaryInd$seed_count>0))
+mean(subset(SummaryInd$prop_accessory_vs_propagule,SummaryInd$seed_count>0))
+SummarySpp[["mean"]]$prop_accessory_vs_embryo_endo
+SummarySpp[["mean"]]$species
 
-check <- dplyr::select(SummarySpp[["mean"]],species,prop_accessory_using_embryo_endo,prop_accessory_using_propagule)
-check <- dplyr::arrange(check,prop_accessory_using_embryo_endo)
-  
 #individual with lowest accessory costs
 check <- subset(SummaryInd,prop_embryo_endo_vs_all_repro>.1)
 check <- dplyr::select(check,individual,prop_embryo_endo_vs_all_repro)
 max(check$prop_embryo_endo_vs_all_repro)
+
+#r2 for relationship between propagule inv and repro inv across all individuals
+mod <- sma(propagule_inv~repro_inv,subset(SummaryInd,SummaryInd$seedset>0),log="xy",method="SMA")
+
+#individual with minimum accessory costs
+min(SummaryInd$prop_accessory_vs_embryo_endo)
+
+max(SummaryInd$prop_embryo_endo_vs_all_repro)
 
 #relationship between plant weight and number of ovules initiated - bigger plants produce proportionally fewer buds
 mod <- sma(ovule_count~total_weight,SummaryInd,method="SMA",log="xy",slope=1)
@@ -59,82 +66,45 @@ mod <- sma(accessory_costs_using_ee ~ embryo_endo_costs, data=subset(SummarySpp[
 summary(mod)
 plot(accessory_costs_using_ee ~ embryo_endo_costs, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
 
-#total seed costs unrelated to seedsize
-mod <- sma(success_costs ~ embryo_endo_costs, SummarySpp[["mean"]],method="SMA", log="xy",slope.test=1)
+#total seed costs correlated with seedsize
+mod <- sma(success_costs ~ embryo_endo_costs, SummarySpp[["mean"]],method="SMA", log="xy")
 summary(mod)
 plot(success_costs ~ embryo_endo_costs, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
 
-#discarded per seed unrelated to seedsize
+#DISCUSSION: lower seedset = higher proportional investment in discarded tissues
+plot(seedset~prop_discarded_vs_all_repro,data=subset(SummarySpp[["mean"]]),log="",pch=16,col=col.spp(species))
+mod <- sma(seedset~prop_discarded_vs_all_repro,data=subset(SummarySpp[["mean"]],species!="BAER"),log="",method="SMA")
+summary(mod)
+
+#discarded costs correlated with seedsize
 mod <- sma(discarded_costs ~ embryo_endo_costs, data=subset(SummarySpp[["mean"]]),method="SMA", log="xy",slope.test=1)
 summary(mod)
 plot(discarded_costs ~ embryo_endo_costs, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
 
-
-mod <- sma(prop_pollen_attract_vs_all_repro ~ seedset, data=subset(SummarySpp[["mean"]]),method="SMA", log="x",slope.test=1)
-summary(mod)
-plot(prop_pollen_attract_vs_all_repro ~ seedset, SummarySpp[["mean"]],log="",pch=16,col=col.spp(species))
-
-mod <- sma(scaled_ovule_count ~ pollen_attract_costs, data=subset(SummarySpp[["mean"]]),method="SMA", log="xy",slope.test=-1)
-summary(mod)
-plot(scaled_ovule_count ~ pollen_attract_costs, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
-
-
-mod <- sma(scaled_seed_count ~ embryo_endo_costs, data=subset(SummarySpp[["mean"]]),method="SMA", log="xy",slope.test=-1)
-summary(mod)
-plot(scaled_seed_count ~ embryo_endo_costs, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
-
-
-mod <- sma(scaled_seed_count ~ provisioning_costs, data=subset(SummarySpp[["mean"]]),method="SMA", log="xy",slope.test=-1)
-summary(mod)
-plot(scaled_seed_count ~ provisioning_costs, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
-
-mod <- sma(scaled_seed_count ~ success_costs, data=subset(SummarySpp[["mean"]]),method="SMA", log="xy",slope.test=-1)
-summary(mod)
-plot(scaled_seed_count ~ success_costs, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
-
-mod <- sma(prepollen_all_costs ~ embryo_endo_costs, data=subset(SummarySpp[["mean"]]),method="SMA", log="xy",slope.test=1)
-summary(mod)
-plot(prepollen_discarded_costs ~ embryo_endo_costs, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species),ylim=c(.02,10000))
-points(pollen_attract_costs~ embryo_endo_costs, SummarySpp[["mean"]],log="xy",pch=1,col=col.spp(species))
-
-#more discarded = lower seedset across species - in discussion
-mod <- sma(seedset ~ prop_discarded, data=subset(SummarySpp[["mean"]],species!="BAER"),method="SMA", log="",slope.test=1)
-summary(mod)
-plot(seedset ~ prop_discarded, SummarySpp[["mean"]],log="",pch=16,col=col.spp(species))
-
 #seed size by propagule investment - all species
 mod <- sma(propagule_inv ~ embryo_endo_costs, SummarySpp[["mean"]],method="SMA", log="xy",slope.test=1)
 summary(mod)
-plot(propagule_inv_ee ~ embryo_endo_costs, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
+plot(propagule_inv ~ embryo_endo_costs, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
 
 #seed size by propagule investment - without EPMI
 mod <- sma(propagule_inv ~ embryo_endo_costs, data=subset(SummarySpp[["mean"]],species!="EPMI"),method="SMA", log="xy",slope.test=1)
 summary(mod)
 plot(propagule_inv ~ embryo_endo_costs, data=subset(SummarySpp[["mean"]],species!="EPMI"),log="xy",pch=16,col=col.spp(species))
 
-#seed size by reproductive investment - all species
+#DISCUSSION SECTION ON ESTIMATING REPRODUCTIVE EFFORT: seed size by reproductive investment - all species
 mod <- sma(repro_inv ~ embryo_endo_costs, SummarySpp[["mean"]],method="SMA", log="xy",slope.test=1)
 summary(mod)
 plot(repro_inv ~ embryo_endo_costs, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
 
-#seed size by reproductive investment - without EPMI
+#DISCUSSION SECTION ON ESTIMATING REPRODUCTIVE EFFORT: seed size by reproductive investment - without EPMI
 mod <- sma(repro_inv ~ embryo_endo_costs, data=subset(SummarySpp[["mean"]],species!="EPMI"),method="SMA", log="xy",slope.test=1)
 summary(mod)
 plot(repro_inv ~ embryo_endo_costs, data=subset(SummarySpp[["mean"]],species!="EPMI"),log="xy",pch=16,col=col.spp(species))
 
-#seedset by pollen attraction
-mod <- sma(prop_pollen_attract_vs_all_repro~seedset,data=subset(SummarySpp[["mean"]]),log="x",slope=1,method="SMA")
-summary(mod)
-
-#seed size by total weight - all species
+#DISCUSSION SECTION ON ESTIMATING REPRODUCTIVE EFFORT: seed size by total weight - all species
 mod <- sma(total_weight_0 ~ embryo_endo_costs, SummarySpp[["mean"]],method="SMA", log="xy",slope.test=1)
 summary(mod)
 plot(total_weight_0 ~ embryo_endo_costs, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
-
-#scaled ovule production vs prop pollen attraction  - all species
-mod <- sma(prop_pollen_attract_vs_all_repro~scaled_ovule_count,data=subset(SummarySpp[["mean"]]),log="x",slope=1,method="SMA")
-summary(mod)
-plot(prop_pollen_attract_vs_all_repro ~ scaled_ovule_count, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
 
 
 yvar <- "ovule_count"
@@ -160,15 +130,6 @@ xvar <- "leaf_area_0"
 data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
 
 fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy",slope.test=1)
-results <- lines(fit$groupsummary)
-plot(fit,xlab=xvar,ylab=yvar,pch=16, col=col.spp(fit$groupsummary$group),lty=results$linetype,ylim=c(1,300000),xlim=c(1,30000))
-results
-
-yvar <- "propagule_inv"
-xvar <- "leaf_area_0_mature"
-data <- subset(SummarySppAge[["mean"]],SummarySppAge[["mean"]][[xvar]]>0&SummarySppAge[["mean"]][[yvar]]>0)
-
-fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
 results <- lines(fit$groupsummary)
 plot(fit,xlab=xvar,ylab=yvar,pch=16, col=col.spp(fit$groupsummary$group),lty=results$linetype,ylim=c(1,300000),xlim=c(1,30000))
 results
@@ -347,7 +308,7 @@ results <- as.data.frame(matrix(vector(), 0, 9,
                 dimnames=list(c(), c("xvar","variable","r2","pval","Slope","Slope_lowCI","Slope_highCI","Int","Slope_test_p"))),
                 stringsAsFactors=F)
 
-for (i in c("total_weight","propagule_inv","fruit_inv","flower_inv","flower_inv2","success_inv","prepollen_success_inv","pack_disp_success_inv","discarded_inv")) {
+for (i in c("total_weight","embryo_endo_inv","propagule_inv","fruit_inv","flower_inv","flower_inv2","success_inv","prepollen_success_inv","pack_disp_success_inv","discarded_inv")) {
   for (j in c("repro_inv")) {
 yvar <- i
 xvar <- j
@@ -537,8 +498,10 @@ mtext("success cost (mg/seed)",2,line=2.3,cex=0.7)
 legend("bottomright",legend=c("pollen_attraction","provisioning"),col=c(cerulean,venetian_red),pch=c(16,16),bty="n",cex=0.7)
 
 
-mod_pollen_attract_costs <- sma(pollen_attract_costs~embryo_endo_costs,SummarySpp[["mean"]],log="xy",method="SMA")
-mod_provisioning_costs <- sma(provisioning_costs~embryo_endo_costs,SummarySpp[["mean"]],log="xy",method="SMA",slope.test = mod_pollen_attract_costs$groupsummary$Slope_highCI)
+mod_repro_costs <- sma(repro_costs~embryo_endo_costs,SummarySpp[["mean"]],log="xy",method="SMA")
+mod_pollen_attract_costs <- sma(pollen_attract_costs~embryo_endo_costs,SummarySpp[["mean"]],log="xy",method="SMA",slope.test = mod_repro_costs$groupsummary$Slope_lowCI)
+mod_provisioning_costs <- sma(provisioning_costs~embryo_endo_costs,SummarySpp[["mean"]],log="xy",method="SMA",slope.test = mod_repro_costs$groupsummary$Slope)
+
 line_function_log_xy(SummarySpp[["mean"]]$embryo_endo_costs,mod_pollen_attract_costs,1,col=cerulean)
 line_function_log_xy(SummarySpp[["mean"]]$embryo_endo_costs,mod_provisioning_costs,1,col=venetian_red)
 
@@ -682,14 +645,14 @@ options(scipen = 4)
 library(smatr)
 
 yvar <- "repro_inv"
-xvar <- "propagule_inv"
+xvar <- "embryo_endo_inv"
 data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
 
 fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="OLS", log="xy")
 results <- lines(fit$groupsummary)
 plot(fit,col=col.spp(fit$groupsummary$group),log="xy",ylim=c(1,300000),xlim=c(1,300000), xlab="",ylab="",lty=results$linetype,pch=16)
 abline(0,1)
-mod <- sma(propagule_inv~repro_inv,data=subset(SummaryInd,propagule_inv>0),log="xy",method="OLS")
+mod <- sma(embryo_endo_inv~repro_inv,data=subset(SummaryInd,propagule_inv>0),log="xy",method="OLS")
 mtext(text="total propagule investment (mg)",side=1,line=2.2,outer=FALSE)
 mtext(text="total reproductive investment (mg)",side=2,line=2,outer=TRUE)
 extra.top.left.logxy("a",2,1.2)
@@ -819,9 +782,7 @@ results
 plot(propagule_costs~total_weight_0,SummaryInd,log="xy",pch=16,col=col.spp(species))
 plot(propagule_costs~total_weight_0,SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
 
-plot(seedset~prop_discarded,data=subset(SummarySpp[["mean"]],species!="BAER"&species!="PEPU"),log="xy",pch=16,col=col.spp(species))
-mod <- sma(propagule_costs~total_weight_0,data=subset(SummarySpp[["mean"]]),log="xy",method="SMA")
-summary(mod)
+
 ```
 
 
