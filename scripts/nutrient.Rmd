@@ -178,6 +178,31 @@ SummaryInd2 <- SummaryInd2 %>% mutate(
   )
 ```
 
+#looking at sequential discs from stems
+```{r}
+wood_discs_base <- nutrient %>%
+    subset(tissue_complete %in% c("wood_from_base"))%>%
+    select(individual_rep1,species,P) 
+names(wood_discs_base) <- c("individual","species","P_base")
+
+wood_discs_middle <- nutrient %>%
+    subset(tissue_complete %in% c("wood_from_middle"))%>%
+    select(individual_rep1,P) 
+names(wood_discs_middle) <- c("individual","P_mid")
+
+wood_discs_tip <- nutrient %>%
+    subset(tissue_complete %in% c("wood_from_tip"))%>%
+    select(individual_rep1,P) 
+names(wood_discs_tip) <- c("individual","P_tip")
+
+wood_discs <- merge(wood_discs_base, wood_discs_middle, by="individual")
+wood_discs <- merge(wood_discs, wood_discs_tip, by="individual")
+
+
+
+```
+unique(nutrient$tissue_complete)
+
 #PLOTS
 
 #soils data
