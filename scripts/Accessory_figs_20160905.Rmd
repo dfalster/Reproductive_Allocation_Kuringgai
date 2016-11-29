@@ -375,17 +375,6 @@ win.metafile("ms/Accessory/Figure01def_predictions.wmf", height=6, width=6)
 plot
 
 par(mfrow=c(2,2), cex=1, omi=c(.1,.1,.05,.2), mai=c(.8,.8,.1,.05))
-
-plot(0,0,ylim=c(0,1),yaxt="n",xaxt="n",xlim=c(0,1),col="white",xlab="",ylab="")
-segments(x0=.1,x1=.9,y0=.9,y1=.1,lty=1)
-segments(x0=.15,x1=.9,y0=.15,y1=.9,lty=2)
-axis(2, at=c(0,1),labels=c(0,1),cex.axis=1,las=2)
-axis(1, at=c(0,1),labels=c("smaller","larger"),cex.axis=1)
-mtext(text="proportion total success costs",side=2,line=1.8,outer=FALSE,cex=0.8)
-mtext(text="seed size (mg)",side=1,line=1.3,outer=FALSE,cex=0.8)
-legend("bottomleft",legend=c("pollen-attraction costs","provisioning costs"),col=c("black","black"),pch=c(16,21),bty="n",cex=0.5)
-extra.top.left("d",2,1)
-
 plot(0,0,ylim=c(0,1),yaxt="n",xaxt="n",xlim=c(0,1),col="white",xlab="",ylab="")
 segments(x0=.1,x1=.9,y0=.9,y1=.1,lty=1)
 segments(x0=.15,x1=.85,y0=.15,y1=.85,lty=2)
@@ -394,7 +383,7 @@ axis(1, at=c(0,1),labels=c("smaller","larger"),cex.axis=1)
 mtext(text="proportion all pollen-attraction investment",side=2,line=1.8,outer=FALSE,cex=0.8)
 mtext(text="seed size (mg)",side=1,line=1.3,outer=FALSE,cex=0.8)
 legend("bottomleft",legend=c("become seeds","are aborted before provisioning"),title="into ovules that:",col=c("black","black"),pch=c(16,21),bty="n",cex=0.5,xjust=0)
-extra.top.left("e",2,1)
+extra.top.left("d",2,1)
 
 plot(0,0,ylim=c(0,1),yaxt="n",xaxt="n",xlim=c(0,1),col="white",xlab="",ylab="")
 segments(x0=.1,x1=.9,y0=.9,y1=.1,lty=2)
@@ -404,6 +393,16 @@ axis(1, at=c(0,1),labels=c("smaller","larger"),cex.axis=1)
 mtext(text="proportion all provisioning investment",side=2,line=1.8,outer=FALSE,cex=0.8)
 mtext(text="seed size (mg)",side=1,line=1.3,outer=FALSE,cex=0.8)
 legend("bottomleft",legend=c("become seeds","are aborted"),title="into zygotes that:",col=c("black","black"),pch=c(16,21),bty="n",cex=0.5,xjust=0)
+extra.top.left("e",2,1)
+
+plot(0,0,ylim=c(0,1),yaxt="n",xaxt="n",xlim=c(0,1),col="white",xlab="",ylab="")
+segments(x0=.1,x1=.9,y0=.9,y1=.1,lty=1)
+segments(x0=.15,x1=.9,y0=.15,y1=.9,lty=2)
+axis(2, at=c(0,1),labels=c(0,1),cex.axis=1,las=2)
+axis(1, at=c(0,1),labels=c("smaller","larger"),cex.axis=1)
+mtext(text="proportion total success costs",side=2,line=1.8,outer=FALSE,cex=0.8)
+mtext(text="seed size (mg)",side=1,line=1.3,outer=FALSE,cex=0.8)
+legend("bottomleft",legend=c("pollen-attraction costs","provisioning costs"),col=c("black","black"),pch=c(16,21),bty="n",cex=0.5)
 extra.top.left("f",2,1)
 
 dev.off()
@@ -448,29 +447,11 @@ line_function_log_xy(SummarySpp[["mean"]]$scaled_pollen_attract_costs,mod_choosy
 extra.top.left.logxy("b",2,1)
 
 #panel c - success proportions
-plot(prop_pollen_attract_vs_success~embryo_endo_costs,SummarySpp[["mean"]],pch=16,log="x",col=cerulean,
-     ylim=c(-0.1,1.1),xlim=c(.01,100),xlab="",ylab="",xaxt="n",yaxt="n")
-points(prop_provisioning_vs_success~embryo_endo_costs,SummarySpp[["mean"]],pch=16,col=venetian_red)
-#arrows(SummarySpp[["mean"]]$embryo_endo_costs,SummarySpp[["mean"]]$prop_pollen_attract_vs_success-SummarySpp[["se"]]$prop_pollen_attract_vs_success,SummarySpp[["mean"]]$embryo_endo_costs,SummarySpp[["mean"]]$prop_pollen_attract_vs_success+SummarySpp[["se"]]$prop_pollen_attract_vs_success,code=3,angle=90, length=0.1,col=cerulean)
-extra.top.left.logx("c",2,1)
-axis(2, at=c(0,.2,.4,.6,.8,1), labels=c(0,0.2,0.4,0.6,0.8,1),cex.axis=0.8,las=2)
-axis(1, at=c(0.01,1,100), labels=c(0.01,1,100),cex.axis=0.8)
-mtext("seed size (mg)",1,line=1.8,cex=0.7)
-mtext("prop. successful investment",2,line=2.3,cex=0.7)
-legend("bottomleft",legend=c("pollen_attraction costs","provisioning costs"),col=c(cerulean,venetian_red),pch=c(16,16),bty="n",cex=0.7)
-
-mod_prop_pollen_attract_vs_success <- sma(prop_pollen_attract_vs_success~embryo_endo_costs,SummarySpp[["mean"]],log="x",method="OLS")
-mod_prop_provisioning_vs_success <- sma(prop_provisioning_vs_success~embryo_endo_costs,SummarySpp[["mean"]],log="x",method="OLS")
-
-line_function_log_x(SummarySpp[["mean"]]$embryo_endo_costs,mod_prop_pollen_attract_vs_success,1,col=cerulean)
-line_function_log_x(SummarySpp[["mean"]]$embryo_endo_costs,mod_prop_provisioning_vs_success,1,col=venetian_red)
-
-#panel d - pollen-attraction proportions
 plot(prop_prepollen_success~embryo_endo_costs,SummarySpp[["mean"]],pch=16,log="x",col=cerulean,ylim=c(-.1,1.1),xlim=c(.01,100),xlab="",ylab="",xaxt="n",yaxt="n")
 points(prop_prepollen_discarded~embryo_endo_costs,SummarySpp[["mean"]],pch=16,col=venetian_red)
 #arrows(SummarySpp[["mean"]]$embryo_endo_costs,SummarySpp[["mean"]]$prop_prepollen_success-SummarySpp[["se"]]$prop_prepollen_success,SummarySpp[["mean"]]$embryo_endo_costs,SummarySpp[["mean"]]$prop_prepollen_success+SummarySpp[["se"]]$prop_prepollen_success,code=3,angle=90, length=0.1,col=cerulean)
 #arrows(SummarySpp[["mean"]]$embryo_endo_costs,SummarySpp[["mean"]]$prop_prepollen_discarded-SummarySpp[["se"]]$prop_prepollen_discarded,SummarySpp[["mean"]]$embryo_endo_costs,SummarySpp[["mean"]]$prop_prepollen_discarded+SummarySpp[["se"]]$prop_prepollen_discarded,code=3,angle=90, length=0.1,col=venetian_red)
-extra.top.left.logx("d",2,1)
+extra.top.left.logx("c",2,1)
 axis(2, at=c(0,.2,.4,.6,.8,1), labels=c(0,0.2,0.4,0.6,0.8,1),cex.axis=0.8,las=2)
 axis(1, at=c(0.01,1,100), labels=c(0.01,1,100),cex.axis=0.8)
 mtext("seed size (mg)",1,line=1.8,cex=0.7)
@@ -483,10 +464,10 @@ mod_prop_prepollen_discarded <- sma(prop_prepollen_discarded~embryo_endo_costs,S
 line_function_log_x(SummarySpp[["mean"]]$embryo_endo_costs,mod_prop_prepollen_success,1,col=cerulean)
 line_function_log_x(SummarySpp[["mean"]]$embryo_endo_costs,mod_prop_prepollen_discarded,1,col=venetian_red)
 
-#panel e - provisioning proportions
+#panel d - pollen-attraction proportions
 plot(prop_postpollen_success~embryo_endo_costs,SummarySpp[["mean"]],pch=16,log="x",col=cerulean,ylim=c(-0.1,1.1),xlim=c(.01,100),xlab="",ylab="",xaxt="n",yaxt="n")
 points(prop_postpollen_discarded~embryo_endo_costs,SummarySpp[["mean"]],pch=16,col=venetian_red)
-extra.top.left.logx("e",2,1)
+extra.top.left.logx("d",2,1)
 axis(2, at=c(0,.2,.4,.6,.8,1), labels=c(0,0.2,0.4,0.6,0.8,1),cex.axis=0.8,las=2)
 axis(1, at=c(0.01,1,100), labels=c(0.01,1,100),cex.axis=0.8)
 mtext("seed size (mg)",1,line=1.8,cex=0.7)
@@ -499,15 +480,33 @@ mod_prop_postpollen_discarded <- sma(prop_postpollen_discarded~embryo_endo_costs
 line_function_log_x(SummarySpp[["mean"]]$embryo_endo_costs,mod_prop_postpollen_success,1,col=cerulean)
 line_function_log_x(SummarySpp[["mean"]]$embryo_endo_costs,mod_prop_postpollen_discarded,1,col=venetian_red)
 
+#panel e - provisioning proportions
+plot(prop_pollen_attract_vs_success~embryo_endo_costs,SummarySpp[["mean"]],pch=16,log="x",col=cerulean,
+     ylim=c(-0.1,1.1),xlim=c(.01,100),xlab="",ylab="",xaxt="n",yaxt="n")
+points(prop_provisioning_vs_success~embryo_endo_costs,SummarySpp[["mean"]],pch=16,col=venetian_red)
+#arrows(SummarySpp[["mean"]]$embryo_endo_costs,SummarySpp[["mean"]]$prop_pollen_attract_vs_success-SummarySpp[["se"]]$prop_pollen_attract_vs_success,SummarySpp[["mean"]]$embryo_endo_costs,SummarySpp[["mean"]]$prop_pollen_attract_vs_success+SummarySpp[["se"]]$prop_pollen_attract_vs_success,code=3,angle=90, length=0.1,col=cerulean)
+extra.top.left.logx("e",2,1)
+axis(2, at=c(0,.2,.4,.6,.8,1), labels=c(0,0.2,0.4,0.6,0.8,1),cex.axis=0.8,las=2)
+axis(1, at=c(0.01,1,100), labels=c(0.01,1,100),cex.axis=0.8)
+mtext("seed size (mg)",1,line=1.8,cex=0.7)
+mtext("prop. successful investment",2,line=2.3,cex=0.7)
+legend("bottomleft",legend=c("pollen attraction costs","provisioning costs"),col=c(cerulean,venetian_red),pch=c(16,16),bty="n",cex=0.7)
+
+mod_prop_pollen_attract_vs_success <- sma(prop_pollen_attract_vs_success~embryo_endo_costs,SummarySpp[["mean"]],log="x",method="OLS")
+mod_prop_provisioning_vs_success <- sma(prop_provisioning_vs_success~embryo_endo_costs,SummarySpp[["mean"]],log="x",method="OLS")
+
+line_function_log_x(SummarySpp[["mean"]]$embryo_endo_costs,mod_prop_pollen_attract_vs_success,1,col=cerulean)
+line_function_log_x(SummarySpp[["mean"]]$embryo_endo_costs,mod_prop_provisioning_vs_success,1,col=venetian_red)
+
 #panel f - change in slope of "success costs"
-plot(pollen_attract_costs~embryo_endo_costs,SummarySpp[["mean"]],pch=16,log="xy",col=cerulean,xlim=c(.002,100),ylim=c(.01,20000),xlab="",ylab="",xaxt="n",yaxt="n")
+plot(pollen_attract_costs~embryo_endo_costs,SummarySpp[["mean"]],pch=16,log="xy",col=cerulean,xlim=c(.01,100),ylim=c(.01,20000),xlab="",ylab="",xaxt="n",yaxt="n")
 points(provisioning_costs~embryo_endo_costs,SummarySpp[["mean"]],pch=16,col=venetian_red)
 extra.top.left.logxy("f",2,1)
 axis(2, at=c(0.01,1,100,10000), labels=c(0.01,1,100,10000),cex.axis=0.8,las=2)
 axis(1, at=c(0.01,1,100), labels=c(0.01,1,100),cex.axis=0.8)
 mtext("seed size (mg)",1,line=1.8,cex=0.7)
 mtext("success cost (mg/seed)",2,line=2.3,cex=0.7)
-legend("bottomright",legend=c("pollen_attraction","provisioning"),col=c(cerulean,venetian_red),pch=c(16,16),bty="n",cex=0.7)
+legend("bottomright",legend=c("pollen attraction","provisioning"),col=c(cerulean,venetian_red),pch=c(16,16),bty="n",cex=0.7)
 
 
 mod_repro_costs <- sma(repro_costs~embryo_endo_costs,SummarySpp[["mean"]],log="xy",method="SMA")
@@ -569,7 +568,7 @@ plot((ovule_count/seed_count)~prop_pollen_attract_vs_all_repro_all_repro,Summary
 axis(2, at=c(1,10,100), labels=c(1,10,100),cex.axis=1)
 axis(1, at=c(0.001,0.005,0.01,0.05,0.1,0.5), labels=c(0.001,0.005,0.01,0.05,0.1,0.5),cex.axis=1)
 mtext("choosiness (ovules initiated per seed matured)",2,line=2.3)
-mtext("proportion reproductive investment for successful pollen_attraction costs",1,line=2.3)
+mtext("proportion reproductive investment for successful pollen attraction costs",1,line=2.3)
 
 mod_choosy <- sma((ovule_count/seed_count)~prop_pollen_attract_vs_all_repro_all_repro,data=SummarySpp[["mean"]],log="xy",slope=-1,method="SMA")
 
@@ -603,7 +602,7 @@ mod_provision <- sma(postpollen_all_per_seed~embryo_endo_costs,SummarySpp[["mean
 line_function_log_xy(SummarySpp[["mean"]]$embryo_endo_costs,mod_prepollen,1)
 line_function_log_xy(SummarySpp[["mean"]]$embryo_endo_costs,mod_provision,2)
 
-legend("topright",legend=c("pollen_attraction","provisioning"),col=c("black","black"),pch=c(16,21),bty="n")
+legend("topright",legend=c("pollen attraction","provisioning"),col=c("black","black"),pch=c(16,21),bty="n")
 extra.top.left.logxy("c",2,1.2)
 
 plot(prop_pollen_attract_vs_all_repro~embryo_endo_costs,SummarySpp[["mean"]],col=col.spp(species),pch=16,log="x", yaxt="n",xaxt="n", ylim=c(0,1), xlim=c(.002,500), ylab="",xlab="",cex=1.5)
