@@ -178,6 +178,20 @@ SummaryInd2 <- SummaryInd2 %>% mutate(
   )
 ```
 
+
+use <- subset(nutrient,nutrient$with_bark_diam_mm!="")
+
+for (i in 1:length(use$individual_rep1)) {
+  if (use$with_bark_diam_mm[i]=="") {
+    use$with_bark_diam <- 3
+    use$with_bark_diam <- mean(as.numeric(unlist(strsplit(as.character(use$with_bark_diam_mm), split = ";"))))
+  } else {
+    nutrient$with_bark_diam <- 4
+  }
+}
+
+
+subset(nutrient$with_bark_diam_mm,nutrient$with_bark_diam_mm!="")
 #looking at sequential discs from stems
 ```{r}
 wood_discs_base <- nutrient %>%
@@ -201,7 +215,7 @@ wood_discs <- merge(wood_discs, wood_discs_tip, by="individual")
 
 
 ```
-unique(nutrient$tissue_complete)
+names(nutrient)
 
 #PLOTS
 
