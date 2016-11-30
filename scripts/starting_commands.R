@@ -8,6 +8,8 @@ HarvestData <- readRDS("export/HarvestData.rds")
 InvestmentByPart <- readRDS("export/Investment_FD_all.rds")
 PartsSummary <- readRDS("export/PartsSummary_all.rds")
 library(smatr)
+library(broom)
+library(dplyr)
 
 source("R/figures.R")
 

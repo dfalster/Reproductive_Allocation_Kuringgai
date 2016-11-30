@@ -255,7 +255,7 @@ get_species_values <- function(SummaryInd, groups) {
     SummaryInd %>%
     group_by_(.dots=dots) %>%
     summarise_each(f, height, growth_inv, total_weight, total_weight_0,total_inv, RA, RA_leaf_area, diameter, stem_area,
-      leaf_weight, stem_weight, growth_stem_diameter, growth_stem_area, growth_leaf, leaf_shed,
+      leaf_weight, stem_weight, growth_stem_diameter, growth_stem_area, growth_leaf, leaf_shed,leaf_weight_0,stem_weight_0,repro_inv,
       growth_stem, diameter, diameter_0,LMA, wood_density,leaf_area,leaf_area_0,leaf_area_midyear,leaf_replacement,growth_leaf_neg)
   })
   names(out[[1]]) <- fs
@@ -281,7 +281,7 @@ get_species_values <- function(SummaryInd, groups) {
     SummaryInd %>%
     filter(repro_inv > 0) %>%
     group_by_(.dots=dots) %>%
-    summarise_each(f,repro_inv,ovule_count,leaf_area_0_mature)
+    summarise_each(f,ovule_count,leaf_area_0_mature)
   })
   names(out[[4]]) <- fs
 
