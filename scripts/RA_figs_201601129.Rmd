@@ -1,3 +1,72 @@
+traits <- as.data.frame(select(SummarySpp[["mean"]],species,RA_leaf_area,RA_max_1,RA_vs_all_leaf,embryo_endo_costs,LMA,wood_density,growth_shoot_length,seed_count,lifespan,maturity,asymptotic_RA))
+traits$maxH <- SummarySpp[["max"]]$height
+
+temp <- subset(SummarySppAge[["mean"]], age >= asymptotic_RA)
+temp <- temp %>%
+        group_by(species) %>%
+        summarise_each(funs(mean), RA_leaf_area,RA_max_1,RA_vs_all_leaf)
+names(temp) <- c("species","RA_leaf_area_max","RA_max_1_max","RA_vs_all_leaf_max")
+
+traits <- merge(traits,temp,by="species")
+        
+#win.metafile("figs2/RA/Figure_3_maxRA_correlates.wmf", height=11, width=8)
+#plot
+par(mfcol=c(3,2), cex=1, omi=c(.1,.7,.1,.1), mai=c(.8,.3,.1,0.2)) 
+ 
+i <- traits$RA_leaf_area_max
+i <- traits$RA_max_1_max
+i <- traits$RA_vs_all_leaf_max
+for (i in c(traits$RA_leaf_area_max,traits$RA_max_1_max,traits$RA_vs_all_leaf_max)) {
+
+plot(i~traits$lifespan,col=col.spp(traits$species),pch=16,cex=1.5,log="x",xlab="",yaxt="n")
+mtext("lifespan (years)",1,outer=FALSE,line=2)
+axis(2, at=c(.4,.6,.8,1,1.2,1.4), labels=c(0.4,0.6,0.8,1.0,1.2,1.4),cex.axis=.9,las=1)
+# <- lm(log10(lifespan)~i,traits)
+#extra.bottom.left.logx(paste("r2=",round(glance(mod)[1],2),"; p-value:",round(glance(mod)[5],4)))
+mtext("maximum RA",2,outer=TRUE,line=1)
+
+plot(i~traits$maturity,col=col.spp(traits$species),pch=16,cex=1.5,log="x",xlab="",yaxt="n")
+mtext("age at maturity (years)",1,outer=FALSE,line=2)
+axis(2, at=c(.4,.6,.8,1,1.2,1.4), labels=c(0.4,0.6,0.8,1.0,1.2,1.4),cex.axis=.9,las=1)
+#mod <- lm(mature~log10(i),traits)
+#extra.bottom.left.logx(paste("r2=",round(glance(mod)[1],2),"; p-value:",round(glance(mod)[5],4)))
+
+plot(i~traits$embryo_endo_costs,col=col.spp(traits$species),pch=16,cex=1.5,log="x",xlab="",yaxt="n",xlim=c(.005,30),xaxt="n")
+mtext("embryo + endosperm weight (mg)",1,outer=FALSE,line=2)
+axis(2, at=c(.4,.6,.8,1,1.2,1.4), labels=c(0.4,0.6,0.8,1.0,1.2,1.4),cex.axis=.9,las=1)
+axis(1, at=c(.01,.1,1,10), labels=c(.01,.1,1,10),las=1)
+#mod <- lm(log10(embryo_endo_size)~i,traits)
+#extra.bottom.left.logx(paste("r2=",round(glance(mod)[1],2),"; p-value:",round(glance(mod)[5],4)))
+#legend("topleft",legend=labels.spp(),col=col.spp(),pch=16, cex=.6,bty="n")
+
+plot(i~traits$maxH,col=col.spp(traits$species),pch=16,cex=1.5,log="x",xlab="",yaxt="n")
+mtext("maximum height (mm)",1,outer=FALSE,line=2)
+#mod <- lm(log10(maxH)~i,traits)
+axis(2, at=c(.4,.6,.8,1,1.2,1.4), labels=c("","","","","",""),cex.axis=.8,las=1)
+#extra.bottom.left.logx(paste("r2=",round(glance(mod)[1],2),"; p-value:",round(glance(mod)[5],4)))
+
+plot(i~traits$LMA,col=col.spp(traits$species),pch=16,cex=1.5,xlab="",yaxt="n",log="x")
+mtext("LMA",1,outer=FALSE,line=2)
+axis(2, at=c(.4,.6,.8,1,1.2,1.4), labels=c("","","","","",""),cex.axis=.8,las=1)
+#mod <- lm(LMA~RA_leaf_area,traits)
+#extra.bottom.left(paste("r2=",round(glance(mod)[1],2),"; p-value:",round(glance(mod)[5],4)))
+
+plot(i~wood_density,traits,col=col.spp(traits$species),pch=16,cex=1.5,xlab="",yaxt="n")
+mtext("wood density",1,outer=FALSE,line=2)
+axis(2, at=c(.4,.6,.8,1,1.2,1.4), labels=c("","","","","",""),cex.axis=.8,las=1)
+#mod <- lm(wood_density~i,traits)
+#extra.top.left(paste("r2=",round(glance(mod)[1],2),"; p-value:",round(glance(mod)[5],4)))
+#dev.off()
+}
+
+write.csv(traits, file="figs2/RA/Table01_maxRA_correlates.csv",row.names=FALSE)
+
+plot(RA_per_year ~ i,traits,col=col.spp(species),pch=16,cex=2,log="y")
+mod <- lm(i~log10(RA_per_year),traits)
+summary(mod)
+
+plot(seed_count ~ i,traits,col=col.spp(species),pch=16,cex=2,log="y")
+
 #new variables
 ``` {r}
 SummaryInd$growth_leaf_fixed_max = SummaryInd$growth_leaf

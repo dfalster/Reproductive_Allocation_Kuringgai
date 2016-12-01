@@ -1,7 +1,7 @@
 # pdf('ms/RA/Figure_1_stacked_lines.pdf', height=11.5, width=8) plot
 
 data <- select(SummarySppAge[["mean"]], species, age, repro_inv, growth_leaf, leaf_replacement,leaf_area_0,leaf_weight_0,
-  growth_stem, leaf_shed,prop_stem,prop_leaf_replacement,prop_leaf_expand,prop_repro,RA_max_1,lifespan,height)
+  growth_stem, leaf_shed,prop_stem,prop_leaf_replacement,prop_leaf_expand,prop_repro,RA_max_1,lifespan,height, RA_vs_all_leaf)
 
 
 par(mfrow = c(7,4), cex = 1, oma = c(5, 5, 1, 1), mar = c(0, 3, 2, 1))
@@ -31,13 +31,25 @@ for (i in seq_along(all_species)) {
     mtext("Standing leaf biomass (mg)", 2, line=2.5, outer=FALSE)
   }
   
-  #reproductive investment
-  plot(NA,xaxt="n",xlim = c(1.4, 32), ylim=c(1,(max(data_sp$repro_inv)*1.1)),log="x",xaxs = "i", yaxs = "i", xaxt="n", ylab="n")
-  polygon(x = data_sp$age[c(1:n, n, 1)], y = c(data_sp$repro_inv, 0, 0), col = "coral3", density = NA)
+  # #reproductive investment
+  # plot(NA,xaxt="n",xlim = c(1.4, 32), ylim=c(1,(max(data_sp$repro_inv)*1.1)),log="x",xaxs = "i", yaxs = "i", xaxt="n", ylab="n")
+  # polygon(x = data_sp$age[c(1:n, n, 1)], y = c(data_sp$repro_inv, 0, 0), col = "coral3", density = NA)
+  # axis(1, labels = (i %in% c(7,14)))
+  # 
+  # if (i %in% c(4,11)) {
+  #   mtext("reproductive investment (mg)", 2, line=2.5, outer=FALSE)
+  # }
+  
+  #RA leaf area, all leaf
+  plot(NA, log = "x", ylim = c(0, 1),  xlim = c(1.4, 32), xaxs = "i", yaxs = "i", axes= FALSE, ann=FALSE)
+  box()
   axis(1, labels = (i %in% c(7,14)))
- 
+  axis(2, at = c(0, 0.2, 0.4, 0.6, 0.8, 1), labels = TRUE, las=1)
+  polygon(x = c(1,m,m,1), y = c(1,1, 0, 0), col = "darkseagreen4", density = NA)
+  polygon(x = data_sp$age[c(1:n, n, 1)], y = c(data_sp$RA_vs_all_leaf, 0, 0), col = "coral3", density = NA)
+  
   if (i %in% c(4,11)) {
-    mtext("reproductive investment (mg)", 2, line=2.5, outer=FALSE)
+    mtext("Proportional allocation to reproduction and leaf growth", 2, line=2.5, outer=FALSE)
   }
   
   #RA leaf area, max 1
