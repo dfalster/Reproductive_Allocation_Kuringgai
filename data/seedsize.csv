@@ -1,15 +1,15 @@
-species,seed_size,embryo_endo_size,prop_endo,embryo_endo_2,ovule_per_ovary,seed_units,seed_size_source,propagule_weight,pod_weight
-BAER,204.979,24.0645, 0.74 ,120,2,mg,Wenk,,2069.93
-BOLE,5.76,2.095, 0.40 ,3.6828,4,mg,Wenk,,6.03
-COER,1.065,0.686, 0.48 ,0.8,1,mg,Wenk,2.279,
-EPMI,0.0206,0.02, 0.69 ,0.02,15,mg,Wenk,1.6838,
-GRBU,53.366,26.699, 0.46 ,31.234,2,mg,Wenk,,162.04
-GRSP,23.361,13.4755, 0.36 ,10.961,2,mg,Wenk,,93.412
-HATE,12.448,8.176, 0.81 ,12.446,2,mg,Wenk,,366.447
-HEPU,0.774,0.29716, 0.28 ,0.29716,4,mg,Henery,3.094,
-LEES,3.899,0.8064, 0.11 ,0.8064,1,mg,Wenk_propagule,3.899,
-PELA,121.214,14.392, 0.03 ,12.328,1,mg,Wenk,411.3,
-PEPU,5.096,2.21, 0.40 ,3.2274,1,mg,Henery,6.459,
-PHPH,2.722,1.7127, 0.57 ,1.7127,2,mg,Wenk,,2.717
-PILI,0.7218,0.72, 0.40 ,0.72,1,mg,Wenk,,0.498
-PUTU,1.682,1.274, 0.55 ,1.274,2,mg,Wenk,,2.56
+species,seed_size,embryo_endo_size,prop_endo,embryo_endo_2,ovule_per_ovary,seed_units,seed_size_source,propagule_weight,pod_weight,lifespan,maturity
+BAER,204.979,24.0645,0.74,120,2,mg,Wenk,,2069.93,40,7
+BOLE,5.76,2.095,0.4,3.6828,4,mg,Wenk,,6.03,9,1.4
+COER,1.065,0.686,0.48,0.8,1,mg,Wenk,2.279,,12,2.4
+EPMI,0.0206,0.02,0.69,0.02,15,mg,Wenk,1.6838,,40,2.4
+GRBU,53.366,26.699,0.46,31.234,2,mg,Wenk,,162.04,32,5
+GRSP,23.361,13.4755,0.36,10.961,2,mg,Wenk,,93.412,20,2.4
+HATE,12.448,8.176,0.81,12.446,2,mg,Wenk,,366.447,40,7
+HEPU,0.774,0.29716,0.28,0.29716,4,mg,Henery,3.094,,20,1.4
+LEES,3.899,0.8064,0.11,0.8064,1,mg,Wenk_propagule,3.899,,40,2.4
+PELA,121.214,14.392,0.03,12.328,1,mg,Wenk,411.3,,40,9
+PEPU,5.096,2.21,0.4,3.2274,1,mg,Henery,6.459,,40,7
+PHPH,2.722,1.7127,0.57,1.7127,2,mg,Wenk,,2.717,32,2.4
+PILI,0.7218,0.72,0.4,0.72,1,mg,Wenk,,0.498,7,1.4
+PUTU,1.682,1.274,0.55,1.274,2,mg,Wenk,,2.56,32,2.4

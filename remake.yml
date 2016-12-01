@@ -1,4 +1,5 @@
 packages:
+  - stats
   - stringr
   - smatr
   - plyr

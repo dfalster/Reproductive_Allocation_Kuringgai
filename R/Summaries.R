@@ -178,17 +178,25 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
   )
   
   
-  for (i in 1:length(SummaryInd$individual)) {
-    if (SummaryInd$growth_leaf_neg[i] < 0) {
-      SummaryInd$growth_leaf_neg[i] <- SummaryInd$growth_leaf_neg[i]
-    }else{
-      SummaryInd$growth_leaf_neg[i] <- 0  
-    }
-  }
+   for (i in 1:length(SummaryInd$individual)) {
+     if (SummaryInd$growth_leaf[i] < 0) {
+       SummaryInd$growth_leaf_neg[i] <- SummaryInd$growth_leaf_neg[i]
+       SummaryInd$growth_leaf_pos[i] <- 0
+     }else{
+       SummaryInd$growth_leaf_pos[i] <- SummaryInd$growth_leaf[i]
+       SummaryInd$growth_leaf_neg[i] <- 0  
+     }
+   }
   
-  SummaryInd <- SummaryInd %>% mutate(
-    leaf_replacement = leaf_shed + growth_leaf_neg
-  )
+   SummaryInd <- SummaryInd %>% mutate(
+     leaf_replacement = leaf_shed + growth_leaf_neg,
+     RA_max_1 = repro_inv / (growth_leaf_pos + repro_inv),
+     gross_inv = repro_inv + growth_leaf_pos + leaf_replacement + growth_stem,
+     prop_repro = repro_inv/gross_inv,
+     prop_leaf_expand = (repro_inv + growth_leaf_pos)/gross_inv,
+     prop_leaf_replacement = (leaf_replacement + repro_inv + growth_leaf_pos)/gross_inv,
+     prop_stem = 1
+   )
   
   #if seedset is low, prepollen costs increase, because the cost of producing pollen across the whole plant is higher per seed matured  
   #if there are very few fruits aborted post-pollination the cost of aborted post-pollination tissues is very low
@@ -196,7 +204,7 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
   
   for(v in c("growth_inv","total_inv","leaf_repro_inv","total_weight_0","stem_weight_0","leaf_weight_0","height_0","diameter_0","RA","RGR","leaf_area",
              "growth_leaf_area","leaf_area_0","growth_leaf_area_log","growth_leaf_log","shoot_leaf_area","shoot_growth_leaf_area","shoot_leaf_area_0","prop_shoot_growth_leaf_area",
-             "leaf_shed","leaf_inv_gross","growth_leaf_neg","RA_leaf_area","leaf_area_midyear","leaf_area_0_mature","reproducing","seed_coat_costs",
+             "leaf_shed","leaf_inv_gross","growth_leaf_neg","growth_leaf_pos","RA_leaf_area","leaf_area_midyear","leaf_area_0_mature","reproducing","seed_coat_costs",
              "pollen_attract_costs","packaging_dispersal_costs","success_costs","embryo_endo_costs","repro_costs","accessory_costs","prop_postpollen_all_vs_all_repro",
              "accessory_costs_using_seedweight","provisioning_costs","prepollen_all_inv","prepollen_success_inv","prepollen_discarded_inv","postpollen_all_inv",
              "postpollen_aborted_inv","flower_inv","fruit_inv","success_inv","embryo_endo_inv","prepollen_all_costs","discarded_inv","choosiness2","zygote_set",
@@ -205,7 +213,8 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
              "prop_pollen_attract_vs_success","prop_provisioning_vs_success","prop_embryo_endo_vs_success","prop_discarded_vs_all_repro","accessory_inv",
              "prop_pack_disp_vs_success","prop_pollen_attract_vs_all_repro","prop_pack_disp_vs_all_repro","prop_embryo_endo_vs_all_repro","prop_postpollen_success","discarded_costs",
              "prop_postpollen_discarded","prop_prepollen_success","prop_prepollen_discarded","scaled_discarded_count","scaled_reach_flowering_count",
-             "scaled_seed_count","scaled_ovule_count","scaled_repro_inv","discarded_to_ovule_ratio","leaf_replacement","scaled_pollen_attract_costs")) {
+             "scaled_seed_count","scaled_ovule_count","scaled_repro_inv","discarded_to_ovule_ratio","leaf_replacement","scaled_pollen_attract_costs",
+             "RA_max_1","gross_inv","prop_repro","prop_leaf_expand","prop_leaf_replacement","prop_stem")) {
     i <- is.na(SummaryInd[[v]])
     SummaryInd[[v]][i] <- 0
     i <- is.infinite(SummaryInd[[v]])
@@ -254,9 +263,10 @@ get_species_values <- function(SummaryInd, groups) {
   out[[1]] <-lapply(fs, function(f) {
     SummaryInd %>%
     group_by_(.dots=dots) %>%
-    summarise_each(f, height, growth_inv, total_weight, total_weight_0,total_inv, RA, RA_leaf_area, diameter, stem_area,
+    summarise_each(f, height, growth_inv, total_weight, total_weight_0,total_inv, RA, RA_leaf_area, stem_area,growth_leaf_pos,
       leaf_weight, stem_weight, growth_stem_diameter, growth_stem_area, growth_leaf, leaf_shed,leaf_weight_0,stem_weight_0,repro_inv,
-      growth_stem, diameter, diameter_0,LMA, wood_density,leaf_area,leaf_area_0,leaf_area_midyear,leaf_replacement,growth_leaf_neg)
+      growth_stem, diameter, diameter_0,LMA, wood_density,leaf_area,leaf_area_0,leaf_area_midyear,leaf_replacement,growth_leaf_neg,
+      RA_max_1,gross_inv,prop_repro,prop_leaf_expand,prop_leaf_replacement,prop_stem,lifespan,maturity)
   })
   names(out[[1]]) <- fs
 

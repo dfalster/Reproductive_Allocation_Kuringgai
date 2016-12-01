@@ -1,6 +1,5 @@
 remake::make("export")
 
-
 SummaryInd <- readRDS("export/SummaryInd.rds")
 SummarySpp <- readRDS("export/SummarySpp.rds")
 SummarySppAge <- readRDS("export/SummarySppAge.rds")
@@ -10,6 +9,7 @@ PartsSummary <- readRDS("export/PartsSummary_all.rds")
 library(smatr)
 library(broom)
 library(dplyr)
+library(stats)
 
 source("R/figures.R")
 
