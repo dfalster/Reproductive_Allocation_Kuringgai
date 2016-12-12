@@ -6,10 +6,19 @@ SummarySppAge <- readRDS("export/SummarySppAge.rds")
 HarvestData <- readRDS("export/HarvestData.rds")
 InvestmentByPart <- readRDS("export/Investment_FD_all.rds")
 PartsSummary <- readRDS("export/PartsSummary_all.rds")
+
+library(digest)
+library(Rcpp)
+library(cmnormt)
+library(reshape2)
+library(tibble)
 library(smatr)
 library(broom)
 library(dplyr)
 library(stats)
+library(scales)
+library(colorspace)
+
 
 source("R/figures.R")
 

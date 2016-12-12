@@ -120,7 +120,7 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
     shoot_growth_leaf_area = shoot_leaf_count_new*leaf_size,
     shoot_leaf_area_0 = shoot_leaf_area - shoot_growth_leaf_area,
     prop_shoot_growth_leaf_area = shoot_growth_leaf_area / shoot_leaf_area_0,
-    leaf_shed = leaf_weight_0 * LL_death,
+    leaf_shed = leaf_weight_0 / LL_death,
     leaf_inv_gross = leaf_shed + growth_leaf,
     growth_leaf_neg = growth_leaf,
     RA_leaf_area = repro_inv / (repro_inv + growth_leaf),
@@ -190,15 +190,20 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
   
    SummaryInd <- SummaryInd %>% mutate(
      leaf_replacement = leaf_shed + growth_leaf_neg,
-     RA_max_1 = repro_inv / (growth_leaf_pos + repro_inv),
+     surplus_inv = repro_inv + growth_leaf_pos,
+     all_leaf_inv = leaf_replacement + growth_leaf_pos,
+     all_leaf_and_repro_inv = repro_inv + leaf_replacement + growth_leaf_pos,
+     RA_max_1 = repro_inv / surplus_inv,
      gross_inv = repro_inv + growth_leaf_pos + leaf_replacement + growth_stem,
      prop_repro = repro_inv/gross_inv,
-     prop_leaf_expand = (repro_inv + growth_leaf_pos)/gross_inv,
-     prop_leaf_replacement = (leaf_replacement + repro_inv + growth_leaf_pos)/gross_inv,
-     RA_vs_all_leaf = repro_inv / (leaf_replacement + growth_leaf_pos + repro_inv),
-     RA_seed = embryo_endo_inv / total_inv
-     prop_stem = 1
-   )
+     prop_leaf_expand = surplus_inv /gross_inv,
+     prop_leaf_replacement = all_leaf_and_repro_inv/gross_inv,
+     prop_surplus = surplus_inv / all_leaf_and_repro_inv,
+     RA_vs_all_leaf = repro_inv / all_leaf_and_repro_inv,
+     RA_seed = embryo_endo_inv / total_inv,
+     prop_stem = 1,
+     prop_leaf_replacement_vs_all_leaf = leaf_replacement / all_leaf_inv
+    )
   
   #if seedset is low, prepollen costs increase, because the cost of producing pollen across the whole plant is higher per seed matured  
   #if there are very few fruits aborted post-pollination the cost of aborted post-pollination tissues is very low
@@ -216,7 +221,8 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
              "prop_pack_disp_vs_success","prop_pollen_attract_vs_all_repro","prop_pack_disp_vs_all_repro","prop_embryo_endo_vs_all_repro","prop_postpollen_success","discarded_costs",
              "prop_postpollen_discarded","prop_prepollen_success","prop_prepollen_discarded","scaled_discarded_count","scaled_reach_flowering_count",
              "scaled_seed_count","scaled_ovule_count","scaled_repro_inv","discarded_to_ovule_ratio","leaf_replacement","scaled_pollen_attract_costs",
-             "RA_max_1","gross_inv","prop_repro","prop_leaf_expand","prop_leaf_replacement","prop_stem","RA_vs_all_leaf","RA_seed")) {
+             "RA_max_1","gross_inv","prop_repro","prop_leaf_expand","prop_leaf_replacement","prop_stem","RA_vs_all_leaf",
+             "all_leaf_inv","RA_seed","prop_surplus","surplus_inv","all_leaf_and_repro_inv")) {
     i <- is.na(SummaryInd[[v]])
     SummaryInd[[v]][i] <- 0
     i <- is.infinite(SummaryInd[[v]])
@@ -265,10 +271,11 @@ get_species_values <- function(SummaryInd, groups) {
   out[[1]] <-lapply(fs, function(f) {
     SummaryInd %>%
     group_by_(.dots=dots) %>%
-    summarise_each(f, height, growth_inv, total_weight, total_weight_0,total_inv, RA, RA_leaf_area, stem_area,growth_leaf_pos,
+    summarise_each(f, height, growth_inv, total_weight, total_weight_0,total_inv, RA, RA_leaf_area, stem_area,growth_leaf_pos,prop_surplus,
       leaf_weight, stem_weight, growth_stem_diameter, growth_stem_area, growth_leaf, leaf_shed,leaf_weight_0,stem_weight_0,repro_inv,
       growth_stem, diameter, diameter_0,LMA, wood_density,leaf_area,leaf_area_0,leaf_area_midyear,leaf_replacement,growth_leaf_neg,
-      RA_max_1,gross_inv,prop_repro,prop_leaf_expand,prop_leaf_replacement,prop_stem,lifespan,maturity,RA_vs_all_leaf)
+      RA_max_1,gross_inv,prop_repro,prop_leaf_expand,prop_leaf_replacement,prop_stem,lifespan,maturity,surplus_inv,all_leaf_and_repro_inv,
+      RA_vs_all_leaf,height_0,all_leaf_inv)
   })
   names(out[[1]]) <- fs
 
