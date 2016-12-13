@@ -1,11 +1,21 @@
 # pdf('ms/RA/Figure_1_stacked_lines.pdf', height=11.5, width=8) plot
 
+SummarySppAge[["mean"]]$leaf_shed_mean <- SummaryInd %>%
+        group_by(species,age) %>%
+        summarise(mean(leaf_shed_mean))
+
+SummarySppAge[["mean"]]$leaf_replacement_mean <- SummaryInd %>%
+        group_by(species,age) %>%
+        summarise(mean(leaf_replacement_mean))
+
+
+
 data <- select(SummarySppAge[["mean"]], species, age, repro_inv, growth_leaf, leaf_replacement,leaf_area_0,leaf_weight_0,total_inv,prop_surplus,
   growth_stem, leaf_shed,prop_stem,prop_leaf_replacement,prop_leaf_expand,prop_repro,RA_max_1,lifespan,height, RA_vs_all_leaf,
-  LL_death,height_0,total_weight_0,all_leaf_inv)
+  LL_death,height_0,total_weight_0,all_leaf_inv,surplus_inv,all_leaf_and_repro_inv,propagule_inv,ovule_count,success_inv)
 data$leaf_shed2 <- data$leaf_weight_0 / data$LL_death
-data_ind <- select(SummaryInd,species,individual,age, LL_death,height_0,leaf_shed,leaf_weight_0,
-                   growth_leaf_pos,repro_inv,total_weight_0,all_leaf_inv,total_inv,surplus_energy)
+data_ind <- select(SummaryInd,species,individual,age, LL_death,height_0,leaf_shed,leaf_weight_0,propagule_inv,ovule_count,
+                   growth_leaf_pos,repro_inv,total_weight_0,all_leaf_inv,total_inv,surplus_inv,all_leaf_and_repro_inv,age,success_inv)
 
 
 ```{r}
@@ -71,9 +81,9 @@ for (i in seq_along(all_species)) {
   plot(NA, log = "xy", xlim = c((min(data_sp_ind$total_weight_0)*0.9),(max(data_sp_ind$total_weight_0)*1.1)), ylim=c(1,(max(data_sp_ind$total_inv)*0.7)),xaxs = "i", yaxs = "i", xaxt="n", ylab="n")
   box()
   axis(1, labels = (i %in% c(7,14)))
-  points(x = data_sp_ind$total_weight_0, y = data_sp_ind$all_leaf_inv, col = "darkseagreen4", lwd=2,type="p",pch=1,cex=1.4)
-  points(x = data_sp_ind$total_weight_0, y = data_sp_ind$repro_inv, col = "coral3", lwd=2,type="p",pch=1,cex=1.4)
-  points(x = data_sp_ind$total_weight_0, y = data_sp_ind$growth_leaf_pos, col = "darkseagreen2", lwd=2,type="p",pch=1,cex=1.4)
+  points(x = data_sp_ind$leaf_weight_0, y = data_sp_ind$all_leaf_inv, col = "darkseagreen4", lwd=2,type="p",pch=1,cex=1.4)
+  points(x = data_sp_ind$leaf_weight_0, y = data_sp_ind$repro_inv, col = "coral3", lwd=2,type="p",pch=1,cex=1.4)
+  points(x = data_sp_ind$leaf_weight_0, y = data_sp_ind$growth_leaf_pos, col = "darkseagreen2", lwd=2,type="p",pch=1,cex=1.4)
   mtext(labels.spp.full(all_species[i]), 3, 0)
   
   if (i %in% c(4,11)) {
@@ -105,7 +115,7 @@ for (i in seq_along(all_species)) {
 
 ```{r}
 #FIGURE 2
-par(mfrow = c(7,3), cex = 1, oma = c(5, 5, 1, 1), mar = c(0, 3, 2, 1))
+par(mfrow = c(7,4), cex = 1, oma = c(5, 5, 1, 1), mar = c(0, 3, 2, 1))
 
 all_species <- unique(data$species)
 
@@ -142,20 +152,20 @@ for (i in seq_along(all_species)) {
   }
   
   #proportion different energy
-  plot(NA, log = "x", ylim = c(0, 1),  xlim = c(1.4, 32), xaxs = "i", yaxs = "i", axes= FALSE, ann=FALSE)
-  box()
-  axis(1, labels = (i %in% c(7,14)))
-  axis(2, at = c(0, 0.2, 0.4, 0.6, 0.8, 1), labels = c(0,"","","","",1), las=1)
-
-  
-  polygon(x = data_sp$age[c(1:n, n, 1)], y = c(data_sp$prop_stem, 0, 0), col = "burlywood4", density = NA)
-  polygon(x = data_sp$age[c(1:n, n, 1)], y = c(data_sp$prop_leaf_replacement, 0, 0), col = "darkseagreen4", density = NA)
-  polygon(x = data_sp$age[c(1:n, n, 1)], y = c(data_sp$prop_leaf_expand, 0, 0), col = "darkseagreen2", density = NA)
-  polygon(x = data_sp$age[c(1:n, n, 1)], y = c(data_sp$prop_repro, 0, 0), col = "coral3", density = NA)
-  
-  if (i %in% c(4,11)) {
-    mtext("Proportional allocation to all energy sinks", 2, line=2, outer=FALSE)
-  }
+  # plot(NA, log = "x", ylim = c(0, 1),  xlim = c(1.4, 32), xaxs = "i", yaxs = "i", axes= FALSE, ann=FALSE)
+  # box()
+  # axis(1, labels = (i %in% c(7,14)))
+  # axis(2, at = c(0, 0.2, 0.4, 0.6, 0.8, 1), labels = c(0,"","","","",1), las=1)
+  # 
+  # 
+  # polygon(x = data_sp$age[c(1:n, n, 1)], y = c(data_sp$prop_stem, 0, 0), col = "burlywood4", density = NA)
+  # polygon(x = data_sp$age[c(1:n, n, 1)], y = c(data_sp$prop_leaf_replacement, 0, 0), col = "darkseagreen4", density = NA)
+  # polygon(x = data_sp$age[c(1:n, n, 1)], y = c(data_sp$prop_leaf_expand, 0, 0), col = "darkseagreen2", density = NA)
+  # polygon(x = data_sp$age[c(1:n, n, 1)], y = c(data_sp$prop_repro, 0, 0), col = "coral3", density = NA)
+  # 
+  # if (i %in% c(4,11)) {
+  #   mtext("Proportional allocation to all energy sinks", 2, line=2, outer=FALSE)
+  # }
 }
 ```
 
@@ -176,14 +186,119 @@ for (i in seq_along(all_species)) {
   n <- length(data_sp$age)
   
 #panel 1
-  plot(NA, log = "xy", xlim = c(1,(max(data_sp_ind$all_leaf_inv)*1.1)),  ylim = c(1,(max(data_sp_ind$repro_inv)*1.1)), xaxs = "i", yaxs = "i", axes= FALSE, ann=FALSE)
-  box()
-  points(x = data_sp_ind$all_leaf_inv, y = data_sp_ind$repro_inv, col = "darkseagreen4", lwd=2,type="p",pch=1,cex=1.4)
+ plot(repro_inv ~ leaf_weight_0,data_sp_ind,log="xy",pch=16,xaxt="n")
+ points(repro_inv ~ growth_leaf_pos,data_sp_ind,log="xy",pch=16,xaxt="n",col="darkseagreen4")
+ points(repro_inv ~ all_leaf_inv,data_sp_ind,log="xy",pch=16,xaxt="n",col="darkseagreen2")
+ abline(0,1)
+ mtext(labels.spp.full(all_species[i]), 3, 0)
+ 
+ 
+ plot(ovule_count ~ leaf_weight_0,data_sp_ind,log="xy",pch=16,xaxt="n",col=col.age(age))
+ #points(leaf_weight_0 ~ ovule_count,data_sp_ind,log="xy",pch=1,xaxt="n",col=col.age(age))
+ #points(surplus_inv ~ leaf_weight_0,data_sp_ind,log="xy",pch=14,xaxt="n",col=col.age(age))
+ #points(repro_inv ~ growth_leaf_pos,data_sp_ind,log="xy",pch=16,xaxt="n",col="darkseagreen4")
+ #points(repro_inv ~ all_leaf_inv,data_sp_ind,log="xy",pch=16,xaxt="n",col="darkseagreen2")
+ abline(0,1)
+ mtext(labels.spp.full(all_species[i]), 3, 0)
   
 #panel 2
-  plot(NA, log = "xy", xlim = c(1,(max(data_sp_ind$growth_leaf_pos)*1.1)),  ylim = c(1,(max(data_sp_ind$repro_inv)*1.1)), xaxs = "i", yaxs = "i", axes= FALSE, ann=FALSE)
-  box()
-  points(x = data_sp_ind$growth_leaf_pos, y = data_sp_ind$repro_inv, col = "darkseagreen4", lwd=2,type="p",pch=1,cex=1.4)
- 
+ #  plot(all_leaf_and_repro_inv ~ leaf_weight_0,data_sp_ind,log="xy",pch=16,xaxt="n")
+ # points(surplus_inv ~ total_weight_0,data_sp_ind,log="xy",pch=16,xaxt="n",col="darkseagreen2")
+ # abline(0,1)
+ # mtext(labels.spp.full(all_species[i]), 3, 0)
+   
 }
 ```
+
+
+```{r}
+yvar <- "repro_inv"
+xvar <- "leaf_weight_0"
+data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+
+fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy",slope.test=1)
+results <- fit$groupsummary
+results$r2 <- format(results$r2,digits=2)
+results$pval <- format(results$pval,digits=3)
+acc_slopes <- dplyr::select(results,group,n,r2,pval)
+names(acc_slopes) <- c("species","n_leaf_weight","r2_leaf_weight","p_leaf_weight")
+
+yvar <- "repro_inv"
+xvar <- "growth_leaf_pos"
+data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+
+fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA",  log="xy",slope.test=1)
+results <- fit$groupsummary
+results$r2 <- format(results$r2,digits=2)
+results$pval <- format(results$pval,digits=3)
+acc_slopes2 <- dplyr::select(results,group,n,r2,pval)
+names(acc_slopes2) <- c("species","n_growth_leaf","r2_growth_leaf","p_growth_leaf")
+acc_slopes <- dplyr::left_join(acc_slopes, acc_slopes2, by ="species")
+
+yvar <- "repro_inv"
+xvar <- "all_leaf_inv"
+data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+
+fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA",  log="xy",slope.test=1)
+results <- fit$groupsummary
+results$r2 <- format(results$r2,digits=2)
+results$pval <- format(results$pval,digits=3)
+acc_slopes2 <- dplyr::select(results,group,n,r2,pval)
+names(acc_slopes2) <- c("species","n_all_leaf_inv","r2_all_leaf_inv","p_all_leaf_inv")
+acc_slopes <- dplyr::left_join(acc_slopes, acc_slopes2, by ="species")
+
+
+acc_slopes$species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia", "Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile pulchella", "Phyllota phylicoides", "Pimelea linifolia", "Pultenaea tuberculata")
+
+write.csv(acc_slopes, file="ms/RA/Table_XX_best_predictor_repro_inv.csv",row.names=FALSE)
+```
+
+```{r}
+yvar <- "surplus_inv"
+xvar <- "leaf_weight_0"
+data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+
+fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy",slope.test=1)
+results <- fit$groupsummary
+results$r2 <- format(results$r2,digits=2)
+results$pval <- format(results$pval,digits=3)
+acc_slopes <- dplyr::select(results,group,n,r2,pval)
+names(acc_slopes) <- c("species","n_lsurplus","r2_surplus","p_surplus")
+
+yvar <- "all_leaf_and_repro_inv"
+xvar <- "leaf_weight_0"
+data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+
+fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA",  log="xy",slope.test=1)
+results <- fit$groupsummary
+results$r2 <- format(results$r2,digits=2)
+results$pval <- format(results$pval,digits=3)
+acc_slopes2 <- dplyr::select(results,group,n,r2,pval)
+names(acc_slopes2) <- c("species","n_leaf_and_repro","r2_leaf_and_repro","p_leaf_and_repro")
+acc_slopes <- dplyr::left_join(acc_slopes, acc_slopes2, by ="species")
+
+yvar <- "all_leaf_inv"
+xvar <- "leaf_weight_0"
+data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+
+fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA",  log="xy",slope.test=1)
+results <- fit$groupsummary
+results$r2 <- format(results$r2,digits=2)
+results$pval <- format(results$pval,digits=3)
+acc_slopes2 <- dplyr::select(results,group,n,r2,pval)
+names(acc_slopes2) <- c("species","n_all_leaf_inv","r2_all_leaf_inv","p_all_leaf_inv")
+acc_slopes <- dplyr::left_join(acc_slopes, acc_slopes2, by ="species")
+
+
+acc_slopes$species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia", "Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile pulchella", "Phyllota phylicoides", "Pimelea linifolia", "Pultenaea tuberculata")
+
+write.csv(acc_slopes, file="ms/RA/Table_XX_best_predictor_leaf_weight.csv",row.names=FALSE)
+```
+
+yvar <- "ovule_count"
+xvar <- "leaf_weight_0"
+data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+
+fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA",  log="xy",slope.test=1)
+results <- fit$groupsummary
+results

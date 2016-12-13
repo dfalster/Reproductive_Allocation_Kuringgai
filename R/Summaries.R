@@ -357,7 +357,10 @@ scale_individual_variable <- function(SummaryInd, SummarySpp) {
         scaled_growth_stem_diameter = growth_stem_diameter / get_species_value("mean", "growth_stem_diameter"),
         scaled_growth_shoot_diameter = growth_shoot_diameter / get_species_value("mean", "growth_shoot_diameter"),
         growth_leaf_min = get_species_value("min","growth_leaf"),
-        ratio_leaf_growth = log10(leaf_area) - log10(leaf_area_0)
+        ratio_leaf_growth = log10(leaf_area) - log10(leaf_area_0),
+        leaf_lifespan_mean = get_species_value("mean","LL_death"),
+        leaf_shed_mean = leaf_weight_0 / leaf_lifespan_mean,
+        leaf_replacement_mean = leaf_shed_mean + growth_leaf_neg
       )
       
 }
