@@ -562,51 +562,7 @@ extra.top.left.logxy("b",2,1.2)
 dev.off()
 ```
 
-#Supplementary Table. Higher RE, RA, plant size do not lead to lower accessory costs; age shows mixed results
-```{r}
-png("ms/Accessory/output/Figure_SXX_RE_RA_size_age_patterns.png", height=10, width=10, units="in", res=300)
 
-par(mfrow=c(2,2), cex=1, omi=c(.1,.4,.1,.05), mai=c(.6,.3,.1,.1))
-options(scipen = 2)
-
-xvar <- "repro_inv"
-yvar <- "accessory_costs"
-data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
-
-fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
-results <- lines(fit$groupsummary)
-plot(fit,col=col.spp(fit$groupsummary$group),pch=16,xlab="",ylab=yvar,lty=results$linetype)
-mtext(text="reproductive investment (mg) (RE)",side=1,line=2,outer=FALSE)
-legend_with_r2(results,"bottomright")
-
-write.csv(results, file="ms/Accessory/output/Table05a_accessory_vs_all_repro.csv",row.names=FALSE)
- 
-xvar <- "total_weight_0"
-yvar <- "accessory_costs"
-data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
-
-fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
-results <- lines(fit$groupsummary)
-plot(fit,col=col.spp(fit$groupsummary$group),pch=16,xlab="",ylab=yvar,lty=results$linetype)
-mtext(text="total plant size (mg)",side=1,line=2,outer=FALSE)
-legend_with_r2(results,"bottomright")
-
-write.csv(results, file="ms/Accessory/output/Table05b_accessory_vs_total_weight.csv",row.names=FALSE)
-
-xvar <- "age"
-yvar <- "accessory_costs"
-data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
-
-fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
-results <- lines(fit$groupsummary)
-plot(fit,col=col.spp(fit$groupsummary$group),pch=16,xlab="",ylab="",lty=results$linetype)
-mtext(text="age (years)",side=1,line=2,outer=FALSE)
-mtext(text="per seed accessory costs (mg/seed)",side=2,line=1,outer=TRUE)
-legend_with_r2(results,"topleft")
-
-write.csv(results, file="ms/Accessory/output/Table05c_accessory_vs_age.csv",row.names=FALSE)
-dev.off()
-```
 
 #Table S1.correlations between repro inv and flower inv by species (noted in Discussiong)
 ```{r}

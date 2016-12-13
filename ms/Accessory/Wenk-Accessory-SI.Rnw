@@ -370,7 +370,64 @@ Details on parts for \emph{Pultenaea tuberculata} found in Table \ref{tab:parts_
 \end{figure}
 
 \clearpage
-  
+
+\clearpage
+
+<<echo=FALSE,results='asis'>>=
+headers <- as.data.frame(matrix(vector(), 3,4,
+                dimnames=list(c(), c("A","B","C","D"))),
+                stringsAsFactors=F)
+headers[1,] <- c("","Proportion","Proportion","Proportion")
+headers[2,] <- c("","pollen-attraction","provisioning","success")
+headers[3,] <- c("","investment to","investment to","investment to")
+
+print(xtable(headers,
+             hline.after=c(-1),
+             align='p{0.1cm}p{11.5cm}|p{3cm}|p{3cm}|p{3cm}'),
+        sanitize.text.function=I,
+        , table.placement = "H"
+        , caption.placement = "top"
+        , include.rownames = FALSE
+        , include.colnames = FALSE
+        , size = "small"
+        , floating = FALSE)             
+@ 
+
+<<echo=FALSE, results='asis', warning=FALSE>>=
+
+make_table_species_values_for_allocation_seedsize_table <- function(file) {
+  data <- select(file,species,embryo_endo_costs, scaled_seed_count,scaled_ovule_count,
+                 scaled_pollen_attract_costs,choosiness2,prop_prepollen_success, prop_prepollen_discarded,
+                 prop_postpollen_success,prop_postpollen_discarded, prop_pollen_attract_vs_success,prop_provisioning_vs_success)
+  data$species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia", "Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile pulchella", "Phyllota phylicoides", "Pimelea linifolia", "Pultenaea tuberculata")
+  data
+}
+
+TableS2 <- make_table_species_values_for_allocation_seedsize_table(SummarySpp[["mean"]])
+
+names(TableS2) <- c("species","embryo and endosperm costs","scaled seed count","scaled ovule count","scaled pollen-attraction costs","choosiness","to success","to discarded","to success","to discarded","to pollen-attraction","to provisioning")
+
+for (i in 2:12) {
+TableS2[,i] <- format(TableS2[,i],digits=3,nsmall=2)
+}
+
+TableS2$species  <- paste("\\textit{",unique(TableS2$species),"}", sep="")
+
+print(xtable(TableS2,
+               hline.after=c(1),
+               align='p{0.1cm}p{4cm}|p{1.5cm}|p{1.5cm}p{1.5cm}|p{1.5cm}p{1.5cm}|p{1.5cm}p{1.5cm}|p{1.5cm}p{1.5cm}|p{1.5cm}p{1.5cm}',
+               caption="Species values for data plotted in Figure 2",
+               sanitize.text.function=I,
+        , table.placement = "H"
+        , caption.placement = "top"
+        , include.rownames = FALSE
+        , include.colnames = TRUE
+        , size = "small"
+        , floating = FALSE))
+@
+Table S2. Species values for data plotted in Figure 2, shifts in reproductive tissue allocation with seed size.
+
+
 <<echo=FALSE,results='asis'>>=
 headers <- as.data.frame(matrix(vector(), 3, 3,
                 dimnames=list(c(), c("A","B","C"))),
@@ -391,7 +448,7 @@ print(xtable(headers,
         , floating = FALSE)             
 @    
    
-       
+
 <<echo=FALSE, results='asis', warning=FALSE>>=
 
 make_table_propagule_invest_vs_all_repropro_inv <- function(SummaryInd) {
@@ -420,19 +477,19 @@ make_table_propagule_invest_vs_all_repropro_inv <- function(SummaryInd) {
   acc_slopes
 }
 
-TableSXX <- make_table_propagule_invest_vs_all_repropro_inv(SummaryInd)
+TableS3 <- make_table_propagule_invest_vs_all_repropro_inv(SummaryInd)
 
-names(TableSXX) <- c("species","n","r$^2$","p", "n","r$^2$","p")
-TableSXX[,2] <- format(TableSXX[,2],digits=2,nsmall=2)
-TableSXX[,3] <- format(TableSXX[,3],digits=2,nsmall=2)
-TableSXX[,6] <- format(TableSXX[,6],digits=2,nsmall=2)
-TableSXX[,5] <- format(TableSXX[,5],digits=2,nsmall=2)
-TableSXX[,4] <- format_p(TableSXX[,4])
-TableSXX[,7] <- format_p(TableSXX[,7])
+names(TableS3) <- c("species","n","r$^2$","p", "n","r$^2$","p")
+TableS3[,2] <- format(TableS3[,2],digits=2,nsmall=2)
+TableS3[,3] <- format(TableS3[,3],digits=2,nsmall=2)
+TableS3[,6] <- format(TableS3[,6],digits=2,nsmall=2)
+TableS3[,5] <- format(TableS3[,5],digits=2,nsmall=2)
+TableS3[,4] <- format_p(TableS3[,4])
+TableS3[,7] <- format_p(TableS3[,7])
 
-TableSXX$species  <- paste("\\textit{",unique(TableSXX$species),"}", sep="")
+TableS3$species  <- paste("\\textit{",unique(TableS3$species),"}", sep="")
 
-print(xtable(TableSXX,
+print(xtable(TableS3,
                hline.after=c(1),
                align='p{0.1cm}p{4cm}|p{.94cm}p{1cm}p{1.5cm}|p{.75cm}p{1cm}p{1.5cm}',
                caption="Intraspecific correlations between reproductive investment and (a) propagule investment and (b) flower investment"),
@@ -445,8 +502,50 @@ print(xtable(TableSXX,
         , floating = FALSE)
 @
 
-Table SXX.Intraspecific correlations between total reproductive investment and (a) propagule investment and (b) flower investment, where flower investment is defined as "flower weight (mg) * bud count".
+Table S3.Intraspecific correlations between total reproductive investment and (a) propagule investment and (b) flower investment, where flower investment is defined as "flower weight (mg) * bud count".
 
+
+\clearpage
+#Supplementary Table. Higher RE, RA, plant size do not lead to lower accessory costs; age shows mixed results
+```{r}
+xvar <- "repro_inv"
+yvar <- "accessory_costs"
+data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+
+fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
+results <- lines(fit$groupsummary)
+plot(fit,col=col.spp(fit$groupsummary$group),pch=16,xlab="",ylab=yvar,lty=results$linetype)
+mtext(text="reproductive investment (mg) (RE)",side=1,line=2,outer=FALSE)
+legend_with_r2(results,"bottomright")
+
+
+ 
+xvar <- "total_weight_0"
+yvar <- "accessory_costs"
+data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+
+fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
+results <- lines(fit$groupsummary)
+plot(fit,col=col.spp(fit$groupsummary$group),pch=16,xlab="",ylab=yvar,lty=results$linetype)
+mtext(text="total plant size (mg)",side=1,line=2,outer=FALSE)
+legend_with_r2(results,"bottomright")
+
+
+
+xvar <- "age"
+yvar <- "accessory_costs"
+data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+
+fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
+results <- lines(fit$groupsummary)
+plot(fit,col=col.spp(fit$groupsummary$group),pch=16,xlab="",ylab="",lty=results$linetype)
+mtext(text="age (years)",side=1,line=2,outer=FALSE)
+mtext(text="per seed accessory costs (mg/seed)",side=2,line=1,outer=TRUE)
+legend_with_r2(results,"topleft")
+```
+
+
+Table S4. Shifts in accessory costs with shifts in age, plant size, or reproductive effort. 
 \clearpage
 
 \addcontentsline{toc}{section}{References}
