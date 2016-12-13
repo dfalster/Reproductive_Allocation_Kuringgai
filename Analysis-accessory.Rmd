@@ -385,6 +385,7 @@ png("ms/Accessory/output/Figure02.png", height=9, width=6, units="in", res=300)
 par(mfrow=c(3,2), cex=1, omi=c(.1,.1,.05,.05), mai=c(.7,.8,.05,.05)) 
 options(scipen = 5)
 
+
 #panel a
 plot(scaled_seed_count~repro_costs,SummarySpp[["mean"]],pch=16,log="xy",col=venetian_red,xlim=c(.01,5000),ylim=c(5e-4,500),yaxt="n",xaxt="n",ylab="",xlab="",cex=1)
 points(scaled_reach_flowering_count~pollen_attract_costs,SummarySpp[["mean"]],pch=16,col=cerulean,cex=1)
@@ -395,7 +396,6 @@ mtext("costs to make a successful unit",1,line=1.8,cex=0.7)
 mtext("count, scaled to leaf area",2,line=2.3,cex=0.7)
 
 mod_seed <- sma(scaled_seed_count~repro_costs,data=SummarySpp[["mean"]],log="xy",slope=-1,method="SMA")
-mod_ovule2 <- sma(scaled_ovule_count~pollen_attract_costs,data=SummarySpp[["mean"]],log="xy",method="SMA",slope.test=mod_seed$groupsummary["Slope"][[1]],elev.test=mod_seed$coef[[1]][1,1])
 mod_ovule <- sma(scaled_reach_flowering_count~pollen_attract_costs,data=SummarySpp[["mean"]],log="xy",method="SMA",slope.test=mod_seed$groupsummary["Slope"][[1]],elev.test=mod_seed$coef[[1]][1,1])
 
 line_function_log_xy(SummarySpp[["mean"]]$repro_costs,mod_seed,1,col=venetian_red)
@@ -404,13 +404,12 @@ legend("bottomleft",legend=c("seed count by reproductive costs","mature ovules c
 extra.top.left.logxy("a",2,1)
 
 #panel b
-#plot(choosiness~prop_pollen_attract_vs_all_repro_all_repro,SummarySpp[["mean"]],log="xy",col=cerulean,pch=16,xlim=c(0.002,.5),ylim=c(3,800),xaxt="n",yaxt="n",cex=1,ylab="",xlab="")
 plot(choosiness2~scaled_pollen_attract_costs,SummarySpp[["mean"]],log="xy",col=cerulean,pch=16,xlim=c(.002,.3),ylim=c(3,800),yaxt="n",cex=1,ylab="",xlab="",xaxt="n")
 axis(2, at=c(10,100,1000), labels=c(10,100,1000),cex.axis=0.8,las=2)
 axis(1, at=c(0.01,0.1), labels=c(0.01,0.1),cex.axis=0.8)
 mtext("pollen-attractions costs, scaled to leaf area",1,line=1.7,cex=0.7)
 mtext("choosiness (ovules:seed)",2,line=2.3,cex=0.7)
-mod_choosy <- sma(choosiness2~scaled_pollen_attract_costs,data=subset(SummarySpp[["mean"]]),log="xy",slope=-1,method="SMA")
+#mod_choosy <- sma(choosiness2~scaled_pollen_attract_costs,data=subset(SummarySpp[["mean"]]),log="xy",slope=-1,method="SMA")
 mod_choosy2 <- sma(choosiness2~scaled_pollen_attract_costs,data=subset(SummarySpp[["mean"]],species!="EPMI"),log="xy",slope=-1,method="SMA")
 line_function_log_xy(SummarySpp[["mean"]]$scaled_pollen_attract_costs,mod_choosy2,1,col=cerulean)
 extra.top.left.logxy("b",2,1)
@@ -418,8 +417,6 @@ extra.top.left.logxy("b",2,1)
 #panel c - success proportions
 plot(prop_prepollen_success~embryo_endo_costs,SummarySpp[["mean"]],pch=16,log="x",col=cerulean,ylim=c(-.1,1.1),xlim=c(.01,100),xlab="",ylab="",xaxt="n",yaxt="n")
 points(prop_prepollen_discarded~embryo_endo_costs,SummarySpp[["mean"]],pch=16,col=venetian_red)
-#arrows(SummarySpp[["mean"]]$embryo_endo_costs,SummarySpp[["mean"]]$prop_prepollen_success-SummarySpp[["se"]]$prop_prepollen_success,SummarySpp[["mean"]]$embryo_endo_costs,SummarySpp[["mean"]]$prop_prepollen_success+SummarySpp[["se"]]$prop_prepollen_success,code=3,angle=90, length=0.1,col=cerulean)
-#arrows(SummarySpp[["mean"]]$embryo_endo_costs,SummarySpp[["mean"]]$prop_prepollen_discarded-SummarySpp[["se"]]$prop_prepollen_discarded,SummarySpp[["mean"]]$embryo_endo_costs,SummarySpp[["mean"]]$prop_prepollen_discarded+SummarySpp[["se"]]$prop_prepollen_discarded,code=3,angle=90, length=0.1,col=venetian_red)
 extra.top.left.logx("c",2,1)
 axis(2, at=c(0,.2,.4,.6,.8,1), labels=c(0,0.2,0.4,0.6,0.8,1),cex.axis=0.8,las=2)
 axis(1, at=c(0.01,1,100), labels=c(0.01,1,100),cex.axis=0.8)
@@ -453,7 +450,6 @@ line_function_log_x(SummarySpp[["mean"]]$embryo_endo_costs,mod_prop_postpollen_d
 plot(prop_pollen_attract_vs_success~embryo_endo_costs,SummarySpp[["mean"]],pch=16,log="x",col=cerulean,
      ylim=c(-0.1,1.1),xlim=c(.01,100),xlab="",ylab="",xaxt="n",yaxt="n")
 points(prop_provisioning_vs_success~embryo_endo_costs,SummarySpp[["mean"]],pch=16,col=venetian_red)
-#arrows(SummarySpp[["mean"]]$embryo_endo_costs,SummarySpp[["mean"]]$prop_pollen_attract_vs_success-SummarySpp[["se"]]$prop_pollen_attract_vs_success,SummarySpp[["mean"]]$embryo_endo_costs,SummarySpp[["mean"]]$prop_pollen_attract_vs_success+SummarySpp[["se"]]$prop_pollen_attract_vs_success,code=3,angle=90, length=0.1,col=cerulean)
 extra.top.left.logx("e",2,1)
 axis(2, at=c(0,.2,.4,.6,.8,1), labels=c(0,0.2,0.4,0.6,0.8,1),cex.axis=0.8,las=2)
 axis(1, at=c(0.01,1,100), labels=c(0.01,1,100),cex.axis=0.8)
