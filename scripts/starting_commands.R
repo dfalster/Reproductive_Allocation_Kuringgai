@@ -9,7 +9,6 @@ PartsSummary <- readRDS("export/PartsSummary_all.rds")
 
 library(digest)
 library(Rcpp)
-library(cmnormt)
 library(reshape2)
 library(tibble)
 library(smatr)
