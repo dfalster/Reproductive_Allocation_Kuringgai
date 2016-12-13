@@ -36,7 +36,7 @@ library(xtable)
 library(knitr)
 opts_chunk$set(echo=FALSE, fig.pos = "!h", fig.align="center", comment = NA)
 
-flowering_parts <- read.csv("ms/Accessory/Sup_Table_flowering_parts.csv", stringsAsFactors=FALSE, check.names=FALSE)
+flowering_parts <- read.csv("Sup_Table_flowering_parts.csv", stringsAsFactors=FALSE, check.names=FALSE)
 
 flowering_parts$method <- gsub("_", " ", flowering_parts$method, fixed=TRUE)
 
@@ -60,9 +60,8 @@ print_table_species <- function(species, data) {
 
 plot_graph <- function(graph) {
 
-  #plot(graph)
-  plot(NA, type="n", xlim=c(0,1), ylim=c(0,1), ann=FALSE, axes=FALSE)
-  box()
+  plot(graph)
+  #plot(NA, type="n", xlim=c(0,1), ylim=c(0,1), ann=FALSE, axes=FALSE); box()
 }
 @
 
@@ -393,109 +392,50 @@ print(xtable(headers,
 @    
    
        
-<<echo=FALSE,results='asis'>>=
-TableSXX <- read.csv("Table_SXX_propagule_invest_vs_repro_inv.csv",
-                    stringsAsFactors=FALSE, check.names=FALSE)
+<<echo=FALSE, results='asis', warning=FALSE>>=
 
-names(TableSXX) <- c("species","n","r$^2$","p", "n","r$^2$","p")
-TableSXX[,2] <- format(TableSXX[,2],digits=2,nsmall=2)
-TableSXX[,5] <- format(TableSXX[,5],digits=2,nsmall=2)
-TableSXX[,4] <- format_p(TableSXX[,4])
-TableSXX[,7] <- format_p(TableSXX[,7])
+make_table_propagule_invest_vs_all_repropro_inv <- function(SummaryInd) {
+  mod_propagule_inv_all <- sma(repro_inv~propagule_inv,data=SummaryInd,log="xy",method="SMA")
+  mod_flower_inv_all <- sma(repro_inv~flower_inv,data=SummaryInd,log="xy",method="SMA")
 
-TableSXX$species  <- paste("\\textit{",unique(TableSXX$species),"}", sep="")
+  yvar <- "repro_inv"
+  xvar <- "propagule_inv"
+  data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
 
-print(xtable(TableSXX,
-               hline.after=c(1),
-               align='p{0.1cm}p{4cm}|p{.94cm}p{1cm}p{1.5cm}|p{.75cm}p{1cm}p{1.5cm}',
-               caption="Intraspecific correlations between reproductive investment and (a) propagule investment and (b) flower investment"),
-               sanitize.text.function=I,
-        , table.placement = "H"
-        , caption.placement = "top"
-        , include.rownames = FALSE
-        , include.colnames = TRUE
-        , size = "small"
-        , floating = FALSE)
-@
+  fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy",slope.test=mod_propagule_inv_all$groupsummary["Slope"][[1]],elev.test=mod_propagule_inv_all$coef[[1]][1,1])
+  results <- fit$groupsummary
+  acc_slopes <- dplyr::select(results,group,n,r2,pval)
+  names(acc_slopes) <- c("species","n_propagule","r2_propagule","p_propagule")
 
-Table SXX.Intraspecific correlations between total reproductive investment and (a) propagule investment and (b) flower investment, where flower investment is defined as "flower weight (mg) * bud count".
+  yvar <- "repro_inv"
+  xvar <- "flower_inv"
+  data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
 
-\clearpage
-
-<<echo=FALSE,results='asis'>>=
-TableSXX <- read.csv("Table_SXX_propagule_invest_vs_repro_inv.csv",
-                    stringsAsFactors=FALSE, check.names=FALSE)
-
-names(TableSXX) <- c("species","n","r$^2$","p", "n","r$^2$","p")
-TableSXX[,2] <- format(TableSXX[,2],digits=2,nsmall=2)
-TableSXX[,5] <- format(TableSXX[,5],digits=2,nsmall=2)
-TableSXX[,4] <- format_p(TableSXX[,4])
-TableSXX[,7] <- format_p(TableSXX[,7])
-
-TableSXX$species  <- paste("\\textit{",unique(TableSXX$species),"}", sep="")
-
-print(xtable(TableSXX,
-               hline.after=c(1),
-               align='p{0.1cm}p{4cm}|p{.94cm}p{1cm}p{1.5cm}|p{.75cm}p{1cm}p{1.5cm}',
-               caption="Intraspecific correlations between reproductive investment and (a) propagule investment and (b) flower investment"),
-               sanitize.text.function=I,
-        , table.placement = "H"
-        , caption.placement = "top"
-        , include.rownames = FALSE
-        , include.colnames = TRUE
-        , size = "small"
-        , floating = FALSE)
-@
-
-Table SXX.Intraspecific correlations between total reproductive investment and (a) propagule investment and (b) flower investment, where flower investment is defined as "flower weight (mg) * bud count".
-
-\clearpage
-
-<<echo=FALSE,results='asis'>>=
-Table02 <- read.csv("Table02_acc_cost_embryo_size_slopes.csv",
-                    stringsAsFactors=FALSE, check.names=FALSE)
-
-names(Table02) <- c("Variable", "r$^2$", "slope (95 CI)","p$_{slope<>1}$")
-Table02[,2] <- format(Table02[,2],digits=2,nsmall=2)
-Table02[,4] <- format(Table02[,4],digits=4,nsmall=4)
-
-print(xtable(Table02,
-               hline.after=c(1),
-               align='p{0.1cm}p{4cm}p{1cm}p{3cm}p{1cm}',
-               caption="Correlations with total reproductive investment"),
-               sanitize.text.function=I,
-        , table.placement = "H"
-        , caption.placement = "top"
-        , include.rownames = FALSE
-        , include.colnames = TRUE
-        , size = "small"
-        , floating = FALSE)
-@
-
-Table 2. Scaling of reproductive tissue costs with seed size. All variables were showed a strong correlation with seed size (p < 0.0001). Tables show properties of SMA line fits, between different variables and seed size. 
-\clearpage
-
-
-<<echo=FALSE,results='asis'>>=
-Table03 <- read.csv("Table03_correlations_with_repro_inv.csv",
-                    stringsAsFactors=FALSE, check.names=FALSE)
-format_p <- function(p, digits = 4) {
-  x <- as.character(round(p, digits = digits))
-  pc <- 10^-digits
-  x[p < pc] <- paste("<", pc)
-  x
+  fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA",  log="xy",slope.test=mod_flower_inv_all$groupsummary["Slope"][[1]],elev.test=mod_flower_inv_all$coef[[1]][1,1])
+  results <- fit$groupsummary
+  acc_slopes2 <- dplyr::select(results,group,n,r2,pval)
+  names(acc_slopes2) <- c("species","n_flower","r2_flower","p_flower")
+  acc_slopes <- dplyr::left_join(acc_slopes, acc_slopes2, by ="species")
+  acc_slopes$species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia", "Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile pulchella", "Phyllota phylicoides", "Pimelea linifolia", "Pultenaea tuberculata")
+  acc_slopes
 }
 
-Table03$pval <- format_p(Table03$pval)
-Table03$variable <- c("Total plant weight (mg)","Propagule investment (mg)","Fruit investment (mg)","Flower investment (mg)",
-                      "Successful investment (mg)", "Successful pre-pollination investment (mg)","Provisioning investment (mg)",
-                      "Failed tissues (mg)")
-names(Table03) <- c("Variable", "n", "r$^2$", "p")
-print(xtable(Table03,
+TableSXX <- make_table_propagule_invest_vs_all_repropro_inv(SummaryInd)
+
+names(TableSXX) <- c("species","n","r$^2$","p", "n","r$^2$","p")
+TableSXX[,2] <- format(TableSXX[,2],digits=2,nsmall=2)
+TableSXX[,3] <- format(TableSXX[,3],digits=2,nsmall=2)
+TableSXX[,6] <- format(TableSXX[,6],digits=2,nsmall=2)
+TableSXX[,5] <- format(TableSXX[,5],digits=2,nsmall=2)
+TableSXX[,4] <- format_p(TableSXX[,4])
+TableSXX[,7] <- format_p(TableSXX[,7])
+
+TableSXX$species  <- paste("\\textit{",unique(TableSXX$species),"}", sep="")
+
+print(xtable(TableSXX,
                hline.after=c(1),
-               align='p{0.1cm}p{6.5cm}p{1cm}p{1cm}p{1.5cm}',
-               caption="Correlations with total reproductive investment",
-             digits = 2),
+               align='p{0.1cm}p{4cm}|p{.94cm}p{1cm}p{1.5cm}|p{.75cm}p{1cm}p{1.5cm}',
+               caption="Intraspecific correlations between reproductive investment and (a) propagule investment and (b) flower investment"),
                sanitize.text.function=I,
         , table.placement = "H"
         , caption.placement = "top"
@@ -505,10 +445,7 @@ print(xtable(Table03,
         , floating = FALSE)
 @
 
-Table 3. Correlation of different estimates of reproductive investment (and total plant weight) against total reproductive investment (mg). Regressions are done across all individuals of all 14 study species for which both reproductive investment and the estimate variable are greater than zero. The total cost of failed tissues or simply the energy expenditure into flowers provides the best approximation of total reproductive investment. Flower investment is a composite variable calculated as flower weight (mg)*bud count. Successful investment is a composite variable calculated as seed costs (mg)*seed count.
-
-\clearpage
-
+Table SXX.Intraspecific correlations between total reproductive investment and (a) propagule investment and (b) flower investment, where flower investment is defined as "flower weight (mg) * bud count".
 
 \clearpage
 

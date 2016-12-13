@@ -15,7 +15,10 @@ CarbonInvestments.pdf
 CarbonInvestments.tex
 ms/Accessory/ms-supp.tex
 ms/Accessory/ms-supp.pdf
+ms/Accessory/Wenk-Accessory-SI.tex
+ms/Accessory/Wenk-Accessory-SI.pdf
 ms/Accessory/figure/
+ms/Accessory/output/
 results.md
 *.whisker
 ./bootstrap

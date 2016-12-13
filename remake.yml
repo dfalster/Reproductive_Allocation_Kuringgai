@@ -13,7 +13,6 @@ packages:
   - yaml
   - mgcv
   - knitr
-  - callr
 
 sources:
   - R
@@ -49,10 +48,10 @@ targets:
   # Papers --------------------------------------
 
 
-  ms/Accessory/ms-supp.pdf:
-    command: latex_build("ms/Accessory/ms-supp.tex", bibliography="ms/Accessory/references.bib", clean=TRUE)
+  ms/Accessory/Wenk-Accessory-SI.pdf:
+    command: latex_build("ms/Accessory/Wenk-Accessory-SI.tex", bibliography="ms/Accessory/references.bib", clean=TRUE)
 
-  ms/Accessory/ms-supp.tex:
+  ms/Accessory/Wenk-Accessory-SI.tex:
     knitr:
       auto_figure_prefix: true
       chdir: true
