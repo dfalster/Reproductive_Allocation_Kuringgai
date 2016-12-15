@@ -8,11 +8,17 @@
 \usepackage[rgb,dvipsnames]{xcolor}
 \definecolor{grey}{rgb}{0.5, 0.5, 0.5}
 
+% Enable new column type -- centered with fixed
+% Following http://texblog.org/2008/05/07/fwd-equal-cell-width-right-and-centre-aligned-content/
+\usepackage{array}
+\newcolumntype{x}[1]{%
+>{\raggedleft}p{#1}}%
+
 \newcommand{\smurl}[1]{\url{#1}}
 \newcommand{\email}[1]{\href{mailto:#1}{\texttt{#1}}}
 
-\title{Accessories dominate the costs of producing seed}
-\runninghead{C\lowercase{osts of producing seed}}
+\title{Coordinated shifts in allocation among reproductive tissues across 14 coexisting plant species}
+\runninghead{S\lowercase{hifts in allocation among reproductive tissues}}
 
 \author{E. H. Wenk\textsuperscript{1,\textasteriskcentered}, K. Abramowicz\textsuperscript{2}, M. Westoby\textsuperscript{1}, D.S. Falster\textsuperscript{1} }
 \affiliation{\textsuperscript{1} Biological Sciences, Macquarie University NSW 2109, Australia \\
@@ -23,7 +29,8 @@
 \usepackage[authoryear,sectionbib,sort]{natbib}
 \bibliographystyle{amnat2}
 
-\pdfminorversion=4 % tell pdflatex to generate PDF in version 1.4
+\pdfminorversion=4
+% tell pdflatex to generate PDF in version 1.4
 % Needed for problem-free conversion on manuscript central (arrgh)
 % http://timotheepoisot.fr/2013/06/24/manuscript-central-pdf-fix/
 
@@ -68,7 +75,7 @@ plot_graph <- function(graph) {
 
 \begin{document}
 
-%\maketitle
+\maketitle
 
 \tableofcontents
 
@@ -78,7 +85,7 @@ plot_graph <- function(graph) {
 
 \clearpage
 
-\section{A -- Methods for estimating Reproductive allocation}
+\section{A -- Methods for estimating reproductive allocation}
 
 All computations implemented in \textsc{r} \citep{R-2015}.
 
@@ -109,15 +116,15 @@ Details on parts for \emph{Boronia ledifolia} found in Table \ref{tab:parts_Boro
 
 
 <<echo=FALSE,results='asis'>>=
-  print_table_species("Boronia ledifolia", flowering_parts)
+print_table_species("Boronia ledifolia", flowering_parts)
 @
-  
-  \begin{figure}
+
+\begin{figure}
 \centering
 <<echo=FALSE,results='asis'>>=
   plot_graph(BOLE_GraphMaps$graph)
 @
-  \caption{Map of parts for \emph{Boronia ledifolia}}
+\caption{Map of parts for \emph{Boronia ledifolia}}
 \label{fig:map Boronia ledifolia}
 \end{figure}
 
@@ -130,16 +137,16 @@ Details on parts for \emph{Conospermum ericifolium} found in Table \ref{tab:part
 
 
 <<echo=FALSE,results='asis'>>=
-  print_table_species("Conospermum ericifolium", flowering_parts)
+print_table_species("Conospermum ericifolium", flowering_parts)
 @
-  
-  
-  \begin{figure}
+
+
+\begin{figure}
 \centering
 <<echo=FALSE,results='asis'>>=
   plot_graph(COER_GraphMaps$graph)
 @
-  \caption{Map of parts for \emph{Conospermum ericifolium}}
+\caption{Map of parts for \emph{Conospermum ericifolium}}
 \label{fig:map Conospermum ericifolium}
 \end{figure}
 
@@ -152,15 +159,15 @@ Details on parts for \emph{Epacris microphylla} found in Table \ref{tab:parts_Ep
 
 
 <<echo=FALSE,results='asis'>>=
-  print_table_species("Epacris microphylla", flowering_parts)
+print_table_species("Epacris microphylla", flowering_parts)
 @
-  
-  \begin{figure}
+
+\begin{figure}
 \centering
 <<echo=FALSE,results='asis'>>=
   plot_graph(EPMI_GraphMaps$graph)
 @
-  \caption{Map of parts for \emph{Epacris microphylla}}
+\caption{Map of parts for \emph{Epacris microphylla}}
 \label{fig:map Epacris microphylla}
 \end{figure}
 
@@ -173,15 +180,15 @@ Details on parts for \emph{Grevillea buxifolia} found in Table \ref{tab:parts_Gr
 
 
 <<echo=FALSE,results='asis'>>=
-  print_table_species("Grevillea buxifolia", flowering_parts)
+print_table_species("Grevillea buxifolia", flowering_parts)
 @
-  
-  \begin{figure}
+
+\begin{figure}
 \centering
 <<echo=FALSE,results='asis'>>=
   plot_graph(GRBU_GraphMaps$graph)
 @
-  \caption{Map of parts for \emph{Grevillea buxifolia}}
+\caption{Map of parts for \emph{Grevillea buxifolia}}
 \label{fig:map Grevillea buxifolia}
 \end{figure}
 
@@ -194,15 +201,15 @@ Details on parts for \emph{Grevillea speciosa} found in Table \ref{tab:parts_Gre
 
 
 <<echo=FALSE,results='asis'>>=
-  print_table_species("Grevillea speciosa", flowering_parts)
+print_table_species("Grevillea speciosa", flowering_parts)
 @
-  
-  \begin{figure}
+
+\begin{figure}
 \centering
 <<echo=FALSE,results='asis'>>=
   plot_graph(GRSP_GraphMaps$graph)
 @
-  \caption{Map of parts for \emph{Grevillea speciosa}}
+\caption{Map of parts for \emph{Grevillea speciosa}}
 \label{fig:map Grevillea speciosa}
 \end{figure}
 
@@ -215,15 +222,15 @@ Details on parts for \emph{Hakea teretifolia} found in Table \ref{tab:parts_Hake
 
 
 <<echo=FALSE,results='asis'>>=
-  print_table_species("Hakea teretifolia", flowering_parts)
+print_table_species("Hakea teretifolia", flowering_parts)
 @
-  
-  \begin{figure}
+
+\begin{figure}
 \centering
 <<echo=FALSE,results='asis'>>=
   plot_graph(HATE_GraphMaps$graph)
 @
-  \caption{Map of parts for \emph{Hakea teretifolia}}
+\caption{Map of parts for \emph{Hakea teretifolia}}
 \label{fig:map Hakea teretifolia}
 \end{figure}
 
@@ -236,15 +243,15 @@ Details on parts for \emph{Hemigenia purpurea} found in Table \ref{tab:parts_Hem
 
 
 <<echo=FALSE,results='asis'>>=
-  print_table_species("Hemigenia purpurea", flowering_parts)
+print_table_species("Hemigenia purpurea", flowering_parts)
 @
-  
-  \begin{figure}
+
+\begin{figure}
 \centering
 <<echo=FALSE,results='asis'>>=
   plot_graph(HEPU_GraphMaps$graph)
 @
-  \caption{Map of parts for \emph{Hemigenia purpurea}}
+\caption{Map of parts for \emph{Hemigenia purpurea}}
 \label{fig:map Hemigenia purpurea}
 \end{figure}
 
@@ -257,15 +264,15 @@ Details on parts for \emph{Leucopogon esquamatus} found in Table \ref{tab:parts_
 
 
 <<echo=FALSE,results='asis'>>=
-  print_table_species("Leucopogon esquamatus", flowering_parts)
+print_table_species("Leucopogon esquamatus", flowering_parts)
 @
-  
-  \begin{figure}
+
+\begin{figure}
 \centering
 <<echo=FALSE,results='asis'>>=
   plot_graph(LEES_GraphMaps$graph)
 @
-  \caption{Map of parts for \emph{Leucopogon esquamatus}}
+\caption{Map of parts for \emph{Leucopogon esquamatus}}
 \label{fig:map Leucopogon esquamatus}
 \end{figure}
 
@@ -277,15 +284,15 @@ Details on parts for \emph{Persoonia lanceolata} found in Table \ref{tab:parts_P
 
 
 <<echo=FALSE,results='asis'>>=
-  print_table_species("Persoonia lanceolata", flowering_parts)
+print_table_species("Persoonia lanceolata", flowering_parts)
 @
-  
-  \begin{figure}
+
+\begin{figure}
 \centering
 <<echo=FALSE,results='asis'>>=
   plot_graph(PELA_GraphMaps$graph)
 @
-  \caption{Map of parts for \emph{Persoonia lanceolata}}
+\caption{Map of parts for \emph{Persoonia lanceolata}}
 \label{fig:map Persoonia lanceolata}
 \end{figure}
 
@@ -297,15 +304,15 @@ Details on parts for \emph{Petrophile pulchella} found in Table \ref{tab:parts_P
 
 
 <<echo=FALSE,results='asis'>>=
-  print_table_species("Petrophile pulchella", flowering_parts)
+print_table_species("Petrophile pulchella", flowering_parts)
 @
-  
-  \begin{figure}
+
+\begin{figure}
 \centering
 <<echo=FALSE,results='asis'>>=
   plot_graph(PEPU_GraphMaps$graph)
 @
-  \caption{Map of parts for \emph{Petrophile pulchella}}
+\caption{Map of parts for \emph{Petrophile pulchella}}
 \label{fig:map Petrophile pulchella}
 \end{figure}
 
@@ -317,15 +324,15 @@ Details on parts for \emph{Phyllota phylicoides} found in Table \ref{tab:parts_P
 
 
 <<echo=FALSE,results='asis'>>=
-  print_table_species("Phyllota phylicoides", flowering_parts)
+print_table_species("Phyllota phylicoides", flowering_parts)
 @
-  
-  \begin{figure}
+
+\begin{figure}
 \centering
 <<echo=FALSE,results='asis'>>=
   plot_graph(PHPH_GraphMaps$graph)
 @
-  \caption{Map of parts for \emph{Phyllota phylicoides}}
+\caption{Map of parts for \emph{Phyllota phylicoides}}
 \label{fig:map Phyllota phylicoides}
 \end{figure}
 
@@ -337,15 +344,15 @@ Details on parts for \emph{Pimelea linifolia} found in Table \ref{tab:parts_Pime
 
 
 <<echo=FALSE,results='asis'>>=
-  print_table_species("Pimelea linifolia", flowering_parts)
+print_table_species("Pimelea linifolia", flowering_parts)
 @
-  
-  \begin{figure}
+
+\begin{figure}
 \centering
 <<echo=FALSE,results='asis'>>=
   plot_graph(PILI_GraphMaps$graph)
 @
-  \caption{Map of parts for \emph{Pimelea linifolia}}
+\caption{Map of parts for \emph{Pimelea linifolia}}
 \label{fig:map Pimelea linifolia}
 \end{figure}
 
@@ -357,19 +364,17 @@ Details on parts for \emph{Pultenaea tuberculata} found in Table \ref{tab:parts_
 
 
 <<echo=FALSE,results='asis'>>=
-  print_table_species("Pultenaea tuberculata", flowering_parts)
+print_table_species("Pultenaea tuberculata", flowering_parts)
 @
-  
-  \begin{figure}
+
+\begin{figure}
 \centering
 <<echo=FALSE,results='asis'>>=
   plot_graph(PUTU_GraphMaps$graph)
 @
-  \caption{Map of parts for \emph{Pultenaea tuberculata}}
+\caption{Map of parts for \emph{Pultenaea tuberculata}}
 \label{fig:map Pultenaea tuberculata}
 \end{figure}
-
-\clearpage
 
 \clearpage
 
@@ -449,7 +454,7 @@ print(xtable(headers,
 @    
    
 
-<<echo=FALSE, results='asis', warning=FALSE>>=
+<<echo=FALSE, warning=FALSE>>=
 
 make_table_propagule_invest_vs_all_repropro_inv <- function(SummaryInd) {
   mod_propagule_inv_all <- sma(repro_inv~propagule_inv,data=SummaryInd,log="xy",method="SMA")
@@ -473,82 +478,44 @@ make_table_propagule_invest_vs_all_repropro_inv <- function(SummaryInd) {
   acc_slopes2 <- dplyr::select(results,group,n,r2,pval)
   names(acc_slopes2) <- c("species","n_flower","r2_flower","p_flower")
   acc_slopes <- dplyr::left_join(acc_slopes, acc_slopes2, by ="species")
-  acc_slopes$species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia", "Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile pulchella", "Phyllota phylicoides", "Pimelea linifolia", "Pultenaea tuberculata")
+  species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia", "Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile pulchella", "Phyllota phylicoides", "Pimelea linifolia", "Pultenaea tuberculata")
+  acc_slopes$species <-  paste("\\textit{",species,"}", sep="")
+  names(acc_slopes) <- c("species","n","r$^2$","p", "n","r$^2$","p")
   acc_slopes
 }
 
 TableS3 <- make_table_propagule_invest_vs_all_repropro_inv(SummaryInd)
 
-names(TableS3) <- c("species","n","r$^2$","p", "n","r$^2$","p")
-TableS3[,2] <- format(TableS3[,2],digits=2,nsmall=2)
-TableS3[,3] <- format(TableS3[,3],digits=2,nsmall=2)
-TableS3[,6] <- format(TableS3[,6],digits=2,nsmall=2)
-TableS3[,5] <- format(TableS3[,5],digits=2,nsmall=2)
-TableS3[,4] <- format_p(TableS3[,4])
-TableS3[,7] <- format_p(TableS3[,7])
-
-TableS3$species  <- paste("\\textit{",unique(TableS3$species),"}", sep="")
-
-print(xtable(TableS3,
-               hline.after=c(1),
-               align='p{0.1cm}p{4cm}|p{.94cm}p{1cm}p{1.5cm}|p{.75cm}p{1cm}p{1.5cm}',
-               caption="Intraspecific correlations between reproductive investment and (a) propagule investment and (b) flower investment"),
-               sanitize.text.function=I,
-        , table.placement = "H"
-        , caption.placement = "top"
-        , include.rownames = FALSE
-        , include.colnames = TRUE
-        , size = "small"
-        , floating = FALSE)
+for(i in c(2,3,5,6)){
+  TableS3[,i] <- format(TableS3[,i],digits=2,nsmall=2)
+}
+for(i in c(4,7)){
+  TableS3[,i] <- format_p(TableS3[,i])
+}
 @
 
-Table S3.Intraspecific correlations between total reproductive investment and (a) propagule investment and (b) flower investment, where flower investment is defined as "flower weight (mg) * bud count".
-
-
-\clearpage
-#Supplementary Table. Higher RE, RA, plant size do not lead to lower accessory costs; age shows mixed results
-```{r}
-xvar <- "repro_inv"
-yvar <- "accessory_costs"
-data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
-
-fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
-results <- lines(fit$groupsummary)
-plot(fit,col=col.spp(fit$groupsummary$group),pch=16,xlab="",ylab=yvar,lty=results$linetype)
-mtext(text="reproductive investment (mg) (RE)",side=1,line=2,outer=FALSE)
-legend_with_r2(results,"bottomright")
-
-
- 
-xvar <- "total_weight_0"
-yvar <- "accessory_costs"
-data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
-
-fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
-results <- lines(fit$groupsummary)
-plot(fit,col=col.spp(fit$groupsummary$group),pch=16,xlab="",ylab=yvar,lty=results$linetype)
-mtext(text="total plant size (mg)",side=1,line=2,outer=FALSE)
-legend_with_r2(results,"bottomright")
-
-
-
-xvar <- "age"
-yvar <- "accessory_costs"
-data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
-
-fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
-results <- lines(fit$groupsummary)
-plot(fit,col=col.spp(fit$groupsummary$group),pch=16,xlab="",ylab="",lty=results$linetype)
-mtext(text="age (years)",side=1,line=2,outer=FALSE)
-mtext(text="per seed accessory costs (mg/seed)",side=2,line=1,outer=TRUE)
-legend_with_r2(results,"topleft")
-```
-
+\begin{table}[H]
+\centering
+\caption{Intraspecific correlations between total reproductive investment and (a) propagule investment and (b) flower investment, where flower investment is defined as 'flower weight (mg) $\times$ bud count'}
+\label{tab:propagule_invest_vs_repro}
+\begin{tabular}{p{4cm}|x{.94cm}x{1cm}x{1.5cm}|x{.75cm}x{1cm}p{1.5cm}}
+\hline
+& \multicolumn{3}{c|}{Total reproductive investment} & \multicolumn{3}{c}{Total reproductive investment} \\
+& \multicolumn{3}{c|}{vs. propagule investment} & \multicolumn{3}{c}{vs. flower investment} \\
+<<echo=FALSE, results='asis', warning=FALSE>>=
+print(xtable(TableS3)
+        , sanitize.text.function=I
+        , include.rownames = FALSE
+        , include.colnames = TRUE,
+        only.contents=TRUE)
+@
+\end{tabular}
+\end{table}
 
 Table S4. Shifts in accessory costs with shifts in age, plant size, or reproductive effort. 
 \clearpage
 
-\addcontentsline{toc}{section}{References}
+\addcontentsline{toc}{section}{B -- References}
 \bibliography{references}
 
 \end{document}
