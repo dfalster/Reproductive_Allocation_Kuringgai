@@ -75,7 +75,7 @@ plot_graph <- function(graph) {
 
 \begin{document}
 
-\maketitle
+%\maketitle
 
 \tableofcontents
 
@@ -85,9 +85,123 @@ plot_graph <- function(graph) {
 
 \clearpage
 
-\section{A -- Methods for estimating reproductive allocation}
+\section{Additional results}
+
+\section{Details on data from main text}
+
+Describe contents of csv files attached
+
+\section{Overview of methods for estimating reproductive allocation}
 
 All computations implemented in \textsc{r} \citep{R-2015}.
+
+List of files
+
+- brief summary here? Detailed list of contents below in section below. Or move up here?
+
+
+What is measured by individual and species
+
+- for parts default is at species unless actual piece was collected
+- various techniques used to estimate weights, eg. by legnth, volume, count -- specified in tables.
+
+
+
+Census
+
+- measurements indicating Counts of parts on each individual\\
+- use species level conversions to get number of parts by individual * census\\
+- algorithm which estimates demography of numbers of parts, with respect to map of progression\\
+- convert numbers into weights (BAER\_Investment -- > 4 dataframes in a list, but only FD (= final development of parts) is used, others for error checking)\\
+- group into different categories (BAER\_reproductive costs -- by function `ReproductiveCosts')\\
+  - investment: weight (mg)\\
+  - count (number)\\
+  - costs (mg/successful seed)\\
+  - reference back to groups in paper and in accessoryParts.yml\\
+- at individual level, calculate various proportions and metrics, after combining growth, reproduction, traits ( in `combine\_by\_individual')\\
+
+
+Investment categories
+
+- process stuff in file `accessoryParts.yml'
+
+
+\section{Details about input files (Old text to adapt)}
+
+2013\_Kuringgai\_harvest
+Allometric data for plants harvested in autumn 2013, including weights and diameters of each harvested segment. Briefly, this dataset includes data on 14 dominant species that are all obligate seeders following a fire. For each species, data were collected from 7 replicate individuals at each of 6 sites, or the subset of those sites on which a given species occurred. The sites represent a chronosequence created by a patchy fire history in the area; all species germinate within a year of a fire, allowing fire history to be used as a proxy for age. When the plants were harvested, they were divided into multiple segments along the stem leader. The diameter was measured at each cut in autumn 2012, when the plants were tagged, and in autumn 2013, at harvest.  For each segment, the dry weights of the leaves and stems were determined separately.
+
+2013\_Kuringgai\_harvest-meta
+Brief descriptions of each data column in the file 2013\_Kuringgai\_harvest, including units.
+
+flower\_parts
+Harvested and weighed flower parts, including collections from tagged individuals (once mature or at time of harvest) and from other individuals in the population (to estimate weight of specific plant parts). All plant parts included in a species' "plant map" have weights in this spreadsheet – or, in rare cases, entries are instead plants parts whose weight is used to calculate the weight of a plant part included in a "plant map". (A "plant map" shows the developmental trajectory of a flower or inflorescence from bud to seed for each species, indicating the flow or carbon as well as discarded parts.) If plant parts are collected from a tagged individual, this spreadsheet also indicates in which census periods this specific weight, rather than a species average, should be used for calculating that individual's reproductive investment. Plant parts all have counts and weights, while the subset of plant parts whose size varies, also have columns indicating height and diameter dimensions; the weight of the plant part at a specific size is then determined by either a regression or volume calculation. For a few plant parts, census data measure the length of stem or cone covered with flowers; for these situations, the segment length collected is also recorded, such that the number of flowers per unit length can be calculated.
+
+Flower\_parts-meta
+Brief descriptions of each data column in the file flower\_parts, including units.
+
+Flowering\_cat\_lookup\_table
+This file contains a matrix of plant parts (rows) by species (columns). For each cell that is used on a given species plant map, the meaning of the values in the spreadsheet titled "reproduction" are indicated in this spreadsheet. Possible method are (1) count, indicating that the numbers represent simple counts; (2) count\_by\_length, indicating that the length of stem or cone covered with buds, flowers or fruit is measured; (3) regress\_by\_dim, indicating that the dimensions of the flowering part are measured and must be converted to a dry mass using a regression equation; and (4) volume, indicating that the height and diameter of the flowering part are given and must be converted to a dry mass using the calculated volume of the flowering part multiplied by the average density of the flowering part.
+
+flowering\_categories\_descriptions
+This files contains a matrix of plant parts (rows) by species (columns). For each cell that is used on a given species plant map, a description of the botanical parts included in the "flower part" is given as well as the flowering stage at which the flower part is harvested, if it is not obvious.
+
+LMA
+This file contains data on leaf area and leaf weight for each of the 14 species at each of the 6 sites. For each species by site combination, leaves were collected from 4-5 individuals (occasionally fewer). A pooled sample was then scanned for leaf area and weighed dry. Three leaf ages were collected for each species; for species where leaf lifespan is short, only two leaf cohorts could be collected. For juvenile individuals, where leaf size and shape changes rapidly with each new flush of leaves, it was noted additional descriptions of the leaves were made.
+
+LMA\_metadata
+Brief descriptions of each data column in the file LMA\_metadata, including units.
+
+MultiplierTable
+Lookup table indicating, for each species by flower part combination, if the investment per part is for a single (1) or multiple propagules, defined as either a mature fruit or a seed, depending on what is the dispersal unit for each species. Within a single column, i.e. within a single species developmental trajectory, numbers will change if the "count" used to access reproduction changes at a given developmental stage. For instance, with BOLE (Boronia ledifolia), counts are made by flowers up through the finished flower stage, but then fruit are the unit counted and each flower forms 4 fruit.
+
+Reproduction
+The reproduction spreadsheet provides both verbal and numeric descriptions of reproduction at each census between April-June 2012, when the plants were first tagged, until April-June 2013, when the plants were harvested. There is a separate row of data for each individual, at each of the 18 censuses. In addition, at each census, there is a row indicating plant parts that are pre-existing on the plant versus new. Flower (or fruit) parts are considered pre-existing if the predecessor of that flower part, as described on that species "plant map" existed in a previous census period. Some plant maps may have multiple parallel diagrams describing how flower parts develop. In that case, a flower part must have a predecessor on that specific diagram to be considered "pre-existing".
+Each of the many plant parts are listed as column headers. At each census, both new and further developed but pre-existing flower parts are recorded. Plant parts that are unchanged in developmental stage between successive censuses are not recorded. Neither are plant parts that disappear between successive censuses. Instead, pre-existing plant parts are recorded if they have progressed to a "more mature" flowering/fruiting stage, as defined by that species "plant map". As an example, if at one census there were 50 PHPH (Phyllota phylicoides) buds recorded and at the next stage, 30 PHPH flowers, 30 of the 50 buds progressed from being buds to being flowers, while the remaining 20 buds were either shed or are still buds. The numbers entered in the cell correspond to either counts, lengths, or dimensions, depending on the method indicated in the file titled "Flowering\_cat\_lookup\_table".
+
+Seed multiplier
+Table indicating if final investment is in units of a single seed (1) or multiple seeds. For species where the final propagule contains multiple seeds, a multiplier is included so that total investment in seeds/fruits (i.e. propagules) can be scaled to a single seed.
+
+Sites
+Tables of sites used in study. Includes site names used in other spreadsheets, date of fire, fire year, as defined by NSW fire layers (which would be the best indicator of germination date), and UTM coordinates for each site.
+
+Species\_names
+Table of species included in study. Includes 4-letter code names used in other spreadsheets, scientific names, family names, and common names.
+
+wood\_density
+Data on wood density for each species. Wood samples were collected from sufficiently large plants to ensure replicable displacement values. Bark and pith were both removed from the samples before determining volume. Multiple methods were tested, with numbers most consistent using the "tweezer" method. Using this method, samples were held with tweezers and just submerged. Using this method, the balance stabilized rapidly and repeatedly. These measurements were all made using the Mettler balance. Of the measurements made using the "pipette\_suspension" method, where a section of wood was submerged inside a suspended pipette, only those made on the Sartorius balance are believable.
+
+wood\_density\_meta
+Brief descriptions of each data column in the file wood\_density\_meta, including units.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Details on calculations by species}
+
+Species differ from one another in
+
+\begin{enumerate}
+\item Something
+\item Something else
+\end{enumerate}
+
+For each species provide
+
+\begin{enumerate}
+\item Something
+\item Something else
+\end{enumerate}
 
 \subsection{Banksia ericifolia}
 
@@ -515,7 +629,7 @@ print(xtable(TableS3)
 Table S4. Shifts in accessory costs with shifts in age, plant size, or reproductive effort. 
 \clearpage
 
-\addcontentsline{toc}{section}{B -- References}
+\addcontentsline{toc}{section}{References}
 \bibliography{references}
 
 \end{document}
