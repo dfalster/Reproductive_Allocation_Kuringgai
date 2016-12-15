@@ -1,9 +1,4 @@
-process_parts_summary <- function(PartsSummary_all) {
-  i <- is.na(weight[[v]])
-  weight[[v]][i] <- 0
-}
-
-
+# Get average LMA and leaf size for each species
 process_LMA <- function(LMA_raw) {
   LMA <- filter(LMA_raw, species!="" & species!=" ") %>%
     select(species, age, LMA, branch_age, leaf_number, leaf_area)
@@ -14,8 +9,8 @@ process_LMA <- function(LMA_raw) {
     summarise_each(funs(mean), LMA, leaf_size)
 }
 
+# Get average leaves per length for each species
 process_leaves_per_length <- function(leavesPerLength_raw) {
-    # get average leaves per length for spp
   filter(leavesPerLength_raw, use=="yes") %>%
     mutate(count_per_length = leaf_count/length_mm) %>%
     group_by(species) %>%
@@ -28,7 +23,6 @@ process_leaves_per_length <- function(leavesPerLength_raw) {
 ## Two types of counts are implemented for each branch and added together:
 ## 1. Direct counts -- these use variables: shoot_leaf_count_start_count, lvs_end_count, shoot_leaf_count_new_count, shoot_leaf_count_new_and_shed_count
 ## 2. Counts based on number of leaves per unit stem length and estimated from stem length -- these use variables  shoot_length_start, growth_shoot_length, shoot_leaf_count_start_length lvs_end_length  shoot_leaf_count_growth_shoot_length
-
 process_leaf_loss <- function(data_raw, leavesPerLength) {
 
   data <- filter(data_raw, dont_use!="dead" & dont_use!="dont_use") %>%
@@ -62,8 +56,8 @@ process_leaf_loss <- function(data_raw, leavesPerLength) {
         shoot_leaf_count_new_and_shed_count, shoot_leaf_count_start, prop_leaf_loss, shoot_leaf_count_new, shoot_leaf_count)
 }
 
+# Calculate average wood density by species
 process_wood_density <- function(wood_density_spp) {
-  # wood density summary by species
   wood <- filter(wood_density_spp, use=="use") %>%
     select(species, density) %>%
     group_by(species) %>%
@@ -71,6 +65,7 @@ process_wood_density <- function(wood_density_spp) {
   names(wood)<-c("species","wood_density")
   wood
 }
+
 
 combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts_all, LMA, leafLoss, wood_density_spp, seedsize) {
   
@@ -81,10 +76,13 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
   SummaryInd <- merge(SummaryInd, LMA, by=c("species","age"), all=TRUE)
   SummaryInd <- merge(SummaryInd, wood_density_spp, by=c("species"), all=TRUE)
   SummaryInd <- merge(SummaryInd, seedsize, by=c("species"), all=TRUE)
-  
-  #TODO: Why do we need these, where are NAs coming from?
-  SummaryInd <- filter(SummaryInd, !is.na(species) & !is.na(individual) &age >1)
-  
+
+  #TODO: Why do we need these? NAs coming from above?
+  # SummaryInd[is.na(SummaryInd$individual), ]
+  # SummaryInd[is.na(SummaryInd$species), ]
+  #  sapply(SummaryInd[is.na(SummaryInd$species), ], function(i) sum(!is.na(i)))
+  SummaryInd <- filter(SummaryInd, !is.na(species) & !is.na(individual) & age >1)
+
   #DANIEL TODO: For the various "per_seed" measures and other accessory costs, need to include only individuals that have non-zero seed count, otherwise combining lots of zeros with real numbers and mean is "meaningless"
   SummaryInd <- SummaryInd %>% mutate(
     growth_inv = growth_stem + growth_leaf,
@@ -220,7 +218,6 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
   years_reproducing <- function(RA, age) {
     ret <- age-min(age[RA>0])
     ret[ret<0] <-0
-    #      if(any(is.na(ret))) browser()
     ret
   }
   
