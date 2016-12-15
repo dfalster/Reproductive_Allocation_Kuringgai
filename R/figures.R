@@ -494,7 +494,7 @@ extra.top.right.logxy <- function (words,fontx,cexx) {
 }
 
 
-lines <- function(results) {
+mylines <- function(results) {
   results$linetype <- 1
   results$linewidth <- 2
   
