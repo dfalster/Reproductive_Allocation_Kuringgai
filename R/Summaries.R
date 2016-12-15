@@ -22,58 +22,44 @@ process_leaves_per_length <- function(leavesPerLength_raw) {
     summarise(count_per_length = mean(count_per_length, na.rm=TRUE))
 }
 
-process_leaf_lifespan <- function(leafLifespan_raw, leavesPerLength) {
 
+## Leaf loss calculations based on surveys of number of leaves on branch.
+## Loss is calculated as # leaves lost during interval  / # at start
+## Two types of counts are implemented for each branch and added together:
+## 1. Direct counts -- these use variables: shoot_leaf_count_start_count, lvs_end_count, shoot_leaf_count_new_count, shoot_leaf_count_new_and_shed_count
+## 2. Counts based on number of leaves per unit stem length and estimated from stem length -- these use variables  shoot_length_start, growth_shoot_length, shoot_leaf_count_start_length lvs_end_length  shoot_leaf_count_growth_shoot_length
 
-  leafLifespan <- filter(leafLifespan_raw, dont_use!="dead" & dont_use!="dont_use") %>%
-    select(species, age, individual, shoot_diameter_start, shoot_diameter_end, shoot_length_start, growth_shoot_length, shoot_leaf_count_start_length, shoot_leaf_count_start_count, lvs_end_length, lvs_end_count, shoot_leaf_count_growth_shoot_length, shoot_leaf_count_new_count, shoot_leaf_count_new_and_shed_count, mm_lvs_spec, count_lvs_spec)
+process_leaf_loss <- function(data_raw, leavesPerLength) {
 
-  # Calculating Leaf Lifespan
+  data <- filter(data_raw, dont_use!="dead" & dont_use!="dont_use") %>%
+    select(-age_exact, -replicate, -site, -segment, -notes, -dont_use, -shoot_diameter_start, -shoot_diameter_end,
+           -mm_lvs_spec, -count_lvs_spec)
 
-  # where counts did not previously exists, set as 0; CHECK WITH DANIEL THAT "V" IS A SET "NAME" IN THESE FUNCTIONS
-  for(v in c("shoot_leaf_count_start_count","lvs_end_count","shoot_leaf_count_new_count","shoot_leaf_count_new_and_shed_count")) {
-    i <- is.na(leafLifespan[[v]])
-    leafLifespan[[v]][i] <- 0
-  }
+  # For individuals with "length" measures, translate into count via spp average
+  data$count_per_length <- leavesPerLength$count_per_length[match(data$species, leavesPerLength$species)]
 
-  # For individuals with "length" measures, translate into count
-  # get spp average for all individuals
-  leafLifespan$count_per_length <- leavesPerLength$count_per_length[match(leafLifespan$species, leavesPerLength$species)]
-
-  # if possible use data for that individual, if it exists; this code substitutes in species count per length #s for individuals where this data is available
-
-  # TODO Lizzy:  variable mm_lvs does not exist
-  #  i <- !is.na(leafLifespan$mm_lvs)
-  #  leafLifespan$count_per_length[i] <- (leafLifespan$count_lvs_spec/leafLifespan$mm_lvs)[i]
-
-  #get total leaf counts
-  for(v in c("shoot_leaf_count_start_length","shoot_leaf_count_start_count","lvs_end_length","lvs_end_count","shoot_leaf_count_growth_shoot_length","shoot_leaf_count_new_count","shoot_leaf_count_new_and_shed_count")) {
-    i <- is.na(leafLifespan[[v]])
-    leafLifespan[[v]][i] <- 0
+  #set these to zero so that sums below
+  for(v in c("shoot_leaf_count_start_length","shoot_leaf_count_start_count","lvs_end_length",
+            "lvs_end_count","shoot_leaf_count_growth_shoot_length","shoot_leaf_count_new_count",
+            "shoot_leaf_count_new_and_shed_count")) {
+    data[[v]][  is.na(data[[v]]) ] <- 0
   }
   
-  #calculating leaf lifespan
-  leafLifespan <- mutate(leafLifespan,
+  #calculating leaf loss
+  mutate(data,
+                        # leaves at start summed from direct counts and count per length
                          shoot_leaf_count_start = shoot_leaf_count_start_count + (shoot_leaf_count_start_length * count_per_length),
+                        # leaves at end summed from direct counts and count per length
                          lvs_end = lvs_end_count + (lvs_end_length * count_per_length),
+                         prop_leaf_loss = ( shoot_leaf_count_start- lvs_end ) / (shoot_leaf_count_start),
                          shoot_leaf_count_new = shoot_leaf_count_new_count + (shoot_leaf_count_growth_shoot_length * count_per_length),
-                         LL_bd = (shoot_leaf_count_start)/(((shoot_leaf_count_start)-(lvs_end)) + (shoot_leaf_count_new)/2),
-                         LL_death = (shoot_leaf_count_start)/((shoot_leaf_count_start)-(lvs_end)),
-                         LL_birth = (shoot_leaf_count_start)/(shoot_leaf_count_new),
-                         growth_shoot_diameter = (shoot_diameter_end - shoot_diameter_start),
-                         growth_shoot_area = (3.14*((shoot_diameter_end/2)^2)) - (3.14*((shoot_diameter_start/2)^2)),
                          shoot_leaf_count = lvs_end + shoot_leaf_count_new
-  )
-  
-  #TODO Lizzy: why do we need this next line?
-  i <- which(is.infinite(leafLifespan$LL_death))
-  for(v in c("LL_death", "LL_bd", "LL_birth")) {
-    leafLifespan[[v]][i] <- NA
-  }
-  select(leafLifespan, -shoot_leaf_count_start_length,
-         -shoot_leaf_count_start_count, -lvs_end_length, -lvs_end_count,
-         -shoot_leaf_count_growth_shoot_length, -shoot_leaf_count_new_count,
-         -mm_lvs_spec, -count_lvs_spec, -count_per_length, -lvs_end)
+                         # old variables Lizzy wants to keep for now
+                         # LL_bd = (shoot_leaf_count_start)/(((shoot_leaf_count_start)-(lvs_end)) + (shoot_leaf_count_new)/2),
+                         # LL_birth = (shoot_leaf_count_start)/(shoot_leaf_count_new),
+                         ) %>%
+  select(species, age, individual, shoot_length_start, growth_shoot_length,
+        shoot_leaf_count_new_and_shed_count, shoot_leaf_count_start, prop_leaf_loss, shoot_leaf_count_new, shoot_leaf_count)
 }
 
 process_wood_density <- function(wood_density_spp) {
@@ -86,10 +72,10 @@ process_wood_density <- function(wood_density_spp) {
   wood
 }
 
-combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts_all, LMA, leafLifespan, wood_density_spp, seedsize) {
+combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts_all, LMA, leafLoss, wood_density_spp, seedsize) {
   
-  #adding investment and accessory costs data to leafLifespan dataframe to create a dataframe with all individual level data
-  SummaryInd <- merge(Growth_all, select(leafLifespan, -species, -age), by="individual", all=TRUE)
+  #adding investment and accessory costs data to leafLoss dataframe to create a dataframe with all individual level data
+  SummaryInd <- merge(Growth_all, select(leafLoss, -species, -age), by="individual", all=TRUE)
   SummaryInd <- merge(SummaryInd, select(ReproductiveCosts_all, -species, -age), by="individual", all=TRUE)
   SummaryInd <- merge(SummaryInd, select(IndividualsList, individual, mature), by="individual", all=TRUE)
   SummaryInd <- merge(SummaryInd, LMA, by=c("species","age"), all=TRUE)
@@ -120,7 +106,7 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
     shoot_growth_leaf_area = shoot_leaf_count_new*leaf_size,
     shoot_leaf_area_0 = shoot_leaf_area - shoot_growth_leaf_area,
     prop_shoot_growth_leaf_area = shoot_growth_leaf_area / shoot_leaf_area_0,
-    leaf_shed = leaf_weight_0 / LL_death,
+    leaf_shed = leaf_weight_0 * prop_leaf_loss,
     leaf_inv_gross = leaf_shed + growth_leaf,
     growth_leaf_neg = growth_leaf,
     RA_leaf_area = repro_inv / (repro_inv + growth_leaf),
@@ -275,36 +261,27 @@ get_species_values <- function(SummaryInd, groups) {
       leaf_weight, stem_weight, growth_stem_diameter, growth_stem_area, growth_leaf, leaf_shed,leaf_weight_0,stem_weight_0,repro_inv,
       growth_stem, diameter, diameter_0,LMA, wood_density,leaf_area,leaf_area_0,leaf_area_midyear,leaf_replacement,growth_leaf_neg,
       RA_max_1,gross_inv,prop_repro,prop_leaf_expand,prop_leaf_replacement,prop_stem,lifespan,maturity,surplus_inv,all_leaf_and_repro_inv,
-      RA_vs_all_leaf,height_0,all_leaf_inv)
+      RA_vs_all_leaf,height_0,all_leaf_inv, prop_leaf_loss)
   })
   names(out[[1]]) <- fs
 
   out[[2]] <-lapply(fs, function(f) {
     SummaryInd %>%
-    filter(LL_bd > 0 & LL_bd < 6 & LL_birth < 8 & LL_death < 8) %>%
+    filter(repro_inv != 0) %>%
     group_by_(.dots=dots) %>%
-    summarise_each(f, LL_bd, LL_death, LL_birth, growth_shoot_length,
-      shoot_leaf_count, growth_shoot_diameter, growth_shoot_area, RGR, shoot_diameter_end)
+    summarise_each(f, prepollen_count_reach_flowering)
   })
   names(out[[2]]) <- fs
 
   out[[3]] <-lapply(fs, function(f) {
     SummaryInd %>%
-    filter(repro_inv != 0) %>%
-    group_by_(.dots=dots) %>%
-    summarise_each(f, prepollen_count_reach_flowering)
-  })
-  names(out[[3]]) <- fs
-
-  out[[4]] <-lapply(fs, function(f) {
-    SummaryInd %>%
     filter(repro_inv > 0) %>%
     group_by_(.dots=dots) %>%
     summarise_each(f,ovule_count,leaf_area_0_mature)
   })
-  names(out[[4]]) <- fs
+  names(out[[3]]) <- fs
 
-  out[[5]] <-lapply(fs, function(f) {
+  out[[4]] <-lapply(fs, function(f) {
     SummaryInd %>%
     filter(seed_count > 0) %>%
     filter(repro_inv >0 ) %>%
@@ -320,12 +297,12 @@ get_species_values <- function(SummaryInd, groups) {
       prop_prepollen_all_vs_all_repro, prop_accessory_vs_embryo_endo,prop_accessory_vs_propagule,prop_success,scaled_repro_inv,discarded_to_ovule_ratio,
       postpollen_all_costs,prop_prepollen_discarded,prop_postpollen_discarded,choosiness,prepollen_success_inv,scaled_pollen_attract_costs)
   })
-  names(out[[5]]) <- fs
+  names(out[[4]]) <- fs
 
  ret <- list()
   for(f in fs){
     ret[[f]] <- out[[1]][[f]]
-    for(i in 2:5)
+    for(i in 2:4)
       ret[[f]] <- merge(ret[[f]], out[[i]][[f]], by=groups, all=TRUE)
 
     # reorder to be same as input
@@ -355,12 +332,8 @@ scale_individual_variable <- function(SummaryInd, SummarySpp) {
         prop_max_weight = total_weight_0 / get_species_value("max", "total_weight"),
         prop_max_repro = repro_inv / get_species_value("max", "repro_inv"),
         scaled_growth_stem_diameter = growth_stem_diameter / get_species_value("mean", "growth_stem_diameter"),
-        scaled_growth_shoot_diameter = growth_shoot_diameter / get_species_value("mean", "growth_shoot_diameter"),
         growth_leaf_min = get_species_value("min","growth_leaf"),
-        ratio_leaf_growth = log10(leaf_area) - log10(leaf_area_0),
-        leaf_lifespan_mean = get_species_value("mean","LL_death"),
-        leaf_shed_mean = leaf_weight_0 / leaf_lifespan_mean,
-        leaf_replacement_mean = leaf_shed_mean + growth_leaf_neg
+        ratio_leaf_growth = log10(leaf_area) - log10(leaf_area_0)
       )
 
 }

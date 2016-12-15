@@ -19,9 +19,7 @@ count_per_length,N/A
 lvs_start,starting count of leaves
 lvs_end,final count of leaves
 lvs_new,new leaves
-LL_bd,leaf lifespan (average of leaf births and deaths)
-LL_death,leaf lifespan (using leaf deaths)
-LL_birth,leaf lifespan (using leaf births)
+prop_leaf_loss,proportion of leaf loss (using leaf deaths)
 repro_inv,reproductive investment (mg/year)
 growth_inv,growth investment (mg/year)
 StartWeight,weight at start (mg)
