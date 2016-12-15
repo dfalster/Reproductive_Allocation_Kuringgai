@@ -1,10 +1,35 @@
+```{r}
+# library(digest)
+# library(Rcpp)
+# library(reshape2)
+# library(tibble)
+library(smatr)
+library(broom)
+library(dplyr)
+# library(stats)
+# library(scales)
+# library(colorspace)
+
+remake::make("export")
+
+SummaryCombine <- readRDS("export/SummaryCombine.rds")
+SummarySpp <- readRDS("export/SummarySpp.rds")
+SummarySppAge <- readRDS("export/SummarySppAge.rds")
+
+HarvestData <- readRDS("export/HarvestData.rds")
+InvestmentByPart <- readRDS("export/Investment_FD_all.rds")
+PartsSummary <- readRDS("export/PartsSummary_all.rds")
+
+source("R/figures.R")
+```
+
 # pdf('ms/RA/Figure_1_stacked_lines.pdf', height=11.5, width=8) plot
 
-SummarySppAge[["mean"]]$leaf_shed_mean <- SummaryInd %>%
+SummarySppAge[["mean"]]$leaf_shed_mean <- SummaryCombine %>%
         group_by(species,age) %>%
         summarise(mean(leaf_shed_mean))
 
-SummarySppAge[["mean"]]$leaf_replacement_mean <- SummaryInd %>%
+SummarySppAge[["mean"]]$leaf_replacement_mean <- SummaryCombine %>%
         group_by(species,age) %>%
         summarise(mean(leaf_replacement_mean))
 
@@ -14,7 +39,7 @@ data <- select(SummarySppAge[["mean"]], species, age, repro_inv, growth_leaf, le
   growth_stem, leaf_shed,prop_stem,prop_leaf_replacement,prop_leaf_expand,prop_repro,RA_max_1,lifespan,height, RA_vs_all_leaf,
   LL_death,height_0,total_weight_0,all_leaf_inv,surplus_inv,all_leaf_and_repro_inv,propagule_inv,ovule_count,success_inv)
 data$leaf_shed2 <- data$leaf_weight_0 / data$LL_death
-data_ind <- select(SummaryInd,species,individual,age, LL_death,height_0,leaf_shed,leaf_weight_0,propagule_inv,ovule_count,
+data_ind <- select(SummaryCombine,species,individual,age, LL_death,height_0,leaf_shed,leaf_weight_0,propagule_inv,ovule_count,
                    growth_leaf_pos,repro_inv,total_weight_0,all_leaf_inv,total_inv,surplus_inv,all_leaf_and_repro_inv,age,success_inv)
 
 
@@ -214,7 +239,7 @@ for (i in seq_along(all_species)) {
 ```{r}
 yvar <- "repro_inv"
 xvar <- "leaf_weight_0"
-data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+data <- subset(SummaryCombine,SummaryCombine[[xvar]]>0&SummaryCombine[[yvar]]>0)
 
 fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy",slope.test=1)
 results <- fit$groupsummary
@@ -225,7 +250,7 @@ names(acc_slopes) <- c("species","n_leaf_weight","r2_leaf_weight","p_leaf_weight
 
 yvar <- "repro_inv"
 xvar <- "growth_leaf_pos"
-data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+data <- subset(SummaryCombine,SummaryCombine[[xvar]]>0&SummaryCombine[[yvar]]>0)
 
 fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA",  log="xy",slope.test=1)
 results <- fit$groupsummary
@@ -237,7 +262,7 @@ acc_slopes <- dplyr::left_join(acc_slopes, acc_slopes2, by ="species")
 
 yvar <- "repro_inv"
 xvar <- "all_leaf_inv"
-data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+data <- subset(SummaryCombine,SummaryCombine[[xvar]]>0&SummaryCombine[[yvar]]>0)
 
 fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA",  log="xy",slope.test=1)
 results <- fit$groupsummary
@@ -256,7 +281,7 @@ write.csv(acc_slopes, file="ms/RA/Table_XX_best_predictor_repro_inv.csv",row.nam
 ```{r}
 yvar <- "surplus_inv"
 xvar <- "leaf_weight_0"
-data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+data <- subset(SummaryCombine,SummaryCombine[[xvar]]>0&SummaryCombine[[yvar]]>0)
 
 fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy",slope.test=1)
 results <- fit$groupsummary
@@ -267,7 +292,7 @@ names(acc_slopes) <- c("species","n_lsurplus","r2_surplus","p_surplus")
 
 yvar <- "all_leaf_and_repro_inv"
 xvar <- "leaf_weight_0"
-data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+data <- subset(SummaryCombine,SummaryCombine[[xvar]]>0&SummaryCombine[[yvar]]>0)
 
 fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA",  log="xy",slope.test=1)
 results <- fit$groupsummary
@@ -279,7 +304,7 @@ acc_slopes <- dplyr::left_join(acc_slopes, acc_slopes2, by ="species")
 
 yvar <- "all_leaf_inv"
 xvar <- "leaf_weight_0"
-data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+data <- subset(SummaryCombine,SummaryCombine[[xvar]]>0&SummaryCombine[[yvar]]>0)
 
 fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA",  log="xy",slope.test=1)
 results <- fit$groupsummary
@@ -297,7 +322,7 @@ write.csv(acc_slopes, file="ms/RA/Table_XX_best_predictor_leaf_weight.csv",row.n
 
 yvar <- "ovule_count"
 xvar <- "leaf_weight_0"
-data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+data <- subset(SummaryCombine,SummaryCombine[[xvar]]>0&SummaryCombine[[yvar]]>0)
 
 fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA",  log="xy",slope.test=1)
 results <- fit$groupsummary

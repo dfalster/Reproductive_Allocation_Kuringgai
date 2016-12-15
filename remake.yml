@@ -131,36 +131,30 @@ targets:
       - read_csv("data/leaderGrowthLL.csv")
       - process_leaf_lifespan(., leavesPerLength)
 
-
   variable_list:
     command:
       - read_csv("data/variable_names.csv")
 
-  SummaryInd1:
+  SummaryInd:
     command:
       - combine_by_individual(IndividualsList, Growth_all, ReproductiveCosts_all, LMA, leafLifespan, wood_density_spp, seedsize)
       - sort_by_variable(., variable_list)
 
   SummarySppAge:
-    command: get_species_values(SummaryInd1, groups=I(c("species", "age")))
+    command: get_species_values(SummaryInd, groups=I(c("species", "age")))
 
   SummarySpp:
-    command: get_species_values(SummaryInd1, groups=I("species"))
+    command: get_species_values(SummaryInd, groups=I("species"))
 
-  SummaryInd_mature:
-    command: filterToMature(SummaryInd1)
-
-  SummarySpp_mature:
-    command: get_species_values(SummaryInd_mature, groups=I("species"))
-
-  SummaryInd:
-    command: scale_individual_variable(SummaryInd1, SummarySpp)
+  SummaryCombine:
+    command: scale_individual_variable(SummaryInd, SummarySpp)
 
   export:
     depends:
       - export/SummaryInd.rds
       - export/SummarySpp.rds
       - export/SummarySppAge.rds
+      - export/SummaryCombine.rds
       - export/HarvestData.rds
       - export/Investment_FD_all.rds
       - export/PartsSummary_all.rds
@@ -173,6 +167,9 @@ targets:
 
   export/SummarySppAge.rds:
     command: saveRDS(SummarySppAge, target_name)
+
+  export/SummaryCombine.rds:
+    command: saveRDS(SummaryCombine, target_name)
 
   export/HarvestData.rds:
     command: saveRDS(HarvestData, target_name)

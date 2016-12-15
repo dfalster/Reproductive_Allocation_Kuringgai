@@ -362,5 +362,5 @@ scale_individual_variable <- function(SummaryInd, SummarySpp) {
         leaf_shed_mean = leaf_weight_0 / leaf_lifespan_mean,
         leaf_replacement_mean = leaf_shed_mean + growth_leaf_neg
       )
-      
+
 }
