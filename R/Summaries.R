@@ -175,7 +175,7 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
  # Lizzy please investigate why these 13 individuals have NA
   # browser()
   # x <- sapply(SummaryInd, function(i) sum(is.na(i))); x[x>0]
-  # SummaryInd[is.na(SummaryInd$shoot_leaf_area),]
+  # SummaryInd[is.na(SummaryInd$shoot_length_start),]
 
   SummaryInd <- SummaryInd %>% mutate(
     leaf_replacement = leaf_shed + growth_leaf_neg,

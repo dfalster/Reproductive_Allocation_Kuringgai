@@ -94,6 +94,7 @@ plot_graph <- function(graph) {
 
 
 \begin{document}
+\SweaveOpts{concordance=TRUE}
 
 %\maketitle
 

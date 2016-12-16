@@ -184,7 +184,7 @@ EPMI,32,32,903,Basin1981,EPMI_903,121,141,127,53,NA - bn 3&4,202,67,,113,53,,,,,
 EPMI,32,32,904,Basin1981,EPMI_904,112,136,210,82,NA - bn 4&5,260,54,145,30,82,,,,,,
 EPMI,32,32,905,Basin1981,EPMI_905,60,93,15,31,5,157,3,15,33,31,,,,,,
 EPMI,32,32,906,Basin1981,EPMI_906,158,180,255,48,NA - bn 3&4,272,44,102,15,48,,,,,,
-EPMI,32,32,907,Basin1981,EPMI_907,84,82,163,0,above 4,166,5,50,,,,,,,"no growth on main stalk mapped. Have increase in diameter for side branches, no lengths or leaf counts",dont_use
+EPMI,32,32,907,Basin1981,EPMI_907,84,85,163,1,above 4,166,5,50,,,,,,,"no growth on main stalk mapped. Have increase in diameter for side branches, no lengths or leaf counts",dont_use
 GRBU,7,7,2,Basin2005,GRBU_002,177,239,215,80,3,83,165,,123,,63,,,,,
 GRBU,7,7,3,Basin2005,GRBU_003,231,485,184,232,NA - bn 2&3,279,21,164,17,232,,,,,,
 GRBU,7,7,7,Basin2005,GRBU_007,129,194,83,87,3,243,,110,,,44,,110,52,,
@@ -220,7 +220,7 @@ GRBU,9,9,807,Waratah2003,GRBU_807,167,308,122,165,3,237,52,,54,165,,,,,,
 GRBU,32,32,903,Basin1981,GRBU_903,95,144,55,55,4,15,,5,,55,,,,,,
 GRBU,32,32,904,Basin1981,GRBU_904,98,156,52,60,,147,2,,19,,39,,,,,
 GRBU,32,32,905,Basin1981,GRBU_905,122,159,85,65,5,200,12,85,59,65,,,,,,
-GRBU,32,32,906,Basin1981,GRBU_906,127,147,98,0,3,73,31,60,4,0,,,,,"marked as alive, but no real growth",dont_use
+GRBU,32,32,906,Basin1981,GRBU_906,127,147,98,1,3,73,31,60,4,0,,,,,"marked as alive, but no real growth",dont_use
 GRBU,32,32,907,Basin1981,GRBU_907,87,145,60,40,NA - bn 6&7,110,41,,50,,20,,,,,
 GRSP,7,7,2,Basin2005,GRSP_002,174,234,138,95,3,75,22,,41,,38,,,,,
 GRSP,7,7,3,Basin2005,GRSP_003,145,182,150,40,NA - bn 3&4,150,19,,6,,72,,,,,
@@ -275,7 +275,7 @@ GRSP,32,32,905,Basin1981,GRSP_905,128,184,95,0,3,,73,,45,,0,,,,,
 GRSP,32,32,907,Basin1981,GRSP_907,100,110,112,0,3,112,,,18,,0,,,,beginning diameter unk,dont_use
 HATE,7,7,1,Basin2005,HATE_001,163,204,140,103,,,115,,65,,41,,,,,
 HATE,7,7,2,Basin2005,HATE_002,380,530,397,212,4,,121,,51,,43,,,,starting diameter estimated from starting diameter of next branch down,
-HATE,7,7,3,Basin2005,HATE_003,208,276,315,75,,,,,31,,23,,,,"starting diameter estimated from starting diameter of next branch down; don't use for LL, orginal leaf number missing",dont_use
+HATE,7,7,3,Basin2005,HATE_003,208,276,315,75,,,130.5921053,,31,,23,,,,"starting diameter estimated from starting diameter of next branch down; don't use for LL, orginal leaf number missing",dont_use
 HATE,7,7,4,Basin2005,HATE_004,426,541,680,415,4,,172,,113,,59,,1438,247,,
 HATE,7,7,5,Basin2005,HATE_005,250,279,347,167,3,,92,,5,,51,,,,think final diameter may be 368,
 HATE,7,7,6,Basin2005,HATE_006,210,445,370,435,4,252.5,93,,67,,60,,1025,148,,
