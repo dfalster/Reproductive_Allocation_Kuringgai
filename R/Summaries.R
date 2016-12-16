@@ -70,20 +70,16 @@ process_wood_density <- function(wood_density_spp) {
 combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts_all, LMA, leafLoss, wood_density_spp, seedsize) {
   
   #adding investment and accessory costs data to leafLoss dataframe to create a dataframe with all individual level data
-  SummaryInd <- merge(Growth_all, select(leafLoss, -species, -age), by="individual", all=TRUE)
-  SummaryInd <- merge(SummaryInd, select(ReproductiveCosts_all, -species, -age), by="individual", all=TRUE)
-  SummaryInd <- merge(SummaryInd, select(IndividualsList, individual, mature), by="individual", all=TRUE)
-  SummaryInd <- merge(SummaryInd, LMA, by=c("species","age"), all=TRUE)
-  SummaryInd <- merge(SummaryInd, wood_density_spp, by=c("species"), all=TRUE)
-  SummaryInd <- merge(SummaryInd, seedsize, by=c("species"), all=TRUE)
+  SummaryInd <- merge(select(IndividualsList, species, age, individual, mature), select(Growth_all, -species, -age), by="individual", all=FALSE)
+  SummaryInd <- merge(SummaryInd, select(leafLoss, -species, -age), by="individual", all.x=TRUE)
+  SummaryInd <- merge(SummaryInd, select(ReproductiveCosts_all, -species, -age), by="individual", all.x=TRUE)
+  SummaryInd <- merge(SummaryInd, LMA, by=c("species","age"), all.x=TRUE)
+  SummaryInd <- merge(SummaryInd, wood_density_spp, by=c("species"), all.x=TRUE)
+  SummaryInd <- merge(SummaryInd, select(seedsize, -propagule_weight, -pod_weight), by=c("species"), all.x=TRUE)
 
-  #TODO: Why do we need these? NAs coming from above?
-  # SummaryInd[is.na(SummaryInd$individual), ]
-  # SummaryInd[is.na(SummaryInd$species), ]
-  #  sapply(SummaryInd[is.na(SummaryInd$species), ], function(i) sum(!is.na(i)))
-  SummaryInd <- filter(SummaryInd, !is.na(species) & !is.na(individual) & age >1)
+  # Remove seedlings collected solely for allometric equations
+  SummaryInd <- filter(SummaryInd, age >1)
 
-  #DANIEL TODO: For the various "per_seed" measures and other accessory costs, need to include only individuals that have non-zero seed count, otherwise combining lots of zeros with real numbers and mean is "meaningless"
   SummaryInd <- SummaryInd %>% mutate(
     growth_inv = growth_stem + growth_leaf,
     total_inv = repro_inv + growth_inv,
@@ -93,7 +89,7 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
     leaf_weight_0 = leaf_weight - growth_leaf,
     height_0 = height - growth_height,
     diameter_0 = diameter - growth_stem_diameter,
-    RA = repro_inv/total_inv,
+    RA = divide_zero(repro_inv, total_inv),
     RGR = log(total_weight)-log(total_weight - growth_inv),
     leaf_area = leaf_weight / (1000*LMA),
     growth_leaf_area = growth_leaf / (1000*LMA),
@@ -103,7 +99,6 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
     shoot_leaf_area = shoot_leaf_count*leaf_size,
     shoot_growth_leaf_area = shoot_leaf_count_new*leaf_size,
     shoot_leaf_area_0 = shoot_leaf_area - shoot_growth_leaf_area,
-    prop_shoot_growth_leaf_area = shoot_growth_leaf_area / shoot_leaf_area_0,
     leaf_shed = leaf_weight_0 * prop_leaf_loss,
     leaf_inv_gross = leaf_shed + growth_leaf,
     growth_leaf_neg = growth_leaf,
@@ -161,8 +156,7 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
     discarded_to_ovule_ratio = 1 - seedset
   )
   
-  
-   for (i in 1:length(SummaryInd$individual)) {
+   for (i in seq_along(SummaryInd$individual)) {
      if (SummaryInd$growth_leaf[i] < 0) {
        SummaryInd$growth_leaf_neg[i] <- SummaryInd$growth_leaf_neg[i]
        SummaryInd$growth_leaf_pos[i] <- 0
@@ -171,50 +165,44 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
        SummaryInd$growth_leaf_neg[i] <- 0  
      }
    }
-  
-   SummaryInd <- SummaryInd %>% mutate(
-     leaf_replacement = leaf_shed + growth_leaf_neg,
-     surplus_inv = repro_inv + growth_leaf_pos,
-     all_leaf_inv = leaf_replacement + growth_leaf_pos,
-     all_leaf_and_repro_inv = repro_inv + leaf_replacement + growth_leaf_pos,
-     RA_max_1 = repro_inv / surplus_inv,
-     gross_inv = repro_inv + growth_leaf_pos + leaf_replacement + growth_stem,
-     prop_repro = repro_inv/gross_inv,
-     prop_leaf_expand = surplus_inv /gross_inv,
-     prop_leaf_replacement = all_leaf_and_repro_inv/gross_inv,
-     prop_surplus = surplus_inv / all_leaf_and_repro_inv,
-     RA_vs_all_leaf = repro_inv / all_leaf_and_repro_inv,
-     RA_seed = embryo_endo_inv / total_inv,
-     prop_stem = 1,
-     prop_leaf_replacement_vs_all_leaf = leaf_replacement / all_leaf_inv
-    )
-  
-  #if seedset is low, prepollen costs increase, because the cost of producing pollen across the whole plant is higher per seed matured  
-  #if there are very few fruits aborted post-pollination the cost of aborted post-pollination tissues is very low
-  
-  
-  for(v in c("growth_inv","total_inv","leaf_repro_inv","total_weight_0","stem_weight_0","leaf_weight_0","height_0","diameter_0","RA","RGR","leaf_area",
-             "growth_leaf_area","leaf_area_0","growth_leaf_area_log","growth_leaf_log","shoot_leaf_area","shoot_growth_leaf_area","shoot_leaf_area_0","prop_shoot_growth_leaf_area",
-             "leaf_shed","leaf_inv_gross","growth_leaf_neg","growth_leaf_pos","RA_leaf_area","leaf_area_midyear","leaf_area_0_mature","reproducing","seed_coat_costs",
-             "pollen_attract_costs","packaging_dispersal_costs","success_costs","embryo_endo_costs","repro_costs","accessory_costs","prop_postpollen_all_vs_all_repro",
-             "accessory_costs_using_seedweight","provisioning_costs","prepollen_all_inv","prepollen_success_inv","prepollen_discarded_inv","postpollen_all_inv",
-             "postpollen_aborted_inv","flower_inv","fruit_inv","success_inv","embryo_endo_inv","prepollen_all_costs","discarded_inv","choosiness2","zygote_set",
-             "prepollen_discarded_costs","postpollen_aborted_costs","postpollen_all_costs","prop_success","prop_propagule_vs_all_repro","scaled_provisioning_costs",
-             "prop_prepollen_all_vs_all_repro","prop_accessory_vs_embryo_endo","prop_accessory_vs_propagule","prop_prepollen_discarded_vs_all_repro","prop_postpollen_discarded_vs_all_repro",
-             "prop_pollen_attract_vs_success","prop_provisioning_vs_success","prop_embryo_endo_vs_success","prop_discarded_vs_all_repro","accessory_inv",
-             "prop_pack_disp_vs_success","prop_pollen_attract_vs_all_repro","prop_pack_disp_vs_all_repro","prop_embryo_endo_vs_all_repro","prop_postpollen_success","discarded_costs",
-             "prop_postpollen_discarded","prop_prepollen_success","prop_prepollen_discarded","scaled_discarded_count","scaled_reach_flowering_count",
-             "scaled_seed_count","scaled_ovule_count","scaled_repro_inv","discarded_to_ovule_ratio","leaf_replacement","scaled_pollen_attract_costs",
-             "RA_max_1","gross_inv","prop_repro","prop_leaf_expand","prop_leaf_replacement","prop_stem","RA_vs_all_leaf",
-             "all_leaf_inv","RA_seed","prop_surplus","surplus_inv","all_leaf_and_repro_inv")) {
+
+ # Where these ratios are infinite we are setting them to zero. It represents cases where no successful seeds were produced
+  for(v in c("prop_prepollen_discarded_vs_all_repro", "prop_postpollen_discarded_vs_all_repro")) {
     i <- is.na(SummaryInd[[v]])
     SummaryInd[[v]][i] <- 0
+  }
+
+ # Lizzy please investigate why these 13 individuals have NA
+  # browser()
+  # x <- sapply(SummaryInd, function(i) sum(is.na(i))); x[x>0]
+  # SummaryInd[is.na(SummaryInd$shoot_leaf_area),]
+
+  SummaryInd <- SummaryInd %>% mutate(
+    leaf_replacement = leaf_shed + growth_leaf_neg,
+    surplus_inv = repro_inv + growth_leaf_pos,
+    all_leaf_inv = leaf_replacement + growth_leaf_pos,
+    all_leaf_and_repro_inv = repro_inv + leaf_replacement + growth_leaf_pos,
+    RA_max_1 = divide_zero(repro_inv, surplus_inv),
+    gross_inv = repro_inv + growth_leaf_pos + leaf_replacement + growth_stem,
+    prop_repro = divide_zero(repro_inv, gross_inv),
+    prop_leaf_expand = divide_zero(surplus_inv, gross_inv),
+    prop_leaf_replacement = divide_zero(all_leaf_and_repro_inv, gross_inv),
+    prop_surplus = divide_zero(surplus_inv,  all_leaf_and_repro_inv),
+    RA_vs_all_leaf = divide_zero(repro_inv, all_leaf_and_repro_inv),
+    RA_seed = divide_zero(embryo_endo_inv, total_inv),
+    prop_stem = 1,
+    prop_leaf_replacement_vs_all_leaf = divide_zero(leaf_replacement, all_leaf_inv)
+    )
+
+  # Where these ratios are infinite we are setting them to zero. It represents cases where no successful seeds were produced
+  for(v in c("choosiness", "choosiness2", "discarded_costs", "repro_costs",
+            "accessory_costs", "accessory_costs_using_seedweight", "prepollen_all_costs", "prepollen_discarded_costs",
+            "postpollen_aborted_costs", "postpollen_all_costs", "prop_pollen_attract_vs_success",
+            "prop_provisioning_vs_success", "prop_pack_disp_vs_success")) {
     i <- is.infinite(SummaryInd[[v]])
     SummaryInd[[v]][i] <- 0
-  }
-  
-  
-  
+    }
+
   years_reproducing <- function(RA, age) {
     ret <- age-min(age[RA>0])
     ret[ret<0] <-0
@@ -225,7 +213,6 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
     group_by(species) %>%
     mutate(years_repro = years_reproducing(RA, age)) %>%
     ungroup()
-  
   
   SummaryInd
   

@@ -1,11 +1,18 @@
 
+# this function gives better behaviour of x/y when both x and y =0 and we are certain the answer should be zero
 divide_zero <- function(x,y) {
+
   if(length(x) != length(y)) stop("bad")
-  ret <- y*0
-  i <- y!=0 
-  ret[i] <- (x/y)[i]
+
+  ret <- x/y
+
+  # if x and y are zero
+  i <- y==0 & x==0
+  ret[i] <- 0
+
   ret
 }
+
 
 read_csv <- function(filename) {
   read.csv(filename, header = TRUE, sep = ",", stringsAsFactors = FALSE)

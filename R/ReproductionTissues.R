@@ -188,8 +188,15 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
   }
   
   Costs$fruit_costs = sapply(Costs$individual, f7)
-  
-  
+
+
+  # Where variables in this function return NA, they should be zero, b
+  # because it represents cases was no investment in that thing
+  for(v in names(Costs)[sapply(Costs, is.numeric)]) {
+    i <- is.na(Costs[[v]])
+    Costs[[v]][i] <- 0
+    }
+
   ret <- merge(AgeData, Costs, by="individual", all=TRUE) %>%
     mutate(
       prepollen_all_inv = prepollen_temp_inv + (postpollen_count*(prepollen_costs_from_pack_disp_tissues + prepollen_costs_from_seed_tissues)),
@@ -210,4 +217,6 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
       discarded_costs = divide_zero(discarded_inv,seed_count),
       success_costs = divide_zero(success_inv,seed_count)
       )
+
+ ret
 }
