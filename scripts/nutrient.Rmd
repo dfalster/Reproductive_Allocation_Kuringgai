@@ -178,6 +178,46 @@ SummaryInd2 <- SummaryInd2 %>% mutate(
   )
 ```
 
+```{r}
+stem_segments <- nutrient %>%
+    subset(tissue_complete %in% c("wood_from_base","wood_from_middle","wood_from_tip"))%>%
+    select(species,age,P,N,diameter_temp,tissue_complete) 
+stem_segments$diameter <- as.numeric(stem_segments$diameter)
+stem_segments$area <- ((stem_segments$diameter/2)^2)*3.14159
+
+all_species <- unique(stem_segments$species)
+
+pdf("ms/Nutrient/output/stem segment by diameter.pdf", height=11, width=8)
+plot
+
+par(mfrow = c(4,2), cex = 1, omi=c(.1,.1,.6,.05), mai=c(1,1,.05,.05))
+
+for (i in seq_along(all_species)) {
+  
+data_sp <- filter(stem_segments, species == all_species[i])
+plot(P~area,data=data_sp,log="x",col=col.age(data_sp$age),pch=pch.tissue(data_sp$tissue_complete),xlab="",ylab="")
+mod <- sma(P~area,data=data_sp,log="x")
+mtext("stem area (mm^2)",1,line=1.7,cex=0.7)
+mtext("P concentration",2,line=2.3,cex=0.7)
+mtext(labels.spp.full(all_species[i]), 3, 0)
+plot(N~area,data=data_sp,log="x",col=col.age(data_sp$age),pch=pch.tissue(data_sp$tissue_complete),xlab="",ylab="")
+mtext("stem area (mm^2)",1,line=1.7,cex=0.7)
+mtext("N concentration",2,line=2.3,cex=0.7)
+
+  if (i %in% c(1,5,9,13)) {
+   legend("bottomleft",legend=c("sapwood","wood from mid","wood from base"),pch=c(16,10,7),bty="n",cex=0.8)
+   legend("topright",legend=labels.age(),col=col.age(),pch=16, bty="n",cex=0.8)
+  }
+
+}
+
+dev.off()
+```
+
+plot(P~diameter,stem_segments,log="xy",col=col.spp(species),pch=16)
+
+stem_segments$diameter <- as.numeric(stem_segments$diameter)
+
 
 use <- subset(nutrient,nutrient$with_bark_diam_mm!="")
 
