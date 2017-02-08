@@ -116,16 +116,28 @@ Describe contents of csv files attached
 
 All computations implemented in \textsc{r} \citep{R-2015}.
 
-List of files
+List of data files.
 
-- brief summary here? Detailed list of contents below in section below. Or move up here?
+The following files contain the empirical data used in the analyses: 
+
+accessory_parts.yml
+flowerCategories.csv and flowerCategories_meta.csv
+flowerParts.csv and flowerParts_meta.csv
+individuals.csv and individuals_meta.csv
+MultiplierTable.csv
+reproduction.csv and reproduction_meta.csv
+seedMultiplier.csv
+
+The following files contain supplmentary data about the species and sites:
+seedsize.csv and seedsize_meta.csv
+sites.csv and sites_meta.csv
+species.csv
 
 
 What is measured by individual and species
 
-- for parts default is at species unless actual piece was collected
-- various techniques used to estimate weights, eg. by legnth, volume, count -- specified in tables.
-
+- for flower parts, the default is at the species level unless the actual piece was collected; Plant parts that were collected on an individual is recorded in the file flowerParts
+- all reproductive output is measured at the individual
 
 
 Census
@@ -142,91 +154,99 @@ Census
 - at individual level, calculate various proportions and metrics, after combining growth, reproduction, traits ( in `combine\_by\_individual')\\
 
 
-Investment categories
+\section{Investment categories}
 
-- process stuff in file `accessoryParts.yml'
+accessoryParts.yml
+This file contains, for each species, lists of reproductive tissues that fall into various tissue categories=. These categories are then used to calculate the reproductive investment in the key reproductive tissue categories, (1) pollen-attraction tissues aborted prior to provisioning; (2) pollen-attraction tissues associated with flowers that form mature seeds; (3) provisioning tissues aborted prior to the formation of a mature seed; (4) packaging and dispersal tissues associated with a mature seed; (5) the mature seed itself. Dividing reproductive investment into these categories requires, for each tissue type, knowing the count of parts that reach the key stages (pollinator-ready, onset of provisioning, mature seed) and the mass of parts at each stage. 
 
-
-\section{Details about input files (Old text to adapt)}
-
-\subsection{Harvest}
-
-Allometric data for plants harvested in autumn 2013, including weights and diameters of each harvested segment. Briefly, this dataset includes data on 14 dominant species that are all obligate seeders following a fire. For each species, data were collected from 7 replicate individuals at each of 6 sites, or the subset of those sites on which a given species occurred. The sites represent a chronosequence created by a patchy fire history in the area; all species germinate within a year of a fire, allowing fire history to be used as a proxy for age. When the plants were harvested, they were divided into multiple segments along the stem leader. The diameter was measured at each cut in autumn 2012, when the plants were tagged, and in autumn 2013, at harvest.  For each segment, the dry weights of the leaves and stems were determined separately.
+\subsection{accessoryParts\_metadata}
+Brief descriptions of each reproductive parts category in the file accessoryParts.
 
 <<echo=FALSE,results='asis'>>=
-  print_table_metadata("../../data/harvest_meta.csv")
+  print_table_metadata("../../data/accessoryParts_meta.csv")
 @
 
-2013\_Kuringgai\_harvest-meta
-Brief descriptions of each data column in the file 2013\_Kuringgai\_harvest, including units.
 
-flower\_parts
+\section{Details about input files}
+floweringCategories
+This file contains a matrix of plant parts (rows) by species (columns). For each cell that is used on a given species plant map, the meaning of the values in the spreadsheet titled "reproduction" are indicated in this spreadsheet. Possible method are (1) count, indicating that the numbers represent simple counts; (2) count\_by\_length, indicating that the length of stem or cone covered with buds, flowers or fruit is measured; (3) regress\_by\_dim, indicating that the dimensions of the flowering part are measured and must be converted to a dry mass using a regression equation; and (4) volume, indicating that the height and diameter of the flowering part are given and must be converted to a dry mass using the calculated volume of the flowering part multiplied by the average density of the flowering part.
+
+floweringCategories\_metadata
+This files contains a matrix of plant parts (rows) by species (columns). For each cell that is used on a given species plant map, a description of the botanical parts included in the "flower part" is given as well as the flowering stage at which the flower part is harvested, if it is not obvious.
+
+flowerParts
 Harvested and weighed flower parts, including collections from tagged individuals (once mature or at time of harvest) and from other individuals in the population (to estimate weight of specific plant parts). All plant parts included in a species' "plant map" have weights in this spreadsheet – or, in rare cases, entries are instead plants parts whose weight is used to calculate the weight of a plant part included in a "plant map". (A "plant map" shows the developmental trajectory of a flower or inflorescence from bud to seed for each species, indicating the flow or carbon as well as discarded parts.) If plant parts are collected from a tagged individual, this spreadsheet also indicates in which census periods this specific weight, rather than a species average, should be used for calculating that individual's reproductive investment. Plant parts all have counts and weights, while the subset of plant parts whose size varies, also have columns indicating height and diameter dimensions; the weight of the plant part at a specific size is then determined by either a regression or volume calculation. For a few plant parts, census data measure the length of stem or cone covered with flowers; for these situations, the segment length collected is also recorded, such that the number of flowers per unit length can be calculated.
 
-\subsection{Flower\_parts}
-Brief descriptions of each data column in the file flower\_parts, including units.
+\subsection{flowerParts\_metadata}
+Brief descriptions of each data column in the file flowerParts, including units.
 
 <<echo=FALSE,results='asis'>>=
   print_table_metadata("../../data/flowerParts_meta.csv")
 @
 
-Flowering\_cat\_lookup\_table
-This file contains a matrix of plant parts (rows) by species (columns). For each cell that is used on a given species plant map, the meaning of the values in the spreadsheet titled "reproduction" are indicated in this spreadsheet. Possible method are (1) count, indicating that the numbers represent simple counts; (2) count\_by\_length, indicating that the length of stem or cone covered with buds, flowers or fruit is measured; (3) regress\_by\_dim, indicating that the dimensions of the flowering part are measured and must be converted to a dry mass using a regression equation; and (4) volume, indicating that the height and diameter of the flowering part are given and must be converted to a dry mass using the calculated volume of the flowering part multiplied by the average density of the flowering part.
+Individuals
+This file contains a list of all plants harvested at the 7 Kuring'gai fieldsites. For each individual it includes basic information about each individual - tag number, age, site, whether the plant was alive at the time of harvest, and information on which calculations use this individual's data. The data itself is contained in other files.
 
-flowering\_categories\_descriptions
-This files contains a matrix of plant parts (rows) by species (columns). For each cell that is used on a given species plant map, a description of the botanical parts included in the "flower part" is given as well as the flowering stage at which the flower part is harvested, if it is not obvious.
+\subsection{Individuals\_metadata}
+Brief descriptions of each data column in the file Individuals, including units.
 
-LMA
-This file contains data on leaf area and leaf weight for each of the 14 species at each of the 6 sites. For each species by site combination, leaves were collected from 4-5 individuals (occasionally fewer). A pooled sample was then scanned for leaf area and weighed dry. Three leaf ages were collected for each species; for species where leaf lifespan is short, only two leaf cohorts could be collected. For juvenile individuals, where leaf size and shape changes rapidly with each new flush of leaves, it was noted additional descriptions of the leaves were made.
+<<echo=FALSE,results='asis'>>=
+  print_table_metadata("../../data/Individuals_meta.csv")
+@
 
-LMA\_metadata
-Brief descriptions of each data column in the file LMA\_metadata, including units.
-
-MultiplierTable
+multiplierTable
 Lookup table indicating, for each species by flower part combination, if the investment per part is for a single (1) or multiple propagules, defined as either a mature fruit or a seed, depending on what is the dispersal unit for each species. Within a single column, i.e. within a single species developmental trajectory, numbers will change if the "count" used to access reproduction changes at a given developmental stage. For instance, with BOLE (Boronia ledifolia), counts are made by flowers up through the finished flower stage, but then fruit are the unit counted and each flower forms 4 fruit.
 
-Reproduction
-The reproduction spreadsheet provides both verbal and numeric descriptions of reproduction at each census between April-June 2012, when the plants were first tagged, until April-June 2013, when the plants were harvested. There is a separate row of data for each individual, at each of the 18 censuses. In addition, at each census, there is a row indicating plant parts that are pre-existing on the plant versus new. Flower (or fruit) parts are considered pre-existing if the predecessor of that flower part, as described on that species "plant map" existed in a previous census period. Some plant maps may have multiple parallel diagrams describing how flower parts develop. In that case, a flower part must have a predecessor on that specific diagram to be considered "pre-existing".
-Each of the many plant parts are listed as column headers. At each census, both new and further developed but pre-existing flower parts are recorded. Plant parts that are unchanged in developmental stage between successive censuses are not recorded. Neither are plant parts that disappear between successive censuses. Instead, pre-existing plant parts are recorded if they have progressed to a "more mature" flowering/fruiting stage, as defined by that species "plant map". As an example, if at one census there were 50 PHPH (Phyllota phylicoides) buds recorded and at the next stage, 30 PHPH flowers, 30 of the 50 buds progressed from being buds to being flowers, while the remaining 20 buds were either shed or are still buds. The numbers entered in the cell correspond to either counts, lengths, or dimensions, depending on the method indicated in the file titled "Flowering\_cat\_lookup\_table".
+reproduction
+The reproduction spreadsheet provides both verbal and numeric descriptions of reproduction at each census between April-June 2012 (or June 2013 for Wilunga2013 and the second set of individuals tagged at Waratah2011), when the plants were first tagged, until April-June 2013 (or June 2014 for Wilunga2013 and the second set of individuals tagged at Waratah2011), when the plants were harvested. There is a separate row of data for each individual, at each of the 18 censuses. In addition, at each census, there is a row indicating plant parts that are pre-existing on the plant versus new. Flower (or fruit) parts are considered pre-existing if the predecessor of that flower part, as described on that species "plant map" existed in a previous census period. Some plant maps may have multiple parallel diagrams describing how flower parts develop. In that case, a flower part must have a predecessor on that specific diagram to be considered "pre-existing".
 
-Seed multiplier
-Table indicating if final investment is in units of a single seed (1) or multiple seeds. For species where the final propagule contains multiple seeds, a multiplier is included so that total investment in seeds/fruits (i.e. propagules) can be scaled to a single seed.
+Each of the many plant parts are listed as column headers. At each census, both new and further developed but pre-existing flower parts are recorded. Plant parts that are unchanged in developmental stage between successive censuses are not recorded. Neither are plant parts that disappear between successive censuses. Instead, pre-existing plant parts are recorded if they have progressed to a "more mature" flowering/fruiting stage, as defined by that species "plant map". As an example, if at one census there were 50 PHPH (Phyllota phylicoides) buds recorded and at the next stage, 30 PHPH flowers, 30 of the 50 buds progressed from being buds to being flowers, while the remaining 20 buds were either shed or are still buds. The numbers entered in the cell correspond to either counts, lengths, or dimensions, depending on the method indicated in the file titled "floweringCategories".
 
-Sites
-Tables of sites used in study. Includes site names used in other spreadsheets, date of fire, fire year, as defined by NSW fire layers (which would be the best indicator of germination date), and UTM coordinates for each site.
+\subsection{reproduction\_metadata}
+Brief descriptions of the first set of data columns in the file reproduction.
 
-Species\_names
+<<echo=FALSE,results='asis'>>=
+  print_table_metadata("../../data/reproduction_meta.csv")
+@
+
+seedsize
+
+\subsection{seedsize\_metadata}
+Brief descriptions of the first set of data columns in the file seedsize, including units.
+
+<<echo=FALSE,results='asis'>>=
+  print_table_metadata("../../data/seedsize_meta.csv")
+@
+
+sites
+Tables of sites used in study. Includes site names used in other spreadsheets, date of fire, fire year, as defined by NSW fire layers, and UTM coordinates for each site.
+
+\subsection{sites\_metadata}
+Brief descriptions of the first set of data columns in the file sites
+
+<<echo=FALSE,results='asis'>>=
+  print_table_metadata("../../data/sites_meta.csv")
+@
+
+species
 Table of species included in study. Includes 4-letter code names used in other spreadsheets, scientific names, family names, and common names.
-
-wood\_density
-Data on wood density for each species. Wood samples were collected from sufficiently large plants to ensure replicable displacement values. Bark and pith were both removed from the samples before determining volume. Multiple methods were tested, with numbers most consistent using the "tweezer" method. Using this method, samples were held with tweezers and just submerged. Using this method, the balance stabilized rapidly and repeatedly. These measurements were all made using the Mettler balance. Of the measurements made using the "pipette\_suspension" method, where a section of wood was submerged inside a suspended pipette, only those made on the Sartorius balance are believable.
-
-wood\_density\_meta
-Brief descriptions of each data column in the file wood\_density\_meta, including units.
-
-
-
-
-
-
-
-
-
-
-
 
 
 
 \section{Details on calculations by species}
 
-Species differ from one another in
+Each species uses notably different algorithms to determine reproductive tissue investment, as each species forms different reproductive tissues and different methods are practical for recording each species' reproductive investment in the field. For some reproductive parts a simple count is pracical, while for species with a large number of buds (or flowers or fruit) that are regularly spaced along branches, the length of stem covered in buds is a better measure. For species that form cones, the cones can be notably different in size and each cone's dimensions must be recorded. 
 
 \begin{enumerate}
 \item Something
 \item Something else
 \end{enumerate}
 
-For each species provide
+For each species we established a list of different reproductive tissue parts and mapped how these parts developed through time.
+As the reproductive cycle progresses, tissue parts were repeatedly split into two (or more) parts. For instance, a bud, once open, divides into being petals + stamens, a sepal, and a stigma. As a pollinated stigma develops into a fruit, it will be further divided into seed, seed pod, and potentially additional parts. This is shown in the map for each species.
+
+The accompanying table for each species provides a list of plant parts, a description of exactly what tissues are included in each plant part and at what developmental stage, the method whereby the count and mass of the plant parts is measured, and the number of ovules in each unit of plant part.
+
 
 \begin{enumerate}
 \item Something
@@ -522,81 +542,129 @@ print_table_species("Pultenaea tuberculata", flowering_parts)
 
 \clearpage
 
-<<echo=FALSE,results='asis'>>=
-headers <- as.data.frame(matrix(vector(), 3,4,
-                dimnames=list(c(), c("A","B","C","D"))),
-                stringsAsFactors=F)
-headers[1,] <- c("","Proportion","Proportion","Proportion")
-headers[2,] <- c("","pollen-attraction","provisioning","success")
-headers[3,] <- c("","investment to","investment to","investment to")
-
-print(xtable(headers,
-             hline.after=c(-1),
-             align='p{0.1cm}p{11.5cm}|p{3cm}|p{3cm}|p{3cm}'),
-        sanitize.text.function=I,
-        , table.placement = "H"
-        , caption.placement = "top"
-        , include.rownames = FALSE
-        , include.colnames = FALSE
-        , size = "small"
-        , floating = FALSE)             
-@ 
 
 <<echo=FALSE, results='asis', warning=FALSE>>=
 
 make_table_species_values_for_allocation_seedsize_table <- function(file) {
   data <- select(file,species,embryo_endo_costs, scaled_seed_count,scaled_ovule_count,
-                 scaled_pollen_attract_costs,choosiness2,prop_prepollen_success, prop_prepollen_discarded,
+                 scaled_pollen_attract_costs,choosiness,prop_prepollen_success, prop_prepollen_discarded,
                  prop_postpollen_success,prop_postpollen_discarded, prop_pollen_attract_vs_success,prop_provisioning_vs_success)
   data$species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia", "Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile pulchella", "Phyllota phylicoides", "Pimelea linifolia", "Pultenaea tuberculata")
   data
 }
 
-TableS2 <- make_table_species_values_for_allocation_seedsize_table(SummarySpp[["mean"]])
+TableS15 <- make_table_species_values_for_allocation_seedsize_table(SummarySpp[["mean"]])
 
-names(TableS2) <- c("species","embryo and endosperm costs","scaled seed count","scaled ovule count","scaled pollen-attraction costs","choosiness","to success","to discarded","to success","to discarded","to pollen-attraction","to provisioning")
+names(TableS15) <- c("species","embryo and endosperm costs","scaled seed count","scaled ovule count","scaled pollen-attraction costs","choosiness","to success","to discarded","to success","to discarded","to pollen-attraction","to provisioning")
 
 for (i in 2:12) {
-TableS2[,i] <- format(TableS2[,i],digits=3,nsmall=2)
+TableS15[,i] <- format(TableS15[,i],digits=3,nsmall=2)
 }
 
-TableS2$species  <- paste("\\textit{",unique(TableS2$species),"}", sep="")
-
-print(xtable(TableS2,
-               hline.after=c(1),
-               align='p{0.1cm}p{4cm}|p{1.5cm}|p{1.5cm}p{1.5cm}|p{1.5cm}p{1.5cm}|p{1.5cm}p{1.5cm}|p{1.5cm}p{1.5cm}|p{1.5cm}p{1.5cm}',
-               caption="Species values for data plotted in Figure 2",
-               sanitize.text.function=I,
-        , table.placement = "H"
-        , caption.placement = "top"
-        , include.rownames = FALSE
-        , include.colnames = TRUE
-        , size = "small"
-        , floating = FALSE))
+TableS15$species  <- paste("\\textit{",unique(TableS15$species),"}", sep="")
 @
-Table S2. Species values for data plotted in Figure 2, shifts in reproductive tissue allocation with seed size.
 
-
-<<echo=FALSE,results='asis'>>=
-headers <- as.data.frame(matrix(vector(), 3, 3,
-                dimnames=list(c(), c("A","B","C"))),
-                stringsAsFactors=F)
-headers[1,] <- c("","Total reproductive investment","Total reproductive investment")
-headers[2,] <- c("","vs","vs")
-headers[3,] <- c("","propagule investment","flower investment")
-
-print(xtable(headers,
-             hline.after=c(-1),
-             align='p{0.1cm}p{4cm}|c|c'),
-        sanitize.text.function=I,
-        , table.placement = "H"
-        , caption.placement = "top"
+\begin{table}[H]
+\centering
+\caption{Species values for data plotted in Figure 2, shifts in reproductive tissue allocation with seed size.}
+\label{tab:species}
+\begin{tabular}{p{0.1cm}p{4cm}|p{1.5cm}|p{1.5cm}p{1.5cm}|p{1.5cm}p{1.5cm}|p{1.5cm}p{1.5cm}|p{1.5cm}p{1.5cm}|p{1.5cm}p{1.5cm}}
+\hline
+& \multicolumn{8}{c|}{Proportion} & \multicolumn{2}{c}{Proportion}& \multicolumn{2}{c}{Proportion} \\
+& \multicolumn{8}{c|}{pollen-attraction} & \multicolumn{2}{c}{provisioning}& \multicolumn{2}{c}{success} \\
+& \multicolumn{8}{c|}{investment to} & \multicolumn{2}{c}{investment to}& \multicolumn{2}{c}{investment to} \\
+<<echo=FALSE, results='asis', warning=FALSE>>=
+print(xtable(TableS15)
+        , sanitize.text.function=I
         , include.rownames = FALSE
-        , include.colnames = FALSE
-        , size = "small"
-        , floating = FALSE)             
-@    
-   
+        , include.colnames = TRUE,
+        only.contents=TRUE)
+@
+\end{tabular}
+\end{table}
+
+\clearpage
+<<echo=FALSE, results='asis', warning=FALSE>>=
+make_table_RA_shifts_with_age <- function() {
+  xvar <- "repro_inv"
+  yvar <- "accessory_per_seed"
+  data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+
+  fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
+  accessory_vs_RE <- lines(fit$groupsummary)
+  accessory_vs_RE <- dplyr::select(accessory_vs_RE,group,n,r2,pval)
+
+  xvar <- "total_weight_0"
+  yvar <- "accessory_per_seed"
+  data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+
+  fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
+  accessory_vs_size <- lines(fit$groupsummary)
+  accessory_vs_size <- dplyr::select(accessory_vs_size,group,n,r2,pval)
+
+  xvar <- "age"
+  yvar <- "accessory_per_seed"
+  data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+
+  fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
+  accessory_vs_age <- lines(fit$groupsummary)
+  accessory_vs_age <- dplyr::select(accessory_vs_age,group,n,r2,pval)
+
+  TableS16 <- merge(accessory_vs_RE,accessory_vs_size,by="group")
+  TableS16 <- merge(TableS16,accessory_vs_age,by="group")
+  
+  names(TableS16) <- c("species","n","r$^2$","p","n","r$^2$","p","n","r$^2$","p")
+  
+  species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia", "Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile pulchella", "Phyllota phylicoides", "Pimelea linifolia", "Pultenaea tuberculata")
+  TableS16$species <-  paste("\\textit{",species,"}", sep="")
+
+  TableS16
+}
+
+TableS16 <- make_table_RA_shifts_with_age()
+
+for(i in c(2,3,5,6,8,9)){
+  TableS16[,i] <- format(TableS16[,i],digits=2,nsmall=2)
+}
+for(i in c(4,7,10)){
+  TableS16[,i] <- format_p(TableS16[,i])
+}
+  
+TableS16$species  <- paste("\\textit{",unique(TableS16$species),"}", sep="")
+@
+
+\begin{table}[H]
+\centering
+\caption{Shifts in accessory costs with shifts in age, plant size, or reproductive effort.}
+\label{tab:propagule_invest_vs_repro}
+\begin{tabular}{p{4cm}|x{.94cm}x{1cm}x{1.5cm}|x{.75cm}x{1cm}p{1.5cm}|x{.75cm}x{1cm}p{1.5cm}}
+\hline
+& \multicolumn{3}{c|}{Accessory costs} & \multicolumn{3}{c}{Accessory costs}& \multicolumn{3}{c}{Accessory costs} \\
+& \multicolumn{3}{c|}{vs. RE} & \multicolumn{3}{c}{vs. plant mass (mg)}& \multicolumn{3}{c}{vs. age} \\
+<<echo=FALSE, results='asis', warning=FALSE>>=
+print(xtable(TableS17)
+        , sanitize.text.function=I
+        , include.rownames = FALSE
+        , include.colnames = TRUE,
+        only.contents=TRUE)
+@
+\end{tabular}
+\end{table}
+
+\clearpage
+
+% lines that previously created tableS16 - will delete once new version working
+% print(xtable(TableS2,
+%                hline.after=c(1),
+%                align='p{0.1cm}p{4cm}|p{1.5cm}|p{1.5cm}p{1.5cm}|p{1.5cm}p{1.5cm}|p{1.5cm}p{1.5cm}|p{1.5cm}p{1.5cm}|p{1.5cm}p{1.5cm}',
+%                caption="Species values for data plotted in Figure 2",
+%                sanitize.text.function=I,
+%         , table.placement = "H"
+%         , caption.placement = "top"
+%         , include.rownames = FALSE
+%         , include.colnames = TRUE
+%         , size = "small"
+%         , floating = FALSE))
 
 <<echo=FALSE, warning=FALSE>>=
 
@@ -622,19 +690,20 @@ make_table_propagule_invest_vs_all_repropro_inv <- function(SummaryInd) {
   acc_slopes2 <- dplyr::select(results,group,n,r2,pval)
   names(acc_slopes2) <- c("species","n_flower","r2_flower","p_flower")
   acc_slopes <- dplyr::left_join(acc_slopes, acc_slopes2, by ="species")
+  names(acc_slopes) <- c("species","n","r$^2$","p", "n","r$^2$","p")
   species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia", "Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile pulchella", "Phyllota phylicoides", "Pimelea linifolia", "Pultenaea tuberculata")
   acc_slopes$species <-  paste("\\textit{",species,"}", sep="")
-  names(acc_slopes) <- c("species","n","r$^2$","p", "n","r$^2$","p")
+
   acc_slopes
 }
 
-TableS3 <- make_table_propagule_invest_vs_all_repropro_inv(SummaryInd)
+TableS17 <- make_table_propagule_invest_vs_all_repropro_inv(SummaryInd)
 
 for(i in c(2,3,5,6)){
-  TableS3[,i] <- format(TableS3[,i],digits=2,nsmall=2)
+  TableS17[,i] <- format(TableS17[,i],digits=2,nsmall=2)
 }
 for(i in c(4,7)){
-  TableS3[,i] <- format_p(TableS3[,i])
+  TableS17[,i] <- format_p(TableS17[,i])
 }
 @
 
@@ -647,7 +716,7 @@ for(i in c(4,7)){
 & \multicolumn{3}{c|}{Total reproductive investment} & \multicolumn{3}{c}{Total reproductive investment} \\
 & \multicolumn{3}{c|}{vs. propagule investment} & \multicolumn{3}{c}{vs. flower investment} \\
 <<echo=FALSE, results='asis', warning=FALSE>>=
-print(xtable(TableS3)
+print(xtable(TableS16)
         , sanitize.text.function=I
         , include.rownames = FALSE
         , include.colnames = TRUE,
@@ -656,7 +725,55 @@ print(xtable(TableS3)
 \end{tabular}
 \end{table}
 
-Table S4. Shifts in accessory costs with shifts in age, plant size, or reproductive effort. 
+\clearpage
+
+
+<<echo=FALSE, results='asis', warning=FALSE>>=
+make_table_buds_vs_size <- function() {
+  xvar <- "total_weight_0"
+  yvar <- "ovule_count"
+  data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+
+  fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="OLS", log="xy")
+  TableS18 <- lines(fit$groupsummary)
+  TableS18 <- dplyr::select(TableS18,group,n,r2,pval)
+  
+  names(TableS18) <- c("species","n","r$^2$","p")
+  
+  species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia", "Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile pulchella", "Phyllota phylicoides", "Pimelea linifolia", "Pultenaea tuberculata")
+  TableS18$species <-  paste("\\textit{",species,"}", sep="")
+
+  TableS18
+}
+
+TableS18 <- make_table_buds_vs_size()
+
+for(i in c(2,3)){
+  TableS18[,i] <- format(TableS18[,i],digits=2,nsmall=2)
+}
+for(i in c(4)){
+  TableS18[,i] <- format_p(TableS18[,i])
+}
+  
+TableS18$species  <- paste("\\textit{",unique(TableS18$species),"}", sep="")
+@
+
+\begin{table}[H]
+\centering
+\caption{Count of buds initiated is well predicted by plant size}
+\label{tab:propagule_invest_vs_repro}
+\begin{tabular}{p{4cm}|x{.94cm}x{1cm}x{1.5cm}}
+\hline
+<<echo=FALSE, results='asis', warning=FALSE>>=
+print(xtable(TableS17)
+        , sanitize.text.function=I
+        , include.rownames = FALSE
+        , include.colnames = TRUE,
+        only.contents=TRUE)
+@
+\end{tabular}
+\end{table}
+
 \clearpage
 
 \addcontentsline{toc}{section}{References}

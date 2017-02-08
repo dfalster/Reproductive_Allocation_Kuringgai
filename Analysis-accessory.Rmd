@@ -608,6 +608,8 @@ acc_slopes2 <- dplyr::select(results,group,n,r2,pval)
 
 acc_slopes <- merge(acc_slopes,acc_slopes2,by="group")
 
+names(acc_slopes) <- c("species","n_propagule","r2_propagule","p_propagule","n_flower","r2_flower","p_flower")
+
 write.csv(acc_slopes, file="ms/Accessory/output/Table_S1_extra_flower_invest_vs_all_repro_inv.csv",row.names=FALSE)
 ```
 

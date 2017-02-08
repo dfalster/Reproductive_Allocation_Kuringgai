@@ -1,0 +1,31 @@
+\subsection{Harvest}
+
+Allometric data for plants harvested in autumn 2013, including weights and diameters of each harvested segment. Briefly, this dataset includes data on 14 dominant species that are all obligate seeders following a fire. For each species, data were collected from 7 replicate individuals at each of 6 sites, or the subset of those sites on which a given species occurred. The sites represent a chronosequence created by a patchy fire history in the area; all species germinate within a year of a fire, allowing fire history to be used as a proxy for age. When the plants were harvested, they were divided into multiple segments along the stem leader. The diameter was measured at each cut in autumn 2012, when the plants were tagged, and in autumn 2013, at harvest.  For each segment, the dry weights of the leaves and stems were determined separately.
+
+<<echo=FALSE,results='asis'>>=
+  print_table_metadata("../../data/harvest_meta.csv")
+@
+  
+  2013\_Kuringgai\_harvest-meta
+Brief descriptions of each data column in the file 2013\_Kuringgai\_harvest, including units.
+
+
+LMA
+This file contains data on leaf area and leaf weight for each of the 14 species at each of the 6 sites. For each species by site combination, leaves were collected from 4-5 individuals (occasionally fewer). A pooled sample was then scanned for leaf area and weighed dry. Three leaf ages were collected for each species; for species where leaf lifespan is short, only two leaf cohorts could be collected. For juvenile individuals, where leaf size and shape changes rapidly with each new flush of leaves, it was noted additional descriptions of the leaves were made.
+
+\subsection{LMA\_metadata}
+Brief descriptions of each data column in the file LMA, including units.
+
+<<echo=FALSE,results='asis'>>=
+  print_table_metadata("../../data/LMA_meta.csv")
+@
+  
+woodDensity
+Data on wood density for each species. Wood samples were collected from sufficiently large plants to ensure replicable displacement values. Bark and pith were both removed from the samples before determining volume. Multiple methods were tested, with numbers most consistent using the "tweezer" method. Using this method, samples were held with tweezers and just submerged. Using this method, the balance stabilized rapidly and repeatedly. These measurements were all made using the Mettler balance. Of the measurements made using the "pipette\_suspension" method, where a section of wood was submerged inside a suspended pipette, only those made on the Sartorius balance are believable.
+
+\subsection{woodDensity\_meta}
+Brief descriptions of each data column in the file woodDensity\_meta, including units.
+
+<<echo=FALSE,results='asis'>>=
+  print_table_metadata("../../data/woodDensity_meta.csv")
+@

@@ -1,0 +1,12 @@
+column,description,units
+species,4 letter species abbreviations,
+seed_size,"seed weight; weights include embryo, endosperm, and seed coat",mg
+embryo_endo_size,weight of just the embryo and endosperm component of the seed,mg
+prop_endo,proportion of total dry seed weight that is the embryo + endosperm (from Westoby 1990),
+ovule_per_ovary,number of ovules per ovary; for EPMI is a mean of multiple individuals and for other species is assumed to be fixed,count
+seed_size_source,data source for total seed weight; either measured for this study (Wenk) or from Henery&Westoby 2001,
+propagule_weight,total propagule weight; recorded for species where the propagule is the unit of dispersal,mg
+pod_weight,pod weight; recorded for species where the seed is released from the seed pod for dispersal,mg
+lifespan,approximate lifespan in the absense of fire,years
+maturity,age at which the species is first widely flowering ,years
+asymptotic_RA,approximate age at which RA asymptotes,years

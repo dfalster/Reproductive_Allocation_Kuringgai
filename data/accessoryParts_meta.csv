@@ -1,0 +1,21 @@
+category,description
+prepollen_FD_success_parts,reproductive tissues used for pollen-attraction that reach their final developmental stage and are shed at the time of pollination
+prepollen_FD_success_parts_denominator,reproductive tissues used for pollen-attraction that reach their final developmental stage and are shed at the time of pollination
+prepollen_parts_continue_developing_into_propagule,"reproductive tissues used for pollen-attraction that continue developing (and increasing in mass), ultimately being part of the propagule "
+prepollen_parts_continue_developing_into_pack_disp,"reproductive tissues used for pollen-attraction that continue developing (and increasing in mass), ultimately being part of packaging and dispersal parts"
+prepollen_parts_continue_developing_into_pack_disp_prepollen_prop_to_use,"reproductive tissues used for pollen-attraction that continue developing (and increasing in mass), ultimately being part of packaging and dispersal parts"
+packaging_dispersal_parts,"reproductive tissues used for packaging and dispersal, that are associated with a fully-developed seed"
+packaging_dispersal_parts_denominator,"reproductive tissues used for packaging and dispersal, that are associated with a fully-developed seed"
+packaging_dispersal_parts_prop_to_use,"reproductive tissues used for packaging and dispersal, that are associated with a fully-developed seed"
+propagule_parts,"reproductive tissues that are part of the propagule, that are associated with a fully-developed seed"
+fruit_parts,"reproductive tissues that are part of the fruit, that are associated with a fully-developed seed"
+prepollen_parts_aborted_preflowering,"reproductive tissues that abort prior to the formation of a mature, pollination-ready flower"
+prepollen_parts_all,"all reproductive tissues that form prior to the time of pollination, including reproductive tissues used for pollen-attraction that continue developing after the point of pollination"
+postpollen_parts_aborted,reproductive tissues that abort post-pollination but before forming a mature propagule
+postpollen_parts_all,all reproductive tissues that form or continue to increase in mass after the onset of provisioning
+count_prepollen_reach_flowering,count of flowers that are fully formed and pollinator-ready
+count_prepollen_aborted_preflowering,count of flowers that abort prior to being fulyl formed and pollinator-ready
+count_postpollen_aborted ,"count of flowers that are pollinated and begin provisioning, but abort prior to the formation of a fully-developed seed"
+cone_count,count of cones; revelant only for BAER and PEPU; important because the weight of a single cone is shared among all flowers on the cone
+inflorescence_count,"count of inflorescences; relevant only for species with a variable number of flowers per inflorescence (COER, GRBU, GRSP, PILI), where the mass of the inflorescence stalk must be shared between all flowers"
+seedpod_count,count of seedpods formed
