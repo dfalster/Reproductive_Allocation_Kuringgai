@@ -94,7 +94,6 @@ plot_graph <- function(graph) {
 
 
 \begin{document}
-\SweaveOpts{concordance=TRUE}
 
 %\maketitle
 
@@ -158,30 +157,27 @@ make_table_RA_shifts_with_age <- function() {
   data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
 
   fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
-  accessory_vs_RE <- lines(fit$groupsummary)
-  accessory_vs_RE <- dplyr::select(accessory_vs_RE,group,n,r2,pval)
+  accessory_vs_RE <- dplyr::select(fit$groupsummary,group,n,r2,pval)
 
   xvar <- "total_weight_0"
   yvar <- "accessory_costs"
   data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
 
   fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
-  accessory_vs_size <- lines(fit$groupsummary)
-  accessory_vs_size <- dplyr::select(accessory_vs_size,group,n,r2,pval)
+  accessory_vs_size <- dplyr::select(fit$groupsummary,group,n,r2,pval)
 
   xvar <- "age"
   yvar <- "accessory_costs"
   data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
 
   fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
-  accessory_vs_age <- lines(fit$groupsummary)
-  accessory_vs_age <- dplyr::select(accessory_vs_age,group,n,r2,pval)
+  accessory_vs_age <- dplyr::select(fit$groupsummary,group,n,r2,pval)
 
   TableS16 <- merge(accessory_vs_RE,accessory_vs_size,by="group")
   TableS16 <- merge(TableS16,accessory_vs_age,by="group")
-  
+
   names(TableS16) <- c("species","n","r$^2$","p","n","r$^2$","p","n","r$^2$","p")
-  
+
   species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia", "Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile pulchella", "Phyllota phylicoides", "Pimelea linifolia", "Pultenaea tuberculata")
   TableS16$species <-  paste("\\textit{",species,"}", sep="")
 
@@ -345,11 +341,11 @@ TableS19 <- make_table_Table2_using_propagule()
 \centering
 \caption{Scaling of reproductive tissue costs with total propagule size}
 \label{tab:propagule_invest_vs_repro}
-\begin{tabular}{p{4cm}|x{.94cm}x{3cm}x{1.5cm}}
+\begin{tabular}{p{4cm}|x{.94cm}x{3cm}p{1.5cm}}
 \hline
 <<echo=FALSE, results='asis', warning=FALSE>>=
 print(xtable(TableS19)
-        , sanitize.text.function=I
+        # , sanitize.text.function=I
         , include.rownames = FALSE
         , include.colnames = TRUE,
         only.contents=TRUE)
@@ -366,8 +362,7 @@ make_table_buds_vs_size <- function() {
   data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
 
   fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="OLS", log="xy")
-  TableS18 <- lines(fit$groupsummary)
-  TableS18 <- dplyr::select(TableS18,group,n,r2,pval)
+  TableS18 <- dplyr::select(fit$groupsummary,group,n,r2,pval)
   
   names(TableS18) <- c("species","n","r$^2$","p")
   
@@ -393,7 +388,7 @@ TableS18$species  <- paste("\\textit{",unique(TableS18$species),"}", sep="")
 \centering
 \caption{Count of buds initiated is well predicted by plant size}
 \label{tab:propagule_invest_vs_repro}
-\begin{tabular}{p{4cm}|x{.94cm}x{1cm}x{1.5cm}}
+\begin{tabular}{p{4cm}|x{.94cm}x{1cm}p{1.5cm}}
 \hline
 <<echo=FALSE, results='asis', warning=FALSE>>=
 print(xtable(TableS18)
@@ -427,7 +422,7 @@ Brief descriptions of each reproductive parts category in the file accessoryPart
 \subsection{investment categories by species}
 List for each species of reproductive tissue types included in each of the investment categories
 <<echo=FALSE,results='asis'>>=
-  @@@("../../data/accessoryParts.yml")
+  ###("../../data/accessoryParts.yml")
 @
 
 
@@ -436,17 +431,17 @@ List of data files.
 
 The following files contain the empirical data used in the analyses: 
 
-accessory_parts.yml
-flowerCategories.csv and flowerCategories_meta.csv
-flowerParts.csv and flowerParts_meta.csv
-individuals.csv and individuals_meta.csv
+accessory\_parts.yml
+flowerCategories.csv and flowerCategories\_meta.csv
+flowerParts.csv and flowerParts\_meta.csv
+individuals.csv and individuals\_meta.csv
 MultiplierTable.csv
-reproduction.csv and reproduction_meta.csv
+reproduction.csv and reproduction\_meta.csv
 seedMultiplier.csv
 
 The following files contain supplmentary data about the species and sites:
-seedsize.csv and seedsize_meta.csv
-sites.csv and sites_meta.csv
+seedsize.csv and seedsize\_meta.csv
+sites.csv and sites\_meta.csv
 species.csv
 
 floweringCategories
