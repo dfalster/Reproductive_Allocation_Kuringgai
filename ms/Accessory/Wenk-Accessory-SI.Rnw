@@ -587,7 +587,7 @@ print(xtable(TableS15)
 <<echo=FALSE, results='asis', warning=FALSE>>=
 make_table_RA_shifts_with_age <- function() {
   xvar <- "repro_inv"
-  yvar <- "accessory_per_seed"
+  yvar <- "accessory_costs"
   data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
 
   fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
@@ -595,7 +595,7 @@ make_table_RA_shifts_with_age <- function() {
   accessory_vs_RE <- dplyr::select(accessory_vs_RE,group,n,r2,pval)
 
   xvar <- "total_weight_0"
-  yvar <- "accessory_per_seed"
+  yvar <- "accessory_costs"
   data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
 
   fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
@@ -603,7 +603,7 @@ make_table_RA_shifts_with_age <- function() {
   accessory_vs_size <- dplyr::select(accessory_vs_size,group,n,r2,pval)
 
   xvar <- "age"
-  yvar <- "accessory_per_seed"
+  yvar <- "accessory_costs"
   data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
 
   fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
@@ -629,8 +629,7 @@ for(i in c(2,3,5,6,8,9)){
 for(i in c(4,7,10)){
   TableS16[,i] <- format_p(TableS16[,i])
 }
-  
-TableS16$species  <- paste("\\textit{",unique(TableS16$species),"}", sep="")
+
 @
 
 \begin{table}[H]
@@ -642,7 +641,7 @@ TableS16$species  <- paste("\\textit{",unique(TableS16$species),"}", sep="")
 & \multicolumn{3}{c|}{Accessory costs} & \multicolumn{3}{c}{Accessory costs}& \multicolumn{3}{c}{Accessory costs} \\
 & \multicolumn{3}{c|}{vs. RE} & \multicolumn{3}{c}{vs. plant mass (mg)}& \multicolumn{3}{c}{vs. age} \\
 <<echo=FALSE, results='asis', warning=FALSE>>=
-print(xtable(TableS17)
+print(xtable(TableS16)
         , sanitize.text.function=I
         , include.rownames = FALSE
         , include.colnames = TRUE,
@@ -716,7 +715,7 @@ for(i in c(4,7)){
 & \multicolumn{3}{c|}{Total reproductive investment} & \multicolumn{3}{c}{Total reproductive investment} \\
 & \multicolumn{3}{c|}{vs. propagule investment} & \multicolumn{3}{c}{vs. flower investment} \\
 <<echo=FALSE, results='asis', warning=FALSE>>=
-print(xtable(TableS16)
+print(xtable(TableS17)
         , sanitize.text.function=I
         , include.rownames = FALSE
         , include.colnames = TRUE,
@@ -765,7 +764,7 @@ TableS18$species  <- paste("\\textit{",unique(TableS18$species),"}", sep="")
 \begin{tabular}{p{4cm}|x{.94cm}x{1cm}x{1.5cm}}
 \hline
 <<echo=FALSE, results='asis', warning=FALSE>>=
-print(xtable(TableS17)
+print(xtable(TableS18)
         , sanitize.text.function=I
         , include.rownames = FALSE
         , include.colnames = TRUE,
@@ -773,6 +772,72 @@ print(xtable(TableS17)
 @
 \end{tabular}
 \end{table}
+
+
+
+<<echo=FALSE, results='asis', warning=FALSE>>=
+make_table_Table2_using_propagule <- function() {
+slopes <- sma(repro_costs ~ propagule_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
+acc_by_species <- dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p)
+
+slopes <- sma(accessory_costs ~ propagule_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
+acc_by_species <- dplyr::bind_rows(acc_by_species,
+  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
+
+slopes <- sma(success_costs ~ propagule_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
+acc_by_species <- dplyr::bind_rows(acc_by_species,
+  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
+
+slopes <- sma(pollen_attract_costs ~ propagule_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
+acc_by_species <- dplyr::bind_rows(acc_by_species,
+  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
+
+slopes <- sma(provisioning_costs ~ propagule_costs,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="SMA")
+acc_by_species <- dplyr::bind_rows(acc_by_species,
+  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
+
+slopes <- sma(discarded_costs ~ propagule_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
+acc_by_species <- dplyr::bind_rows(acc_by_species,
+  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
+
+slopes <- sma(prepollen_discarded_costs ~ propagule_costs,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="SMA")
+acc_by_species <- dplyr::bind_rows(acc_by_species,
+  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
+
+slopes <- sma(postpollen_aborted_costs ~ propagule_costs,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="SMA")
+acc_by_species <- dplyr::bind_rows(acc_by_species, dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
+
+acc_by_species$variable = c("total reproductive costs","total accessory costs","seed costs","pollen attraction costs","provisioning costs", "failed tissues costs","failed pre-pollination costs","failed provisioning costs")
+
+acc_by_species$Slope <- format(acc_by_species$Slope,nsmall=2,digits=2)
+acc_by_species$Slope_lowCI <- format(acc_by_species$Slope_lowCI,nsmall=2,digits=2)
+acc_by_species$Slope_highCI <- format(acc_by_species$Slope_highCI,nsmall=2,digits=2)
+
+acc_by_species$slope2 <- paste(acc_by_species$Slope," (",acc_by_species$Slope_lowCI," - ",acc_by_species$Slope_highCI,")",sep="")
+
+acc_by_species$r2 <- format(acc_by_species$r2,digits=2)
+acc_by_species$pval <- format_p(acc_by_species$pval)
+acc_by_species$Slope_test_p <- format(acc_by_species$Slope_test_p,digits=2)
+acc_slopes <- dplyr::select(acc_by_species,variable,r2,slope2,Slope_test_p)
+}
+TableS19 <- make_table_Table2_using_propagule()
+@
+\begin{table}[H]
+\centering
+\caption{Scaling of reproductive tissue costs with total propagule size}
+\label{tab:propagule_invest_vs_repro}
+\begin{tabular}{p{4cm}|x{.94cm}x{3cm}x{1.5cm}}
+\hline
+<<echo=FALSE, results='asis', warning=FALSE>>=
+print(xtable(TableS19)
+        , sanitize.text.function=I
+        , include.rownames = FALSE
+        , include.colnames = TRUE,
+        only.contents=TRUE)
+@
+\end{tabular}
+\end{table}
+
 
 \clearpage
 

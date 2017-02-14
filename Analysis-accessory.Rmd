@@ -120,6 +120,14 @@ summary(mod)
 plot(total_weight_0 ~ embryo_endo_costs, SummarySpp[["mean"]],log="xy",pch=16,col=col.spp(species))
 
 
+#DISCUSSION - slope of seed size vs repro costs not different from values reported in Lord; i.e. testing slope against the 1.1 she had.
+
+slopes <- sma(repro_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),slope.test=1.1173,method="SMA", log="xy")
+
+checking_slope <- dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p)
+
+
+
 yvar <- "ovule_count"
 xvar <- "repro_inv"
 data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
@@ -155,6 +163,7 @@ fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy"
 results <- lines(fit$groupsummary)
 plot(fit,xlab=xvar,ylab=yvar,pch=16, col=col.spp(fit$groupsummary$group),lty=results$linetype,ylim=c(1,300000),xlim=c(1,30000))
 results
+
 ```
 
 #Table 1 showing accessory cost values for the species
@@ -207,68 +216,53 @@ options(scipen = 5)
 
 library(smatr)
 
-plot(repro_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy", ylim=c(.02,10000), xlim=c(.02,10000), ylab="total per seed accessory costs (mg/seed)",xlab="",cex=1.5)
-y.error.bars(SummarySpp[["mean"]]$embryo_endo_costs,SummarySpp[["mean"]]$repro_costs,SummarySpp[["se"]]$accessory_costs)
+#repro costs
 slopes <- sma(repro_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
-abline(slopes$groupsummary["Int"][[1]],slopes$groupsummary["Slope"][[1]])
-abline(slopes$groupsummary["Int"][[1]],1,lty=2)
-summary(slopes)
-
-plot(prop_pollen_attract_vs_all_repro_all_repro~ seedset,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy",cex=1.5)
 
 acc_by_species <- dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p)
 
-plot(success_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy", ylim=c(.02,10000), ylab="seed costs (mg/seed)",xlab="",cex=1.5)
-y.error.bars(SummarySpp[["mean"]]$embryo_endo_costs,SummarySpp[["mean"]]$success_costs,SummarySpp[["se"]]$success_costs)
+#accessory costs
+slopes <- sma(accessory_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
+
+acc_by_species <- dplyr::bind_rows(acc_by_species,
+  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
+
+#success costs
 slopes <- sma(success_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
-abline(slopes$groupsummary["Int"][[1]],slopes$groupsummary["Slope"][[1]])
-abline(slopes$groupsummary["Int"][[1]],1,lty=2)
-acc_by_species <- dplyr::bind_rows(acc_by_species, dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
 
-plot(pollen_attract_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy", ylim=c(.02,10000), ylab="prepollen success costs (mg/seed)",xlab="",cex=1.5)
-y.error.bars(SummarySpp[["mean"]]$embryo_endo_costs,SummarySpp[["mean"]]$pollen_attract_costs,SummarySpp[["se"]]$pollen_attract_costs)
+acc_by_species <- dplyr::bind_rows(acc_by_species,
+  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
+
+#pollen attraction costs
 slopes <- sma(pollen_attract_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
-abline(slopes$groupsummary["Int"][[1]],slopes$groupsummary["Slope"][[1]])
-abline(slopes$groupsummary["Int"][[1]],1,lty=2)
-acc_by_species <- dplyr::bind_rows(acc_by_species, dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
 
-plot(provisioning_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy", ylim=c(.02,10000), ylab="dispersal & packaging accessory costs (mg/seed)",xlab="",cex=1.5)
+acc_by_species <- dplyr::bind_rows(acc_by_species,
+  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
+
+#provisioning costs
 slopes <- sma(provisioning_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="SMA")
-abline(slopes$groupsummary["Int"][[1]],slopes$groupsummary["Slope"][[1]])
-abline(slopes$groupsummary["Int"][[1]],1,lty=2)
-y.error.bars(SummarySpp[["mean"]]$embryo_endo_costs,SummarySpp[["mean"]]$provisioning_costs,SummarySpp[["se"]]$provisioning_costs)
-acc_by_species <- dplyr::bind_rows(acc_by_species, dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
-mtext(text="seed size (mg)",side=1,line=1.5,outer=TRUE)
 
-plot(discarded_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy", ylim=c(.02,10000), ylab="all discarded costs (mg/seed)",xlab="",cex=1.5)
+acc_by_species <- dplyr::bind_rows(acc_by_species,
+  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
+
+#discarded costs
 slopes <- sma(discarded_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
-abline(slopes$groupsummary["Int"][[1]],slopes$groupsummary["Slope"][[1]])
-abline(slopes$groupsummary["Int"][[1]],1,lty=2)
-y.error.bars(SummarySpp[["mean"]]$embryo_endo_costs,SummarySpp[["mean"]]$discarded_costs,SummarySpp[["se"]]$discarded_costs)
-acc_by_species <- dplyr::bind_rows(acc_by_species, dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
 
-plot(prepollen_all_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy", ylim=c(.02,10000), ylab="all pre-pollination costs (mg/seed)",xlab="",cex=1.5,xaxt="n")
-y.error.bars(SummarySpp[["mean"]]$embryo_endo_costs,SummarySpp[["mean"]]$prepollen_all_costs,SummarySpp[["se"]]$prepollen_all_costs)
-slopes <- sma(prepollen_all_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="SMA")
-abline(slopes$groupsummary["Int"][[1]],slopes$groupsummary["Slope"][[1]])
-abline(slopes$groupsummary["Int"][[1]],1,lty=2)
-acc_by_species <- dplyr::bind_rows(acc_by_species, dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
+acc_by_species <- dplyr::bind_rows(acc_by_species,
+  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
 
-plot(prepollen_discarded_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy", ylim=c(.02,10000), ylab="aborted pre-pollination costs (mg/seed)",xlab="",cex=1.5,xaxt="n")
-y.error.bars(SummarySpp[["mean"]]$embryo_endo_costs,SummarySpp[["mean"]]$prepollen_discarded_costs,SummarySpp[["se"]]$prepollen_discarded_costs)
+#discarded prepollen costs
 slopes <- sma(prepollen_discarded_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="SMA")
-abline(slopes$groupsummary["Int"][[1]],slopes$groupsummary["Slope"][[1]])
-abline(slopes$groupsummary["Int"][[1]],1,lty=2)
-acc_by_species <- dplyr::bind_rows(acc_by_species, dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
 
-plot(postpollen_aborted_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),col=col.spp(species),pch=16,log="xy", ylim=c(.02,10000), ylab="aborted during provisioning costs (mg/seed)",xlab="",cex=1.5,xaxt="n")
-y.error.bars(SummarySpp[["mean"]]$embryo_endo_costs,SummarySpp[["mean"]]$postpollen_aborted_costs,SummarySpp[["se"]]$postpollen_aborted_costs)
+acc_by_species <- dplyr::bind_rows(acc_by_species,
+  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
+
+#discarded postpollen costs
 slopes <- sma(postpollen_aborted_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="SMA")
-abline(slopes$groupsummary["Int"][[1]],slopes$groupsummary["Slope"][[1]])
-abline(slopes$groupsummary["Int"][[1]],1,lty=2)
+
 acc_by_species <- dplyr::bind_rows(acc_by_species, dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
 
-acc_by_species$variable = c("total accessory costs","seed costs","pollen attraction costs","provisioning costs", "failed tissues costs","all pre-pollen costs per seed","failed pre-pollination costs","failed provisioning costs")
+acc_by_species$variable = c("total reproductive costs","total accessory costs","seed costs","pollen attraction costs","provisioning costs", "failed tissues costs","failed pre-pollination costs","failed provisioning costs")
 
 acc_by_species$Slope <- format(acc_by_species$Slope,nsmall=2,digits=2)
 acc_by_species$Slope_lowCI <- format(acc_by_species$Slope_lowCI,nsmall=2,digits=2)
@@ -323,7 +317,7 @@ plot(0,0,ylim=c(0,1),yaxt="n",xaxt="n",xlim=c(0,1),col="white",xlab="",ylab="")
 segments(x0=.2,x1=.9,y0=.9,y1=.2,lty=1)
 axis(1, at=c(0,1),labels=c("lower","higher"),cex.axis=1)
 axis(2, at=c(0,1),labels=c("lower","higher"),cex.axis=1,las=2)
-mtext(text="b.  Trade-off 1:",side=3,outer=FALSE,adj=0,line=1.6)
+mtext(text="Trade-off 1:",side=3,outer=FALSE,adj=0,line=1.6)
 mtext(text="Seed count-reproductive costs",side=3,outer=FALSE,adj=0,line=0.7)
 mtext(text="seed count,",side=2,line=1.3,outer=FALSE,cex=0.8)
 mtext(text="scaled to plant size",side=2,line=0.4,outer=FALSE,cex=0.8)
@@ -335,7 +329,7 @@ plot(0,0,ylim=c(0,1),yaxt="n",xaxt="n",xlim=c(0,1),col="white",xlab="",ylab="")
 segments(x0=.1,x1=.8,y0=.8,y1=.1,lty=1)
 axis(1, at=c(0,1),labels=c("lower","higher"),cex.axis=1)
 axis(2, at=c(0,1),labels=c("lower","higher"),cex.axis=1,las=2)
-mtext(text="c.  Trade-off 2.",side=3,outer=FALSE,adj=0,line=1.6)
+mtext(text="Trade-off 2.",side=3,outer=FALSE,adj=0,line=1.6)
 mtext(text="Ovule count-pollen attraction costs",side=3,outer=FALSE,adj=0,line=0.7)
 mtext(text="mature ovules count,",side=2,line=1.3,outer=FALSE,cex=0.8)
 mtext(text="scaled to plant size",side=2,line=0.4,outer=FALSE,cex=0.8)
@@ -347,7 +341,7 @@ plot(0,0,ylim=c(0,1),yaxt="n",xaxt="n",xlim=c(0,1),col="white",xlab="",ylab="")
 segments(x0=.1,x1=.9,y0=.9,y1=.1,lty=1)
 axis(1, at=c(0,1),labels=c("lower","higher"),cex.axis=1)
 axis(2, at=c(0,1),labels=c("lower","higher"),cex.axis=1,las=2)
-mtext(text="d.  Trade-off 3.",side=3,outer=FALSE,adj=0,line=1.6)
+mtext(text="Trade-off 3.",side=3,outer=FALSE,adj=0,line=1.6)
 mtext(text="Choosiness-pollen attraction costs",side=3,outer=FALSE,adj=0,line=0.7)
 mtext(text="choosiness",side=2,line=1.3,outer=FALSE,cex=0.8)
 mtext(text="(ovule:seed)",side=2,line=0.4,outer=FALSE,cex=0.8)
