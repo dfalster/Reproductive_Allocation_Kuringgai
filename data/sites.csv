@@ -1,8 +1,8 @@
-site,date_of_fire,age_at_harvest,UTM,notes
-Basin2005,2005,7,,
-Basin2007,2007,5,,"this site is excluded from some fits - although the plants here display RA patterns consistent with other sites, their actual growth is quite stunted in comparison to other similar aged sites"
-Basin1981,1981,32,,most of site burnt in autumn 2016
-Waratah2003,2003,9,,part of site burnt in late winter 2015
-Waratah2011,2011,2.4,,two cohorts of individuals followed at this sitel the first had an age of 1.4 years at harvest and the second an age of 2.4 years
-Bobbin2010,2010,3,,site not used in the end
-Wilunga2012,2013,1.35,,
+site,date_of_fire,age_at_harvest,UTM zone,UTM easting,UTM northing,notes
+Basin2005,2005,7,56,340734,6281614,
+Basin2007,2007,5,56,340916,6281422,"this site is excluded from some fits - although the plants here display RA patterns consistent with other sites, their actual growth is quite stunted in comparison to other similar aged sites"
+Basin1981,1981,32,56,340886,6281385,most of site burnt in autumn 2016
+Waratah2003,2003,9,56,338359,6276250,part of site burnt in late winter 2015
+Waratah2011,2011,2.4,56,338404,6276308,two cohorts of individuals followed at this sitel the first had an age of 1.4 years at harvest and the second an age of 2.4 years
+Bobbin2010,2010,3,56,329049,6271775,site not used in the end
+Wilunga2012,2013,1.35,56,338791,6278908,

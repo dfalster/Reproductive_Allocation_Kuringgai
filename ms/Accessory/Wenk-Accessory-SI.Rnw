@@ -398,7 +398,7 @@ print(xtable(TableS18)
 
 \section{Investment categories}
 
-The file accessoryParts.yml contains, for each species, lists of reproductive tissues that fall into various tissue categories=. These categories are then used to calculate the reproductive investment in the key reproductive tissue categories, (1) pollen-attraction tissues aborted prior to provisioning; (2) pollen-attraction tissues associated with flowers that form mature seeds; (3) provisioning tissues aborted prior to the formation of a mature seed; (4) packaging and dispersal tissues associated with a mature seed; (5) the mature seed itself. Dividing reproductive investment into these categories requires, for each tissue type, knowing the count of parts that reach the key stages (pollinator-ready, onset of provisioning, mature seed) and the mass of parts at each stage. 
+The file accessoryParts.yml contains, for each species, lists of reproductive tissues that fall into various tissue categories. These categories are then used to calculate the reproductive investment in the key reproductive tissue categories, (1) pollen-attraction tissues aborted prior to provisioning; (2) pollen-attraction tissues associated with flowers that form mature seeds; (3) provisioning tissues aborted prior to the formation of a mature seed; (4) packaging and dispersal tissues associated with a mature seed; (5) the mature seed itself. Dividing reproductive investment into these categories requires, for each tissue type, knowing the count of parts that reach the key stages (pollinator-ready, onset of provisioning, mature seed) and the mass of parts at each stage. 
 
 \subsection{accessoryParts\_metadata}
 Brief descriptions of each reproductive parts category in the file accessoryParts.
@@ -547,7 +547,7 @@ Output: PartsList (by species)
 
 \subsection{FlowerParts.R}
 
-Script to calculate the weights of all reproductive tissues for each individual, including special calculations for:
+Script to calculate the unit weights of all reproductive tissues for each individual, including special calculations for:
 
 \begin{enumerate}
 \item determine weights based on dimensions where applicable
@@ -560,7 +560,7 @@ Output: PartsSummary (by species)
 
 \subsection{GraphRepresentation.R}
 
-Script describing defining the plant maps for each species.
+Script describing defining the plant maps for each species. Each plant map begins with a bud (or the appropriate starting point for reproductive tissue development for a specific species) and depicts graphically how the tissue develops through the plant's reproductive cycle to a seed or mature fruit. During the reproductive cycle, there will be branches off the central tissue axis (development from bud to seed). Some of these lead to aborted tissue types (colored red in the graph maps below) and others lead to tissues that reach their final development stage and are then shed by a plant (e.g. petals, calyx, seed pod; colored green in the graph maps below). For some species, there are mutiple axes of development. For instance, cones and flowers on a cone have separate axes, because the number of flowers on a cone is inconsistent across individuals. A few species have aborted plant parts that are listed as a separate axis. In these cases, the aborted unit weighs less than a bud and therefore cannot be shown as ever having reached the stage of a bud.
 
 Uses data files and data frames: PartsSummary (by species), data/MultiplierTable.csv
 Output: GraphMaps (by species)
