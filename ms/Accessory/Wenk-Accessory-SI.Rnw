@@ -94,7 +94,6 @@ plot_graph <- function(graph) {
 
 
 \begin{document}
-\SweaveOpts{concordance=TRUE}
 
 %\maketitle
 
@@ -605,7 +604,8 @@ print_table_species("Banksia ericifolia", flowering_parts)
 \begin{figure}
 \centering
 <<echo=FALSE,results='asis'>>=
-plot_graph(BAER_GraphMaps$graph)
+  plot_graph(BAER_GraphMaps$graph)
+  ###\includegraphics{"../../ms/Accessory/output/BAER.pdf"}
 @
 \caption{Map of parts for \emph{Banksia ericifolia}}
 \label{fig:map Banksia ericifolia}
@@ -627,6 +627,7 @@ print_table_species("Boronia ledifolia", flowering_parts)
 \centering
 <<echo=FALSE,results='asis'>>=
   plot_graph(BOLE_GraphMaps$graph)
+  ###\includegraphics{"../../ms/Accessory/output/BOLE.pdf"}
 @
 \caption{Map of parts for \emph{Boronia ledifolia}}
 \label{fig:map Boronia ledifolia}
