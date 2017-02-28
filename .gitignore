@@ -20,6 +20,7 @@ ms/Accessory/Wenk-Accessory-SI.pdf
 ms/Accessory/figure/
 ms/Accessory/output/
 results.md
+~*.doc*
 *.whisker
 ./bootstrap
 # LaTeX #
