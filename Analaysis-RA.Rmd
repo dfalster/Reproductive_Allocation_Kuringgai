@@ -22,12 +22,13 @@ PartsSummary <- readRDS("export/PartsSummary_all.rds")
 
 source("R/figures.R")
 
-data <- select(SummarySppAge[["mean"]], species, age, repro_inv, growth_leaf, leaf_replacement,leaf_area_0,leaf_weight_0,total_inv,prop_surplus,
+data <- select(SummarySppAge[["mean"]], species, age, repro_inv, growth_leaf, leaf_replacement,leaf_area_0,leaf_weight_0,total_inv,prop_surplus,seed_count,
   growth_stem, leaf_shed,prop_stem,prop_leaf_replacement,prop_leaf_expand,prop_repro,RA_max_1,lifespan,height, RA_vs_all_leaf,
   prop_leaf_loss,height_0,total_weight_0,all_leaf_inv,surplus_inv,all_leaf_and_repro_inv,propagule_inv,ovule_count,success_inv)
 
 data_ind <- select(SummaryCombine,species,individual,age, prop_leaf_loss,height_0,leaf_shed,leaf_weight_0,propagule_inv,ovule_count,
-                   growth_leaf_pos,repro_inv,total_weight_0,all_leaf_inv,total_inv,surplus_inv,all_leaf_and_repro_inv,age,success_inv)
+                   growth_leaf_pos,repro_inv,total_weight_0,all_leaf_inv,total_inv,surplus_inv,all_leaf_and_repro_inv,age,success_inv,
+                   seed_count)
 
 ```
 
