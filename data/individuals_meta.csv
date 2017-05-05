@@ -5,7 +5,7 @@ site,site at Kuringgai
 age,"age at harvest; Waratah 2011 (2012 harvest) and Wilunga 2012 (2013 harvest) are asigned the same age, even though the  plants at the Waratah site are very slightly older"
 age_exact,"age at harvest; Waratah 2011 (2012 harvest) plants are assigned an age of 1.4 years and Wilunga 2012 (2013 harvest) are asigned an age of 1.35 years, reflecting the slightly earlier Julian data of the fire at the Waratah site"
 date_tagged,date species tagged; or harvested for babies
-mature,"indicates if the plant has begun flowers; plants that have flowered in the past, even if they did not produce flowers during the census year, are designated as mature"
+mature,"indicates if the plant has begun flowering; plants that have flowered in the past, even if they did not produce flowers during the census year, are designated as mature"
 use_for_allocation_calculations,if plant is to be used for RA calculations; omits all dead plants; used in ReproductionTissues.R; also appears in GrowthCalculations.R for a secondary individuals dataframe currently not used
 use_for_allometric_equations,"if plant is to be used for calculating overall allometric equations for species; this includes baby plants; currently superceded by column ""use_for_fit"""
 use_for_fit,"if plant is included in the allometric fits; dataframe ""individuals"" created in GrowthCalculations.R only uses individuals tagged as ""yes"" "

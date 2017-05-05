@@ -123,7 +123,7 @@ plot_graph <- function(graph) {
 <<echo=FALSE, results='asis', warning=FALSE>>=
 
 make_table_species_values_for_allocation_seedsize_table <- function(file) {
-  data <- select(file,species,embryo_endo_costs, scaled_seed_count,scaled_ovule_count,
+  data <- select(file,species,scaled_seed_count,scaled_ovule_count,
                  scaled_pollen_attract_costs,choosiness,prop_prepollen_success, prop_prepollen_discarded,
                  prop_postpollen_success,prop_postpollen_discarded, prop_pollen_attract_vs_success,prop_provisioning_vs_success)
   data$species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia", "Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile pulchella", "Phyllota phylicoides", "Pimelea linifolia", "Pultenaea tuberculata")
@@ -132,7 +132,7 @@ make_table_species_values_for_allocation_seedsize_table <- function(file) {
 
 TableS15 <- make_table_species_values_for_allocation_seedsize_table(SummarySpp[["mean"]])
 
-names(TableS15) <- c("species","embryo and endosperm costs","scaled seed count","scaled ovule count","scaled pollen-attraction costs","choosiness","success","discarded","success","discarded","pollen-attraction","provisioning")
+names(TableS15) <- c("species","seed count scaled to leaf area","ovule count scaled to leaf area","pollen-attraction costs scaled to leaf area","choosiness (1/seedset)","success","discarded","success","discarded","pollen-attraction","provisioning")
 
 for (i in 2:12) {
 TableS15[,i] <- format(TableS15[,i],digits=3,nsmall=2)
@@ -143,13 +143,13 @@ TableS15$species  <- paste("\\textit{",unique(TableS15$species),"}", sep="")
 
 \begin{table}[H]
 \centering
-\caption{Species values for data plotted in Figure 2: shifts in reproductive tissue allocation with seed size.}
+\caption{Species values for data plotted in Figure 2: shifts in reproductive tissue allocation with seed size. Data for reproductive costs (Figure 2, panel a), Seed-size, pollen-attraction costs, and provisioning costs (Figure 2, panel f) are presented in Table 1 in the main text and are not included here.}
 \label{tab:species}
-\begin{tabular}{p{4cm}|p{1cm}|p{1.5cm}p{1cm}|p{1.5cm}p{1cm}|p{1.5cm}p{1cm}|p{1cm}p{1.5cm}|p{1.5cm}p{1.5cm}}
+\begin{tabular}{p{4cm}|p{1.5cm}p{1cm}|p{1.5cm}p{1cm}|p{1.5cm}p{1cm}|p{1cm}p{1.5cm}|p{1.5cm}p{1.5cm}}
 \hline
-& \multicolumn{7}{c|}{Proportion} & \multicolumn{2}{c}{Proportion}& \multicolumn{2}{c}{Proportion} \\
-& \multicolumn{7}{c|}{pollen-attraction} & \multicolumn{2}{c}{provisioning}& \multicolumn{2}{c}{success} \\
-& \multicolumn{7}{c|}{investment to} & \multicolumn{2}{c}{investment to}& \multicolumn{2}{c}{investment to} \\
+& \multicolumn{4}{c|}{} & \multicolumn{2}{c|}{Proportion} & \multicolumn{2}{c}{Proportion}& \multicolumn{2}{c}{Proportion} \\
+& \multicolumn{4}{c|}{} & \multicolumn{2}{c|}{pollen-attraction} & \multicolumn{2}{c}{provisioning}& \multicolumn{2}{c}{success} \\
+& \multicolumn{4}{c|}{} & \multicolumn{2}{c|}{investment to} & \multicolumn{2}{c}{investment to}& \multicolumn{2}{c}{investment to} \\
 
 % \begin{tabular}{p{3cm}|p{1cm}p{1.5cm}p{1cm}|p{1.5cm}p{1cm}|p{1.5cm}p{1cm}|p{1cm}p{1.5cm}|p{1.5cm}p{1.5cm}}
 % \hline
@@ -164,6 +164,9 @@ print(xtable(TableS15)
         , include.colnames = TRUE,
         only.contents=TRUE)
 @
+\hline
+& \multicolumn{1}{c|}{Figure reference} & \multicolumn{3}{c|}{Fig 2, panel a} & \multicolumn{2}{c|}{Fig 2, panel b} & \multicolumn{2}{c}{Fig 2, panel c} & \multicolumn{2}{c}{Fig 2, panel d} & \multicolumn{2}{c}{Fig 2, panel e} \\
+
 \end{tabular}
 
 {\color{red}
@@ -226,7 +229,7 @@ for(i in c(4,7,10)){
 
 \begin{table}[H]
 \centering
-\caption{Testing for shifts in accessory costs with in age, plant size, or reproductive effort.}
+\caption{Testing for shifts in accessory costs with in age, plant size, or reproductive effort. Shifts in accessory costs with these variables is suggested as one possible explanation of increasing reproductive investment in larger, older plants, but such a trend did not exist in these data.}
 \label{tab:access_vs_age}
 \begin{tabular}{p{4cm}|x{.75cm}x{1cm}x{1.25cm}|x{.75cm}x{1cm}p{1.25cm}|x{.75cm}x{1cm}p{1.25cm}}
 \hline
@@ -287,7 +290,7 @@ for(i in c(4,7)){
 
 \begin{table}[H]
 \centering
-\caption{Intraspecific correlations between total reproductive investment and (a) propagule investment and (b) flower investment, where flower investment is defined as 'flower weight $\times$ bud count'.}
+\caption{Intraspecific correlations between total reproductive investment and (a) propagule investment and (b) flower investment, where flower investment is defined as 'flower weight $\times$ bud count'. Due to the high proportion of aborted flowers, flower investment was a better proxy of reproductive investment than was propagule investment. This was true both across species (Figure 3, Table 3 in the main text) and within species, as is shown here.}
 \label{tab:propagule_invest_vs_repro}
 \begin{tabular}{p{4cm}|x{.75cm}x{1cm}x{1.5cm}|x{.75cm}x{1cm}p{1.5cm}}
 \hline
@@ -356,7 +359,7 @@ names(TableS19) <- c("costs","r$^2$","slope (95$\\%$ CI)","p (slope test)")
 @
 \begin{table}[H]
 \centering
-\caption{Scaling of reproductive tissue costs with total propagule size.}
+\caption{Scaling of reproductive tissue costs with total propagule size. In this manuscript all "seed size" calculations use embryo and endosperm size, not propagule size. Most previous research has used propagule size as a measure of "seed size" and noted isometric relationships between various tissue costs and "seed size". Using embryo and endosperm size, these relationship did not exist for this data set, but are present if "seed size" includes the entire propagule.}
 \label{tab:repro_tissues_vs_prop_size}
 \begin{tabular}{p{5cm}|x{.75cm}x{3.5cm}p{3cm}}
 \hline
@@ -370,52 +373,6 @@ print(xtable(TableS19)
 \end{tabular}
 \end{table}
 
-\clearpage
-
-<<echo=FALSE, results='asis', warning=FALSE>>=
-make_table_buds_vs_size <- function() {
-  xvar <- "total_weight_0"
-  yvar <- "ovule_count"
-  data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
-
-  fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="OLS", log="xy")
-  TableS18 <- dplyr::select(fit$groupsummary,group,n,r2,pval)
-
-  names(TableS18) <- c("species","n","r$^2$","p")
-
-  species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia", "Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile pulchella", "Phyllota phylicoides", "Pimelea linifolia", "Pultenaea tuberculata")
-  TableS18$species <-  paste("\\textit{",species,"}", sep="")
-
-  TableS18
-}
-
-TableS18 <- make_table_buds_vs_size()
-
-for(i in c(2,3)){
-  TableS18[,i] <- format_r2(TableS18[,i])
-}
-for(i in c(4)){
-  TableS18[,i] <- format_p(TableS18[,i])
-}
-
-TableS18$species  <- paste("\\textit{",unique(TableS18$species),"}", sep="")
-@
-
-\begin{table}[H]
-\centering
-\caption{Count of buds initiated is well predicted by plant size.}
-\label{tab:bud_count_vs_size}
-\begin{tabular}{p{4cm}|x{.75cm}x{1cm}p{1.25cm}}
-\hline
-<<echo=FALSE, results='asis', warning=FALSE>>=
-print(xtable(TableS18)
-        , sanitize.text.function=I
-        , include.rownames = FALSE
-        , include.colnames = TRUE,
-        only.contents=TRUE)
-@
-\end{tabular}
-\end{table}
 
 \clearpage
 

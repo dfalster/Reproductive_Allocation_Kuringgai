@@ -1,12 +1,12 @@
 category,description
-prepollen_FD_success_parts,reproductive tissues used for pollen-attraction that reach their final developmental stage and are shed at the time of pollination
-prepollen_FD_success_parts_denominator,reproductive tissues used for pollen-attraction that reach their final developmental stage and are shed at the time of pollination
+prepollen_FD_success_parts,weight of reproductive tissues used for pollen-attraction that reach their final developmental stage and are shed at the time of pollination
+prepollen_FD_success_parts_denominator,count of reproductive tissues used for pollen-attraction that reach their final developmental stage and are shed at the time of pollination
 prepollen_parts_continue_developing_ into_propagule,"reproductive tissues used for pollen-attraction that continue developing (and increasing in mass), ultimately being part of the propagule "
 prepollen_parts_continue_developing_ into_pack_disp,"reproductive tissues used for pollen-attraction that continue developing (and increasing in mass), ultimately being part of packaging and dispersal parts"
-prepollen_parts_continue_developing_ into_pack_disp_prepollen_prop_to_use,"reproductive tissues used for pollen-attraction that continue developing (and increasing in mass), ultimately being part of packaging and dispersal parts"
+prepollen_parts_continue_developing_ into_pack_disp_prepollen_prop_to_use,"reproductive tissues used for pollen-attraction that continue developing (and increasing in mass), ultimately being part of packaging and dispersal parts; proportion of parts attributed to pollen-attraction investment"
 packaging_dispersal_parts,"reproductive tissues used for packaging and dispersal, that are associated with a fully-developed seed"
-packaging_dispersal_parts_denominator,"reproductive tissues used for packaging and dispersal, that are associated with a fully-developed seed"
-packaging_dispersal_parts_prop_to_use,"reproductive tissues used for packaging and dispersal, that are associated with a fully-developed seed"
+packaging_dispersal_parts_denominator,"count of reproductive tissues used for packaging and dispersal, that are associated with a fully-developed seed"
+packaging_dispersal_parts_prop_to_use,"reproductive tissues used for packaging and dispersal, that are associated with a fully-developed seed; proportion of parts attributed to packaging and dispersal investment"
 propagule_parts,"reproductive tissues that are part of the propagule, that are associated with a fully-developed seed"
 fruit_parts,"reproductive tissues that are part of the fruit, that are associated with a fully-developed seed"
 prepollen_parts_aborted_preflowering,"reproductive tissues that abort prior to the formation of a mature, pollination-ready flower"
