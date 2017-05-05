@@ -49,7 +49,7 @@ targets:
 
 
   ms/Accessory/Wenk-Accessory-SI.pdf:
-    command: latex_build("ms/Accessory/Wenk-Accessory-SI.tex", bibliography="ms/Accessory/references.bib", clean=TRUE)
+    command: latex_build("ms/Accessory/Wenk-Accessory-SI.tex", clean=TRUE)
 
   ms/Accessory/Wenk-Accessory-SI.tex:
     knitr:

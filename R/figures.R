@@ -205,6 +205,10 @@ format_p <- function(p, digits = 4) {
   x
 }
 
+format_r2 <- function(x) {
+  format(x, nsmall=2, digits=2)
+}
+
 
 print_xtable_for_species <- function(thisSpecies, data, file){
   print_xtable(filter(data, species==thisSpecies),file=file)
