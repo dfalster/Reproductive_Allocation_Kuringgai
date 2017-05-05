@@ -713,7 +713,7 @@ This file \texttt{individuals.csv} contains a list of all plants harvested at th
 @
 
 \subsubsection{Multiplier Table}
-The file \texttt{MultiplierTable.csv} is a lookup table indicating, for each species by flower part combination, if the investment per part is for a single (1) or multiple propagules, defined as either a mature fruit or a seed, depending on what is the dispersal unit for each species. Within a single column, i.e. within a single species developmental trajectory, numbers will change if the "count" used to access reproduction changes at a given developmental stage. For instance, with BOLE (\emph{Boronia ledifolia}), counts are made by flowers up through the finished flower stage, but then fruit are the unit counted and each flower forms 4 fruit.
+The file \texttt{MultiplierTable.csv} is a lookup table indicating, for each species by flower part combination, if the investment per part is for a single (1) or multiple propagules, defined as either a mature fruit or a seed, depending on what is the dispersal unit for each species. Within a single column, i.e. within a single species developmental trajectory, numbers will change if the "count" used to access reproduction changes at a given developmental stage. For instance, with BOLE (\emph{Boronia ledifolia}), counts are made by flowers up through the finished flower stage, but then fruits are the unit counted for not all 4 fruits develop within each flower.
 
 \subsubsection{Reproduction}
 
