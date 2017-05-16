@@ -1,124 +1,3 @@
-to.dev <- function(expr, dev, filename, ..., verbose=TRUE) {
-  if ( verbose )
-    cat(sprintf("Creating %s\n", filename))
-  dev(filename, ...)
-  on.exit(dev.off())
-  eval.parent(substitute(expr))
-}
-
-to.pdf <- function(expr, filename, ...) {
-  to.dev(expr, pdf, filename, ...)
-}
-
-
-to.png <- function(expr, filename, ...) {
-  to.dev(expr, png, filename, ...)
-}
-
-base_plot_logged <- function(..., axes=TRUE, labels=c(TRUE, TRUE)) {
-
-  plot(..., type="n", log="xy", xlab="",ylab="", ann=FALSE, axes=FALSE)
-  if(axes) {
-    axis.log10(1, labels=labels[1])
-    axis.log10(2, labels=labels[2])
-    box()
-  }
-}
-
-base_plot <- function(..., axes=TRUE, labels=c(TRUE, TRUE)) {
-  plot(..., type="n", xlab="",ylab="", ann=FALSE, axes=FALSE)
-  if(axes) {
-    axis(1, labels=labels[1])
-    axis(2, labels=labels[2], las=1)
-    box()
-  }
-}
-
-
-axis.log10 <- function(side=1, horiz=FALSE, labels=TRUE, 
-  baseAxis = TRUE, wholenumbers=TRUE, labelEnds=TRUE, las=1, at=NULL) {
-
-  fg <- par("fg")
-
-  if(is.null(at)){
-
-    #get range on axis
-    if(side ==1 | side ==3) {
-      r <- par("usr")[1:2]   #upper and lower limits of x-axis
-    } else {
-      r <- par("usr")[3:4] #upper and lower limits of y-axis
-    }
-
-    #make pretty intervals
-    at <- pretty(r)
-    #drop ends if desirbale
-    if(!labelEnds)
-      at <- at[at > r[1] & at < r[2]]
-  }
-
-  #restrict to whole numbers if desirable
-  if(wholenumbers)
-    at<-at[is.wholenumber(at)]
-
-  lab <- do.call(expression, lapply(at, function(i) bquote(10^.(i))))
-
-  #convert at if
-  if(baseAxis)
-    at<-10^at
-
-  #make labels
-  if ( labels )
-    axis(side, at=at, lab, col=if(horiz) fg else NA,
-         col.ticks=fg, las=las)
-  else
-    axis(side, at=at, FALSE, col=if(horiz) fg else NA,
-         col.ticks=fg, las=las)
-}
-
-is.wholenumber <-  function(x, tol = .Machine$double.eps^0.5) {
-  abs(x - round(x)) < tol
-}
-
-
-##' Sequence in log space
-##'
-##' Unlike the billions of options for \code{seq}, only
-##' \code{length.out} is supported here, and both \code{from} and
-##' \code{to} must be provided.  For completeness, \code{seq_range}
-##' generates a range in non-log space.
-##' @title Sequence in log space
-##' @param from Starting point
-##' @param to Ending point
-##' @param length.out Number of points to generate
-##' @author Rich FitzJohn
-##' @export
-seq_log <- function(from, to, length.out) {
-  exp(seq(log(from), log(to), length.out=length.out))
-}
-
-##' @export
-##' @param r range (i.e., c(from, to)
-##' @rdname seq_log
-seq_log_range <- function(r, length.out) {
-  seq_log(r[[1]], r[[2]], length.out)
-}
-
-##' @export
-##' @rdname seq_log
-seq_range <- function(r, length.out) {
-  seq(r[[1]], r[[2]], length.out=length.out)
-}
-
-#define functions
-se <- function(x) {
-  sd(x)/sqrt(length(x))
-}
-
-con95 <- function(x){
-  (sd(x)/sqrt(length(x)))*1.96
-}
-
-
 col.spp <- function(x=NULL){
 
   ret <- c(BAER="red", BOLE="darkolivegreen4", COER="blue", EPMI="purple", GRBU="grey",
@@ -198,7 +77,7 @@ col.lots <- function(x) {
   cols[as.factor(x)]
 }
 
-format_p <- function(p, digits = 4) {
+format_p <- function(p, digits = 3) {
   x <- as.character(round(p, digits = digits))
   pc <- 10^-digits
   x[p < pc] <- paste("<", pc)
@@ -206,7 +85,7 @@ format_p <- function(p, digits = 4) {
 }
 
 format_r2 <- function(x) {
-  format(x, nsmall=2, digits=2)
+  format(round(x, 2), nsmall=2)
 }
 
 

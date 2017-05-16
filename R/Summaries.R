@@ -1,3 +1,14 @@
+filterBySpecies <- function(thisSpecies, data){
+  filter(data, species == thisSpecies)
+}
+
+filterForAllocation <- function(data, IndividualsList){
+ # TODO: change column name in reproduction ro be consistent: individual -> tagID
+ keep <- IndividualsList$individual[IndividualsList$use_for_allocation_calculations]
+ data %>% filter(individual %in% keep)
+ }
+
+
 # Get average LMA and leaf size for each species
 process_LMA <- function(LMA_raw) {
   LMA <- filter(LMA_raw, species!="" & species!=" ") %>%

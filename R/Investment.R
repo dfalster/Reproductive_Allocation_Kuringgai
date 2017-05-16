@@ -1,9 +1,10 @@
 
-# Error - amounts that were pre-existing on plant at start of census, i.e. no predecsssor
-#    - rename ot pre-existing
+# Outputs a list with several elements:
 # Lost - parts lost during development - same number lost
 # Finished Development is everything (including lost parts) - rename to Halted development
 # Investment = energy investment in going from one stage to next
+# Error - amounts that were pre-existing on plant at start of census, i.e. no predecessor
+#    - rename to pre-existing
 
 CalculateInvestmentForSpecies <- function(species, Reproduction, FloweringCategories, MultiplierTable, GraphMaps,
   PartsSummary) {
@@ -125,9 +126,9 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
     Progression <- V_names[PATH]
     n <- length(Progression)
 
-    # Duplicate tree structure (Acc= for accesories calculations, Pred=for storing possible predecessors) Will modify below, TreeLis contains list of lists, one for
+    # Duplicate tree structure (Acc= for accessories calculations, Pred=for storing possible predecessors) Will modify below, TreeLis contains list of lists, one for
     # each census. As we identify, parents for a given object, they are removed from the list of possible predecssors. In this way progressively identify
-    # predecssors.
+    # predecessors.
     TreeList <- TreeListOrig
     TreeList_Acc <- TreeList
     TreeList_Pred <- TreeList
@@ -150,7 +151,7 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
 
         {
           # Some elements have aborted/empty parts which can be their alternative at that stage of reproduction. Make calculations for them Checking if there are X-OR-s
-          # before moving to the lower developement
+          # before moving to the lower development
           dist.to.root <- as.numeric(shortest.paths(Plant.Graph, v = Progression[1], to = Progression[j], weight = NA))
           which.have.the.same.dist <- shortest.paths(Plant.Graph, v = Progression[1], weight = NA) == dist.to.root
           # Find the ones that belong to the same group
@@ -203,11 +204,11 @@ InvestmentCalculations <- function(TreeListOrig, GraphMaps) {
     FinishedDevelopement <- rbind(FinishedDevelopement, FD[as.character(FD$part) %in% V(Plant.Graph)$name[V(Plant.Graph)$col == get.vertex.attribute(Plant.Graph,
       "col", index = Progression[1])], ])
 
-    ################### Calculating cost of accesorries Check the color of main progression line
+    ################### Calculating cost of accessories Check the color of main progression line
     Progression_color <- get.vertex.attribute(Plant.Graph, index = Progression[1], name = "col")
     # Accesoried to that line have color 1 higher, moreover choose the last stage of progression for each accesory (degree=1)
     Acc.Finals <- V(Plant.Graph)[(V(Plant.Graph)$col == (Progression_color + 1)) & (degree(Plant.Graph) == 1)]$name
-    # If there are accesories
+    # If there are accessories
       for (k in seq_len(length(Acc.Finals))) {
         L <- data.frame(part = c(), Census = c(), count = c(), weight = c())
         FD <- data.frame(species= c(), part = c(), Census = c(), count = c(), weight = c())

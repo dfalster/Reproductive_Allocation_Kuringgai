@@ -10,4 +10,4 @@ str <- whisker.render(readLines("x_remake_species_data.yml.whisker"), vals)
 writeLines(str, "remake_species_data.yml")
 
 str <- whisker.render(readLines("x_species_data.R.whisker"), vals)
-writeLines(str, "R/species_data.R")
+writeLines(str, "R/Species.R")

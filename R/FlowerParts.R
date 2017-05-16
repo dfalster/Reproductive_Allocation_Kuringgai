@@ -8,7 +8,7 @@ make_PartsSummary <- function(FlowerParts, PartsList) {
   )
 }
 
-### Average counts per mm for specied that require it. Specie (not part) specific.
+### Average counts per mm for specified that require it. Specie (not part) specific.
 make_AvCountsPerMM <- function(FPSummary) {
   data <- FPSummary %>% filter(part == "count_by_length")
   ret <- NULL
@@ -27,7 +27,7 @@ get_volume <- function(diameter,height) {
   height * (diameter/2)^2 * pi
 }
 
-### Calculating the regression coefficients requiered for calculations of weight based on the measured dimension of the plant part.  Calculations are only made for
+### Calculating the regression coefficients required for calculations of weight based on the measured dimension of the plant part.  Calculations are only made for
 # TODO: make these plots
 # pdf(file = paste("output/docs/", species.name, "_", part.name, ".pdf", sep = ""), width = 10, height = 10)
 # plot(height, weight, type = "p", main = paste(species.name, part.name, sep = ": "))
@@ -144,7 +144,7 @@ make_AvWeightPerUnit <- function(FPSummary, PartList) {
     }
   out <- data.frame(species = species.name, part = PartList, weight = weight, stringsAsFactors = FALSE)
 
-  # Add additional parts which are derivative of the existing measurments
+ # Add additional parts which are derivative of the existing measurements
  DeriveMissingParts(out)
 
 }
