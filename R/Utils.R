@@ -11,7 +11,7 @@
 ##' @author Rich FitzJohn
 ##' @export
 seq_log <- function(from, to, length.out) {
-  exp(seq(log(from), log(to), length.out=length.out))
+  exp(seq(log(from), log(to), length.out = length.out))
 }
 
 ##' @export
@@ -24,33 +24,62 @@ seq_log_range <- function(r, length.out) {
 ##' @export
 ##' @rdname seq_log
 seq_range <- function(r, length.out) {
-  seq(r[[1]], r[[2]], length.out=length.out)
+  seq(r[[1]], r[[2]], length.out = length.out)
 }
 
-#define functions
+# define functions
 se <- function(x) {
   sd(x)/sqrt(length(x))
 }
 
-con95 <- function(x){
-  (sd(x)/sqrt(length(x)))*1.96
+con95 <- function(x) {
+  (sd(x)/sqrt(length(x))) * 1.96
 }
 
 clean_headers <- function(x) {
-  x <- gsub("_", " ", x, fixed=TRUE)
+  x <- gsub("_", " ", x, fixed = TRUE)
   x <- lapply(x, firstup)
   x
 }
 
 # Captilise first letter of strings
 firstup <- function(x) {
-   substr(x, 1, 1) <- toupper(substr(x, 1, 1))
-x
+  substr(x, 1, 1) <- toupper(substr(x, 1, 1))
+  x
 }
 
-latex_build <- function(filename, bibliography=NULL, output=NULL,
-                        chdir=TRUE, interaction="nonstopmode",
-                        max_attempts=5L, clean=FALSE, engine="pdflatex") {
+
+# this function gives better behaviour of x/y when both x and y =0 and we are
+# certain the answer should be zero
+divide_zero <- function(x, y) {
+
+  if (length(x) != length(y))
+    stop("bad")
+
+  ret <- x/y
+
+  # if x and y are zero
+  i <- y == 0 & x == 0
+  ret[i] <- 0
+
+  ret
+}
+
+
+read_csv <- function(filename) {
+  read.csv(filename, header = TRUE, sep = ",", stringsAsFactors = FALSE)
+}
+
+combine_data_frames <- function(..., d = list(...)) {
+  ldply(d, function(x) x)
+}
+
+combine_list_elements <- function(..., d = list(...), element) {
+  ldply(d, function(x) x[[element]])
+}
+
+latex_build <- function(filename, bibliography = NULL, output = NULL, chdir = TRUE,
+  interaction = "nonstopmode", max_attempts = 5L, clean = FALSE, engine = "pdflatex") {
 
   fileout <- sub(".tex$", ".pdf", filename)
 
@@ -61,8 +90,8 @@ latex_build <- function(filename, bibliography=NULL, output=NULL,
   }
 
   res <- run_latex(filename, interaction, engine)
-  if(engine=="xelatex") {
-      res <- run_latex(filename, interaction, engine)
+  if (engine == "xelatex") {
+    res <- run_latex(filename, interaction, engine)
   }
   if (!is.null(bibliography)) {
     run_bibtex(filename)
@@ -74,9 +103,11 @@ latex_build <- function(filename, bibliography=NULL, output=NULL,
   pat <- c("Rerun to get cross-references right", # labels
            "Rerun to get citations correct",      # bibtex
            "Rerun to get outlines right")         # tikz
+
   isin <- function(p, x) {
     any(grepl(p, x))
   }
+
   for (i in seq_len(max_attempts)) {
     if (any(vapply(pat, isin, logical(1), res))) {
       res <- run_latex(filename, interaction, engine)
@@ -89,7 +120,7 @@ latex_build <- function(filename, bibliography=NULL, output=NULL,
     latex_clean(filename)
   }
 
-  if(!is.null(output)) {
+  if (!is.null(output)) {
     if (chdir) {
       setwd(owd)
     }
@@ -102,16 +133,14 @@ latex_build <- function(filename, bibliography=NULL, output=NULL,
 
 latex_clean <- function(filename) {
   filebase <- sub(".tex$", "", filename)
-  exts <- c(".log", ".aux", ".bbl", ".blg", ".fls", ".out", ".snm",
-            ".nav", ".tdo", ".toc")
+  exts <- c(".log", ".aux", ".bbl", ".blg", ".fls", ".out", ".snm", ".nav", ".tdo",
+    ".toc")
   aux <- paste0(filebase, exts)
   file.remove(aux[file.exists(aux)])
 }
 
-run_latex <- function(filename, interaction="nonstopmode", engine="pdflatex") {
-  args <- c(paste0("-interaction=", interaction),
-            "-halt-on-error",
-            filename)
+run_latex <- function(filename, interaction = "nonstopmode", engine = "pdflatex") {
+  args <- c(paste0("-interaction=", interaction), "-halt-on-error", filename)
   call_system(Sys_which(engine), args)
 }
 
@@ -126,6 +155,7 @@ Sys_which <- function(x) {
   }
   ret
 }
+
 
 ##' Function imported from callr package;  makes it easy to call a
 ##' system command from R and have it behave.
@@ -166,7 +196,7 @@ Sys_which <- function(x) {
 ##' environment variables (see \code{\link{system2}}).
 ##' @param max_lines Maximum number of lines of program output to
 ##' print with the error message.  We may prune further to get the
-##' error message under \code{getOption("warn.length")}, however.
+##' error message under \code{getOption('warn.length')}, however.
 ##' @param p Fraction of the error message to show from the tail of
 ##' the output if truncating on error (default is 20\% lines are head,
 ##' 80\% is tail).
@@ -175,10 +205,10 @@ Sys_which <- function(x) {
 ##' both to \code{FALSE} is not recommended.
 ##' @export
 ##' @author Rich FitzJohn
-call_system <- function(command, args, env=character(), max_lines=20,
-                        p=0.8, stdout=TRUE, stderr=TRUE) {
-  res <- suppressWarnings(system2(command, args,
-                                  env=env, stdout=stdout, stderr=stderr))
+call_system <- function(command, args, env = character(), max_lines = 20, p = 0.8,
+  stdout = TRUE, stderr = TRUE) {
+  res <- suppressWarnings(system2(command, args, env = env, stdout = stdout,
+    stderr = stderr))
   ok <- attr(res, "status")
   if (!is.null(ok) && ok != 0) {
     max_nc <- getOption("warning.length")
@@ -189,14 +219,13 @@ call_system <- function(command, args, env=character(), max_lines=20,
     if (!is.null(errmsg)) {
       msg <- c(msg, sprintf("%s\nerrmsg: %s", errmsg))
     }
-    sep <- paste(rep("-", getOption("width")), collapse="")
+    sep <- paste(rep("-", getOption("width")), collapse = "")
 
     ## Truncate message:
     if (length(res) > max_lines) {
       n <- ceiling(max_lines * p)
-      res <- c(head(res, ceiling(max_lines - n)),
-               sprintf("[[... %d lines dropped ...]]", length(res) - max_lines),
-               tail(res, ceiling(n)))
+      res <- c(head(res, ceiling(max_lines - n)), sprintf("[[... %d lines dropped ...]]",
+        length(res) - max_lines), tail(res, ceiling(n)))
     }
 
     ## compute the number of characters so far, including three new lines:
@@ -204,43 +233,10 @@ call_system <- function(command, args, env=character(), max_lines=20,
     i <- max(1, which(cumsum(rev(nchar(res) + 1L)) < (max_nc - nc)))
     res <- res[(length(res) - i + 1L):length(res)]
     msg <- c(msg, "Program output:", sep, res, sep)
-    stop(paste(msg, collapse="\n"))
+    stop(paste(msg, collapse = "\n"))
   }
   invisible(res)
 }
 
 
 
-# this function gives better behaviour of x/y when both x and y =0 and we are certain the answer should be zero
-divide_zero <- function(x,y) {
-
-  if(length(x) != length(y)) stop("bad")
-
-  ret <- x/y
-
-  # if x and y are zero
-  i <- y==0 & x==0
-  ret[i] <- 0
-
-  ret
-}
-
-
-read_csv <- function(filename) {
-  read.csv(filename, header = TRUE, sep = ",", stringsAsFactors = FALSE)
-}
-
-tex_2_pdf <- function(texfile){
-  filename <- tools::file_path_sans_ext(texfile)
-  system(sprintf("pdflatex %s", texfile))
-  aux.files <- paste0(filename, c(".log", ".aux", ".bbl", ".blg"))
-  file.remove(aux.files[file.exists(aux.files)])
-}
-
-combine_data_frames <- function(..., d=list(...)) {
-   ldply(d, function(x) x)
- }
-
-combine_list_elements <- function(..., d=list(...), element) {
-   ldply(d, function(x) x[[element]])
- }
