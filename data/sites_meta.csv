@@ -1,4 +1,4 @@
-column,description
+Column,Description
 site,site name
 date_of_fire,year of most recent fire prior to time of study
 age_at_harvest,age of plants at harvest

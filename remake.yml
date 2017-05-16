@@ -78,6 +78,7 @@ targets:
       - PHPH_GraphMaps
       - PILI_GraphMaps
       - PUTU_GraphMaps
+      - R/figures.R
 
   # Data --------------------------------------
   IndividualsList:

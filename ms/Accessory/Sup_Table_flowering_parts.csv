@@ -1,4 +1,4 @@
-species,part,description,method,ovules per unit,multiplier factor
+Species,Part,Description,Method,Ovules per unit,Multiplier factor
 Banksia ericifolia,"bud, tiny",buds that are just starting to form; includes all flower parts,count\_per\_length,2,2
 Banksia ericifolia,"bud, small",small buds; includes all flower parts,count\_per\_length,2,2
 Banksia ericifolia,"bud, mid-sized",mid-sized buds; includes all flower parts,count\_per\_length,2,2
@@ -91,7 +91,7 @@ Grevillea buxifolia,"fruit, large immature, stage 06","fruit more than 7 mm in l
 Grevillea buxifolia,pedicel,"pedicel from a mature fruit; considered a separate part once at ""fruit large immature"" as this is when they start expanding",count,2,2
 Grevillea buxifolia,seed pod,seed pod once seed is mature; varies considerably by length; does not include pedicel,length,2,2
 Grevillea buxifolia,"seed, aborted",seeds that are quite flat and much lighter than others of similar length,count,1,1
-Grevillea buxifolia,seed,mature seeds weighed from pod; all mature seeds similar weight regardless of pod length,count,1,1
+Grevillea buxifolia,seed,mature seeds weighed from pod; all similar weight regardless of pod length,count,1,1
 Grevillea speciosa,"inflorescence stalk, in flower","inflorescence stalk for buds, flowers or finished flowers",count,variable,1
 Grevillea speciosa,"inflorescence bud, small",inflorescence bud; weight includes stalk and miniature buds; stage before individual buds are discernable,count,variable,1
 Grevillea speciosa,"inflorescence stalk, in fruit",inflorescence stalk in fruit,count,variable,2

@@ -1,4 +1,4 @@
-column,units,description
+Column,Units,Description
 sort2,,"sorts species by year, age, species, individual"
 sort1,,sorts species by order of data on datasheets
 species,,4 letter species abbreviations

@@ -1,4 +1,4 @@
-element,units,original_units,method
+Element,Units,Original units,Method
 C,Wt %,Wt %,combustion using a LECO TruSpec analyser
 N,Wt %,Wt %,combustion using a LECO TruSpec analyser
 Al,ppm,mg/kg,ICPOES on samples open-vessel digested with a 5:1 mixture of nitric and perchloric acids

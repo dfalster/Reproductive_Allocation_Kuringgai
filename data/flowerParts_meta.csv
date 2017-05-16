@@ -1,4 +1,4 @@
-Var,units,description
+Column,Units,Description
 sort,,"order in which data were entered, to easily relocate plant parts"
 species,,4 letter species abbreviations
 site,,name of site along West Head Road

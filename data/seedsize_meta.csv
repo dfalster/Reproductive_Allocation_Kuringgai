@@ -1,4 +1,4 @@
-column,description,units
+Column,Description,Units
 species,4 letter species abbreviations,
 seed_size,"seed weight; weights include embryo, endosperm, and seed coat",mg
 embryo_endo_size,weight of just the embryo and endosperm component of the seed,mg

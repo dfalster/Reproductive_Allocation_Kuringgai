@@ -1,0 +1,6 @@
+Column,Description
+Species_name,Latin binomial for study species
+Family,Family of study species
+Common_name,Common name of species
+Abbreviation,4 letter code for species used in data and text
+Previous_names,Recognised synonyms for species

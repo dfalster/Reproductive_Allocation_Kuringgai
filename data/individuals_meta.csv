@@ -1,3 +1,4 @@
+Column,Description
 species,species 4 letter code
 replicate,species tag number
 individual,full tag ID
