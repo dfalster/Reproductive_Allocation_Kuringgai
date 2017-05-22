@@ -21,6 +21,7 @@ ms/Accessory/figure/
 ms/Accessory/output/
 ms/plant_maps/full
 results.md
+release
 ~*.doc*
 *.whisker
 ./bootstrap

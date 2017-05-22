@@ -792,7 +792,7 @@ The file \texttt{species.csv} lists species included in study. Includes 4-letter
 \clearpage
 \subsection{Code calculating reproductive investment}
 
-Code reproducing the results described in this paper is available at \\ \href{https://github.com/traitecoevo/reproductive_allocation_kuringai}{github.com/traitecoevo/reproductive\_allocation\_kuringai}. Further instructions on running the code are available at that address. Here we simply provide a brief overview of the content. The folder \texttt{R} contains functions implementing the methods described above and in the main text as follows.
+Code reproducing the results described in this paper is available at \\ \href{https://github.com/traitecoevo/reproductive_allocation_kuringgai}{github.com/traitecoevo/reproductive\_allocation\_kuringgai}. Further instructions on running the code are available at that address. Here we simply provide a brief overview of the content. The folder \texttt{R} contains functions implementing the methods described above and in the main text as follows.
 
 \subsubsection{\texttt{FlowerParts.R}}
 

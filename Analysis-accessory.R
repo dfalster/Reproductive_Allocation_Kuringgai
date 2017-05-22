@@ -1,5 +1,3 @@
-
-
 library(smatr)
 library(broom)
 library(dplyr)
