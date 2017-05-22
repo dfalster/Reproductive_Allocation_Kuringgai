@@ -393,9 +393,9 @@ We collected data for 14 species (Table \ref{tab:species}) at 7 sites (Tables \r
       , floating = FALSE)
 @
 
-For each species we established a list of different reproductive tissue parts and mapped how these parts developed through time. Each species reproductive tissue development initiates with a bud or inflorescence bud, which increases in size and is divided into multiple tissue types several times during development. For instance, a bud, once open, divides into being petals + stamens, a sepal, and a stigma. As a pollinated stigma develops into a fruit, it will be further divided into seed, seed pod, and potentially additional parts. The central development axis terminates with the formation of a mature seed, while side axes end in fully developed tissues (such as petals, calyx, pedicel) and aborted tissues (aborted seeds, aborted fruit) at the point where they cease to increase in mass.
+For each species, we established a list of different reproductive tissue parts and mapped how these parts developed through time. In all species, reproductive tissue development initiates with a bud or inflorescence bud, which increases in size and is divided into multiple tissue types several times during development. For instance, a bud, once open, divides into being petals + stamens, a sepal, and a stigma. As a pollinated stigma develops into a fruit, it will be further divided into seed, seed pod, and potentially additional parts. The central development axis terminates with the formation of a mature seed, while side axes end in fully developed tissues (such as petals, calyx, pedicel) and aborted tissues (aborted seeds, aborted fruit) at the point where they cease to increase in mass.
 
-While all species developed reproductive tissues from buds to seeds, species showed different developmental pathways in the precise reproductive tissues used. We therefore created a developmental flowchart for each species, as shown below in following sections in Figs. \ref{fig:map_Banksia_ericifolia}-\ref{fig:map_Pultenaea_tuberculata}). Tables \ref{tab:parts_Banksia_ericifolia}-Table \ref{tab:parts_Pultenaea_tuberculata} then provide, for each species, a list of plant parts, a description of exactly what tissues are included in each plant part and at what developmental stage, the method whereby the count and mass of the plant parts is measured, and the number of ovules in each unit of plant part.
+While all species developed reproductive tissues from buds to seeds, species showed different developmental pathways due to the precise reproductive tissues used. We therefore created a developmental flowchart for each species, as shown below in following sections in Figs. \ref{fig:map_Banksia_ericifolia}-\ref{fig:map_Pultenaea_tuberculata}). Tables \ref{tab:parts_Banksia_ericifolia}-Table \ref{tab:parts_Pultenaea_tuberculata} then provide, for each species, a list of plant parts, a description of exactly what tissues are included in each plant part and at what developmental stage, the method whereby the count and mass of the plant parts is measured, and the number of ovules in each unit of plant part.
 
 \subsubsection{How the census is completed for each part}
 
@@ -416,7 +416,7 @@ Our goal was to estimate the amount of mass each plant invests in different tiss
 \item After finding a predecessor, the investment needed to progress  is calculated. The investment is defined as the difference between the element mass at the time of census and that of it's predecessor.
 \end{itemize}
 
-As an example, if, in census $t$, a large bud exists, it is assumed that it has developped from a medium sized bud (the previous stage) in census $t$-1. If in census $t$-1 no medium buds exists, the large bud is assumed to have developped from a small bud (two stages back). This process continues back along the plant map developmental trajectory until a plausible predecessor is located in the previous census period. After this process is complete, any parts from census $t$-1 for which a subsequent developmental stage is not identified as designated as having reached their final developmental stage at census $t$-1 (i.e. they aborted). For plant parts, such as petals, that as a final development stage, no success is sought.
+As an example, if, in census $t$, a large bud exists, it is assumed that it has developped from a medium sized bud (the previous stage) in census $t$-1. If in census $t$-1 no medium buds exists, the large bud is assumed to have developped from a small bud (two stages back). This process continues back along the plant map developmental trajectory until a plausible predecessor is located in the previous census period. After this process is complete, any parts from census $t$-1 for which a subsequent developmental stage is not identified as designated as having reached their final developmental stage at census $t$-1 (i.e. they aborted). For plant parts, such as petals, that is a final development stage, no success is sought.
 
 
 \subsection{Details on calculations by species}
@@ -737,26 +737,26 @@ The file \texttt{accessoryParts.yml} contains, for each species, lists of reprod
 
 The file \texttt{flowerCategories.csv} contains a matrix of plant parts (rows) by species (columns). For each cell that is used on a given species plant map, the meaning of the values in the spreadsheet titled "reproduction" are indicated in this spreadsheet. Possible method are (1) count, indicating that the numbers represent simple counts; (2) count\_by\_length, indicating that the length of stem or cone covered with buds, flowers or fruit is measured; (3) regress\_by\_dim, indicating that the dimensions of the flowering part are measured and must be converted to a dry mass using a regression equation; and (4) volume, indicating that the height and diameter of the flowering part are given and must be converted to a dry mass using the calculated volume of the flowering part multiplied by the average density of the flowering part.
 
-The file \texttt{floweringCategories\_meta} contains a matrix of plant parts (rows) by species (columns). For each cell that is used on a given species plant map, a description of the botanical parts included in the "flower part" is given as well as the flowering stage at which the flower part is harvested, if it is not obvious.
+The file \texttt{floweringCategories\_meta} contains a matrix of plant parts (rows) by species (columns). For each cell that is used on a given species plant map, a description of the botanical parts included in the "flower part" is given as well as the flowering stage at which the flower part is harvested, if it is not obvious.  This is the information presented in Tables \ref{tab:parts_Banksia_ericifolia}-Table \ref{tab:parts_Pultenaea_tuberculata}, above.
 
 \subsubsection{Flower Parts}
 The file \texttt{flowerParts.csv} contains records for harvested and weighed flower parts, including collections from tagged individuals (once mature or at time of harvest) and from other individuals in the population (to estimate weight of specific plant parts).  Table \ref{tab:flowerParts_meta} gives a brief descriptions of each column in the file.
 
-All plant parts included in a species' "plant map" have weights in this spreadsheet – or, in rare cases, entries are instead plants parts whose weight is used to calculate the weight of a plant part included in a "plant map". (A "plant map" shows the developmental trajectory of a flower or inflorescence from bud to seed for each species, indicating the flow or carbon as well as discarded parts.) If plant parts are collected from a tagged individual, this spreadsheet also indicates in which census periods this specific weight, rather than a species average, should be used for calculating that individual's reproductive investment. Plant parts all have counts and weights, while the subset of plant parts whose size varies, also have columns indicating height and diameter dimensions; the weight of the plant part at a specific size is then determined by either a regression or volume calculation. For a few plant parts, census data measure the length of stem or cone covered with flowers; for these situations, the segment length collected is also recorded, such that the number of flowers per unit length can be calculated.
+All plant parts included in a species' "plant map" have weights in this spreadsheet -- or, in rare cases, entries are instead plants parts whose weight is used to calculate the weight of a plant part included in a "plant map". (A "plant map" shows the developmental trajectory of a flower or inflorescence from bud to seed for each species, indicating the flow or carbon as well as discarded parts.) If plant parts are collected from a tagged individual, this spreadsheet also indicates in which census periods this specific weight, rather than a species average, should be used for calculating that individual's reproductive investment. Plant parts all have counts and weights, while the subset of plant parts whose size varies, also have columns indicating height and diameter dimensions; the weight of the plant part at a specific size is then determined by either a regression or volume calculation. For a few plant parts, census data measure the length of stem or cone covered with flowers; for these situations, the segment length collected is also recorded, such that the number of flowers per unit length can be calculated.
 
 <<echo=FALSE,results='asis'>>=
   print_table_metadata("../../data/flowerParts_meta.csv", align = 'p{0.1cm}p{4cm}p{2cm}p{10cm}')
 @
 
 \subsubsection{Individuals}
-This file \texttt{individuals.csv} contains a list of all plants harvested at the 7 Kuring'gai field sites. For each individual it includes basic information about each individual - tag number, age, site, whether the plant was alive at the time of harvest, and information on which calculations use this individual's data. The data itself is contained in other files. Table \ref{Individuals_meta} gives a brief description of each data column in the file.
+This file \texttt{individuals.csv} contains a list of all plants harvested at the 7 Kuring'gai field sites. For each individual it includes basic information about each individual - tag number, age, site, whether the plant was alive at the time of harvest, and information on which calculations use this individual's data. The data itself is contained in other files. Table \ref{tab:Individuals_meta} gives a brief description of each data column in the file.
 
 <<echo=FALSE,results='asis'>>=
   print_table_metadata("../../data/Individuals_meta.csv", align = 'p{0.1cm}p{6cm}p{10cm}')
 @
 
 \subsubsection{Multiplier Table}
-The file \texttt{MultiplierTable.csv} is a lookup table indicating, for each species by flower part combination, if the investment per part is for a single (1) or multiple propagules, defined as either a mature fruit or a seed, depending on what is the dispersal unit for each species. Within a single column, i.e. within a single species developmental trajectory, numbers will change if the "count" used to access reproduction changes at a given developmental stage. For instance, with BOLE (\emph{Boronia ledifolia}), counts are made by flowers up through the finished flower stage, but then fruits are the unit counted for not all 4 fruits develop within each flower.
+The file \texttt{MultiplierTable.csv} is a lookup table indicating, for each species by flower part combination, if the investment per part is for a single (1) or multiple propagules, defined as either a mature fruit or a seed, depending on what is the dispersal unit for each species. Within a single column, i.e. within a single species developmental trajectory, numbers will change if the "count" used to access reproduction changes at a given developmental stage. For instance, with BOLE (\emph{Boronia ledifolia}), counts are made by flowers up through the finished flower stage, but then fruits are the unit counted for not all 4 fruits develop within each flower. This is the information presented in Tables \ref{tab:parts_Banksia_ericifolia}-Table \ref{tab:parts_Pultenaea_tuberculata}, above.
 
 \subsubsection{Reproduction}
 
@@ -776,7 +776,7 @@ The file \texttt{seedsize.csv} includes a collection of species level informatio
 @
 
 \subsubsection{Sites}
-The file \texttt{sites.csv} lists details of sites used in study. Includes site names used in other spreadsheets, date of fire, fire year, as defined by NSW fire layers, and UTM coordinates for each site. Table \ref{tab:sites_meta} gives a brief description of the data columns in the file.
+The file \texttt{sites.csv} lists details of sites used in study. Includes site names used in other spreadsheets, date of fire, fire year, as defined by NSW fire layers, and UTM coordinates for each site. Table \ref{tab:sites_meta} gives a brief description of the data columns in the file. Tables \ref{tab:sites} displays the data in this file.
 
 <<echo=FALSE,results='asis'>>=
   print_table_metadata("../../data/sites_meta.csv", align = 'p{0.1cm}p{6cm}p{10cm}')
@@ -801,7 +801,7 @@ where applicable: i)  weights based on dimensions; and ii) individual based weig
 
 \subsubsection{\texttt{GraphRepresentation.R}}
 
-Defines the plant maps for each species, as shown in Figs. \ref{fig:map_Banksia ericifolia}-Table \ref{fig:map_Pultenaea tuberculata}. Also defines the list of reproductive parts for each species.
+Defines the plant maps and the list of reproductive parts for each specie, as shown in Figs. \ref{fig:map_Banksia_ericifolia}-\ref{fig:map_Pultenaea_tuberculata} and Tables \ref{tab:parts_Banksia_ericifolia}-Table \ref{tab:parts_Pultenaea_tuberculata}.
 
 \subsubsection{\texttt{Growth.R}}
 
