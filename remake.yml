@@ -108,38 +108,52 @@ targets:
   InvestmentCategories:
     command: yaml.load_file("data/accessoryParts.yml")
 
-  LMA:
+  LMA_1:
     command:
       - read_csv("data/LMA.csv")
-      - process_LMA(.)
 
-  wood_density_spp:
+  LMA:
+    command:
+      - process_LMA(LMA_1)
+
+  wood_density_spp1:
     command:
       - read_csv("data/woodDensity.csv")
-      - process_wood_density(.)
+
+  wood_density_spp:
+    command: process_wood_density(wood_density_spp1)
 
   seedsize:
     command:
       - read_csv("data/seedsize.csv")
 
-  leavesPerLength:
+  leavesPerLength_1:
     command:
       - read_csv("data/leaves_per_length.csv")
-      - process_leaves_per_length(.)
+
+  leavesPerLength:
+    command:
+      - process_leaves_per_length(leavesPerLength_1)
+
+  leafLoss_1:
+    command:
+      - read_csv("data/leaderGrowthLL.csv")
 
   leafLoss:
     command:
-      - read_csv("data/leaderGrowthLL.csv")
-      - process_leaf_loss(., leavesPerLength)
+      - process_leaf_loss(leafLoss_1, leavesPerLength)
 
   variable_list:
     command:
       - read_csv("data/variable_names.csv")
 
-  SummaryInd:
+  SummaryInd_1:
     command:
       - combine_by_individual(IndividualsList, Growth_all, ReproductiveCosts_all, LMA, leafLoss, wood_density_spp, seedsize)
-      - sort_by_variable(., variable_list)
+
+  SummaryInd:
+    command:
+      - sort_by_variable(SummaryInd_1, variable_list)
 
   SummarySppAge:
     command: get_species_values(SummaryInd, groups=I(c("species", "age")))
