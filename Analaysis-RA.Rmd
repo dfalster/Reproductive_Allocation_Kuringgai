@@ -33,8 +33,8 @@ data_ind <- select(SummaryCombine,species,individual,age, prop_leaf_loss,height_
 ```
 
 ```{r}
-
-# pdf('ms/RA/Figure_1_stacked_lines.pdf', height=11.5, width=8) plot
+#pdf('ms/RA/Figure_1_stacked_lines.pdf', height=11.5, width=8) 
+plot
 par(mfrow = c(7,4), cex = 1, oma = c(5, 5, 1, 1), mar = c(0, 3, 2, 1))
 
 all_species <- unique(data$species)
@@ -42,8 +42,8 @@ all_species <- unique(data$species)
 for (i in seq_along(all_species)) {
 
   # Todo: this should be calculated at individual level before taking means by species
-  data_sp <- filter(data, species == all_species[i])
-  data_sp_ind <- filter(data_ind, species == all_species[i])
+  data_sp <- filter(data, species == all_species[1])
+  data_sp_ind <- filter(data_ind, species == all_species[1])
   data_sp_no5 <- subset(data_sp,age!=5)
   m <- max(data_sp$age)
   n <- length(data_sp$age)

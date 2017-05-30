@@ -65,7 +65,7 @@ process_leaf_loss <- function(data_raw, leavesPerLength) {
     shoot_leaf_count = lvs_end + shoot_leaf_count_new) %>%
   select(species, age, individual, shoot_length_start, growth_shoot_length,
     shoot_leaf_count_new_and_shed_count, shoot_leaf_count_start, prop_leaf_loss,
-    shoot_leaf_count_new, shoot_leaf_count)
+    shoot_leaf_count_new, shoot_leaf_count,lvs_end,lvs_end_count,lvs_end_length,count_per_length)
 }
 
 # Calculate average wood density by species
@@ -202,9 +202,15 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
       prop_leaf_replacement = divide_zero(all_leaf_and_repro_inv, gross_inv),
       prop_surplus = divide_zero(surplus_inv, all_leaf_and_repro_inv),
       RA_vs_all_leaf = divide_zero(repro_inv, all_leaf_and_repro_inv),
-      RA_seed = divide_zero(embryo_endo_inv, total_inv),
+      RA_seed = divide_zero(embryo_endo_inv, gross_inv),
       prop_stem = 1,
-      prop_leaf_replacement_vs_all_leaf = divide_zero(leaf_replacement, all_leaf_inv))
+      leaf_shed_prop_surplus = 1-(divide_zero(leaf_shed,all_leaf_and_repro_inv)),
+      repro_prop_surplus = divide_zero(repro_inv,all_leaf_and_repro_inv), 
+      leaf_replacement_prop_surplus = divide_zero(leaf_replacement,all_leaf_and_repro_inv), 
+      repro_and_leaf_growth_prop_surplus = divide_zero((growth_leaf_pos+repro_inv),all_leaf_and_repro_inv), 
+      seed_prop_surplus = divide_zero(embryo_endo_inv, all_leaf_and_repro_inv),
+      prop_leaf_replacement_vs_all_leaf = divide_zero(leaf_replacement, all_leaf_inv)
+      )
 
   # Where these ratios are infinite we are setting them to zero. It represents
   # cases where no successful seeds were produced
@@ -215,7 +221,14 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
     i <- is.infinite(SummaryInd[[v]])
     SummaryInd[[v]][i] <- 0
   }
+  
+  for (v in c("leaf_shed_prop_surplus")) {
+    i <- is.na(SummaryInd[[v]])
+    SummaryInd[[v]][i] <- 1
+  }
 
+  
+  
   years_reproducing <- function(RA, age) {
     ret <- age - min(age[RA > 0])
     ret[ret < 0] <- 0
@@ -253,25 +266,29 @@ get_species_values <- function(SummaryInd, groups) {
       group_by_(.dots = dots) %>%
       summarise_each(f, height, growth_inv,
         total_weight, total_weight_0, total_inv, RA, RA_leaf_area, stem_area,
-        growth_leaf_pos, prop_surplus, leaf_weight, stem_weight, growth_stem_diameter,
-        growth_stem_area, growth_leaf, leaf_shed, leaf_weight_0, stem_weight_0,
+        growth_leaf_pos, leaf_weight, stem_weight, growth_stem_diameter,
+        growth_stem_area, growth_leaf, leaf_weight_0, stem_weight_0,
         repro_inv, growth_stem, diameter, diameter_0, LMA, wood_density, leaf_area,
-        leaf_area_0, leaf_area_midyear, leaf_replacement, growth_leaf_neg,
-        RA_max_1, gross_inv, prop_repro, prop_leaf_expand, prop_leaf_replacement,
-        prop_stem, lifespan, maturity, surplus_inv, all_leaf_and_repro_inv,
-        RA_vs_all_leaf, height_0, all_leaf_inv, prop_leaf_loss)
+        leaf_area_0, leaf_area_midyear, growth_leaf_neg,
+        RA_max_1, lifespan, maturity, 
+        RA_vs_all_leaf, height_0)
   })
   names(out[[1]]) <- fs
 
+  #remove individuals with no data for leaf lifespan
   out[[2]] <- lapply(fs, function(f) {
-    SummaryInd %>% filter(repro_inv != 0) %>% group_by_(.dots = dots) %>% summarise_each(f,
-      prepollen_count_reach_flowering)
+    SummaryInd %>% filter(!(individual %in% c("COER_806","EPMI_907","GRBU_906","HATE_105","HATE_003","LEES_354",
+                                              "LEES_352","LEES_355","LEES_353","LEES_351","PELA_161","PELA_162",
+                                              "PUTU_108"))) %>% group_by_(.dots = dots) %>% 
+      summarise_each(f,prop_leaf_loss,leaf_shed_prop_surplus,leaf_shed_prop_surplus,leaf_shed,leaf_replacement,
+                     repro_prop_surplus, leaf_replacement_prop_surplus, repro_and_leaf_growth_prop_surplus,prop_leaf_expand, prop_leaf_replacement,
+                     gross_inv,prop_repro,prop_surplus, all_leaf_inv,all_leaf_and_repro_inv,prop_stem,surplus_inv)
   })
   names(out[[2]]) <- fs
 
   out[[3]] <- lapply(fs, function(f) {
     SummaryInd %>% filter(repro_inv > 0) %>% group_by_(.dots = dots) %>% summarise_each(f,
-      ovule_count, leaf_area_0_mature)
+      ovule_count, leaf_area_0_mature,prepollen_count_reach_flowering)
   })
   names(out[[3]]) <- fs
 
@@ -299,7 +316,7 @@ get_species_values <- function(SummaryInd, groups) {
         prop_prepollen_all_vs_all_repro, prop_accessory_vs_embryo_endo,
         prop_accessory_vs_propagule, prop_success, scaled_repro_inv, discarded_to_ovule_ratio,
         postpollen_all_costs, prop_prepollen_discarded, prop_postpollen_discarded,
-        choosiness, prepollen_success_inv, scaled_pollen_attract_costs)
+        choosiness, prepollen_success_inv, scaled_pollen_attract_costs,seed_prop_surplus)
   })
   names(out[[4]]) <- fs
 
