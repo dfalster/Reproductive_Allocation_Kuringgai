@@ -45,16 +45,41 @@ labels.spp.genus <- function(x = NULL) {
 }
 
 col.age <- function(x = NULL) {
-
+  
   ret <- c("red", "orchid1", "gold1", "darkolivegreen3", "cyan2", "dodgerblue3",
-    "purple")
+           "purple")
   names(ret) <- c("0.1", "1.4", "2.4", "5", "7", "9", "32")
-
+  
   if (!is.null(x)) {
     ret <- ret[as.character(x)]
   }
   ret
 }
+
+col.age2 <- function(x = NULL) {
+  
+  ret <- c("darkslategray1", "darkslategray2", "darkslategray3", "darkslategray4", "darkslategray", "gray33",
+           "black")
+  names(ret) <- c("0.1", "1.4", "2.4", "5", "7", "9", "32")
+  
+  if (!is.null(x)) {
+    ret <- ret[as.character(x)]
+  }
+  ret
+}
+
+col.age.leaf <- function(x = NULL) {
+  
+  ret <- c("darkseagreen1", "darkseagreen1", "darkseagreen2", "darkseagreen3", "darkseagreen4", "gray33",
+           "black")
+  names(ret) <- c("0.1", "1.4", "2.4", "5", "7", "9", "32")
+  
+  if (!is.null(x)) {
+    ret <- ret[as.character(x)]
+  }
+  ret
+}
+
 
 labels.age <- function(x = NULL) {
   names(col.age(x))
