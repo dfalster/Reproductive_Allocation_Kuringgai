@@ -729,7 +729,7 @@ dev.off()
 
 ###################
 
-win.metafile("ms/RA/leaf_weight_by_diameter.wmf", height=12, width=12)
+win.metafile("ms/RA/leaf_weight_by_stem_weight.wmf", height=12, width=12)
 par(mfrow=c(4,4), cex=1, omi=c(.4,.4,.1,.1), mai=c(0.4,.4,.1,0.1)) 
 
 data <- SummaryInd
@@ -740,17 +740,23 @@ data <- subset(data,!(data$individual %in% c("COER_806","EPMI_907","GRBU_906","H
 
 data <- split(data, data$species)
 
-for(spp in c("BOLE","PILI","HEPU","COER","GRBU","GRSP","GRSP","GRSP","EPMI","LEES","PHPH","PUTU","HATE","BAER","PELA","PEPU")) {
-  
-  y_max <-max(data[[spp]]$leaf_weight_0) 
-  y_min <-min(data[[spp]]$leaf_weight_0)
-  x_max <-max(data[[spp]]$diameter_0) 
-  x_min <-min(data[[spp]]$diameter_0)
-  plot(leaf_weight_0~diameter_0,data[[spp]],pch=16,log="xy",col=col.age2(age),cex=1.5,ylim=c((0.5*y_min),(2*y_max)),xlim=c((0.5*x_min),(2*x_max)))
-  extra.top.left.logxy(labels.spp.full(spp),3,1)
+yvar <- "age"
+
+for(spp in c("BOLE","PILI","HEPU","COER","GRBU","GRSP","XXXX","XXXX","EPMI","LEES","PHPH","PUTU","HATE","BAER","PELA","PEPU")) {
+
+  if(spp == "XXXX") {
+    plot(1,1, type="n", axes=FALSE, ann=FALSE)
+  } else {
+    y_max <-max(data[[spp]]$leaf_weight_0)
+    y_min <-min(data[[spp]]$leaf_weight_0)
+    x_max <-max(data[[spp]][[yvar]])
+    x_min <-min(data[[spp]][[yvar]])
+    plot(data[[spp]][["leaf_weight_0"]]~data[[spp]][[yvar]],pch=16,log="xy",col=col.age2(data[[spp]]$age),cex=1.5,ylim=c((0.5*y_min),(2*y_max)),xlim=c((0.5*x_min),(2*x_max)))
+    extra.top.left.logxy(labels.spp.full(spp),3,1)
+    }
 }  
 
-mtext("total plant weight (mg)",outer=TRUE,1,line=0.25)
+mtext("Age (yr)",outer=TRUE,1,line=0.25)
 mtext("leaf weight (mg)",outer=TRUE,2,line=0.25)
 
 dev.off()
