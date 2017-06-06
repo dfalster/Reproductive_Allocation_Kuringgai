@@ -182,14 +182,14 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
   )
 
 
-
+  
   # Where these ratios are infinite we are setting them to zero. It represents
   # cases where no successful seeds were produced
   for (v in c("prop_prepollen_discarded_vs_all_repro", "prop_postpollen_discarded_vs_all_repro")) {
     i <- is.na(SummaryInd[[v]])
     SummaryInd[[v]][i] <- 0
   }
-
+  
   SummaryInd <- SummaryInd %>%
     mutate(
       leaf_replacement = leaf_shed + growth_leaf_neg,
@@ -210,27 +210,29 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
       leaf_replacement_prop_surplus = divide_zero(leaf_replacement,all_leaf_and_repro_inv), 
       repro_and_leaf_growth_prop_surplus = divide_zero((growth_leaf_pos+repro_inv),all_leaf_and_repro_inv), 
       seed_prop_surplus = divide_zero(embryo_endo_inv, all_leaf_and_repro_inv),
-      seed_prop_veg = divide_zero(embryo_endo_inv,(growth_leaf_pos + leaf_replacement + growth_stem+embryo_endo_inv)),
+      seed_prop_veg = divide_zero(embryo_endo_inv,(growth_leaf_pos + leaf_replacement + growth_stem + embryo_endo_inv)),
+      growth_leaf_prop_no_accessory = divide_zero((embryo_endo_inv+growth_leaf_pos),(growth_leaf_pos + leaf_replacement + growth_stem + embryo_endo_inv)),
+      replace_leaf_prop_no_accessory = divide_zero((embryo_endo_inv+growth_leaf_pos+leaf_replacement),(growth_leaf_pos + leaf_replacement + growth_stem + embryo_endo_inv)),
       prop_leaf_loss = 1+(divide_zero(growth_leaf_neg,(growth_leaf_pos + repro_inv))),
       prop_leaf_replacement_vs_all_leaf = divide_zero(leaf_replacement, all_leaf_inv),
       RA_max_2 <- RA_leaf_area
-      )
-
+    )
+  
   # Where these ratios are infinite we are setting them to zero. It represents
   # cases where no successful seeds were produced
   for (v in c("choosiness", "choosiness2", "discarded_costs", "repro_costs",
-    "accessory_costs", "accessory_costs_using_seedweight", "prepollen_all_costs",
-    "prepollen_discarded_costs", "postpollen_aborted_costs", "postpollen_all_costs",
-    "prop_pollen_attract_vs_success", "prop_provisioning_vs_success", "prop_pack_disp_vs_success")) {
+              "accessory_costs", "accessory_costs_using_seedweight", "prepollen_all_costs",
+              "prepollen_discarded_costs", "postpollen_aborted_costs", "postpollen_all_costs",
+              "prop_pollen_attract_vs_success", "prop_provisioning_vs_success", "prop_pack_disp_vs_success")) {
     i <- is.infinite(SummaryInd[[v]])
     SummaryInd[[v]][i] <- 0
   }
-
+  
   for (v in c("leaf_shed_prop_surplus")) {
     i <- is.na(SummaryInd[[v]])
     SummaryInd[[v]][i] <- 1
   }
-
+  
   for (v in c("prop_leaf_loss")) {
     i <- is.infinite(SummaryInd[[v]])
     SummaryInd[[v]][i] <- 0
@@ -246,46 +248,46 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
     ret[ret < 0] <- 0
     ret
   }
-
+  
   SummaryInd <- SummaryInd %>% group_by(species) %>% mutate(years_repro = years_reproducing(RA,
-    age)) %>% ungroup()
-
+                                                                                            age)) %>% ungroup()
+  
   SummaryInd
-
+  
 }
 
 # re-orders columns in data to match order of values in 'variable' column of
 # variable_list
 sort_by_variable <- function(data, variable_list) {
-
+  
   vars <- variable_list$variable[variable_list$variable %in% names(data)]
   vars <- base::union(vars, names(data))
   data[, vars]
 }
 
 get_species_values <- function(SummaryInd, groups) {
-
+  
   # function to apply
   fs <- c("max", "min", "mean", "sd", "length")
-
+  
   # note use of `group_by_` below - allows for passing in of character vectors
   dots <- lapply(groups, as.symbol)
-
+  
   # summarizing data by species, age
   out <- list()
   out[[1]] <- lapply(fs, function(f) {
     SummaryInd %>%
       group_by_(.dots = dots) %>%
       summarise_each(f, height, growth_inv,
-        total_weight, total_weight_0, total_inv, RA, stem_area,
-        growth_leaf_pos, leaf_weight, stem_weight, growth_stem_diameter,
-        growth_stem_area, growth_leaf, leaf_weight_0, stem_weight_0,
-        repro_inv, growth_stem, diameter, diameter_0, LMA, wood_density, leaf_area,
-        leaf_area_0, leaf_area_midyear, growth_leaf_neg,
-        RA_max_1, lifespan, maturity, height_0)
+                     total_weight, total_weight_0, total_inv, RA, stem_area,
+                     growth_leaf_pos, leaf_weight, stem_weight, growth_stem_diameter,
+                     growth_stem_area, growth_leaf, leaf_weight_0, stem_weight_0,
+                     repro_inv, growth_stem, diameter, diameter_0, LMA, wood_density, leaf_area,
+                     leaf_area_0, leaf_area_midyear, growth_leaf_neg,
+                     RA_max_1, lifespan, maturity, height_0)
   })
   names(out[[1]]) <- fs
-
+  
   #remove individuals with no data for leaf lifespan
   out[[2]] <- lapply(fs, function(f) {
     SummaryInd %>% filter(!(individual %in% c("COER_806","EPMI_907","GRBU_408","GRBU_906","HATE_105","HATE_003","LEES_354",
@@ -293,50 +295,51 @@ get_species_values <- function(SummaryInd, groups) {
                                               "PUTU_108"))) %>% group_by_(.dots = dots) %>% 
       summarise_each(f,prop_leaf_loss,leaf_shed_prop_surplus,leaf_shed_prop_surplus,leaf_shed,leaf_replacement,RA_leaf_area, 
                      repro_prop_surplus, leaf_replacement_prop_surplus, repro_and_leaf_growth_prop_surplus,prop_leaf_expand, prop_leaf_replacement,
-                     gross_inv,prop_repro,prop_surplus, all_leaf_inv,all_leaf_and_repro_inv,prop_stem,surplus_inv,seed_prop_veg,prop_leaf_loss,RA_vs_all_leaf)
+                     gross_inv,prop_repro,prop_surplus, all_leaf_inv,all_leaf_and_repro_inv,prop_stem,surplus_inv,
+                     growth_leaf_prop_no_accessory,replace_leaf_prop_no_accessory,seed_prop_veg,prop_leaf_loss,RA_vs_all_leaf)
   })
   names(out[[2]]) <- fs
-
+  
   out[[3]] <- lapply(fs, function(f) {
     SummaryInd %>% filter(repro_inv > 0) %>% group_by_(.dots = dots) %>% summarise_each(f,
-      ovule_count, leaf_area_0_mature,prepollen_count_reach_flowering)
+                                                                                        ovule_count, leaf_area_0_mature,prepollen_count_reach_flowering)
   })
   names(out[[3]]) <- fs
-
+  
   out[[4]] <- lapply(fs, function(f) {
     SummaryInd %>%
-    filter(seed_count > 0) %>%
-    filter(repro_inv > 0) %>%
-    group_by_(.dots = dots) %>%
-    summarise_each(f, seed_size, seedset, seed_count, packaging_dispersal_costs,
-        accessory_costs_using_seedweight, scaled_provisioning_costs, success_inv,
-        success_costs, scaled_seed_count, prop_provisioning_vs_success,
-        fruit_costs, prop_discarded_vs_all_repro, zygote_set, asymptotic_RA,
-        postpollen_aborted_inv, propagule_inv, embryo_endo_inv, discarded_costs,
-        scaled_reach_flowering_count, choosiness2, accessory_inv, prop_pack_disp_vs_success,
-        prepollen_discarded_costs, prepollen_all_costs, accessory_costs,
-        prop_embryo_endo_vs_success, RA_seed, postpollen_aborted_costs,
-        propagule_costs, repro_costs, prop_postpollen_success, discarded_inv,
-        prop_propagule_vs_all_repro, prop_postpollen_all_vs_all_repro,
-        scaled_discarded_count, scaled_ovule_count, prop_pollen_attract_vs_success,
-        pollen_attract_costs, prepollen_costs_from_pack_disp_tissues, prepollen_costs_from_seed_tissues,
-        prepollen_inv_aborted_preflowering, prepollen_all_inv, prop_prepollen_success,
-        prop_prepollen_discarded_vs_all_repro, prop_postpollen_discarded_vs_all_repro,
-        prop_pollen_attract_vs_all_repro, prop_pack_disp_vs_all_repro,
-        prop_embryo_endo_vs_all_repro, provisioning_costs, embryo_endo_costs,
-        prop_prepollen_all_vs_all_repro, prop_accessory_vs_embryo_endo,
-        prop_accessory_vs_propagule, prop_success, scaled_repro_inv, discarded_to_ovule_ratio,
-        postpollen_all_costs, prop_prepollen_discarded, prop_postpollen_discarded,
-        choosiness, prepollen_success_inv, scaled_pollen_attract_costs,seed_prop_surplus)
+      filter(seed_count > 0) %>%
+      filter(repro_inv > 0) %>%
+      group_by_(.dots = dots) %>%
+      summarise_each(f, seed_size, seedset, seed_count, packaging_dispersal_costs,
+                     accessory_costs_using_seedweight, scaled_provisioning_costs, success_inv,
+                     success_costs, scaled_seed_count, prop_provisioning_vs_success,
+                     fruit_costs, prop_discarded_vs_all_repro, zygote_set, asymptotic_RA,
+                     postpollen_aborted_inv, propagule_inv, embryo_endo_inv, discarded_costs,
+                     scaled_reach_flowering_count, choosiness2, accessory_inv, prop_pack_disp_vs_success,
+                     prepollen_discarded_costs, prepollen_all_costs, accessory_costs,
+                     prop_embryo_endo_vs_success, RA_seed, postpollen_aborted_costs,
+                     propagule_costs, repro_costs, prop_postpollen_success, discarded_inv,
+                     prop_propagule_vs_all_repro, prop_postpollen_all_vs_all_repro,
+                     scaled_discarded_count, scaled_ovule_count, prop_pollen_attract_vs_success,
+                     pollen_attract_costs, prepollen_costs_from_pack_disp_tissues, prepollen_costs_from_seed_tissues,
+                     prepollen_inv_aborted_preflowering, prepollen_all_inv, prop_prepollen_success,
+                     prop_prepollen_discarded_vs_all_repro, prop_postpollen_discarded_vs_all_repro,
+                     prop_pollen_attract_vs_all_repro, prop_pack_disp_vs_all_repro,
+                     prop_embryo_endo_vs_all_repro, provisioning_costs, embryo_endo_costs,
+                     prop_prepollen_all_vs_all_repro, prop_accessory_vs_embryo_endo,
+                     prop_accessory_vs_propagule, prop_success, scaled_repro_inv, discarded_to_ovule_ratio,
+                     postpollen_all_costs, prop_prepollen_discarded, prop_postpollen_discarded,
+                     choosiness, prepollen_success_inv, scaled_pollen_attract_costs,seed_prop_surplus)
   })
   names(out[[4]]) <- fs
-
+  
   ret <- list()
   for (f in fs) {
     ret[[f]] <- out[[1]][[f]]
     for (i in 2:4) ret[[f]] <- merge(ret[[f]], out[[i]][[f]], by = groups,
-      all = TRUE)
-
+                                     all = TRUE)
+    
     # reorder to be same as input
     order <- names(SummaryInd)[names(SummaryInd) %in% names(ret[[f]])]
     ret[[f]] <- ret[[f]][, order]
@@ -352,20 +355,20 @@ filterToMature <- function(data) {
 }
 
 scale_individual_variable <- function(SummaryInd, SummarySpp) {
-
+  
   get_species_value <- function(f, v) {
     i <- match(SummaryInd[["species"]], SummarySpp[[f]][["species"]])
     SummarySpp[[f]][[v]][i]
   }
-
+  
   mutate(SummaryInd,
-    maxH = get_species_value("max", "height"),
-    prop_maxH = height_0/maxH,
-    prop_max_weight = total_weight_0/get_species_value("max", "total_weight"),
-    prop_max_repro = repro_inv/get_species_value("max", "repro_inv"),
-    scaled_growth_stem_diameter = growth_stem_diameter/get_species_value("mean", "growth_stem_diameter"),
-    growth_leaf_min = get_species_value("min",  "growth_leaf"),
-    ratio_leaf_growth = log10(leaf_area) - log10(leaf_area_0)
-    )
-
+         maxH = get_species_value("max", "height"),
+         prop_maxH = height_0/maxH,
+         prop_max_weight = total_weight_0/get_species_value("max", "total_weight"),
+         prop_max_repro = repro_inv/get_species_value("max", "repro_inv"),
+         scaled_growth_stem_diameter = growth_stem_diameter/get_species_value("mean", "growth_stem_diameter"),
+         growth_leaf_min = get_species_value("min",  "growth_leaf"),
+         ratio_leaf_growth = log10(leaf_area) - log10(leaf_area_0)
+  )
+  
 }

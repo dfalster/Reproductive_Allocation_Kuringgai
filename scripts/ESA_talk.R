@@ -19,15 +19,20 @@ mtext("LMA",1,outer=FALSE,line=3)
 mtext("maximum RA",2,outer=FALSE,line=3)
 mtext("(prop inv in reproduction and all leaves)",2,outer=FALSE,line=2)
 axis(2, at=c(0,0.1,0.2,.4,.6,.8,1,1.2,1.4), labels=c(0,0.1,0.2,0.4,.6,.8,1,1.2,1.4),cex.axis=.8,las=1)
+mod <- sma(RA_vs_all_leaf~LMA,traits,log="xy")
+summary(mod)
+
 
 plot(RA_vs_all_leaf~wood_density,traits,col="coral4",pch=16,cex=1.5,xlab="",yaxt="n",log="xy")
 mtext("wood density",1,outer=FALSE,line=3)
-
 axis(2, at=c(.4,.6,.8,1,1.2,1.4), labels=c(.4,.6,.8,1,1.2,1.4),cex.axis=.8,las=1)
+mod <- sma(RA_vs_all_leaf~wood_density,traits,log="xy")
+summary(mod)
 
 plot(RA_vs_all_leaf~seed_size,traits,col="coral4",pch=16,cex=1.5,xlab="",yaxt="n",log="xy")
 mtext("seed size (mg)",1,outer=FALSE,line=3)
 axis(2, at=c(.4,.6,.8,1,1.2,1.4), labels=c(.4,.6,.8,1,1.2,1.4),cex.axis=.8,las=1)
+mod <- sma(RA_vs_all_leaf~seed_size,traits,log="xy")
 
 dev.off()
 
@@ -814,4 +819,19 @@ for(spp in c("BOLE","PILI","HEPU","COER","GRBU","GRSP","GRSP","GRSP","EPMI","LEE
 mtext("RA", 2, outer=TRUE,cex=1,line=2)
 mtext("age",1, outer=TRUE,cex=1,line=1.8)
 
+dev.off()
+
+################################
+
+win.metafile("ms/RA/repro_inv_vs_RA.wmf", height=6, width=12)
+plot
+par(mfcol=c(1,2), cex=1, omi=c(.5,.7,.1,.1), mai=c(.8,.8,.1,0.2)) 
+
+plot(RA_vs_all_leaf~scaled_seed_count,SummarySpp[["mean"]],pch=16,cex=1.5,log="x",col="coral4",ylab="",xlab="seed count")
+plot(RA_vs_all_leaf~scaled_repro_inv,SummarySpp[["mean"]],pch=16,cex=1.5,log="x",col="coral4",ylab="",xlab="reproductive investment")
+#axis(2, at=c(.4,.6,.8,1,1.2,1.4), labels=c(0.4,0.6,0.8,1.0,1.2,1.4),cex.axis=.9,las=1)
+# <- lm(log10(lifespan)~i,traits)
+#extra.bottom.left.logx(paste("r2=",round(glance(mod)[1],2),"; p-value:",round(glance(mod)[5],4)))
+mtext("maximum RA",2,outer=TRUE,line=1)
+mtext("scaled to plant size",1,outer=TRUE,line=1)
 dev.off()
