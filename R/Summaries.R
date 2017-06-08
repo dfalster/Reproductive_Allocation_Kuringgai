@@ -56,10 +56,11 @@ process_leaf_loss <- function(data_raw, leavesPerLength) {
 
   # calculating leaf loss
   mutate(data,
-    shoot_leaf_count_start = shoot_leaf_count_start_count +
+         shoot_leaf_count_start = shoot_leaf_count_start_count +
           (shoot_leaf_count_start_length *  count_per_length),
     lvs_end = lvs_end_count + (lvs_end_length * count_per_length),
-    prop_leaf_loss = (shoot_leaf_count_start - lvs_end)/(shoot_leaf_count_start),
+    leaf_loss_count = shoot_leaf_count_start - lvs_end,
+    prop_leaf_loss = leaf_loss_count/shoot_leaf_count_start,
     shoot_leaf_count_new = shoot_leaf_count_new_count +
           (shoot_leaf_count_growth_shoot_length *  count_per_length),
     shoot_leaf_count = lvs_end + shoot_leaf_count_new) %>%
@@ -215,7 +216,7 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
       seed_prop_all = divide_zero(embryo_endo_inv,(growth_leaf_pos + leaf_replacement + growth_stem + embryo_endo_inv)),
       growth_leaf_prop_no_accessory = divide_zero((embryo_endo_inv+growth_leaf_pos),(growth_leaf_pos + leaf_replacement + growth_stem + embryo_endo_inv)),
       replace_leaf_prop_no_accessory = divide_zero((embryo_endo_inv+growth_leaf_pos+leaf_replacement),(growth_leaf_pos + leaf_replacement + growth_stem + embryo_endo_inv)),
-      prop_leaf_loss = 1+(divide_zero(growth_leaf_neg,(growth_leaf_pos + repro_inv))),
+      prop_leaf_loss_relative = 1+(divide_zero(growth_leaf_neg,(growth_leaf_pos + repro_inv))),
       prop_leaf_replacement_vs_all_leaf = divide_zero(leaf_replacement, all_leaf_inv),
       RA_max_2 <- RA_leaf_area
     )

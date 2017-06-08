@@ -15,15 +15,33 @@ labels.spp <- function(x = NULL) {
   names(col.spp(x))
 }
 
+labels.RA.full <- function(x = NULL) {
+  
+  ret <- c("Gradual-indeterminate  ", "Gradual-determinate  ", "Gradual-indeterminate  ", "Asymptotic  ", "Gradual-determinate  ", 
+           "Gradual-determinate  ","Gradual-indeterminate  ","Gradual-determinate  ","Asymptotic  ", "Gradual-determinate  ", 
+           "Declining  ", "Asymptotic  ", "Gradual-determinate  ","Gradual-determinate  ")
+  names(ret) <- c("BAER", "BOLE", "COER", "EPMI", "GRBU", "GRSP", "HATE", "HEPU",
+                  "LEES", "PELA", "PEPU", "PHPH", "PILI", "PUTU")
+  
+  if (!is.null(x)) {
+    ret <- ret[as.character(x)]
+  }
+  ret
+}
+
+
+
+
+
 labels.spp.full <- function(x = NULL) {
 
   ret <- c("Banksia ericifolia", "Boronia ledifolia", "Conospermum ericifolium",
-    "Epacris microphylla", "Grevillea buxifolia", "Grevillea speciosa", "Hakea teretifolia",
-    "Hemigenia purpurea", "Leucopogon esquamatus", "Persoonia lanceolata",
-    "Petrophile pulchella", "Phyllota phylicoides", "Pimelea linifolia", "Pultenaea tuberculata")
+           "Epacris microphylla", "Grevillea buxifolia", "Grevillea speciosa", "Hakea teretifolia",
+           "Hemigenia purpurea", "Leucopogon esquamatus", "Persoonia lanceolata",
+           "Petrophile pulchella", "Phyllota phylicoides", "Pimelea linifolia", "Pultenaea tuberculata")
   names(ret) <- c("BAER", "BOLE", "COER", "EPMI", "GRBU", "GRSP", "HATE", "HEPU",
-    "LEES", "PELA", "PEPU", "PHPH", "PILI", "PUTU")
-
+                  "LEES", "PELA", "PEPU", "PHPH", "PILI", "PUTU")
+  
   if (!is.null(x)) {
     ret <- ret[as.character(x)]
   }
@@ -31,13 +49,13 @@ labels.spp.full <- function(x = NULL) {
 }
 
 labels.spp.genus <- function(x = NULL) {
-
+  
   ret <- c("B. ericifolia", "B. ledifolia", "C. ericifolium", "E. microphylla",
-    "G. buxifolia", "G. speciosa", "H. teretifolia", "H. purpurea", "L. esquamatus",
-    "P. lanceolata", "P. pulchella", "P. phylicoides", "P. linifolia", "P. tuberculata")
+           "G. buxifolia", "G. speciosa", "H. teretifolia", "H. purpurea", "L. esquamatus",
+           "P. lanceolata", "P. pulchella", "P. phylicoides", "P. linifolia", "P. tuberculata")
   names(ret) <- c("BAER", "BOLE", "COER", "EPMI", "GRBU", "GRSP", "HATE", "HEPU",
-    "LEES", "PELA", "PEPU", "PHPH", "PILI", "PUTU")
-
+                  "LEES", "PELA", "PEPU", "PHPH", "PILI", "PUTU")
+  
   if (!is.null(x)) {
     ret <- ret[as.character(x)]
   }

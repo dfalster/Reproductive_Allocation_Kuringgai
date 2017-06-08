@@ -8,7 +8,7 @@ extra.top.left.logx <- function(words, fontx, cexx) {
        font = fontx)
 }
 
-win.metafile("ms/RA/FIGURE2_4_RA_calculation_colors.wmf", height=4, width=16)
+win.metafile("ms/RA/Figure_2_4_RA_calculation_colors.wmf", height=4, width=16)
 par(mfcol=c(1,4), cex=1, omi=c(.5,.6,.1,.1), mai=c(0.2,.25,.01,0.02)) 
 
 data <- SummarySppAge[["mean"]]
@@ -74,12 +74,41 @@ for(spp in c("EPMI")) {
 }
 dev.off()
 
-
 ######################
 #####  FIGURE 3  #####
 ######################
+win.metafile("ms/RA/Figure_3_accessory_costs.wmf", height=4, width=8)
 
-win.metafile("ms/RA/FIGURE3_RA_max1_boxes.wmf", height=12, width=16)
+barplot_data <- SummarySpp[["mean"]]
+barplot_data <- select(barplot_data,species,prop_embryo_endo_vs_all_repro,prop_pollen_attract_vs_all_repro,prop_pack_disp_vs_all_repro,
+                       prop_prepollen_discarded_vs_all_repro,prop_postpollen_discarded_vs_all_repro)
+
+barplot_data <- as.matrix(barplot_data[,2:6])
+barplot_data <- t(barplot_data)
+names(barplot_data) <-c("BAER", "BOLE", "COER", "EPMI", "GRBU", "GRSP", "HATE", "HEPU","LEES", "PELA", "PEPU", "PHPH", "PILI", "PUTU")
+#barplot_data_matrix <- as.matrix(barplot_data[2:15])
+
+par(mfcol=c(1,1), cex=1, omi=c(.3,.6,.01,.01), mai=c(.4,.15,.3,0.1)) 
+barplot(barplot_data,beside=FALSE,width=0.8,cex.axis=1,cex.names=1,xlim=c(.5,17.2),
+        col=c("black", "darkseagreen3","darkseagreen4","darkslategray2","darkslategray4"),
+        ylab="proportion repro investment")
+legend(13.5,1,legend=c("failed packaging &","dispersal inv","failed","pollen-attraction inv",
+                       "successful","packaging &","dispersal inv","successful","pollen-attraction inv","seed investment"),
+       pch=16, cex=0.8,bty="n",col=c("darkslategray4","white","darkslategray2","white","darkseagreen4","white","white","darkseagreen2","white","black"))
+mtext(side=2,text="proportion reproductive investment (0-1)",line=2.5)
+axis(1,labels=c("BAER", "BOLE", "COER", "EPMI", "GRBU", "GRSP", "HATE", "HEPU","LEES", "PELA", "PEPU", "PHPH", "PILI", "PUTU"),
+     at=seq(0.5,13,(12.5/13)),tck=FALSE,line=-1.25,lwd=0,cex.axis=0.5)
+
+dev.off()
+
+
+
+
+######################
+#####  FIGURE 4  #####
+######################
+
+win.metafile("ms/RA/Figure_4_RA_max1_boxes.wmf", height=12, width=16)
 par(mfrow=c(4,4), cex=1, omi=c(.5,.6,.2,.1), mai=c(0.2,.2,.01,0.01)) 
 
 data <- SummarySppAge[["mean"]]
@@ -94,7 +123,7 @@ for(v in c("growth_leaf")) {
 data <- split(data, data$species)
 data2 <- split(data2, data2$species)
 
-for(spp in c("BOLE","PILI","HEPU","COER","GRBU","GRSP","XXXX","XXXX","EPMI","LEES","PHPH","PUTU","HATE","BAER","PELA","PEPU")) {
+for(spp in c("BOLE","PILI","HEPU","GRSP","GRBU","COER","XXXX","XXXX","EPMI","LEES","PHPH","PUTU","HATE","BAER","PELA","PEPU")) {
   
   if(spp == "XXXX") {
     plot(1,1, type="n", axes=FALSE, ann=FALSE)
@@ -134,8 +163,10 @@ for(spp in c("BOLE","PILI","HEPU","COER","GRBU","GRSP","XXXX","XXXX","EPMI","LEE
       polygon(x=c(1.4,2.4,5,7,9,32,32,1.4),y=c(data[[spp]]$RA_max_1[1],data[[spp]]$RA_max_1[2],data[[spp]]$RA_max_1[3],data[[spp]]$RA_max_1[4],
                                                data[[spp]]$RA_max_1[5],data[[spp]]$RA_max_1[6],0,0),col="coral3",density=NA)
     }
-    points((RA_max_1)~jitter(age),data2[[spp]],cex=1.2,lwd=1.5)
+    points((RA_max_1)~(age),data2[[spp]],cex=1,lwd=1.5,pch=4)
     mtext(labels.spp.full(spp),font=3,outer=FALSE,side=3,adj=0)
+    mtext(labels.RA.full(spp),adj=1,side=1,line=-1.75,cex=0.7)
+    
   }
   #extra.top.left.logx(labels.spp.full(spp),3,1)
 }
@@ -145,7 +176,74 @@ mtext("RA (0-1)",side=2,outer=TRUE,line=1.75)
 dev.off()
 
 ######################
-#####  FIGURE 4  #####
+#####  FIGURE 5  #####
+######################
+extra.top.left.logx <- function(words, fontx, cexx) {
+  text(10^((0.06 * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), 
+       ((0.95 * (par("usr")[4] - par("usr")[3])) + par("usr")[3]), words, adj = 0, cex = cexx,
+       font = fontx)
+}
+
+win.metafile("ms/RA/Figure_5_life_history_correlations.wmf", height=8, width=8)
+plot
+par(mfcol=c(2,2), cex=1, omi=c(.1,.7,.1,.1), mai=c(.8,.3,.1,0.2)) 
+
+
+traits <- SummarySpp[["mean"]]
+traits$maxH <- SummarySpp[["max"]]$height
+
+temp <- SummarySppAge[["mean"]]
+temp <- temp %>%
+  group_by(species) %>%
+  summarise_each(funs(max), RA_leaf_area,RA_max_1,RA_vs_all_leaf)
+names(temp) <- c("species","RA_leaf_area_max","RA_max_1_max","RA_vs_all_leaf_max")
+
+traits <- merge(traits,temp,by="species")
+i <- traits$RA_max_1_max
+
+plot(i~traits$lifespan,pch=16,cex=1.5,log="x",xlab="",yaxt="n",col="coral4",ylim=c(0,1))
+mtext("lifespan (years)",1,outer=FALSE,line=2)
+axis(2, at=c(0,.2,.4,.6,.8,1,1.2,1.4), labels=c(0,0.2,0.4,0.6,0.8,1.0,1.2,1.4),cex.axis=.9,las=1)
+mod <- lm(log10(lifespan)~i,traits)
+#extra.bottom.left.logx(paste("r2=",round(glance(mod)[1],2),"; p-value:",round(glance(mod)[5],4)),cexx=1,fontx=1)
+extra.top.left.logx(words="a",fontx=2,cexx=1.3)
+
+plot(i~traits$maturity,pch=16,cex=1.5,log="x",xlab="",yaxt="n",col="coral4",ylim=c(0,1))
+mtext("age at maturity (years)",1,outer=FALSE,line=2)
+axis(2, at=c(0,.2,.4,.6,.8,1,1.2,1.4), labels=c(0,0.2,0.4,0.6,0.8,1.0,1.2,1.4),cex.axis=.9,las=1)
+mod <- lm(maturity~log10(i),traits)
+#extra.bottom.left.logx(paste("r2=",round(glance(mod)[1],2),"; p-value:",round(glance(mod)[5],4)),cexx=1,fontx=1)
+extra.top.left.logx(words="b",fontx=2,cexx=1.3)
+
+plot(i~traits$maxH,pch=16,cex=1.5,log="x",xlab="",yaxt="n",col="coral4",ylim=c(0,1))
+mtext("maximum height (mm)",1,outer=FALSE,line=2)
+mod <- lm(log10(maxH)~i,traits)
+axis(2, at=c(0,.2,.4,.6,.8,1,1.2,1.4), labels=c("","","","","","","",""),cex.axis=.9,las=1)
+#extra.bottom.left.logx(paste("r2=",round(glance(mod)[1],2),"; p-value:",round(glance(mod)[5],4)),cexx=1,fontx=1)
+extra.top.left.logx(words="c",fontx=2,cexx=1.3)
+
+plot(RA_max_1 ~ prop_leaf_loss,subset(SummarySppAge[["mean"]],age>2),pch=16,cex=1.5,log="",xlab="",yaxt="n",col="coral4",ylim=c(0,1))
+mtext("proportion leaf loss (0-1)",1,outer=FALSE,line=2)
+axis(2, at=c(0,.2,.4,.6,.8,1,1.2,1.4), labels=c("","","","","","","",""),cex.axis=.9,las=1)
+mod <- lm(RA_max_1~prop_leaf_loss,subset(SummarySppAge[["mean"]],age>2))
+#extra.top.left(paste("r2=",round(glance(mod)[1],2)),cexx=1,fontx=1)
+extra.top.left(words="d",fontx=2,cexx=1.3)
+mtext("maximum RA, as fraction of surplus energy",2,outer=TRUE,line=1)
+
+dev.off()
+
+win.metafile("ms/RA/Figure_4b_life_history_correlation_matrix.wmf", height=8, width=8)
+plot
+par(mfcol=c(1,1), cex=1, omi=c(.1,.7,.1,.1), mai=c(.05,.05,.05,0.05)) 
+
+temp2 <- select(traits,lifespan, maturity,maxH,RA_max_1_max)
+names(temp2) <- c("lifespan","maturity","max height","maximum RA")
+pairs(temp2,pch=16,upper.panel =NULL,log="xy")
+
+dev.off()
+
+######################
+#####  FIGURE 6  #####
 ######################
 
 
@@ -156,14 +254,14 @@ data <- subset(data,!(data$individual %in% c("COER_806","EPMI_907","GRBU_906","H
                                              "PUTU_108")))
 options(scipen=0)
 
-#pdf("figs2/RA/Figure_4_investment.pdf", height=11, width=8)
-win.metafile("ms/RA/Figure4_investment.wmf", height=16, width=16)
+#pdf("figs2/RA/Figure_6_investment.pdf", height=11, width=8)
+win.metafile("ms/RA/Figure_6_investment.wmf", height=16, width=16)
 par(mfrow=c(4,4), cex=1, omi=c(.5,.6,.1,.1), mai=c(.3,.6,0.3,0.02))
 
 data <- subset(data)
 data <- split(data, data$species)
 
-for(spp in c("BOLE","PILI","HEPU","COER","GRBU","GRSP","XXXX","XXXX","EPMI","LEES","PHPH","PUTU","HATE","BAER","PELA","PEPU")) {
+for(spp in c("BOLE","PILI","HEPU","GRSP","GRBU","COER","XXXX","XXXX","EPMI","LEES","PHPH","PUTU","HATE","BAER","PELA","PEPU")) {
   
   
   if(spp == "XXXX") {
@@ -174,6 +272,7 @@ for(spp in c("BOLE","PILI","HEPU","COER","GRBU","GRSP","XXXX","XXXX","EPMI","LEE
     data[[spp]]$leaf_expansion_log <- log10(data[[spp]]$growth_leaf)
     data[[spp]]$leaf_replacement_log <- log10(data[[spp]]$leaf_replacement)
     data[[spp]]$repro_inv_log <- log10(data[[spp]]$repro_inv)
+    data[[spp]]$surplus_inv_log <- log10(data[[spp]]$surplus_inv)
     
     for (v in c("leaf_shed_log","leaf_expansion_log","leaf_replacement_log","repro_inv_log")) {
       i <- is.infinite(data[[spp]][[v]])
@@ -202,9 +301,10 @@ for(spp in c("BOLE","PILI","HEPU","COER","GRBU","GRSP","XXXX","XXXX","EPMI","LEE
     
     polygon(x=c(0.5*x_min,0.5*x_min,2*x_max,2*x_max),y=c(y_min-1,y_min-2,y_min-2,y_min-1),col="grey90")
     points(leaf_replacement_log~total_weight_0,data[[spp]],pch=16,cex=1,col="darkseagreen4") 
-    points(leaf_expansion_log~total_weight_0,data[[spp]],pch=16,cex=1,col="darkseagreen2")  
-    points(repro_inv_log~total_weight_0,data[[spp]],pch=16,cex=1,col="coral3")
-    points(leaf_expansion_log~total_weight_0,data[[spp]],pch=16,cex=0.5,col="darkseagreen2") 
+    #points(leaf_expansion_log~total_weight_0,data[[spp]],pch=16,cex=1,col="darkseagreen2")  
+    #points(repro_inv_log~total_weight_0,data[[spp]],pch=16,cex=1,col="coral3")
+    #points(leaf_expansion_log~total_weight_0,data[[spp]],pch=16,cex=0.5,col="darkseagreen2")
+    points(surplus_inv_log~total_weight_0,data[[spp]],pch=16,cex=0.5,col="black")
     
     for (i in seq_along(data[[spp]]$individual)) {
       if (data[[spp]]$leaf_shed_log[i] > data[[spp]]$leaf_replacement_log[i]) {
@@ -241,13 +341,55 @@ dev.off()
 
 
 ######################
-#####  FIGURE 5  #####
+#####  FIGURE 7  #####
 ######################
 
-win.metafile("ms/RA/FIGURE5_leaf_area_by_age.wmf", height=16, width=16)
-par(mfrow=c(4,4), cex=1, omi=c(.5,.6,.02,.02), mai=c(0.2,.65,.01,0.01)) 
+win.metafile("ms/RA/Figure_7_leaf_area_by_age.wmf", height=16, width=16)
+par(mfrow=c(4,4), cex=1, omi=c(.5,.6,.2,.02), mai=c(0.2,.65,.01,0.01)) 
 
 data <- SummaryInd
+
+data <- split(data, data$species)
+
+
+for(spp in c("BOLE","PILI","HEPU","GRSP","GRBU","COER","XXXX","XXXX","EPMI","LEES","PHPH","PUTU","HATE","BAER","PELA","PEPU")) {
+  
+  if(spp == "XXXX") {
+    plot(1,1, type="n", axes=FALSE, ann=FALSE)
+  } else {
+    
+    y_max <-max(data[[spp]]$leaf_area_0)
+    y_min <-min(data[[spp]]$leaf_area_0)
+    
+    plot(leaf_area_0~age,data[[spp]],pch=16,log="xy",xlim=c(1,40),ylim=c(y_min*0.5,y_max*2),col=col.age2(age),xaxt="n",ylab="n",las=1,xaxs="i",yaxs="i")
+    
+    if(spp=="BAER"|spp=="PEPU"|spp=="PELA"|spp=="HATE") {
+      axis(1, at=c(2,5,10,20), labels=c(2,5,10,20),cex.axis=1,las=1)
+    }
+    
+    mtext(labels.spp.full(spp),font=3,outer=FALSE,side=3,adj=0)
+  }
+}
+mtext("age (yr)",side=1,outer=TRUE,line=1)
+mtext("leaf area (mm^2)",side=2,outer=TRUE,line=1.75)
+
+dev.off()
+
+
+
+######################
+#####  SUPP 1  #####
+######################
+
+win.metafile("ms/RA/SupMat_01_leaf_area_vs_production.wmf", height=16, width=16)
+par(mfrow=c(4,4), cex=1, omi=c(.5,.6,.02,.02), mai=c(0.2,.75,.4,0.01)) 
+options(scipen=999)
+data <- SummaryInd
+
+data <- subset(data,!(data$individual %in% c("COER_806","EPMI_907","GRBU_906","HATE_105","HATE_003","LEES_354",
+                                             "LEES_352","LEES_355","LEES_353","LEES_351","PELA_161","PELA_162",
+                                             "PUTU_108")))
+
 
 data <- split(data, data$species)
 
@@ -258,19 +400,53 @@ for(spp in c("BOLE","PILI","HEPU","COER","GRBU","GRSP","XXXX","XXXX","EPMI","LEE
     plot(1,1, type="n", axes=FALSE, ann=FALSE)
   } else {
     
-    y_max <-max(data[[spp]]$leaf_area_0)
-    y_min <-min(data[[spp]]$leaf_area_0)
+    y_max <-max(data[[spp]]$all_leaf_and_repro_inv)
+    y_min <-min(subset(data[[spp]]$all_leaf_and_repro_inv,data[[spp]]$all_leaf_and_repro_inv>0))
+    x_max <-max(data[[spp]]$leaf_area_0)
+    x_min <-min(subset(data[[spp]]$leaf_area_0,data[[spp]]$leaf_area_0>0))
     
-    plot(leaf_area_0~age,data[[spp]],pch=16,log="xy",xlim=c(1.25,35),ylim=c(y_min*0.5,y_max*2),col=col.age2(age),xaxt="n",ylab="n",las=1,xaxs="i",yaxs="i")
-
-    if(spp=="BAER"|spp=="PEPU"|spp=="PELA"|spp=="HATE") {
-      axis(1, at=c(2,5,10,20), labels=c(2,5,10,20),cex.axis=1,las=1)
-    }
-    
-    mtext(labels.spp.full(spp),font=3,outer=FALSE,side=3,adj=0)
+    plot(all_leaf_and_repro_inv~leaf_area_0,data[[spp]],pch=16,log="xy",ylim=c(y_min*0.5,y_max*2),xlim=c(x_min*0.5,x_max*2),col=col.age2(age),ylab="",las=1,xaxs="i",yaxs="i")
+    mtext(labels.spp.full(spp),font=3,outer=FALSE,side=3,adj=0,cex.axis=0.8)
+    #points(repro_inv~leaf_area_0,data[[spp]])
   }
 }
-mtext("age (yr)",side=1,outer=TRUE,line=1)
-mtext("leaf area (mm^2)",side=2,outer=TRUE,line=1.75)
+mtext("leaf area (mm^2)",side=1,outer=TRUE,line=1)
+mtext("total production (mg)",side=2,outer=TRUE,line=1)
+
+dev.off()
+
+#########
+
+win.metafile("ms/RA/SupMat_02_leaf_area_vs_tot_production.wmf", height=16, width=16)
+par(mfrow=c(4,4), cex=1, omi=c(.5,.6,.02,.02), mai=c(0.2,.75,.4,0.01)) 
+options(scipen=999)
+data <- SummaryInd
+
+data <- subset(data,!(data$individual %in% c("COER_806","EPMI_907","GRBU_906","HATE_105","HATE_003","LEES_354",
+                                             "LEES_352","LEES_355","LEES_353","LEES_351","PELA_161","PELA_162",
+                                             "PUTU_108")))
+
+
+data <- split(data, data$species)
+
+
+for(spp in c("BOLE","PILI","HEPU","COER","GRBU","GRSP","XXXX","XXXX","EPMI","LEES","PHPH","PUTU","HATE","BAER","PELA","PEPU")) {
+  
+  if(spp == "XXXX") {
+    plot(1,1, type="n", axes=FALSE, ann=FALSE)
+  } else {
+    
+    y_max <-max(data[[spp]]$total_inv)
+    y_min <-min(subset(data[[spp]]$total_inv,data[[spp]]$total_inv>0))
+    x_max <-max(data[[spp]]$leaf_area_0)
+    x_min <-min(subset(data[[spp]]$leaf_area_0,data[[spp]]$leaf_area_0>0))
+    
+    plot(total_inv~leaf_area_0,data[[spp]],pch=16,log="xy",ylim=c(y_min*0.5,y_max*2),xlim=c(x_min*0.5,x_max*2),col=col.age2(age),ylab="",las=1,xaxs="i",yaxs="i")
+    mtext(labels.spp.full(spp),font=3,outer=FALSE,side=3,adj=0,cex.axis=0.8)
+    #points(repro_inv~leaf_area_0,data[[spp]])
+  }
+}
+mtext("leaf area (mm^2)",side=1,outer=TRUE,line=1)
+mtext("total production (mg)",side=2,outer=TRUE,line=1)
 
 dev.off()
