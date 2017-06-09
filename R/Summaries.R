@@ -65,8 +65,8 @@ process_leaf_loss <- function(data_raw, leavesPerLength) {
           (shoot_leaf_count_growth_shoot_length *  count_per_length),
     shoot_leaf_count = lvs_end + shoot_leaf_count_new) %>%
   select(species, age, individual, shoot_length_start, growth_shoot_length,
-    shoot_leaf_count_new_and_shed_count, shoot_leaf_count_start, prop_leaf_loss,
-    shoot_leaf_count_new, shoot_leaf_count,lvs_end,lvs_end_count,lvs_end_length,count_per_length)
+         shoot_leaf_count_new_and_shed_count, shoot_leaf_count_start, prop_leaf_loss,
+         shoot_leaf_count_new, shoot_leaf_count,lvs_end,lvs_end_count,lvs_end_length,count_per_length)
 }
 
 # Calculate average wood density by species

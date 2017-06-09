@@ -1,3 +1,77 @@
+######################
+#####  FIGURE 4  #####
+######################
+
+win.metafile("ms/RA/Figure_4_RA_max1_boxes.wmf", height=12, width=16)
+par(mfrow=c(4,4), cex=1, omi=c(.5,.6,.2,.1), mai=c(0.2,.2,.01,0.01)) 
+
+data <- SummarySppAge[["mean"]]
+data2 <- SummaryInd
+
+for(v in c("growth_leaf")) {
+  i <- (data[[v]] < 0)
+  data[[v]][i] <- 0
+}
+
+
+data <- split(data, data$species)
+data2 <- split(data2, data2$species)
+
+for(spp in c("BOLE","PILI","HEPU","GRSP","GRBU","COER","XXXX","XXXX","EPMI","LEES","PHPH","PUTU","HATE","BAER","PELA","PEPU")) {
+  
+  if(spp == "XXXX") {
+    plot(1,1, type="n", axes=FALSE, ann=FALSE)
+  } else {
+    plot(RA_max_1~age,data[[spp]],pch=16,log="x",ylim=c(-0.05,1.05),xlim=c(1.25,35),col="white",yaxt="n",xaxt="n",las=1,xaxs="i",yaxs="i")
+    polygon(x=c(1.25,1.25,35,35),y=c(-0.05,1.05,1.05,-0.05),col="white")
+    
+    if(spp=="BOLE"|spp=="EPMI"|spp=="GRBU"|spp=="HATE") {
+      axis(2, at=c(0,0.2,.4,.6,.8,1,1.2,1.4), labels=c(0,0.2,0.4,.6,.8,1,1.2,1.4),cex.axis=1,las=1)
+    }
+    
+    if(spp=="BAER"|spp=="PEPU"|spp=="PELA"|spp=="HATE") {
+      axis(1, at=c(2,5,10,20), labels=c(2,5,10,20),cex.axis=1,las=1)
+    }
+    
+    if(spp=="PILI") {
+      polygon(x=c(1.4,7,7,1.4),y=c(1,1,0,0),col="darkseagreen2",density=NA)
+      polygon(x=c(1.4,2.4,5,7,7,1.4),y=c(data[[spp]]$RA_max_1[1],data[[spp]]$RA_max_1[2],data[[spp]]$RA_max_1[3],data[[spp]]$RA_max_1[4],
+                                         0,0),col="coral3",density=NA)
+    }
+    
+    if(spp=="PHPH") {
+      polygon(x=c(1.4,32,32,1.4),y=c(1,1,0,0),col="darkseagreen2",density=NA)
+      polygon(x=c(2.4,5,7,9,32,32,2.4),y=c(data[[spp]]$RA_max_1[1],data[[spp]]$RA_max_1[2],data[[spp]]$RA_max_1[3],data[[spp]]$RA_max_1[4],
+                                           data[[spp]]$RA_max_1[5],0,0),col="coral3",density=NA)
+    }
+    
+    
+    if(spp=="BOLE"|spp=="COER"|spp=="HEPU"|spp=="GRSP") {
+      polygon(x=c(1.4,9,9,1.4),y=c(1,1,0,0),col="darkseagreen2",density=NA) 
+      polygon(x=c(1.4,2.4,5,7,9,9,1.4),y=c(data[[spp]]$RA_max_1[1],data[[spp]]$RA_max_1[2],data[[spp]]$RA_max_1[3],data[[spp]]$RA_max_1[4],
+                                           data[[spp]]$RA_max_1[5],0,0),col="coral3",density=NA)
+    }
+    
+    if(spp=="BAER"|spp=="EPMI"|spp=="GRBU"|spp=="HATE"|spp=="PELA"|spp=="PUTU"|spp=="LEES"|spp=="PEPU") {
+      polygon(x=c(1.4,32,32,1.4),y=c(1,1,0,0),col="darkseagreen2",density=NA)
+      polygon(x=c(1.4,2.4,5,7,9,32,32,1.4),y=c(data[[spp]]$RA_max_1[1],data[[spp]]$RA_max_1[2],data[[spp]]$RA_max_1[3],data[[spp]]$RA_max_1[4],
+                                               data[[spp]]$RA_max_1[5],data[[spp]]$RA_max_1[6],0,0),col="coral3",density=NA)
+    }
+    points((RA_max_1)~(age),data2[[spp]],cex=1.2,lwd=1.5,pch=1)
+    #mtext(labels.spp.full(spp),font=3,outer=FALSE,side=3,adj=0)
+    #mtext(labels.RA.full(spp),adj=1,side=1,line=-1.75,cex=0.7)
+    
+  }
+  #extra.top.left.logx(labels.spp.full(spp),3,1)
+}
+mtext("age (yr)",side=1,outer=TRUE,line=1)
+mtext("RA (0-1)",side=2,outer=TRUE,line=1.75)
+
+dev.off()
+
+
+#########################
+
 traits <- SummarySpp[["mean"]]
 traits$maxH <- SummarySpp[["max"]]$height
 

@@ -238,7 +238,33 @@ par(mfcol=c(1,1), cex=1, omi=c(.1,.7,.1,.1), mai=c(.05,.05,.05,0.05))
 
 temp2 <- select(traits,lifespan, maturity,maxH,RA_max_1_max)
 names(temp2) <- c("lifespan","maturity","max height","maximum RA")
-pairs(temp2,pch=16,upper.panel =NULL,log="xy")
+pairs(temp2,pch=16,upper.panel =NULL,log="xy",col="coral3",cex=1.2)
+
+dev.off()
+
+######RA vs LMA
+win.metafile("ms/RA/Figure_4c_LMA_vs_RA.wmf", height=4, width=4)
+
+par(mfcol=c(1,1), cex=1, omi=c(.6,.6,.1,.1), mai=c(.05,.05,.05,0.05)) 
+
+plot(RA_max_1~LMA,traits,col="coral4",cex=1.5,pch=16)
+mod <- sma(RA_max_1~LMA,traits,log="")
+mtext("average species RA, as fraction of surplus energy",2,outer=TRUE,line=2)
+mtext("LMA",1,outer=TRUE,line=2)
+
+dev.off()
+
+
+###RA vs scaled seed count
+###NOT SIGNIFICANT
+win.metafile("ms/RA/Figure_4d_scaled_seed_count_vs_RA.wmf", height=4, width=4)
+
+par(mfcol=c(1,1), cex=1, omi=c(.6,.6,.1,.1), mai=c(.05,.05,.05,0.05)) 
+
+plot(RA_max_1~scaled_seed_count,traits,col="coral4",cex=1.5,pch=16,log="x")
+mod <- sma(RA_max_1~scaled_seed_count,traits,log="x")
+mtext("average species RA, as fraction of surplus energy",2,outer=TRUE,line=2)
+mtext("yearly seed producion, scaled to plant size",1,outer=TRUE,line=2)
 
 dev.off()
 
@@ -301,10 +327,10 @@ for(spp in c("BOLE","PILI","HEPU","GRSP","GRBU","COER","XXXX","XXXX","EPMI","LEE
     
     polygon(x=c(0.5*x_min,0.5*x_min,2*x_max,2*x_max),y=c(y_min-1,y_min-2,y_min-2,y_min-1),col="grey90")
     points(leaf_replacement_log~total_weight_0,data[[spp]],pch=16,cex=1,col="darkseagreen4") 
-    #points(leaf_expansion_log~total_weight_0,data[[spp]],pch=16,cex=1,col="darkseagreen2")  
-    #points(repro_inv_log~total_weight_0,data[[spp]],pch=16,cex=1,col="coral3")
-    #points(leaf_expansion_log~total_weight_0,data[[spp]],pch=16,cex=0.5,col="darkseagreen2")
-    points(surplus_inv_log~total_weight_0,data[[spp]],pch=16,cex=0.5,col="black")
+    points(leaf_expansion_log~total_weight_0,data[[spp]],pch=16,cex=1,col="darkseagreen2")  
+    points(repro_inv_log~total_weight_0,data[[spp]],pch=16,cex=1,col="coral3")
+    points(leaf_expansion_log~total_weight_0,data[[spp]],pch=16,cex=0.5,col="darkseagreen2")
+    #points(surplus_inv_log~total_weight_0,data[[spp]],pch=16,cex=0.5,col="black")
     
     for (i in seq_along(data[[spp]]$individual)) {
       if (data[[spp]]$leaf_shed_log[i] > data[[spp]]$leaf_replacement_log[i]) {
@@ -374,6 +400,33 @@ mtext("age (yr)",side=1,outer=TRUE,line=1)
 mtext("leaf area (mm^2)",side=2,outer=TRUE,line=1.75)
 
 dev.off()
+
+
+######################
+#####  FIGURE 8  #####
+######################
+win.metafile("ms/RA/Figure_8_leaf_replacement_vs_RA.wmf", height=4, width=4)
+par(mfrow=c(1,1), cex=1, omi=c(.6,.6,.02,.02), mai=c(0.02,.02,.01,0.01)) 
+
+plot(RA_max_1 ~ prop_leaf_loss,subset(SummarySppAge[["mean"]],age>2),pch=16,col=col.age2(age),xlim=c(0,1),ylim=c(0,1),xlab="",ylab="")
+mod <- lm(prop_leaf_loss~RA_max_1,subset(SummarySppAge[["mean"]],age>2))
+#abline((coef(mod)[1]),coef(mod)[2])
+extra.top.left(paste("r2 =",round(glance(mod)[2],digits=2)),cexx=1,fontx=1)
+mtext("proportion of leaves lost annually",side=1,outer=TRUE,line=2)
+mtext("RA (0-1)",side=2,outer=TRUE,line=2)
+          
+dev.off()
+
+
+par(mfrow=c(1,1), cex=1, omi=c(.6,.6,.02,.02), mai=c(0.02,.02,.01,0.01)) 
+
+plot(RA_max_1 ~ leaf_replacement_prop_surplus,subset(SummarySppAge[["mean"]],RA_max_1>0),pch=16,col=col.age2(age),xlim=c(0,1),ylim=c(0,1),xlab="",ylab="")
+mod <- lm(leaf_replacement_prop_surplus~RA_max_1,subset(SummarySppAge[["mean"]],age>2))
+#abline((coef(mod)[1]),coef(mod)[2])
+extra.top.left(paste("r2 =",round(glance(mod)[2],digits=2)),cexx=1,fontx=1)
+mtext("proportion of leaves lost annually",side=1,outer=TRUE,line=2)
+mtext("RA (0-1)",side=2,outer=TRUE,line=2)
+
 
 
 
