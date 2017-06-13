@@ -1,4 +1,48 @@
 ######################
+#####  Repro inv by age  #####
+######################
+
+win.metafile("ms/RA/Figure_repro_inv_by_leaf_inv.wmf", height=16, width=16)
+par(mfrow=c(4,4), cex=1, omi=c(.5,.6,.2,.02), mai=c(0.2,.65,.01,0.01)) 
+
+data <- SummaryInd
+
+data <- split(data, data$species)
+
+
+for(spp in c("BOLE","PILI","HEPU","GRSP","GRBU","COER","XXXX","XXXX","EPMI","LEES","PHPH","PUTU","HATE","BAER","PELA","PEPU")) {
+  
+  if(spp == "XXXX") {
+    plot(1,1, type="n", axes=FALSE, ann=FALSE)
+  } else {
+    
+    y_max <-max(data[[spp]]$repro_inv)
+    y_min <-min(subset(data[[spp]]$repro_inv,data[[spp]]$repro_inv>0))
+    x_max <-max(subset(data[[spp]]$leaf_inv_gross,!is.na(data[[spp]]$leaf_inv_gross)))
+    x_min <-min(subset(data[[spp]]$leaf_inv_gross,data[[spp]]$leaf_inv_gross>0))
+    
+    plot(repro_inv~leaf_inv_gross,data[[spp]],pch=16,log="xy",xlim=c(x_min*0.5,x_max*2),ylim=c(y_min*0.5,y_max*2),col=col.age2(age),xaxt="n",ylab="n",las=1,xaxs="i",yaxs="i")
+    
+    if(spp=="BAER"|spp=="PEPU"|spp=="PELA"|spp=="HATE") {
+      axis(1, at=c(2,5,10,20), labels=c(2,5,10,20),cex.axis=1,las=1)
+    }
+    
+    mtext(labels.spp.full(spp),font=3,outer=FALSE,side=3,adj=0)
+    abline(0,1)
+  }
+}
+mtext("all leaf investment (mg)",side=1,outer=TRUE,line=1)
+mtext("reproductive investment (mg)",side=2,outer=TRUE,line=1.75)
+
+dev.off()
+
+
+
+
+
+
+
+######################
 #####  FIGURE 4  #####
 ######################
 
@@ -889,15 +933,51 @@ dev.off()
 
 ################################
 
-win.metafile("ms/RA/repro_inv_vs_RA.wmf", height=6, width=12)
+win.metafile("ms/RA/seed_count_vs_RA.wmf", height=4, width=8)
 plot
-par(mfcol=c(1,2), cex=1, omi=c(.5,.7,.1,.1), mai=c(.8,.8,.1,0.2)) 
+par(mfcol=c(1,2), cex=1, omi=c(.1,1,.1,.1), mai=c(1,.1,.1,0.2)) 
+options(scipen=999)
 
-plot(RA_vs_all_leaf~scaled_seed_count,SummarySpp[["mean"]],pch=16,cex=1.5,log="x",col="coral4",ylab="",xlab="seed count")
-plot(RA_vs_all_leaf~scaled_repro_inv,SummarySpp[["mean"]],pch=16,cex=1.5,log="x",col="coral4",ylab="",xlab="reproductive investment")
-#axis(2, at=c(.4,.6,.8,1,1.2,1.4), labels=c(0.4,0.6,0.8,1.0,1.2,1.4),cex.axis=.9,las=1)
-# <- lm(log10(lifespan)~i,traits)
-#extra.bottom.left.logx(paste("r2=",round(glance(mod)[1],2),"; p-value:",round(glance(mod)[5],4)))
-mtext("maximum RA",2,outer=TRUE,line=1)
-mtext("scaled to plant size",1,outer=TRUE,line=1)
+plot(RA_max_1~seed_size,SummarySpp[["mean"]],pch=16,cex=1.5,log="x",col=col.spp2(species),ylab="",xlab="seed size (mg)",cex.axis=1.3)
+mod <- lm(seed_size~RA_max_1,subset(SummarySpp[["mean"]], RA_max_1>0),log="x")
+extra.bottom.left.logx(paste("r2=",round(glance(mod)[1],2),"; p-value:",round(glance(mod)[5],4)),cexx=1,fontx=1)
+
+plot(RA_max_1~scaled_seed_count,SummarySppAge[["mean"]],pch=16,cex=1.5,log="x",col=col.spp2(species),ylab="",cex.axis=1.3,xlab="seed count scale to plant size",yaxt="n")
+mod <- lm(scaled_seed_count~RA_max_1,subset(SummarySppAge[["mean"]], RA_max_1>0),log="x")
+extra.bottom.left.logx(paste("r2=",round(glance(mod)[1],2),"; p-value:",round(glance(mod)[5],4)),cexx=1,fontx=1)
+
+mtext("average RA (0-1)",2,outer=TRUE,line=2,cex=1.3)
 dev.off()
+
+################################
+
+win.metafile("ms/RA/LMA_vs_RA.wmf", height=4, width=8)
+plot
+par(mfcol=c(1,2), cex=1, omi=c(.1,1,.1,.1), mai=c(1,.1,.1,0.2)) 
+
+plot(RA_max_1~LMA,subset(SummarySppAge[["mean"]],age>3),pch=16,cex=1.5,log="",col=col.spp2(species),xlab="leaf thickness",cex.axis=1.3)
+mod <- lm(LMA~RA_max_1,subset(SummarySppAge[["mean"]],age>3))
+extra.bottom.left(paste("r2=",round(glance(mod)[1],2),"; p-value:",round(glance(mod)[5],4)))
+
+plot(RA_max_1~prop_leaf_loss,subset(SummarySppAge[["mean"]],age>3),pch=16,cex=1.5,log="",col=col.spp2(species),yaxt="n",ylab="",cex.axis=1.3,xlab="proportion leaves shed each year")
+mod <- lm(prop_leaf_loss~RA_max_1,subset(SummarySppAge[["mean"]],age>3))
+extra.bottom.left(paste("r2=",round(glance(mod)[1],2),"; p-value:",round(glance(mod)[5],4)))
+
+mtext("average RA (0-1)",2,outer=TRUE,line=2,cex=1.3)
+#mtext("scaled to plant size",1,outer=TRUE,line=2)
+dev.off()
+
+################################
+
+win.metafile("ms/RA/wood_density_vs_RA.wmf", height=4, width=4)
+plot
+par(mfcol=c(1,1), cex=1, omi=c(.1,1,.1,.1), mai=c(1,.1,.1,0.2)) 
+
+plot(RA_max_1~wood_density,subset(SummarySppAge[["mean"]],age>3),pch=16,cex=1.5,log="",col=col.spp2(species),xlab="wood density (g/cm^3)",cex.axis=1.3)
+mod <- lm(wood_density~RA_max_1,subset(SummarySppAge[["mean"]],age>3))
+extra.bottom.left(paste("r2=",round(glance(mod)[1],2),"; p-value:",round(glance(mod)[5],4)))
+
+mtext("average RA (0-1)",2,outer=TRUE,line=2,cex=1.3)
+
+dev.off()
+

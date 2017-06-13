@@ -11,6 +11,19 @@ col.spp <- function(x = NULL) {
   ret
 }
 
+col.spp2 <- function(x = NULL) {
+  
+  ret <- c(BAER = "firebrick1", BOLE = "blue4", COER = "cadetblue4", EPMI = "aquamarine3",
+           GRBU = "darkslateblue", GRSP = "blue3", HATE = "firebrick4", HEPU = "blue2", LEES = "aquamarine4",
+           PELA = "firebrick2", PEPU = "firebrick3", PHPH = "aquamarine2", PILI = "blue",
+           PUTU = "aquamarine1")
+  
+  if (!is.null(x)) {
+    ret <- ret[as.character(x)]
+  }
+  ret
+}
+
 labels.spp <- function(x = NULL) {
   names(col.spp(x))
 }

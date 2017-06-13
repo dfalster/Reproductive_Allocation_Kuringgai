@@ -218,6 +218,7 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
       replace_leaf_prop_no_accessory = divide_zero((embryo_endo_inv+growth_leaf_pos+leaf_replacement),(growth_leaf_pos + leaf_replacement + growth_stem + embryo_endo_inv)),
       prop_leaf_loss_relative = 1+(divide_zero(growth_leaf_neg,(growth_leaf_pos + repro_inv))),
       prop_leaf_replacement_vs_all_leaf = divide_zero(leaf_replacement, all_leaf_inv),
+      surplus_vs_plant_size = divide_zero(surplus_inv,total_weight_0),
       RA_max_2 <- RA_leaf_area
     )
   
@@ -305,7 +306,7 @@ get_species_values <- function(SummaryInd, groups) {
                      repro_prop_all_leaf, leaf_replacement_prop_surplus, repro_and_leaf_growth_prop_surplus,prop_leaf_expand, prop_leaf_replacement,
                      gross_inv,prop_repro,prop_surplus, all_leaf_inv,all_leaf_and_repro_inv,prop_stem,surplus_inv,seed_prop_all_acc,
                      growth_leaf_prop_no_accessory,replace_leaf_prop_no_accessory,seed_prop_veg,seed_prop_all,seed_prop_surplus,
-                     prop_leaf_loss,RA_vs_all_leaf)
+                     prop_leaf_loss,RA_vs_all_leaf,surplus_vs_plant_size)
   })
   names(out[[2]]) <- fs
   
