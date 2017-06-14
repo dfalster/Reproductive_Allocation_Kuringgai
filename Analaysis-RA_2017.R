@@ -563,10 +563,10 @@ for(spp in c("BOLE","PILI","HEPU","GRSP","GRBU","COER","XXXX","XXXX","EPMI","LEE
     
     y_max <-max(data[[spp]]$ovule_count)
     y_min <-min(subset(data[[spp]]$ovule_count,data[[spp]]$ovule_count>0))
-    x_max <-max(subset(data[[spp]]$leaf_inv_gross,!is.na(data[[spp]]$leaf_inv_gross)))
-    x_min <-min(subset(data[[spp]]$leaf_inv_gross,data[[spp]]$leaf_inv_gross>0))
+    x_max <-max(subset(data[[spp]]$all_leaf_inv,!is.na(data[[spp]]$all_leaf_inv)))
+    x_min <-min(subset(data[[spp]]$all_leaf_inv,data[[spp]]$all_leaf_inv>0))
     
-    plot(ovule_count~leaf_inv_gross,data[[spp]],pch=16,log="xy",xlim=c(x_min*0.5,x_max*2),ylim=c(y_min*0.5,y_max*2),col=col.age2(age),ylab="n",las=1,xaxs="i",yaxs="i")
+    plot(ovule_count~all_leaf_inv,data[[spp]],pch=16,log="xy",xlim=c(x_min*0.5,x_max*2),ylim=c(y_min*0.5,y_max*2),col=col.age2(age),ylab="n",las=1,xaxs="i",yaxs="i")
     
     if(spp=="BAER"|spp=="PEPU"|spp=="PELA"|spp=="HATE") {
       axis(1, at=c(2,5,10,20), labels=c(2,5,10,20),cex.axis=1,las=1)
