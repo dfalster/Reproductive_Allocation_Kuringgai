@@ -76,41 +76,16 @@ labels.spp.genus <- function(x = NULL) {
 }
 
 col.age <- function(x = NULL) {
-  
+
   ret <- c("red", "orchid1", "gold1", "darkolivegreen3", "cyan2", "dodgerblue3",
-           "purple")
+    "purple")
   names(ret) <- c("0.1", "1.4", "2.4", "5", "7", "9", "32")
-  
+
   if (!is.null(x)) {
     ret <- ret[as.character(x)]
   }
   ret
 }
-
-col.age2 <- function(x = NULL) {
-  
-  ret <- c("darkslategray1", "darkslategray2", "darkslategray3", "darkslategray4", "darkslategray", "gray33",
-           "black")
-  names(ret) <- c("0.1", "1.4", "2.4", "5", "7", "9", "32")
-  
-  if (!is.null(x)) {
-    ret <- ret[as.character(x)]
-  }
-  ret
-}
-
-col.age.leaf <- function(x = NULL) {
-  
-  ret <- c("darkseagreen1", "darkseagreen1", "darkseagreen2", "darkseagreen3", "darkseagreen4", "gray33",
-           "black")
-  names(ret) <- c("0.1", "1.4", "2.4", "5", "7", "9", "32")
-  
-  if (!is.null(x)) {
-    ret <- ret[as.character(x)]
-  }
-  ret
-}
-
 
 labels.age <- function(x = NULL) {
   names(col.age(x))
@@ -157,6 +132,14 @@ format_p <- function(p, digits = 3) {
   x
 }
 
+format_p2 <- function(p, digits = 3) {
+  x <- as.character(round(p, digits = digits))
+  pc <- 10^-digits
+  x[p < pc] <- paste("<", pc)
+  x[p >= pc] <- paste("=", x[p >= pc])
+  x
+}
+
 format_r2 <- function(x) {
   format(round(x, 2), nsmall = 2)
 }
@@ -176,6 +159,36 @@ print_xtable <- function(data, file) {
 
 # plotting and stats creating lists of information for plotting symbols,
 # colors, labels
+
+
+add_axis_log10 <- function(side=1, labels=TRUE, las=1, ...){
+  at <- -20:20
+  if(labels)
+    lab <- do.call(expression, lapply(at, function(i) bquote(10^.(i))))
+  else
+    lab=""
+  axis(side, at = 10^at, labels = lab, las=las,...)
+}
+
+add_axis_proprtion <- function(side=1, labels=TRUE, las=1,...){
+  axis(2, at = c(0, 0.2, 0.4, 0.6, 0.8, 1), labels = labels, las=las)
+}
+
+seq_log_range <- function (r, length.out)
+{
+    seq_log(r[[1]], r[[2]], length.out)
+}
+
+seq_log <- function (from, to, length.out)
+{
+    exp(seq(log(from), log(to), length.out = length.out))
+}
+
+# General formula for r2 in glm -- for identity or logit links
+R2_glm<- function(model){
+    1-(model$deviance/model$null.deviance)
+}
+
 
 plot_yvar_vs_xvar <- function(data, yvar = "y", xvar = "x", ...) {
   Y <- data[[yvar]]
@@ -284,8 +297,6 @@ line_function_log_y <- function(x_axis, mod, type, colx) {
   y_max <- (10^(x_max * slope)) * (10^intercept)
   segments(x_min, y_min, x_max, y_max, lty = type, col = colx)
 }
-
-
 
 words.top.right.logxy <- function(x) {
   output <- data.frame(select(glance(x), r.squared, p.value))
@@ -472,68 +483,70 @@ words.top.left.logxy <- function(x) {
 words.top.left.logy <- function(x) {
   output <- data.frame(select(glance(x), r.squared, p.value))
   output <- round(output, 4)
-  text(((0.02 * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), 10^((0.93 *
-                                                                          (par("usr")[4] - par("usr")[3])) + par("usr")[3]), paste("r squared = ",
-                                                                                                                                   output[1]), adj = 0, cex = 0.9)
-  text(((0.02 * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), 10^((0.88 *
-                                                                          (par("usr")[4] - par("usr")[3])) + par("usr")[3]), paste("p-value = ",
-                                                                                                                                   output[2]), adj = 0, cex = 0.9)
-  text(((0.02 * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), 10^((0.98 *
-                                                                          (par("usr")[4] - par("usr")[3])) + par("usr")[3]), summary(mod)[1], cex = 0.7,
-       adj = 0)
+
+  text(((px * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), 10^((0.93 *
+    (par("usr")[4] - par("usr")[3])) + par("usr")[3]), paste("r squared = ",
+    output[1]), adj = 0, cex = 0.9)
+  text(((px * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), 10^((0.88 *
+    (par("usr")[4] - par("usr")[3])) + par("usr")[3]), paste("p-value = ",
+    output[2]), adj = 0, cex = 0.9)
+  text(((px * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), 10^((0.98 *
+    (par("usr")[4] - par("usr")[3])) + par("usr")[3]), summary(mod)[1], cex = 0.7,
+    adj = 0)
 }
 
-extra.top.left.logxy <- function(words, fontx, cexx) {
-  text(10^((0.02 * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), 10^((0.96 *
-                                                                             (par("usr")[4] - par("usr")[3])) + par("usr")[3]), words, adj = 0, font = fontx,
-       cex = cexx)
+extra.top.left.logxy <- function(words, px =0.02, py = 0.96, ...) {
+  text(10^((px * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), 10^((py *
+    (par("usr")[4] - par("usr")[3])) + par("usr")[3]), words, adj = 0,
+    xpd = NA, ...)
 }
 
-extra.top.left.logx <- function(words, fontx, cexx) {
-  text(10^((0.02 * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), ((0.96 *
-                                                                          (par("usr")[4] - par("usr")[3])) + par("usr")[3]), words, adj = 0, cex = cexx,
-       font = fontx)
+extra.top.left.logx <- function(words, px =0.02, py = 0.96, ...) {
+  text(10^((px * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), ((py *
+    (par("usr")[4] - par("usr")[3])) + par("usr")[3]), words, adj = 0,
+    xpd=NA, ...)
 }
 
-extra.top.left <- function(words, fontx, cexx) {
-  text(((0.02 * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), ((0.96 * (par("usr")[4] -
-                                                                               par("usr")[3])) + par("usr")[3]), words, adj = 0, font = fontx, cex = cexx)
+extra.top.left <- function(words, px =0.02, py = 0.96, ...) {
+  text(((px * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), ((py * (par("usr")[4] -
+    par("usr")[3])) + par("usr")[3]), words, adj = 0,
+    xpd = NA, ...)
 }
 
-extra.bottom.left.logxy <- function(words, fontx, cexx) {
-  text(10^((0.02 * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), 10^((0.04 *
-                                                                             (par("usr")[4] - par("usr")[3])) + par("usr")[3]), words, adj = 0, cex = cexx,
-       font = fontx)
+extra.bottom.left.logxy <- function(words, px =0.02, py = 0.96, ...) {
+  text(10^((px * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), 10^((py *
+    (par("usr")[4] - par("usr")[3])) + par("usr")[3]), words, adj = 0,
+    xpd = NA, ...)
 }
 
-extra.bottom.left.logx <- function(words, fontx, cexx) {
-  text(10^((0.012 * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), ((0.04 *
-                                                                           (par("usr")[4] - par("usr")[3])) + par("usr")[3]), words, adj = 0, cex = cexx,
-       font = fontx)
+extra.bottom.left.logx <- function(words, px =0.012, py = 0.96, ...) {
+  text(10^((px * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), ((py *
+    (par("usr")[4] - par("usr")[3])) + par("usr")[3]), words, adj = 0,
+    xpd = NA, ...)
 }
 
 
-extra.bottom.left <- function(words) {
-  text(((0.02 * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), ((0.04 * (par("usr")[4] -
-                                                                               par("usr")[3])) + par("usr")[3]), words, adj = 0, cex = 0.75)
+extra.bottom.left <- function(words, px =0.02, py = 0.96, ...) {
+  text(((px * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), ((py * (par("usr")[4] -
+    par("usr")[3])) + par("usr")[3]), words, adj = 0, ...)
 }
 
-extra.bottom.right.logx <- function(words, fontx) {
-  text(10^((0.98 * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), ((0.04 *
-                                                                          (par("usr")[4] - par("usr")[3])) + par("usr")[3]), words, cex = 0.75, adj = 1,
-       font = fontx)
+extra.bottom.right.logx <- function(words, ...) {
+  text(10^((0.98 * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), ((py *
+    (par("usr")[4] - par("usr")[3])) + par("usr")[3]), words, adj = 1,
+    xpd=NA, ...)
 }
 
-extra.top.right.logx <- function(words, fontx, cexx) {
-  text(10^((0.98 * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), ((0.96 *
-                                                                          (par("usr")[4] - par("usr")[3])) + par("usr")[3]), words, adj = 1, font = fontx,
-       cex = cexx)
+extra.top.right.logx <- function(words, px =0.02, py = 0.98, ...) {
+  text(10^((px * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), ((py *
+    (par("usr")[4] - par("usr")[3])) + par("usr")[3]), words, adj = 1,
+    xpd=NA,...)
 }
 
-extra.top.right.logxy <- function(words, fontx, cexx) {
-  text(10^((0.98 * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), 10^((0.96 *
-                                                                             (par("usr")[4] - par("usr")[3])) + par("usr")[3]), words, adj = 1, font = fontx,
-       cex = cexx)
+extra.top.right.logxy <- function(words, px =0.02, py = 0.98, ...) {
+  text(10^((px * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), 10^((py *
+    (par("usr")[4] - par("usr")[3])) + par("usr")[3]), words, adj = 1,
+    xpd=NA,...)
 }
 
 

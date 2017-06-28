@@ -224,23 +224,6 @@ write.csv(acc_costs_spp_format, file = "ms/Accessory/output/Table01_AccCosts_by_
   row.names = FALSE)
 
 
-# Table 1. color dots
-
-png("ms/Accessory/output/Table01_dots.png", height = 3, width = 0.2, units = "in",
-  res = 300)
-
-par(mfrow = c(1, 1), cex = 1, omi = c(0.01, 0.01, 0.01, 0.01), mai = c(0.01, 0.01,
-  0.01, 0.01))
-dots <- dplyr::select(SummarySpp[["mean"]], species, embryo_endo_costs)
-dots <- dots[order(dots$embryo_endo_costs), ]
-dots$x <- c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
-dots$y <- c(28, 26, 24, 22, 20, 18, 16, 14, 12, 10, 8, 6, 4, 2)
-
-plot(y ~ x, dots, cex = 1.5, pch = 16, xlab = "", ylab = "", xaxt = "n", yaxt = "n",
-  col = col.spp(dots$species), bty = "n", xlim = c(0.8, 1.2), ylim = c(1.8, 28.2))
-dev.off()
-
-
 
 # Table 2. Slopes for various embryo size by acc cost regressions
 
@@ -463,7 +446,8 @@ mod_seed$groupsummary$r2
 mod_ovule$groupsummary$r2
 
 # panel b
-plot(choosiness2 ~ scaled_pollen_attract_costs, SummarySpp[["mean"]], log = "xy",
+plot(prop_prepollen_success~ choosiness,  SummarySpp[["mean"]], log = "x")
+,
   col = cerulean, pch = 16, xlim = c(0.002, 0.3), ylim = c(3, 800), yaxt = "n",
   cex = 1, ylab = "", xlab = "", xaxt = "n")
 axis(2, at = c(10, 100, 1000), labels = c(10, 100, 1000), cex.axis = 0.8, las = 2)
@@ -632,52 +616,10 @@ temp <- dplyr::select(mod_prop_postpollen_success$groupsummary, r2, pval, Slope,
 temp$test[1] <- "Proportion postpollen costs to success"
 energy_prop <- rbind(energy_prop, temp)
 
-# Figure 3. Correlations of various reproductive investment categories against
-# plant weight
-
-png("ms/Accessory/output/Figure03_correlations_with_plant_weight.png", height = 5,
-  width = 10, units = "in", res = 300)
-
-par(mfrow = c(1, 2), cex = 1, omi = c(0.1, 0.6, 0.1, 0.05), mai = c(0.8, 0.1, 0.1,
-  0.05))
-options(scipen = 4)
-
-
-yvar <- "repro_inv"
-xvar <- "embryo_endo_inv"
-data <- subset(SummaryInd, SummaryInd[[xvar]] > 0 & SummaryInd[[yvar]] > 0)
-
-fit <- sma(data[[yvar]] ~ data[[xvar]] * data[["species"]], method = "OLS", log = "xy")
-plot(fit, col = col.spp(fit$groupsummary$group), log = "xy", ylim = c(0.3, 3e+05),
-  xlim = c(0.3, 3e+05), xlab = "", ylab = "", lty = fit$groupsummary, pch = 16)
-abline(0, 1)
-mod <- sma(embryo_endo_inv ~ repro_inv, data = subset(SummaryInd, propagule_inv >
-  0), log = "xy", method = "OLS")
-mtext(text = "total embryo and endosperm investment (mg)", side = 1, line = 2.2,
-  outer = FALSE)
-mtext(text = "total reproductive investment (mg)", side = 2, line = 2, outer = TRUE)
-extra.top.left.logxy("a", 2, 1.2)
-
-xvar <- "flower_inv"
-yvar <- "repro_inv"
-data <- subset(SummaryInd, SummaryInd[[xvar]] > 0 & SummaryInd[[yvar]] > 0)
-
-fit <- sma(data[[yvar]] ~ data[[xvar]] * data[["species"]], method = "OLS", log = "xy",
-  slope.test = 1)
-plot(fit, xlab = "", ylab = "", pch = 16, col = col.spp(fit$groupsummary$group),
-  lty = "solid", ylim = c(0.3, 3e+05), xlim = c(0.3, 3e+05), yaxt = "n")
-axis(2, at = c(1, 100, 10000), labels = c("", "", ""))
-abline(0, 1)
-mtext(text = "flower weight * bud count (mg)", side = 1, line = 2.2, outer = FALSE)
-extra.top.left.logxy("b", 2, 1.2)
-
-dev.off()
-
-
 
 
 # Table S1.correlations between repro investment and flower investment by
-# species (noted in Discussiong)
+# species (noted in Discussion)
 
 
 yvar <- "repro_inv"
