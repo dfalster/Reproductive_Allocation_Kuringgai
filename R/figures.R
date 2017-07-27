@@ -77,8 +77,7 @@ labels.spp.genus <- function(x = NULL) {
 
 col.age <- function(x = NULL) {
 
-  ret <- c("red", "orchid1", "gold1", "darkolivegreen3", "cyan2", "dodgerblue3",
-    "purple")
+  ret <- RColorBrewer::brewer.pal(8, "Blues")[-1]
   names(ret) <- c("0.1", "1.4", "2.4", "5", "7", "9", "32")
 
   if (!is.null(x)) {

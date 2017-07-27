@@ -62,6 +62,24 @@ preprocessHarvest <- function(HarvestData_raw, IndividualsList) {
 }
 
 
+# Function for fitting a gam on log scaled values of X and Y
+# k: the dimension of the basis used to represent the smooth term.
+fit_gam_loglog <- function(Y, X, df, k = 4) {
+  df <- subset(df, df[[Y]] != 0 & df[[X]] != 0)
+  df$Y <- log(df[[Y]])
+  df$X <- log(df[[X]])
+  gam(Y ~ s(X, k = k), data = df)
+}
+
+y_hat <- function(fit, X, ...) {
+  exp(predict(fit, data.frame(X = log(X))))
+}
+
+predict_start_Y <- function(fit, Y2, X1, X2) {
+  Y2 * (y_hat(fit, X1)/y_hat(fit, X2))
+}
+
+
 growth_calculations <- function(thisSpecies, HarvestData, IndividualsList) {
 
   individuals <- filter(IndividualsList, use_for_fit & alive)$individual
@@ -89,23 +107,6 @@ growth_calculations <- function(thisSpecies, HarvestData, IndividualsList) {
     df[df$individual == thisindividual, v][1]
   }
 
-
-  # Function for fitting a gam on log scaled values of X and Y k: the dimension
-  # of the basis used to represent the smooth term.
-  fit_gam_loglog <- function(Y, X, df, k = 4) {
-    df <- subset(df, df[[Y]] != 0 & df[[X]] != 0)
-    df$Y <- log(df[[Y]])
-    df$X <- log(df[[X]])
-    gam(Y ~ s(X, k = k), data = df)
-  }
-
-  y_hat <- function(fit, X, ...) {
-    exp(predict(fit, data.frame(X = log(X))))
-  }
-
-  predict_start_Y <- function(fit, Y2, X1, X2) {
-    Y2 * (y_hat(fit, X1)/y_hat(fit, X2))
-  }
 
   # fit stem equation
   fit.s <- fit_gam_loglog("stem_weight", "diameter", HarvestData_basal_end)
@@ -154,14 +155,14 @@ growth_calculations <- function(thisSpecies, HarvestData, IndividualsList) {
     par(mfrow = c(1, 4), cex = 1, oma = c(1, 1, 2, 1), mar = c(4, 4, 0, 1))
     plot(stem_weight ~ diameter, data = HarvestData_basal_2, pch = 16, log = "xy",
       col = col.age(age))
-    dia.r <- seq_log_range(c(0.1, 50), 50)
+    dia.r <- seq_log_range(c(0.05, 50), 50)
     points(dia.r, y_hat(fit.s, dia.r), type = "l")
     out %>% group_by(individual) %>% do(add_line(., "diameter", "stem_weight_est"))
     text(stem_weight ~ diameter, data = HarvestData_basal_2, labels = gsub(paste0(thisSpecies,
       "_"), "", individual), cex = 0.2)
 
     plot(leaf_weight ~ age, data = HarvestData_basal_2, pch = 16, log = "xy",
-      col = col.age(age), xlim = c(1,32))
+      col = col.age(age), xlim = c(0.05,32))
     age.r <- seq_log_range(c(0.08, 35), 50)
     points(age.r, y_hat(fit.l, age.r), type = "l")
     out %>% group_by(individual) %>% do(add_line(., "age", "leaf_weight_est"))
@@ -171,13 +172,13 @@ growth_calculations <- function(thisSpecies, HarvestData, IndividualsList) {
 
 
     plot(height ~ age, data = HarvestData_basal_2, pch = 16, log = "xy",
-      col = col.age(age), xlim = c(1,32))
+      col = col.age(age), xlim = c(0.05,32))
     age.r <- seq_log_range(c(0.08, 35), 50)
     points(age.r, y_hat(fit.h, age.r), type = "l")
     mtext(thisSpecies, line = 1, outer = TRUE)
 
     plot(stem_weight ~ age, data = HarvestData_basal_2, pch = 16, log = "xy",
-      col = col.age(age), xlim = c(1,32))
+      col = col.age(age), xlim = c(0.05,32))
     age.r <- seq_log_range(c(0.08, 35), 50)
     points(age.r, y_hat(fit.s2, age.r), type = "l")
     mtext(thisSpecies, line = 1, outer = TRUE)

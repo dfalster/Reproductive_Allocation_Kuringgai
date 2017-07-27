@@ -68,7 +68,7 @@ targets:
       height: 12
 
   ms/RA/figures/leaf_area.pdf:
-    command: figure_leaf_area(SummaryInd)
+    command: figure_leaf_area(Growth_all)
     plot:
       width: 12
       height: 12

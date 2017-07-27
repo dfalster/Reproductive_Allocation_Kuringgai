@@ -122,7 +122,25 @@ figure_allocation_all <- function(SummaryInd, SummarySppAge) {
       polygon(x=c(1.4,2.4,5,7,9,32,32,1.4),y=c(data[[spp]]$RA_max_1[1],data[[spp]]$RA_max_1[2],data[[spp]]$RA_max_1[3],data[[spp]]$RA_max_1[4],
                                                data[[spp]]$RA_max_1[5],data[[spp]]$RA_max_1[6],0,0),col="coral3",density=NA)
     }
-    points((RA_max_1)~(age),data2[[spp]],cex=1,lwd=1.5,pch=4)
+    points((RA_max_1)~(age),data2[[spp]],cex=1,lwd=1.5,pch=16)
+
+    # Try fitting a line -- doesn't work
+    # Via a betaregression
+    # library(betareg)
+    # try({x <- data2[[spp]][["age"]]
+    # y <- data2[[spp]][["RA_max_1"]]
+    # y[y==0] <- 1E-5
+    # y[y==1] <- 0.9999
+    # fit <- betareg(y ~ x)
+    # x.pred <- seq_log_range(range(data2[[spp]][["age"]], na.rm=TRUE), 50)
+    # y.pred <- predict(fit, newdata = data.frame(x=x.pred), type = c("response"))
+    # lines(x.pred, y.pred, col = venetian_red)})
+
+    # Via a gam
+    # fit.l <- gam(RA_max_1 ~ s("age", k = 4), data = data2[[spp]])
+    # age.r <- seq_log_range(range(data2[[spp]][["age"]], na.rm=TRUE), 50)
+    # points(age.r,  predict(fit.l, data.frame(X = age.r)), type = "l")
+
     mtext(labels.spp.full(spp),font=3,outer=FALSE,side=3,adj=0)
     mtext(labels.RA.full(spp),adj=1,side=1,line=-1.75,cex=0.7)
 
@@ -206,8 +224,9 @@ figure_investment_weight <- function(SummaryInd) {
         }
       }
 
-      plot(leaf_replacement_log~total_weight_0,data[[spp]],type="n",log="x",xlab="",ylab="",cex=0.7,ylim=c((y_min-2),(1.1*y_max)),xlim=c((0.5*x_min),(2*x_max)),
-           col="darkseagreen4",cex.main=0.9, yaxt="n",pch=16,xaxs="i",yaxs="i")
+      plot(leaf_replacement_log~total_weight_0,data[[spp]],type="n",log="x",xlab="",ylab="",
+        cex=0.7,ylim=c((y_min-2),(1.1*y_max)),xlim=c((0.5*x_min),(2*x_max)),
+           col="darkseagreen4",cex.main=0.9, yaxt="n",pch=16, xaxs="i",yaxs="i", axes=FALSE)
 
       polygon(x=c(0.5*x_min,0.5*x_min,2*x_max,2*x_max),y=c(y_min-1,y_min-2,y_min-2,y_min-1),col="grey90")
       points(leaf_replacement_log~total_weight_0,data[[spp]],pch=16,cex=1,col="darkseagreen4")
@@ -215,46 +234,35 @@ figure_investment_weight <- function(SummaryInd) {
       points(repro_inv_log~total_weight_0,data[[spp]],pch=16,cex=1,col="coral3")
       points(leaf_expansion_log~total_weight_0,data[[spp]],pch=16,cex=0.5,col="darkseagreen2")
 
-      for (i in seq_along(data[[spp]]$individual)) {
-        if (data[[spp]]$leaf_shed_log[i] > data[[spp]]$leaf_replacement_log[i]) {
-          arrows(data[[spp]]$total_weight_0[i],data[[spp]]$leaf_replacement_log[i],data[[spp]]$total_weight_0[i],data[[spp]]$leaf_shed_log[i],
-                 length=0,col="darkseagreen4")
-        } else {}
-      }
+      # for (i in seq_along(data[[spp]]$individual)) {
+      #   if (data[[spp]]$leaf_shed_log[i] > data[[spp]]$leaf_replacement_log[i]) {
+      #     arrows(data[[spp]]$total_weight_0[i],data[[spp]]$leaf_replacement_log[i],data[[spp]]$total_weight_0[i],data[[spp]]$leaf_shed_log[i],
+      #            length=0,col="darkseagreen4")
+      #   } else {}
+      # }
 
       mtext(labels.spp.full(spp),font=3,outer=FALSE,side=3,adj=0)
 
-      y_min_int <- floor(y_min)
-      y_max_int <- ceiling(y_max)
-      y_span <- y_max_int-y_min_int+1
+      add_axis_log10(1)
 
-      label_list <- as.data.frame(seq(y_min_int,y_max_int,by=1))
-      names(label_list) <- c("base")
-      label_list$nums <- 10^(label_list$base)
-      label_list$to_use <- label_list$nums
-      for (i in 1:nrow(label_list)) {
-        if(label_list$to_use[i]>1000) {
-          label_list$to_use[i] <- paste("10^",label_list$base[i],sep="")
-        }
-      }
-
-
-      axis(side=2,at = label_list$base,label =label_list$to_use,las=1)
+      at <- seq(floor(y_min),ceiling(y_max))
+      lab <- do.call(expression, lapply(at, function(i) bquote(10^.(i))))
+      axis(2, at = at, labels = lab, las=1)
+      box()
     }
-
-    mtext("investment (mg)", 2, outer=TRUE,cex=1,line=1.5)
-    mtext("plant weight (mg)",1,outer=TRUE,cex=1,line=1)
   }
+  mtext("Investment (mg)", 2, outer=TRUE,cex=1,line=1.5)
+  mtext("Plant weight (mg)",1,outer=TRUE,cex=1,line=1)
+
 }
 
 
-figure_leaf_area <- function(SummaryInd){
-  par(mfrow=c(4,4), cex=1, omi=c(.5,.6,.2,.02), mai=c(0.2,.65,.01,0.01))
+figure_leaf_area <- function(Growth_all){
+  par(mfrow=c(4,4), cex=1, omi=c(.5,.6,.2,.02), mai=c(0.4,.65,.01,0.01))
 
-  data <- SummaryInd
+  data <- Growth_all
 
   data <- split(data, data$species)
-
 
   for(spp in species_order()) {
 
@@ -262,20 +270,28 @@ figure_leaf_area <- function(SummaryInd){
       plot(1,1, type="n", axes=FALSE, ann=FALSE)
     } else {
 
-      y_max <-max(data[[spp]]$leaf_area_0)
-      y_min <-min(data[[spp]]$leaf_area_0)
+      y_max <-max(data[[spp]]$leaf_weight)
+      y_min <-min(data[[spp]]$leaf_weight)
 
-      plot(leaf_area_0~age,data[[spp]],pch=16,log="xy",xlim=c(1,40),ylim=c(y_min*0.5,y_max*2),col=col.age(age),xaxt="n",ylab="n",las=1,xaxs="i",yaxs="i")
+      plot(leaf_weight~age,data[[spp]],pch=16,log="xy",
+      xlim=c(0.05,40),ylim=c(y_min*0.5,y_max*2),col=col.age(age),axes=FALSE,ylab="n",xaxs="i",yaxs="i")
 
-      if(spp %in% c("BAER", "PEPU", "PELA", "HATE")) {
-        axis(1, at=c(2,5,10,20), labels=c(2,5,10,20),cex.axis=1,las=1)
-      }
+      fit.l <- fit_gam_loglog("leaf_weight", "age", data[[spp]])
+      age.r <- seq_log_range(range(data[[spp]][["age"]], na.rm=TRUE), 50)
+      points(age.r, y_hat(fit.l, age.r), type = "l")
 
+      x <- c(0.125, 0.25, 0.5, 1, 2,5,10,20, 40)
+      axis(1, at=x, labels= FALSE)
+      axis(1, at=x[c(2,5,8)], labels= (spp %in% c("BAER", "PEPU", "PELA", "HATE")))
+
+      add_axis_log10(2)
+
+      box()
       mtext(labels.spp.full(spp),font=3,outer=FALSE,side=3,adj=0)
     }
   }
   mtext("Age (yr)",side=1,outer=TRUE,line=1)
-  mtext("Leaf area (mm^2)",side=2,outer=TRUE,line=1.75)
+  mtext(expression(paste("Leaf area (", mm^2, " )")),side=2,outer=TRUE,line=1.75)
 
 }
 
@@ -313,11 +329,16 @@ figure_leafarea_production <- function(SummaryInd){
       x_max <-max(data[[spp]]$leaf_area_0)
       x_min <-min(subset(data[[spp]]$leaf_area_0,data[[spp]]$leaf_area_0>0))
 
-      plot(total_inv~leaf_area_0,data[[spp]],pch=16,log="xy",ylim=c(y_min*0.5,y_max*2),xlim=c(x_min*0.5,x_max*2),col=col.age(age),ylab="",las=1,xaxs="i",yaxs="i")
+      plot(total_inv~leaf_area_0,data[[spp]],pch=16,log="xy",
+        ylim=c(y_min*0.5,y_max*2),xlim=c(x_min*0.5,x_max*2),
+        col=col.age(age),ylab="",las=1,xaxs="i",yaxs="i", axes=FALSE)
+      add_axis_log10(1)
+      add_axis_log10(2)
+      box()
       mtext(labels.spp.full(spp),font=3,outer=FALSE,side=3,adj=0,cex.axis=0.8)
       #points(repro_inv~leaf_area_0,data[[spp]])
     }
   }
-  mtext("Leaf area (mm^2)",side=1,outer=TRUE,line=1)
+  mtext(expression(paste("Leaf area (", mm^2, " )")),side=1,outer=TRUE,line=1)
   mtext("Total production (mg)",side=2,outer=TRUE,line=1)
 }
