@@ -114,6 +114,12 @@ growth_calculations <- function(thisSpecies, HarvestData, IndividualsList) {
   fit.l <- fit_gam_loglog("leaf_weight", "age", HarvestData_basal_end)
 
 
+  fit.h <- fit_gam_loglog("height", "age", HarvestData_basal_end)
+
+
+  fit.s2 <- fit_gam_loglog("stem_weight", "age", HarvestData_basal_end)
+
+
   ## Estimate weight at beginning and end (year 2012 and 2013) using fitted
   ## regression
   suppressWarnings(out <- HarvestData_basal_2 %>%
@@ -141,11 +147,11 @@ growth_calculations <- function(thisSpecies, HarvestData, IndividualsList) {
 
   path <- "output/growth_plots"
   dir.create(path, FALSE, TRUE)
-  pdf(sprintf("%s/%s.pdf", path, thisSpecies), width = 6, height = 3)
+  pdf(sprintf("%s/%s.pdf", path, thisSpecies), width = 10, height = 3)
   on.exit(dev.off())
 
   suppressWarnings({
-    par(mfrow = c(1, 2), cex = 1, oma = c(1, 1, 2, 1), mar = c(4, 4, 0, 1))
+    par(mfrow = c(1, 4), cex = 1, oma = c(1, 1, 2, 1), mar = c(4, 4, 0, 1))
     plot(stem_weight ~ diameter, data = HarvestData_basal_2, pch = 16, log = "xy",
       col = col.age(age))
     dia.r <- seq_log_range(c(0.1, 50), 50)
@@ -155,13 +161,27 @@ growth_calculations <- function(thisSpecies, HarvestData, IndividualsList) {
       "_"), "", individual), cex = 0.2)
 
     plot(leaf_weight ~ age, data = HarvestData_basal_2, pch = 16, log = "xy",
-      col = col.age(age))
+      col = col.age(age), xlim = c(1,32))
     age.r <- seq_log_range(c(0.08, 35), 50)
     points(age.r, y_hat(fit.l, age.r), type = "l")
     out %>% group_by(individual) %>% do(add_line(., "age", "leaf_weight_est"))
     mtext(thisSpecies, line = 1, outer = TRUE)
     text(leaf_weight ~ age, data = HarvestData_basal_2, labels = gsub(paste0(thisSpecies,
       "_"), "", individual), cex = 0.2)
+
+
+    plot(height ~ age, data = HarvestData_basal_2, pch = 16, log = "xy",
+      col = col.age(age), xlim = c(1,32))
+    age.r <- seq_log_range(c(0.08, 35), 50)
+    points(age.r, y_hat(fit.h, age.r), type = "l")
+    mtext(thisSpecies, line = 1, outer = TRUE)
+
+    plot(stem_weight ~ age, data = HarvestData_basal_2, pch = 16, log = "xy",
+      col = col.age(age), xlim = c(1,32))
+    age.r <- seq_log_range(c(0.08, 35), 50)
+    points(age.r, y_hat(fit.s2, age.r), type = "l")
+    mtext(thisSpecies, line = 1, outer = TRUE)
+
   })
 
   out %>%
