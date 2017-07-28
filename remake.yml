@@ -26,21 +26,17 @@ targets:
       - export
 
   # Papers --------------------------------------
-
   ms-RA:
     depends:
     - ms/RA/figures/RA_demo.pdf
     - ms/RA/figures/RA_all.pdf
-    - ms/RA/figures/life_history.pdf
-    - ms/RA/figures/investment_weight.pdf
+    - ms/RA/figures/investment.pdf
     - ms/RA/figures/leaf_area.pdf
-    - ms/RA/figures/leaf_loss.pdf
-    - ms/RA/figures/leafarea_production.pdf
 
   ms/RA/figures/RA_demo.pdf:
     command: figure_allocation_demo(SummarySppAge)
     plot:
-      width: 12
+      width: 16
       height: 4
 
   ms/RA/figures/accessory.pdf:
@@ -53,7 +49,7 @@ targets:
     command: figure_allocation_all(SummaryInd, SummarySppAge)
     plot:
       width: 16
-      height: 12
+      height: 9
 
   ms/RA/figures/life_history.pdf:
     command: figure_life_history(SummarySpp, SummarySppAge)
@@ -61,17 +57,17 @@ targets:
       width: 8
       height: 8
 
-  ms/RA/figures/investment_weight.pdf:
+  ms/RA/figures/investment.pdf:
     command: figure_investment_weight(SummaryInd)
     plot:
-      width: 12
-      height: 12
+      width: 16
+      height: 9
 
   ms/RA/figures/leaf_area.pdf:
     command: figure_leaf_area(Growth_all)
     plot:
-      width: 12
-      height: 12
+      width: 16
+      height: 9
 
   ms/RA/figures/leaf_loss.pdf:
     command: figure_leaf_loss(SummarySppAge)

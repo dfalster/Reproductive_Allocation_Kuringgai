@@ -160,8 +160,7 @@ print_xtable <- function(data, file) {
 # colors, labels
 
 
-add_axis_log10 <- function(side=1, labels=TRUE, las=1, ...){
-  at <- -20:20
+add_axis_log10 <- function(side=1, labels=TRUE, las=1, at = -20:20, ...){
   if(labels)
     lab <- do.call(expression, lapply(at, function(i) bquote(10^.(i))))
   else
