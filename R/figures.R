@@ -1,3 +1,18 @@
+make_transparent <- function(col, opacity=.5) {
+  alpha <- opacity
+  if (length(alpha) > 1 && any(is.na(alpha))) {
+    n <- max(length(col), length(alpha))
+    alpha <- rep(alpha, length.out=n)
+    col <- rep(col, length.out=n)
+    ok <- !is.na(alpha)
+    ret <- rep(NA, length(col))
+    ret[ok] <- make_transparent(col[ok], alpha[ok])
+    ret
+  } else {
+    tmp <- col2rgb(col)/255
+    rgb(tmp[1,], tmp[2,], tmp[3,], alpha=alpha)
+  }
+}
 col.spp <- function(x = NULL) {
 
   ret <- c(BAER = "red", BOLE = "darkolivegreen4", COER = "blue", EPMI = "purple",
@@ -164,7 +179,7 @@ add_axis_log10 <- function(side=1, labels=TRUE, las=1, at = -20:20, ...){
   if(labels)
     lab <- do.call(expression, lapply(at, function(i) bquote(10^.(i))))
   else
-    lab=""
+    lab=labels
   axis(side, at = 10^at, labels = lab, las=las,...)
 }
 
@@ -187,6 +202,22 @@ R2_glm<- function(model){
     1-(model$deviance/model$null.deviance)
 }
 
+
+per_x <- function(p) {
+  u <- par("usr")
+  z <- u[1] + p * (u[2] - u[1])
+  if(par("xlog"))
+   z <- 10^z
+  z
+}
+
+per_y <- function(p) {
+  u <- par("usr")
+  z <- u[3] + p * (u[4] - u[3])
+  if(par("ylog"))
+   z <- 10^z
+  z
+}
 
 plot_yvar_vs_xvar <- function(data, yvar = "y", xvar = "x", ...) {
   Y <- data[[yvar]]
@@ -461,37 +492,7 @@ words.bottom.left.logxy <- function(x) {
        adj = 0)
 }
 
-words.top.left.logxy <- function(x) {
-  output <- data.frame(select(glance(x), r.squared, p.value))
-  output <- round(output, 4)
-  text(10^((0.02 * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), 10^((0.93 *
-                                                                             (par("usr")[4] - par("usr")[3])) + par("usr")[3]), paste("r squared = ",
-                                                                                                                                      output[1]), adj = 0, cex = 0.9)
-  text(10^((0.02 * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), 10^((0.88 *
-                                                                             (par("usr")[4] - par("usr")[3])) + par("usr")[3]), paste("p-value = ",
-                                                                                                                                      output[2]), adj = 0, cex = 0.9)
-  text(10^((0.02 * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), 10^((0.98 *
-                                                                             (par("usr")[4] - par("usr")[3])) + par("usr")[3]), summary(mod)[1], cex = 0.7,
-       adj = 0)
-}
 
-
-
-
-words.top.left.logy <- function(x) {
-  output <- data.frame(select(glance(x), r.squared, p.value))
-  output <- round(output, 4)
-
-  text(((px * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), 10^((0.93 *
-    (par("usr")[4] - par("usr")[3])) + par("usr")[3]), paste("r squared = ",
-    output[1]), adj = 0, cex = 0.9)
-  text(((px * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), 10^((0.88 *
-    (par("usr")[4] - par("usr")[3])) + par("usr")[3]), paste("p-value = ",
-    output[2]), adj = 0, cex = 0.9)
-  text(((px * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), 10^((0.98 *
-    (par("usr")[4] - par("usr")[3])) + par("usr")[3]), summary(mod)[1], cex = 0.7,
-    adj = 0)
-}
 
 extra.top.left.logxy <- function(words, px =0.02, py = 0.96, ...) {
   text(10^((px * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), 10^((py *
@@ -522,7 +523,6 @@ extra.bottom.left.logx <- function(words, px =0.012, py = 0.96, ...) {
     (par("usr")[4] - par("usr")[3])) + par("usr")[3]), words, adj = 0,
     xpd = NA, ...)
 }
-
 
 extra.bottom.left <- function(words, px =0.02, py = 0.96, ...) {
   text(((px * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), ((py * (par("usr")[4] -

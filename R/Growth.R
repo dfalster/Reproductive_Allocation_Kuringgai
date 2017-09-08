@@ -71,6 +71,7 @@ fit_gam_loglog <- function(Y, X, df, k = 4) {
   gam(Y ~ s(X, k = k), data = df)
 }
 
+
 y_hat <- function(fit, X, ...) {
   exp(predict(fit, data.frame(X = log(X))))
 }

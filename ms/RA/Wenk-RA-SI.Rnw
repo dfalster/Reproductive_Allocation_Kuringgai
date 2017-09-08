@@ -1,0 +1,834 @@
+\documentclass[10pt,twoside]{article}
+
+\usepackage{float}
+\usepackage{suppmat}
+\usepackage{listings}
+\usepackage[T1]{fontenc} % Better underscores
+\usepackage{longtable}
+\usepackage{graphicx}
+
+\usepackage[rgb,dvipsnames]{xcolor}
+\definecolor{grey}{rgb}{0.5, 0.5, 0.5}
+
+% Enable new column type -- centered with fixed
+% Following http://texblog.org/2008/05/07/fwd-equal-cell-width-right-and-centre-aligned-content/
+\usepackage{array}
+\newcolumntype{x}[1]{%
+>{\raggedleft}p{#1}}%
+
+\newcommand{\smurl}[1]{\url{#1}}
+\newcommand{\email}[1]{\href{mailto:#1}{\texttt{#1}}}
+
+
+\title{Coordinated shifts in allocation among reproductive tissues across 14 coexisting plant species}
+\runninghead{S\lowercase{hifts in allocation among reproductive tissues}}
+
+
+
+\author[a,*]{E.H. Wenk}
+\author[b]{K. Abramowicz}
+\author[a]{M. Westoby}
+\author[c]{D.S. Falster}
+
+\affil[a]{Department of Biological Sciences, Macquarie University NSW 2109, Australia}
+\affil[b]{Department of Mathematics and Mathematical Statistics, Ume{\aa} University, 90187 Ume{\aa}, Sweden}
+\affil[c]{Evolution and Ecology Research Centre, University of New South Wales, Australia}
+
+%\textsuperscript{\textasteriskcentered} Correspondence author. E-mail: \email{ehwenk@gmail.com}
+
+\pdfminorversion=4
+% tell pdflatex to generate PDF in version 1.4
+% Needed for problem-free conversion on manuscript central (arrgh)
+% http://timotheepoisot.fr/2013/06/24/manuscript-central-pdf-fix/
+
+
+\titleprefix{Supporting Materials for:}
+
+\date{}
+
+<<preload, echo=FALSE>>=
+library(xtable)
+library(knitr)
+opts_chunk$set(echo=FALSE, fig.pos = "!h", fig.align="center", comment = NA)
+
+flowering_parts <- read.csv("../Accessory/Sup_Table_flowering_parts.csv", stringsAsFactors=FALSE, check.names=FALSE)
+flowering_parts$Method <- clean_headers(flowering_parts$Method)
+flowering_parts$Part <- firstup(flowering_parts$Part)
+flowering_parts$Description <- firstup(flowering_parts$Description)
+
+
+print_table_species <- function(species, data) {
+  data <- data[data$Species == species, -c(1)]
+  print(xtable(data,
+            hline.after=c(1),
+            align='p{0.1cm}p{4.5cm}p{6cm}p{2cm}p{1cm}p{1cm}',
+            label=sprintf("tab:parts_%s", gsub(" ", "_", species)),
+            caption=sprintf("Table of parts for \\emph{%s}.", species)),
+      sanitize.text.function=I,
+      , table.placement = "h"
+      , caption.placement = "top"
+      , include.rownames = FALSE
+      , include.colnames = TRUE
+      , size = "small"
+      , tabular.environment = 'longtable'
+      , floating = FALSE)
+}
+
+print_table_metadata <- function(path, align = NULL) {
+
+  data <-  read.csv(path, stringsAsFactors=FALSE, check.names=FALSE)
+  file <- gsub("_", "\\_", basename(path), fixed = TRUE)
+
+  label <- sprintf("tab:%s_meta", strsplit(basename(path), "_")[[1]][1])
+
+  print(xtable(data,
+            align=align,
+            hline.after=c(1),
+            label= label,
+            caption=
+              sprintf("Description of variables within the file \\texttt{data/%s}. These definitions can also be found within the file \\texttt{data/%s}.",
+              gsub("\\_meta", "", file, fixed = TRUE), file)),
+      , table.placement = "h"
+      , caption.placement = "top"
+      , include.rownames = FALSE
+      , include.colnames = TRUE
+      , size = "small"
+      , tabular.environment = 'longtable'
+      , floating = FALSE)
+}
+@
+
+\begin{document}
+
+\maketitle
+
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thetable}{S\arabic{table}}
+\setcounter{secnumdepth}{0}
+
+
+\section{Additional results supporting main text}
+
+<<echo=FALSE, results='asis', warning=FALSE>>=
+
+make_table_species_values_for_allocation_seedsize_table <- function(file) {
+  data <- select(file,species,scaled_seed_count,scaled_ovule_count,
+                 scaled_pollen_attract_costs,choosiness,prop_prepollen_success, prop_prepollen_discarded,
+                 prop_postpollen_success,prop_postpollen_discarded, prop_pollen_attract_vs_success,prop_provisioning_vs_success)
+  data$species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia", "Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile pulchella", "Phyllota phylicoides", "Pimelea linifolia", "Pultenaea tuberculata")
+  data
+}
+
+TableS15 <- make_table_species_values_for_allocation_seedsize_table(SummarySpp[["mean"]])
+
+names(TableS15) <- c("species","seed count","ovule count","pollen-attraction costs","choosi- ness","success","discarded","success","discarded","pollen-attraction","provi- sioning")
+
+for (i in 2:11) {
+TableS15[,i] <- format(TableS15[,i],digits=3, nsmall=0)
+}
+
+TableS15$species  <- paste("\\textit{",unique(TableS15$species),"}", sep="")
+@
+
+\begin{table}[h]
+\centering
+\caption{Species values for data plotted in Figure 2: shifts in reproductive tissue allocation with seed size.  Counts and costs are per unit leaf area of the plant. The bottom line indicates the corresponding figure of the main text where the data are presented. Data for reproductive costs (Figure 2, panel a), Seed-size, pollen-attraction costs, and provisioning costs (Figure 2, panel f) are presented in Table 1 in the main text and are not included here.}
+\label{tab:species}
+{\footnotesize
+\begin{tabular}{p{3cm}|p{1cm}p{1cm}|p{1cm}p{1cm}|p{1cm}p{1cm}|p{1cm}p{1cm}|p{1.5cm}p{1cm}}
+\hline
+& \multicolumn{2}{c|}{} & \multicolumn{2}{c|}{} & \multicolumn{2}{c|}{Proportion} & \multicolumn{2}{c|}{Proportion}& \multicolumn{2}{c}{Proportion} \\
+& \multicolumn{2}{c|}{} & \multicolumn{2}{c|}{} & \multicolumn{2}{c|}{pollen-attraction} & \multicolumn{2}{c|}{provisioning}& \multicolumn{2}{c}{success} \\
+& \multicolumn{2}{c|}{} & \multicolumn{2}{c|}{} & \multicolumn{2}{c|}{investment to} & \multicolumn{2}{c|}{investment to}& \multicolumn{2}{c}{investment to} \\
+<<echo=FALSE, results='asis', warning=FALSE>>=
+print(xtable(TableS15)
+        , sanitize.text.function=I
+        , include.rownames = FALSE
+        , include.colnames = TRUE,
+        only.contents=TRUE)
+cat("Figure reference & \\multicolumn{2}{c|}{Fig. 2, panel a} & \\multicolumn{2}{c|}{Fig. 2, panel b} & \\multicolumn{2}{c|}{Fig. 2, panel c} & \\multicolumn{2}{c|}{Fig. 2, panel d}  & \\multicolumn{2}{c}{Fig. 2, panel e}\\\\
+\\hline")
+@
+\end{tabular}
+}
+\end{table}
+
+\clearpage
+<<echo=FALSE, results='asis', warning=FALSE>>=
+make_table_RA_shifts_with_age <- function(SummaryInd) {
+  xvar <- "repro_inv"
+  yvar <- "accessory_costs"
+  data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+
+  fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
+  accessory_vs_RE <- dplyr::select(fit$groupsummary,group,n,r2,pval)
+
+  xvar <- "total_weight_0"
+  yvar <- "accessory_costs"
+  data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+
+  fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
+  accessory_vs_size <- dplyr::select(fit$groupsummary,group,n,r2,pval)
+
+  xvar <- "age"
+  yvar <- "accessory_costs"
+  data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+
+  fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
+  accessory_vs_age <- dplyr::select(fit$groupsummary,group,n,r2,pval)
+
+  TableS16 <- merge(accessory_vs_RE,accessory_vs_size,by="group")
+  TableS16 <- merge(TableS16,accessory_vs_age,by="group")
+
+  names(TableS16) <- c("Species","n","r$^2$","p","n","r$^2$","p","n","r$^2$","p")
+
+  Species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia", "Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile pulchella", "Phyllota phylicoides", "Pimelea linifolia", "Pultenaea tuberculata")
+  TableS16$Species <-  paste("\\textit{",Species,"}", sep="")
+
+  TableS16
+}
+
+TableS16 <- make_table_RA_shifts_with_age(SummaryInd)
+
+for(i in c(2,3,5,6,8,9)){
+  TableS16[,i] <- format_r2(TableS16[,i])
+}
+for(i in c(4,7,10)){
+  TableS16[,i] <- format_p(TableS16[,i])
+}
+@
+
+\begin{table}[H]
+\centering
+\caption{Testing for shifts in accessory costs with in age, plant size, or reproductive effort. Shifts in accessory costs with these variables is suggested as one possible explanation of increasing reproductive investment in larger, older plants, but such a trend did not exist in these data.}
+\label{tab:access_vs_age}
+\begin{tabular}{p{4cm}|x{.75cm}x{1cm}x{1.25cm}|x{.75cm}x{1cm}p{1.25cm}|x{.75cm}x{1cm}p{1.25cm}}
+\hline
+& \multicolumn{3}{c|}{Accessory costs} & \multicolumn{3}{c|}{Accessory costs}& \multicolumn{3}{c}{Accessory costs} \\
+& \multicolumn{3}{c|}{vs. RE} & \multicolumn{3}{c|}{vs. plant mass}& \multicolumn{3}{c}{vs. age} \\
+<<echo=FALSE, results='asis', warning=FALSE>>=
+print(xtable(TableS16)
+        , sanitize.text.function=I
+        , include.rownames = FALSE
+        , include.colnames = TRUE,
+        only.contents=TRUE)
+@
+\end{tabular}
+\end{table}
+
+\clearpage
+
+<<echo=FALSE, warning=FALSE>>=
+
+make_table_propagule_invest_vs_all_repropro_inv <- function(SummaryInd) {
+  mod_propagule_inv_all <- sma(repro_inv~propagule_inv,data=SummaryInd,log="xy",method="SMA")
+  mod_flower_inv_all <- sma(repro_inv~flower_inv,data=SummaryInd,log="xy",method="SMA")
+
+  yvar <- "repro_inv"
+  xvar <- "propagule_inv"
+  data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+
+  fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy",slope.test=mod_propagule_inv_all$groupsummary["Slope"][[1]],elev.test=mod_propagule_inv_all$coef[[1]][1,1])
+  results <- fit$groupsummary
+  acc_slopes <- dplyr::select(results,group,n,r2,pval)
+  names(acc_slopes) <- c("Species","n_propagule","r2_propagule","p_propagule")
+
+  yvar <- "repro_inv"
+  xvar <- "flower_inv"
+  data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+
+  fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA",  log="xy",slope.test=mod_flower_inv_all$groupsummary["Slope"][[1]],elev.test=mod_flower_inv_all$coef[[1]][1,1])
+  results <- fit$groupsummary
+  acc_slopes2 <- dplyr::select(results,group,n,r2,pval)
+  names(acc_slopes2) <- c("Species","n_flower","r2_flower","p_flower")
+  acc_slopes <- dplyr::left_join(acc_slopes, acc_slopes2, by ="Species")
+  names(acc_slopes) <- c("Species","n","r$^2$","p", "n","r$^2$","p")
+  Species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia", "Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile pulchella", "Phyllota phylicoides", "Pimelea linifolia", "Pultenaea tuberculata")
+  acc_slopes$Species <-  paste("\\textit{",Species,"}", sep="")
+
+  acc_slopes
+}
+
+TableS17 <- make_table_propagule_invest_vs_all_repropro_inv(SummaryInd)
+
+for(i in c(2,3,5,6)){
+  TableS17[,i] <- format_r2(TableS17[,i])
+}
+for(i in c(4,7)){
+  TableS17[,i] <- format_p(TableS17[,i])
+}
+@
+
+\begin{table}[H]
+\centering
+\caption{Intraspecific correlations between total reproductive investment and (a) propagule investment and (b) flower investment, where flower investment is defined as 'flower weight $\times$ bud count'. Due to the high proportion of aborted flowers, flower investment was a better proxy of reproductive investment than was propagule investment. This was true both across species (Figure 3, Table 3 in the main text) and within species, as is shown here.}
+\label{tab:propagule_invest_vs_repro}
+\begin{tabular}{p{4cm}|x{.75cm}x{1cm}x{1.5cm}|x{.75cm}x{1cm}p{1.5cm}}
+\hline
+& \multicolumn{3}{c|}{Total reproductive investment} & \multicolumn{3}{c}{Total reproductive investment} \\
+& \multicolumn{3}{c|}{vs. propagule investment} & \multicolumn{3}{c}{vs. flower investment} \\
+<<echo=FALSE, results='asis', warning=FALSE>>=
+print(xtable(TableS17)
+        , sanitize.text.function=I
+        , include.rownames = FALSE
+        , include.colnames = TRUE,
+        only.contents=TRUE)
+@
+\end{tabular}
+\end{table}
+
+\clearpage
+
+
+<<echo=FALSE, results='asis', warning=FALSE>>=
+make_table_Table2_using_propagule <- function() {
+slopes <- sma(repro_costs ~ propagule_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
+acc_by_species <- dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p)
+
+slopes <- sma(accessory_costs ~ propagule_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
+acc_by_species <- dplyr::bind_rows(acc_by_species,
+  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
+
+slopes <- sma(success_costs ~ propagule_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
+acc_by_species <- dplyr::bind_rows(acc_by_species,
+  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
+
+slopes <- sma(pollen_attract_costs ~ propagule_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
+acc_by_species <- dplyr::bind_rows(acc_by_species,
+  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
+
+slopes <- sma(provisioning_costs ~ propagule_costs,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="SMA")
+acc_by_species <- dplyr::bind_rows(acc_by_species,
+  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
+
+slopes <- sma(discarded_costs ~ propagule_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
+acc_by_species <- dplyr::bind_rows(acc_by_species,
+  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
+
+slopes <- sma(prepollen_discarded_costs ~ propagule_costs,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="SMA")
+acc_by_species <- dplyr::bind_rows(acc_by_species,
+  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
+
+slopes <- sma(postpollen_aborted_costs ~ propagule_costs,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="SMA")
+acc_by_species <- dplyr::bind_rows(acc_by_species, dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
+
+acc_by_species$variable = c("total reproductive","total accessory","seed","pollen attraction","provisioning", "failed tissue","failed pre-pollination","failed provisioning")
+
+acc_by_species$Slope <- format_r2(acc_by_species$Slope)
+acc_by_species$Slope_lowCI <- format_r2(acc_by_species$Slope_lowCI)
+acc_by_species$Slope_highCI <- format_r2(acc_by_species$Slope_highCI)
+
+acc_by_species$slope2 <- paste(acc_by_species$Slope," (",acc_by_species$Slope_lowCI," - ",acc_by_species$Slope_highCI,")",sep="")
+
+acc_by_species$r2 <- format_r2(acc_by_species$r2)
+acc_by_species$pval <- format_p(acc_by_species$pval)
+acc_by_species$Slope_test_p <- format_p(acc_by_species$Slope_test_p)
+acc_slopes <- dplyr::select(acc_by_species,variable,r2,slope2,Slope_test_p)
+}
+TableS19 <- make_table_Table2_using_propagule()
+names(TableS19) <- c("Costs","r$^2$","Slope (95$\\%$ CI)","p (slope test)")
+TableS19$Costs <- firstup(TableS19$Costs)
+
+@
+\begin{table}[H]
+\centering
+\caption{Scaling of reproductive tissue costs with total propagule size. In this manuscript all "seed size" calculations use embryo and endosperm size, not propagule size. Most previous research has used propagule size as a measure of "seed size" and noted isometric relationships between various tissue costs and "seed size". Using embryo and endosperm size, these relationship did not exist for this data set, but are present if "seed size" includes the entire propagule.}
+\label{tab:repro_tissues_vs_prop_size}
+\begin{tabular}{p{5cm}|x{.75cm}x{3.5cm}p{3cm}}
+\hline
+<<echo=FALSE, results='asis', warning=FALSE>>=
+print(xtable(TableS19)
+         , sanitize.text.function=I
+        , include.rownames = FALSE
+        , include.colnames = TRUE,
+        only.contents=TRUE)
+@
+\end{tabular}
+\end{table}
+
+
+\clearpage
+
+\section{Additional details on methods}
+
+\subsection{Methods for calculating investment in reproductive tissues}
+
+We collected data for 14 species (Table \ref{tab:species}) at 7 sites (Tables \ref{tab:sites}). Individuals were selected as described in the main text.
+
+<<echo=FALSE,results='asis'>>=
+  data <-  read.csv("../../data/species.csv", stringsAsFactors=FALSE, check.names=FALSE)
+  data$Common_name <- firstup(data$Common_name)
+  names(data) <-  clean_headers(names(data))
+
+  print(xtable(data,
+            align= 'p{1cm}p{5cm}p{3cm}p{3cm}p{2cm}p{3cm}',
+            hline.after=c(1),
+            label= "tab:species",
+            caption="Details on study species."),
+      , table.placement = "h"
+      , caption.placement = "top"
+      , include.rownames = FALSE
+      , include.colnames = TRUE
+      , size = "small"
+      , tabular.environment = 'longtable'
+      , floating = FALSE)
+
+  data <-  read.csv("../../data/sites.csv", stringsAsFactors=FALSE, check.names=FALSE)
+  data <- data[order(data$age_at_harvest),]
+  names(data) <-  clean_headers(names(data))
+
+  print(xtable(data,
+            align= 'p{0.1cm}p{2cm}p{1cm}p{1cm}p{1cm}p{1.4cm}p{1.4cm}p{7cm}',
+            hline.after=c(1),
+            label= "tab:sites",
+            caption="Details on study sites."),
+      , table.placement = "h"
+      , caption.placement = "top"
+      , include.rownames = FALSE
+      , include.colnames = TRUE
+      , size = "small"
+      , tabular.environment = 'longtable'
+      , floating = FALSE)
+@
+
+For each species, we established a list of different reproductive tissue parts and mapped how these parts developed through time. In all species, reproductive tissue development initiates with a bud or inflorescence bud, which increases in size and is divided into multiple tissue types several times during development. For instance, a bud, once open, divides into being petals + stamens, a sepal, and a stigma. As a pollinated stigma develops into a fruit, it will be further divided into seed, seed pod, and potentially additional parts. The central development axis terminates with the formation of a mature seed, while side axes end in fully developed tissues (such as petals, calyx, pedicel) and aborted tissues (aborted seeds, aborted fruit) at the point where they cease to increase in mass.
+
+While all species developed reproductive tissues from buds to seeds, species showed different developmental pathways due to the precise reproductive tissues used. We therefore created a developmental flowchart for each species, as shown below in following sections in Figs. \ref{fig:map_Banksia_ericifolia}-\ref{fig:map_Pultenaea_tuberculata}). Tables \ref{tab:parts_Banksia_ericifolia}-Table \ref{tab:parts_Pultenaea_tuberculata} then provide, for each species, a list of plant parts, a description of exactly what tissues are included in each plant part and at what developmental stage, the method whereby the count and mass of the plant parts is measured, and the number of ovules in each unit of plant part.
+
+\subsubsection{How the census is completed for each part}
+
+The count of each reproductive tissue type was determined for each individual at each census time. For some reproductive parts a simple count is practical, while for species with a large number of buds (or flowers or fruit) that are regularly spaced along branches, the length of stem covered in buds is a better measure. These lengths were converted into counts through a species-level estimate of "flowers per length". For species that form cones, the cones can be notably different in size and each cone's dimensions was recorded throughout development. The counts of flowers (or other reproductive tissues) were then converted to a count of ovules using the values in the variable \texttt{Multiplier per factor}. Tables \ref{tab:parts_Banksia_ericifolia}-Table \ref{tab:parts_Pultenaea_tuberculata} indicate for each species and plant part, the method used to estimate the mass of parts.
+
+
+\subsubsection{How parts weights are determined}
+
+For all plant parts, a sample of the representative part was collected from other individuals growing nearby the sample population. We then estimated an average mass of that tissue part for each species. For plant parts that vary considerably in size, such as cones, the mass of parts of different sizes were measured and a regression of mass per length or mass per volume was established. For some individuals, actual reproductive parts were collected. This includes any reproductive parts of the plants at the time of harvest, including both current reproductive tissues and previously mature woody fruits still attached to the branches. In addition, some seeds were collected once mature, but before they were dispersed. Whenever actual reproductive parts were collected from an individual, the unit mass of these structures was used instead of the population mean.
+
+\subsubsection{How investment in each part is estimated}
+
+Our goal was to estimate the amount of mass each plant invests in different tissues within a given time period from field census data recording the numbers of each part type at successive census dates for a given plant. To achieve this we apply an accounting algorithm to estimate the number of units that have progressed from one category to another in the interval between censuses. The algorithm works as follows:
+
+\begin{itemize}
+\item At each census, we compare the number of each part with possible numbers of predecessors from the prior census. Predecessors are those parts that lie at the same or younger age in the plant maps.
+\item For a each part in turn, we try to identify the most obvious predecessor, being the one with minimal amount of progression needed to satisfy successive censuses. The predecessor is removed from the list of possible predecessors and the process sis repeated until all parts have predecessors.
+\item After finding a predecessor, the investment needed to progress  is calculated. The investment is defined as the difference between the element mass at the time of census and that of it's predecessor.
+\end{itemize}
+
+As an example, if, in census $t$, a large bud exists, it is assumed that it has developped from a medium sized bud (the previous stage) in census $t$-1. If in census $t$-1 no medium buds exists, the large bud is assumed to have developped from a small bud (two stages back). This process continues back along the plant map developmental trajectory until a plausible predecessor is located in the previous census period. After this process is complete, any parts from census $t$-1 for which a subsequent developmental stage is not identified as designated as having reached their final developmental stage at census $t$-1 (i.e. they aborted). For plant parts, such as petals, that is a final development stage, no success is sought.
+
+
+\subsection{Details on calculations by species}
+
+The algorithm for estimating reproductive investment is adjusted for each species according to the specific developmental pathway it uses to produce seeds. Below, for each species we provide a graphic illustration of the pathway used (Figs. \ref{fig:map_Banksia_ericifolia}-\ref{fig:map_Pultenaea_tuberculata}), and tables detailing specific about each part (Tables \ref{tab:parts_Banksia_ericifolia}-Table \ref{tab:parts_Pultenaea_tuberculata}).  Figure \ref{fig:map_key} provides a key on the colouring in Figs. \ref{fig:map_Banksia_ericifolia}-\ref{fig:map_Pultenaea_tuberculata}).
+
+Each plant map begins with a bud (or the appropriate starting point for reproductive tissue development for a specific species) and depicts graphically how the tissue develops through the plant's reproductive cycle to a seed or mature fruit. During the reproductive cycle, there will be branches off the central tissue axis (development from bud to seed). Some of these lead to aborted tissue types (colored red in the graph maps below) and others lead to tissues that reach their final development stage and are then shed by a plant (e.g. petals, calyx, seed pod; colored green in the graph maps below). For some species, there are multiple axes of development. For instance, cones and flowers on a cone have separate axes, because the number of flowers on a cone is inconsistent across individuals. A few species have aborted plant parts that are listed as a separate axis. In these cases, the aborted unit weighs less than a bud and therefore cannot be shown as ever having reached the stage of a bud.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{../plant_maps/crop/key.png}
+\caption{Key describing use of colour in Figs. \ref{fig:map_Banksia_ericifolia}-\ref{fig:map_Pultenaea_tuberculata}.}
+\label{fig:map_key}
+\end{figure}
+\clearpage
+
+\subsubsection{\emph{Banksia ericifolia}}
+
+Fig. \ref{fig:map_Banksia_ericifolia} indicates the developmental pathway for reproductive tissues in the species \emph{Banksia ericifolia}. Arrows indicate the direction of progression.  The numbers of each part shown in the diagram were recorded in successive censuses. Further details on each part type are given in Table \ref{tab:parts_Banksia_ericifolia}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{../plant_maps/crop/BAER.png}
+\caption{Map of parts for \emph{Banksia ericifolia}. Colours indicate different categories, as described in Fig. \ref{fig:map_key}.}
+\label{fig:map_Banksia_ericifolia}
+\end{figure}
+
+\clearpage
+<<echo=FALSE,results='asis'>>=
+print_table_species("Banksia ericifolia", flowering_parts)
+@
+
+
+\clearpage
+
+\subsubsection{\emph{Boronia ledifolia}}
+
+Fig. \ref{fig:map_Boronia_ledifolia} indicates the developmental pathway for reproductive tissues in the species \emph{Boronia ledifolia}. Arrows indicate the direction of progression.  The numbers of each part shown in the diagram were recorded in successive censuses. Further details on each part type are given in Table \ref{tab:parts_Boronia_ledifolia}.
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{../plant_maps/crop/BOLE.png}
+\caption{Map of parts for \emph{Boronia ledifolia}. Colours indicate different categories, as described in Fig. \ref{fig:map_key}.}
+\label{fig:map_Boronia_ledifolia}
+\end{figure}
+
+\clearpage
+<<echo=FALSE,results='asis'>>=
+print_table_species("Boronia ledifolia", flowering_parts)
+@
+
+
+\clearpage
+
+\subsubsection{\emph{Conospermum ericifolium}}
+
+Fig. \ref{fig:map_Conospermum_ericifolium} indicates the developmental pathway for reproductive tissues in the species \emph{Conospermum ericifolium}. Arrows indicate the direction of progression.  The numbers of each part shown in the diagram were recorded in successive censuses. Further details on each part type are given in Table \ref{tab:parts_Conospermum_ericifolium}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{../plant_maps/crop/COER.png}
+\caption{Map of parts for \emph{Conospermum ericifolium}. Colours indicate different categories, as described in Fig. \ref{fig:map_key}.}
+\label{fig:map_Conospermum_ericifolium}
+\end{figure}
+
+\clearpage
+<<echo=FALSE,results='asis'>>=
+print_table_species("Conospermum ericifolium", flowering_parts)
+@
+
+
+\clearpage
+
+\subsubsection{\emph{Epacris microphylla}}
+
+Fig. \ref{fig:map_Epacris_microphylla} indicates the developmental pathway for reproductive tissues in the species \emph{Epacris microphylla}. Arrows indicate the direction of progression.  The numbers of each part shown in the diagram were recorded in successive censuses. Further details on each part type are given in Table \ref{tab:parts_Epacris_microphylla}.
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{../plant_maps/crop/EPMI.png}
+\caption{Map of parts for \emph{Epacris microphylla}. Colours indicate different categories, as described in Fig. \ref{fig:map_key}.}
+\label{fig:map_Epacris_microphylla}
+\end{figure}
+
+\clearpage
+<<echo=FALSE,results='asis'>>=
+print_table_species("Epacris microphylla", flowering_parts)
+@
+
+\clearpage
+
+\subsubsection{\emph{Grevillea buxifolia}}
+
+Fig. \ref{fig:map_Grevillea_buxifolia} indicates the developmental pathway for reproductive tissues in the species \emph{Grevillea buxifolia}. Arrows indicate the direction of progression.  The numbers of each part shown in the diagram were recorded in successive censuses. Further details on each part type are given in Table \ref{tab:parts_Grevillea_buxifolia}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{../plant_maps/crop/GRBU.png}
+\caption{Map of parts for \emph{Grevillea buxifolia}. Colours indicate different categories, as described in Fig. \ref{fig:map_key}.}
+\label{fig:map_Grevillea_buxifolia}
+\end{figure}
+
+\clearpage
+
+<<echo=FALSE,results='asis'>>=
+print_table_species("Grevillea buxifolia", flowering_parts)
+@
+
+
+\clearpage
+
+\subsubsection{\emph{Grevillea speciosa}}
+
+Fig. \ref{fig:map_Grevillea_speciosa} indicates the developmental pathway for reproductive tissues in the species \emph{Grevillea speciosa}. Arrows indicate the direction of progression.  The numbers of each part shown in the diagram were recorded in successive censuses. Further details on each part type are given in Table \ref{tab:parts_Grevillea_speciosa}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{../plant_maps/crop/GRSP.png}
+\caption{Map of parts for \emph{Grevillea speciosa}. Colours indicate different categories, as described in Fig. \ref{fig:map_key}.}
+\label{fig:map_Grevillea_speciosa}
+\end{figure}
+
+\clearpage
+<<echo=FALSE,results='asis'>>=
+print_table_species("Grevillea speciosa", flowering_parts)
+@
+
+\clearpage
+
+\subsubsection{\emph{Hakea teretifolia}}
+
+Fig. \ref{fig:map_Hakea_teretifolia} indicates the developmental pathway for reproductive tissues in the species \emph{Hakea teretifolia}. Arrows indicate the direction of progression.  The numbers of each part shown in the diagram were recorded in successive censuses. Further details on each part type are given in Table \ref{tab:parts_Hakea_teretifolia}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{../plant_maps/crop/HATE.png}
+\caption{Map of parts for \emph{Hakea teretifolia}. Colours indicate different categories, as described in Fig. \ref{fig:map_key}.}
+\label{fig:map_Hakea_teretifolia}
+\end{figure}
+
+\clearpage
+
+<<echo=FALSE,results='asis'>>=
+print_table_species("Hakea teretifolia", flowering_parts)
+@
+
+\clearpage
+
+
+\subsubsection{\emph{Hemigenia purpurea}}
+
+Fig. \ref{fig:map_Hemigenia_purpurea} indicates the developmental pathway for reproductive tissues in the species \emph{Hemigenia purpurea}. Arrows indicate the direction of progression.  The numbers of each part shown in the diagram were recorded in successive censuses. Further details on each part type are given in Table \ref{tab:parts_Hemigenia_purpurea}.
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{../plant_maps/crop/HEPU.png}
+\caption{Map of parts for \emph{Hemigenia purpurea}. Colours indicate different categories, as described in Fig. \ref{fig:map_key}.}
+\label{fig:map_Hemigenia_purpurea}
+\end{figure}
+
+\clearpage
+<<echo=FALSE,results='asis'>>=
+print_table_species("Hemigenia purpurea", flowering_parts)
+@
+
+\clearpage
+
+
+\subsubsection{\emph{Leucopogon esquamatus}}
+
+Fig. \ref{fig:map_Leucopogon_esquamatus} indicates the developmental pathway for reproductive tissues in the species \emph{Leucopogon esquamatus}. Arrows indicate the direction of progression.  The numbers of each part shown in the diagram were recorded in successive censuses. Further details on each part type are given in Table \ref{tab:parts_Leucopogon_esquamatus}.
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{../plant_maps/crop/LEES.png}
+\caption{Map of parts for \emph{Leucopogon esquamatus}. Colours indicate different categories, as described in Fig. \ref{fig:map_key}.}
+\label{fig:map_Leucopogon_esquamatus}
+\end{figure}
+
+\clearpage
+<<echo=FALSE,results='asis'>>=
+print_table_species("Leucopogon esquamatus", flowering_parts)
+@
+
+\clearpage
+
+\subsubsection{\emph{Persoonia lanceolata}}
+
+Fig. \ref{fig:map_Persoonia_lanceolata} indicates the developmental pathway for reproductive tissues in the species \emph{Persoonia lanceolata}. Arrows indicate the direction of progression.  The numbers of each part shown in the diagram were recorded in successive censuses. Further details on each part type are given in Table \ref{tab:parts_Persoonia_lanceolata}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{../plant_maps/crop/PELA.png}
+\caption{Map of parts for \emph{Persoonia lanceolata}. Colours indicate different categories, as described in Fig. \ref{fig:map_key}.}
+\label{fig:map_Persoonia_lanceolata}
+\end{figure}
+
+\clearpage
+
+<<echo=FALSE,results='asis'>>=
+print_table_species("Persoonia lanceolata", flowering_parts)
+@
+
+\clearpage
+
+\subsubsection{\emph{Petrophile pulchella}}
+
+Fig. \ref{fig:map_Petrophile_pulchella} indicates the developmental pathway for reproductive tissues in the species \emph{Petrophile pulchella}. Arrows indicate the direction of progression.  The numbers of each part shown in the diagram were recorded in successive censuses. Further details on each part type are given in Table \ref{tab:parts_Petrophile_pulchella}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{../plant_maps/crop/PEPU.png}
+\caption{Map of parts for \emph{Petrophile pulchella}. Colours indicate different categories, as described in Fig. \ref{fig:map_key}.}
+\label{fig:map_Petrophile_pulchella}
+\end{figure}
+
+\clearpage
+
+<<echo=FALSE,results='asis'>>=
+print_table_species("Petrophile pulchella", flowering_parts)
+@
+
+\clearpage
+
+\subsubsection{\emph{Phyllota phylicoides}}
+
+Fig. \ref{fig:map_Phyllota_phylicoides} indicates the developmental pathway for reproductive tissues in the species \emph{Phyllota phylicoides}. Arrows indicate the direction of progression.  The numbers of each part shown in the diagram were recorded in successive censuses. Further details on each part type are given in Table \ref{tab:parts_Phyllota_phylicoides}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{../plant_maps/crop/PHPH.png}
+\caption{Map of parts for \emph{Phyllota phylicoides}. Colours indicate different categories, as described in Fig. \ref{fig:map_key}.}
+\label{fig:map_Phyllota_phylicoides}
+\end{figure}
+
+\clearpage
+
+<<echo=FALSE,results='asis'>>=
+print_table_species("Phyllota phylicoides", flowering_parts)
+@
+
+\clearpage
+
+\subsubsection{\emph{Pimelea linifolia}}
+
+Fig. \ref{fig:map_Pimelea_linifolia} indicates the developmental pathway for reproductive tissues in the species \emph{Pimelea linifolia}. Arrows indicate the direction of progression.  The numbers of each part shown in the diagram were recorded in successive censuses. Further details on each part type are given in Table \ref{tab:parts_Pimelea_linifolia}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{../plant_maps/crop/PILI.png}
+\caption{Map of parts for \emph{Pimelea linifolia}. Colours indicate different categories, as described in Fig. \ref{fig:map_key}.}
+\label{fig:map_Pimelea_linifolia}
+\end{figure}
+
+\clearpage
+
+<<echo=FALSE,results='asis'>>=
+print_table_species("Pimelea linifolia", flowering_parts)
+@
+
+\clearpage
+
+\subsubsection{\emph{Pultenaea tuberculata}}
+
+Fig. \ref{fig:map_Pultenaea_tuberculata} indicates the developmental pathway for reproductive tissues in the species \emph{Pultenaea tuberculata}. Arrows indicate the direction of progression.  The numbers of each part shown in the diagram were recorded in successive censuses. Further details on each part type are given in Table \ref{tab:parts_Pultenaea_tuberculata}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{../plant_maps/crop/PUTU.png}
+\caption{Map of parts for \emph{Pultenaea tuberculata}. Colours indicate different categories, as described in Fig. \ref{fig:map_key}.}
+\label{fig:map_Pultenaea_tuberculata}
+\end{figure}
+
+\clearpage
+
+<<echo=FALSE,results='asis'>>=
+print_table_species("Pultenaea tuberculata", flowering_parts)
+@
+
+\clearpage
+
+\subsection{Structure of data files}
+
+The following files contain the empirical data used in the analyses decsribed above and in the main:
+
+\begin{enumerate}
+\item \texttt{accessory\_parts.yml}
+\item \texttt{flowerCategories.csv}
+\item \texttt{flowerParts.csv}
+\item \texttt{individuals.csv}
+\item \texttt{MultiplierTable.csv}
+\item \texttt{reproduction.csv}
+\item \texttt{seedMultiplier.csv}
+\end{enumerate}
+The following files contain supplementary data about the species and sites:
+\begin{enumerate}
+\item \texttt{seedsize.csv}
+\item \texttt{sites.csv}
+\item \texttt{species.csv}
+\end{enumerate}
+
+Below we describe in more detail the contents of each file.
+
+\subsubsection{Accessory Parts}
+
+The file \texttt{accessoryParts.yml} contains, for each species, lists of reproductive tissues that fall into various tissue categories. These categories are then used to calculate the reproductive investment in the key reproductive tissue categories, (1) pollen-attraction tissues aborted prior to provisioning; (2) pollen-attraction tissues associated with flowers that form mature seeds; (3) provisioning tissues aborted prior to the formation of a mature seed; (4) packaging and dispersal tissues associated with a mature seed; (5) the mature seed itself. Dividing reproductive investment into these categories requires, for each tissue type, knowing the count of parts that reach the key stages (pollinator-ready, onset of provisioning, mature seed) and the mass of parts at each stage. Table \ref{tab:accessoryParts_meta} provides descriptions of each reproductive part category in the file \texttt{accessoryParts.yml}.
+
+<<echo=FALSE,results='asis'>>=
+  print_table_metadata("../../data/accessoryParts_meta.csv", align = 'p{0.1cm}p{6cm}p{10cm}')
+@
+
+
+\subsubsection{Flowering Categories}
+
+The file \texttt{flowerCategories.csv} contains a matrix of plant parts (rows) by species (columns). For each cell that is used on a given species plant map, the meaning of the values in the spreadsheet titled "reproduction" are indicated in this spreadsheet. Possible method are (1) count, indicating that the numbers represent simple counts; (2) count\_by\_length, indicating that the length of stem or cone covered with buds, flowers or fruit is measured; (3) regress\_by\_dim, indicating that the dimensions of the flowering part are measured and must be converted to a dry mass using a regression equation; and (4) volume, indicating that the height and diameter of the flowering part are given and must be converted to a dry mass using the calculated volume of the flowering part multiplied by the average density of the flowering part.
+
+The file \texttt{floweringCategories\_meta} contains a matrix of plant parts (rows) by species (columns). For each cell that is used on a given species plant map, a description of the botanical parts included in the "flower part" is given as well as the flowering stage at which the flower part is harvested, if it is not obvious.  This is the information presented in Tables \ref{tab:parts_Banksia_ericifolia}-Table \ref{tab:parts_Pultenaea_tuberculata}, above.
+
+\subsubsection{Flower Parts}
+The file \texttt{flowerParts.csv} contains records for harvested and weighed flower parts, including collections from tagged individuals (once mature or at time of harvest) and from other individuals in the population (to estimate weight of specific plant parts).  Table \ref{tab:flowerParts_meta} gives a brief descriptions of each column in the file.
+
+All plant parts included in a species' "plant map" have weights in this spreadsheet -- or, in rare cases, entries are instead plants parts whose weight is used to calculate the weight of a plant part included in a "plant map". (A "plant map" shows the developmental trajectory of a flower or inflorescence from bud to seed for each species, indicating the flow or carbon as well as discarded parts.) If plant parts are collected from a tagged individual, this spreadsheet also indicates in which census periods this specific weight, rather than a species average, should be used for calculating that individual's reproductive investment. Plant parts all have counts and weights, while the subset of plant parts whose size varies, also have columns indicating height and diameter dimensions; the weight of the plant part at a specific size is then determined by either a regression or volume calculation. For a few plant parts, census data measure the length of stem or cone covered with flowers; for these situations, the segment length collected is also recorded, such that the number of flowers per unit length can be calculated.
+
+<<echo=FALSE,results='asis'>>=
+  print_table_metadata("../../data/flowerParts_meta.csv", align = 'p{0.1cm}p{4cm}p{2cm}p{10cm}')
+@
+
+\subsubsection{Individuals}
+This file \texttt{individuals.csv} contains a list of all plants harvested at the 7 Kuring'gai field sites. For each individual it includes basic information about each individual - tag number, age, site, whether the plant was alive at the time of harvest, and information on which calculations use this individual's data. The data itself is contained in other files. Table \ref{tab:Individuals_meta} gives a brief description of each data column in the file.
+
+<<echo=FALSE,results='asis'>>=
+  print_table_metadata("../../data/Individuals_meta.csv", align = 'p{0.1cm}p{6cm}p{10cm}')
+@
+
+\subsubsection{Multiplier Table}
+The file \texttt{MultiplierTable.csv} is a lookup table indicating, for each species by flower part combination, if the investment per part is for a single (1) or multiple propagules, defined as either a mature fruit or a seed, depending on what is the dispersal unit for each species. Within a single column, i.e. within a single species developmental trajectory, numbers will change if the "count" used to access reproduction changes at a given developmental stage. For instance, with BOLE (\emph{Boronia ledifolia}), counts are made by flowers up through the finished flower stage, but then fruits are the unit counted for not all 4 fruits develop within each flower. This is the information presented in Tables \ref{tab:parts_Banksia_ericifolia}-Table \ref{tab:parts_Pultenaea_tuberculata}, above.
+
+\subsubsection{Reproduction}
+
+The file \texttt{reproduction.csv} provides both verbal and numeric descriptions of reproduction at each census between April-June 2012 (or June 2013 for Wilunga2013 and the second set of individuals tagged at Waratah2011), when the plants were first tagged, until April-June 2013 (or June 2014 for Wilunga2013 and the second set of individuals tagged at Waratah2011), when the plants were harvested. Table \ref{tab:reproduction_meta} gives a brief description of the columns in the file. There is a separate row of data for each individual, at each of the 18 censuses. In addition, at each census, there is a row indicating plant parts that are pre-existing on the plant versus new. Flower (or fruit) parts are considered pre-existing if the predecessor of that flower part, as described on that species "plant map" existed in a previous census period. Some plant maps may have multiple parallel diagrams describing how flower parts develop. In that case, a flower part must have a predecessor on that specific diagram to be considered "pre-existing".
+
+Each of the many plant parts are listed as column headers. At each census, both new and further developed but pre-existing flower parts are recorded. Plant parts that are unchanged in developmental stage between successive censuses are not recorded. Neither are plant parts that disappear between successive censuses. Instead, pre-existing plant parts are recorded if they have progressed to a "more mature" flowering/fruiting stage, as defined by that species "plant map". As an example, if at one census there were 50 PHPH (\emph{Phyllota phylicoides}) buds recorded and at the next stage, 30 PHPH flowers, 30 of the 50 buds progressed from being buds to being flowers, while the remaining 20 buds were either shed or are still buds. The numbers entered in the cell correspond to either counts, lengths, or dimensions, depending on the method indicated in the file titled "floweringCategories".
+
+<<echo=FALSE,results='asis'>>=
+  print_table_metadata("../../data/reproduction_meta.csv", align = 'p{0.1cm}p{6cm}p{10cm}')
+@
+
+\subsubsection{Seed size}
+The file \texttt{seedsize.csv} includes a collection of species level information, including seed size and embryo-endosperm weight. This file also includes data on the number of ovules per ovary, lifespan, age at maturity, and approximate age at which RA asymptotes. Table \ref{tab:seedsize_meta} gives a brief description of the data columns in the file.
+
+<<echo=FALSE,results='asis'>>=
+  print_table_metadata("../../data/seedsize_meta.csv", align = 'p{0.1cm}p{4cm}p{10cm}p{2cm}')
+@
+
+\subsubsection{Sites}
+The file \texttt{sites.csv} lists details of sites used in study. Includes site names used in other spreadsheets, date of fire, fire year, as defined by NSW fire layers, and UTM coordinates for each site. Table \ref{tab:sites_meta} gives a brief description of the data columns in the file. Tables \ref{tab:sites} displays the data in this file.
+
+<<echo=FALSE,results='asis'>>=
+  print_table_metadata("../../data/sites_meta.csv", align = 'p{0.1cm}p{6cm}p{10cm}')
+@
+
+\subsubsection{Species}
+The file \texttt{species.csv} lists species included in study. Includes 4-letter code names used in other spreadsheets, scientific names, family names, and common names. Table \ref{tab:species} gives a brief description of the data columns in the file.
+
+<<echo=FALSE,results='asis'>>=
+  print_table_metadata("../../data/species_meta.csv", align = 'p{0.1cm}p{6cm}p{10cm}')
+@
+
+\clearpage
+\subsection{Code calculating reproductive investment}
+
+Code reproducing the results described in this paper is available at \\ \href{https://github.com/traitecoevo/reproductive_allocation_kuringgai}{github.com/traitecoevo/reproductive\_allocation\_kuringgai}. Further instructions on running the code are available at that address. Here we simply provide a brief overview of the content. The folder \texttt{R} contains functions implementing the methods described above and in the main text as follows.
+
+\subsubsection{\texttt{FlowerParts.R}}
+
+Defines functions that calculates the unit weights of all reproductive tissues for each individual, including special calculations for determining,
+where applicable: i)  weights based on dimensions; and ii) individual based weights.
+
+\subsubsection{\texttt{GraphRepresentation.R}}
+
+Defines the plant maps and the list of reproductive parts for each specie, as shown in Figs. \ref{fig:map_Banksia_ericifolia}-\ref{fig:map_Pultenaea_tuberculata} and Tables \ref{tab:parts_Banksia_ericifolia}-Table \ref{tab:parts_Pultenaea_tuberculata}.
+
+\subsubsection{\texttt{Growth.R}}
+
+Defines functions that estimate growth rates of the plant (not used in this analysis).
+
+\subsubsection{\texttt{Investment.R}}
+
+Functions that combine, for each species, the map of parts (\texttt{GraphMaps}), weights of flower parts (\texttt{PartsSummary}), and the census data (\texttt{Reproduction}) to calculate the actual investment in reproductive parts. The output is a list with four dataframes, but only one (\texttt{FD} (= Final Development)) is used. The others were generated for error checking.
+
+\subsubsection{\texttt{ReproductionTissues.R}}
+
+Defines functions that take the investment data and breaks it down into specific reproductive cost categories based on the data in \texttt{accessoryParts.yml}
+
+
+\subsubsection{\texttt{Species.R}}
+
+Defines functions that apply the methods for all species in the study.
+
+
+\subsubsection{\texttt{Summaries.R}}
+
+Defines functions that summarise and combined the different components.
+
+\subsubsection{\texttt{WeightCalculations.R}}
+
+Functions that estimate, for each part, the weights invested in reproductive allocation.
+
+\end{document}
+
+
+
+

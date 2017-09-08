@@ -1,5 +1,34 @@
+par_all_species_fig <- function() {
+  par(mfrow=c(3,5), cex=1, omi=c(0.9,0.9,.1,.1), mai=c(.3,.3,0.2,0.02))
+}
 
-figure_allocation_demo <- function(SummarySppAge) {
+species_order <- function() {
+  c("BOLE", "HEPU", "PILI", "COER", "EPMI", "GRSP", "LEES", "PHPH", "PUTU", "GRBU", "BAER", "PELA", "HATE", "PEPU")
+}
+
+glm_r2 <- function(model) {
+  r2 <- sprintf("= %s", format_r2(R2_glm(model)))
+  bquote(r^2 ~ .(r2))
+}
+
+gam_r2 <- function(model) {
+  r2 <- sprintf("= %s", format_r2(summary(model)$ r.sq))
+  bquote(r^2 ~ .(r2))
+}
+
+r2_inset <- function(r2, cex=0.75, font=1, pos=4,  ...) {
+   text(per_x(0), per_y(0.95), r2, cex=cex, font=font, pos=pos, ...)
+}
+
+species_labels <- function(spp) {
+  mtext(labels.spp.full(spp),font=3,outer=FALSE,side=3,adj=0, line =0.25)
+}
+
+polygon2 <- function(...) polygon(..., density=NA)
+
+ypoly <- function(data, n=6) {c(data[seq_len(n)],0,0)}
+
+figure_allocation_demo_single <- function(SummarySppAge) {
 
   par(mfcol=c(1,4), cex=1, omi=c(0.6,1,.1,2.6), mai=c(0.2,.45,.3,0.02))
 
@@ -14,111 +43,199 @@ figure_allocation_demo <- function(SummarySppAge) {
 
   spp <- "EPMI"
 
-  YLIM <- c(0,1)
+  x <- c(1.4,2.4,5,7,9,32,32,1.4)
+  y0 <- c(rep(1,6), 0, 0)
 
-  mylab <- function(...){
-    text(1, 1.1, ..., cex=1.3, xpd=NA)
+  myplot <- function(lab, labels=FALSE){
+    plot(NA,log="x",ylim=c(0,1),xlim=c(1.06*1.4,0.94*32),ylab="",yaxt="n",xaxs="i", yaxs="i")
+    axis(2, at= c(0, 0.2, 0.4, 0.6, 0.8, 1.0), labels = labels, las=1)
+    text(1, 1.1, lab, cex=1.3, xpd=NA)
+    polygon2(c(1.4,32,32,1.4), c(1,1,0, 0), col="grey")
   }
 
-  plot(RA_seed~age,data[[spp]],pch=16,log="x",ylim=YLIM,xlim=c(1.06*1.4,0.94*32),col="white",las=1,xaxs="i", yaxs="i")
-  polygon(x=c(1.4,32,32,1.4),y=c(1,1,0,0),col="saddlebrown",density=NA)
-  polygon(x=c(1.4,2.4,5,7,9,32,32,1.4),y=c(data[[spp]]$replace_leaf_prop_no_accessory[1:6],0,0),col="darkseagreen4",density=NA)
-  polygon(x=c(1.4,2.4,5,7,9,32,32,1.4),y=c(data[[spp]]$growth_leaf_prop_no_accessory[1:6],0,0),
-          col="darkseagreen2",density=NA)
-  polygon(x=c(1.4,2.4,5,7,9,32,32,1.4),y=c(data[[spp]]$seed_prop_all[1:6],0,0),col="coral1",density=NA)
-  mylab("(a)")
+  myplot("(a)", TRUE)
+  polygon2(x, y0,col="saddlebrown")
+  polygon2(x, ypoly(data[[spp]]$replace_leaf_prop_no_accessory),col="darkseagreen4")
+  polygon2(x, ypoly(data[[spp]]$growth_leaf_prop_no_accessory),
+          col="darkseagreen2")
+  polygon2(x, ypoly(data[[spp]]$seed_prop_all),col="coral1")
 
-  plot(prop_repro~age,data[[spp]],pch=16,log="x",ylim=YLIM,xlim=c(1.06*1.4,0.94*32),col="white",ylab="",yaxt="n",xaxs="i", yaxs="i")
-  polygon(x=c(1.4,32,32,1.4),y=c(1,1,0,0),col="saddlebrown",density=NA)
-  polygon(x=c(1.4,2.4,5,7,9,32,32,1.4),y=c(data[[spp]]$prop_leaf_replacement[1:6],0,0),col="darkseagreen4",density=NA)
-  polygon(x=c(1.4,2.4,5,7,9,32,32,1.4),y=c(data[[spp]]$prop_leaf_expand[1:6],0,0),col="darkseagreen2",density=NA)
-  polygon(x=c(1.4,2.4,5,7,9,32,32,1.4),y=c(data[[spp]]$prop_repro[1:6],0,0),col="coral3",density=NA)
-  polygon(x=c(1.4,2.4,5,7,9,32,32,1.4),y=c(data[[spp]]$seed_prop_all_acc[1:6],0,0),col="coral1",density=NA)
-  mylab("(b)")
-  axis(2, at= c(0, 0.2, 0.4, 0.6, 0.8, 1.0), labels = FALSE)
+  myplot("(b)")
+  polygon2(x, y0,col="saddlebrown")
+  polygon2(x, ypoly(data[[spp]]$prop_leaf_replacement),col="darkseagreen4")
+  polygon2(x, ypoly(data[[spp]]$prop_leaf_expand),col="darkseagreen2")
+  polygon2(x, ypoly(data[[spp]]$prop_repro),col="coral3")
+  polygon2(x, ypoly(data[[spp]]$seed_prop_all_acc),col="coral1")
 
-  plot(repro_prop_all_leaf~age,data[[spp]],pch=16,log="x",ylim=YLIM,xlim=c(1.06*1.4,0.94*32),col="white",ylab="",yaxt="n",xaxs="i", yaxs="i")
-  polygon(x=c(1.4,32,32,1.4),y=c(1,1,0,0),col="darkseagreen4",density=NA)
-  polygon(x=c(1.4,2.4,5,7,9,32,32,1.4),y=c(data[[spp]]$repro_and_leaf_growth_prop_surplus[1:6],
-                                           0,0),col="darkseagreen2",density=NA)
-  polygon(x=c(1.4,2.4,5,7,9,32,32,1.4),y=c(data[[spp]]$repro_prop_all_leaf[1:6],0,0),col="coral3",density=NA)
+  myplot("(c)")
+  polygon2(x, y0,col="darkseagreen4")
+  polygon2(x, ypoly(data[[spp]]$repro_and_leaf_growth_prop_surplus),col="darkseagreen2")
+  polygon2(x, ypoly(data[[spp]]$repro_prop_all_leaf),col="coral3")
+  polygon2(x, ypoly(data[[spp]]$seed_prop_veg),col="coral1")
 
-  polygon(x=c(1.4,2.4,5,7,9,32,32,1.4),y=c(data[[spp]]$seed_prop_veg[1:6],0,0),col="coral1",density=NA)
-  mylab("(c)")
-  axis(2, at= c(0, 0.2, 0.4, 0.6, 0.8, 1.0), labels = FALSE)
-
-  plot(prop_repro~age,data[[spp]],pch=16,log="x",ylim=YLIM,xlim=c(1.06*1.4,0.94*32),col="white",ylab="",yaxt="n",xaxs="i", yaxs="i")
-  polygon(x=c(1.4,32,32,1.4),y=c(1,1,0,0),col="darkseagreen2",density=NA)
-  polygon(x=c(1.4,2.4,5,7,9,32,32,1.4),y=c(data[[spp]]$RA_max_1[1:6],0,0),col="coral3",density=NA)
-  polygon(x=c(1.4,2.4,5,7,9,32,32,1.4),y=c(data[[spp]]$seed_prop_surplus[1:6],0,0),col="coral1",density=NA)
-  mylab("(d)")
-  axis(2, at= c(0, 0.2, 0.4, 0.6, 0.8, 1.0), labels = FALSE)
+  myplot("(d)")
+  polygon2(x, y0,col="darkseagreen2")
+  polygon2(x, ypoly(data[[spp]]$RA_max_1),col="coral3")
+  polygon2(x, ypoly(data[[spp]]$seed_prop_surplus),col="coral1")
 
   legend(40, 0.8, c("Stem growth", "Leaf replacement", "Leaf expansion", "Reproductive - accessories", "Reproductive - seed"),
-    bty="n", pch=16,
-    col=c("saddlebrown", "darkseagreen4", "darkseagreen2","coral3", "coral1"), xpd= NA)
+    bty="n", pch=16, col=c("saddlebrown", "darkseagreen4", "darkseagreen2","coral3", "coral1"), xpd= NA)
 
   mtext("Age (yr)",side=1,outer=TRUE,line=1.5, cex=1.25)
-  mtext("Reproductive allocation (0-1)",side=2,outer=TRUE,line=2, cex=1.25)
-
+  mtext("Fraction of mass allocated",side=2,outer=TRUE,line=2, cex=1.25)
 }
 
-figure_allocation_all <- function(SummaryInd, SummarySppAge) {
+figure_allocation_demo_all <- function(SummaryInd, SummarySppAge) {
 
-  par(mfrow=c(3,5), cex=1, omi=c(.5,.5,.1,.1), mai=c(.3,.6,0.5,0.02))
+  par(mfrow=c(14,4), cex=1, omi=c(1,1.5,.1,0.1), mai=c(0.2,.45,.3,0.02))
 
   data <- SummarySppAge[["mean"]]
   data2 <- SummaryInd
 
-  for(v in c("growth_leaf")) {
-  i <- (data[[v]] < 0)
-  data[[v]][i] <- 0
-  }
-
+  for(v in c("growth_leaf"))
+    data[[v]][data[[v]] < 0] <- 0
 
   data <- split(data, data$species)
   data2 <- split(data2, data2$species)
 
   for(spp in species_order()) {
 
-    plot(RA_max_1~age,data[[spp]],pch=16,log="x",ylim=c(-0.05,1.05),xlim=c(1.25,35),col="white",yaxt="n",xaxt="n",las=1,xaxs="i",yaxs="i")
-    polygon(x=c(1.25,1.25,35,35),y=c(-0.05,1.05,1.05,-0.05),col="white")
+    x <- c(1.4,2.4,5,7,9,32,32,1.4)
+    if(spp %in% c("PILI")) x <- c(1.4,2.4,5,7,7,1.4)
+    if(spp %in% c("PHPH"))  x <- c(2.4,5,7,9,32,32,2.4)
+    if(spp %in% c("BOLE", "COER", "HEPU", "GRSP"))  x <- c(1.4,2.4,5,7,9,9,1.4)
+    n <- length(x)-2
+    y0 <- c(rep(1,n), 0, 0)
 
-    axis(2, at=c(0,0.2,.4,.6,.8,1), las=1)
-    axis(1, at=c(2,5,10,20))
-
-    if(spp %in% c("PILI")) {
-      polygon(x=c(1.4,7,7,1.4),y=c(1,1,0,0),col="darkseagreen2",density=NA)
-      polygon(x=c(1.4,2.4,5,7,7,1.4),y=c(data[[spp]]$RA_max_1[1],data[[spp]]$RA_max_1[2],data[[spp]]$RA_max_1[3],data[[spp]]$RA_max_1[4],
-                                         0,0),col="coral3",density=NA)
+    myplot <- function(labelsx=FALSE, labelsy=FALSE){
+      plot(NA,log="x",ylim=c(0,1),xlim=c(1.06*1.4,0.94*32),ylab="",yaxt="n", xaxt="n",xaxs="i", yaxs="i")
+      axis(1, at= c(2,5, 10, 20), labels = labelsx, las=1)
+      axis(2, at= c(0, 0.2, 0.4, 0.6, 0.8, 1.0), labels = labelsy, las=1)
+      polygon2(c(1.4,32,32,1.4), c(1,1,0, 0), col="grey90")
+      box()
     }
 
-    if(spp %in% c("PHPH")) {
-      polygon(x=c(1.4,32,32,1.4),y=c(1,1,0,0),col="darkseagreen2",density=NA)
-      polygon(x=c(2.4,5,7,9,32,32,2.4),y=c(data[[spp]]$RA_max_1[1],data[[spp]]$RA_max_1[2],data[[spp]]$RA_max_1[3],data[[spp]]$RA_max_1[4],
-                                           data[[spp]]$RA_max_1[5],0,0),col="coral3",density=NA)
-    }
+    i <- (spp %in% species_order()[14])
+    myplot(i, TRUE)
+    polygon2(x, y0, col="saddlebrown")
+    polygon2(x, ypoly(data[[spp]]$replace_leaf_prop_no_accessory, n),col="darkseagreen4")
+    polygon2(x, ypoly(data[[spp]]$growth_leaf_prop_no_accessory, n),
+            col="darkseagreen2")
+    polygon2(x, ypoly(data[[spp]]$seed_prop_all, n),col="coral1")
+    mtext(labels.spp.full(spp), 2, line=4, font=3)
 
+    myplot(i)
+    polygon2(x, y0, col="saddlebrown")
+    polygon2(x, ypoly(data[[spp]]$prop_leaf_replacement, n),col="darkseagreen4")
+    polygon2(x, ypoly(data[[spp]]$prop_leaf_expand, n),col="darkseagreen2")
+    polygon2(x, ypoly(data[[spp]]$prop_repro, n),col="coral3")
+    polygon2(x, ypoly(data[[spp]]$seed_prop_all_acc, n),col="coral1")
 
-    if(spp %in% c("BOLE", "COER", "HEPU", "GRSP")) {
-      polygon(x=c(1.4,9,9,1.4),y=c(1,1,0,0),col="darkseagreen2",density=NA)
-      polygon(x=c(1.4,2.4,5,7,9,9,1.4),y=c(data[[spp]]$RA_max_1[1],data[[spp]]$RA_max_1[2],data[[spp]]$RA_max_1[3],data[[spp]]$RA_max_1[4],
-                                           data[[spp]]$RA_max_1[5],0,0),col="coral3",density=NA)
-    }
+    myplot(i)
+    polygon2(x, y0, col="darkseagreen4")
+    polygon2(x, ypoly(data[[spp]]$repro_and_leaf_growth_prop_surplus, n),col="darkseagreen2")
+    polygon2(x, ypoly(data[[spp]]$repro_prop_all_leaf, n),col="coral3")
+    polygon2(x, ypoly(data[[spp]]$seed_prop_veg, n),col="coral1")
 
-    if(spp %in% c("BAER", "EPMI", "GRBU", "HATE", "PELA", "PUTU", "LEES", "PEPU")) {
-      polygon(x=c(1.4,32,32,1.4),y=c(1,1,0,0),col="darkseagreen2",density=NA)
-      polygon(x=c(1.4,2.4,5,7,9,32,32,1.4),y=c(data[[spp]]$RA_max_1[1],data[[spp]]$RA_max_1[2],data[[spp]]$RA_max_1[3],data[[spp]]$RA_max_1[4],
-                                               data[[spp]]$RA_max_1[5],data[[spp]]$RA_max_1[6],0,0),col="coral3",density=NA)
-    }
-    points((RA_max_1)~(age),data2[[spp]],cex=1,lwd=1.5,pch=16)
-
-    mtext(labels.spp.genus(spp),font=3,outer=FALSE,side=3,adj=0)
+    myplot(i)
+    polygon2(x, y0, col="darkseagreen2")
+    polygon2(x, ypoly(data[[spp]]$RA_max_1, n),col="coral3")
+    polygon2(x, ypoly(data[[spp]]$seed_prop_surplus, n),col="coral1")
   }
-  mtext("Age (yr)",side=1,outer=TRUE,line=1, cex=1.5)
-  mtext("Reproductive allocation (0-1)",side=2,outer=TRUE,line=1, cex=1.5)
 
-  legend(80, 0.8, c("Individual observation", "Leaf expansion", "Reproductive tissues"), bty="n", pch=16, col=c("black", "darkseagreen2","coral3"), xpd= NA)
+  mtext("Age (yr)",side=1,outer=TRUE,line=2, cex=2)
+  mtext("Fraction of mass allocated",side=2,outer=TRUE,line=4, cex=2)
+}
+
+figure_allocation_all_a <- function(SummaryInd, SummarySppAge) {
+
+  par_all_species_fig()
+
+  data <- split(SummarySppAge[["mean"]], SummarySppAge[["mean"]]$species)
+  data2 <- split(SummaryInd, SummaryInd$species)
+
+  for(spp in species_order()) {
+
+    x <- c(1.4,2.4,5,7,9,32,32,1.4)
+    if(spp %in% c("PILI")) x <- c(1.4,2.4,5,7,7,1.4)
+    if(spp %in% c("PHPH"))  x <- c(2.4,5,7,9,32,32,2.4)
+    if(spp %in% c("BOLE", "COER", "HEPU", "GRSP"))  x <- c(1.4,2.4,5,7,9,9,1.4)
+    n <- length(x)-2
+
+    plot(NA,log="x",ylim=c(-0.05,1.05),xlim=c(1.25,35),yaxt="n",xaxt="n",xaxs="i",yaxs="i")
+    axis(2, at=c(0,0.2,.4,.6,.8,1), las=1, labels = (spp %in% species_order()[c(1,6,11)]))
+    axis(1, at=c(2,5,10,20), labels = (spp %in% species_order()[10:14]))
+    # polygon2(c(1,40,40,1), c(1.1,1.1,-0.1, -0.1), col="grey90")
+    box()
+
+    # polygon2(x, c(rep(1, n), 0,0),col="darkseagreen2")
+    # polygon2(x, ypoly(data[[spp]]$RA_max_1, n),col="coral3")
+
+    y <- data2[[spp]][["RA_max_1"]]
+    x <- data2[[spp]][["age"]]
+    points(y~x, pch=16, col=col.age(data2[[spp]][["age"]]))
+
+    fit <- glm (y ~ x, family = binomial)
+    x.pred <- seq_log_range(range(x), 100)
+    lines(x.pred, predict(fit, list(x = x.pred),type="response"), col = "black")
+    r2_inset(glm_r2(fit))
+    species_labels(spp)
+  }
+  mtext("Age (yr)",side=1,outer=TRUE,line=2, cex=1.5)
+  mtext("Reproductive allocation",side=2,outer=TRUE,line=2, cex=1.5)
+
+  legend(per_x(1.05), per_y(0.8), "Sites Ages:", bty="n", xpd= NA)
+  legend(per_x(1.15), per_y(0.70), names(col.age()), bty="n", pch=16, col=col.age(), xpd= NA)
+
+}
+
+figure_allocation_all_h <- function(SummaryInd, SummarySppAge) {
+
+  par_all_species_fig()
+
+  data <- split(SummaryInd, SummaryInd$species)
+
+  for(spp in species_order()) {
+
+    y <- data[[spp]][["RA_max_1"]]
+    x <- data[[spp]][["height"]]
+    plot(NA, log="x",xlim= c(50, 4700), ylim=c(-0.05,1.05), yaxt="n",xaxt="n",xaxs="i",yaxs="i")
+    points(y~x, col=col.age(data[[spp]][["age"]]), pch=16)
+
+    fit <- glm (y ~ x, family = binomial)
+    x.pred <- seq_log_range(range(x), 100)
+    lines(x.pred, predict(fit, list(x = x.pred),type="response"), col = "black")
+
+    r2_inset(glm_r2(fit))
+
+# #    browser()
+#     RA_f <- function(h, hmat=100, h50=1000){
+#       RAinit=0
+#       RAmax=1
+#       yo <- RAinit + michaelis_menton(h-hmat, h50, RAmax - RAinit)
+#       yo[h < hmat] <- 0
+#       yo
+#     }
+
+    # fit <- nls(y~RA_f(x, hmat=hmat, RAinit=0, RAmax=1, h50=h50),
+    #             start=list(hmat=100, h50 = 1000))
+
+    # lines(x.pred, RA_f(x.pred, coef(fit)), col = "blue")
+
+    x <- c(0.125, 0.25, 0.5, 1, 2,5,10,20, 40)
+    axis(1, at = c(15, 30, 60 , 125, 250, 500, 1000, 2000, 4000), labels = spp %in% species_order()[10:14])
+    axis(2, label = spp %in% species_order()[c(1,6,11)], las=1)
+    species_labels(spp)
+  }
+
+  legend(per_x(1.05), per_y(0.8), "Sites Ages:", bty="n", xpd= NA)
+  legend(per_x(1.15), per_y(0.70), names(col.age()), bty="n", pch=16, col=col.age(), xpd= NA)
+
+  mtext("Height (mm)",side=1,outer=TRUE,line=2, cex=1.5)
+  mtext("Reproductive allocation",side=2,outer=TRUE,line=2, cex=1.5)
+
+  # legend(40, 0.8, c("Individual observation", "Leaf expansion", "Reproductive tissues"), bty="n",
+  #   pch=16, col=c("black", "darkseagreen2","coral3"), xpd= NA, cex=1.25)
 }
 
 figure_life_history <- function(SummarySpp, SummarySppAge){
@@ -126,25 +243,50 @@ figure_life_history <- function(SummarySpp, SummarySppAge){
   traits <- SummarySpp[["mean"]]
   traits$maxH <- SummarySpp[["max"]]$height
 
-  temp <- SummarySppAge[["mean"]]
-  temp <- temp %>%
+  temp <- SummarySppAge[["mean"]] %>%
     group_by(species) %>%
-    summarise_each(funs(max), RA_leaf_area,RA_max_1,RA_vs_all_leaf)
-  names(temp) <- c("species","RA_leaf_area_max","RA_max_1_max","RA_vs_all_leaf_max")
+    summarise(RA_max = mean(RA_max_1))
 
-  traits <- merge(traits,temp,by="species")
-  i <- traits$RA_max_1_max
+  data <- merge(traits,temp,by="species")
+  par(mfrow=c(2,2), cex=1, omi=c(0.9,0.9,0.2,0.2), mai=c(.3,.3,0.2,0.02))
 
-  par(mfcol=c(1,1), cex=1, omi=c(.1,.7,.1,.1), mai=c(.05,.05,.05,0.05))
+  myplot <- function(x,y, data, log="x", ylab = NULL, xlab = NULL, ...){
 
-  temp2 <- select(traits,lifespan, maturity,maxH,RA_max_1_max)
-  names(temp2) <- c("lifespan","maturity","max height","maximum RA")
-  pairs(temp2,pch=16,upper.panel =NULL,log="xy",col="coral3",cex=1.2)
+    if(x == "maxH"){
+      xlim <- c(250, 4000)
+    }else {
+      xlim <- c(0.005, 0.1)
+    }
+
+    if(y == "maturity"){
+      ylim <- c(1, 10)
+    }else {
+      ylim <- c(0, 1)
+    }
+
+    plot(data[[x]], data[[y]], log = log, axes=FALSE, ann=FALSE, xlim=xlim, ylim = ylim, pch=16)
+    axis(1, labels = !is.null(xlab))
+    axis(2, labels = !is.null(ylab), las=1)
+    box()
+    if(!is.null(ylab))
+      mtext(ylab, side=2, line=3, cex=1.5)
+    if(!is.null(xlab))
+      mtext(xlab, side=1, line=3, cex=1.5)
+
+    if(par()$ylog)
+      fit <- glm (data[[y]]~log(data[[x]]), family = gaussian)
+    else
+      fit <- glm (log(data[[y]])~log(data[[x]]), family = gaussian)
+
+    r2_inset(glm_r2(fit), cex=1)
+  }
+
+  myplot("LMA", "maturity", data, log="xy", ylab = "Age at maturation (yr)")
+  myplot("maxH", "maturity", data, log="xy")
+  myplot("LMA", "RA_max", data, ylab = "Average RA", xlab = expression(paste("Leaf mass per area (", mg~mm^-2, ")")))
+  myplot("maxH", "RA_max", data,  xlab = expression(paste("Maximum height (", mm, ")")))
 }
 
-species_order <- function() {
-  c("BOLE", "HEPU", "PILI", "COER", "EPMI", "GRSP", "LEES", "PHPH", "PUTU", "GRBU", "BAER", "HATE", "PEPU", "PELA")
-}
 
 figure_investment_weight <- function(SummaryInd) {
 
@@ -153,7 +295,7 @@ figure_investment_weight <- function(SummaryInd) {
   data <- subset(data,!(data$individual %in% c("COER_806","EPMI_907","GRBU_906","HATE_105","HATE_003","LEES_354",
                                                "LEES_352","LEES_355","LEES_353","LEES_351","PELA_161","PELA_162",
                                                "PUTU_108")))
-  par(mfrow=c(3,5), cex=1, omi=c(.5,.5,.1,.1), mai=c(.3,.6,0.5,0.02))
+  par_all_species_fig()
 
   data <- split(data, data$species)
 
@@ -163,40 +305,52 @@ figure_investment_weight <- function(SummaryInd) {
 
   for(spp in species_order()) {
     y_all <- unlist(data[[spp]][vars])
-    y_max <-max(y_all)
-    y_min <-min(y_all[y_all>0])
+    y_max <-0.95e6
+    y_min <-0.01
+    y_0 <- y_min*3.16
 
-    x_max <-max(data[[spp]]$height)
-    x_min <-min(data[[spp]]$height)
+    x_max <- 4750
+    x_min <- 20
 
     plot(NA,type="n",log="xy",xlab="",ylab="", xaxs="i",yaxs="i", axes=FALSE,
-      ylim=c((y_min/100),(10*y_max)),xlim=c((0.5*x_min),(2*x_max)))
-
-    polygon(x=c(0.5*x_min,0.5*x_min,2*x_max,2*x_max),y=c(y_min/10,y_min/100,y_min/100,y_min/10),col="grey90")
+      ylim=c(y_min,y_max),xlim=c(x_min,x_max))
+    polygon(x=c(x_min,x_min,x_max,x_max),y=c(y_min*10,y_min,y_min,y_min*10),col="grey90")
 
     x <- data[[spp]][["height"]]
 
     for(i in 1:3){
       y <- data[[spp]][[vars[i]]]
-      y[y<=0] <- y_min/30
+      y[y<=0] <- y_0
       points(x,y,pch=16, col=cols[i])
     }
 
-    mtext(labels.spp.genus(spp),font=3,outer=FALSE,side=3,adj=0)
+    i <- data[[spp]]$leaf_shed > data[[spp]]$leaf_replacement
 
-    axis(1, at = c(18, 37, 75, 150, 300, 600, 1200, 2400, 4800))
-    add_axis_log10(2, at = seq(floor(log10(y_min)),ceiling(log(y_max))))
+    arrows(data[[spp]]$height[i], data[[spp]]$leaf_replacement[i],
+        data[[spp]]$height[i],data[[spp]]$leaf_shed[i],
+               length=0,col="black")
+
+    species_labels(spp)
+
+    axis(1, at = c(15, 30, 60 , 125, 250, 500, 1000, 2000, 4000), labels = spp %in% species_order()[10:14])
+    flag <- spp %in% species_order()[c(1,6,11)]
+    add_axis_log10(2, at = -0:6, labels = flag)
+    axis(2, at = y_0, labels = if(flag) c("0") else FALSE, las=1)
+
     box()
     }
-  legend(8000, 2000, labs, bty="n", pch=16, col=cols, xpd= NA)
-  mtext("Investment (mg)", 2, outer=TRUE,cex=1.5,line=1)
-  mtext("Plant height (mm)",1,outer=TRUE,cex=1.5,line=1)
 
+  legend(per_x(1.05), per_y(0.8), bty="n", xpd= NA, cex=1.25,
+    c(rev(labs), "Replacement deficit"), pch=c(16,16,16, NA), col= c(rev(cols), "black"), lty = c(NA,NA,NA, "solid"))
+  mtext(expression(paste("Investment (", mg~yr^-1, ")")), 2, outer=TRUE,cex=1.5,line=2)
+
+  mtext("Plant height (mm)",1,outer=TRUE,cex=1.5,line=2)
 }
 
-figure_leaf_area <- function(Growth_all){
 
-  par(mfrow=c(3, 5), cex=1, omi=c(.5,.5,.1,.1), mai=c(.3,.6,0.5,0.02))
+figure_leaf_weight <- function(Growth_all){
+
+  par_all_species_fig()
 
   data <- Growth_all
 
@@ -204,70 +358,155 @@ figure_leaf_area <- function(Growth_all){
 
   for(spp in species_order()) {
 
-    y_max <-max(data[[spp]]$leaf_weight)
-    y_min <-min(data[[spp]]$leaf_weight)
-
     plot(leaf_weight~age,data[[spp]],pch=16,log="xy",
-    xlim=c(0.05,40),ylim=c(y_min*0.5,y_max*2),col=col.age(age),axes=FALSE,ylab="n",xaxs="i",yaxs="i")
+    xlim=c(0.05,40),ylim=c(0.8E0,1.5E6),col=col.age(age),axes=FALSE,ylab="n",xaxs="i",yaxs="i")
 
-    fit.l <- fit_gam_loglog("leaf_weight", "age", data[[spp]])
+    fit <- fit_gam_loglog("leaf_weight", "age", data[[spp]])
     age.r <- seq_log_range(range(data[[spp]][["age"]], na.rm=TRUE), 50)
-    points(age.r, y_hat(fit.l, age.r), type = "l")
+    points(age.r, y_hat(fit, age.r), type = "l")
+    r2_inset(gam_r2(fit))
 
     x <- c(0.125, 0.25, 0.5, 1, 2,5,10,20, 40)
-    axis(1, at=x, labels= FALSE)
-    axis(1, at=x[c(2,5,8)], labels= (spp %in% c("BAER", "PEPU", "PELA", "HATE")))
-
-    add_axis_log10(2)
+    axis(1, at=x[c(2,5,8)], labels= spp %in% species_order()[10:14])
+    add_axis_log10(2, label = spp %in% species_order()[c(1,6,11)])
 
     box()
-    mtext(labels.spp.genus(spp),font=3,outer=FALSE,side=3,adj=0)
+    species_labels(spp)
   }
 
- legend(60, 2.5E4, "Sites Ages:", bty="n", xpd= NA)
- legend(80, 1E4, names(col.age()), bty="n", pch=16, col=col.age(), xpd= NA)
+  legend(per_x(1.05), per_y(0.8), "Sites Ages:", bty="n", xpd= NA)
+  legend(per_x(1.15), per_y(0.70), names(col.age()), bty="n", pch=16, col=col.age(), xpd= NA)
 
-  mtext("Age (yr)",side=1,outer=TRUE,line=1, cex=1.5)
-  mtext(expression(paste("Leaf area (", mm^2, " )")),side=2,outer=TRUE,line=0.8, cex=1.5)
-
+  mtext("Age (yr)",side=1,outer=TRUE,line=2, cex=1.5)
+  mtext(expression(paste("Leaf weight (", mg, " )")),side=2,outer=TRUE,line=2, cex=1.5)
 }
 
-figure_leaf_loss <- function(SummarySppAge){
-  par(mfrow=c(1,1), cex=1, omi=c(.6,.6,.02,.02), mai=c(0.02,.02,.01,0.01))
 
-  plot(RA_max_1 ~ prop_leaf_loss,subset(SummarySppAge[["mean"]],age>2),pch=16,col=col.age(age),xlim=c(0,1),ylim=c(0,1),xlab="",ylab="")
-  mod <- lm(prop_leaf_loss~RA_max_1,subset(SummarySppAge[["mean"]],age>2))
-  extra.top.left(paste("r2 =",round(glance(mod)[2],digits=2)))
-  mtext("Proportion of leaves lost annually",side=1,outer=TRUE,line=2)
-  mtext("Reproductive allocation (0-1)",side=2,outer=TRUE,line=2)
-}
+figure_height <- function(Growth_all){
 
-figure_leafarea_production <- function(SummaryInd){
+  par_all_species_fig()
 
-  par(mfrow=c(4,4), cex=1, omi=c(.5,.6,.02,.02), mai=c(0.2,.75,.4,0.01))
-  data <- SummaryInd
-
-  data <- subset(data,!(data$individual %in% c("COER_806","EPMI_907","GRBU_906","HATE_105","HATE_003","LEES_354",
-                                               "LEES_352","LEES_355","LEES_353","LEES_351","PELA_161","PELA_162",
-                                               "PUTU_108")))
+  data <- Growth_all
 
   data <- split(data, data$species)
 
   for(spp in species_order()) {
 
-    y_max <-max(data[[spp]]$total_inv)
-    y_min <-min(subset(data[[spp]]$total_inv,data[[spp]]$total_inv>0))
-    x_max <-max(data[[spp]]$leaf_area_0)
-    x_min <-min(subset(data[[spp]]$leaf_area_0,data[[spp]]$leaf_area_0>0))
+    plot(height~age,data[[spp]],pch=16,log="xy",
+    xlim=c(0.08,40),ylim=c(0.8E1, 5E3),col=col.age(age),axes=FALSE,ylab="n",xaxs="i",yaxs="i")
 
-    plot(total_inv~leaf_area_0,data[[spp]],pch=16,log="xy",
-      ylim=c(y_min*0.5,y_max*2),xlim=c(x_min*0.5,x_max*2),
-      col=col.age(age),ylab="",las=1,xaxs="i",yaxs="i", axes=FALSE)
-    add_axis_log10(1)
-    add_axis_log10(2)
+    fit <- fit_gam_loglog("height", "age", data[[spp]])
+    age.r <- seq_log_range(range(data[[spp]][["age"]], na.rm=TRUE), 50)
+    points(age.r, y_hat(fit, age.r), type = "l")
+
+    x <- c(0.125, 0.25, 0.5, 1, 2,5,10,20, 40)
+    axis(1, at=x[c(2,5,8)], labels= spp %in% species_order()[10:14])
+    add_axis_log10(2, label = spp %in% species_order()[c(1,6,11)])
     box()
-    mtext(labels.spp.genus(spp),font=3,outer=FALSE,side=3,adj=0,cex.axis=0.8)
+    r2_inset(gam_r2(fit))
+
+    species_labels(spp)
   }
-  mtext(expression(paste("Leaf area (", mm^2, " )")),side=1,outer=TRUE,line=1)
-  mtext("Total production (mg)",side=2,outer=TRUE,line=1)
+
+  legend(per_x(1.05), per_y(0.8), "Sites Ages:", bty="n", xpd= NA)
+  legend(per_x(1.15), per_y(0.70), names(col.age()), bty="n", pch=16, col=col.age(), xpd= NA)
+
+  mtext("Age (yr)",side=1,outer=TRUE,line=2, cex=1.5)
+  mtext(expression(paste("Plant height (", mm, " )")),side=2,outer=TRUE,line=2, cex=1.5)
+}
+
+figure_leaf_loss <- function(SummarySppAge){
+  par(mfrow=c(1,1), cex=1, omi=c(.6,.6,.02,.02), mai=c(0.02,.02,.01,0.01))
+
+  data <- subset(SummarySppAge[["mean"]],age>2)
+
+  plot(RA_max_1 ~ prop_leaf_loss, data,pch=16,col=col.age(age),xlim=c(0,1),ylim=c(0,1),xlab="",ylab="")
+  mod <- lm(prop_leaf_loss~RA_max_1,data)
+  extra.top.left(paste("r2 =",round(glance(mod)[2],digits=2)))
+
+  mtext("Proportion of leaves lost annually",side=1,outer=TRUE,line=2)
+  mtext("Reproductive allocation",side=2,outer=TRUE,line=2)
+}
+
+RA_examples_fns <- function(){
+
+  RAS <- list()
+
+  RAS[["Big bang"]] <- function(x, mat=0.5){
+    y <- x*0 + 1
+    y[x < mat] <- 0
+    y
+  }
+
+  RAS[["Partial bang"]] <- function(x, mat=0.5, RAinit=0.5, RAmax=0.7, A50=0.05*mat){
+    y <- RAinit + michaelis_menton(x-mat, A50=A50)*(RAmax - RAinit)
+    y[x < mat] <- 0
+    y
+  }
+
+  RAS[["Asymptotic"]] <- function(x, ...){
+     RAS[["Partial bang"]](x, RAinit=0,...)
+  }
+
+
+  RAS[["Gradual - indeterminate"]] <- function(x, mat=0.5, A50=2*mat,  ...){
+    RAS[["Partial bang"]](x, RAinit=0, mat=mat, A50=A50, ...)
+  }
+
+  RAS[["Gradual - determinate"]] <- function(x, mat=0.5, A50=0.5,  ...){
+    RAS[["Partial bang"]](x, RAinit=0, RAmax=2, mat=mat, A50=A50, ...)
+  }
+
+  # based on formula for a parabola (x-h)^2 = 4p(y-k), with vertex (h,k)
+  RAS[["Declining"]] <- function(x, mat=0.5, h=0.65, k=0.6, p=-0.1){
+    y <- k + (x^2 - 2*h*x +h^2)/(4*p)
+    y[x < mat] <- 0
+    y
+  }
+  RAS
+}
+
+rectagular_hyperbolae <- function(X,  Amax, QY, theta, phi){
+  (phi*X + Amax -  pow((phi*X + Amax)^2 - 4*theta*X*Amax*phi, 0.5))/ (2 * theta)
+}
+
+michaelis_menton <- function(x, A50, Amax=1){
+  Amax * x / (x+A50)
+}
+
+
+plotRASexamples <- function(){
+
+  RAS <- RA_examples_fns()
+
+  par(oma = c(3,3,1,1), mar = c(2,3,2,2), mfrow=c(1,3))
+
+  new_plot <- function(ylab=TRUE){
+    plot.new()
+    plot.window(xlim=c(0, 1), ylim=c(-0,1),  xaxt='n', yaxt='n', ann=FALSE)
+    axis(2, at = c(0,1), labels =ylab, las = 1)
+    axis(1, at = c(0.1,0.9), labels = c("young", "old"), las = 1)
+
+    box()
+  }
+
+  col <- venetian_red
+  x<-seq(0,1, by=0.001)
+
+  for(i in 1:3) {
+
+    new_plot()
+    if(i ==1)
+      y <- RAS[["Big bang"]](x, mat=0.5)
+    if(i==2)
+      y <- RAS[["Gradual - determinate"]](x, mat=0.5)
+    if(i==3)
+      y <- RAS[["Gradual - indeterminate"]](x, mat=0.5)
+    points(x, y, type='l', lwd=2, col=col)
+    text(-0.15, 1.2, sprintf("(%s)", letters[i]), cex=1.5, xpd=NA)
+  }
+
+  mtext("Plant age",1, 1, outer =  TRUE)
+  mtext("Reproductive allocation", 2, 1, outer = TRUE,)
+
 }

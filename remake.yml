@@ -28,25 +28,44 @@ targets:
   # Papers --------------------------------------
   ms-RA:
     depends:
+    - ms/RA/figures/schematic.pdf
     - ms/RA/figures/RA_demo.pdf
-    - ms/RA/figures/RA_all.pdf
+    - ms/RA/figures/RA_all_h.pdf
+    - ms/RA/figures/RA_all_a.pdf
     - ms/RA/figures/investment.pdf
-    - ms/RA/figures/leaf_area.pdf
+    - ms/RA/figures/leaf_weight.pdf
+    - ms/RA/figures/life_history.pdf
+    - ms/RA/figures/height.pdf
+    - ms/RA/figures/RA_demo_all.pdf
+#    - ms/RA/Wenk-RA-SI.pdf
+
+  ms/RA/figures/schematic.pdf:
+    command: plotRASexamples()
+    plot:
+      height: 2.5
+      width: 7.5
 
   ms/RA/figures/RA_demo.pdf:
-    command: figure_allocation_demo(SummarySppAge)
+    command: figure_allocation_demo_single(SummarySppAge)
     plot:
       width: 16
       height: 4
 
-  ms/RA/figures/accessory.pdf:
-    command: figure_accessory_bar(SummarySpp)
+  ms/RA/figures/RA_demo_all.pdf:
+    command: figure_allocation_demo_all(SummaryInd, SummarySppAge)
     plot:
-      width: 10
-      height: 6
+      width: 16
+      height: 32
 
-  ms/RA/figures/RA_all.pdf:
-    command: figure_allocation_all(SummaryInd, SummarySppAge)
+
+  ms/RA/figures/RA_all_h.pdf:
+    command: figure_allocation_all_h(SummaryInd, SummarySppAge)
+    plot:
+      width: 16
+      height: 9
+
+  ms/RA/figures/RA_all_a.pdf:
+    command: figure_allocation_all_a(SummaryInd, SummarySppAge)
     plot:
       width: 16
       height: 9
@@ -63,23 +82,52 @@ targets:
       width: 16
       height: 9
 
-  ms/RA/figures/leaf_area.pdf:
-    command: figure_leaf_area(Growth_all)
+  ms/RA/figures/leaf_weight.pdf:
+    command: figure_leaf_weight(Growth_all)
     plot:
       width: 16
       height: 9
 
-  ms/RA/figures/leaf_loss.pdf:
-    command: figure_leaf_loss(SummarySppAge)
-    plot:
-      width: 4
-      height: 4
-
-  ms/RA/figures/leafarea_production.pdf:
-    command: figure_leafarea_production(SummaryInd)
+  ms/RA/figures/height.pdf:
+    command: figure_height(Growth_all)
     plot:
       width: 16
-      height: 12
+      height: 9
+
+  ms/RA/Wenk-RA-SI.pdf:
+    command: latex_build("ms/RA/Wenk-RA-SI.tex", clean=TRUE)
+
+  ms/RA/Wenk-RA-SI.tex:
+    knitr:
+      auto_figure_prefix: true
+      chdir: true
+    depends:
+      - SummaryInd
+      - SummarySpp
+      - SummarySppAge
+      - HarvestData
+      - Investment_FD_all
+      - PartsSummary_all
+      - ms/Accessory/Sup_Table_flowering_parts.csv
+      - BAER_GraphMaps
+      - BOLE_GraphMaps
+      - COER_GraphMaps
+      - EPMI_GraphMaps
+      - GRBU_GraphMaps
+      - GRSP_GraphMaps
+      - HATE_GraphMaps
+      - HEPU_GraphMaps
+      - LEES_GraphMaps
+      - PELA_GraphMaps
+      - PEPU_GraphMaps
+      - PHPH_GraphMaps
+      - PILI_GraphMaps
+      - PUTU_GraphMaps
+      - R/figures.R
+      - ms/RA/suppmat.sty
+
+
+# ----------------
 
   ms-Accessory:
    depends:
@@ -120,7 +168,6 @@ targets:
     knitr:
       auto_figure_prefix: true
       chdir: true
-
     depends:
       - SummaryInd
       - SummarySpp
