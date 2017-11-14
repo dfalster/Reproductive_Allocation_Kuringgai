@@ -16,9 +16,10 @@ gam_r2 <- function(model) {
   bquote(r^2 ~ .(r2))
 }
 
-r2_inset <- function(r2, cex=0.75, font=1, pos=4,  ...) {
-   text(per_x(0), per_y(0.95), r2, cex=cex, font=font, pos=pos, ...)
+r2_inset <- function(r2, cex=0.75, font=1, pos=4, px = 0, py = 0.95, ...) {
+   text(per_x(px), per_y(py), r2, cex=cex, font=font, pos=pos, ...)
 }
+
 
 species_labels <- function(spp) {
   mtext(labels.spp.full(spp),font=3,outer=FALSE,side=3,adj=0, line =0.25)
@@ -85,18 +86,16 @@ figure_allocation_demo_single <- function(SummarySppAge) {
   mtext("Fraction of mass allocated",side=2,outer=TRUE,line=2, cex=1.25)
 }
 
-figure_allocation_demo_all <- function(SummaryInd, SummarySppAge) {
+figure_allocation_demo_all <- function(SummarySppAge) {
 
   par(mfrow=c(14,4), cex=1, omi=c(1,1.5,.1,0.1), mai=c(0.2,.45,.3,0.02))
 
   data <- SummarySppAge[["mean"]]
-  data2 <- SummaryInd
 
   for(v in c("growth_leaf"))
     data[[v]][data[[v]] < 0] <- 0
 
   data <- split(data, data$species)
-  data2 <- split(data2, data2$species)
 
   for(spp in species_order()) {
 
@@ -147,12 +146,32 @@ figure_allocation_demo_all <- function(SummaryInd, SummarySppAge) {
   mtext("Fraction of mass allocated",side=2,outer=TRUE,line=4, cex=2)
 }
 
-figure_allocation_all_a <- function(SummaryInd, SummarySppAge) {
+# Fits a GLM with binomial to RA as function of age
+# Also extract point at which RA = 0.5. Given the 
+# equation for logistic curve R = 1/(1+exp(- (B_0 + B1 * x))), 
+# we can solve for the point where R  = 0.5 as x0 = -B_0/ B_1
+
+fit_allocation_model <- function(SummaryInd) {
+
+  data <- split(SummaryInd, SummaryInd$species)
+
+  fits <- list()
+
+  for(spp in species_order()) {
+    y <- data[[spp]][["RA_max_1"]]
+    x <- data[[spp]][["age"]]
+    fit <- glm (y ~ x, family = binomial)
+    p50 <- coef(fit)[1]/-coef(fit)[2]
+    fits[[spp]] <- list(fit = fit, x = x, y = y, spp = spp, p50 = p50)
+  }
+  fits
+}
+
+
+figure_allocation_all_a <- function(fits) {
 
   par_all_species_fig()
 
-  data <- split(SummarySppAge[["mean"]], SummarySppAge[["mean"]]$species)
-  data2 <- split(SummaryInd, SummaryInd$species)
 
   for(spp in species_order()) {
 
@@ -165,20 +184,16 @@ figure_allocation_all_a <- function(SummaryInd, SummarySppAge) {
     plot(NA,log="x",ylim=c(-0.05,1.05),xlim=c(1.25,35),yaxt="n",xaxt="n",xaxs="i",yaxs="i")
     axis(2, at=c(0,0.2,.4,.6,.8,1), las=1, labels = (spp %in% species_order()[c(1,6,11)]))
     axis(1, at=c(2,5,10,20), labels = (spp %in% species_order()[10:14]))
-    # polygon2(c(1,40,40,1), c(1.1,1.1,-0.1, -0.1), col="grey90")
     box()
 
-    # polygon2(x, c(rep(1, n), 0,0),col="darkseagreen2")
-    # polygon2(x, ypoly(data[[spp]]$RA_max_1, n),col="coral3")
+    points(fits[[spp]][["x"]], fits[[spp]][["y"]], pch=16, col=col.age(fits[[spp]][["x"]]))
+    points(fits[[spp]][["p50"]], 0.5, pch=16, col="black", cex=0.5)
+    lines(rep(fits[[spp]][["p50"]],2), c(0,0.5), lty="dashed", col="black")
 
-    y <- data2[[spp]][["RA_max_1"]]
-    x <- data2[[spp]][["age"]]
-    points(y~x, pch=16, col=col.age(data2[[spp]][["age"]]))
 
-    fit <- glm (y ~ x, family = binomial)
-    x.pred <- seq_log_range(range(x), 100)
-    lines(x.pred, predict(fit, list(x = x.pred),type="response"), col = "black")
-    r2_inset(glm_r2(fit))
+    x.pred <- seq_log_range(range(fits[[spp]][["x"]]), 100)
+    lines(x.pred, predict(fits[[spp]][["fit"]], list(x = x.pred),type="response"), col = "black")
+    r2_inset(glm_r2(fits[[spp]][["fit"]]))
     species_labels(spp)
   }
   mtext("Age (yr)",side=1,outer=TRUE,line=2, cex=1.5)
@@ -186,10 +201,9 @@ figure_allocation_all_a <- function(SummaryInd, SummarySppAge) {
 
   legend(per_x(1.05), per_y(0.8), "Sites Ages:", bty="n", xpd= NA)
   legend(per_x(1.15), per_y(0.70), names(col.age()), bty="n", pch=16, col=col.age(), xpd= NA)
-
 }
 
-figure_allocation_all_h <- function(SummaryInd, SummarySppAge) {
+figure_allocation_all_h <- function(SummaryInd) {
 
   par_all_species_fig()
 
@@ -208,20 +222,6 @@ figure_allocation_all_h <- function(SummaryInd, SummarySppAge) {
 
     r2_inset(glm_r2(fit))
 
-# #    browser()
-#     RA_f <- function(h, hmat=100, h50=1000){
-#       RAinit=0
-#       RAmax=1
-#       yo <- RAinit + michaelis_menton(h-hmat, h50, RAmax - RAinit)
-#       yo[h < hmat] <- 0
-#       yo
-#     }
-
-    # fit <- nls(y~RA_f(x, hmat=hmat, RAinit=0, RAmax=1, h50=h50),
-    #             start=list(hmat=100, h50 = 1000))
-
-    # lines(x.pred, RA_f(x.pred, coef(fit)), col = "blue")
-
     x <- c(0.125, 0.25, 0.5, 1, 2,5,10,20, 40)
     axis(1, at = c(15, 30, 60 , 125, 250, 500, 1000, 2000, 4000), labels = spp %in% species_order()[10:14])
     axis(2, label = spp %in% species_order()[c(1,6,11)], las=1)
@@ -238,19 +238,28 @@ figure_allocation_all_h <- function(SummaryInd, SummarySppAge) {
   #   pch=16, col=c("black", "darkseagreen2","coral3"), xpd= NA, cex=1.25)
 }
 
-figure_life_history <- function(SummarySpp, SummarySppAge){
+figure_life_history <- function(SummarySpp, SummarySppAge, fits){
 
   traits <- SummarySpp[["mean"]]
   traits$maxH <- SummarySpp[["max"]]$height
 
-  temp <- SummarySppAge[["mean"]] %>%
-    group_by(species) %>%
-    summarise(RA_max = mean(RA_max_1))
+  p50 <- sapply(fits, "[[", "p50")
+  names(p50) <- names(fits)
 
-  data <- merge(traits,temp,by="species")
+  temp <- SummarySppAge[["mean"]] %>%
+    group_by(species, age) %>%
+    summarise(RA_max = mean(RA_max_1)) %>%
+    ungroup() %>%
+    group_by(species) %>% 
+    summarise(RA_max = max(RA_max))
+
+  data <- merge(traits,temp,by="species") %>%
+    mutate(p50 = p50[species]) %>%
+    filter(species != "PEPU")
+
   par(mfrow=c(2,2), cex=1, omi=c(0.9,0.9,0.2,0.2), mai=c(.3,.3,0.2,0.02))
 
-  myplot <- function(x,y, data, log="x", ylab = NULL, xlab = NULL, ...){
+  myplot <- function(x,y, data, log="x", ylab = NULL, xlab = NULL, py = 0.95){
 
     if(x == "maxH"){
       xlim <- c(250, 4000)
@@ -258,8 +267,8 @@ figure_life_history <- function(SummarySpp, SummarySppAge){
       xlim <- c(0.005, 0.1)
     }
 
-    if(y == "maturity"){
-      ylim <- c(1, 10)
+    if(y == "p50"){
+      ylim <- c(1, 20)
     }else {
       ylim <- c(0, 1)
     }
@@ -278,13 +287,13 @@ figure_life_history <- function(SummarySpp, SummarySppAge){
     else
       fit <- glm (log(data[[y]])~log(data[[x]]), family = gaussian)
 
-    r2_inset(glm_r2(fit), cex=1)
+    r2_inset(glm_r2(fit), cex=1, py = py)
   }
 
-  myplot("LMA", "maturity", data, log="xy", ylab = "Age at maturation (yr)")
-  myplot("maxH", "maturity", data, log="xy")
-  myplot("LMA", "RA_max", data, ylab = "Average RA", xlab = expression(paste("Leaf mass per area (", mg~mm^-2, ")")))
-  myplot("maxH", "RA_max", data,  xlab = expression(paste("Maximum height (", mm, ")")))
+  myplot("LMA", "p50", data, log="xy", ylab = "Age at 50% RA (yr)")
+  myplot("maxH", "p50", data, log="xy")
+  myplot("LMA", "RA_max", data, py = 0.05, ylab = "Maximum RA", xlab = expression(paste("Leaf mass per area (", mg~mm^-2, ")")))
+  myplot("maxH", "RA_max", data, py = 0.05, xlab = expression(paste("Maximum height (", mm, ")")))
 }
 
 

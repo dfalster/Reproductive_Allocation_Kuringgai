@@ -52,26 +52,29 @@ targets:
       height: 4
 
   ms/RA/figures/RA_demo_all.pdf:
-    command: figure_allocation_demo_all(SummaryInd, SummarySppAge)
+    command: figure_allocation_demo_all(SummarySppAge)
     plot:
       width: 16
       height: 32
 
 
   ms/RA/figures/RA_all_h.pdf:
-    command: figure_allocation_all_h(SummaryInd, SummarySppAge)
+    command: figure_allocation_all_h(SummaryInd)
     plot:
       width: 16
       height: 9
 
+  fits_figure_allocation_all_a:
+    command: fit_allocation_model(SummaryInd)
+
   ms/RA/figures/RA_all_a.pdf:
-    command: figure_allocation_all_a(SummaryInd, SummarySppAge)
+    command: figure_allocation_all_a(fits_figure_allocation_all_a)
     plot:
       width: 16
       height: 9
 
   ms/RA/figures/life_history.pdf:
-    command: figure_life_history(SummarySpp, SummarySppAge)
+    command: figure_life_history(SummarySpp, SummarySppAge, fits_figure_allocation_all_a)
     plot:
       width: 8
       height: 8
