@@ -37,6 +37,7 @@ targets:
     - ms/RA/figures/life_history.pdf
     - ms/RA/figures/height.pdf
     - ms/RA/figures/RA_demo_all.pdf
+    - ms/RA/figures/leaf_loss.pdf
 #    - ms/RA/Wenk-RA-SI.pdf
 
   ms/RA/figures/schematic.pdf:
@@ -77,7 +78,7 @@ targets:
     command: figure_life_history(SummarySpp, SummarySppAge, fits_figure_allocation_all_a)
     plot:
       width: 8
-      height: 8
+      height: 4
 
   ms/RA/figures/investment.pdf:
     command: figure_investment_weight(SummaryInd)
@@ -96,6 +97,12 @@ targets:
     plot:
       width: 16
       height: 9
+
+  ms/RA/figures/leaf_loss.pdf:
+    command: figure_LMA_leafloss(SummarySpp)
+    plot:
+      width: 4
+      height: 4
 
   ms/RA/Wenk-RA-SI.pdf:
     command: latex_build("ms/RA/Wenk-RA-SI.tex", clean=TRUE)

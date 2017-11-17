@@ -246,18 +246,11 @@ figure_life_history <- function(SummarySpp, SummarySppAge, fits){
   p50 <- sapply(fits, "[[", "p50")
   names(p50) <- names(fits)
 
-  temp <- SummarySppAge[["mean"]] %>%
-    group_by(species, age) %>%
-    summarise(RA_max = mean(RA_max_1)) %>%
-    ungroup() %>%
-    group_by(species) %>% 
-    summarise(RA_max = max(RA_max))
-
-  data <- merge(traits,temp,by="species") %>%
+  data <- traits %>%
     mutate(p50 = p50[species]) %>%
     filter(species != "PEPU")
 
-  par(mfrow=c(2,2), cex=1, omi=c(0.9,0.9,0.2,0.2), mai=c(.3,.3,0.2,0.02))
+  par(mfrow=c(1,2), cex=1, omi=c(0.9,0.9,0.2,0.2), mai=c(.3,.3,0.2,0.02))
 
   myplot <- function(x,y, data, log="x", ylab = NULL, xlab = NULL, py = 0.95){
 
@@ -273,29 +266,55 @@ figure_life_history <- function(SummarySpp, SummarySppAge, fits){
       ylim <- c(0, 1)
     }
 
-    plot(data[[x]], data[[y]], log = log, axes=FALSE, ann=FALSE, xlim=xlim, ylim = ylim, pch=16)
+    plot(data[[x]], data[[y]], log="xy", axes=FALSE, ann=FALSE, xlim=xlim, ylim = ylim, pch=16)
     axis(1, labels = !is.null(xlab))
     axis(2, labels = !is.null(ylab), las=1)
     box()
     if(!is.null(ylab))
-      mtext(ylab, side=2, line=3, cex=1.5)
+      mtext(ylab, side=2, line=4, cex=1.25)
     if(!is.null(xlab))
-      mtext(xlab, side=1, line=3, cex=1.5)
+      mtext(xlab, side=1, line=4, cex=1.25)
 
-    if(par()$ylog)
-      fit <- glm (data[[y]]~log(data[[x]]), family = gaussian)
-    else
-      fit <- glm (log(data[[y]])~log(data[[x]]), family = gaussian)
+    fit <- glm (log(data[[y]])~log(data[[x]]), family = gaussian)
+    alpha <- coef(fit)
+    x.pred <- seq_log_range(range(data[[x]], na.rm=TRUE), 100)
+    lines(x.pred, exp(alpha[1] + alpha[2]*log(x.pred)), col = "black")
 
     r2_inset(glm_r2(fit), cex=1, py = py)
   }
 
-  myplot("LMA", "p50", data, log="xy", ylab = "Age at 50% RA (yr)")
-  myplot("maxH", "p50", data, log="xy")
-  myplot("LMA", "RA_max", data, py = 0.05, ylab = "Maximum RA", xlab = expression(paste("Leaf mass per area (", mg~mm^-2, ")")))
-  myplot("maxH", "RA_max", data, py = 0.05, xlab = expression(paste("Maximum height (", mm, ")")))
+  myplot("LMA", "p50", data, ylab = "Age where RAAR = 0.5 (yr)", xlab = expression(paste("Leaf  mass per area (", mg~mm^-2, ")")))
+  myplot("maxH", "p50", data, xlab = expression(paste("Maximum height (", mm, ")")))
 }
 
+
+figure_LMA_leafloss <- function(SummarySpp){
+
+  par(mfrow=c(1,1), cex=1, omi=c(0.9,0.9,0.2,0.2), mai=c(.3,.3,0.2,0.02))
+
+  myplot <- function(x,y, data, log="x", ylab = NULL, xlab = NULL, py = 0.95){
+
+    ylim <- c(0.2, 1)
+    xlim <- c(0.005, 0.1)
+
+    plot(data[[x]], data[[y]], log="xy", axes=FALSE, ann=FALSE, xlim=xlim, ylim = ylim, pch=16)
+    axis(1, labels = !is.null(xlab))
+    axis(2, labels = !is.null(ylab), las=1)
+    box()
+    if(!is.null(ylab))
+      mtext(ylab, side=2, line=4, cex=1.25)
+    if(!is.null(xlab))
+      mtext(xlab, side=1, line=4, cex=1.25)
+
+    fit <- glm (log(data[[y]])~log(data[[x]]), family = gaussian)
+    alpha <- coef(fit)
+    x.pred <- seq_log_range(range(data[[x]], na.rm=TRUE), 100)
+    lines(x.pred, exp(alpha[1] + alpha[2]*log(x.pred)), col = "black")
+
+    r2_inset(glm_r2(fit), cex=1, py = py)
+  }
+  myplot("LMA", "prop_leaf_loss", SummarySpp[["mean"]], ylab = "Proportion of leaves lost", xlab = expression(paste("Leaf  mass per area (", mg~mm^-2, ")")))
+}
 
 figure_investment_weight <- function(SummaryInd) {
 
