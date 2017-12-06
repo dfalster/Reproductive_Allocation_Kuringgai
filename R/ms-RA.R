@@ -3,7 +3,8 @@ par_all_species_fig <- function() {
 }
 
 species_order <- function() {
-  c("BOLE", "HEPU", "PILI", "COER", "EPMI", "GRSP", "LEES", "PHPH", "PUTU", "GRBU", "BAER", "PELA", "HATE", "PEPU")
+  # this order based on sorting of values for Age at maturation in Table 1
+  c("BOLE", "GRSP", "PILI", "HEPU", "EPMI", "GRBU", "LEES", "PUTU", "COER", "HATE", "PHPH", "BAER", "PEPU", "PELA")
 }
 
 glm_r2 <- function(model) {

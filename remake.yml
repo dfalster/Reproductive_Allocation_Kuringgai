@@ -10,6 +10,7 @@ packages:
   - rmarkdown
   - broom
   - ggtern
+  - ggmap
   - yaml
   - mgcv
   - knitr
@@ -30,15 +31,11 @@ targets:
     depends:
     - ms/RA/figures/schematic.pdf
     - ms/RA/figures/RA_demo.pdf
-    - ms/RA/figures/RA_all_h.pdf
     - ms/RA/figures/RA_all_a.pdf
     - ms/RA/figures/investment.pdf
     - ms/RA/figures/leaf_weight.pdf
     - ms/RA/figures/life_history.pdf
-    - ms/RA/figures/height.pdf
-    - ms/RA/figures/RA_demo_all.pdf
-    - ms/RA/figures/leaf_loss.pdf
-#    - ms/RA/Wenk-RA-SI.pdf
+    - ms/RA/Wenk-RA-SI.pdf
 
   ms/RA/figures/schematic.pdf:
     command: plotRASexamples()
@@ -57,13 +54,6 @@ targets:
     plot:
       width: 16
       height: 32
-
-
-  ms/RA/figures/RA_all_h.pdf:
-    command: figure_allocation_all_h(SummaryInd)
-    plot:
-      width: 16
-      height: 9
 
   fits_figure_allocation_all_a:
     command: fit_allocation_model(SummaryInd)
@@ -91,18 +81,6 @@ targets:
     plot:
       width: 16
       height: 9
-
-  ms/RA/figures/height.pdf:
-    command: figure_height(Growth_all)
-    plot:
-      width: 16
-      height: 9
-
-  ms/RA/figures/leaf_loss.pdf:
-    command: figure_LMA_leafloss(SummarySpp)
-    plot:
-      width: 4
-      height: 4
 
   ms/RA/Wenk-RA-SI.pdf:
     command: latex_build("ms/RA/Wenk-RA-SI.tex", clean=TRUE)
@@ -135,7 +113,29 @@ targets:
       - PUTU_GraphMaps
       - R/figures.R
       - ms/RA/suppmat.sty
+      - ms/RA/figures/height.pdf
+      - ms/RA/figures/RA_demo_all.pdf
+      - ms/RA/figures/leaf_loss.pdf
+      - ms/map.pdf
 
+
+  ms/RA/figures/height.pdf:
+    command: figure_height(Growth_all)
+    plot:
+      width: 16
+      height: 9
+
+  ms/RA/figures/leaf_loss.pdf:
+    command: figure_LMA_leafloss(SummarySpp)
+    plot:
+      width: 4
+      height: 4
+
+  ms/map.pdf:
+    command: figure_site_map("data/sites.csv")
+    plot:
+      width: 4
+      height: 4
 
 # ----------------
 
@@ -201,6 +201,7 @@ targets:
       - PILI_GraphMaps
       - PUTU_GraphMaps
       - R/figures.R
+      - ms/map.pdf
 
   # Data --------------------------------------
   IndividualsList:

@@ -1,8 +1,1 @@
-site,date_of_fire,age_at_harvest,UTM zone,UTM easting,UTM northing,notes
-Basin2005,2005,7,56,340734,6281614,
-Basin2007,2007,5,56,340916,6281422,"this site is excluded from some fits - although the plants here display RA patterns consistent with other sites, their actual growth is quite stunted in comparison to other similar aged sites"
-Basin1981,1981,32,56,340886,6281385,most of site burnt in autumn 2016
-Waratah2003,2003,9,56,338359,6276250,part of site burnt in late winter 2015
-Waratah2011,2011,2.4,56,338404,6276308,"two cohorts of individuals followed at this site with ages of 1.4 and 2.4 yrs at harvest"
-Bobbin2010,2010,3,56,329049,6271775,site not used in the end
-Wilunga2012,2013,1.35,56,338791,6278908,
+site,date_of_fire,age_at_harvest,UTM zone,UTM easting,UTM northing,Longitude,Latitude,notesBasin2005,2005,7,56,340734,6281614,151.2836,-33.59332,Basin2007,2007,5,56,340916,6281422,151.2855,-33.59508,"this site is excluded from some fits - although the plants here display RA patterns consistent with other sites, their actual growth is quite stunted in comparison to other similar aged sites"Basin1981,1981,32,56,340886,6281385,151.2852,-33.59541,most of site burnt in autumn 2016Waratah2003,2003,9,56,338359,6276250,151.257,-33.64132,part of site burnt in late winter 2015Waratah2011,2011,2.4,56,338404,6276308,151.2575,-33.64081,two cohorts of individuals followed at this site with ages of 1.4 and 2.4 yrs at harvestBobbin2010,2010,3,56,329049,6271775,151.1558,-33.68021,site not used in the endWilunga2012,2013,1.35,56,338791,6278908,151.2622,-33.61743,
