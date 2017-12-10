@@ -174,25 +174,34 @@ Our goal was to estimate the amount of mass each plant invests in different tiss
 
 \begin{itemize}
 \item At each census, we compare the number of each part with possible numbers of predecessors from the prior census. Predecessors are those parts that lie at the same or younger age in the plant maps.
-\item For a each part in turn, we try to identify the most obvious predecessor, being the one with minimal amount of progression needed to satisfy successive censuses. The predecessor is removed from the list of possible predecessors and the process sis repeated until all parts have predecessors.
+\item For a each part in turn, we try to identify the most obvious predecessor, being the one with minimal amount of progression needed to satisfy successive censuses. The predecessor is removed from the list of possible predecessors and the process is repeated until all parts have predecessors.
 \item After finding a predecessor, the investment needed to progress  is calculated. The investment is defined as the difference between the element mass at the time of census and that of it's predecessor.
 \end{itemize}
 
-As an example, if, in census $t$, a large bud exists, it is assumed that it has developped from a medium sized bud (the previous stage) in census $t$-1. If in census $t$-1 no medium buds exists, the large bud is assumed to have developped from a small bud (two stages back). This process continues back along the plant map developmental trajectory until a plausible predecessor is located in the previous census period. After this process is complete, any parts from census $t$-1 for which a subsequent developmental stage is not identified as designated as having reached their final developmental stage at census $t$-1 (i.e. they aborted). For plant parts, such as petals, that is a final development stage, no success is sought.
+As an example, if, in census $t$, a large bud exists, it is assumed that it has developed from a medium sized bud (the previous stage) in census $t$-1. If in census $t$-1 no medium buds exists, the large bud is assumed to have developed from a small bud (two stages back). This process continues back along the plant map developmental trajectory until a plausible predecessor is located in the previous census period. After this process is complete, any parts from census $t$-1 for which a subsequent developmental stage is not identified as designated as having reached their final developmental stage at census $t$-1 (i.e. they aborted). For plant parts, such as petals, that is a final development stage, no success is sought.
 
 \subsubsection{Estimating leaf and stem growth}
 
-XXXXX
+We estimated the net amount of leaf and stem growth across the study period from point estimates of the weight of each tissue at the beginning and end of the study. Destructive harvests were taken at the end of the study and so leaf and stem weights at that point were calculated exactly (within measurement error). To estimate leaf growth across the study period we fitted a generalised additive model (GAM), a semi-parametric modelling approach that makes no assumption about the shape of the relationships, with site age as a predictor. We allowed four degrees of freedom, which resulted in biologically realistic relationships. Both X and Y variables were log transformed. These relationships were fitted across all individuals within each species, i.e. from multiple site ages. To maintain individual-level variation around the fitted line, we used the fitted lines to estimate the ratio of leaf mass at the end and beginning of the study, and then applied this ratio to the observed endpoint, i.e.
+\begin{equation}\label{eq:biomass}
+y_i(t_1) = y_i(t_2) \frac{\hat{y}(t_1)}{\hat{y}(t_2)}
+\end{equation}
+where $y_i(t)$ is true biomass of individual $i$ at time $t$ and $\hat{y}(t)$ is the estimated biomass of an average individual in the species at time $t$. 
+
+A similar technique was used estimate stem growth, but using stem diameter instead of age as the predictor and using a linear regression instead of a GAM. 
+
+Plots of the fitted relationships for both leaf mass and stem mass for each species are included below (Figs. \ref{fig:growth_Banksia_ericifolia}, \ref{fig:growth_Pultenaea_tuberculata}).
+
 
 \clearpage
 
 \subsection{Details on calculations by species}
 
-The algorithm for estimating reproductive investment is adjusted for each species according to the specific developmental pathway it uses to produce seeds. Below, for each species we provide a graphic illustration of the pathway used (Figs. \ref{fig:map_Banksia_ericifolia}-\ref{fig:map_Pultenaea_tuberculata}), and tables detailing specific about each part (Tables \ref{tab:parts_Banksia_ericifolia}-Table \ref{tab:parts_Pultenaea_tuberculata}).  Figure \ref{fig:map_key} provides a key on the colouring in Figs. \ref{fig:map_Banksia_ericifolia}-\ref{fig:map_Pultenaea_tuberculata}). 
+The algorithm for estimating reproductive investment is adjusted for each species according to the specific developmental pathway it uses to produce seeds. Below, for each species we provide a graphic illustration of the pathway used (Figs. \ref{fig:map_Banksia_ericifolia}-\ref{fig:map_Pultenaea_tuberculata}), and tables detailing specific about each part (Tables \ref{tab:parts_Banksia_ericifolia}-\ref{tab:parts_Pultenaea_tuberculata}).  Figure \ref{fig:map_key} provides a key on the colouring in Figs. \ref{fig:map_Banksia_ericifolia}-\ref{fig:map_Pultenaea_tuberculata}). 
 
 Each plant map begins with a bud (or the appropriate starting point for reproductive tissue development for a specific species) and depicts graphically how the tissue develops through the plant's reproductive cycle to a seed or mature fruit. During the reproductive cycle, there will be branches off the central tissue axis (development from bud to seed). Some of these lead to aborted tissue types (colored red in the graph maps below) and others lead to tissues that reach their final development stage and are then shed by a plant (e.g. petals, calyx, seed pod; colored green in the graph maps below). For some species, there are multiple axes of development. For instance, cones and flowers on a cone have separate axes, because the number of flowers on a cone is inconsistent across individuals. A few species have aborted plant parts that are listed as a separate axis. In these cases, the aborted unit weighs less than a bud and therefore cannot be shown as ever having reached the stage of a bud.
 
-Also shown below  in Figs. \ref{fig:growth_Banksia_ericifolia}, \ref{fig:growth_Boronia_ledifolia},...., \ref{fig:growth_Pultenaea_tuberculata} are the relationships used to estimate growth in leaf and stem mass for each species.
+Also shown below are the relationships used to estimate growth in leaf and stem mass for each species (Figs. \ref{fig:growth_Banksia_ericifolia}-\ref{fig:growth_Pultenaea_tuberculata}).
 
 \begin{figure}[h]
 \centering
@@ -224,7 +233,7 @@ print_table_species("Banksia ericifolia", flowering_parts)
 \centering
 \includegraphics[width=0.6\linewidth]{../growth_plots/BAER.pdf}
 \caption{Estimating growth in leaf and stem mass for \emph{Banksia ericifolia}. Colours indicate different site ages, as described in Fig. \ref{fig:height}. Red lines show the 
-estimated growth trajectory for each individual across an entire year.}
+estimated growth trajectory for each individual across an entire year, calculated from eq. \ref{eq:biomass}.}
 \label{fig:growth_Banksia_ericifolia}
 \end{figure}
 
@@ -253,7 +262,7 @@ print_table_species("Boronia ledifolia", flowering_parts)
 \centering
 \includegraphics[width=0.6\linewidth]{../growth_plots/BOLE.pdf}
 \caption{Estimating growth in leaf and stem mass for \emph{Boronia ledifolia}. Colours indicate different site ages, as described in Fig. \ref{fig:height}. Red lines show the 
-estimated growth trajectory for each individual across an entire year.}
+estimated growth trajectory for each individual across an entire year, calculated from eq. \ref{eq:biomass}.}
 \label{fig:growth_Boronia_ledifolia}
 \end{figure}
 
@@ -281,7 +290,7 @@ print_table_species("Conospermum ericifolium", flowering_parts)
 \centering
 \includegraphics[width=0.6\linewidth]{../growth_plots/COER.pdf}
 \caption{Estimating growth in leaf and stem mass for \emph{Conospermum ericifolium}. Colours indicate different site ages, as described in Fig. \ref{fig:height}. Red lines show the 
-estimated growth trajectory for each individual across an entire year.}
+estimated growth trajectory for each individual across an entire year, calculated from eq. \ref{eq:biomass}.}
 \label{fig:growth_Conospermum_ericifolium}
 \end{figure}
 
@@ -310,7 +319,7 @@ print_table_species("Epacris microphylla", flowering_parts)
 \centering
 \includegraphics[width=0.6\linewidth]{../growth_plots/EPMI.pdf}
 \caption{Estimating growth in leaf and stem mass for \emph{Epacris microphylla}. Colours indicate different site ages, as described in Fig. \ref{fig:height}. Red lines show the 
-estimated growth trajectory for each individual across an entire year.}
+estimated growth trajectory for each individual across an entire year, calculated from eq. \ref{eq:biomass}.}
 \label{fig:growth_Epacris_microphylla}
 \end{figure}
 \clearpage
@@ -338,7 +347,7 @@ print_table_species("Grevillea buxifolia", flowering_parts)
 \centering
 \includegraphics[width=0.6\linewidth]{../growth_plots/GRBU.pdf}
 \caption{Estimating growth in leaf and stem mass for \emph{Grevillea buxifolia}. Colours indicate different site ages, as described in Fig. \ref{fig:height}. Red lines show the 
-estimated growth trajectory for each individual across an entire year.}
+estimated growth trajectory for each individual across an entire year, calculated from eq. \ref{eq:biomass}.}
 \label{fig:growth_Grevillea_buxifolia}
 \end{figure}
 
@@ -366,7 +375,7 @@ print_table_species("Grevillea speciosa", flowering_parts)
 \centering
 \includegraphics[width=0.6\linewidth]{../growth_plots/GRSP.pdf}
 \caption{Estimating growth in leaf and stem mass for \emph{Grevillea speciosa}. Colours indicate different site ages, as described in Fig. \ref{fig:height}. Red lines show the 
-estimated growth trajectory for each individual across an entire year.}
+estimated growth trajectory for each individual across an entire year, calculated from eq. \ref{eq:biomass}.}
 \label{fig:growth_Grevillea_speciosa}
 \end{figure}
 \clearpage
@@ -394,7 +403,7 @@ print_table_species("Hakea teretifolia", flowering_parts)
 \centering
 \includegraphics[width=0.6\linewidth]{../growth_plots/HATE.pdf}
 \caption{Estimating growth in leaf and stem mass for \emph{Hakea teretifolia}. Colours indicate different site ages, as described in Fig. \ref{fig:height}. Red lines show the 
-estimated growth trajectory for each individual across an entire year.}
+estimated growth trajectory for each individual across an entire year, calculated from eq. \ref{eq:biomass}.}
 \label{fig:growth_Hakea_teretifolia}
 \end{figure}
 \clearpage
@@ -423,7 +432,7 @@ print_table_species("Hemigenia purpurea", flowering_parts)
 \centering
 \includegraphics[width=0.6\linewidth]{../growth_plots/HEPU.pdf}
 \caption{Estimating growth in leaf and stem mass for \emph{Hemigenia purpurea}. Colours indicate different site ages, as described in Fig. \ref{fig:height}. Red lines show the 
-estimated growth trajectory for each individual across an entire year.}
+estimated growth trajectory for each individual across an entire year, calculated from eq. \ref{eq:biomass}.}
 \label{fig:growth_Hemigenia_purpurea}
 \end{figure}
 \clearpage
@@ -452,7 +461,7 @@ print_table_species("Leucopogon esquamatus", flowering_parts)
 \centering
 \includegraphics[width=0.6\linewidth]{../growth_plots/LEES.pdf}
 \caption{Estimating growth in leaf and stem mass for \emph{Leucopogon esquamatus}. Colours indicate different site ages, as described in Fig. \ref{fig:height}. Red lines show the 
-estimated growth trajectory for each individual across an entire year.}
+estimated growth trajectory for each individual across an entire year, calculated from eq. \ref{eq:biomass}.}
 \label{fig:growth_Leucopogon_esquamatus}
 \end{figure}
 \clearpage
@@ -480,7 +489,7 @@ print_table_species("Persoonia lanceolata", flowering_parts)
 \centering
 \includegraphics[width=0.6\linewidth]{../growth_plots/PELA.pdf}
 \caption{Estimating growth in leaf and stem mass for \emph{Persoonia lanceolata}. Colours indicate different site ages, as described in Fig. \ref{fig:height}. Red lines show the 
-estimated growth trajectory for each individual across an entire year.}
+estimated growth trajectory for each individual across an entire year, calculated from eq. \ref{eq:biomass}.}
 \label{fig:growth_Persoonia_lanceolata}
 \end{figure}
 \clearpage
@@ -508,7 +517,7 @@ print_table_species("Petrophile pulchella", flowering_parts)
 \centering
 \includegraphics[width=0.6\linewidth]{../growth_plots/PEPU.pdf}
 \caption{Estimating growth in leaf and stem mass for \emph{Petrophile pulchella}. Colours indicate different site ages, as described in Fig. \ref{fig:height}. Red lines show the 
-estimated growth trajectory for each individual across an entire year.}
+estimated growth trajectory for each individual across an entire year, calculated from eq. \ref{eq:biomass}.}
 \label{fig:growth_Petrophile_pulchella}
 \end{figure}
 \clearpage
@@ -536,7 +545,7 @@ print_table_species("Phyllota phylicoides", flowering_parts)
 \centering
 \includegraphics[width=0.6\linewidth]{../growth_plots/PHPH.pdf}
 \caption{Estimating growth in leaf and stem mass for \emph{Phyllota phylicoides}. Colours indicate different site ages, as described in Fig. \ref{fig:height}. Red lines show the 
-estimated growth trajectory for each individual across an entire year.}
+estimated growth trajectory for each individual across an entire year, calculated from eq. \ref{eq:biomass}.}
 \label{fig:growth_Phyllota_phylicoides}
 \end{figure}
 \clearpage
@@ -564,7 +573,7 @@ print_table_species("Pimelea linifolia", flowering_parts)
 \centering
 \includegraphics[width=0.6\linewidth]{../growth_plots/PILI.pdf}
 \caption{Estimating growth in leaf and stem mass for \emph{Pimelea linifolia}. Colours indicate different site ages, as described in Fig. \ref{fig:height}. Red lines show the 
-estimated growth trajectory for each individual across an entire year.}
+estimated growth trajectory for each individual across an entire year, calculated from eq. \ref{eq:biomass}.}
 \label{fig:growth_Pimelea_linifolia}
 \end{figure}
 \clearpage
@@ -592,7 +601,7 @@ print_table_species("Pultenaea tuberculata", flowering_parts)
 \centering
 \includegraphics[width=0.6\linewidth]{../growth_plots/PUTU.pdf}
 \caption{Estimating growth in leaf and stem mass for \emph{Pultenaea tuberculata}. Colours indicate different site ages, as described in Fig. \ref{fig:height}. Red lines show the 
-estimated growth trajectory for each individual across an entire year.}
+estimated growth trajectory for each individual across an entire year, calculated from eq. \ref{eq:biomass}.}
 \label{fig:growth_Pultenaea_tuberculata}
 \end{figure}
 \clearpage
