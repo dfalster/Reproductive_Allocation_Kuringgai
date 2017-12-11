@@ -19,7 +19,7 @@
 \newcommand{\email}[1]{\href{mailto:#1}{\texttt{#1}}}
 
 
-\title{Investment in reproduction by 14 iteroparous perennials and its coordination with other life-history and functional traits}
+\title{Investment in reproduction for 14 iteroparous perennials is large and associated with other life-history and functional traits}
 \runninghead{I\lowercase{nvestment in reproduction}}
 
 \author{E. H. Wenk\textsuperscript{1,\textasteriskcentered}, K. Abramowicz\textsuperscript{2}, M. Westoby\textsuperscript{1}, D.S. Falster\textsuperscript{3} }
@@ -91,7 +91,7 @@ flowering_parts$Description <- firstup(flowering_parts$Description)
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.75\linewidth]{figures/leaf_loss.pdf}
-\caption{Relationship between a species leaf mass per area and it's rate of annual leaf turnover.}
+\caption{Relationship between a species' leaf mass per area and annual rate of leaf turnover.}
 \label{fig:leaf_loss}
 \end{figure}
 \clearpage
@@ -125,7 +125,8 @@ print(xtable(data,
     , tabular.environment = 'longtable'
     , floating = FALSE)
 
-data <-  read.csv("../../data/sites.csv", stringsAsFactors=FALSE, check.names=FALSE)
+data <-  read.csv("../../data/sites.csv", stringsAsFactors=FALSE, check.names=FALSE) %>% 
+  filter(site != "Bobbin2010")
 data <- data[order(data$age_at_harvest),]
 names(data) <-  clean_headers(names(data))
 
@@ -166,15 +167,15 @@ The count of each reproductive tissue type was determined for each individual at
 
 \subsubsection{How parts weights are determined}
 
-For all plant parts, a sample of the representative part was collected from other individuals growing nearby the sample population. We then estimated an average mass of that tissue part for each species. For plant parts that vary considerably in size, such as cones, the mass of parts of different sizes were measured and a regression of mass per length or mass per volume was established. For some individuals, actual reproductive parts were collected. This includes any reproductive parts of the plants at the time of harvest, including both current reproductive tissues and previously mature woody fruits still attached to the branches. In addition, some seeds were collected once mature, but before they were dispersed. Whenever actual reproductive parts were collected from an individual, the unit mass of these structures was used instead of the population mean.
+For all plant parts, a sample of the representative part was collected from other individuals growing nearby the sample population. We then estimated an average mass of that tissue part for each species. For plant parts that vary considerably in size, such as cones, the mass of parts of different sizes were measured and a regression of mass per length or mass per volume was established. For some individuals, actual reproductive parts were collected. This includes any reproductive parts of the plants at the time of harvest. In addition, some seeds were collected once mature, but before they were dispersed. Whenever actual reproductive parts were collected from an individual, the unit mass of these structures was used instead of the population mean.
 
 \subsubsection{How investment in each part is estimated}
 
-Our goal was to estimate the amount of mass each plant invests in different tissues within a given time period from field census data recording the numbers of each part type at successive census dates for a given plant. To achieve this we apply an accounting algorithm to estimate the number of units that have progressed from one category to another in the interval between censuses. The algorithm works as follows:
+Our goal was to estimate the amount of mass each plant invests in different tissues within each census period from field data recording the numbers of each part type at successive census dates for a given plant. To achieve this we apply an accounting algorithm to estimate the number of units that have progressed from one category to another in the interval between censuses. The algorithm works as follows:
 
 \begin{itemize}
 \item At each census, we compare the number of each part with possible numbers of predecessors from the prior census. Predecessors are those parts that lie at the same or younger age in the plant maps.
-\item For a each part in turn, we try to identify the most obvious predecessor, being the one with minimal amount of progression needed to satisfy successive censuses. The predecessor is removed from the list of possible predecessors and the process is repeated until all parts have predecessors.
+\item For a each part in turn, we try to identify the most obvious predecessor, as the one with minimal amount of progression needed to satisfy successive censuses. The predecessor is removed from the list of possible predecessors and the process is repeated until all parts have predecessors.
 \item After finding a predecessor, the investment needed to progress  is calculated. The investment is defined as the difference between the element mass at the time of census and that of it's predecessor.
 \end{itemize}
 

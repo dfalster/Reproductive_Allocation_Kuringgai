@@ -48,11 +48,12 @@ figure_site_map <- function(file) {
   basemap <- get_map('Kuringai National Park', zoom = 12, maptype = "hybrid")
 
   # Load site data 
-  data <-  read.csv(file, stringsAsFactors=FALSE, check.names=FALSE)
+  data <-  read.csv(file, stringsAsFactors=FALSE, check.names=FALSE) %>% 
+    filter(site != "Bobbin2010")
 
   ## Add nudges to data
-  nudge_x <- c(-0.002, 0.03, -0.002, -0.002, 0.035, 0.035, -0.002)
-  nudge_y <- c(0.002, 0, -0.002, 0.001, -0.003, 0, 0.003)
+  nudge_x <- c(-0.002, 0.03, -0.002, -0.002, 0.035, -0.002)
+  nudge_y <- c(0.002, 0, -0.002, 0.001, -0.003, 0.003)
 
 
   ggmap(basemap) + 

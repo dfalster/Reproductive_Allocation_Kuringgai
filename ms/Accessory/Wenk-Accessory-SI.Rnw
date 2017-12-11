@@ -340,7 +340,9 @@ print(xtable(data,
     , tabular.environment = 'longtable'
     , floating = FALSE)
 
-data <-  read.csv("../../data/sites.csv", stringsAsFactors=FALSE, check.names=FALSE)
+data <-  read.csv("../../data/sites.csv", stringsAsFactors=FALSE, check.names=FALSE) %>% 
+  filter(site != "Bobbin2010")
+
 data <- data[order(data$age_at_harvest),]
 names(data) <-  clean_headers(names(data))
 
@@ -377,11 +379,12 @@ The count of each reproductive tissue type was determined for each individual at
 
 \subsubsection{How parts weights are determined}
 
-For all plant parts, a sample of the representative part was collected from other individuals growing nearby the sample population. We then estimated an average mass of that tissue part for each species. For plant parts that vary considerably in size, such as cones, the mass of parts of different sizes were measured and a regression of mass per length or mass per volume was established. For some individuals, actual reproductive parts were collected. This includes any reproductive parts of the plants at the time of harvest, including both current reproductive tissues and previously mature woody fruits still attached to the branches. In addition, some seeds were collected once mature, but before they were dispersed. Whenever actual reproductive parts were collected from an individual, the unit mass of these structures was used instead of the population mean.
+For all plant parts, a sample of the representative part was collected from other individuals growing nearby the sample population. We then estimated an average mass of that tissue part for each species. For plant parts that vary considerably in size, such as cones, the mass of parts of different sizes were measured and a regression of mass per length or mass per volume was established. For some individuals, actual reproductive parts were collected. This includes any reproductive parts of the plants at the time of harvest. In addition, some seeds were collected once mature, but before they were dispersed. Whenever actual reproductive parts were collected from an individual, the unit mass of these structures was used instead of the population mean.
 
 \subsubsection{How investment in each part is estimated}
 
-Our goal was to estimate the amount of mass each plant invests in different tissues within a given time period from field census data recording the numbers of each part type at successive census dates for a given plant. To achieve this we apply an accounting algorithm to estimate the number of units that have progressed from one category to another in the interval between censuses. The algorithm works as follows:
+
+Our goal was to estimate the amount of mass each plant invests in different tissues within each census period from field data recording the numbers of each part type at successive census dates for a given plant. To achieve this we apply an accounting algorithm to estimate the number of units that have progressed from one category to another in the interval between censuses. The algorithm works as follows:
 
 \begin{itemize}
 \item At each census, we compare the number of each part with possible numbers of predecessors from the prior census. Predecessors are those parts that lie at the same or younger age in the plant maps.
