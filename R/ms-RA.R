@@ -52,36 +52,36 @@ figure_allocation_demo_single <- function(SummarySppAge) {
     plot(NA,log="x",ylim=c(0,1),xlim=c(1.06*1.4,0.94*32),ylab="",yaxt="n",xaxs="i", yaxs="i")
     axis(2, at= c(0, 0.2, 0.4, 0.6, 0.8, 1.0), labels = labels, las=1)
     text(1, 1.1, lab, cex=1.3, xpd=NA)
-    polygon2(c(1.4,32,32,1.4), c(1,1,0, 0), col="grey")
+    polygon2(c(1.4,32,32,1.4), c(1,1,0, 0), col="#CFD1C0")
   }
 
   myplot("(a)", TRUE)
-  polygon2(x, y0,col="saddlebrown")
-  polygon2(x, ypoly(data[[spp]]$replace_leaf_prop_no_accessory),col="darkseagreen4")
+  polygon2(x, y0,col="#A37B45")
+  polygon2(x, ypoly(data[[spp]]$replace_leaf_prop_no_accessory),col="#507642")
   polygon2(x, ypoly(data[[spp]]$growth_leaf_prop_no_accessory),
-          col="darkseagreen2")
+          col="#86942A")
   polygon2(x, ypoly(data[[spp]]$seed_prop_all),col="coral1")
 
   myplot("(b)")
-  polygon2(x, y0,col="saddlebrown")
-  polygon2(x, ypoly(data[[spp]]$prop_leaf_replacement),col="darkseagreen4")
-  polygon2(x, ypoly(data[[spp]]$prop_leaf_expand),col="darkseagreen2")
-  polygon2(x, ypoly(data[[spp]]$prop_repro),col="coral3")
+  polygon2(x, y0,col="#A37B45")
+  polygon2(x, ypoly(data[[spp]]$prop_leaf_replacement),col="#507642")
+  polygon2(x, ypoly(data[[spp]]$prop_leaf_expand),col="#86942A")
+  polygon2(x, ypoly(data[[spp]]$prop_repro),col="coral4")
   polygon2(x, ypoly(data[[spp]]$seed_prop_all_acc),col="coral1")
 
   myplot("(c)")
-  polygon2(x, y0,col="darkseagreen4")
-  polygon2(x, ypoly(data[[spp]]$repro_and_leaf_growth_prop_surplus),col="darkseagreen2")
-  polygon2(x, ypoly(data[[spp]]$repro_prop_all_leaf),col="coral3")
+  polygon2(x, y0,col="#507642")
+  polygon2(x, ypoly(data[[spp]]$repro_and_leaf_growth_prop_surplus),col="#86942A")
+  polygon2(x, ypoly(data[[spp]]$repro_prop_all_leaf),col="coral4")
   polygon2(x, ypoly(data[[spp]]$seed_prop_veg),col="coral1")
 
   myplot("(d)")
-  polygon2(x, y0,col="darkseagreen2")
-  polygon2(x, ypoly(data[[spp]]$RA_max_1),col="coral3")
+  polygon2(x, y0,col="#86942A")
+  polygon2(x, ypoly(data[[spp]]$RA_max_1),col="coral4")
   polygon2(x, ypoly(data[[spp]]$seed_prop_surplus),col="coral1")
 
   legend(40, 0.8, c("Stem growth", "Leaf replacement", "Leaf expansion", "Reproductive - accessories", "Reproductive - seed"),
-    bty="n", pch=16, col=c("saddlebrown", "darkseagreen4", "darkseagreen2","coral3", "coral1"), xpd= NA)
+    bty="n", pch=16, col=c("#A37B45", "#507642", "#86942A","coral4", "coral1"), xpd= NA)
 
   mtext("Age (yr)",side=1,outer=TRUE,line=1.5, cex=1.25)
   mtext("Fraction of mass allocated",side=2,outer=TRUE,line=2, cex=1.25)
@@ -111,35 +111,35 @@ figure_allocation_demo_all <- function(SummarySppAge) {
       plot(NA,log="x",ylim=c(0,1),xlim=c(1.06*1.4,0.94*32),ylab="",yaxt="n", xaxt="n",xaxs="i", yaxs="i")
       axis(1, at= c(2,5, 10, 20), labels = labelsx, las=1)
       axis(2, at= c(0, 0.2, 0.4, 0.6, 0.8, 1.0), labels = labelsy, las=1)
-      polygon2(c(1.4,32,32,1.4), c(1,1,0, 0), col="grey90")
+      polygon2(c(1.4,32,32,1.4), c(1,1,0, 0), col="#CFD1C0")
       box()
     }
 
     i <- (spp %in% species_order()[14])
     myplot(i, TRUE)
-    polygon2(x, y0, col="saddlebrown")
-    polygon2(x, ypoly(data[[spp]]$replace_leaf_prop_no_accessory, n),col="darkseagreen4")
+    polygon2(x, y0, col="#A37B45")
+    polygon2(x, ypoly(data[[spp]]$replace_leaf_prop_no_accessory, n),col="#507642")
     polygon2(x, ypoly(data[[spp]]$growth_leaf_prop_no_accessory, n),
-            col="darkseagreen2")
+            col="#86942A")
     polygon2(x, ypoly(data[[spp]]$seed_prop_all, n),col="coral1")
     mtext(labels.spp.full(spp), 2, line=4, font=3)
 
     myplot(i)
-    polygon2(x, y0, col="saddlebrown")
-    polygon2(x, ypoly(data[[spp]]$prop_leaf_replacement, n),col="darkseagreen4")
-    polygon2(x, ypoly(data[[spp]]$prop_leaf_expand, n),col="darkseagreen2")
-    polygon2(x, ypoly(data[[spp]]$prop_repro, n),col="coral3")
+    polygon2(x, y0, col="#A37B45")
+    polygon2(x, ypoly(data[[spp]]$prop_leaf_replacement, n),col="#507642")
+    polygon2(x, ypoly(data[[spp]]$prop_leaf_expand, n),col="#86942A")
+    polygon2(x, ypoly(data[[spp]]$prop_repro, n),col="coral4")
     polygon2(x, ypoly(data[[spp]]$seed_prop_all_acc, n),col="coral1")
 
     myplot(i)
-    polygon2(x, y0, col="darkseagreen4")
-    polygon2(x, ypoly(data[[spp]]$repro_and_leaf_growth_prop_surplus, n),col="darkseagreen2")
-    polygon2(x, ypoly(data[[spp]]$repro_prop_all_leaf, n),col="coral3")
+    polygon2(x, y0, col="#507642")
+    polygon2(x, ypoly(data[[spp]]$repro_and_leaf_growth_prop_surplus, n),col="#86942A")
+    polygon2(x, ypoly(data[[spp]]$repro_prop_all_leaf, n),col="coral4")
     polygon2(x, ypoly(data[[spp]]$seed_prop_veg, n),col="coral1")
 
     myplot(i)
-    polygon2(x, y0, col="darkseagreen2")
-    polygon2(x, ypoly(data[[spp]]$RA_max_1, n),col="coral3")
+    polygon2(x, y0, col="#86942A")
+    polygon2(x, ypoly(data[[spp]]$RA_max_1, n),col="coral4")
     polygon2(x, ypoly(data[[spp]]$seed_prop_surplus, n),col="coral1")
   }
 
@@ -236,7 +236,7 @@ figure_allocation_all_h <- function(SummaryInd) {
   mtext("Reproductive allocation",side=2,outer=TRUE,line=2, cex=1.5)
 
   # legend(40, 0.8, c("Individual observation", "Leaf expansion", "Reproductive tissues"), bty="n",
-  #   pch=16, col=c("black", "darkseagreen2","coral3"), xpd= NA, cex=1.25)
+  #   pch=16, col=c("black", "#86942A","coral4"), xpd= NA, cex=1.25)
 }
 
 figure_life_history <- function(SummarySpp, SummarySppAge, fits){
@@ -328,7 +328,7 @@ figure_investment_weight <- function(SummaryInd) {
 
   data <- split(data, data$species)
 
-  cols <- c("darkseagreen4", "darkseagreen2", "coral3")
+  cols <- c("#507642", "#86942A", "coral4")
   vars <- c("leaf_replacement", "growth_leaf", "repro_inv")
   labs <- c("Leaf replacement", "Leaf expansion", "Reproductive tissues")
 
@@ -343,7 +343,7 @@ figure_investment_weight <- function(SummaryInd) {
 
     plot(NA,type="n",log="xy",xlab="",ylab="", xaxs="i",yaxs="i", axes=FALSE,
       ylim=c(y_min,y_max),xlim=c(x_min,x_max))
-    polygon(x=c(x_min,x_min,x_max,x_max),y=c(y_min*10,y_min,y_min,y_min*10),col="grey90")
+    polygon(x=c(x_min,x_min,x_max,x_max),y=c(y_min*10,y_min,y_min,y_min*10),col="#CFD1C0")
 
     x <- data[[spp]][["height"]]
 
@@ -519,7 +519,7 @@ plotRASexamples <- function(){
     box()
   }
 
-  col <- venetian_red
+  col <- "coral3"
   x<-seq(0,1, by=0.001)
 
   for(i in 1:3) {
