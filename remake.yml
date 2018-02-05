@@ -36,6 +36,7 @@ targets:
     - ms/RA/figures/leaf_weight.pdf
     - ms/RA/figures/life_history.pdf
     - ms/RA/Wenk-RA-SI.pdf
+    - ms/RA/figures/abstract.pdf
 
   ms/RA/figures/schematic.pdf:
     command: plotRASexamples()
@@ -81,6 +82,12 @@ targets:
     plot:
       width: 16
       height: 9
+
+  ms/RA/figures/abstract.pdf:
+    command: figure_graphical_abstract(SummarySppAge)
+    plot:
+      width: 8
+      height: 4
 
   ms/RA/Wenk-RA-SI.pdf:
     command: latex_build("ms/RA/Wenk-RA-SI.tex", clean=TRUE)

@@ -87,6 +87,56 @@ figure_allocation_demo_single <- function(SummarySppAge) {
   mtext("Fraction of mass allocated",side=2,outer=TRUE,line=2, cex=1.25)
 }
 
+
+figure_graphical_abstract <- function(SummarySppAge) {
+
+  par(mfcol=c(1,2), cex=1, omi=c(0.6,0.75,.1,1.4), mai=c(0.2,.5,.1,0.02))
+
+  data <- SummarySppAge[["mean"]]
+
+  for(v in c("growth_leaf")) {
+    i <- (data[[v]] < 0)
+    data[[v]][i] <- 0
+  }
+
+  data <- split(data, data$species)
+
+  spp <- "EPMI"
+
+  x <- c(1.4,2.4,5,7,9,32,32,1.4)
+  y0 <- c(rep(1,6), 0, 0)
+
+  myplot <- function(labels=FALSE){
+    plot(NA,log="x",ylim=c(0,1),xlim=c(1.06*1.4,0.94*32),ylab="",yaxt="n",xaxs="i", yaxs="i")
+    axis(2, at= c(0, 0.2, 0.4, 0.6, 0.8, 1.0), labels = labels, las=1)
+    polygon2(c(1.4,32,32,1.4), c(1,1,0, 0), col="grey")
+  }
+
+  myplot()
+  polygon2(x, y0,col="darkseagreen4")
+  polygon2(x, ypoly(data[[spp]]$repro_and_leaf_growth_prop_surplus),col="darkseagreen2")
+  polygon2(x, ypoly(data[[spp]]$repro_prop_all_leaf),col="coral3")
+  polygon2(x, ypoly(data[[spp]]$seed_prop_veg),col="coral1")
+  axis(2, at= c(0, 0.2, 0.4, 0.6, 0.8, 1.0), labels = TRUE, las=1)
+
+  myplot()
+  polygon2(x, y0,col="darkseagreen2")
+  polygon2(x, ypoly(data[[spp]]$RA_max_1),col="coral3")
+  polygon2(x, ypoly(data[[spp]]$seed_prop_surplus),col="coral1")
+
+  legend(25, 0.875, "Leaf:", bty="n", pch=NA, xpd=NA, xjust = 0)
+  legend(35, 0.8, bty="n", xpd=NA, xjust = 0, pch =16,
+         c("replacement", "expansion"), col=c("darkseagreen4", "darkseagreen2"))
+
+
+  legend(25, 0.575, "Reproductive:", bty="n", pch=NA, xpd=NA)
+  legend(35, 0.5, c("seed", "other"), bty="n", pch=16, col=c("coral1","coral3"), xpd= NA)
+
+  mtext("Age (yr)",side=1,outer=TRUE,line=1.5, cex=1.25)
+  mtext("Fraction of mass allocated",side=2,outer=TRUE,line=1.5, cex=1.25)
+}
+
+
 figure_allocation_demo_all <- function(SummarySppAge) {
 
   par(mfrow=c(14,4), cex=1, omi=c(1,1.5,.1,0.1), mai=c(0.2,.45,.3,0.02))
