@@ -157,7 +157,7 @@ print(xtable(data,
 
 For each species, we established a list of different reproductive tissue parts and mapped how these parts developed through time. In all species, reproductive tissue development initiates with a bud or inflorescence bud, which increases in size and is divided into multiple tissue types several times during development. For instance, a bud, once open, divides into being petals + stamens, a sepal, and a stigma. As a pollinated stigma develops into a fruit, it will be further divided into seed, seed pod, and potentially additional parts. The central development axis terminates with the formation of a mature seed, while side axes end in fully developed tissues (such as petals, calyx, pedicel) and aborted tissues (aborted seeds, aborted fruit) at the point where they cease to increase in mass.
 
-While all species developed reproductive tissues from buds to seeds, species showed different developmental pathways due to the precise reproductive tissues used. We therefore created a developmental flowchart for each species, as shown below in following sections in Figs. \ref{fig:map_Banksia_ericifolia}-\ref{fig:map_Pultenaea_tuberculata}). Tables \ref{tab:parts_Banksia_ericifolia}-Table \ref{tab:parts_Pultenaea_tuberculata} then provide, for each species, a list of plant parts, a description of exactly what tissues are included in each plant part and at what developmental stage, the method whereby the count and mass of the plant parts is measured, and the number of ovules in each unit of plant part.
+While all species developed reproductive tissues from buds to seeds, species showed different developmental pathways due to the precise reproductive tissues used. We therefore created a developmental flowchart for each species, as shown below in Figs. \ref{fig:map_Banksia_ericifolia}-\ref{fig:map_Pultenaea_tuberculata}). Tables \ref{tab:parts_Banksia_ericifolia}-Table \ref{tab:parts_Pultenaea_tuberculata} then provide, for each species, a list of plant parts, a description of exactly what tissues are included in each plant part and at what developmental stage, the method whereby the count and mass of the plant parts is measured, and the number of ovules in each unit of plant part.
 
 
 \subsubsection{How the census is completed for each part}
@@ -175,11 +175,11 @@ Our goal was to estimate the amount of mass each plant invests in different tiss
 
 \begin{itemize}
 \item At each census, we compare the number of each part with possible numbers of predecessors from the prior census. Predecessors are those parts that lie at the same or younger age in the plant maps.
-\item For a each part in turn, we try to identify the most obvious predecessor, as the one with minimal amount of progression needed to satisfy successive censuses. The predecessor is removed from the list of possible predecessors and the process is repeated until all parts have predecessors.
-\item After finding a predecessor, the investment needed to progress  is calculated. The investment is defined as the difference between the element mass at the time of census and that of it's predecessor.
+\item For each part in turn, we try to identify the most obvious predecessor, as the one with minimal amount of progression needed between successive censuses. The predecessor is removed from the list of possible predecessors and the process is repeated until all parts have predecessors.
+\item After finding a predecessor, the investment needed to progress  is calculated. The investment is defined as the difference between the element mass at the time of census and that of its predecessor.
 \end{itemize}
 
-As an example, if, in census $t$, a large bud exists, it is assumed that it has developed from a medium sized bud (the previous stage) in census $t$-1. If in census $t$-1 no medium buds exists, the large bud is assumed to have developed from a small bud (two stages back). This process continues back along the plant map developmental trajectory until a plausible predecessor is located in the previous census period. After this process is complete, any parts from census $t$-1 for which a subsequent developmental stage is not identified as designated as having reached their final developmental stage at census $t$-1 (i.e. they aborted). For plant parts, such as petals, that is a final development stage, no success is sought.
+As an example, if, in census $t$, a large bud exists, it is assumed that it has developed from a medium sized bud (the previous stage) in census $t$-1. If in census $t$-1 no medium buds exists, the large bud is assumed to have developed from a small bud (two stages back). This process continues back along the plant map developmental trajectory until a plausible predecessor is located in the previous census period. After this process is complete, any parts from census $t$-1 for which a subsequent developmental stage is not identified are designated as having reached their final developmental stage at census $t$-1 (i.e. they aborted). For plant parts, such as petals, that is a final development stage, no success is sought.
 
 \subsubsection{Estimating leaf and stem growth}
 
@@ -191,14 +191,14 @@ where $y_i(t)$ is true biomass of individual $i$ at time $t$ and $\hat{y}(t)$ is
 
 A similar technique was used estimate stem growth, but using stem diameter instead of age as the predictor and using a linear regression instead of a GAM. 
 
-Plots of the fitted relationships for both leaf mass and stem mass for each species are included below (Figs. \ref{fig:growth_Banksia_ericifolia}, \ref{fig:growth_Pultenaea_tuberculata}).
+Plots of the fitted relationships for both leaf mass and stem mass for each species are included below (Figs. \ref{fig:growth_Banksia_ericifolia}- \ref{fig:growth_Pultenaea_tuberculata}).
 
 
 \clearpage
 
 \subsection{Details on calculations by species}
 
-The algorithm for estimating reproductive investment is adjusted for each species according to the specific developmental pathway it uses to produce seeds. Below, for each species we provide a graphic illustration of the pathway used (Figs. \ref{fig:map_Banksia_ericifolia}-\ref{fig:map_Pultenaea_tuberculata}), and tables detailing specific about each part (Tables \ref{tab:parts_Banksia_ericifolia}-\ref{tab:parts_Pultenaea_tuberculata}).  Figure \ref{fig:map_key} provides a key on the colouring in Figs. \ref{fig:map_Banksia_ericifolia}-\ref{fig:map_Pultenaea_tuberculata}). 
+The algorithm for estimating reproductive investment is adjusted for each species according to the specific developmental pathway it uses to produce seeds. Below, for each species we provide a graphic illustration of the pathway used (Figs. \ref{fig:map_Banksia_ericifolia}-\ref{fig:map_Pultenaea_tuberculata}), and tables detailing specifics about each part (Tables \ref{tab:parts_Banksia_ericifolia}-\ref{tab:parts_Pultenaea_tuberculata}).  Figure \ref{fig:map_key} provides a key on the colouring in Figs. \ref{fig:map_Banksia_ericifolia}-\ref{fig:map_Pultenaea_tuberculata}). 
 
 Each plant map begins with a bud (or the appropriate starting point for reproductive tissue development for a specific species) and depicts graphically how the tissue develops through the plant's reproductive cycle to a seed or mature fruit. During the reproductive cycle, there will be branches off the central tissue axis (development from bud to seed). Some of these lead to aborted tissue types (colored red in the graph maps below) and others lead to tissues that reach their final development stage and are then shed by a plant (e.g. petals, calyx, seed pod; colored green in the graph maps below). For some species, there are multiple axes of development. For instance, cones and flowers on a cone have separate axes, because the number of flowers on a cone is inconsistent across individuals. A few species have aborted plant parts that are listed as a separate axis. In these cases, the aborted unit weighs less than a bud and therefore cannot be shown as ever having reached the stage of a bud.
 
@@ -661,7 +661,7 @@ This file \texttt{individuals.csv} contains a list of all plants harvested at th
 @
 
 \subsubsection{Multiplier Table}
-The file \texttt{MultiplierTable.csv} is a lookup table indicating, for each species by flower part combination, if the investment per part is for a single (1) or multiple propagules, defined as either a mature fruit or a seed, depending on what is the dispersal unit for each species. Within a single column, i.e. within a single species developmental trajectory, numbers will change if the "count" used to access reproduction changes at a given developmental stage. For instance, with BOLE (\emph{Boronia ledifolia}), counts are made by flowers up through the finished flower stage, but then fruits are the unit counted for not all 4 fruits develop within each flower. This is the information presented in Tables \ref{tab:parts_Banksia_ericifolia}-Table \ref{tab:parts_Pultenaea_tuberculata}, above.
+The file \texttt{MultiplierTable.csv} is a lookup table indicating, for each species by flower part combination, if the investment per part is for a single (1) or multiple propagules, defined as either a mature fruit or a seed, depending on what is the dispersal unit for each species. Within a single column, i.e. within a single species developmental trajectory, numbers will change if the reproductive part being "counted" during censuses changes between developmental stages. For instance, with BOLE (\emph{Boronia ledifolia}), counts are made by flowers up through the finished flower stage, but then fruits are the unit counted for not all 4 fruits develop within each flower. This is the information presented in Tables \ref{tab:parts_Banksia_ericifolia}-Table \ref{tab:parts_Pultenaea_tuberculata}, above.
 
 \subsubsection{Reproduction}
 
