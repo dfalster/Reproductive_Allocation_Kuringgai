@@ -191,9 +191,6 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
       prop_leaf_expand = divide_zero(surplus_inv, gross_inv),
       prop_leaf_replacement = divide_zero(all_leaf_and_repro_inv, gross_inv),
       prop_surplus = divide_zero(surplus_inv, all_leaf_and_repro_inv),
-      RA_vs_all_leaf = divide_zero(repro_inv, all_leaf_and_repro_inv),
-      RA_seed = divide_zero(embryo_endo_inv, gross_inv),
-      prop_stem = 1,
       repro_prop_all_leaf = divide_zero(repro_inv,all_leaf_and_repro_inv), 
       repro_and_leaf_growth_prop_surplus = divide_zero((growth_leaf_pos+repro_inv),all_leaf_and_repro_inv), 
       seed_prop_veg = divide_zero(embryo_endo_inv, (growth_leaf_pos + leaf_replacement + growth_stem + repro_inv)),
@@ -202,9 +199,6 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
       seed_prop_all = divide_zero(embryo_endo_inv,(growth_leaf_pos + leaf_replacement + growth_stem + embryo_endo_inv)),
       growth_leaf_prop_no_accessory = divide_zero((embryo_endo_inv+growth_leaf_pos),(growth_leaf_pos + leaf_replacement + growth_stem + embryo_endo_inv)),
       replace_leaf_prop_no_accessory = divide_zero((embryo_endo_inv+growth_leaf_pos+leaf_replacement),(growth_leaf_pos + leaf_replacement + growth_stem + embryo_endo_inv)),
-      prop_leaf_loss_relative = 1+(divide_zero(growth_leaf_neg,(growth_leaf_pos + repro_inv))),
-      prop_leaf_replacement_vs_all_leaf = divide_zero(leaf_replacement, all_leaf_inv),
-      surplus_vs_plant_size = divide_zero(surplus_inv,total_weight_0)
     )
   
   # Where these ratios are infinite we are setting them to zero. It represents
@@ -284,9 +278,9 @@ get_species_values <- function(SummaryInd, groups) {
                                               "PUTU_108"))) %>% group_by_(.dots = dots) %>% 
       summarise_each(f,prop_leaf_loss,leaf_shed,leaf_replacement,
                      repro_prop_all_leaf, repro_and_leaf_growth_prop_surplus,prop_leaf_expand, prop_leaf_replacement,
-                     gross_inv,prop_repro,prop_surplus, all_leaf_inv,all_leaf_and_repro_inv,prop_stem,surplus_inv,seed_prop_all_acc,
+                     gross_inv,prop_repro,prop_surplus, all_leaf_inv,all_leaf_and_repro_inv,surplus_inv,seed_prop_all_acc,
                      growth_leaf_prop_no_accessory,replace_leaf_prop_no_accessory,seed_prop_veg,seed_prop_all,seed_prop_surplus,
-                     prop_leaf_loss,RA_vs_all_leaf,surplus_vs_plant_size)
+                     prop_leaf_loss)
   })
   names(out[[2]]) <- fs
   
@@ -308,11 +302,11 @@ get_species_values <- function(SummaryInd, groups) {
                      postpollen_aborted_inv, propagule_inv, embryo_endo_inv, discarded_costs,
                      scaled_reach_flowering_count, choosiness2, accessory_inv, prop_pack_disp_vs_success,
                      prepollen_discarded_costs, prepollen_all_costs, accessory_costs,
-                     prop_embryo_endo_vs_success, RA_seed, postpollen_aborted_costs,
+                     prop_embryo_endo_vs_success, postpollen_aborted_costs,
                      propagule_costs, repro_costs, prop_postpollen_success, discarded_inv,
                      prop_propagule_vs_all_repro, prop_postpollen_all_vs_all_repro,
                      scaled_ovule_count, prop_pollen_attract_vs_success,
-                     prepollen_inv_aborted_preflowering, prepollen_all_inv, prop_prepollen_success,
+                     prepollen_all_inv, prop_prepollen_success,
                      prop_prepollen_discarded_vs_all_repro, prop_postpollen_discarded_vs_all_repro,
                      prop_pollen_attract_vs_all_repro, prop_pack_disp_vs_all_repro,
                      prop_embryo_endo_vs_all_repro, provisioning_costs, embryo_endo_costs,
