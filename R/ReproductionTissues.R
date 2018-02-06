@@ -44,7 +44,7 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
         aborted_ovule_count = ovule_count - seed_count,
         seedset = divide_zero(seed_count, ovule_count),
         choosiness = divide_zero(ovule_count, seed_count),
-        choosiness2 = divide_zero(prepollen_count_reach_flowering, seed_count),
+        #choosiness2 = divide_zero(prepollen_count_reach_flowering, seed_count),
         zygote_set = divide_zero(seed_count, postpollen_count),
         pollen_set = divide_zero(postpollen_count, prepollen_count_reach_flowering))
 

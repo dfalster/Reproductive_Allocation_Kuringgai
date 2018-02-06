@@ -9,4 +9,3 @@ propagule_weight,total propagule weight; recorded for species where the propagul
 pod_weight,pod weight; recorded for species where the seed is released from the seed pod for dispersal,mg
 lifespan,approximate lifespan in the absense of fire,years
 maturity,age at which the species is first widely flowering ,years
-asymptotic_RA,approximate age at which RA asymptotes,years
