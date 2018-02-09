@@ -203,7 +203,7 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
   
   # Where these ratios are infinite we are setting them to zero. It represents
   # cases where no successful seeds were produced
-  for (v in c("choosiness", "choosiness2", "discarded_costs", "repro_costs",
+  for (v in c("choosiness", "discarded_costs", "repro_costs",
               "accessory_costs", "accessory_costs_using_seedweight", "prepollen_all_costs",
               "prepollen_discarded_costs", "postpollen_aborted_costs", "postpollen_all_costs",
               "prop_pollen_attract_vs_success", "prop_provisioning_vs_success", "prop_pack_disp_vs_success")) {
@@ -300,13 +300,14 @@ get_species_values <- function(SummaryInd, groups) {
                      success_costs, scaled_seed_count, prop_provisioning_vs_success,
                      fruit_costs, prop_discarded_vs_all_repro, zygote_set,
                      postpollen_aborted_inv, propagule_inv, embryo_endo_inv, discarded_costs,
-                     scaled_reach_flowering_count, choosiness2, accessory_inv, prop_pack_disp_vs_success,
+                     scaled_reach_flowering_count, accessory_inv, prop_pack_disp_vs_success,
                      prepollen_discarded_costs, prepollen_all_costs, accessory_costs,
                      prop_embryo_endo_vs_success, postpollen_aborted_costs,
                      propagule_costs, repro_costs, prop_postpollen_success, discarded_inv,
                      prop_propagule_vs_all_repro, prop_postpollen_all_vs_all_repro,
                      scaled_ovule_count, prop_pollen_attract_vs_success,
-                     prepollen_all_inv, prop_prepollen_success,
+                     pollen_attract_costs, prepollen_costs_from_pack_disp_tissues, prepollen_costs_from_seed_tissues,
+                     prepollen_inv_aborted_preflowering, prepollen_all_inv, prop_prepollen_success,
                      prop_prepollen_discarded_vs_all_repro, prop_postpollen_discarded_vs_all_repro,
                      prop_pollen_attract_vs_all_repro, prop_pack_disp_vs_all_repro,
                      prop_embryo_endo_vs_all_repro, provisioning_costs, embryo_endo_costs,
