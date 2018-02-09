@@ -226,15 +226,6 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
     SummaryInd[[v]][i] <- 0
   }
   
-  years_reproducing <- function(RA, age) {
-    ret <- age - min(age[RA > 0])
-    ret[ret < 0] <- 0
-    ret
-  }
-  
-  SummaryInd <- SummaryInd %>% group_by(species) %>% mutate(years_repro = years_reproducing(RA,
-                                                                                            age)) %>% ungroup()
-  
   SummaryInd
   
 }

@@ -135,7 +135,6 @@ growth_calculations <- function(thisSpecies, HarvestData, IndividualsList) {
             stem_weight_est = predict_start_Y(fit.s, stem.end, diameter, diameter.end),
             growth_stem = c(NA, diff(stem_weight_est)),
             growth_leaf = c(NA, diff(leaf_weight_est)),
-            growth_inv = growth_stem - growth_leaf,
             growth_height = c(NA, diff(height)),
             growth_stem_diameter = c(NA, diff(diameter)),
             growth_stem_area = c(NA, diff(stem_area)))
@@ -187,6 +186,6 @@ growth_calculations <- function(thisSpecies, HarvestData, IndividualsList) {
     filter(start_end == "end") %>%
     select(species, start_end, site, individual,
         age, height, diameter, stem_area, leaf_weight, stem_weight, total_weight,
-        growth_inv, growth_stem, growth_leaf, growth_height, growth_stem_diameter,
+        growth_stem, growth_leaf, growth_height, growth_stem_diameter,
         growth_stem_area)
 }

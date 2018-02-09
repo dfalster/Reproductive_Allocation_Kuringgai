@@ -277,7 +277,7 @@ targets:
 
   variable_list:
     command:
-      - read_csv("data/variable_names.csv")
+      - read_csv("data/variable_metadata.csv")
 
   SummaryInd_1:
     command:
