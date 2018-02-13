@@ -35,6 +35,10 @@ figure_accessory_v_seed_size <- function(SummarySpp) {
   y.pred <- function(out, x) {
     predict(out, list(embryo_endo_costs = x),type="response")
   }
+  
+  y.pred2 <- function(out, x) {
+    predict(out, list(prop_prepollen_success = x),type="response")
+  }
 
   legend_text <- function(out) {
     sprintf("R2 = %s, p %s", format_r2(R2_glm(out)), format_p2(coef(summary(out))[,4][2]))
@@ -52,8 +56,8 @@ figure_accessory_v_seed_size <- function(SummarySpp) {
   mtext("Proportion success investment to pollen-attraction", 1, line = 3)
   mtext("Ratio of seeds:ovules", 2, line = 3)
   
-  out <- glm((seedset) ~ (prop_prepollen_success), data = data)
-  lines(x.pred, y.pred(out, x.pred), col = venetian_red)
+  out <- glm(seedset ~ prop_prepollen_success, data = data)
+  lines(x.pred, y.pred2(out, x.pred), col = venetian_red)
   extra.bottom.left(legend_text(out), px=0.70, py=0.05, cex=0.75, font=1)  
   
   # panel - choosiness; big seeded species have lower seedset
@@ -69,7 +73,7 @@ figure_accessory_v_seed_size <- function(SummarySpp) {
   out <- glm(log10(seedset) ~ log10(embryo_endo_costs), data = data)
   lines(x.pred, 10^y.pred(out, x.pred), col = venetian_red)
   extra.bottom.left.logxy(legend_text(out), px=0.70, py=0.05, cex=0.75, font=1)  
-}
+
    # panel - success proportions; big seeded species invest more pollen-attraction energy into accessory tissues not associated with successful ovules
   plot(prop_prepollen_discarded ~ embryo_endo_costs, data, pch = 16,
     log = "x", col = venetian_red, ylim = c(0, 1),xlim = XLIM, xlab = "",
@@ -116,7 +120,7 @@ figure_accessory_v_seed_size <- function(SummarySpp) {
              family=gaussian(link="logit"), data =  data)
   lines(x.pred, y.pred(out, x.pred), col = venetian_red)
   extra.bottom.left.logx(legend_text(out), px=0.70, py=0.05, cex=0.75, font=1)
-
+}
   
 
 figure_scaling_costs_seed_size <- function(SummarySpp) {
