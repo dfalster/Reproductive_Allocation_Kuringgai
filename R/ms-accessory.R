@@ -13,7 +13,7 @@ figure_accessory_bar <- function(SummarySpp) {
 
   cols <- c("darkslategray4","darkslategray2", "black", "darkseagreen3","darkseagreen4")
   # sapply(cols, function(i) rgb(t(col2rgb(i))/255))
-  labs <- c("Pre-flowering (buds)", "Post-flowering (ovules)", "Pollen attraction", "Packaging & dispersal", "Mature seeds")
+  labs <- c("Pollen attraction", "Packaging & dispersal", "Pollen attraction", "Packaging & dispersal", "Mature seeds")
 
   par(oma=c(0,0,0,10), mar=c(4,4,1,0))
   barplot(data, beside=FALSE,width=0.8,cex.axis=1,cex.names=0.7,las=1, col=cols,
