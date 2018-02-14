@@ -184,7 +184,7 @@ add_axis_log10 <- function(side=1, labels=TRUE, las=1, at = -20:20, ...){
 }
 
 add_axis_proprtion <- function(side=1, labels=TRUE, las=1,...){
-  axis(2, at = c(0, 0.2, 0.4, 0.6, 0.8, 1), labels = labels, las=las)
+  axis(side, at = c(0, 0.2, 0.4, 0.6, 0.8, 1), labels = labels, las=las)
 }
 
 seq_log_range <- function (r, length.out)
@@ -498,6 +498,12 @@ extra.top.left.logxy <- function(words, px =0.02, py = 0.96, ...) {
   text(10^((px * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), 10^((py *
     (par("usr")[4] - par("usr")[3])) + par("usr")[3]), words, adj = 0,
     xpd = NA, ...)
+}
+
+extra.top.left.logy <- function(words, px =0.02, py = 0.96, ...) {
+  text(((px * (par("usr")[2] - par("usr")[1])) + par("usr")[1]), 10^((py *
+    (par("usr")[4] - par("usr")[3])) + par("usr")[3]), words, adj = 0,
+    xpd=NA, ...)
 }
 
 extra.top.left.logx <- function(words, px =0.02, py = 0.96, ...) {

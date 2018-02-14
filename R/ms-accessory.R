@@ -27,10 +27,12 @@ figure_accessory_v_seed_size <- function(SummarySpp) {
 
   data <- SummarySpp[["mean"]]
 
-  par(mfrow = c(3, 2), oma = c(2, 1, 1, 0), mar = c(4, 5, 2,2))
+  par(mfrow = c(3, 2), oma = c(2, 1, 1, 0), mar = c(5, 5, 2,2))
 
   XLIM <- c(0.008, 50)
   x.pred <- seq_log_range(range(data$embryo_endo_costs), 50)
+  x.pred2 <- seq_log_range(range(data$seedset), 50)
+
 
   y.pred <- function(out, x) {
     predict(out, list(embryo_endo_costs = x),type="response")
@@ -38,6 +40,10 @@ figure_accessory_v_seed_size <- function(SummarySpp) {
   
   y.pred2 <- function(out, x) {
     predict(out, list(prop_prepollen_success = x),type="response")
+  }
+
+  y.pred3 <- function(out, x) {
+    predict(out, list(seedset = x),type="response")
   }
 
   legend_text <- function(out) {
@@ -48,18 +54,25 @@ figure_accessory_v_seed_size <- function(SummarySpp) {
   py  <- 1.15
 
   # panel - choosiness; lower seedset species invest lower proportion of success costs in pollen attraction tissues
-  plot(seedset ~ prop_prepollen_success, data, log = "",
-       col = venetian_red, pch = 16,ylim = c(1E-3, 0.5), yaxt = "n",
-       cex = 1, ylab = "", xlab = "", xaxt = "n")
-  extra.top.left("A", px = px, py = py, font=2)
-  extra.top.left("Seedset versus proportion successful investment to pollen-attraction costs", px = px +0.05, py =py)
-  mtext("Proportion success investment to pollen-attraction", 1, line = 3)
-  mtext("Ratio of seeds:ovules", 2, line = 3)
+  plot(prop_pollen_attract_vs_success ~ seedset, data, log = "x",
+       col = venetian_red, pch = 16, xlim = c(1E-3, 1), ylim = c(0, 1),
+       cex = 1, ylab = "", xlab = "", xaxt = "n", yaxt = "n")
+  extra.top.left.logx("A", px = px, py = py, font=2)
+  extra.top.left.logx("Division within successfully-matured units", px = px +0.05, py =py)
+  add_axis_proprtion(2, las=1)
+  add_axis_log10(1)
+
+  mtext("Prop. to pollen-attraction", 2, line = 3)
+  mtext("Ratio of seeds:ovules", 1, line = 3)
   
-  out <- glm(seedset ~ prop_prepollen_success, data = data)
-  lines(x.pred, y.pred2(out, x.pred), col = venetian_red)
-  extra.bottom.left(legend_text(out), px=0.70, py=0.05, cex=0.75, font=1)  
+  out <- glm(prop_pollen_attract_vs_success ~ log10(seedset),
+             family=gaussian(link="logit"), data =  data)
+  lines(x.pred2, y.pred3(out, x.pred2), col = venetian_red)
+
+  extra.bottom.left.logx(legend_text(out), px=0.70, py=0.05, cex=0.75, font=1)
   
+  plot.new()
+
   # panel - choosiness; big seeded species have lower seedset
   plot(seedset ~ embryo_endo_costs, data, log = "xy",
        col = venetian_red, pch = 16,xlim = XLIM, ylim = c(1E-3, 1), yaxt = "n",
@@ -75,17 +88,17 @@ figure_accessory_v_seed_size <- function(SummarySpp) {
   extra.bottom.left.logxy(legend_text(out), px=0.70, py=0.05, cex=0.75, font=1)  
 
    # panel - success proportions; big seeded species invest more pollen-attraction energy into accessory tissues not associated with successful ovules
-  plot(prop_prepollen_discarded ~ embryo_endo_costs, data, pch = 16,
+  plot(prop_prepollen_success ~ embryo_endo_costs, data, pch = 16,
     log = "x", col = venetian_red, ylim = c(0, 1),xlim = XLIM, xlab = "",
     ylab = "", xaxt = "n", yaxt = "n")
   extra.top.left.logx("C", px = px, py = py, font=2)
-  extra.top.left.logx("Division of pollen attraction resources into successful versus failed investment", px = px+0.05, py = py)
+  extra.top.left.logx("Division of pollen-attraction resources", px = px+0.05, py = py)
 
   add_axis_proprtion(2, las=1)
   add_axis_log10(1)
-  mtext("Prop. to failed invesment", 2, line = 3)
+  mtext("Prop. to successfully-matured units", 2, line = 3)
 
-  out <- glm(prop_prepollen_discarded ~ log10(embryo_endo_costs),
+  out <- glm(prop_prepollen_success ~ log10(embryo_endo_costs),
              family=gaussian(link="logit"), data =  data)
   lines(x.pred, y.pred(out, x.pred), col = venetian_red)
   extra.bottom.left.logx(legend_text(out), px=0.70, py=0.05, cex=0.75, font=1)
@@ -95,22 +108,23 @@ figure_accessory_v_seed_size <- function(SummarySpp) {
     log = "x", col = venetian_red, ylim = c(0, 1.0),xlim = XLIM, xlab = "",
     ylab = "", xaxt = "n", yaxt = "n")
   extra.top.left.logx("D", px = px, py = py, font=2)
-  extra.top.left.logx("Division of post-pollination resources into successful versus failed investment", px = px +0.05, py = py)
+  extra.top.left.logx("Division of provisioning resources", px = px +0.05, py = py)
   add_axis_proprtion(2)
   add_axis_log10(1)
-  mtext("Prop. to successful investment", 2, line = 3)
+  mtext("Prop. to successful units", 2, line = 3)
+  mtext("Seed size (mg)", 1, line = 3)
 
   out <- glm(prop_postpollen_success ~ log10(embryo_endo_costs),
              family=gaussian(link="logit"), data =  data)
   lines(x.pred, y.pred(out, x.pred), col = venetian_red)
   extra.bottom.left.logx(legend_text(out), px=0.70, py=0.05, cex=0.75, font=1)
 
-  # panel - provisioning proportions; seed size versus proportion of success investment that goes to provisioning
+  # panel - provisioning proportions; seed size vs. proportion of success investment that goes to provisioning
   plot(prop_provisioning_vs_success ~ embryo_endo_costs, data,
     pch = 16, log = "x", col = venetian_red, ylim = c(0, 1.0),xlim = XLIM,
     xlab = "", ylab = "", xaxt = "n", yaxt = "n")
   extra.top.left.logx("E", px = px, py = py, font=2)
-  extra.top.left.logx("Division of successful investment between seed provisioning & pollen attraction", px = px +0.05, py = py)
+  extra.top.left.logx("Division within successfully-matured units", px = px +0.05, py = py)
   add_axis_log10(1)
   add_axis_proprtion(2)
   mtext("Prop. to seed provisioning", 2, line = 3)
