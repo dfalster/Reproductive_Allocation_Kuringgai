@@ -96,7 +96,7 @@ figure_accessory_v_seed_size <- function(SummarySpp) {
 
   add_axis_proprtion(2, las=1)
   add_axis_log10(1)
-  mtext("Prop. to successfully-matured units", 2, line = 3)
+  mtext("Prop. to successful units", 2, line = 3)
 
   out <- glm(prop_prepollen_success ~ log10(embryo_endo_costs),
              family=gaussian(link="logit"), data =  data)
