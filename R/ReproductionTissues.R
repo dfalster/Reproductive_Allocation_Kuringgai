@@ -10,7 +10,7 @@ ReproductiveCosts <- function(species, IndividualsList, InvestmentCategories, sp
 
   FD <- species_Investment$FD %>%
         group_by(individual, part) %>%
-        summarise_each(funs(sum), count, weight) %>%
+        summarise_at(vars(count, weight), sum) %>%
         mutate(unit_weight = divide_zero(weight, count))
 
   # add in embryo_endo_size from seed size spreadsheet

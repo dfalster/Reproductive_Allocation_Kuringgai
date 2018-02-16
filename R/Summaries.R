@@ -17,7 +17,7 @@ process_LMA <- function(LMA_raw) {
 
   LMA$leaf_size <- LMA$leaf_area/LMA$leaf_number
 
-  LMA %>% group_by(species, age) %>% summarise_each(funs(mean), LMA, leaf_size)
+  LMA %>% group_by(species, age) %>% summarise_at(vars(LMA, leaf_size), mean)
 }
 
 # Get average leaves per length for each species
@@ -72,7 +72,7 @@ process_leaf_loss <- function(data_raw, leavesPerLength) {
 # Calculate average wood density by species
 process_wood_density <- function(wood_density_spp) {
   wood <- filter(wood_density_spp, use == "use") %>% select(species, density) %>%
-    group_by(species) %>% summarise_each(funs(mean), density)
+    group_by(species) %>% summarise_at(vars(density), mean)
   names(wood) <- c("species", "wood_density")
   wood
 }
@@ -252,13 +252,13 @@ get_species_values <- function(SummaryInd, groups) {
   out[[1]] <- lapply(fs, function(f) {
     SummaryInd %>%
       group_by_(.dots = dots) %>%
-      summarise_each(f, height, growth_inv,
+      summarise_at(vars(height, growth_inv,
                      total_weight, total_weight_0, total_inv, RA,
                      growth_leaf_pos, leaf_weight, stem_weight, growth_stem_diameter,
                      growth_leaf, leaf_weight_0, stem_weight_0,
                      repro_inv, growth_stem, diameter, diameter_0, LMA, wood_density, leaf_area,
                      leaf_area_0, growth_leaf_neg,
-                     RA_max_1, lifespan, maturity, height_0)
+                     RA_max_1, lifespan, maturity, height_0), f)
   })
   names(out[[1]]) <- fs
   
@@ -267,17 +267,16 @@ get_species_values <- function(SummaryInd, groups) {
     SummaryInd %>% filter(!(individual %in% c("COER_806","EPMI_907","GRBU_408","GRBU_906","HATE_105","HATE_003","LEES_354",
                                               "LEES_352","LEES_355","LEES_353","LEES_351","PELA_161","PELA_162",
                                               "PUTU_108"))) %>% group_by_(.dots = dots) %>% 
-      summarise_each(f,prop_leaf_loss,leaf_shed,leaf_replacement,
+      summarise_at(vars(prop_leaf_loss,leaf_shed,leaf_replacement,
                      repro_prop_all_leaf, repro_and_leaf_growth_prop_surplus,prop_leaf_expand, prop_leaf_replacement,
                      gross_inv,prop_repro,prop_surplus, all_leaf_inv,all_leaf_and_repro_inv,surplus_inv,seed_prop_all_acc,
                      growth_leaf_prop_no_accessory,replace_leaf_prop_no_accessory,seed_prop_veg,seed_prop_all,seed_prop_surplus,
-                     prop_leaf_loss)
+                     prop_leaf_loss), f)
   })
   names(out[[2]]) <- fs
   
   out[[3]] <- lapply(fs, function(f) {
-    SummaryInd %>% filter(repro_inv > 0) %>% group_by_(.dots = dots) %>% summarise_each(f,
-                                                                                        ovule_count, prepollen_count_reach_flowering)
+    SummaryInd %>% filter(repro_inv > 0) %>% group_by_(.dots = dots) %>% summarise_at(vars(ovule_count, prepollen_count_reach_flowering), f)
   })
   names(out[[3]]) <- fs
   
@@ -286,7 +285,7 @@ get_species_values <- function(SummaryInd, groups) {
       filter(seed_count > 0) %>%
       filter(repro_inv > 0) %>%
       group_by_(.dots = dots) %>%
-      summarise_each(f, seed_size, seedset, seed_count, packaging_dispersal_costs,
+      summarise_at(vars(seed_size, seedset, seed_count, packaging_dispersal_costs,
                      accessory_costs_using_seedweight, scaled_provisioning_costs, success_inv,
                      success_costs, scaled_seed_count, prop_provisioning_vs_success,
                      fruit_costs, prop_discarded_vs_all_repro, zygote_set,
@@ -305,7 +304,7 @@ get_species_values <- function(SummaryInd, groups) {
                      prop_prepollen_all_vs_all_repro, prop_accessory_vs_embryo_endo,
                      prop_accessory_vs_propagule, prop_success, scaled_repro_inv, 
                      postpollen_all_costs, prop_prepollen_discarded, prop_postpollen_discarded,
-                     choosiness, prepollen_success_inv, scaled_pollen_attract_costs)
+                     choosiness, prepollen_success_inv, scaled_pollen_attract_costs), f)
   })
   names(out[[4]]) <- fs
   
