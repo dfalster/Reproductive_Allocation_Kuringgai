@@ -1,9 +1,13 @@
 variable,keep,meaning,units,extra notes,source of calculation
+site,1,site at Kuringgai,,,individuals.csv
+species,1,species 4 letter code,,,individuals.csv
+individual,1,individual plants measured for the study,,,individuals.csv
+start_end,1,variable indicating if data is from census at the beginning or the end of the study,categorical,,harvest.csv
+age,1,"age at harvest; Waratah 2011 (2012 harvest) and Wilunga 2012 (2013 harvest) are asigned the same age, even though the  plants at the Waratah site are very slightly older",yrs,,individuals.csv
 aborted_ovule_count,1,count of ovules that are aborted during the developmental trajectory,count,ovule_count - seed_count,ReproductionTissues.R
 accessory_costs,1,carbon investment in accessory tissues per mature propagule formed,mg,repro_costs - embryo_endo_costs,Summaries.R
 accessory_costs_using_seedweight,1,carbon investment in accessory tissues per mature seed formed,mg,repro_costs - propagule_costs,Summaries.R
 accessory_inv,1,carbon investment in all accessory tissues,mg,repro_inv - embryo_endo_inv,Summaries.R
-age,1,"age at harvest; Waratah 2011 (2012 harvest) and Wilunga 2012 (2013 harvest) are asigned the same age, even though the  plants at the Waratah site are very slightly older",yrs,,individuals.csv
 all_leaf_and_repro_inv,1,carbon investment in all leaves (replacement + growth) and all reproductive tissues,mg,repro_inv + leaf_replacement + growth_leaf_pos,Summaries.R
 all_leaf_inv,1,carbon investment in all leaves (replacement + growth) ,mg,leaf_replacement + growth_leaf_pos,Summaries.R
 choosiness,1,inverse of seedset,proportion,ovule_count / seed_count,ReproductionTissues.R
@@ -33,7 +37,6 @@ growth_stem_area,1,increase in stem area across the study year,mm2,"c(NA, diff(s
 growth_stem_diameter,1,increase in stem diameter across the study year,mm,"c(NA, diff(diameter))",Growth.R
 height,1,plant height at end of study,mm,,harvest.csv; Growth.R
 height_0,1,plant height at start of study,mm,height - growth_height,Summaries.R
-individual,1,individual plants measured for the study,,,individuals.csv
 inflorescence_count,1,count of inflorescences,count,,ReproductionTissues.R
 leaf_area,1,leaf surface area at end of study; calculated from site specific LMA and individual leaf weight,mm2,leaf_weight/(1000 * LMA),Summaries.R
 leaf_area_0,1,leaf surface area at start of study; calculated from site specific LMA and individual leaf weight,mm2,leaf_area - growth_leaf_area,Summaries.R
@@ -141,9 +144,6 @@ shoot_leaf_count_new,1,count of newly formed leaves along the leader at the end 
 shoot_leaf_count_new_and_shed_count,1,count of leaves along the leader that formed and were then shed during the study year,count,,leaderGrowthLL.csv
 shoot_leaf_count_start,1,count of leaves along the leader at the start of the study,count,,leaderGrowthLL.csv
 shoot_length_start,1,leader length at the start of the study,mm,,leaderGrowthLL.csv
-site,1,site at Kuringgai,,,individuals.csv
-species,1,species 4 letter code,,,individuals.csv
-start_end,1,variable indicating if data is from census at the beginning or the end of the study,categorical,,harvest.csv
 stem_area,1,cross sectional area of the stem,mm2,,harvest.csv; Growth.R
 stem_weight,1,stem mass at end of study,mg,,Growth.R
 stem_weight_0,1,stem mass at start of study,mg,stem_weight - growth_stem,Summaries.R

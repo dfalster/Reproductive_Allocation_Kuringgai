@@ -39,6 +39,18 @@ targets:
     - ms/RA/figures/life_history.pdf
     - ms/RA/Wenk-RA-SI.pdf
     - ms/RA/figures/abstract.pdf
+    - ms/RA/Datadryad/SummaryInd.csv
+    - ms/RA/Datadryad/Variable_metadata.csv
+    - ms/RA/Datadryad/Growth_all.csv
+
+  ms/RA/Datadryad/Growth_all.csv:
+    command: write.csv(Growth_all, target_name, row.names = FALSE)
+
+  ms/RA/Datadryad/SummaryInd.csv:
+    command: write.csv(SummaryInd, target_name, row.names = FALSE)
+
+  ms/RA/Datadryad/Variable_metadata.csv:
+    command: write.csv(variable_list, target_name, row.names = FALSE)
 
   ms/RA/figures/schematic.pdf:
     command: plotRASexamples()

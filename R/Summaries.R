@@ -235,8 +235,8 @@ combine_by_individual <- function(IndividualsList, Growth_all, ReproductiveCosts
 sort_by_variable <- function(data, variable_list) {
   
   vars <- variable_list$variable[variable_list$variable %in% names(data)]
-  vars <- base::union(vars, names(data))
-  data[, vars]
+  vars <- base::union(vars, names(data)) 
+  data[, vars] %>%  dplyr::arrange(species, individual, age, start_end)
 }
 
 get_species_values <- function(SummaryInd, groups) {
