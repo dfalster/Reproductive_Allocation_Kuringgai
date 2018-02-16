@@ -27,8 +27,9 @@ targets:
       - ms-RA
       - ms-Accessory
       - export
+      - analysis.R
 
-  # Papers --------------------------------------
+  # Paper on Reproductive allocation-----------------------------
   ms-RA:
     depends:
     - ms/RA/figures/schematic.pdf
@@ -39,18 +40,6 @@ targets:
     - ms/RA/figures/life_history.pdf
     - ms/RA/Wenk-RA-SI.pdf
     - ms/RA/figures/abstract.pdf
-    - ms/RA/Datadryad/SummaryInd.csv
-    - ms/RA/Datadryad/Variable_metadata.csv
-    - ms/RA/Datadryad/Growth_all.csv
-
-  ms/RA/Datadryad/Growth_all.csv:
-    command: write.csv(Growth_all, target_name, row.names = FALSE)
-
-  ms/RA/Datadryad/SummaryInd.csv:
-    command: write.csv(SummaryInd, target_name, row.names = FALSE)
-
-  ms/RA/Datadryad/Variable_metadata.csv:
-    command: write.csv(variable_list, target_name, row.names = FALSE)
 
   ms/RA/figures/schematic.pdf:
     command: plotRASexamples()
@@ -158,7 +147,7 @@ targets:
       width: 4
       height: 4
 
-# ----------------
+# Paper on Accessory costs ----------------
 
   ms-Accessory:
    depends:
@@ -224,7 +213,7 @@ targets:
       - R/figures.R
       - ms/map.pdf
 
-  # Data --------------------------------------
+  # Dataset construction --------------------------------------
   IndividualsList:
     command: read_csv("data/individuals.csv")
 
@@ -308,33 +297,19 @@ targets:
   SummaryCombine:
     command: scale_individual_variable(SummaryInd, SummarySpp)
 
+  # Export of core dataset   --------------------------------------
   export:
     depends:
-      - export/SummaryInd.rds
-      - export/SummarySpp.rds
-      - export/SummarySppAge.rds
-      - export/SummaryCombine.rds
-      - export/HarvestData.rds
-      - export/Investment_FD_all.rds
-      - export/PartsSummary_all.rds
+      - export/SummaryInd.csv
+      - export/Variable_metadata.csv
 
-  export/SummaryInd.rds:
-    command: saveRDS(SummaryInd, target_name)
+  export/Variable_metadata.csv:
+    command: write.csv(variable_list, target_name, row.names = FALSE)
 
-  export/SummarySpp.rds:
-    command: saveRDS(SummarySpp, target_name)
+  export/SummaryInd.csv:
+    command: write.csv(SummaryInd, target_name, row.names = FALSE)
 
-  export/SummarySppAge.rds:
-    command: saveRDS(SummarySppAge, target_name)
-
-  export/SummaryCombine.rds:
-    command: saveRDS(SummaryCombine, target_name)
-
-  export/HarvestData.rds:
-    command: saveRDS(HarvestData, target_name)
-
-  export/Investment_FD_all.rds:
-    command: saveRDS(Investment_FD_all, target_name)
-
-  export/PartsSummary_all.rds:
-    command: saveRDS(PartsSummary_all, target_name)
+  # A plain R version of this file, for those who don't like remake  -----------------------------------
+  analysis.R:
+    packages: remake
+    command: make_script(file=target_name)
