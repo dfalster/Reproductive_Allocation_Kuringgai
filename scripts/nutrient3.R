@@ -166,8 +166,11 @@ SummaryNut <- SummaryInd2 %>% mutate(
   leaf_N_net = leaf_N_new - leaf_N_resorbed,
   leaf_P_net = leaf_P_new - leaf_P_resorbed,
   leaf_N_for_RA = growth_leaf*live_leaf_N,
-  leaf_P_for_RA = growth_leaf*live_leaf_P
+  leaf_P_for_RA = growth_leaf*live_leaf_P,
+  leaf_N_for_replacement = leaf_N_lost,
+  leaf_P_for_replacement = leaf_P_lost
 )
+
 
 for (i in 1:nrow(SummaryNut)) {
   for (v in c("leaf_N_for_RA","leaf_P_for_RA")) {
