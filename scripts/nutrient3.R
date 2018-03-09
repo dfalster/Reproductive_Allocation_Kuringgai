@@ -409,3 +409,115 @@ legend("topleft",legend=c("sapwood","wood from mid","wood from base","shed sapwo
 }
 dev.off()
 ```
+
+
+
+
+###fits for nutrient concentration
+
+tmp <- subset(stem_segments,tissue_complete==
+                "wood_from_tip")
+tmp <- subset(tmp,age>1.4)
+
+mean_sapwood <- tmp %>% 
+  dplyr::group_by(species) %>%
+  dplyr::summarise_each(dplyr::funs(mean),P,N,mean_without_bark_diam_mm)
+
+names(mean_sapwood) <- c("species","sapwood_P","sapwood_N","sapwood_diameter")
+
+sapwood_fits <- select(stem_segments,species,age,tissue_complete,)
+
+names(stem_segments) <- c("species","age","P","N","diameter","tissue_complete")
+sapwood_fits <- subset(stem_segments,age>2 &tissue_complete!="wood_from_tip")
+
+sapwood_fits <- merge(sapwood_fits,mean_sapwood, by="species")
+sapwood_fits$radius <- sapwood_fits$diameter/2
+
+
+# hh - hardwood conc as a fraction of sapwood_fits
+# xx -sapwood depth
+# ans = total conc predicted
+
+data_tmp <- sapwood_fits
+data_tmp <- split(data_tmp, data_tmp$species)
+
+sapwood_output_P <- data.frame(matrix(ncol = 5, nrow = 0))
+names(sapwood_output_P) <- c("species","logit.h","xx","logit.h t-value","xx t-value")
+
+
+for(spp in c("BAER", "BOLE", "COER", "EPMI", "GRBU", "HATE", "HEPU", "LEES", "PELA", "PILI")) {
+  #function to determine concentration for a single set of values
+  concentration <- function(radius,logit.h,xx) {
+    sapwood_conc <- mean(data_tmp[[spp]]$sapwood_P)
+    hh <- exp(logit.h)/(1+exp(logit.h))
+    #xx <- max(radius)*exp(logit.x)/(1+exp(logit.x))
+    
+    ans <- sapwood_conc*hh*(radius-xx)^2/radius^2 + sapwood_conc*(1-(radius-xx)^2/radius^2)
+    ans[radius <= xx] <- sapwood_conc
+    
+    return(ans)
+  }
+  
+  myfit <- nls(data_tmp[[spp]]$P ~ concentration(data_tmp[[spp]]$radius,logit.h,xx),
+             data = data_tmp[[spp]],
+             start = list(logit.h = -2,xx=0.5))
+  summary(myfit)
+  #confint(myfit)
+  tmp_column <- data.frame(matrix(ncol = 5, nrow = 0))
+  names(tmp_column) <- c("species","logit.h","xx","logit.h t-value","xx t-value")
+  tmp_column[1,] <- c(spp,summary(myfit)$coefficients[1],summary(myfit)$coefficients[2],
+                      summary(myfit)$coefficients[7],summary(myfit)$coefficients[8])
+  sapwood_output_P <- rbind(sapwood_output_P,tmp_column)
+}
+
+for (i in c(2:5)) {
+sapwood_output_P[,i] <- as.numeric(sapwood_output_P[,i])
+}
+
+sapwood_output_P$prop_decline <- (exp(sapwood_output_P$logit.h)/(1+(exp(sapwood_output_P$logit.h))))
+
+write.csv(sapwood_output_P, file="output/Sapwood_P.csv",row.names=FALSE)
+
+
+
+
+data_tmp <- subset(sapwood_fits,!is.na(sapwood_fits$N))
+
+data_tmp <- split(data_tmp, data_tmp$species)
+
+
+
+sapwood_output_N <- data.frame(matrix(ncol = 5, nrow = 0))
+names(sapwood_output_N) <- c("species","logit.h","xx","logit.h t-value","xx t-value")
+
+for(spp in c("BAER", "EPMI", "GRBU", "PELA","PEPU","PHPH")) {
+  #function to determine concentration for a single set of values
+  concentration <- function(radius,logit.h,xx) {
+    sapwood_conc <- mean(data_tmp[[spp]]$sapwood_N)
+    hh <- exp(logit.h)/(1+exp(logit.h))
+    #xx <- max(radius)*exp(logit.x)/(1+exp(logit.x))
+    
+    ans <- sapwood_conc*hh*(radius-xx)^2/radius^2 + sapwood_conc*(1-(radius-xx)^2/radius^2)
+    ans[radius <= xx] <- sapwood_conc
+    
+    return(ans)
+  }
+  
+  myfit <- nls(data_tmp[[spp]]$N ~ concentration(data_tmp[[spp]]$radius,logit.h,xx),
+               data = data_tmp[[spp]],
+               start = list(logit.h = -.5,xx=0.5))
+  summary(myfit)
+  #confint(myfit)
+  tmp_column <- data.frame(matrix(ncol = 5, nrow = 0))
+  names(tmp_column) <- c("species","logit.h","xx","logit.h t-value","xx t-value")
+  tmp_column[1,] <- c(spp,summary(myfit)$coefficients[1],summary(myfit)$coefficients[2],
+                      summary(myfit)$coefficients[7],summary(myfit)$coefficients[8])
+  sapwood_output_N <- rbind(sapwood_output_N,tmp_column)
+}
+
+for (i in c(2:5)) {
+  sapwood_output_N[,i] <- as.numeric(sapwood_output_N[,i])
+}
+
+sapwood_output_N$prop_decline <- (exp(sapwood_output_N$logit.h)/(1+(exp(sapwood_output_N$logit.h))))
+write.csv(sapwood_output_N, file="output/Sapwood_N.csv",row.names=FALSE)
