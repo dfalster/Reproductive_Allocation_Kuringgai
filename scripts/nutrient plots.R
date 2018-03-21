@@ -218,20 +218,23 @@ plot
 par(mfrow = c(4,2), cex = 1, omi=c(.1,.1,.6,.05), mai=c(1,1,.05,.05))
 
 stem_segments_select <- subset(stem_segments,age>2|tissue_complete=="wood_from_tip")
+stem_segments_select_N <- subset(stem_segments_select,use_for_N==TRUE)
+stem_segments_select_P <- subset(stem_segments_select,use_for_P==TRUE)
 
 for (i in seq_along(all_species)) {
   
-  data_sp <- filter(stem_segments_select, species == all_species[i])
-  temp2 <- subset(data_sp,diameter>0)
-  temp3 <- subset(data_sp,N>0)
+  data_sp_P <- filter(stem_segments_select_P, species == all_species[i])
+  data_sp_N <- filter(stem_segments_select_N, species == all_species[i])
+  temp2 <- subset(data_sp_P,diameter>0)
+  temp3 <- subset(data_sp_N,N>0)
   
-  plot(P~diameter,data=data_sp,log="",col=col.age(data_sp$age),pch=pch.tissue(data_sp$tissue_complete),xlab="",ylab="",
+  plot(P~diameter,data=data_sp_P,log="",col=col.age(data_sp_P$age),pch=pch.tissue(data_sp_P$tissue_complete),xlab="",ylab="",
        xlim=c(0,1.1*max(temp2$diameter)),ylim=c(0,1.1*max(temp2$P)))
-  mod <- sma(P~diameter,data=data_sp,log="")
+  mod <- sma(P~diameter,data=data_sp_P,log="")
   mtext("stem diameter (mm)",1,line=1.7,cex=0.7)
   mtext("P concentration",2,line=2.3,cex=0.7)
   mtext(labels.spp.full(all_species[i]), 3, 0)
-  plot(N~diameter,data=data_sp,log="",col=col.age(data_sp$age),pch=pch.tissue(data_sp$tissue_complete),xlab="",ylab="",
+  plot(N~diameter,data=data_sp_N,log="",col=col.age(data_sp_N$age),pch=pch.tissue(data_sp_N$tissue_complete),xlab="",ylab="",
        xlim=c(0,1.1*max(temp2$diameter)),ylim=c(0,1.1*max(temp3$N)))
   mtext("stem diameter (mm)",1,line=1.7,cex=0.7)
   mtext("N concentration",2,line=2.3,cex=0.7)
@@ -252,21 +255,24 @@ plot
 par(mfrow = c(4,2), cex = 1, omi=c(.1,.1,.6,.05), mai=c(1,1,.05,.05))
 
 stem_segments_select <- subset(stem_segments,age>2|tissue_complete=="wood_from_tip")
+stem_segments_select_N <- subset(stem_segments_select,use_for_N==TRUE)
+stem_segments_select_P <- subset(stem_segments_select,use_for_P==TRUE)
 
 for (i in seq_along(all_species)) {
   
-  data_sp <- filter(stem_segments_select, species == all_species[i])
-  temp2 <- subset(data_sp,diameter>0)
-  temp3 <- subset(data_sp,N>0)
+  data_sp_N <- filter(stem_segments_select_N, species == all_species[i])
+  data_sp_P <- filter(stem_segments_select_N, species == all_species[i])
+  temp2 <- subset(data_sp_P,diameter>0)
+  temp3 <- subset(data_sp_N,N>0)
   
-  plot(P~category,data=data_sp,log="",col=col.age(data_sp$age),pch=pch.tissue(data_sp$tissue_complete),xlab="",ylab="",
+  plot(P~category,data=data_sp_P,log="",col=col.age(data_sp_P$age),pch=pch.tissue(data_sp_P$tissue_complete),xlab="",ylab="",
        xlim=c(0.5,3.5),ylim=c(0,1.1*max(temp2$P)),xaxt="n")
   axis(1, at= c(1,2,3), labels = c("wood from tip","wood from middle","wood from base"), las=1,cex.axis=0.5)
   #mod <- sma(P~diameter,data=data_sp,log="")
   mtext("stem type",1,line=1.7,cex=0.7)
   mtext("P concentration",2,line=2.3,cex=0.7)
   mtext(labels.spp.full(all_species[i]), 3, 0)
-  plot(N~category,data=data_sp,log="",col=col.age(data_sp$age),pch=pch.tissue(data_sp$tissue_complete),xlab="",ylab="",
+  plot(N~category,data=data_sp_N,log="",col=col.age(data_sp_N$age),pch=pch.tissue(data_sp_N$tissue_complete),xlab="",ylab="",
        xlim=c(0.5,3.5),ylim=c(0,1.1*max(temp3$N)),xaxt="n")
   axis(1, at= c(1,2,3), labels = c("wood from tip","wood from middle","wood from base"), las=1,cex.axis=0.5)
   mtext("stem type",1,line=1.7,cex=0.7)

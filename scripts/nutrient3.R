@@ -216,7 +216,7 @@ RA_Nutrient <- mean_values(data_spp_age)
 
 stem_segments <- nutrient %>%
     subset(tissue_complete %in% c("wood_from_base","wood_from_middle","wood_from_tip"))%>%
-    dplyr::select(species,age,P,N,mean_without_bark_diam_mm,tissue_complete) 
+    dplyr::select(species,age,P,N,mean_without_bark_diam_mm,tissue_complete,use_for_N,use_for_P) 
 stem_segments$diameter <- as.numeric(stem_segments$mean_without_bark_diam_mm)
 #stem_segments$area <- ((stem_segments$diameter/2)^2)*3.14159
 
