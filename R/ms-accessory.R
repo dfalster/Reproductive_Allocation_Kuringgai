@@ -194,7 +194,6 @@ figure_proxy <- function(SummaryInd) {
     add_axis_log10(2)
     abline(0, 1, lty="dashed")
 
-    mod <- sma(data[[yvar]] ~ data[[xvar]], log = "xy", method = "OLS")
     mtext(text = xlab, side = 1, line = 3)
     extra.top.left.logxy(LETTERS[i],px =-0.15, py = 1.15, cex=1.25)
     if(i==1)
