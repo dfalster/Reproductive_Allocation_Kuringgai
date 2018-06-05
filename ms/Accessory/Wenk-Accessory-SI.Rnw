@@ -44,7 +44,7 @@
 <<preload, echo=FALSE>>=
 library(xtable)
 library(knitr)
-opts_chunk$set(echo=FALSE, fig.pos = "!h", fig.align="center", comment = NA)
+opts_chunk$set(echo=FALSE, fig.pos = "!h", fig.align="center", comment = NA, warning = FALSE)
 
 flowering_parts <- read.csv("Sup_Table_flowering_parts.csv", stringsAsFactors=FALSE, check.names=FALSE)
 flowering_parts$Method <- clean_headers(flowering_parts$Method)
@@ -71,140 +71,142 @@ flowering_parts$Description <- firstup(flowering_parts$Description)
 
 \section{Additional results supporting main text}
 
-<<echo=FALSE, results='asis', warning=FALSE>>=
 
-make_table_species_values_for_allocation_seedsize_table <- function(file) {
-  data <- select(file,species,scaled_seed_count,scaled_ovule_count,
-                 scaled_pollen_attract_costs,choosiness,prop_prepollen_success, prop_prepollen_discarded,
-                 prop_postpollen_success,prop_postpollen_discarded, prop_pollen_attract_vs_success,prop_provisioning_vs_success)
-  data$species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia", "Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile pulchella", "Phyllota phylicoides", "Pimelea linifolia", "Pultenaea tuberculata")
-  data
+<<echo=FALSE, warning=FALSE>>=
+
+make_table_figure3_main_text <- function(SummarySpp) {
+  acc_costs_spp <- dplyr::select(SummarySpp[["mean"]], species, 
+                               seedset, embryo_endo_costs, prop_pollen_attract_vs_success, 
+                               prop_prepollen_success, prop_postpollen_success)
+
+  acc_costs_spp$species <-  paste("\\textit{",labels.spp.full(),"}", sep="")
+  for (i in c("seedset", "embryo_endo_costs", "prop_pollen_attract_vs_success", 
+                               "prop_prepollen_success", "prop_postpollen_success")) {
+    acc_costs_spp[[i]] <- round(acc_costs_spp[[i]], digits = 3)
+  
+  }
+
+  names(acc_costs_spp) <- c("Species","ratio seeds to ovules","seed size",
+                                  "prop. of successful inv. to pollen attraction tissues",
+                                  "prop. of pollen attraction tissues to successful inv.",
+                                  "prop. of provisioning tissues to successful inv.")
+
+  acc_costs_spp
 }
 
-TableS15 <- make_table_species_values_for_allocation_seedsize_table(SummarySpp[["mean"]])
-
-names(TableS15) <- c("species","seed count","ovule count","pollen-attraction costs","choosi- ness","success","discarded","success","discarded","pollen-attraction","provi- sioning")
-
-for (i in 2:11) {
-TableS15[,i] <- format(TableS15[,i],digits=3, nsmall=0)
-}
-
-TableS15$species  <- paste("\\textit{",unique(TableS15$species),"}", sep="")
+TableS1 <- make_table_figure3_main_text(SummarySpp)
 @
 
 \begin{table}[h]
 \centering
-\caption{Species values for data plotted in Figure 2: shifts in reproductive tissue allocation with seed size.  Counts and costs are per unit leaf area of the plant. The bottom line indicates the corresponding figure of the main text where the data are presented. Data for reproductive costs (Figure 2, panel a), Seed-size, pollen-attraction costs, and provisioning costs (Figure 2, panel f) are presented in Table 1 in the main text and are not included here.}
-\label{tab:species}
-{\footnotesize
-\begin{tabular}{p{3cm}|p{1cm}p{1cm}|p{1cm}p{1cm}|p{1cm}p{1cm}|p{1cm}p{1cm}|p{1.5cm}p{1cm}}
+\caption{NEED TITLE - showing values in Figure Table 3 in the main text}
+\label{tab:fig_3_table}
+\begin{tabular}{p{4cm}p{2cm}p{2cm}p{2cm}p{2cm}p{2cm}}
 \hline
-& \multicolumn{2}{c|}{} & \multicolumn{2}{c|}{} & \multicolumn{2}{c|}{Proportion} & \multicolumn{2}{c|}{Proportion}& \multicolumn{2}{c}{Proportion} \\
-& \multicolumn{2}{c|}{} & \multicolumn{2}{c|}{} & \multicolumn{2}{c|}{pollen-attraction} & \multicolumn{2}{c|}{provisioning}& \multicolumn{2}{c}{success} \\
-& \multicolumn{2}{c|}{} & \multicolumn{2}{c|}{} & \multicolumn{2}{c|}{investment to} & \multicolumn{2}{c|}{investment to}& \multicolumn{2}{c}{investment to} \\
 <<echo=FALSE, results='asis', warning=FALSE>>=
-print(xtable(TableS15)
+print(xtable(TableS1)
         , sanitize.text.function=I
         , include.rownames = FALSE
         , include.colnames = TRUE,
         only.contents=TRUE)
-cat("Figure reference & \\multicolumn{2}{c|}{Fig. 2, panel a} & \\multicolumn{2}{c|}{Fig. 2, panel b} & \\multicolumn{2}{c|}{Fig. 2, panel c} & \\multicolumn{2}{c|}{Fig. 2, panel d}  & \\multicolumn{2}{c}{Fig. 2, panel e}\\\\
-\\hline")
 @
 \end{tabular}
-}
 \end{table}
 
 \clearpage
+
+
 <<echo=FALSE, results='asis', warning=FALSE>>=
-make_table_RA_shifts_with_age <- function(SummaryInd) {
-  xvar <- "repro_inv"
-  yvar <- "accessory_costs"
-  data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+make_table_Table2_using_seed <- function() {
+slopes <- sma(repro_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
+acc_by_species <- dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p)
 
-  fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
-  accessory_vs_RE <- dplyr::select(fit$groupsummary,group,n,r2,pval)
+slopes <- sma(accessory_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
+acc_by_species <- dplyr::bind_rows(acc_by_species,
+  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
 
-  xvar <- "total_weight_0"
-  yvar <- "accessory_costs"
-  data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+slopes <- sma(success_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
+acc_by_species <- dplyr::bind_rows(acc_by_species,
+  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
 
-  fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
-  accessory_vs_size <- dplyr::select(fit$groupsummary,group,n,r2,pval)
+slopes <- sma(pollen_attract_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
+acc_by_species <- dplyr::bind_rows(acc_by_species,
+  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
 
-  xvar <- "age"
-  yvar <- "accessory_costs"
-  data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
+slopes <- sma(provisioning_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="SMA")
+acc_by_species <- dplyr::bind_rows(acc_by_species,
+  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
 
-  fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")
-  accessory_vs_age <- dplyr::select(fit$groupsummary,group,n,r2,pval)
+slopes <- sma(discarded_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
+acc_by_species <- dplyr::bind_rows(acc_by_species,
+  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
 
-  TableS16 <- merge(accessory_vs_RE,accessory_vs_size,by="group")
-  TableS16 <- merge(TableS16,accessory_vs_age,by="group")
+slopes <- sma(prepollen_discarded_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="SMA")
+acc_by_species <- dplyr::bind_rows(acc_by_species,
+  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
 
-  names(TableS16) <- c("Species","n","r$^2$","p","n","r$^2$","p","n","r$^2$","p")
+slopes <- sma(postpollen_aborted_costs ~ embryo_endo_costs,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="SMA")
+acc_by_species <- dplyr::bind_rows(acc_by_species, dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
 
-  Species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia", "Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile pulchella", "Phyllota phylicoides", "Pimelea linifolia", "Pultenaea tuberculata")
-  TableS16$Species <-  paste("\\textit{",Species,"}", sep="")
+acc_by_species$variable = c("total reproductive","total accessory","seed","pollen attraction","provisioning", "failed tissue","failed pre-pollination","failed provisioning")
 
-  TableS16
+acc_by_species$Slope <- format_r2(acc_by_species$Slope)
+acc_by_species$Slope_lowCI <- format_r2(acc_by_species$Slope_lowCI)
+acc_by_species$Slope_highCI <- format_r2(acc_by_species$Slope_highCI)
+
+acc_by_species$slope2 <- paste(acc_by_species$Slope," (",acc_by_species$Slope_lowCI," - ",acc_by_species$Slope_highCI,")",sep="")
+
+acc_by_species$r2 <- format_r2(acc_by_species$r2)
+acc_by_species$pval <- format_p(acc_by_species$pval)
+acc_by_species$Slope_test_p <- format_p(acc_by_species$Slope_test_p)
+acc_slopes <- dplyr::select(acc_by_species,variable,r2,slope2,Slope_test_p)
 }
+TableS19 <- make_table_Table2_using_seed()
+names(TableS19) <- c("Costs","r$^2$","Slope (95$\\%$ CI)","p (slope test)")
+TableS19$Costs <- firstup(TableS19$Costs)
 
-TableS16 <- make_table_RA_shifts_with_age(SummaryInd)
-
-for(i in c(2,3,5,6,8,9)){
-  TableS16[,i] <- format_r2(TableS16[,i])
-}
-for(i in c(4,7,10)){
-  TableS16[,i] <- format_p(TableS16[,i])
-}
 @
-
 \begin{table}[h]
 \centering
-\caption{Testing for shifts in accessory costs with in age, plant size, or reproductive effort. Shifts in accessory costs with these variables is suggested as one possible explanation of increasing reproductive investment in larger, older plants, but such a trend did not exist in these data.}
-\label{tab:access_vs_age}
-\begin{tabular}{p{4cm}|x{.75cm}x{1cm}x{1.25cm}|x{.75cm}x{1cm}p{1.25cm}|x{.75cm}x{1cm}p{1.25cm}}
+\caption{Scaling of reproductive tissue costs with total seed size. In this manuscript all "seed size" calculations use embryo and endosperm size, not propagule size. Most previous research has used propagule size as a measure of "seed size" and noted isometric relationships between various tissue costs and "seed size". Using embryo and endosperm size, these relationship did not exist for this data set, but are present if "seed size" includes the entire propagule.}
+\label{tab:repro_tissues_vs_prop_size}
+\begin{tabular}{p{5cm}|x{.75cm}x{3.5cm}p{3cm}}
 \hline
-& \multicolumn{3}{c|}{Accessory costs} & \multicolumn{3}{c|}{Accessory costs}& \multicolumn{3}{c}{Accessory costs} \\
-& \multicolumn{3}{c|}{vs. RE} & \multicolumn{3}{c|}{vs. plant mass}& \multicolumn{3}{c}{vs. age} \\
 <<echo=FALSE, results='asis', warning=FALSE>>=
-print(xtable(TableS16)
-        , sanitize.text.function=I
+print(xtable(TableS19)
+         , sanitize.text.function=I
         , include.rownames = FALSE
         , include.colnames = TRUE,
         only.contents=TRUE)
 @
 \end{tabular}
 \end{table}
+
 
 \clearpage
 
 <<echo=FALSE, warning=FALSE>>=
 
 make_table_propagule_invest_vs_all_repropro_inv <- function(SummaryInd) {
-  mod_propagule_inv_all <- sma(repro_inv~propagule_inv,data=SummaryInd,log="xy",method="SMA")
-  mod_flower_inv_all <- sma(repro_inv~flower_inv,data=SummaryInd,log="xy",method="SMA")
-
+  
   yvar <- "repro_inv"
   xvar <- "propagule_inv"
   data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
 
-  fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy",slope.test=mod_propagule_inv_all$groupsummary["Slope"][[1]],elev.test=mod_propagule_inv_all$coef[[1]][1,1])
-  results <- fit$groupsummary
-  acc_slopes <- dplyr::select(results,group,n,r2,pval)
-  names(acc_slopes) <- c("Species","n_propagule","r2_propagule","p_propagule")
+  acc_slopes <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA", log="xy")$groupsummary %>%
+                select(group,n,r2,pval, Int, Slope)
+  names(acc_slopes) <- c("Species","n_propagule","r2_propagule","p_propagule", "int_propagule","slope_propagule")
 
   yvar <- "repro_inv"
   xvar <- "flower_inv"
   data <- subset(SummaryInd,SummaryInd[[xvar]]>0&SummaryInd[[yvar]]>0)
 
-  fit <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA",  log="xy",slope.test=mod_flower_inv_all$groupsummary["Slope"][[1]],elev.test=mod_flower_inv_all$coef[[1]][1,1])
-  results <- fit$groupsummary
-  acc_slopes2 <- dplyr::select(results,group,n,r2,pval)
-  names(acc_slopes2) <- c("Species","n_flower","r2_flower","p_flower")
+  acc_slopes2 <- sma(data[[yvar]] ~ data[[xvar]]*data[["species"]], method="SMA",  log="xy")$groupsummary %>%
+                select(group,r2,pval, Int, Slope)
+  names(acc_slopes2) <- c("Species","r2_flower","p_flower", "int_flower","slope_flower")
+  
   acc_slopes <- dplyr::left_join(acc_slopes, acc_slopes2, by ="Species")
-  names(acc_slopes) <- c("Species","n","r$^2$","p", "n","r$^2$","p")
+  names(acc_slopes) <- c("Species","n","r$^2$","p","int.", "slope","r$^2$","p","int.", "slope")
   Species <- c("Banksia ericifolia","Boronia ledifolia","Conospermum ericifolium","Epacris microphylla", "Grevillea buxifolia","Grevillea speciosa","Hakea teretifolia", "Hemigenia purpurea","Leucopogon esquamatus","Persoonia lanceolata", "Petrophile pulchella", "Phyllota phylicoides", "Pimelea linifolia", "Pultenaea tuberculata")
   acc_slopes$Species <-  paste("\\textit{",Species,"}", sep="")
 
@@ -225,10 +227,10 @@ for(i in c(4,7)){
 \centering
 \caption{Intraspecific correlations between total reproductive investment and (a) propagule investment and (b) flower investment, where flower investment is defined as 'flower weight $\times$ bud count'. Due to the high proportion of aborted flowers, flower investment was a better proxy of reproductive investment than was propagule investment. This was true both across species (Figure 3, Table 3 in the main text) and within species, as is shown here.}
 \label{tab:propagule_invest_vs_repro}
-\begin{tabular}{p{4cm}|x{.75cm}x{1cm}x{1.5cm}|x{.75cm}x{1cm}p{1.5cm}}
+\begin{tabular}{p{4cm}|x{.75cm}|x{1cm}x{1.5cm}x{1cm}x{1cm}|x{1cm}x{1.5cm}x{1cm}p{1cm}}
 \hline
-& \multicolumn{3}{c|}{Total reproductive investment} & \multicolumn{3}{c}{Total reproductive investment} \\
-& \multicolumn{3}{c|}{vs. propagule investment} & \multicolumn{3}{c}{vs. flower investment} \\
+& & \multicolumn{4}{c|}{Total reproductive investment} & \multicolumn{4}{c}{Total reproductive investment} \\
+& & \multicolumn{4}{c|}{vs. propagule investment} & \multicolumn{4}{c}{vs. flower investment} \\
 <<echo=FALSE, results='asis', warning=FALSE>>=
 print(xtable(TableS17)
         , sanitize.text.function=I
@@ -238,76 +240,6 @@ print(xtable(TableS17)
 @
 \end{tabular}
 \end{table}
-
-\clearpage
-
-
-<<echo=FALSE, results='asis', warning=FALSE>>=
-make_table_Table2_using_propagule <- function() {
-slopes <- sma(repro_costs ~ propagule_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
-acc_by_species <- dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p)
-
-slopes <- sma(accessory_costs ~ propagule_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
-acc_by_species <- dplyr::bind_rows(acc_by_species,
-  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
-
-slopes <- sma(success_costs ~ propagule_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
-acc_by_species <- dplyr::bind_rows(acc_by_species,
-  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
-
-slopes <- sma(pollen_attract_costs ~ propagule_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
-acc_by_species <- dplyr::bind_rows(acc_by_species,
-  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
-
-slopes <- sma(provisioning_costs ~ propagule_costs,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="SMA")
-acc_by_species <- dplyr::bind_rows(acc_by_species,
-  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
-
-slopes <- sma(discarded_costs ~ propagule_costs,data=subset(SummarySpp[["mean"]]),slope.test=1,method="SMA", log="xy")
-acc_by_species <- dplyr::bind_rows(acc_by_species,
-  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
-
-slopes <- sma(prepollen_discarded_costs ~ propagule_costs,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="SMA")
-acc_by_species <- dplyr::bind_rows(acc_by_species,
-  dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
-
-slopes <- sma(postpollen_aborted_costs ~ propagule_costs,data=subset(SummarySpp[["mean"]]),slope.test=1, log="xy",method="SMA")
-acc_by_species <- dplyr::bind_rows(acc_by_species, dplyr::select(slopes$groupsummary,r2,pval,Slope,Slope_lowCI,Slope_highCI,Int,Int_lowCI,Int_highCI,Slope_test_p))
-
-acc_by_species$variable = c("total reproductive","total accessory","seed","pollen attraction","provisioning", "failed tissue","failed pre-pollination","failed provisioning")
-
-acc_by_species$Slope <- format_r2(acc_by_species$Slope)
-acc_by_species$Slope_lowCI <- format_r2(acc_by_species$Slope_lowCI)
-acc_by_species$Slope_highCI <- format_r2(acc_by_species$Slope_highCI)
-
-acc_by_species$slope2 <- paste(acc_by_species$Slope," (",acc_by_species$Slope_lowCI," - ",acc_by_species$Slope_highCI,")",sep="")
-
-acc_by_species$r2 <- format_r2(acc_by_species$r2)
-acc_by_species$pval <- format_p(acc_by_species$pval)
-acc_by_species$Slope_test_p <- format_p(acc_by_species$Slope_test_p)
-acc_slopes <- dplyr::select(acc_by_species,variable,r2,slope2,Slope_test_p)
-}
-TableS19 <- make_table_Table2_using_propagule()
-names(TableS19) <- c("Costs","r$^2$","Slope (95$\\%$ CI)","p (slope test)")
-TableS19$Costs <- firstup(TableS19$Costs)
-
-@
-\begin{table}[h]
-\centering
-\caption{Scaling of reproductive tissue costs with total propagule size. In this manuscript all "seed size" calculations use embryo and endosperm size, not propagule size. Most previous research has used propagule size as a measure of "seed size" and noted isometric relationships between various tissue costs and "seed size". Using embryo and endosperm size, these relationship did not exist for this data set, but are present if "seed size" includes the entire propagule.}
-\label{tab:repro_tissues_vs_prop_size}
-\begin{tabular}{p{5cm}|x{.75cm}x{3.5cm}p{3cm}}
-\hline
-<<echo=FALSE, results='asis', warning=FALSE>>=
-print(xtable(TableS19)
-         , sanitize.text.function=I
-        , include.rownames = FALSE
-        , include.colnames = TRUE,
-        only.contents=TRUE)
-@
-\end{tabular}
-\end{table}
-
 
 \clearpage
 
@@ -370,11 +302,11 @@ print(xtable(data,
 
 For each species, we established a list of different reproductive tissue parts and mapped how these parts developed through time. In all species, reproductive tissue development initiates with a bud or inflorescence bud, which increases in size and is divided into multiple tissue types several times during development. For instance, a bud, once open, divides into being petals + stamens, a sepal, and a stigma. As a pollinated stigma develops into a fruit, it will be further divided into seed, seed pod, and potentially additional parts. The central development axis terminates with the formation of a mature seed, while side axes end in fully developed tissues (such as petals, calyx, pedicel) and aborted tissues (aborted seeds, aborted fruit) at the point where they cease to increase in mass.
 
-While all species developed reproductive tissues from buds to seeds, species showed different developmental pathways due to the precise reproductive tissues used. We therefore created a developmental flowchart for each species, as shown below in following sections in Figs. \ref{fig:map_Banksia_ericifolia}-\ref{fig:map_Pultenaea_tuberculata}). Tables \ref{tab:parts_Banksia_ericifolia}-Table \ref{tab:parts_Pultenaea_tuberculata} then provide, for each species, a list of plant parts, a description of exactly what tissues are included in each plant part and at what developmental stage, the method whereby the count and mass of the plant parts is measured, and the number of ovules in each unit of plant part.
+While all species developed reproductive tissues from buds to seeds, species showed different developmental pathways due to the precise reproductive tissues used. We therefore created a developmental flowchart for each species, as shown below in following sections in Figs. \ref{fig:map_Banksia_ericifolia}-\ref{fig:map_Pultenaea_tuberculata}). Tables \ref{tab:parts_Banksia_ericifolia}-\ref{tab:parts_Pultenaea_tuberculata} then provide, for each species, a list of plant parts, a description of exactly what tissues are included in each plant part and at what developmental stage, the method whereby the count and mass of the plant parts is measured, and the number of ovules in each unit of plant part.
 
 \subsubsection{How the census is completed for each part}
 
-The count of each reproductive tissue type was determined for each individual at each census time. For some reproductive parts a simple count is practical, while for species with a large number of buds (or flowers or fruit) that are regularly spaced along branches, the length of stem covered in buds is a better measure. These lengths were converted into counts through a species-level estimate of "flowers per length". For species that form cones, the cones can be notably different in size and each cone's dimensions was recorded throughout development. The counts of flowers (or other reproductive tissues) were then converted to a count of ovules using the values in the variable \texttt{Multiplier per factor}. Tables \ref{tab:parts_Banksia_ericifolia}-Table \ref{tab:parts_Pultenaea_tuberculata} indicate for each species and plant part, the method used to estimate the mass of parts.
+The count of each reproductive tissue type was determined for each individual at each census time. For some reproductive parts a simple count is practical, while for species with a large number of buds (or flowers or fruit) that are regularly spaced along branches, the length of stem covered in buds is a better measure. These lengths were converted into counts through a species-level estimate of "flowers per length". For species that form cones, the cones can be notably different in size and each cone's dimensions was recorded throughout development. The counts of flowers (or other reproductive tissues) were then converted to a count of ovules using the values in the variable \texttt{Multiplier per factor}. Tables \ref{tab:parts_Banksia_ericifolia}-\ref{tab:parts_Pultenaea_tuberculata} indicate for each species and plant part, the method used to estimate the mass of parts.
 
 
 \subsubsection{How parts weights are determined}
